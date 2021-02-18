@@ -1,0 +1,1 @@
+E:\Software\NWjs\nwjs-sdk-v0.50.2-win-x64\nw.exe .

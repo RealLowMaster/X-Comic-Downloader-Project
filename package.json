@@ -1,0 +1,23 @@
+{
+  "name": "x-comic-downloader",
+  "version": "1.0.0",
+  "description": "A Software for Downloading Adult or Hentai Comic and Manga.",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": [
+    "comic",
+    "hentai",
+    "manga",
+    "adult",
+    "downloader"
+  ],
+  "author": "Mehdi Enayatzadeh",
+  "license": "ISC",
+  "dependencies": {
+    "api-xlecx-com": "^1.1.2",
+    "api2-xlecx-com": "^1.0.0",
+    "internet-available": "^1.0.0",
+    "nedb": "^1.8.0",
+    "nhentai": "^2.0.0"
+  }
+}
