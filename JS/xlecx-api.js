@@ -1,10 +1,11 @@
 class XlecxAPI {
 	constructor() {
 		this.baseURL = 'https://xlecx.org';
-		this.groupURL = '/xfsearch/group/[Value]/';
-		this.artistURL = '/xfsearch/artist/[Value]/';
-		this.parodyURL = '/xfsearch/parody/[Value]/';
-		this.tagURL = '/tags/[Value]/';
+		this.groupURL = '/xfsearch/group/';
+		this.artistURL = '/xfsearch/artist/';
+		this.parodyURL = '/xfsearch/parody/';
+		this.tagURL = '/tags/';
+		this.searchURL = '/index.php?do=search';
 	}
 
 	lastSlash(str) {
@@ -26,29 +27,52 @@ class XlecxAPI {
 		var parser = new DOMParser();
 		var htmlDoc = parser.parseFromString(xmlHttp.responseText, 'text/html');
 		var gg = 0;
+		var bb = 0;
 
 		var arr = { "content": [] };
 		var li = htmlDoc.getElementById('dle-content').getElementsByClassName('th-in');
 		if (li.length != 0 && xmlHttp.status != 404) {
 			for (var i=0; i<li.length; i++) {
 				gg = li[i].getElementsByClassName('th-img img-resp-h')[0].getAttribute('href');
+				bb = li[i].getElementsByClassName('th-time icon-l')[0];
+				if (bb != undefined) {
+					bb = bb.textContent;
+					bb = bb.replace(' img', '');
+					bb = bb.replace(' images', '');
+					bb = bb.replace(' pages', '');
+				} else {
+					bb = 0;
+				}
+				
 				arr.content.push({
 					"id": this.lastSlash(gg),
 					"title": li[i].getElementsByClassName('th-title')[0].textContent,
 					"thumb": li[i].getElementsByTagName('img')[0].getAttribute('src'),
+					"pages": Number(bb),
 					"url": gg
 				});
 			}
 
-			if (random == true) {
+			if (random === true || random === 1) {
 				arr.random = [];
 				li = htmlDoc.getElementsByClassName('main')[0].children;
 				for (var i=2; i<=13; i++) {
-					gg = li[i].getElementsByClassName('th-img img-resp-h')[0].getAttribute('href')
+					gg = li[i].getElementsByClassName('th-img img-resp-h')[0].getAttribute('href');
+					bb = li[i].getElementsByClassName('th-time icon-l')[0];
+					if (bb != undefined) {
+						bb = bb.textContent;
+						bb = bb.replace(' img', '');
+						bb = bb.replace(' images', '');
+						bb = bb.replace(' pages', '');
+					} else {
+						bb = 0;
+					}
+
 					arr.random.push({
 						"id": this.lastSlash(gg),
 						"title": li[i].getElementsByClassName('th-title')[0].textContent,
 						"thumb": li[i].getElementsByTagName('img')[0].getAttribute('src'),
+						"pages": Number(bb),
 						"url": gg
 					});
 				}
@@ -172,6 +196,220 @@ class XlecxAPI {
 						"thumb": bb
 					});
 				}
+			}
+		} else {
+			arr = false;
+		}
+		
+
+		return arr;
+	}
+
+	getAllTags() {
+		var url = this.baseURL+'/tags/';
+		var xmlHttp = null;
+
+		xmlHttp = new XMLHttpRequest();
+		xmlHttp.open("GET", url, false);
+		xmlHttp.send(null);
+
+		var parser = new DOMParser();
+		var htmlDoc = parser.parseFromString(xmlHttp.responseText, 'text/html');
+
+		var arr = [];
+		var gg = 0;
+		var li = htmlDoc.getElementsByClassName('clouds_xsmall');
+		for (var i=0; i<li.length; i++) {
+			gg = li[i].children[0];
+			arr.push({
+				"name": gg.textContent,
+				"url": gg.getAttribute('href')
+			});
+		}
+		
+
+		return arr;
+	}
+
+	getGroup(name, page) {
+		if (page == null) {
+			page = 1;
+		}
+		var url = this.baseURL+this.groupURL+'/'+name+'/page/'+page+'/';
+		var xmlHttp = null;
+
+		xmlHttp = new XMLHttpRequest();
+		xmlHttp.open("GET", url, false);
+		xmlHttp.send(null);
+
+		var parser = new DOMParser();
+		var htmlDoc = parser.parseFromString(xmlHttp.responseText, 'text/html');
+		var gg = 0;
+		var bb = 0;
+
+		var arr = { "content": [] };
+		var li = htmlDoc.getElementById('dle-content').getElementsByClassName('th-in');
+		if (li.length != 0 && xmlHttp.status != 404) {
+			for (var i=0; i<li.length; i++) {
+				gg = li[i].getElementsByClassName('th-img img-resp-h')[0].getAttribute('href');
+				bb = li[i].getElementsByClassName('th-time icon-l')[0];
+				if (bb != undefined) {
+					bb = bb.textContent;
+					bb = bb.replace(' img', '');
+					bb = bb.replace(' images', '');
+					bb = bb.replace(' pages', '');
+				} else {
+					bb = 0;
+				}
+
+				arr.content.push({
+					"id": this.lastSlash(gg),
+					"title": li[i].getElementsByClassName('th-title')[0].textContent,
+					"thumb": li[i].getElementsByTagName('img')[0].getAttribute('src'),
+					"pages": Number(bb),
+					"url": gg
+				});
+			}
+		} else {
+			arr = false;
+		}
+		
+
+		return arr;
+	}
+
+	getArtist(name, page) {
+		if (page == null) {
+			page = 1;
+		}
+		var url = this.baseURL+this.artistURL+'/'+name+'/page/'+page+'/';
+		var xmlHttp = null;
+
+		xmlHttp = new XMLHttpRequest();
+		xmlHttp.open("GET", url, false);
+		xmlHttp.send(null);
+
+		var parser = new DOMParser();
+		var htmlDoc = parser.parseFromString(xmlHttp.responseText, 'text/html');
+		var gg = 0;
+		var bb = 0;
+
+		var arr = { "content": [] };
+		var li = htmlDoc.getElementById('dle-content').getElementsByClassName('th-in');
+		if (li.length != 0 && xmlHttp.status != 404) {
+			for (var i=0; i<li.length; i++) {
+				gg = li[i].getElementsByClassName('th-img img-resp-h')[0].getAttribute('href');
+				bb = li[i].getElementsByClassName('th-time icon-l')[0];
+				if (bb != undefined) {
+					bb = bb.textContent;
+					bb = bb.replace(' img', '');
+					bb = bb.replace(' images', '');
+					bb = bb.replace(' pages', '');
+				} else {
+					bb = 0;
+				}
+
+				arr.content.push({
+					"id": this.lastSlash(gg),
+					"title": li[i].getElementsByClassName('th-title')[0].textContent,
+					"thumb": li[i].getElementsByTagName('img')[0].getAttribute('src'),
+					"pages": Number(bb),
+					"url": gg
+				});
+			}
+		} else {
+			arr = false;
+		}
+		
+
+		return arr;
+	}
+
+	getParody(name, page) {
+		if (page == null) {
+			page = 1;
+		}
+		var url = this.baseURL+this.parodyURL+'/'+name+'/page/'+page+'/';
+		var xmlHttp = null;
+
+		xmlHttp = new XMLHttpRequest();
+		xmlHttp.open("GET", url, false);
+		xmlHttp.send(null);
+
+		var parser = new DOMParser();
+		var htmlDoc = parser.parseFromString(xmlHttp.responseText, 'text/html');
+		var gg = 0;
+		var bb = 0;
+
+		var arr = { "content": [] };
+		var li = htmlDoc.getElementById('dle-content').getElementsByClassName('th-in');
+		if (li.length != 0 && xmlHttp.status != 404) {
+			for (var i=0; i<li.length; i++) {
+				gg = li[i].getElementsByClassName('th-img img-resp-h')[0].getAttribute('href');
+				bb = li[i].getElementsByClassName('th-time icon-l')[0];
+				if (bb != undefined) {
+					bb = bb.textContent;
+					bb = bb.replace(' img', '');
+					bb = bb.replace(' images', '');
+					bb = bb.replace(' pages', '');
+				} else {
+					bb = 0;
+				}
+
+				arr.content.push({
+					"id": this.lastSlash(gg),
+					"title": li[i].getElementsByClassName('th-title')[0].textContent,
+					"thumb": li[i].getElementsByTagName('img')[0].getAttribute('src'),
+					"pages": Number(bb),
+					"url": gg
+				});
+			}
+		} else {
+			arr = false;
+		}
+		
+
+		return arr;
+	}
+
+	getTag(name, page) {
+		if (page == null) {
+			page = 1;
+		}
+		var url = this.baseURL+this.tagURL+'/'+name+'/page/'+page+'/';
+		var xmlHttp = null;
+
+		xmlHttp = new XMLHttpRequest();
+		xmlHttp.open("GET", url, false);
+		xmlHttp.send(null);
+
+		var parser = new DOMParser();
+		var htmlDoc = parser.parseFromString(xmlHttp.responseText, 'text/html');
+		var gg = 0;
+		var bb = 0;
+
+		var arr = { "content": [] };
+		var li = htmlDoc.getElementById('dle-content').getElementsByClassName('th-in');
+		if (li.length != 0 && xmlHttp.status != 404) {
+			for (var i=0; i<li.length; i++) {
+				gg = li[i].getElementsByClassName('th-img img-resp-h')[0].getAttribute('href');
+				bb = li[i].getElementsByClassName('th-time icon-l')[0];
+				if (bb != undefined) {
+					bb = bb.textContent;
+					bb = bb.replace(' img', '');
+					bb = bb.replace(' images', '');
+					bb = bb.replace(' pages', '');
+				} else {
+					bb = 0;
+				}
+
+				arr.content.push({
+					"id": this.lastSlash(gg),
+					"title": li[i].getElementsByClassName('th-title')[0].textContent,
+					"thumb": li[i].getElementsByTagName('img')[0].getAttribute('src'),
+					"pages": Number(bb),
+					"url": gg
+				});
 			}
 		} else {
 			arr = false;
