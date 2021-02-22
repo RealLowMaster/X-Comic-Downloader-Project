@@ -11,12 +11,36 @@
 	<!-- Scripts -->
 	<script type="text/javascript">if (typeof module === 'object') {window.module = module;module = undefined;}</script>
 	<script type="text/javascript" src="JS/Jquery.min.js"></script>
-	<script type="text/javascript" src="JS/action.js"></script>
+	<script type="text/javascript" src="JS/actions.js"></script>
+	<script type="text/javascript" src="JS/xlecx-api.js"></script>
 </head>
 <body>
-	<h1> Hello, World! </h1>
+
+	<div class="main">
+		<!-- Top Menu -->
+		<div>
+			<div class="top-menu">
+				<div>
+					<button class="btn btn-primary" onclick="$('.action-menu').attr('id', 'active');">Actions</button>
+				</div>
+				<div></div>
+				<div></div>
+			</div>
+		</div>
+
+		<!-- Body -->
+		<div></div>
+	</div>
+
+	<!-- Action Menu -->
+	<div class="action-menu">
+		<div onclick="$(this).parent('.action-menu').attr('id', '')"></div>
+		<div>
+			<button style="color:#d0d">Xlecx</button>
+		</div>
+	</div>
 
 	<!-- Scripts -->
-	<script type="text/javascript" src="main.js"></script>
+	<script type="text/javascript" src="JS/main.js"></script>
 </body>
 </html>

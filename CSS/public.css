@@ -6,12 +6,70 @@
 * {
 	padding: 0;
 	margin: 0;
-	outline: 0;
+	outline: none;
     border: none;
     box-sizing: border-box;
 }
 
 html, body {
 	width: 100%;
+	height: 100vh;
+}
+
+.main {
+	display: grid;
+	width: 100%;
 	height: 100%;
+	grid-template-rows: 50px 11fr;
+}
+
+.main > div:first-child {
+	display: block;
+	overflow: hidden;
+	background-color: #eee;
+	box-shadow: 0 0 3rem -2px rgba(0,0,0,0.2);
+}
+
+.main > div:last-child {
+	display: block;
+	overflow-y: auto;
+	padding: 10px;
+	background-color: #fff;
+	z-index: -1;
+}
+
+.top-menu {
+	display: grid;
+	width: 100%;
+	height: 100%;
+	grid-template-columns: 3fr 6fr 3fr;
+}
+
+.top-menu > div {
+	display: flex;
+	padding: 5px;
+	align-items: center;
+}
+
+.btn {
+	display: inline-block;
+	padding: 10px;
+	margin: 2px 4px;
+	background-color: transparent;
+	border: 1px solid transparent;
+	transition: 0.2s;
+	color: #222;
+	cursor: pointer;
+}
+
+.btn-primary {
+	background-color: #0af;
+	border-color: #0ad;
+	color: #fff;
+}
+
+.btn-primary:hover {
+	background-color: #0ad;
+	border-color: #0ac;
+	color: #fff;
 }
