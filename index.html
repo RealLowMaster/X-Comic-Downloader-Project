@@ -36,7 +36,18 @@
 	<div class="action-menu">
 		<div onclick="$(this).parent('.action-menu').attr('id', '')"></div>
 		<div>
-			<button style="color:#d0d">Xlecx</button>
+			<button style="color:#d0d" onclick="openXlecxBrowser()">Xlecx</button>
+		</div>
+	</div>
+
+	<div class="browser">
+		<div class="browser-tab-container">
+			<div class="browser-tab">Tab 1 <button onclick="">X</button></div>
+			<div class="browser-tab">Tab 2 <button onclick="">X</button></div>
+			<div class="browser-tab">Tab 3 <button onclick="">X</button></div>
+		</div>
+		<div class="browser-view">
+			<div class="browser-page" id="?"></div>
 		</div>
 	</div>
 

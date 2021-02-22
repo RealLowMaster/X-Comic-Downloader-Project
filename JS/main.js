@@ -12,3 +12,7 @@ $(document).ready(() => {
 	// var h = xlecx.getTag('absorption', 2);
 	// var h = xlecx.search('hello');
 });
+
+function openXlecxBrowser() {
+	$('.browser').attr('style', 'display:grid');
+}
