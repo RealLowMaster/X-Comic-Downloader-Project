@@ -121,8 +121,11 @@ function activeTab(who) {
 	var tabsContainer = document.getElementById('browser-tabs')
 	var passId = tabsContainer.getAttribute('pid') || null
 	if (passId != null) {
-		document.getElementById('browser-tabs').querySelector(`[pi="${passId}"]`).setAttribute('active', null)
-		document.getElementById(passId).setAttribute('style', null)
+		var passTab = document.getElementById('browser-tabs').querySelector(`[pi="${passId}"]`) || null
+		if (passTab != null) {
+			passTab.setAttribute('active', null)
+			document.getElementById(passId).setAttribute('style', null)
+		}
 	}
 	tabsContainer.setAttribute('pid', pageId)
 	who.setAttribute('active', true)
@@ -179,11 +182,11 @@ function openXlecxBrowser() {
 	document.getElementById('add-new-tab').setAttribute('onclick', 'createNewXlecxTab(createNewTab())')
 	var firstTabId = createNewTab()
 	createNewXlecxTab(firstTabId)
-	activeTab(document.getElementById('browser-tabs').querySelector(`[pi="${firstTabId}"]`))
 	document.getElementById('browser').setAttribute('style', 'display:grid')
 }
 
 function createNewXlecxTab(id) {
+	activeTab(document.getElementById('browser-tabs').querySelector(`[pi="${id}"]`))
 	var page = document.getElementById(id)
 	var result = xlecx.getPage(1, true, true, true)
 	var container = document.createElement('div')

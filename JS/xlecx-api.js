@@ -61,9 +61,7 @@ class XlecxAPI {
 					bb = li[i].getElementsByClassName('th-time icon-l')[0];
 					if (bb != undefined) {
 						bb = bb.textContent;
-						bb = bb.replace(' img', '');
-						bb = bb.replace(' images', '');
-						bb = bb.replace(' pages', '');
+						bb = bb.replace(' img', '').replace(' images', '').replace(' pages', '');
 					} else {
 						bb = 0;
 					}
@@ -71,7 +69,7 @@ class XlecxAPI {
 					arr.random.push({
 						"id": this.lastSlash(gg),
 						"title": li[i].getElementsByClassName('th-title')[0].textContent,
-						"thumb": li[i].getElementsByTagName('img')[0].getAttribute('src'),
+						"thumb": li[i].getElementsByTagName('img')[0].getAttribute('src').replace('http://xlecx.com', ''),
 						"pages": Number(bb),
 						"url": gg
 					});
