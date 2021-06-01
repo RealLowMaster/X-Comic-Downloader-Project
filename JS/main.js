@@ -1,4 +1,77 @@
+const fs = require('fs')
+const path = require('path')
+require('v8-compile-cache')
 const xlecx = new XlecxAPI();
+const defaultSetting = {
+	"max_per_page": 18
+}
+var setting
+
+// Directions
+var dirRoot = path.join(__dirname)
+var dirDB = path.join(__dirname+'/db')
+var dirUL = path.join(__dirname+'/Download')
+
+// Error
+function error(txt, onclick, t1) {
+	var err = txt.toString()
+	if (t1 != null) err = err.replace(/{var1}/gi, t1)
+	err = err.replace(/\n/gi, '<br>')
+
+	var html = `<div class="error"><div></div><div><p>${err}</p>`
+	if (onclick == null) {
+		html += '<button class="btn btn-danger" onclick="$(this).parent(\'div\').parent(\'.error\').remove()">OK</button></div></div>'
+	} else {
+		html += `<button class="btn btn-danger" onclick="${onclick}">OK</button></div></div>`
+	}
+
+	$('#main').append(html)
+}
+
+function errorSelector(txt, t1, bgClose, buttons) {
+	var err = txt || null
+	if (t1 != null && err != null) err = err.replace(/{var1}/gi, t1)
+	if (err != null) err = err.replace(/\n/gi, '<br>')
+
+	bgClose = bgClose || false
+	var bgCloseValue = ''
+	if (bgClose == true) bgCloseValue = `$(this).parent('.error').remove()`
+	var html = `<div class="error"><div onclick="${bgCloseValue}"></div><div style="text-align:center">`
+	if (err != null) html += `<p>${err}</p>`
+	
+	buttons = buttons || null
+	if (buttons != null && typeof(buttons) == 'object') for (let i=0; i<buttons.length; i++) {
+		let name = buttons[i][0] || "Ok"
+		let style = buttons[i][1] || ""
+		let onclick = buttons[i][2] || "$(this).parent('div').parent('.error').remove()"
+		html += `<button class="btn btn-danger m-2" style="${style}" onclick="${onclick}">${name}</button>`
+	}
+	html += '</div></div>'
+
+	$('#main').append(html);
+}
+
+// Get Json
+function getJSON(src) {
+	var xmlHttp = null
+
+	xmlHttp = new XMLHttpRequest()
+	xmlHttp.open("GET", src, false)
+	xmlHttp.send(null)
+	var obj = JSON.parse(xmlHttp.responseText)
+	return obj
+}
+
+// Create Main Roots
+if (!fs.existsSync(dirDB)) fs.mkdirSync(dirDB)
+if (!fs.existsSync(dirUL)) fs.mkdirSync(dirUL)
+if (!fs.existsSync(dirRoot+'/setting.cfg')) {
+	setting = defaultSetting
+	fs.writeFile(dirRoot+'/setting.cfg', JSON.stringify(defaultSetting), (err) => { if (err) error(err) })
+} else {
+	setting = getJSON(dirRoot+'./setting.cfg')
+}
+if (setting.max_per_page < 1) setting.max_per_page = 18
 
 
 // Browser
