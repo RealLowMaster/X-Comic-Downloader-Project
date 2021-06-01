@@ -142,10 +142,15 @@
 	transition: 0.2s;
 }
 
-.browser-tab:hover {
+.browser-tab:hover,
+.browser-tab[active="true"] {
 	background-color: #222;
 	color: #fff;
 	border-color: #000;
+}
+
+.browser-tab[active="true"] {
+	background-color: #111;
 }
 
 .browser-tab > span {
@@ -181,7 +186,7 @@
 }
 
 .browser-page {
-	display: block;
+	display: none;
 	width: 100%;
 	height: auto;
 	margin: 0 auto;

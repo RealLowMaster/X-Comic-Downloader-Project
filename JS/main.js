@@ -9,7 +9,7 @@ function closeBrowser() {
 }
 
 function openXlecxBrowser() {
-	$('.browser').attr('style', 'display:grid');
+	document.getElementById('browser').setAttribute('style', 'display:grid')
 }
 
 function updateTabSize() {
@@ -27,9 +27,21 @@ function updateTabSize() {
 	}
 }
 
-setInterval(() => {
-	updateTabSize()
-}, 2000)
+function activeTab(who, id) {
+	var pageId = who.getAttribute('pi')
+	page = document.getElementById(pageId) || null
+	if (page == null) return
+
+	var tabsContainer = document.getElementById('browser-tabs')
+	var passId = tabsContainer.getAttribute('pid') || null
+	if (passId != null) {
+		document.getElementById('browser-tabs').querySelector(`[pi="${passId}"]`).setAttribute('active', null)
+		document.getElementById(passId).setAttribute('style', null)
+	}
+	tabsContainer.setAttribute('pid', pageId)
+	who.setAttribute('active', true)
+	document.getElementById(pageId).setAttribute('style', 'display:block')
+}
 
 $(document).ready(() => {
 	// var h = xlecx.getPage(692, true);
