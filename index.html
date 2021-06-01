@@ -9,10 +9,13 @@
 	<link rel="stylesheet" type="text/css" href="CSS/action.css">
 	<link rel="stylesheet" type="text/css" href="CSS/main.css">
 	<!-- Scripts -->
-	<script type="text/javascript">if (typeof module === 'object') {window.module = module;module = undefined;}</script>
+	<script type="text/javascript">
+		if (typeof module === 'object') {window.module = module;module = undefined;}
+	</script>
 	<script type="text/javascript" src="JS/Jquery.min.js"></script>
 	<script type="text/javascript" src="JS/actions.js"></script>
 	<script type="text/javascript" src="JS/xlecx-api.js"></script>
+	<script type="text/javascript" src="JS/main.js" defer></script>
 </head>
 <body>
 
@@ -21,7 +24,7 @@
 		<div>
 			<div class="top-menu">
 				<div>
-					<button class="btn btn-primary" onclick="$('.action-menu').attr('id', 'active');">Actions</button>
+					<button class="btn btn-primary" onclick="$('#site-menu').attr('active', true);">Sites</button>
 				</div>
 				<div></div>
 				<div></div>
@@ -33,8 +36,8 @@
 	</div>
 
 	<!-- Action Menu -->
-	<div class="action-menu">
-		<div onclick="$(this).parent('.action-menu').attr('id', '')"></div>
+	<div class="action-menu" id="site-menu">
+		<div onclick="$(this).parent('.action-menu').attr('active', null)"></div>
 		<div>
 			<button style="color:#d0d" onclick="openXlecxBrowser()">Xlecx</button>
 		</div>
@@ -50,8 +53,5 @@
 			<div class="browser-page" id="?"></div>
 		</div>
 	</div>
-
-	<!-- Scripts -->
-	<script type="text/javascript" src="JS/main.js"></script>
 </body>
 </html>
