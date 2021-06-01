@@ -40,4 +40,5 @@ Tasks => {
     Create Internet Check Script
     Complete Xlecx API
     Create NHentai API
+    Search About CreateElement Performance vs innerHTML
 }

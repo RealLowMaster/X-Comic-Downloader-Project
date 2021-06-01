@@ -44,17 +44,9 @@
 	</div>
 
 	<div class="browser" id="browser">
-		<div class="browser-tab-container" id="browser-tabs" pid>
-			<div class="browser-tab" onclick="activeTab(this)" pi="tab-1"><span>Tab 1</span> <button onclick="">X</button></div>
-			<div class="browser-tab" onclick="activeTab(this)" pi="tab-2"><span>Tab 2</span> <button onclick="">X</button></div>
-			<div class="browser-tab" onclick="activeTab(this)" pi="tab-3"><span>Tab 3</span> <button onclick="">X</button></div>
-		</div>
-		<button class="borwser-add-tab-btn" onclick="">+</button>
-		<div class="browser-view" id="browser-pages">
-			<div class="browser-page" id="tab-1">tab 1</div>
-			<div class="browser-page" id="tab-2">tab 2</div>
-			<div class="browser-page" id="tab-3">tab 3</div>
-		</div>
+		<div class="browser-tab-container" id="browser-tabs" pid></div>
+		<button class="borwser-add-tab-btn" onclick="createNewTab()">+</button>
+		<div class="browser-view" id="browser-pages"></div>
 	</div>
 </body>
 </html>
