@@ -18,6 +18,7 @@
   "author": "Mehdi Enayatzadeh",
   "license": "ISC",
   "dependencies": {
+    "sqlite3": "^5.0.2",
     "v8-compile-cache": "^2.3.0"
   },
   "devDependencies": {
