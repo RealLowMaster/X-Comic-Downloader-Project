@@ -188,9 +188,125 @@
 .browser-page {
 	display: none;
 	width: 100%;
+	min-height: 100%;
 	height: auto;
 	margin: 0 auto;
 }
+
+/* Xlecx */
+.xlecx-container {
+	display: grid;
+	grid-template-columns: 3fr 9fr;
+	width: 100%;
+	min-height: 95vh;
+}
+
+.xlecx-container > div:first-child {
+	padding: 20px 0;
+	background-color: #111;
+	overflow: hidden;
+	text-align: center;
+}
+
+.xlecx-container > div:first-child > button {
+	display: block;
+	width: 95%;
+	padding: 11px;
+	margin: 8px auto;
+	background-color: #333;
+	border: 1px solid #222;
+	color: #fff;
+	font-family: monospace, sans-serif;
+	font-size: 16px;
+	cursor: pointer;
+}
+
+.xlecx-container > div:first-child > button:hover {
+	color: #d20068;
+}
+
+.xlecx-container > div:last-child {
+	padding: 15px;
+	background-color: #222;
+	text-align: center;
+}
+
+.xlecx-post-container {
+	display: block;
+	width: 100%;
+	padding: 15px;
+	background-color: #222;
+	text-align: center;
+}
+
+.xlecx-post-container > div {
+	display: inline-block;
+	width: 235px;
+	padding: 5px;
+	margin: 10px 5px;
+	background-color: #111;
+	position: relative;
+	cursor: pointer;
+	transition: .2s;
+}
+
+.xlecx-post-container > div > img {
+	display: block;
+	width: 225px;
+	height: 315px;
+}
+
+.xlecx-post-container > div > span {
+	padding: 8px;
+	background-color: #111111aa;
+	color: #fff;
+	border-radius: 50px;
+	font-size: 14px;
+	position: absolute;
+	top: 5px;
+	right: 8px;
+}
+
+.xlecx-post-container > div > p {
+	display: block;
+	width: 100%;
+	padding: 8px;
+	margin: 5px auto 0 auto;
+	background-color: #333;
+	color: #fff;
+	font-size: 16px;
+	line-height: 1.4;
+}
+
+.xlecx-post-container > div:hover {
+	background-color: #a7025b;
+}
+
+.xlecx-pagigation {
+	display: block;
+	width: 100%;
+	padding: 20px;
+	background-color: transparent;
+	text-align: center;
+}
+
+.xlecx-pagigation > * {
+	display: inline-block;
+	min-width: 36px;
+	height: 36px;
+	margin: 0 3px;
+	background-color: #222;
+	color: #fff;
+}
+
+.xlecx-pagigation > button[disable="true"] {
+	background-color: #d20068;
+}
+
+.xlecx-pagigation > button:hover {
+	background-color: #d20068;
+}
+
 
 /* Error */
 .error {

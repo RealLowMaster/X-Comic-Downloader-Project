@@ -13,14 +13,14 @@ class XlecxAPI {
 		return base;
 	}
 
-	getPage(page, random) {
-		if (page == null) {
-			page = 1;
-		}
+	getPage(page, random, pagigation, category) {
+		page = page || 1
+		random = random || false
+		pagigation = pagigation || false
+		category = category || false
 		var url = this.baseURL+'/page/'+page+'/';
-		var xmlHttp = null;
 
-		xmlHttp = new XMLHttpRequest();
+		var xmlHttp = new XMLHttpRequest();
 		xmlHttp.open("GET", url, false);
 		xmlHttp.send(null);
 
@@ -53,7 +53,7 @@ class XlecxAPI {
 				});
 			}
 
-			if (random === true || random === 1) {
+			if (random == true) {
 				arr.random = [];
 				li = htmlDoc.getElementsByClassName('main')[0].children;
 				for (var i=2; i<=13; i++) {
@@ -77,6 +77,40 @@ class XlecxAPI {
 					});
 				}
 			}
+
+			if (pagigation == true) {
+				var value = null, page = null
+				arr.pagigation = [];
+				li = htmlDoc.getElementById('bottom-nav').querySelector('.navigation').children
+				for (var i = 0; i < li.length; i++) {
+					if (li[i].textContent == "")
+						if (i == li.length - 1)
+							value = ">"
+						else
+							value = "<"
+					else
+						value = li[i].textContent
+					
+					if (li[i].getAttribute('href') == null)
+						page = null
+					else
+						page = Number(li[i].getAttribute('href').replace(this.baseURL+'/page/', '').replace('/', ''))
+					
+					
+					arr.pagigation.push([value, page])
+				}
+			}
+
+			if (category == true) {
+				arr.categories = [];
+				var li = htmlDoc.getElementsByClassName('side-bc')[0].getElementsByTagName('a');
+				var regexp = RegExp('/', 'g')
+				for (var i=0; i<li.length; i++) {
+					arr.categories.push({ "name": li[i].textContent, "url": li[i].getAttribute('href').replace(this.baseURL+'/', '').replace(regexp, '') })
+				}
+			}
+
+
 		} else {
 			arr = false;
 		}
@@ -98,8 +132,9 @@ class XlecxAPI {
 
 		var arr = [];
 		var li = htmlDoc.getElementsByClassName('side-bc')[0].getElementsByTagName('a');
+		var regexp = RegExp('/', 'g')
 		for (var i=0; i<li.length; i++) {
-			arr.push({ "Name": li[i].textContent, "URL": li[i].getAttribute('href') });
+			arr.push({ "name": li[i].textContent, "url": li[i].getAttribute('href').replace(this.baseURL, '').replace(regexp, '') });
 		}
 
 		return arr;

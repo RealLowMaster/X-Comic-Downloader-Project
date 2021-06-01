@@ -35,7 +35,7 @@
 		<div></div>
 	</div>
 
-	<!-- Action Menu -->
+	<!-- Sites Menu -->
 	<div class="action-menu" id="site-menu">
 		<div onclick="$(this).parent('.action-menu').attr('active', null)"></div>
 		<div>
@@ -43,9 +43,10 @@
 		</div>
 	</div>
 
+	<!-- Browser -->
 	<div class="browser" id="browser">
 		<div class="browser-tab-container" id="browser-tabs" pid></div>
-		<button class="borwser-add-tab-btn" onclick="createNewTab()">+</button>
+		<button class="borwser-add-tab-btn" id="add-new-tab" onclick="">+</button>
 		<div class="browser-view" id="browser-pages"></div>
 	</div>
 </body>

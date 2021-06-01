@@ -1,11 +1,12 @@
 const fs = require('fs')
 const path = require('path')
 require('v8-compile-cache')
-const xlecx = new XlecxAPI();
+const xlecx = new XlecxAPI()
 const defaultSetting = {
 	"max_per_page": 18
 }
 var setting
+// eval() Convert String To Code
 
 // Directions
 var dirRoot = path.join(__dirname)
@@ -73,6 +74,16 @@ if (!fs.existsSync(dirRoot+'/setting.cfg')) {
 }
 if (setting.max_per_page < 1) setting.max_per_page = 18
 
+// CheckConnection
+const checkOnlineStatus = async(url) => {
+	url = url || "https://www.google.com/"
+	try {
+		const online = await fetch(url)
+		return online.status >= 200 && online.status < 300;
+	} catch (err) {
+		return false;
+	}
+};
 
 // Browser
 function openBrowser() {
@@ -102,7 +113,7 @@ window.onresize = () => {
 	updateTabSize()
 }
 
-function activeTab(who, id) {
+function activeTab(who) {
 	var pageId = who.getAttribute('pi')
 	page = document.getElementById(pageId) || null
 	if (page == null) return
@@ -115,7 +126,9 @@ function activeTab(who, id) {
 	}
 	tabsContainer.setAttribute('pid', pageId)
 	who.setAttribute('active', true)
-	document.getElementById(pageId).setAttribute('style', 'display:block')
+	var tpage = document.getElementById(pageId)
+	tpage.scrollTop = 1
+	tpage.setAttribute('style', 'display:block')
 }
 
 function checkTabLimit() {
@@ -152,16 +165,51 @@ function removeTab(id) {
 
 // Xlecx
 function openXlecxBrowser() {
+	document.getElementById('add-new-tab').setAttribute('onclick', 'createNewXlecxTab(createNewTab())')
+	var firstTabId = createNewTab()
+	createNewXlecxTab(firstTabId)
+	activeTab(document.getElementById('browser-tabs').querySelector(`[pi="${firstTabId}"]`))
 	document.getElementById('browser').setAttribute('style', 'display:grid')
 }
 
+function createNewXlecxTab(id) {
+	var page = document.getElementById(id)
+	var result = xlecx.getPage(1, true, true, true)
+	console.log(result)
+	var html = '<div class="xlecx-container"><div>'
+	for (var i = 0; i < result.categories.length; i++) {
+		html += `<button>${result.categories[i].name}</button>`
+	}
+	html += '</div><div><div class="xlecx-post-container">'
+
+	for (var i = 0; i < result.content.length; i++) {
+		html += `<div><img src="${xlecx.baseURL+result.content[i].thumb}" alt=""><span>${result.content[i].pages}</span><p>${result.content[i].title}</p></div>`
+	}
+	html += '</div><div class="xlecx-pagigation">'
+
+	for (var i = 0; i < result.pagigation.length; i++) {
+		if (result.pagigation[i][1] == null)
+			html += `<button disable="true">${result.pagigation[i][0]}</span>`
+		else
+			html += `<button>${result.pagigation[i][0]}</button>`
+	}
+	html += '</div><div class="xlecx-post-container">'
+
+	for (var i = 0; i < result.random.length; i++) {
+		html += `<div><img src="${xlecx.baseURL+result.random[i].thumb}" alt=""><span>${result.random[i].pages}</span><p>${result.random[i].title}</p></div>`
+	}
+	html += '</div></div></div>'
+
+	page.innerHTML = html
+}
+
 $(document).ready(() => {
-	// var h = xlecx.getPage(692, true);
-	// var h = xlecx.getComic('9666-uchishikiri.html');
-	// var h = xlecx.getAllTags();
-	// var h = xlecx.getGroup('pucchu', 1);
-	// var h = xlecx.getArtist('felsala', 1);
-	// var h = xlecx.getParody('boruto', 1);
-	// var h = xlecx.getTag('absorption', 2);
-	// var h = xlecx.search('hello');
+	// var h = xlecx.getPage(692, true)
+	// var h = xlecx.getComic('9666-uchishikiri.html')
+	// var h = xlecx.getAllTags()
+	// var h = xlecx.getGroup('pucchu', 1)
+	// var h = xlecx.getArtist('felsala', 1)
+	// var h = xlecx.getParody('boruto', 1)
+	// var h = xlecx.getTag('absorption', 2)
+	// var h = xlecx.search('hello')
 });
