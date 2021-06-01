@@ -99,16 +99,35 @@
 
 .browser-tab-container {
 	display: flex;
-	overflow-y: hidden;
-	overflow-x: auto;
+	overflow: hidden;
 	align-items: center;
 	background-color: #fff;
 	box-shadow: 0 -2px 25px 0 rgba(0,0,0,0.3);
 }
 
+.borwser-add-tab-btn {
+	display: block;
+	width: 35px;
+	height: 35px;
+	background-color: #fff;
+	border-radius: 50%;
+	border: 1px solid #eee;
+	box-shadow: 0 1px 10px 0 rgba(0,0,0,0.2);
+	position: fixed;
+	top: 2px;
+	right: 10px;
+	cursor: pointer;
+	transition: .2s;
+}
+
+.borwser-add-tab-btn:hover {
+	transform: translate(0, -1px);
+	box-shadow: 0 10px 10px 1px rgba(0,0,0,0.3);
+}
+
 .browser-tab {
 	display: flex;
-	min-width: 150px;
+	width: 200px;
 	height: 100%;
 	padding: 10px;
 	position: relative;
@@ -117,6 +136,7 @@
 	justify-content: center;
 	border: 0 solid #ddd;
 	border-width: 0 1px 0 0;
+	border-radius: 10px 10px 0 0;
 	font-size: 0.9rem;
 	cursor: pointer;
 	transition: 0.2s;
@@ -128,11 +148,19 @@
 	border-color: #000;
 }
 
+.browser-tab > span {
+	display: block;
+	width: 100%;
+	max-width: 100%;
+	word-wrap: normal;
+	overflow: hidden;
+}
+
 .browser-tab > button {
 	display: block;
 	position: absolute;
 	top: 4px;
-	right: 4px;
+	right: 6px;
 	color: transparent;
 	background-color: transparent;
 	font-size: 0.9rem;
