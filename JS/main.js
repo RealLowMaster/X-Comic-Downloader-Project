@@ -1,15 +1,13 @@
 const xlecx = new XlecxAPI();
 
+
+// Browser
 function openBrowser() {
 	console.log('Comming Sood!')
 }
 
 function closeBrowser() {
 	console.log('Comming Sood!')
-}
-
-function openXlecxBrowser() {
-	document.getElementById('browser').setAttribute('style', 'display:grid')
 }
 
 function updateTabSize() {
@@ -76,6 +74,12 @@ function createNewTab() {
 function removeTab(id) {
 	document.getElementById(id).remove()
 	document.getElementById('browser-tabs').querySelector(`[pi="${id}"]`).remove()
+}
+
+
+// Xlecx
+function openXlecxBrowser() {
+	document.getElementById('browser').setAttribute('style', 'display:grid')
 }
 
 $(document).ready(() => {
