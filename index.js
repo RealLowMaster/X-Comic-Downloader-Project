@@ -1,19 +1,39 @@
-nw.Window.open('index.html', {
-	min_width: 800,
-	min_height: 600,
-	position: 'center',
-	icon: './Image/favicon.png'
-}, function(win) {
-	var option = {
-		key : "Ctrl+R",
-		active : function() {
-			win.reload();
-		}
-	};
+const { app, BrowserWindow } = require('electron')
+const fs = require('fs')
+require('v8-compile-cache');
 
-	// Create a shortcut with |option|.
-	var shortcut = new nw.Shortcut(option);
+function createWindow () {
+  const win = new BrowserWindow({
+    width: 800,
+    height: 600,
+    minWidth: 800,
+    minHeight: 600,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false
+    }
+  })
 
-	// Register global desktop shortcut, which can work without focus.
-	nw.App.registerGlobalHotKey(shortcut);
-});
+  win.maximize(true)
+
+  win.loadFile('index.html')
+}
+
+app.whenReady().then(() => {
+  createWindow()
+
+  app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createWindow()
+    }
+  })
+})
+
+app.on('window-all-closed', () => {
+	fs.rmdir('./tmp', (err) => {
+		console.log(err)
+	})
+  if (process.platform !== 'darwin') {
+    app.quit()
+  }
+})

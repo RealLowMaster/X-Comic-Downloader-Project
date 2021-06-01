@@ -1,0 +1,1 @@
+electron-packager . x-comic-downloader --overwrite --asar=false --platform=win32 --arch=x64 --icon=Image/favicon.ico --prune=true --out=release-builds --version-string.CompanyName="LowMaster" --version-string.FileDescription="A Software for Downloading Adult or Hentai Comic and Manga." --version-string.ProductName="X Comic Downloader"
