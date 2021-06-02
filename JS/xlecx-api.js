@@ -13,10 +13,10 @@ class XlecxAPI {
 		return base;
 	}
 
-	getPage(page, random, pagigation, category) {
+	getPage(page, random, pagination, category) {
 		page = page || 1
 		random = random || false
-		pagigation = pagigation || false
+		pagination = pagination || false
 		category = category || false
 		var url = this.baseURL+'/page/'+page+'/';
 
@@ -76,9 +76,9 @@ class XlecxAPI {
 				}
 			}
 
-			if (pagigation == true) {
+			if (pagination == true) {
 				var value = null, page = null
-				arr.pagigation = [];
+				arr.pagination = [];
 				li = htmlDoc.getElementById('bottom-nav').querySelector('.navigation').children
 				for (var i = 0; i < li.length; i++) {
 					if (li[i].textContent == "")
@@ -95,7 +95,7 @@ class XlecxAPI {
 						page = Number(li[i].getAttribute('href').replace(this.baseURL+'/page/', '').replace('/', ''))
 					
 					
-					arr.pagigation.push([value, page])
+					arr.pagination.push([value, page])
 				}
 			}
 
@@ -139,6 +139,7 @@ class XlecxAPI {
 	}
 
 	getComic(id, cook) {
+		cook = cook || false
 		var url = this.baseURL+'/'+id;
 		var xmlHttp = null;
 

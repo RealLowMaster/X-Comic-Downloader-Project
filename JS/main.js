@@ -194,6 +194,7 @@ function createNewXlecxTabContents(id) {
 	var elementContainer = null
 	var element = null
 
+	// Categories
 	elementContainer = document.createElement('div')
 	for (var i = 0; i < result.categories.length; i++) {
 		element = document.createElement('button')
@@ -205,28 +206,30 @@ function createNewXlecxTabContents(id) {
 	}
 	container.appendChild(elementContainer)
 
+	// Content
 	elementContainerContainer = document.createElement('div')
 	elementContainer = document.createElement('div')
 	elementContainer.classList.add("xlecx-post-container")
 	for (var i = 0; i < result.content.length; i++) {
 		element = document.createElement('div')
-		element.innerHTML = `<img src="${xlecx.baseURL+result.content[i].thumb}"><span>${result.content[i].pages}</span><p>${result.content[i].title}</p>`
+		element.innerHTML = `<img src="${xlecx.baseURL+result.content[i].thumb}"><span>${result.content[i].pages}</span><p>${result.content[i].title}</p><div id="${result.content[i].id}"></div>`
 		element.onmousedown = e => {
-			xlecxOpenPage(checkMouseButton(e))
+			xlecxOpenPage(checkMouseButton(e), e.target.getAttribute('id'))
 		}
 		elementContainer.appendChild(element)
 	}
 	elementContainerContainer.appendChild(elementContainer)
 
+	// Pagination
 	elementContainer = document.createElement('div')
-	elementContainer.classList.add("xlecx-pagigation")
-	for (var i = 0; i < result.pagigation.length; i++) {
+	elementContainer.classList.add("xlecx-pagination")
+	for (var i = 0; i < result.pagination.length; i++) {
 		element = document.createElement('button')
-		if (result.pagigation[i][1] == null) {
+		if (result.pagination[i][1] == null) {
 			element.setAttribute('disable', true)
-			element.textContent = result.pagigation[i][0]
+			element.textContent = result.pagination[i][0]
 		} else {
-			element.textContent = result.pagigation[i][0]
+			element.textContent = result.pagination[i][0]
 			element.onmousedown = e => {
 				xlecxOpenPage(checkMouseButton(e))
 			}
@@ -236,13 +239,14 @@ function createNewXlecxTabContents(id) {
 	}
 	elementContainerContainer.appendChild(elementContainer)
 
+	// Random
 	elementContainer = document.createElement('div')
 	elementContainer.classList.add("xlecx-post-container")
 	for (var i = 0; i < result.random.length; i++) {
 		element = document.createElement('div')
-		element.innerHTML = `<img src="${xlecx.baseURL+result.random[i].thumb}"><span>${result.random[i].pages}</span><p>${result.random[i].title}</p>`
+		element.innerHTML = `<img src="${xlecx.baseURL+result.random[i].thumb}"><span>${result.random[i].pages}</span><p>${result.random[i].title}</p><div id="${result.random[i].id}"></div>`
 		element.onmousedown = e => {
-			xlecxOpenPage(checkMouseButton(e))
+			xlecxOpenPage(checkMouseButton(e), e.target.getAttribute('id'))
 		}
 		elementContainer.appendChild(element)
 	}
@@ -253,13 +257,81 @@ function createNewXlecxTabContents(id) {
 }
 
 function createNewXlecxTab(id) {
-	// activeTab(document.getElementById('browser-tabs').querySelector(`[pi="${id}"]`))
-	// createNewXlecxTabContents(id)
+	activeTab(document.getElementById('browser-tabs').querySelector(`[pi="${id}"]`))
+	createNewXlecxTabContents(id)
 }
 
-function xlecxOpenPage(makeNewPage) {
+function xlecxOpenPage(makeNewPage, id) {
 	makeNewPage = makeNewPage || false
-	console.log(makeNewPage)
+	var page
+	var result = xlecx.getComic(id)
+	var containerContainer = document.createElement('div')
+	containerContainer.classList.add('xlecx-container-one-row')
+	var container = document.createElement('div')
+	var element
+	container.innerHTML = `<p class="xlecx-post-title">${result.title}</p>`
+
+	if (makeNewPage)
+		page = document.getElementById(createNewTab())
+	else {
+		page = document.getElementById(document.getElementById('browser-tabs').getAttribute('pid'))
+		page.innerHTML = ''
+	}
+
+	// Groups
+	if (result.groups != undefined) {
+		element = document.createElement('div')
+		element.classList.add('xlecx-post-tags')
+		element.innerHTML = "Group: "
+		for(var i = 0; i < result.groups.length; i++) {
+			element.innerHTML += `<button>${result.groups[i].name}</button> `
+		}
+	}
+	container.append(element)
+
+	// Artists
+	if (result.artists != undefined) {
+		element = document.createElement('div')
+		element.classList.add('xlecx-post-tags')
+		element.innerHTML = "Artist: "
+		for(var i = 0; i < result.artists.length; i++) {
+			element.innerHTML += `<button>${result.artists[i].name}</button> `
+		}
+	}
+	container.append(element)
+
+	// Parody
+	if (result.parody != undefined) {
+		element = document.createElement('div')
+		element.classList.add('xlecx-post-tags')
+		element.innerHTML = "Parody: "
+		for(var i = 0; i < result.parody.length; i++) {
+			element.innerHTML += `<button>${result.parody[i].name}</button> `
+		}
+	}
+	container.append(element)
+
+	// Tags
+	if (result.tags != undefined) {
+		element = document.createElement('div')
+		element.classList.add('xlecx-post-tags')
+		element.innerHTML = "Tag: "
+		for(var i = 0; i < result.tags.length; i++) {
+			element.innerHTML += `<button>${result.tags[i].name}</button> `
+		}
+	}
+	container.append(element)
+
+	// Images
+	element = document.createElement('div')
+	element.classList.add('xlecx-image-container-1x1')
+	for (var i = 0; i < result.images.length; i++) {
+		element.innerHTML += `<img src="${xlecx.baseURL}/${result.images[i].thumb}">`
+	}
+	container.appendChild(element)
+	containerContainer.appendChild(container)
+
+	page.appendChild(containerContainer)
 }
 
 function xlecxOpenCategory(makeNewPage) {
