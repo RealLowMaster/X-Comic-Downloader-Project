@@ -34,6 +34,10 @@ html, body {
 	user-select: none;
 }
 
+a {
+	text-decoration: none;
+}
+
 img {
 	-webkit-user-drag: none;
 }
@@ -274,6 +278,10 @@ img {
 	margin: 0 auto;
 }
 
+.child-draggable > img {
+	-webkit-user-drag: auto;
+}
+
 /* Xlecx */
 .xlecx-container {
 	display: grid;
@@ -310,6 +318,69 @@ img {
 	padding: 15px;
 	background-color: #222;
 	text-align: center;
+}
+
+.xlecx-container-one-row {
+	display: block;
+	width: 100%;
+	min-height: 95vh;
+	padding: 15px;
+	background-color: #222;
+}
+
+.xlecx-container-one-row > div {
+	display: block;
+	width: 95%;
+	margin: 0 auto;
+	background-color: #333;
+	color: #fff;
+	box-shadow: 0 1px 2px 0 rgb(0 0 0 / 40%);
+}
+
+.xlecx-post-title {
+	display: block;
+	width: 100%;
+	padding: 10px;
+	margin-bottom: 10px;
+	background-color: #282828;
+	font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+	font-size: 24px;
+}
+
+.xlecx-post-tags {
+	display: block;
+	line-height: 30px;
+	padding: 0 10px;
+	font: 13px 'Open Sans', Arial, Helvetica, sans-serif;
+}
+
+.xlecx-post-tags > button {
+	display: inline-block;
+	padding: 0 10px;
+	margin: 0 0 10px 5px;
+	background-color: #222;
+	color: #ccc;
+	line-height: 30px;
+	cursor: pointer;
+}
+
+.xlecx-image-container-1x1 {
+	display: block;
+	padding: 10px;
+	margin: 0 10px 10px 10px;
+	background-color: #282828;
+	text-align: center;
+}
+
+.xlecx-image-container-1x1 > img {
+	display: block;
+	max-width: 100%;
+	height: auto;
+	margin: 10px 0;
+}
+
+.xlecx-post-tags > button:hover {
+	color: #d20068;
 }
 
 .xlecx-post-container {

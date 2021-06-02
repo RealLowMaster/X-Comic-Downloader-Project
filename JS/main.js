@@ -253,8 +253,8 @@ function createNewXlecxTabContents(id) {
 }
 
 function createNewXlecxTab(id) {
-	activeTab(document.getElementById('browser-tabs').querySelector(`[pi="${id}"]`))
-	createNewXlecxTabContents(id)
+	// activeTab(document.getElementById('browser-tabs').querySelector(`[pi="${id}"]`))
+	// createNewXlecxTabContents(id)
 }
 
 function xlecxOpenPage(makeNewPage) {
