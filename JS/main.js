@@ -79,11 +79,11 @@ const checkOnlineStatus = async(url) => {
 	url = url || "https://www.google.com/"
 	try {
 		const online = await fetch(url)
-		return online.status >= 200 && online.status < 300;
+		return online.status >= 200 && online.status < 300
 	} catch (err) {
-		return false;
+		return false
 	}
-};
+}
 
 // Browser
 function openBrowser() {
@@ -180,13 +180,12 @@ function checkMouseButton(event) {
 // Xlecx
 function openXlecxBrowser() {
 	document.getElementById('add-new-tab').setAttribute('onclick', 'createNewXlecxTab(createNewTab())')
-	var firstTabId = createNewTab()
-	createNewXlecxTab(firstTabId)
+	createNewXlecxTab(createNewTab())
 	document.getElementById('browser').setAttribute('style', 'display:grid')
 }
 
-function createNewXlecxTab(id) {
-	activeTab(document.getElementById('browser-tabs').querySelector(`[pi="${id}"]`))
+function createNewXlecxTabContents(id) {
+	if (id == null) return
 	var page = document.getElementById(id)
 	var result = xlecx.getPage(1, true, true, true)
 	var container = document.createElement('div')
@@ -233,7 +232,6 @@ function createNewXlecxTab(id) {
 			}
 		}
 		
-		
 		elementContainer.appendChild(element)
 	}
 	elementContainerContainer.appendChild(elementContainer)
@@ -252,6 +250,11 @@ function createNewXlecxTab(id) {
 	container.appendChild(elementContainerContainer)
 
 	page.appendChild(container)
+}
+
+function createNewXlecxTab(id) {
+	activeTab(document.getElementById('browser-tabs').querySelector(`[pi="${id}"]`))
+	createNewXlecxTabContents(id)
 }
 
 function xlecxOpenPage(makeNewPage) {
