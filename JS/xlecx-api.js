@@ -6,6 +6,7 @@ class XlecxAPI {
 		this.parodyURL = '/xfsearch/parody/'
 		this.tagURL = '/tags/'
 		this.searchURL = '/index.php?do=search'
+		this.timeout = 6000
 	}
 
 	lastSlash(str) {
@@ -139,7 +140,7 @@ class XlecxAPI {
 		var xhr = new XMLHttpRequest()
 		xhr.open("GET", url, true)
 
-		xhr.timeout = 4000
+		xhr.timeout = this.timeout
 
 		xhr.onload = () => {
 			var parser = new DOMParser()
@@ -177,7 +178,7 @@ class XlecxAPI {
 		var xhr = new XMLHttpRequest()
 		xhr.open("GET", url, true)
 
-		xhr.timeout = 4000
+		xhr.timeout = this.timeout
 
 		xhr.onload = () => {
 			var parser = new DOMParser()
@@ -290,7 +291,7 @@ class XlecxAPI {
 		var xhr = new XMLHttpRequest()
 		xhr.open("GET", url, true)
 
-		xhr.timeout = 4000
+		xhr.timeout = this.timeout
 
 		xhr.onload = () => {
 			var parser = new DOMParser()
@@ -335,7 +336,7 @@ class XlecxAPI {
 		var xhr = new XMLHttpRequest()
 		xhr.open("GET", url, true)
 
-		xhr.timeout = 4000
+		xhr.timeout = this.timeout
 
 		xhr.onload = () => {
 			var parser = new DOMParser()
@@ -424,7 +425,7 @@ class XlecxAPI {
 		var xhr = new XMLHttpRequest()
 		xhr.open("GET", url, true)
 
-		xhr.timeout = 4000
+		xhr.timeout = this.timeout
 
 		xhr.onload = () => {
 			var parser = new DOMParser()
@@ -513,7 +514,7 @@ class XlecxAPI {
 		var xhr = new XMLHttpRequest()
 		xhr.open("GET", url, true)
 
-		xhr.timeout = 4000
+		xhr.timeout = this.timeout
 
 		xhr.onload = () => {
 			var parser = new DOMParser()
@@ -602,7 +603,7 @@ class XlecxAPI {
 		var xhr = new XMLHttpRequest()
 		xhr.open("GET", url, true)
 
-		xhr.timeout = 4000
+		xhr.timeout = this.timeout
 
 		xhr.onload = () => {
 			var parser = new DOMParser()
