@@ -74,17 +74,6 @@ if (!fs.existsSync(dirRoot+'/setting.cfg')) {
 }
 if (setting.max_per_page < 1) setting.max_per_page = 18
 
-// CheckConnection
-const checkOnlineStatus = async(url) => {
-	url = url || "https://www.google.com/"
-	try {
-		const online = await fetch(url)
-		return online.status >= 200 && online.status < 300
-	} catch (err) {
-		return false
-	}
-}
-
 // Browser
 function openBrowser() {
 	console.log('Comming Sood!')
@@ -165,14 +154,14 @@ function removeTab(id) {
 	document.getElementById('browser-tabs').querySelector(`[pi="${id}"]`).remove()
 }
 
-function checkMouseButton(event) {
+function checkMiddleMouseClick(event) {
 	var isRightMB
 	event = event || window.event
 
 	if ("which" in event)
-		isRightMB = event.which == 3
+		isRightMB = event.which == 2
 	else if ("button" in e)
-		isRightMB = event.button == 2
+		isRightMB = event.button == 3
 
 	return isRightMB
 }
@@ -214,7 +203,8 @@ function createNewXlecxTabContents(id) {
 		element = document.createElement('div')
 		element.innerHTML = `<img src="${xlecx.baseURL+result.content[i].thumb}"><span>${result.content[i].pages}</span><p>${result.content[i].title}</p><div id="${result.content[i].id}"></div>`
 		element.onmousedown = e => {
-			xlecxOpenPage(checkMouseButton(e), e.target.getAttribute('id'))
+			e.preventDefault()
+			xlecxOpenPage(checkMiddleMouseClick(e), e.target.getAttribute('id'))
 		}
 		elementContainer.appendChild(element)
 	}
@@ -246,7 +236,8 @@ function createNewXlecxTabContents(id) {
 		element = document.createElement('div')
 		element.innerHTML = `<img src="${xlecx.baseURL+result.random[i].thumb}"><span>${result.random[i].pages}</span><p>${result.random[i].title}</p><div id="${result.random[i].id}"></div>`
 		element.onmousedown = e => {
-			xlecxOpenPage(checkMouseButton(e), e.target.getAttribute('id'))
+			e.preventDefault()
+			xlecxOpenPage(checkMiddleMouseClick(e), e.target.getAttribute('id'))
 		}
 		elementContainer.appendChild(element)
 	}
