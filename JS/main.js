@@ -106,7 +106,7 @@ window.onresize = () => {
 	updateTabSize()
 }
 
-function activeTab(who) {
+function activateTab(who) {
 	var pageId = who.getAttribute('pi')
 	page = document.getElementById(pageId) || null
 	if (page == null) return
@@ -146,7 +146,7 @@ function createNewTab() {
 	var page = document.createElement('div')
 	page.setAttribute('class', 'browser-page')
 	page.setAttribute('id', newTabId)
-	document.getElementById('browser-tabs').innerHTML += `<div class="browser-tab" onclick="activeTab(this)" pi="${newTabId}"><span>${newTabId}</span> <button onclick="removeTab('${newTabId}')">X</button></div>`
+	document.getElementById('browser-tabs').innerHTML += `<div class="browser-tab" onclick="activateTab(this)" pi="${newTabId}"><span>${newTabId}</span> <button onclick="removeTab('${newTabId}')">X</button></div>`
 	document.getElementById('browser-pages').appendChild(page)
 
 	updateTabSize()
@@ -154,8 +154,20 @@ function createNewTab() {
 }
 
 function removeTab(id) {
+	var removingTab = document.getElementById('browser-tabs').querySelector(`[pi="${id}"]`)
+	var tabs = document.getElementById('browser-tabs').children
+	var index = Array.prototype.slice.call(tabs).indexOf(removingTab)
+
+	if (index == 0) {
+		if (1 <= tabs.length - 1) {
+			activateTab(tabs[1])
+		}
+	} else {
+		activateTab(tabs[index - 1])
+	}
+
+	removingTab.remove()
 	document.getElementById(id).remove()
-	document.getElementById('browser-tabs').querySelector(`[pi="${id}"]`).remove()
 }
 
 function checkMiddleMouseClick(event) {
@@ -178,7 +190,7 @@ function openXlecxBrowser() {
 }
 
 function createNewXlecxTab(id) {
-	activeTab(document.getElementById('browser-tabs').querySelector(`[pi="${id}"]`))
+	activateTab(document.getElementById('browser-tabs').querySelector(`[pi="${id}"]`))
 	var page = document.getElementById(id)
 
 	xlecx.getPage({page:1, random:true, category:true}, (err, result) => {
