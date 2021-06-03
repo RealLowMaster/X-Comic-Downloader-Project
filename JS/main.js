@@ -19,15 +19,18 @@ function error(txt, onclick, t1) {
 	var err = txt.toString()
 	if (t1 != null) err = err.replace(/{var1}/gi, t1)
 	err = err.replace(/\n/gi, '<br>')
+	var element = document.createElement('div')
+	element.classList.add('error')
 
-	var html = `<div class="error"><div></div><div><p>${err}</p>`
+	var html = `<div></div><div><p>${err}</p>`
 	if (onclick == null) {
 		html += '<button class="btn btn-danger" onclick="$(this).parent(\'div\').parent(\'.error\').remove()">OK</button></div></div>'
 	} else {
-		html += `<button class="btn btn-danger" onclick="${onclick}">OK</button></div></div>`
+		html += `<button onclick="${onclick}">OK</button></div>`
 	}
+	element.innerHTML = html
 
-	$('#main').append(html)
+	document.getElementsByTagName('body')[0].appendChild(element)
 }
 
 function errorSelector(txt, t1, bgClose, buttons) {
@@ -174,156 +177,156 @@ function openXlecxBrowser() {
 	document.getElementById('browser').setAttribute('style', 'display:grid')
 }
 
-function createNewXlecxTabContents(id) {
-	if (id == null) return
-	var page = document.getElementById(id)
-	var result = xlecx.getPage(1, true, true, true)
-	var container = document.createElement('div')
-	container.classList.add("xlecx-container")
-	var elementContainerContainer = null
-	var elementContainer = null
-	var element = null
-
-	// Categories
-	elementContainer = document.createElement('div')
-	for (var i = 0; i < result.categories.length; i++) {
-		element = document.createElement('button')
-		element.textContent = result.categories[i].name
-		element.onmousedown = e => {
-			xlecxOpenCategory(checkMouseButton(e))
-		}
-		elementContainer.appendChild(element)
-	}
-	container.appendChild(elementContainer)
-
-	// Content
-	elementContainerContainer = document.createElement('div')
-	elementContainer = document.createElement('div')
-	elementContainer.classList.add("xlecx-post-container")
-	for (var i = 0; i < result.content.length; i++) {
-		element = document.createElement('div')
-		element.innerHTML = `<img src="${xlecx.baseURL+result.content[i].thumb}"><span>${result.content[i].pages}</span><p>${result.content[i].title}</p><div id="${result.content[i].id}"></div>`
-		element.onmousedown = e => {
-			e.preventDefault()
-			xlecxOpenPage(checkMiddleMouseClick(e), e.target.getAttribute('id'))
-		}
-		elementContainer.appendChild(element)
-	}
-	elementContainerContainer.appendChild(elementContainer)
-
-	// Pagination
-	elementContainer = document.createElement('div')
-	elementContainer.classList.add("xlecx-pagination")
-	for (var i = 0; i < result.pagination.length; i++) {
-		element = document.createElement('button')
-		if (result.pagination[i][1] == null) {
-			element.setAttribute('disable', true)
-			element.textContent = result.pagination[i][0]
-		} else {
-			element.textContent = result.pagination[i][0]
-			element.onmousedown = e => {
-				xlecxOpenPage(checkMouseButton(e))
-			}
-		}
-		
-		elementContainer.appendChild(element)
-	}
-	elementContainerContainer.appendChild(elementContainer)
-
-	// Random
-	elementContainer = document.createElement('div')
-	elementContainer.classList.add("xlecx-post-container")
-	for (var i = 0; i < result.random.length; i++) {
-		element = document.createElement('div')
-		element.innerHTML = `<img src="${xlecx.baseURL+result.random[i].thumb}"><span>${result.random[i].pages}</span><p>${result.random[i].title}</p><div id="${result.random[i].id}"></div>`
-		element.onmousedown = e => {
-			e.preventDefault()
-			xlecxOpenPage(checkMiddleMouseClick(e), e.target.getAttribute('id'))
-		}
-		elementContainer.appendChild(element)
-	}
-	elementContainerContainer.appendChild(elementContainer)
-	container.appendChild(elementContainerContainer)
-
-	page.appendChild(container)
-}
-
 function createNewXlecxTab(id) {
 	activeTab(document.getElementById('browser-tabs').querySelector(`[pi="${id}"]`))
-	createNewXlecxTabContents(id)
+	var page = document.getElementById(id)
+
+	xlecx.getPage({page:1, random:true, category:true}, (err, result) => {
+		if (err) { error(err); return }
+		var container = document.createElement('div')
+		container.classList.add("xlecx-container")
+		var elementContainerContainer = null
+		var elementContainer = null
+		var element = null
+
+		// Categories
+		elementContainer = document.createElement('div')
+		for (var i = 0; i < result.categories.length; i++) {
+			element = document.createElement('button')
+			element.textContent = result.categories[i].name
+			element.onmousedown = e => {
+				xlecxOpenCategory(checkMouseButton(e))
+			}
+			elementContainer.appendChild(element)
+		}
+		container.appendChild(elementContainer)
+
+		// Content
+		elementContainerContainer = document.createElement('div')
+		elementContainer = document.createElement('div')
+		elementContainer.classList.add("xlecx-post-container")
+		for (var i = 0; i < result.content.length; i++) {
+			element = document.createElement('div')
+			element.innerHTML = `<img src="${xlecx.baseURL+result.content[i].thumb}"><span>${result.content[i].pages}</span><p>${result.content[i].title}</p><div id="${result.content[i].id}"></div>`
+			element.onmousedown = e => {
+				e.preventDefault()
+				xlecxOpenPage(checkMiddleMouseClick(e), e.target.getAttribute('id'))
+			}
+			elementContainer.appendChild(element)
+		}
+		elementContainerContainer.appendChild(elementContainer)
+
+		// Pagination
+		elementContainer = document.createElement('div')
+		elementContainer.classList.add("xlecx-pagination")
+		for (var i = 0; i < result.pagination.length; i++) {
+			element = document.createElement('button')
+			if (result.pagination[i][1] == null) {
+				element.setAttribute('disable', true)
+				element.textContent = result.pagination[i][0]
+			} else {
+				element.textContent = result.pagination[i][0]
+				element.onmousedown = e => {
+					xlecxOpenPage(checkMouseButton(e))
+				}
+			}
+			
+			elementContainer.appendChild(element)
+		}
+		elementContainerContainer.appendChild(elementContainer)
+
+		// Random
+		elementContainer = document.createElement('div')
+		elementContainer.classList.add("xlecx-post-container")
+		for (var i = 0; i < result.random.length; i++) {
+			element = document.createElement('div')
+			element.innerHTML = `<img src="${xlecx.baseURL+result.random[i].thumb}"><span>${result.random[i].pages}</span><p>${result.random[i].title}</p><div id="${result.random[i].id}"></div>`
+			element.onmousedown = e => {
+				e.preventDefault()
+				xlecxOpenPage(checkMiddleMouseClick(e), e.target.getAttribute('id'))
+			}
+			elementContainer.appendChild(element)
+		}
+		elementContainerContainer.appendChild(elementContainer)
+		container.appendChild(elementContainerContainer)
+
+		page.appendChild(container)
+	})
 }
 
 function xlecxOpenPage(makeNewPage, id) {
 	makeNewPage = makeNewPage || false
 	var page
-	var result = xlecx.getComic(id)
-	var containerContainer = document.createElement('div')
-	containerContainer.classList.add('xlecx-container-one-row')
-	var container = document.createElement('div')
-	var element
-	container.innerHTML = `<p class="xlecx-post-title">${result.title}</p>`
-
 	if (makeNewPage)
 		page = document.getElementById(createNewTab())
 	else {
 		page = document.getElementById(document.getElementById('browser-tabs').getAttribute('pid'))
 		page.innerHTML = ''
 	}
+	
+	xlecx.getComic(id, false, (err, result) => {
+		if (err) { error(err); return }
+		var containerContainer = document.createElement('div')
+		containerContainer.classList.add('xlecx-container-one-row')
+		var container = document.createElement('div')
+		var element
+		container.innerHTML = `<p class="xlecx-post-title">${result.title}</p>`
 
-	// Groups
-	if (result.groups != undefined) {
-		element = document.createElement('div')
-		element.classList.add('xlecx-post-tags')
-		element.innerHTML = "Group: "
-		for(var i = 0; i < result.groups.length; i++) {
-			element.innerHTML += `<button>${result.groups[i].name}</button> `
+		// Groups
+		if (result.groups != undefined) {
+			element = document.createElement('div')
+			element.classList.add('xlecx-post-tags')
+			element.innerHTML = "Group: "
+			for(var i = 0; i < result.groups.length; i++) {
+				element.innerHTML += `<button>${result.groups[i].name}</button> `
+			}
+			container.append(element)
 		}
-		container.append(element)
-	}
 
-	// Artists
-	if (result.artists != undefined) {
-		element = document.createElement('div')
-		element.classList.add('xlecx-post-tags')
-		element.innerHTML = "Artist: "
-		for(var i = 0; i < result.artists.length; i++) {
-			element.innerHTML += `<button>${result.artists[i].name}</button> `
+		// Artists
+		if (result.artists != undefined) {
+			element = document.createElement('div')
+			element.classList.add('xlecx-post-tags')
+			element.innerHTML = "Artist: "
+			for(var i = 0; i < result.artists.length; i++) {
+				element.innerHTML += `<button>${result.artists[i].name}</button> `
+			}
+			container.append(element)
 		}
-		container.append(element)
-	}
 
-	// Parody
-	if (result.parody != undefined) {
-		element = document.createElement('div')
-		element.classList.add('xlecx-post-tags')
-		element.innerHTML = "Parody: "
-		for(var i = 0; i < result.parody.length; i++) {
-			element.innerHTML += `<button>${result.parody[i].name}</button> `
+		// Parody
+		if (result.parody != undefined) {
+			element = document.createElement('div')
+			element.classList.add('xlecx-post-tags')
+			element.innerHTML = "Parody: "
+			for(var i = 0; i < result.parody.length; i++) {
+				element.innerHTML += `<button>${result.parody[i].name}</button> `
+			}
+			container.append(element)
 		}
-		container.append(element)
-	}
 
-	// Tags
-	if (result.tags != undefined) {
-		element = document.createElement('div')
-		element.classList.add('xlecx-post-tags')
-		element.innerHTML = "Tag: "
-		for(var i = 0; i < result.tags.length; i++) {
-			element.innerHTML += `<button>${result.tags[i].name}</button> `
+		// Tags
+		if (result.tags != undefined) {
+			element = document.createElement('div')
+			element.classList.add('xlecx-post-tags')
+			element.innerHTML = "Tag: "
+			for(var i = 0; i < result.tags.length; i++) {
+				element.innerHTML += `<button>${result.tags[i].name}</button> `
+			}
+			container.append(element)
 		}
-		container.append(element)
-	}
 
-	// Images
-	element = document.createElement('div')
-	element.classList.add('xlecx-image-container-1x1')
-	for (var i = 0; i < result.images.length; i++) {
-		element.innerHTML += `<img src="${xlecx.baseURL}/${result.images[i].thumb}">`
-	}
-	container.appendChild(element)
-	containerContainer.appendChild(container)
+		// Images
+		element = document.createElement('div')
+		element.classList.add('xlecx-image-container-1x1')
+		for (var i = 0; i < result.images.length; i++) {
+			element.innerHTML += `<img src="${xlecx.baseURL}/${result.images[i].thumb}">`
+		}
+		container.appendChild(element)
+		containerContainer.appendChild(container)
 
-	page.appendChild(containerContainer)
+		page.appendChild(containerContainer)
+	})
 }
 
 function xlecxOpenCategory(makeNewPage) {
@@ -332,6 +335,7 @@ function xlecxOpenCategory(makeNewPage) {
 }
 
 function dl() {
+	/*
 	var option = {
 		url: "https://xlecx.org/uploads/posts/2021-06/1622716645_01_tumblr_p3uuymo4kk1r97p6co1_1280.jpg",
 		dest: dirUL+"/"
@@ -341,6 +345,7 @@ function dl() {
 	}).catch((err) => {
 		console.error(err)
 	})
+	*/
 }
 
 $(document).ready(() => {

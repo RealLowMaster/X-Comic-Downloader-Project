@@ -100,6 +100,18 @@ img {
 	color: #fff;
 }
 
+.btn-danger {
+	background-color: #d22;
+	border-color: #b22;
+	color: #fff;
+}
+
+.btn-danger:hover {
+	background-color: #b22;
+	border-color: #b11;
+	color: #fff;
+}
+
 .action-menu {
 	display: block;
 	position: fixed;
@@ -499,4 +511,22 @@ img {
 	padding: 10px;
 	box-shadow: 0 0 10px 0 rgba(255,255,255,0.3);
 	z-index: +1;
+}
+
+.error > div:last-child > button {
+	display: inline-block;
+	min-width: 70px;
+	padding: 10px;
+	margin: 15px 4px 4px 2px;
+	background-color: #d22;
+	border: 1px solid #b22;
+	border-radius: 3px;
+	transition: 0.2s;
+	color: #fff;
+	cursor: pointer;
+}
+
+.error > div:last-child > button:hover {
+	background-color: #b22;
+	border-color: #b11;
 }
