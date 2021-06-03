@@ -1,5 +1,6 @@
 const fs = require('fs')
 const path = require('path')
+const ImageDownloader = require('image-downloader')
 require('v8-compile-cache')
 const xlecx = new XlecxAPI()
 const defaultSetting = {
@@ -277,8 +278,8 @@ function xlecxOpenPage(makeNewPage, id) {
 		for(var i = 0; i < result.groups.length; i++) {
 			element.innerHTML += `<button>${result.groups[i].name}</button> `
 		}
+		container.append(element)
 	}
-	container.append(element)
 
 	// Artists
 	if (result.artists != undefined) {
@@ -288,8 +289,8 @@ function xlecxOpenPage(makeNewPage, id) {
 		for(var i = 0; i < result.artists.length; i++) {
 			element.innerHTML += `<button>${result.artists[i].name}</button> `
 		}
+		container.append(element)
 	}
-	container.append(element)
 
 	// Parody
 	if (result.parody != undefined) {
@@ -299,8 +300,8 @@ function xlecxOpenPage(makeNewPage, id) {
 		for(var i = 0; i < result.parody.length; i++) {
 			element.innerHTML += `<button>${result.parody[i].name}</button> `
 		}
+		container.append(element)
 	}
-	container.append(element)
 
 	// Tags
 	if (result.tags != undefined) {
@@ -310,8 +311,8 @@ function xlecxOpenPage(makeNewPage, id) {
 		for(var i = 0; i < result.tags.length; i++) {
 			element.innerHTML += `<button>${result.tags[i].name}</button> `
 		}
+		container.append(element)
 	}
-	container.append(element)
 
 	// Images
 	element = document.createElement('div')
@@ -328,6 +329,18 @@ function xlecxOpenPage(makeNewPage, id) {
 function xlecxOpenCategory(makeNewPage) {
 	makeNewPage = makeNewPage || false
 	console.log(makeNewPage)
+}
+
+function dl() {
+	var option = {
+		url: "https://xlecx.org/uploads/posts/2021-06/1622716645_01_tumblr_p3uuymo4kk1r97p6co1_1280.jpg",
+		dest: dirUL+"/"
+	}
+	ImageDownloader.image(option).then(({ filename }) => {
+		console.log('Saved to', filename)
+	}).catch((err) => {
+		console.error(err)
+	})
 }
 
 $(document).ready(() => {
