@@ -5,6 +5,11 @@ class Tab {
         this.activeHistory = 0
     }
 
+    addHistory(text) {
+        this.history.push(text)
+        this.activeHistory += 1
+    }
+
     prev() {
 
     }

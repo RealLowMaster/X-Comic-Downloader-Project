@@ -81,11 +81,11 @@ if (setting.max_per_page < 1) setting.max_per_page = 18
 // Browser
 function closeBrowser() {
 	document.getElementById('browser').setAttribute('style', null)
+	tabs = []
 	document.getElementById('browser-pages').innerHTML = ''
 	var browser_tabs = document.getElementById('browser-tabs')
 	browser_tabs.innerHTML = ''
 	browser_tabs.setAttribute('pid', '')
-	tabs = []
 	document.getElementById('add-new-tab').setAttribute('onclick', null)
 }
 
@@ -139,16 +139,22 @@ function checkTabLimit() {
 		return false
 }
 
-function createNewTab() {
+function createNewTab(history) {
 	if (checkTabLimit()) return null
 
+	history = history || null
+	var tabIndex = tabs.length
 	var date = new Date()
 	var randomNumber = Math.floor(Math.random() * 500)
 	var newTabId = `${date.getTime()}-${randomNumber}`
 	var page = document.createElement('div')
+
+	tabs[tabIndex] = new Tab(newTabId)
+	tabs[tabIndex].history.push(history)
+
 	page.setAttribute('class', 'browser-page')
 	page.setAttribute('id', newTabId)
-	document.getElementById('browser-tabs').innerHTML += `<div class="browser-tab" onclick="activateTab(this)" pi="${newTabId}"><span>${newTabId}</span> <button onclick="removeTab('${newTabId}')">X</button></div>`
+	document.getElementById('browser-tabs').innerHTML += `<div class="browser-tab" onclick="activateTab(this)" pi="${newTabId}" ti="${tabIndex}"><span>${newTabId}</span> <button onclick="removeTab('${newTabId}')">X</button></div>`
 	page.innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
 	document.getElementById('browser-pages').appendChild(page)
 
@@ -158,15 +164,16 @@ function createNewTab() {
 
 function removeTab(id) {
 	var removingTab = document.getElementById('browser-tabs').querySelector(`[pi="${id}"]`)
-	var tabs = document.getElementById('browser-tabs').children
-	var index = Array.prototype.slice.call(tabs).indexOf(removingTab)
-
+	tabs[Number(removingTab.getAttribute('ti'))] = null
+	var btabs = document.getElementById('browser-tabs').children
+	var index = Array.prototype.slice.call(btabs).indexOf(removingTab)
+	
 	if (index == 0) {
-		if (1 <= tabs.length - 1) {
-			activateTab(tabs[1])
+		if (1 <= btabs.length - 1) {
+			activateTab(btabs[1])
 		}
 	} else {
-		activateTab(tabs[index - 1])
+		activateTab(btabs[index - 1])
 	}
 
 	removingTab.remove()
@@ -188,16 +195,16 @@ function checkMiddleMouseClick(event) {
 // Xlecx
 function openXlecxBrowser() {
 	document.getElementById('add-new-tab').setAttribute('onclick', 'createNewXlecxTab(createNewTab())')
-	createNewXlecxTab(createNewTab())
+	createNewXlecxTab(createNewTab('xlecxChangePage()'))
 	document.getElementById('browser').setAttribute('style', 'display:grid')
 }
 
-function createNewXlecxTab(id) {
+function createNewXlecxTab(id, pageNumber) {
 	activateTab(document.getElementById('browser-tabs').querySelector(`[pi="${id}"]`))
 	var page = document.getElementById(id)
-	var tabIndex = tabs.length
+	pageNumber = pageNumber || 1
 
-	xlecx.getPage({page:1, random:true, category:true}, (err, result) => {
+	xlecx.getPage({page:pageNumber, random:true, category:true}, (err, result) => {
 		page.innerHTML = ''
 		if (err) { console.log(err); return }
 		var container = document.createElement('div')
@@ -227,7 +234,7 @@ function createNewXlecxTab(id) {
 			element.innerHTML = `<img src="${xlecx.baseURL+result.content[i].thumb}"><span>${result.content[i].pages}</span><p>${result.content[i].title}</p><div id="${result.content[i].id}"></div>`
 			element.onmousedown = e => {
 				e.preventDefault()
-				xlecxOpenPage(checkMiddleMouseClick(e), e.target.getAttribute('id'))
+				xlecxOpenPost(checkMiddleMouseClick(e), e.target.getAttribute('id'))
 			}
 			elementContainer.appendChild(element)
 		}
@@ -243,8 +250,9 @@ function createNewXlecxTab(id) {
 				element.textContent = result.pagination[i][0]
 			} else {
 				element.textContent = result.pagination[i][0]
+				element.setAttribute('p', result.pagination[i][0])
 				element.onmousedown = e => {
-					xlecxOpenPage(checkMouseButton(e))
+					xlecxChangePage(Number(e.target.getAttribute('p')), checkMiddleMouseClick(e))
 				}
 			}
 			
@@ -260,7 +268,7 @@ function createNewXlecxTab(id) {
 			element.innerHTML = `<img src="${xlecx.baseURL+result.random[i].thumb}"><span>${result.random[i].pages}</span><p>${result.random[i].title}</p><div id="${result.random[i].id}"></div>`
 			element.onmousedown = e => {
 				e.preventDefault()
-				xlecxOpenPage(checkMiddleMouseClick(e), e.target.getAttribute('id'))
+				xlecxOpenPost(checkMiddleMouseClick(e), e.target.getAttribute('id'))
 			}
 			elementContainer.appendChild(element)
 		}
@@ -271,17 +279,24 @@ function createNewXlecxTab(id) {
 	})
 }
 
-function xlecxOpenPage(makeNewPage, id) {
+function xlecxOpenPost(makeNewPage, id) {
 	makeNewPage = makeNewPage || false
+	var browser_tabs = document.getElementById('browser-tabs')
+	var pageId = browser_tabs.getAttribute('pid')
 	var page
 	if (makeNewPage)
-		page = document.getElementById(createNewTab())
+		page = document.getElementById(createNewTab(`xlecxOpenPost(false, ${id})`))
 	else {
-		page = document.getElementById(document.getElementById('browser-tabs').getAttribute('pid'))
+		var tabIndexId = Number(browser_tabs.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))
+		page = document.getElementById(pageId)
 		page.innerHTML = ''
+		document.getElementById(pageId).innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
+		
+		tabs[tabIndexId].addHistory(`xlecxOpenPost(false, ${id})`)
 	}
 	
 	xlecx.getComic(id, false, (err, result) => {
+		page.innerHTML = ''
 		if (err) { error(err); return }
 		var containerContainer = document.createElement('div')
 		containerContainer.classList.add('xlecx-container-one-row')
@@ -346,12 +361,36 @@ function xlecxOpenPage(makeNewPage, id) {
 	})
 }
 
+function xlecxChangePage(page, makeNewPage) {
+	page = page || 1
+	makeNewPage = makeNewPage || false
+	var id, pageContent
+	if (makeNewPage) {
+		id = createNewTab(`xlecxChangePage(${page}, false)`)
+		pageContent = document.getElementById(id)
+	} else {
+		var browser_tabs = document.getElementById('browser-tabs')
+		var pageId = browser_tabs.getAttribute('pid')
+		var tabIndexId = Number(browser_tabs.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))
+
+		id = document.getElementById('browser-tabs').getAttribute('pid')
+		pageContent = document.getElementById(document.getElementById('browser-tabs').getAttribute('pid'))
+		pageContent.innerHTML = ''
+
+		tabs[tabIndexId].addHistory(`xlecxChangePage(${page}, false)`)
+	}
+
+	document.getElementById(id).innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
+	createNewXlecxTab(id, page)
+}
+
 function xlecxOpenCategory(makeNewPage) {
 	makeNewPage = makeNewPage || false
 	console.log(makeNewPage)
 }
 
 function dl() {
+	console.log(tabs)
 	/*
 	var option = {
 		url: "https://xlecx.org/uploads/posts/2021-06/1622716645_01_tumblr_p3uuymo4kk1r97p6co1_1280.jpg",
