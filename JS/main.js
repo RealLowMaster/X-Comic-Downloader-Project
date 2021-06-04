@@ -6,10 +6,10 @@ const xlecx = new XlecxAPI()
 const defaultSetting = {
 	"max_per_page": 18,
 	"spin_color": 0,
-	"post_img_num_in_row": 0
+	"post_img_num_in_row": 0,
+	"img_graphic": 0
 }
 var setting, tabs = []
-// eval() Convert String To Code
 
 // Directions
 var dirRoot = path.join(__dirname)
@@ -438,7 +438,10 @@ function xlecxOpenCategory(makeNewPage) {
 }
 
 function dl() {
-	console.log(tabs)
+	xlecx.getComic('21243-captainejerkpants-puffy-anus-festival-.html', false, (err, doc) => {
+		if (err) { console.log(err); return }
+		console.log(doc)
+	})
 	/*
 	var option = {
 		url: "https://xlecx.org/uploads/posts/2021-06/1622716645_01_tumblr_p3uuymo4kk1r97p6co1_1280.jpg",

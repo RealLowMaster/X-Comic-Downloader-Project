@@ -193,7 +193,7 @@ class XlecxAPI {
 				var info = li[0].getElementsByClassName('full-tags')
 
 				// Groups
-				if (info[0].children.length > 0) {
+				if (info.length >= 1 && info[0].children.length > 0) {
 					arr.groups = []
 					var t = info[0].getElementsByTagName('a')
 					for (var i=0; i<t.length; i++) {
@@ -206,7 +206,7 @@ class XlecxAPI {
 				}
 
 				// Artist
-				if (info[1].children.length > 0) {
+				if (info.length >= 2 && info[1].children.length > 0) {
 					arr.artists = []
 					var t = info[1].getElementsByTagName('a')
 					for (var i=0; i<t.length; i++) {
@@ -219,7 +219,7 @@ class XlecxAPI {
 				}
 
 				// Parody
-				if (info[2].children.length > 0) {
+				if (info.length >= 3 && info[2].children.length > 0) {
 					arr.parody = []
 					var t = info[2].getElementsByTagName('a')
 					for (var i=0; i<t.length; i++) {
@@ -232,7 +232,7 @@ class XlecxAPI {
 				}
 
 				// Tags
-				if (info[3].children.length > 0) {
+				if (info.length >= 4 && info[3].children.length > 0) {
 					arr.tags = []
 					var t = info[3].getElementsByTagName('a')
 					for (var i=0; i<t.length; i++) {
