@@ -158,6 +158,9 @@ function createNewTab(history) {
 	page.innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
 	document.getElementById('browser-pages').appendChild(page)
 
+	document.getElementById('browser-prev-btn').setAttribute('style', null)
+	document.getElementById('browser-next-btn').setAttribute('style', null)
+
 	updateTabSize()
 	return newTabId
 }
@@ -176,6 +179,11 @@ function removeTab(id) {
 		activateTab(btabs[index - 1])
 	}
 
+	if (btabs.length == 1) {
+		document.getElementById('browser-prev-btn').setAttribute('style', 'display:none')
+		document.getElementById('browser-next-btn').setAttribute('style', 'display:none')
+	}
+
 	removingTab.remove()
 	document.getElementById(id).remove()
 }
@@ -190,6 +198,14 @@ function checkMiddleMouseClick(event) {
 		isRightMB = event.button == 3
 
 	return isRightMB
+}
+
+function prevPage() {
+	error('Coming Soon!')
+}
+
+function nextPage() {
+	error('Coming Soon!')
 }
 
 // Xlecx
@@ -291,7 +307,7 @@ function xlecxOpenPost(makeNewPage, id) {
 		page = document.getElementById(pageId)
 		page.innerHTML = ''
 		document.getElementById(pageId).innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
-		
+
 		tabs[tabIndexId].addHistory(`xlecxOpenPost(false, ${id})`)
 	}
 	
