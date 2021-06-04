@@ -6,7 +6,7 @@ const xlecx = new XlecxAPI()
 const defaultSetting = {
 	"max_per_page": 18
 }
-var setting
+var setting, tabs = []
 // eval() Convert String To Code
 
 // Directions
@@ -79,12 +79,14 @@ if (!fs.existsSync(dirRoot+'/setting.cfg')) {
 if (setting.max_per_page < 1) setting.max_per_page = 18
 
 // Browser
-function openBrowser() {
-	console.log('Comming Sood!')
-}
-
 function closeBrowser() {
-	console.log('Comming Sood!')
+	document.getElementById('browser').setAttribute('style', null)
+	document.getElementById('browser-pages').innerHTML = ''
+	var browser_tabs = document.getElementById('browser-tabs')
+	browser_tabs.innerHTML = ''
+	browser_tabs.setAttribute('pid', '')
+	tabs = []
+	document.getElementById('add-new-tab').setAttribute('onclick', null)
 }
 
 function updateTabSize() {
