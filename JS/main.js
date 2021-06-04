@@ -149,6 +149,7 @@ function createNewTab() {
 	page.setAttribute('class', 'browser-page')
 	page.setAttribute('id', newTabId)
 	document.getElementById('browser-tabs').innerHTML += `<div class="browser-tab" onclick="activateTab(this)" pi="${newTabId}"><span>${newTabId}</span> <button onclick="removeTab('${newTabId}')">X</button></div>`
+	page.innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
 	document.getElementById('browser-pages').appendChild(page)
 
 	updateTabSize()
@@ -194,9 +195,11 @@ function openXlecxBrowser() {
 function createNewXlecxTab(id) {
 	activateTab(document.getElementById('browser-tabs').querySelector(`[pi="${id}"]`))
 	var page = document.getElementById(id)
+	var tabIndex = tabs.length
 
 	xlecx.getPage({page:1, random:true, category:true}, (err, result) => {
-		if (err) { error(err); return }
+		page.innerHTML = ''
+		if (err) { console.log(err); return }
 		var container = document.createElement('div')
 		container.classList.add("xlecx-container")
 		var elementContainerContainer = null

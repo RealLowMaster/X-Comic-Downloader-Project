@@ -184,6 +184,7 @@ img {
 	transform: scale(1.1);
 }
 
+/* Browser */
 .browser {
 	display: none;
 	grid-template-rows: 40px 35px 10fr;
@@ -337,6 +338,43 @@ img {
 	min-height: 100%;
 	height: auto;
 	margin: 0 auto;
+}
+
+.browser-page-loading {
+	display: block;
+	width: 100%;
+	padding: 20px;
+	text-align: center;
+	background-color: transparent;
+}
+
+/* Spin */
+.spin {
+	display: inline-block;
+	width: 60px;
+	height: 60px;
+	border-color: #ddd;
+	background-color: transparent;
+	border-width: 2px 2px 2px 0;
+	border-style: solid;
+	border-radius: 50%;
+	animation-name: spin;
+	animation-duration: 3000ms;
+	animation-iteration-count: infinite;
+	animation-timing-function: linear; 
+}
+
+.spin-primary {
+	border-color: #0ba1b4;
+}
+
+@keyframes spin {
+	from {
+		transform:rotate(0deg);
+	}
+	to {
+		transform:rotate(360deg);
+	}
 }
 
 .child-draggable > img {
