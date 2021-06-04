@@ -7,7 +7,8 @@ const defaultSetting = {
 	"max_per_page": 18,
 	"spin_color": 0,
 	"post_img_num_in_row": 0,
-	"img_graphic": 0
+	"img_graphic": 0,
+	"connection_timeout": 6000
 }
 var setting, tabs = []
 
@@ -79,6 +80,9 @@ if (!fs.existsSync(dirRoot+'/setting.cfg')) {
 	setting = getJSON(dirRoot+'./setting.cfg')
 }
 if (setting.max_per_page < 1) setting.max_per_page = 18
+
+// Apply Setting
+xlecx.timeout = setting.connection_timeout
 
 // Browser
 function closeBrowser() {
@@ -438,10 +442,6 @@ function xlecxOpenCategory(makeNewPage) {
 }
 
 function dl() {
-	xlecx.getComic('21243-captainejerkpants-puffy-anus-festival-.html', false, (err, doc) => {
-		if (err) { console.log(err); return }
-		console.log(doc)
-	})
 	/*
 	var option = {
 		url: "https://xlecx.org/uploads/posts/2021-06/1622716645_01_tumblr_p3uuymo4kk1r97p6co1_1280.jpg",
