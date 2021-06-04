@@ -30,4 +30,8 @@ class Tab {
             eval(this.history[this.activeHistory])
         }
     }
+
+    reload() {
+        eval(this.history[this.activeHistory])
+    }
 }

@@ -4,7 +4,9 @@ const ImageDownloader = require('image-downloader')
 require('v8-compile-cache')
 const xlecx = new XlecxAPI()
 const defaultSetting = {
-	"max_per_page": 18
+	"max_per_page": 18,
+	"spin_color": 0,
+	"post_img_num_in_row": 0
 }
 var setting, tabs = []
 // eval() Convert String To Code
@@ -221,6 +223,13 @@ function changeHistory(next) {
 	}
 }
 
+function reloadTab() {
+	var browser_tabs = document.getElementById('browser-tabs')
+	var pageId = browser_tabs.getAttribute('pid')
+	var tabIndexId = Number(browser_tabs.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))
+	tabs[tabIndexId].reload()
+}
+
 // Xlecx
 function openXlecxBrowser() {
 	document.getElementById('add-new-tab').setAttribute('onclick', 'createNewXlecxTab(createNewTab())')
@@ -235,7 +244,10 @@ function createNewXlecxTab(id, pageNumber) {
 
 	xlecx.getPage({page:pageNumber, random:true, category:true}, (err, result) => {
 		page.innerHTML = ''
-		if (err) { console.log(err); return }
+		if (err) {
+			page.innerHTML = `<br><div class="alert alert-danger">${err}</div><button class="btn btn-primary" style="display:block;margin:3px auto" onclick="reloadTab()">Reload</button>`
+			return
+		}
 		var container = document.createElement('div')
 		container.classList.add("xlecx-container")
 		var elementContainerContainer = null
@@ -328,7 +340,10 @@ function xlecxOpenPost(makeNewPage, id, updateTabIndex) {
 	
 	xlecx.getComic(id, false, (err, result) => {
 		page.innerHTML = ''
-		if (err) { error(err); return }
+		if (err) {
+			page.innerHTML = `<br><div class="alert alert-danger">${err}</div><button class="btn btn-primary" style="display:block;margin:3px auto" onclick="reloadTab()">Reload</button>`
+			return
+		}
 		var containerContainer = document.createElement('div')
 		containerContainer.classList.add('xlecx-container-one-row')
 		var container = document.createElement('div')

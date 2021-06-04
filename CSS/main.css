@@ -359,9 +359,9 @@ img {
 	border-style: solid;
 	border-radius: 50%;
 	animation-name: spin;
-	animation-duration: 3000ms;
+	animation-duration: 2000ms;
 	animation-iteration-count: infinite;
-	animation-timing-function: linear; 
+	animation-timing-function: linear;
 }
 
 .spin-primary {
@@ -375,6 +375,27 @@ img {
 	to {
 		transform:rotate(360deg);
 	}
+}
+
+/* Alert */
+.alert {
+	display: block;
+	padding: 10px;
+	margin: 5px 10px;
+	background-color: #ddd;
+	color: #222;
+	border: 1px solid #ccc;
+	border-radius: 1px;
+	font-size: 16px;
+	font-weight: 600;
+	text-shadow: 0 0 5px rgba(0,0,0,0.3);
+	box-shadow: 0 1px 10px 0 rgba(0,0,0,0.1);
+}
+
+.alert-danger {
+	background-color: #e00;
+	color: #fff;
+	border-color: #c00;
 }
 
 .child-draggable > img {
