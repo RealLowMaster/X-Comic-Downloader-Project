@@ -14,6 +14,32 @@ class XlecxAPI {
 		return base
 	}
 
+	checkConnection(callback) {
+		callback = callback || null
+
+		if (callback == null) throw "You can't Set Callback as Null."
+		if (typeof callback != 'function') throw "The Type of Callback Should Be a Function."
+
+		var xhr = new XMLHttpRequest()
+		xhr.open("GET", url, true)
+
+		xhr.timeout = this.timeout
+
+		xhr.onload = () => {
+			callback(null, true)
+		}
+
+		xhr.ontimeout = (e) => {
+			callback("Connection Timeout", false)
+		}
+
+		xhr.onerror = () => {
+			callback("An error occurred during the proceres, Check Internet Connection.", false)
+		}
+
+		xhr.send()
+	}
+
 	getPage(options = {page:1, random:false, pagination:true, category:false}, callback) {
 		const page = options.page || 1
 		const random = options.random || false
@@ -38,6 +64,8 @@ class XlecxAPI {
 			var arr = { "content": [] }
 			var li = htmlDoc.getElementById('dle-content').getElementsByClassName('th-in')
 			if (li.length != 0 && xhr.status != 404) {
+
+				// Content
 				for (var i=0; i<li.length; i++) {
 					gg = li[i].getElementsByClassName('th-img img-resp-h')[0].getAttribute('href')
 					bb = li[i].getElementsByClassName('th-time icon-l')[0]
@@ -59,6 +87,7 @@ class XlecxAPI {
 					})
 				}
 
+				// Random
 				if (random == true) {
 					arr.random = []
 					li = htmlDoc.getElementsByClassName('main')[0].children
@@ -82,6 +111,7 @@ class XlecxAPI {
 					}
 				}
 
+				// Pagination
 				if (pagination == true) {
 					var value, pPage
 					arr.pagination = [];
@@ -105,6 +135,7 @@ class XlecxAPI {
 					}
 				}
 
+				// Category
 				if (category == true) {
 					arr.categories = []
 					var li = htmlDoc.getElementsByClassName('side-bc')[0].getElementsByTagName('a')
@@ -124,7 +155,7 @@ class XlecxAPI {
 		}
 
 		xhr.onerror = () => {
-			callback("An error occurred during the proceres", null)
+			callback("An error occurred during the proceres, Check Internet Connection.", null)
 		}
 
 		xhr.send()
@@ -161,7 +192,132 @@ class XlecxAPI {
 		}
 
 		xhr.onerror = () => {
-			callback("An error occurred during the proceres", null)
+			callback("An error occurred during the proceres, Check Internet Connection.", null)
+		}
+
+		xhr.send()
+	}
+
+	getCategory(name, options = {page:1, random:false, pagination:true, category:false}, callback) {
+		name = name || null
+		if (name == null) throw "You can't Set name to Null."
+		const page = options.page || 1
+		const random = options.random || false
+		const pagination = options.pagination || true
+		const category = options.category || false
+		const url = this.baseURL+'/'+name+'/page/'+page+'/'
+		callback = callback || null
+
+		if (callback == null) throw "You can't Set Callback as Null."
+		if (typeof callback != 'function') throw "The Type of Callback Should Be a Function."
+
+		var xhr = new XMLHttpRequest()
+		xhr.open("GET", url, true)
+
+		xhr.timeout = this.timeout
+
+		xhr.onload = () => {
+			var parser = new DOMParser()
+			var htmlDoc = parser.parseFromString(xhr.responseText, 'text/html')
+			var gg = 0
+			var bb = 0
+	
+			var arr = { "content": [] }
+			var li = htmlDoc.getElementById('dle-content').getElementsByClassName('th-in')
+			if (li.length != 0 && xhr.status != 404) {
+
+				// Contents
+				for (var i=0; i<li.length; i++) {
+					gg = li[i].getElementsByClassName('th-img img-resp-h')[0].getAttribute('href')
+					bb = li[i].getElementsByClassName('th-time icon-l')[0]
+					if (bb != undefined) {
+						bb = bb.textContent;
+						bb = bb.replace(' img', '')
+						bb = bb.replace(' images', '')
+						bb = bb.replace(' pages', '')
+					} else
+						bb = 0
+	
+					arr.content.push({
+						"id": this.lastSlash(gg),
+						"title": li[i].getElementsByClassName('th-title')[0].textContent,
+						"thumb": li[i].getElementsByTagName('img')[0].getAttribute('src'),
+						"pages": Number(bb),
+						"url": gg
+					})
+				}
+
+				// Random
+				if (random == true) {
+					arr.random = []
+					li = htmlDoc.getElementsByClassName('main')[0].children
+					for (var i=2; i<=13; i++) {
+						gg = li[i].getElementsByClassName('th-img img-resp-h')[0].getAttribute('href')
+						bb = li[i].getElementsByClassName('th-time icon-l')[0]
+						if (bb != undefined) {
+							bb = bb.textContent
+							bb = bb.replace(' img', '').replace(' images', '').replace(' pages', '')
+						} else {
+							bb = 0
+						}
+
+						arr.random.push({
+							"id": this.lastSlash(gg),
+							"title": li[i].getElementsByClassName('th-title')[0].textContent,
+							"thumb": li[i].getElementsByTagName('img')[0].getAttribute('src').replace('http://xlecx.com', ''),
+							"pages": Number(bb),
+							"url": gg
+						})
+					}
+				}
+
+				// Pagination
+				if (pagination == true) {
+					li = htmlDoc.getElementById('bottom-nav') || null
+					if (li != null) {
+						li = li.querySelector('.navigation').children || null
+						var value, pPage
+						arr.pagination = []
+						for (var i = 0; i < li.length; i++) {
+							if (li[i].textContent == "")
+								if (i == li.length - 1)
+									value = ">"
+								else
+									value = "<"
+							else
+								value = li[i].textContent
+							
+							if (li[i].getAttribute('href') == null)
+								pPage = null
+							else
+								pPage = Number(li[i].getAttribute('href').replace((this.baseURL+this.groupURL+name+'/page/').replace(' ', '%20'), '').replace('/', ''))
+							
+							arr.pagination.push([value, pPage])
+						}
+					}
+				}
+
+				// Category
+				if (category == true) {
+					arr.categories = []
+					var li = htmlDoc.getElementsByClassName('side-bc')[0].getElementsByTagName('a')
+					var regexp = RegExp('/', 'g')
+					for (var i=0; i<li.length; i++) {
+						arr.categories.push({ "name": li[i].textContent, "url": li[i].getAttribute('href').replace(this.baseURL+'/', '').replace(regexp, '') })
+					}
+				}
+			} else
+				arr = null
+			
+			callback(null, arr)
+		}
+
+		xhr.ontimeout = (e) => {
+			callback("Connection Timeout", null)
+		}
+
+		xhr.onerror = () => {
+			callback("An error occurred during the proceres, Check Internet Connection.", null)
 		}
 
 		xhr.send()
@@ -275,7 +431,7 @@ class XlecxAPI {
 		}
 
 		xhr.onerror = () => {
-			callback("An error occurred during the proceres", null)
+			callback("An error occurred during the proceres, Check Internet Connection.", null)
 		}
 
 		xhr.send()
@@ -316,7 +472,7 @@ class XlecxAPI {
 		}
 
 		xhr.onerror = () => {
-			callback("An error occurred during the proceres", null)
+			callback("An error occurred during the proceres, Check Internet Connection.", null)
 		}
 
 		xhr.send()
@@ -405,7 +561,7 @@ class XlecxAPI {
 		}
 
 		xhr.onerror = () => {
-			callback("An error occurred during the proceres", null)
+			callback("An error occurred during the proceres, Check Internet Connection.", null)
 		}
 
 		xhr.send()
@@ -494,7 +650,7 @@ class XlecxAPI {
 		}
 
 		xhr.onerror = () => {
-			callback("An error occurred during the proceres", null)
+			callback("An error occurred during the proceres, Check Internet Connection.", null)
 		}
 
 		xhr.send()
@@ -583,7 +739,7 @@ class XlecxAPI {
 		}
 
 		xhr.onerror = () => {
-			callback("An error occurred during the proceres", null)
+			callback("An error occurred during the proceres, Check Internet Connection.", null)
 		}
 
 		xhr.send()
@@ -672,7 +828,7 @@ class XlecxAPI {
 		}
 
 		xhr.onerror = () => {
-			callback("An error occurred during the proceres", null)
+			callback("An error occurred during the proceres, Check Internet Connection.", null)
 		}
 
 		xhr.send()

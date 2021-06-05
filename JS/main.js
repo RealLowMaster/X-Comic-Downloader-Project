@@ -8,6 +8,7 @@ const defaultSetting = {
 	"spin_color": 0,
 	"post_img_num_in_row": 0,
 	"img_graphic": 0,
+	"pagination_width": 5,
 	"connection_timeout": 6000
 }
 var setting, tabs = []
@@ -83,6 +84,100 @@ if (setting.max_per_page < 1) setting.max_per_page = 18
 
 // Apply Setting
 xlecx.timeout = setting.connection_timeout
+
+// Comics
+function loadComics(page, search) {
+	page = page || 1
+	search = search || null
+	/*
+	var mc = $('#movies-container')
+	mc.children().remove()
+	var min = 0, max, allPages, id, name, image
+	var max_per_page = setting.max_per_page
+
+	max = doc.length
+	allPages = Math.ceil(doc.length / max_per_page)
+	if (doc.length >= max_per_page) {
+		min = (max_per_page * page) - max_per_page
+		max = min + max_per_page
+		if (max > doc.length) max = doc.length
+	}
+
+
+	pagination(allPages, page, 'loadMovies({page})')
+	$('#movies-container').attr('page', page)
+	*/
+
+	var comic_container = document.getElementById('comic-container')
+	var html = ''
+	for (var i = 0; i < 15; i++) {
+		html += '<div class="comic"><img src=""><span>12</span><p>Title</p></div>'
+	}
+	comic_container.innerHTML = html
+
+	// Pagination
+	var thisPagination = pagination(10, 1)
+	html = '<div>'
+	for (var i in thisPagination) {
+		if (thisPagination[i][1] == null)
+			html += `<button disabled>${thisPagination[i][0]}</button>`
+		else
+			html += `<button onclick="loadComics(${thisPagination[i][1]}, ${search})">${thisPagination[i][0]}</button>`
+	}
+	html += '</div>'
+	document.getElementById('pagination').innerHTML = html
+}
+
+function pagination(total_pages, page) {
+	var arr = [], min = 1, max = 1, bdot = false, fdot = false, bfirst = false, ffirst = false, pagination_width = setting.pagination_width
+	if (total_pages > pagination_width - 1) {
+		if (page == 1) {
+			min = 1
+			max = pagination_width
+		} else {
+			if (page < total_pages) {
+				if (page == pagination_width || page == pagination_width - 1)
+					min = page - Math.floor(pagination_width / 2) - 1
+				else
+					min = page - Math.floor(pagination_width / 2)
+				
+				if (page == (total_pages - pagination_width) + 1 || page == (total_pages - pagination_width) + 2) {
+					max = page + Math.floor(pagination_width / 2) + 1
+				} else
+					max = page + Math.floor(pagination_width / 2)
+			} else {
+				min = page - pagination_width + 1
+				max = page
+			}
+		}
+	} else {
+		min = 1
+		max = total_pages
+	}
+	
+	if (min < 1) min = 1
+	if (max > total_pages) max = total_pages
+	
+	if (page > pagination_width - 1 && total_pages > pagination_width) bfirst = true
+	if (page > pagination_width && total_pages > pagination_width + 1) bdot = true
+	if (page < (total_pages - pagination_width) + 2 && total_pages > pagination_width) ffirst = true
+	if (page < (total_pages - pagination_width) + 1 && total_pages > pagination_width + 1) fdot = true
+	
+	if (page > 1) arr.push(['Prev', page - 1])
+	if (bfirst) arr.push(['1', 1])
+	if (bdot) arr.push(['...', null])
+	for (var i=min; i <= max;i++) {
+		if (i == page)
+			arr.push([`${i}`, null])
+		else 
+			arr.push([`${i}`, i])
+	}
+	if (fdot) arr.push(['...', null])
+	if (ffirst) arr.push([`${total_pages}`, total_pages])
+	if (page < total_pages) arr.push(['Next', page + 1])
+
+	return arr
+}
 
 // Browser
 function closeBrowser() {
@@ -262,9 +357,11 @@ function createNewXlecxTab(id, pageNumber) {
 		elementContainer = document.createElement('div')
 		for (var i = 0; i < result.categories.length; i++) {
 			element = document.createElement('button')
+			element.setAttribute('c', result.categories[i].url)
 			element.textContent = result.categories[i].name
 			element.onmousedown = e => {
-				xlecxOpenCategory(checkMouseButton(e))
+				e.preventDefault()
+				xlecxOpenCategory(e.target.getAttribute('c'), 1, checkMiddleMouseClick(e))
 			}
 			elementContainer.appendChild(element)
 		}
@@ -297,6 +394,7 @@ function createNewXlecxTab(id, pageNumber) {
 				element.textContent = result.pagination[i][0]
 				element.setAttribute('p', result.pagination[i][0])
 				element.onmousedown = e => {
+					e.preventDefault()
 					xlecxChangePage(Number(e.target.getAttribute('p')), checkMiddleMouseClick(e))
 				}
 			}
@@ -336,7 +434,7 @@ function xlecxOpenPost(makeNewPage, id, updateTabIndex) {
 		var tabIndexId = Number(browser_tabs.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))
 		page = document.getElementById(pageId)
 		page.innerHTML = ''
-		document.getElementById(pageId).innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
+		page.innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
 
 		if (updateTabIndex == true)
 			tabs[tabIndexId].addHistory(`xlecxOpenPost(false, "${id}", false)`)
@@ -425,23 +523,122 @@ function xlecxChangePage(page, makeNewPage, updateTabIndex) {
 		var tabIndexId = Number(browser_tabs.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))
 
 		id = document.getElementById('browser-tabs').getAttribute('pid')
-		pageContent = document.getElementById(document.getElementById('browser-tabs').getAttribute('pid'))
+		pageContent = document.getElementById(id)
 		pageContent.innerHTML = ''
 
 		if (updateTabIndex == true)
 			tabs[tabIndexId].addHistory(`xlecxChangePage(${page}, false, false)`)
 	}
 
-	document.getElementById(id).innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
+	pageContent.innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
 	createNewXlecxTab(id, page)
 }
 
-function xlecxOpenCategory(makeNewPage) {
+function xlecxOpenCategory(name, page, makeNewPage, updateTabIndex) {
+	name = name || null
+	page = page || 1
+	if (name == null) return
 	makeNewPage = makeNewPage || false
-	console.log(makeNewPage)
+	if (updateTabIndex == null) updateTabIndex = true
+	var pageContent
+	if (makeNewPage) {
+		var id = createNewTab(`xlecxOpenCategory('${name}', ${page}, false, false)`)
+		pageContent = document.getElementById(id)
+	} else {
+		var browser_tabs = document.getElementById('browser-tabs')
+		var pageId = browser_tabs.getAttribute('pid')
+		var tabIndexId = Number(browser_tabs.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))
+
+		pageContent = document.getElementById(document.getElementById('browser-tabs').getAttribute('pid'))
+		pageContent.innerHTML = ''
+
+		if (updateTabIndex == true)
+			tabs[tabIndexId].addHistory(`xlecxOpenCategory('${name}', ${page}, false, false)`)
+	}
+
+	pageContent.innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
+	xlecx.getCategory(name, {page:page, random:true, category:true}, (err, result) => {
+		pageContent.innerHTML = ''
+		if (err) {
+			page.innerHTML = `<br><div class="alert alert-danger">${err}</div><button class="btn btn-primary" style="display:block;margin:3px auto" onclick="reloadTab()">Reload</button>`
+			return
+		}
+		var container = document.createElement('div')
+		container.classList.add("xlecx-container")
+		var elementContainerContainer = null
+		var elementContainer = null
+		var element = null
+
+		// Categories
+		elementContainer = document.createElement('div')
+		for (var i = 0; i < result.categories.length; i++) {
+			element = document.createElement('button')
+			element.setAttribute('c', result.categories[i].url)
+			element.textContent = result.categories[i].name
+			element.onmousedown = e => {
+				xlecxOpenCategory(e.target.textContent, 1, checkMiddleMouseClick(e))
+			}
+			elementContainer.appendChild(element)
+		}
+		container.appendChild(elementContainer)
+
+		// Content
+		elementContainerContainer = document.createElement('div')
+		elementContainer = document.createElement('div')
+		elementContainer.classList.add("xlecx-post-container")
+		for (var i = 0; i < result.content.length; i++) {
+			element = document.createElement('div')
+			element.innerHTML = `<img src="${xlecx.baseURL+result.content[i].thumb}"><span>${result.content[i].pages}</span><p>${result.content[i].title}</p><div id="${result.content[i].id}"></div>`
+			element.onmousedown = e => {
+				e.preventDefault()
+				xlecxOpenPost(checkMiddleMouseClick(e), e.target.getAttribute('id'))
+			}
+			elementContainer.appendChild(element)
+		}
+		elementContainerContainer.appendChild(elementContainer)
+
+		// Pagination
+		elementContainer = document.createElement('div')
+		elementContainer.classList.add("xlecx-pagination")
+		for (var i = 0; i < result.pagination.length; i++) {
+			element = document.createElement('button')
+			if (result.pagination[i][1] == null) {
+				element.setAttribute('disable', true)
+				element.textContent = result.pagination[i][0]
+			} else {
+				element.textContent = result.pagination[i][0]
+				element.setAttribute('p', result.pagination[i][0])
+				element.onmousedown = e => {
+					e.preventDefault()
+					xlecxOpenCategory(name, Number(e.target.getAttribute('p')), checkMiddleMouseClick(e))
+				}
+			}
+			
+			elementContainer.appendChild(element)
+		}
+		elementContainerContainer.appendChild(elementContainer)
+		
+		// Random
+		elementContainer = document.createElement('div')
+		elementContainer.classList.add("xlecx-post-container")
+		for (var i = 0; i < result.random.length; i++) {
+			element = document.createElement('div')
+			element.innerHTML = `<img src="${xlecx.baseURL+result.random[i].thumb}"><span>${result.random[i].pages}</span><p>${result.random[i].title}</p><div id="${result.random[i].id}"></div>`
+			element.onmousedown = e => {
+				e.preventDefault()
+				xlecxOpenPost(checkMiddleMouseClick(e), e.target.getAttribute('id'))
+			}
+			elementContainer.appendChild(element)
+		}
+		elementContainerContainer.appendChild(elementContainer)
+		container.appendChild(elementContainerContainer)
+
+		pageContent.appendChild(container)
+	})
 }
 
 function dl() {
+	console.log(tabs)
 	/*
 	var option = {
 		url: "https://xlecx.org/uploads/posts/2021-06/1622716645_01_tumblr_p3uuymo4kk1r97p6co1_1280.jpg",
@@ -456,12 +653,5 @@ function dl() {
 }
 
 $(document).ready(() => {
-	// var h = xlecx.getPage(692, true)
-	// var h = xlecx.getComic('9666-uchishikiri.html')
-	// var h = xlecx.getAllTags()
-	// var h = xlecx.getGroup('pucchu', 1)
-	// var h = xlecx.getArtist('felsala', 1)
-	// var h = xlecx.getParody('boruto', 1)
-	// var h = xlecx.getTag('absorption', 2)
-	// var h = xlecx.search('hello')
+	loadComics()
 });
