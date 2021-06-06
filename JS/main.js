@@ -261,6 +261,7 @@ function createNewTab(history) {
 
 	document.getElementById('browser-prev-btn').setAttribute('style', null)
 	document.getElementById('browser-next-btn').setAttribute('style', null)
+	document.getElementById('browser-reload-btn').setAttribute('style', null)
 
 	updateTabSize()
 	return newTabId
@@ -283,6 +284,7 @@ function removeTab(id) {
 	if (btabs.length == 1) {
 		document.getElementById('browser-prev-btn').setAttribute('style', 'display:none')
 		document.getElementById('browser-next-btn').setAttribute('style', 'display:none')
+		document.getElementById('browser-reload-btn').setAttribute('style', 'display:none')
 	}
 
 	removingTab.remove()

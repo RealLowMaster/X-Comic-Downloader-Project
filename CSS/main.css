@@ -592,7 +592,6 @@ img {
 	max-width: 100%;
 	height: auto;
 	margin: 10px auto;
-	max-height: 290px;
 	object-fit: cover;
 	object-position: center;
 }
