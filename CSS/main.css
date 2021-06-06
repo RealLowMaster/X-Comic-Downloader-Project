@@ -363,8 +363,16 @@ img {
 	animation-timing-function: linear;
 }
 
+.spin-fast {
+	animation-duration: 600ms !important;
+}
+
 .spin-primary {
 	border-color: #0ba1b4;
+}
+
+.spin-success {
+	border-color: #05a451;
 }
 
 @keyframes spin {
@@ -491,6 +499,84 @@ img {
 	color: #fff;
 	border-color: #014ba7;
 	cursor: default;
+}
+
+/* Downloader */
+.downloader {
+	width: 200px;
+	height: 150px;
+	padding: 10px 0;
+	background-color: #1119;
+	border: 1px solid #111a;
+	border-radius: 7px;
+	overflow-y: auto;
+	position: fixed;
+	top: 15px;
+	right: 20px;
+	z-index: 99999;
+}
+
+.downloader::-webkit-scrollbar {
+	width: 3px;
+}
+
+.downloader *:not(span) {
+	display: block;
+	width: 100%;
+}
+
+.downloader > div {
+	height: 50px;
+	padding: 10px;
+	background-color: #2227;
+	border: 0 solid #111a;
+	border-width: 1px 0 1px 0;
+	overflow: hidden;
+	position: relative;
+}
+
+.downloader > div > p {
+	width: 92%;
+	margin: 0 0 6px 0;
+	color: #fff;
+	font-size: 12px;
+	white-space: nowrap;
+	text-align: left;
+	overflow: hidden;
+}
+
+.downloader > div > div {
+	height: 3px;
+	background-color: #eeea;
+}
+
+.downloader > div > div > div {
+	width: 50%;
+	height: 100%;
+	background-color: #025bd7;
+}
+
+.downloader > div > span {
+	width: 15px;
+	height: 15px;
+	position: absolute;
+	top: 4px;
+	right: 4px;
+}
+
+.downloader > div > close {
+	display: none;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+	background-color: #07a461cc;
+	color: #fff;
+	font-size: 24px;
+	font-weight: 600;
+	position: absolute;
+	top: 0;
+	left: 0;
 }
 
 .child-draggable > img {
