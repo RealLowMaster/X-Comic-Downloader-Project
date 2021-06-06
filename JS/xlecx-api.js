@@ -478,11 +478,12 @@ class XlecxAPI {
 		xhr.send()
 	}
 
-	getGroup(name, options = {page:1, pagination:true}, callback) {
+	getGroup(name, options = {page:1, pagination:true, category:false}, callback) {
 		name = name || null
 		if (name == null) throw "You can't Set name to Null."
 		const page = options.page || 1
 		const pagination = options.pagination || true
+		const category = options.category || false
 		const url = this.baseURL+this.groupURL+name+'/page/'+page+'/'
 		callback = callback || null
 
@@ -550,6 +551,16 @@ class XlecxAPI {
 						}
 					}
 				}
+
+				// Category
+				if (category == true) {
+					arr.categories = []
+					var li = htmlDoc.getElementsByClassName('side-bc')[0].getElementsByTagName('a')
+					var regexp = RegExp('/', 'g')
+					for (var i=0; i<li.length; i++) {
+						arr.categories.push({ "name": li[i].textContent, "url": li[i].getAttribute('href').replace(this.baseURL+'/', '').replace(regexp, '') })
+					}
+				}
 			} else
 				arr = null
 			
@@ -567,11 +578,12 @@ class XlecxAPI {
 		xhr.send()
 	}
 
-	getArtist(name, options = {page:1, pagination:true}, callback) {
+	getArtist(name, options = {page:1, pagination:true, category:false}, callback) {
 		name = name || null
 		if (name == null) throw "You can't Set name to Null."
 		const page = options.page || 1
 		const pagination = options.pagination || true
+		const category = options.category || false
 		const url = this.baseURL+this.artistURL+name+'/page/'+page+'/'
 		callback = callback || null
 
@@ -639,6 +651,16 @@ class XlecxAPI {
 						}
 					}
 				}
+
+				// Category
+				if (category == true) {
+					arr.categories = []
+					var li = htmlDoc.getElementsByClassName('side-bc')[0].getElementsByTagName('a')
+					var regexp = RegExp('/', 'g')
+					for (var i=0; i<li.length; i++) {
+						arr.categories.push({ "name": li[i].textContent, "url": li[i].getAttribute('href').replace(this.baseURL+'/', '').replace(regexp, '') })
+					}
+				}
 			} else
 				arr = null
 
@@ -656,11 +678,12 @@ class XlecxAPI {
 		xhr.send()
 	}
 
-	getParody(name, options = {page:1, pagination:true}, callback) {
+	getParody(name, options = {page:1, pagination:true, category:false}, callback) {
 		name = name || null
 		if (name == null) throw "You can't Set name to Null."
 		const page = options.page || 1
 		const pagination = options.pagination || true
+		const category = options.category || false
 		const url = this.baseURL+this.parodyURL+name+'/page/'+page+'/'
 		callback = callback || null
 
@@ -728,6 +751,16 @@ class XlecxAPI {
 						}
 					}
 				}
+
+				// Category
+				if (category == true) {
+					arr.categories = []
+					var li = htmlDoc.getElementsByClassName('side-bc')[0].getElementsByTagName('a')
+					var regexp = RegExp('/', 'g')
+					for (var i=0; i<li.length; i++) {
+						arr.categories.push({ "name": li[i].textContent, "url": li[i].getAttribute('href').replace(this.baseURL+'/', '').replace(regexp, '') })
+					}
+				}
 			} else
 				arr = null
 
@@ -745,11 +778,12 @@ class XlecxAPI {
 		xhr.send()
 	}
 
-	getTag(name, options = {page:1, pagination:true}, callback) {
+	getTag(name, options = {page:1, pagination:true, category:false}, callback) {
 		name = name || null
 		if (name == null) throw "You can't Set name to Null."
 		const page = options.page || 1
 		const pagination = options.pagination || true
+		const category = options.category || false
 		const url = this.baseURL+this.tagURL+name+'/page/'+page+'/'
 		callback = callback || null
 
@@ -815,6 +849,16 @@ class XlecxAPI {
 							
 							arr.pagination.push([value, pPage])
 						}
+					}
+				}
+
+				// Category
+				if (category == true) {
+					arr.categories = []
+					var li = htmlDoc.getElementsByClassName('side-bc')[0].getElementsByTagName('a')
+					var regexp = RegExp('/', 'g')
+					for (var i=0; i<li.length; i++) {
+						arr.categories.push({ "name": li[i].textContent, "url": li[i].getAttribute('href').replace(this.baseURL+'/', '').replace(regexp, '') })
 					}
 				}
 			} else
