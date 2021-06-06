@@ -557,6 +557,7 @@ function xlecxOpenCategory(name, page, makeNewPage, updateTabIndex) {
 	}
 
 	pageContent.innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
+	console.log(name)
 	xlecx.getCategory(name, {page:page, random:true, category:true}, (err, result) => {
 		pageContent.innerHTML = ''
 		if (err) {
@@ -576,7 +577,7 @@ function xlecxOpenCategory(name, page, makeNewPage, updateTabIndex) {
 			element.setAttribute('c', result.categories[i].url)
 			element.textContent = result.categories[i].name
 			element.onmousedown = e => {
-				xlecxOpenCategory(e.target.textContent, 1, checkMiddleMouseClick(e))
+				xlecxOpenCategory(e.target.getAttribute('c'), 1, checkMiddleMouseClick(e))
 			}
 			elementContainer.appendChild(element)
 		}
@@ -635,6 +636,41 @@ function xlecxOpenCategory(name, page, makeNewPage, updateTabIndex) {
 
 		pageContent.appendChild(container)
 	})
+}
+
+function xlecxOpenTag(name, page, whitch, makeNewPage, updateTabIndex) {
+	name = name || null
+	page = page || 1
+	whitch = whitch || 1
+	if (name == null) return
+	makeNewPage = makeNewPage || false
+	if (updateTabIndex == null) updateTabIndex = true
+	var pageContent
+	if (makeNewPage) {
+		var id = createNewTab(`xlecxOpenCategory('${name}', ${page}, false, false)`)
+		pageContent = document.getElementById(id)
+	} else {
+		var browser_tabs = document.getElementById('browser-tabs')
+		var pageId = browser_tabs.getAttribute('pid')
+		var tabIndexId = Number(browser_tabs.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))
+
+		pageContent = document.getElementById(document.getElementById('browser-tabs').getAttribute('pid'))
+		pageContent.innerHTML = ''
+
+		if (updateTabIndex == true)
+			tabs[tabIndexId].addHistory(`xlecxOpenCategory('${name}', ${page}, false, false)`)
+	}
+
+	pageContent.innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
+	if (whitch == 1) {
+
+	} else if (whitch == 2) {
+
+	} else if (whitch == 3) {
+
+	} else {
+
+	}
 }
 
 function dl() {
