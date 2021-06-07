@@ -12,7 +12,7 @@ const defaultSetting = {
 	"pagination_width": 5,
 	"connection_timeout": 6000
 }
-var setting, tabs = [], db = {}
+var setting, tabs = [], db = {}, downloadingList = []
 
 // Directions
 var dirRoot = path.join(__dirname)
@@ -115,30 +115,37 @@ const count_index = async(id) => {
 	})
 }
 
-function makeDatabaseIndexs() {
+async function makeDatabaseIndexs() {
 	// comics
-	count_index(1)
+	await count_index(1)
 	// artists
-	count_index(2)
+	await count_index(2)
 	// comic_artists
-	count_index(3)
+	await count_index(3)
 	// tags
-	count_index(4)
+	await count_index(4)
 	// comic_tags
-	count_index(5)
+	await count_index(5)
 	// groups
-	count_index(6)
+	await count_index(6)
 	// comic_groups
-	count_index(7)
+	await count_index(7)
 	// parodies
-	count_index(8)
+	await count_index(8)
 	// comic_parodies
-	count_index(9)
+	await count_index(9)
 	// playlist
-	count_index(10)
+	await count_index(10)
+}
+
+// Needable Functions
+function fileExt(str) {
+	var base = new String(str).substring(str.lastIndexOf('.') + 1)
+	return base
 }
 
 // Apply Setting
+if (setting.img_graphic > 1) setting.img_graphic = 1
 xlecx.timeout = setting.connection_timeout
 
 // Comics
@@ -387,8 +394,39 @@ function reloadTab() {
 	tabs[tabIndexId].reload()
 }
 
-function comicDownloader() {
-
+async function comicDownloader(index, callback) {
+	const date = new Date()
+	const random = Math.floor(Math.random() * 1000)
+	const url = downloadingList[index][1][downloadingList[index][0]]
+	const saveName = `${date.getTime()}-${random}.${fileExt(url)}`
+	var option = {
+		url: url,
+		dest: dirUL+`/${saveName}`
+	}
+	
+	var min = downloadingList[index][0] + 1
+	var max = downloadingList[index][1].length
+	var percentage = (100 / max) * min
+	await ImageDownloader.image(option).then(({ filename }) => {
+		downloadingList[index][3][downloadingList[index][0]] = saveName
+		document.getElementById(`${downloadingList[index][2]}`).getElementsByTagName('div')[0].getElementsByTagName('div')[0].style.width = percentage+'%'
+		downloadingList[index][0] += 1
+		if (downloadingList[index][0] == downloadingList[index][1].length) {
+			callback()
+		} else {
+			comicDownloader(index, callback)
+		}
+	}).catch((err) => {
+		console.log(err)
+		downloadingList[index][3][downloadingList[index][1]] = null
+		document.getElementById(`${downloadingList[index][2]}`).getElementsByTagName('div')[0].getElementsByTagName('div')[0].style.width = percentage+'%'
+		downloadingList[index][0] += 1
+		if (downloadingList[index][0] == downloadingList[index][1].length) {
+			callback()
+		} else {
+			comicDownloader(index, callback)
+		}
+	})
 }
 
 // Xlecx
@@ -510,6 +548,7 @@ function xlecxOpenPost(makeNewPage, id, updateTabIndex) {
 		}
 		var containerContainer = document.createElement('div')
 		containerContainer.classList.add('xlecx-container-one-row')
+		containerContainer.innerHTML = `<button class="xlecx-download-btn" onclick="xlecxDownloader('${id}')">Download</button>`
 		var container = document.createElement('div')
 		var element, miniElement
 		container.innerHTML = `<p class="xlecx-post-title">${result.title}</p>`
@@ -847,12 +886,42 @@ function xlecxOpenTag(name, page, whitch, makeNewPage, updateTabIndex) {
 	}
 }
 
-function xlecxDownloader() {
+function xlecxDownloader(id) {
+	xlecx.getComic(id, false, (err, result) => {
+		if (err) { error(err); return }
 
+		var downloader = document.getElementById('downloader')
+		downloader.setAttribute('style', 'display:block')
+		var element = document.createElement('div')
+		var name = result.title, number = result.images.length, quality = 0
+		if (name.length > 19) name = name.substr(0, 16)+'...'
+		if (result.images[0].src == result.images[0].thumb)
+			quality = 1
+		else
+			quality = setting.img_graphic
+
+		var downloadIndex = downloadingList.length
+		downloadingList[downloadIndex] = [0, [], new Date().getTime(), []]
+		element.setAttribute('id', downloadingList[downloadIndex][2])
+		element.setAttribute('i', downloadIndex)
+		element.innerHTML = `<span class="spin spin-fast spin-success"></span><p>${name} <span>(0/${number})</span></p><div><div></div></div><close>Finish</close>`
+		downloader.appendChild(element)
+
+		for (var i = 0; i < number; i++) {
+			if (quality == 0)
+				downloadingList[downloadIndex][1].push(xlecx.baseURL+result.images[i].thumb)
+			else
+				downloadingList[downloadIndex][1].push(xlecx.baseURL+result.images[i].src)
+		}
+
+		comicDownloader(downloadIndex, () => {
+
+		})
+	})
 }
 
 function dl() {
-	console.log(tabs)
+	console.log(downloadingList)
 	/*
 	var option = {
 		url: "https://xlecx.org/uploads/posts/2021-06/1622716645_01_tumblr_p3uuymo4kk1r97p6co1_1280.jpg",
@@ -863,24 +932,6 @@ function dl() {
 	}).catch((err) => {
 		console.error(err)
 	})
-	*/
-
-	/*
-	db.serialize(function() {
-		db.run("CREATE TABLE lorem (info TEXT)");
-
-		var stmt = db.prepare("INSERT INTO lorem VALUES (?)");
-		for (var i = 0; i < 10; i++) {
-			stmt.run("Ipsum " + i);
-		}
-		stmt.finalize();
-
-		db.each("SELECT rowid AS id, info FROM lorem", function(err, row) {
-			console.log(row.id + ": " + row.info);
-		});
-	});
-
-	db.close();
 	*/
 }
 

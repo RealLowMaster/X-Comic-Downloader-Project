@@ -503,6 +503,7 @@ img {
 
 /* Downloader */
 .downloader {
+	display: none;
 	width: 200px;
 	height: 150px;
 	padding: 10px 0;
@@ -551,9 +552,11 @@ img {
 }
 
 .downloader > div > div > div {
-	width: 50%;
+	width: 0;
+	max-width: 100%;
 	height: 100%;
 	background-color: #025bd7;
+	transition: .1s;
 }
 
 .downloader > div > span {
@@ -621,12 +624,32 @@ img {
 	text-align: center;
 }
 
+.xlecx-download-btn {
+	width: 80px;
+	padding: 8px 10px;
+	background-color: #222a;
+	color: #fff;
+	font-size: 12px;
+	position: sticky;
+	top: 10px;
+	left: 0px;
+	cursor: pointer;
+	transition: .2s;
+}
+
+.xlecx-download-btn:hover {
+	background-color: #fff;
+	color: #222;
+	box-shadow: 0 1px 6px 0 rgba(0,0,0,0.3);
+}
+
 .xlecx-container-one-row {
 	display: block;
 	width: 100%;
 	min-height: 95vh;
 	padding: 15px;
 	background-color: #222;
+	position: relative;
 }
 
 .xlecx-container-one-row > div {
