@@ -331,6 +331,10 @@ function reloadTab() {
 	tabs[tabIndexId].reload()
 }
 
+function comicDownloader() {
+
+}
+
 // Xlecx
 function openXlecxBrowser() {
 	document.getElementById('add-new-tab').setAttribute('onclick', 'createNewXlecxTab(createNewTab())')
@@ -787,6 +791,10 @@ function xlecxOpenTag(name, page, whitch, makeNewPage, updateTabIndex) {
 	}
 }
 
+function xlecxDownloader() {
+
+}
+
 function dl() {
 	console.log(tabs)
 	/*
@@ -799,6 +807,24 @@ function dl() {
 	}).catch((err) => {
 		console.error(err)
 	})
+	*/
+
+	/*
+	db.serialize(function() {
+		db.run("CREATE TABLE lorem (info TEXT)");
+
+		var stmt = db.prepare("INSERT INTO lorem VALUES (?)");
+		for (var i = 0; i < 10; i++) {
+			stmt.run("Ipsum " + i);
+		}
+		stmt.finalize();
+
+		db.each("SELECT rowid AS id, info FROM lorem", function(err, row) {
+			console.log(row.id + ": " + row.info);
+		});
+	});
+
+	db.close();
 	*/
 }
 
