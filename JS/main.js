@@ -1,5 +1,6 @@
 const fs = require('fs')
 const path = require('path')
+const nedb = require('nedb')
 const ImageDownloader = require('image-downloader')
 require('v8-compile-cache')
 const xlecx = new XlecxAPI()
@@ -11,7 +12,7 @@ const defaultSetting = {
 	"pagination_width": 5,
 	"connection_timeout": 6000
 }
-var setting, tabs = []
+var setting, tabs = [], db = {}
 
 // Directions
 var dirRoot = path.join(__dirname)
@@ -81,6 +82,61 @@ if (!fs.existsSync(dirRoot+'/setting.cfg')) {
 	setting = getJSON(dirRoot+'./setting.cfg')
 }
 if (setting.max_per_page < 1) setting.max_per_page = 18
+
+// Create Database
+db.index = new nedb({ filename: dirDB+'/index', autoload: true })
+db.comics = new nedb({ filename: dirDB+'/comics', autoload: true })
+db.artists = new nedb({ filename: dirDB+'/artists', autoload: true })
+db.comic_artists = new nedb({ filename: dirDB+'/comic_artists', autoload: true })
+db.comic_tags = new nedb({ filename: dirDB+'/comic_tags', autoload: true })
+db.groups = new nedb({ filename: dirDB+'/groups', autoload: true })
+db.comic_groups = new nedb({ filename: dirDB+'/comic_groups', autoload: true })
+db.parodies = new nedb({ filename: dirDB+'/parodies', autoload: true })
+db.comic_parodies = new nedb({ filename: dirDB+'/comic_parodies', autoload: true })
+db.playlist = new nedb({ filename: dirDB+'/playlist', autoload: true })
+
+const insert_index = async(id) => {
+	await db.index.insert({ i:1, _id:id }, (err) => { if (err) error(err) })
+}
+
+const delete_index = async(id) => {
+	await db.index.delete({ _id:1 }, { multi:true })
+}
+
+const count_index = async(id) => {
+	await db.index.count({_id:id}, (err, num) => {
+		if (err) throw err
+		if (num == 0) {
+			insert_index(id)
+		} else if (num > 1) {
+			delete_index(id)
+			insert_index(id)
+		}
+	})
+}
+
+function makeDatabaseIndexs() {
+	// comics
+	count_index(1)
+	// artists
+	count_index(2)
+	// comic_artists
+	count_index(3)
+	// tags
+	count_index(4)
+	// comic_tags
+	count_index(5)
+	// groups
+	count_index(6)
+	// comic_groups
+	count_index(7)
+	// parodies
+	count_index(8)
+	// comic_parodies
+	count_index(9)
+	// playlist
+	count_index(10)
+}
 
 // Apply Setting
 xlecx.timeout = setting.connection_timeout
@@ -829,5 +885,6 @@ function dl() {
 }
 
 $(document).ready(() => {
+	makeDatabaseIndexs()
 	loadComics()
 });
