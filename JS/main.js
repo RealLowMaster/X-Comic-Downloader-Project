@@ -1141,7 +1141,6 @@ function xlecxDownloader(id) {
 					if (err) { error(err); return }
 					update_index(cIndex.i, 1)
 					var id = doc._id
-					console.log(gottenResult)
 					var groups = gottenResult.groups || null
 					var artists = gottenResult.artists || null
 					var parody = gottenResult.parody || null
@@ -1151,76 +1150,76 @@ function xlecxDownloader(id) {
 					if (groups != null) {
 						var list = []
 						for (var i in groups) {
-							list.push(groups[i].name)
+							groupsList.push(groups[i].name)
 						}
 						db.index.findOne({_id:6}, (err, doc) => {
 							if (err) { error(err); return }
 							var counter = doc.i
-							for (var i in list) {
-								xlecxCreateGroups(list[i], counter)
+							for (var i in groupsList) {
+								xlecxCreateGroups(groupsList[i], counter)
 								counter++;
 							}
-							xlecxAddGroups(id, list)
+							xlecxAddGroups(id, groupsList)
 							update_index(counter - 1, 6)
 						})
 					}
 
 					// Artists
 					if (artists != null) {
-						var list = []
+						var artistsList = []
 						for (var i in artists) {
-							list.push(artists[i].name)
+							artistsList.push(artists[i].name)
 						}
 						db.index.findOne({_id:2}, (err, doc) => {
 							if (err) { error(err); return }
 							var counter = doc.i
-							for (var i in list) {
-								xlecxCreateArtists(list[i], counter)
+							for (var i in artistsList) {
+								xlecxCreateArtists(artistsList[i], counter)
 								counter++;
 							}
-							xlecxAddArtists(id, list)
+							xlecxAddArtists(id, artistsList)
 							update_index(counter - 1, 2)
 						})
 					}
 
 					// Parody
 					if (parody != null) {
-						var list = []
+						var parodyList = []
 						for (var i in parody) {
-							list.push(parody[i].name)
+							parodyList.push(parody[i].name)
 						}
 						db.index.findOne({_id:8}, (err, doc) => {
 							if (err) { error(err); return }
 							var counter = doc.i
-							for (var i in list) {
-								xlecxCreateParody(list[i], counter)
+							for (var i in parodyList) {
+								xlecxCreateParody(parodyList[i], counter)
 								counter++;
 							}
-							xlecxAddParody(id, list)
+							xlecxAddParody(id, parodyList)
 							update_index(counter - 1, 8)
 						})
 					}
-					/*
 					// Tags
 					if (tags != null) {
-						var list = []
+						var tagsList = []
 						for (var i in tags) {
-							list.push(tags[i].name)
+							tagsList.push(tags[i].name)
 						}
 						db.index.findOne({_id:4}, (err, doc) => {
 							if (err) { error(err); return }
 							var counter = doc.i
-							for (var i in list) {
-								xlecxCreateTag(list[i], counter)
+							for (var i in tagsList) {
+								xlecxCreateTag(tagsList[i], counter)
 								counter++;
 							}
-							xlecxAddTag(id, list)
+							xlecxAddTag(id, tagsList)
 							update_index(counter - 1, 4)
 						})
 					}
-					*/
 
 					document.getElementById(`${downloadingList[index][2]}`).remove()
+					var downloader = document.getElementById('downloader')
+					if (downloader.children.length == 0) downloader.setAttribute('style', null)
 					downloadingList[index] = null
 				})
 			})
