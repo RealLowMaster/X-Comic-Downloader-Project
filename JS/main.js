@@ -404,7 +404,7 @@ function reloadTab() {
 	tabs[tabIndexId].reload()
 }
 
-async function comicDownloader(index, result, quality, comicId, callback) {
+async function comicDownloader(index, result, quality, callback) {
 	const date = new Date()
 	const random = Math.floor(Math.random() * 1000)
 	const url = downloadingList[index][1][downloadingList[index][0]]
@@ -423,20 +423,32 @@ async function comicDownloader(index, result, quality, comicId, callback) {
 		downloaderRow.getElementsByTagName('div')[0].getElementsByTagName('div')[0].style.width = percentage+'%'
 		downloaderRow.getElementsByTagName('p')[0].getElementsByTagName('span')[0].textContent = `(${downloadingList[index][0]}/${max})`
 		if (downloadingList[index][0] == max) {
-			callback(index, result, quality, comicId)
+			callback(index, result, quality)
 		} else {
-			comicDownloader(index, result, quality, comicId, callback)
+			comicDownloader(index, result, quality, callback)
 		}
 	}).catch((err) => {
 		downloadingList[index][3][downloadingList[index][1]] = [url]
 		downloaderRow.getElementsByTagName('div')[0].getElementsByTagName('div')[0].style.width = percentage+'%'
 		downloaderRow.getElementsByTagName('p')[0].getElementsByTagName('span')[0].textContent = `(${downloadingList[index][0]}/${max})`
 		if (downloadingList[index][0] == max) {
-			callback(index, result, quality, comicId)
+			callback(index, result, quality)
 		} else {
-			comicDownloader(index, result, quality, comicId, callback)
+			comicDownloader(index, result, quality, callback)
 		}
 	})
+}
+
+function checkIsDownloading(id) {
+	var arr = []
+	for (var i in downloadingList) {
+		arr.push(downloadingList[i][4])
+	}
+
+	if (arr.indexOf(id) > -1)
+		return true
+	else
+		return false
 }
 
 // Xlecx
@@ -1101,126 +1113,134 @@ async function xlecxCreateTag(tagName, index) {
 }
 
 function xlecxDownloader(id) {
-	xlecx.getComic(id, false, (err, result) => {
-		if (err) { error(err); return }
-
-		var downloader = document.getElementById('downloader')
-		downloader.setAttribute('style', 'display:block')
-		var element = document.createElement('div')
-		var name = result.title, number = result.images.length, quality = 0
-		if (name.length > 19) name = name.substr(0, 16)+'...'
-		if (result.images[0].src == result.images[0].thumb)
-			quality = 1
-		else
-			quality = setting.img_graphic
-
-		var downloadIndex = downloadingList.length
-		downloadingList[downloadIndex] = [0, [], new Date().getTime(), []]
-		element.setAttribute('id', downloadingList[downloadIndex][2])
-		element.setAttribute('i', downloadIndex)
-		element.innerHTML = `<span class="spin spin-fast spin-success"></span><p>${name} <span>(0/${number})</span></p><div><div></div></div>`
-		downloader.appendChild(element)
-
-		for (var i = 0; i < number; i++) {
-			if (quality == 0)
-				downloadingList[downloadIndex][1].push(xlecx.baseURL+result.images[i].thumb)
+	if (checkIsDownloading(id)) { error('You are Downloading This Comic.'); return }
+	db.comics.count({s:0, p:id}, (err, num) => {
+		if (err) { error(err); return}
+		if (num > 0) { error('You Already Have This Comic.'); return }
+		xlecx.getComic(id, false, (err, result) => {
+			if (err) { error(err); return }
+	
+			var downloader = document.getElementById('downloader')
+			downloader.setAttribute('style', 'display:block')
+			var element = document.createElement('div')
+			var name = result.title, number = result.images.length, quality = 0
+			if (name.length > 19) name = name.substr(0, 16)+'...'
+			if (result.images[0].src == result.images[0].thumb)
+				quality = 1
 			else
-				downloadingList[downloadIndex][1].push(xlecx.baseURL+result.images[i].src)
-		}
-
-		var sendingResult = {}
-		sendingResult.title = result.title
-		if (result.groups != undefined)	sendingResult.groups = result.groups
-		if (result.artists != undefined) sendingResult.artists = result.artists
-		if (result.parody != undefined)	sendingResult.parody = result.parody
-		if (result.tags != undefined)	sendingResult.tags = result.tags
-		comicDownloader(downloadIndex, sendingResult, quality, id, async(index, gottenResult, gottenQuality, gottenComicId) => {
-			db.index.findOne({_id:1}, (err, cIndex) => {
-				if (err) { error(err); return }
-				db.comics.insert({n:gottenResult.title.toLowerCase(), i:downloadingList[index][3], q:gottenQuality, s:0, p:gottenComicId, _id:cIndex.i}, (err, doc) => {
+				quality = setting.img_graphic
+	
+			var downloadIndex = downloadingList.length
+			downloadingList[downloadIndex] = [0, [], new Date().getTime(), [], id]
+			element.setAttribute('id', downloadingList[downloadIndex][2])
+			element.setAttribute('i', downloadIndex)
+			element.innerHTML = `<span class="spin spin-fast spin-success"></span><p>${name} <span>(0/${number})</span></p><div><div></div></div>`
+			downloader.appendChild(element)
+	
+			for (var i = 0; i < number; i++) {
+				if (quality == 0)
+					downloadingList[downloadIndex][1].push(xlecx.baseURL+result.images[i].thumb)
+				else
+					downloadingList[downloadIndex][1].push(xlecx.baseURL+result.images[i].src)
+			}
+	
+			var sendingResult = {}
+			sendingResult.title = result.title
+			if (result.groups != undefined)	sendingResult.groups = result.groups
+			if (result.artists != undefined) sendingResult.artists = result.artists
+			if (result.parody != undefined)	sendingResult.parody = result.parody
+			if (result.tags != undefined)	sendingResult.tags = result.tags
+			comicDownloader(downloadIndex, sendingResult, quality, async(index, gottenResult, gottenQuality) => {
+				db.index.findOne({_id:1}, (err, cIndex) => {
 					if (err) { error(err); return }
-					update_index(cIndex.i, 1)
-					var id = doc._id
-					var groups = gottenResult.groups || null
-					var artists = gottenResult.artists || null
-					var parody = gottenResult.parody || null
-					var tags = gottenResult.tags || null
-
-					// Groups
-					if (groups != null) {
-						var list = []
-						for (var i in groups) {
-							groupsList.push(groups[i].name)
-						}
-						db.index.findOne({_id:6}, (err, doc) => {
-							if (err) { error(err); return }
-							var counter = doc.i
-							for (var i in groupsList) {
-								xlecxCreateGroups(groupsList[i], counter)
-								counter++;
+					db.comics.insert({n:gottenResult.title.toLowerCase(), i:downloadingList[index][3], q:gottenQuality, s:0, p:downloadingList[index][4], _id:cIndex.i}, (err, doc) => {
+						if (err) { error(err); return }
+						update_index(cIndex.i, 1)
+						var id = doc._id
+						var groups = gottenResult.groups || null
+						var artists = gottenResult.artists || null
+						var parody = gottenResult.parody || null
+						var tags = gottenResult.tags || null
+	
+						// Groups
+						if (groups != null) {
+							var list = []
+							for (var i in groups) {
+								groupsList.push(groups[i].name)
 							}
-							xlecxAddGroups(id, groupsList)
-							update_index(counter - 1, 6)
-						})
-					}
-
-					// Artists
-					if (artists != null) {
-						var artistsList = []
-						for (var i in artists) {
-							artistsList.push(artists[i].name)
+							db.index.findOne({_id:6}, (err, doc) => {
+								if (err) { error(err); return }
+								var counter = doc.i
+								for (var i in groupsList) {
+									xlecxCreateGroups(groupsList[i], counter)
+									counter++;
+								}
+								xlecxAddGroups(id, groupsList)
+								update_index(counter - 1, 6)
+							})
 						}
-						db.index.findOne({_id:2}, (err, doc) => {
-							if (err) { error(err); return }
-							var counter = doc.i
-							for (var i in artistsList) {
-								xlecxCreateArtists(artistsList[i], counter)
-								counter++;
+	
+						// Artists
+						if (artists != null) {
+							var artistsList = []
+							for (var i in artists) {
+								artistsList.push(artists[i].name)
 							}
-							xlecxAddArtists(id, artistsList)
-							update_index(counter - 1, 2)
-						})
-					}
-
-					// Parody
-					if (parody != null) {
-						var parodyList = []
-						for (var i in parody) {
-							parodyList.push(parody[i].name)
+							db.index.findOne({_id:2}, (err, doc) => {
+								if (err) { error(err); return }
+								var counter = doc.i
+								for (var i in artistsList) {
+									xlecxCreateArtists(artistsList[i], counter)
+									counter++;
+								}
+								xlecxAddArtists(id, artistsList)
+								update_index(counter - 1, 2)
+							})
 						}
-						db.index.findOne({_id:8}, (err, doc) => {
-							if (err) { error(err); return }
-							var counter = doc.i
-							for (var i in parodyList) {
-								xlecxCreateParody(parodyList[i], counter)
-								counter++;
+	
+						// Parody
+						if (parody != null) {
+							var parodyList = []
+							for (var i in parody) {
+								parodyList.push(parody[i].name)
 							}
-							xlecxAddParody(id, parodyList)
-							update_index(counter - 1, 8)
-						})
-					}
-					// Tags
-					if (tags != null) {
-						var tagsList = []
-						for (var i in tags) {
-							tagsList.push(tags[i].name)
+							db.index.findOne({_id:8}, (err, doc) => {
+								if (err) { error(err); return }
+								var counter = doc.i
+								for (var i in parodyList) {
+									xlecxCreateParody(parodyList[i], counter)
+									counter++;
+								}
+								xlecxAddParody(id, parodyList)
+								update_index(counter - 1, 8)
+							})
 						}
-						db.index.findOne({_id:4}, (err, doc) => {
-							if (err) { error(err); return }
-							var counter = doc.i
-							for (var i in tagsList) {
-								xlecxCreateTag(tagsList[i], counter)
-								counter++;
+						// Tags
+						if (tags != null) {
+							var tagsList = []
+							for (var i in tags) {
+								tagsList.push(tags[i].name)
 							}
-							xlecxAddTag(id, tagsList)
-							update_index(counter - 1, 4)
-						})
-					}
-
-					document.getElementById(`${downloadingList[index][2]}`).remove()
-					var downloader = document.getElementById('downloader')
-					if (downloader.children.length == 0) downloader.setAttribute('style', null)
-					downloadingList[index] = null
+							db.index.findOne({_id:4}, (err, doc) => {
+								if (err) { error(err); return }
+								var counter = doc.i
+								for (var i in tagsList) {
+									xlecxCreateTag(tagsList[i], counter)
+									counter++;
+								}
+								xlecxAddTag(id, tagsList)
+								update_index(counter - 1, 4)
+							})
+						}
+	
+						document.getElementById(`${downloadingList[index][2]}`).remove()
+						downloadingList[index] = null
+						var downloader = document.getElementById('downloader')
+						if (downloader.children.length == 0) {
+							downloader.setAttribute('style', null)
+							downloadingList = []
+						}
+					})
 				})
 			})
 		})
