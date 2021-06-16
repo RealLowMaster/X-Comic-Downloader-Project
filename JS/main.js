@@ -455,7 +455,7 @@ function checkIsDownloading(id) {
 
 // Xlecx
 function openXlecxBrowser() {
-	document.getElementById('add-new-tab').setAttribute('onclick', 'createNewXlecxTab(createNewTab())')
+	document.getElementById('add-new-tab').setAttribute('onclick', "createNewXlecxTab(createNewTab('xlecxChangePage(1, false, false)'))")
 	createNewXlecxTab(createNewTab('xlecxChangePage(1, false, false)'))
 	document.getElementById('browser').setAttribute('style', 'display:grid')
 }
