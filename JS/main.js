@@ -10,7 +10,7 @@ const defaultSetting = {
 	"post_img_num_in_row": 0,
 	"img_graphic": 0,
 	"pagination_width": 5,
-	"connection_timeout": 6000
+	"connection_timeout": 10000
 }
 var setting, tabs = [], db = {}, downloadingList = [], addingGroups = [], addingArtists = [], addingParody = [], addingTag = []
 
@@ -362,6 +362,8 @@ function removeTab(id) {
 
 	removingTab.remove()
 	document.getElementById(id).remove()
+
+	updateTabSize()
 }
 
 function checkMiddleMouseClick(event) {
