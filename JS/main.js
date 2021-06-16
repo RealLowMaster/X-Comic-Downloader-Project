@@ -495,6 +495,7 @@ function createNewXlecxTab(id, pageNumber) {
 			page.innerHTML = `<br><div class="alert alert-danger">${err}</div><button class="btn btn-primary" style="display:block;margin:3px auto" onclick="reloadTab()">Reload</button>`
 			return
 		}
+		document.getElementById('browser-tabs').querySelector(`[pi="${id}"]`).getElementsByTagName('span')[0].textContent = `Page ${pageNumber}`
 		var container = document.createElement('div')
 		container.classList.add("xlecx-container")
 		var elementContainerContainer = null
@@ -509,7 +510,7 @@ function createNewXlecxTab(id, pageNumber) {
 			element.textContent = result.categories[i].name
 			element.onmousedown = e => {
 				e.preventDefault()
-				xlecxOpenCategory(e.target.getAttribute('c'), 1, checkMiddleMouseClick(e))
+				xlecxOpenCategory(e.target.getAttribute('c'), 1, e.target.textContent, checkMiddleMouseClick(e))
 			}
 			elementContainer.appendChild(element)
 		}
@@ -576,9 +577,10 @@ function xlecxOpenPost(makeNewPage, id, updateTabIndex) {
 	var browser_tabs = document.getElementById('browser-tabs')
 	var pageId = browser_tabs.getAttribute('pid')
 	var page
-	if (makeNewPage)
-		page = document.getElementById(createNewTab(`xlecxOpenPost(false, "${id}", false)`))
-	else {
+	if (makeNewPage) {
+		pageId = createNewTab(`xlecxOpenPost(false, "${id}", false)`)
+		page = document.getElementById(pageId)
+	} else {
 		var tabIndexId = Number(browser_tabs.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))
 		page = document.getElementById(pageId)
 		page.innerHTML = ''
@@ -594,6 +596,7 @@ function xlecxOpenPost(makeNewPage, id, updateTabIndex) {
 			page.innerHTML = `<br><div class="alert alert-danger">${err}</div><button class="btn btn-primary" style="display:block;margin:3px auto" onclick="reloadTab()">Reload</button>`
 			return
 		}
+		document.getElementById('browser-tabs').querySelector(`[pi="${pageId}"]`).getElementsByTagName('span')[0].textContent = result.title
 		var containerContainer = document.createElement('div')
 		containerContainer.classList.add('xlecx-container-one-row')
 		containerContainer.innerHTML = `<button class="xlecx-download-btn" onclick="xlecxDownloader('${id}')">Download</button>`
@@ -707,15 +710,16 @@ function xlecxChangePage(page, makeNewPage, updateTabIndex) {
 	createNewXlecxTab(id, page)
 }
 
-function xlecxOpenCategory(name, page, makeNewPage, updateTabIndex) {
+function xlecxOpenCategory(name, page, shortName, makeNewPage, updateTabIndex) {
 	name = name || null
 	page = page || 1
-	if (name == null) return
+	shortName = shortName || null
+	if (name == null || shortName == null) return
 	makeNewPage = makeNewPage || false
 	if (updateTabIndex == null) updateTabIndex = true
 	var pageContent
 	if (makeNewPage) {
-		var id = createNewTab(`xlecxOpenCategory('${name}', ${page}, false, false)`)
+		var id = createNewTab(`xlecxOpenCategory('${name}', ${page}, '${shortName}', false, false)`)
 		pageContent = document.getElementById(id)
 	} else {
 		var browser_tabs = document.getElementById('browser-tabs')
@@ -726,7 +730,7 @@ function xlecxOpenCategory(name, page, makeNewPage, updateTabIndex) {
 		pageContent.innerHTML = ''
 
 		if (updateTabIndex == true)
-			tabs[tabIndexId].addHistory(`xlecxOpenCategory('${name}', ${page}, false, false)`)
+			tabs[tabIndexId].addHistory(`xlecxOpenCategory('${name}', ${page}, '${shortName}', false, false)`)
 	}
 
 	pageContent.innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
@@ -736,6 +740,7 @@ function xlecxOpenCategory(name, page, makeNewPage, updateTabIndex) {
 			page.innerHTML = `<br><div class="alert alert-danger">${err}</div><button class="btn btn-primary" style="display:block;margin:3px auto" onclick="reloadTab()">Reload</button>`
 			return
 		}
+		document.getElementById('browser-tabs').querySelector(`[pi="${pageId}"]`).getElementsByTagName('span')[0].textContent = `${shortName} - ${page}`
 		var container = document.createElement('div')
 		container.classList.add("xlecx-container")
 		var elementContainerContainer = null
@@ -749,7 +754,7 @@ function xlecxOpenCategory(name, page, makeNewPage, updateTabIndex) {
 			element.setAttribute('c', result.categories[i].url)
 			element.textContent = result.categories[i].name
 			element.onmousedown = e => {
-				xlecxOpenCategory(e.target.getAttribute('c'), 1, checkMiddleMouseClick(e))
+				xlecxOpenCategory(e.target.getAttribute('c'), 1, e.target.textContent, checkMiddleMouseClick(e))
 			}
 			elementContainer.appendChild(element)
 		}
@@ -783,7 +788,7 @@ function xlecxOpenCategory(name, page, makeNewPage, updateTabIndex) {
 				element.setAttribute('p', result.pagination[i][0])
 				element.onmousedown = e => {
 					e.preventDefault()
-					xlecxOpenCategory(name, Number(e.target.getAttribute('p')), checkMiddleMouseClick(e))
+					xlecxOpenCategory(name, Number(e.target.getAttribute('p')), shortName, checkMiddleMouseClick(e))
 				}
 			}
 			
@@ -823,7 +828,7 @@ function xlecxOpenTagContentMaker(result, pageContent, name, whitch) {
 		element.textContent = result.categories[i].name
 		element.onmousedown = e => {
 			e.preventDefault()
-			xlecxOpenCategory(e.target.getAttribute('c'), 1, checkMiddleMouseClick(e))
+			xlecxOpenCategory(e.target.getAttribute('c'), 1, e.target.textContent, checkMiddleMouseClick(e))
 		}
 		elementContainer.appendChild(element)
 	}
@@ -877,10 +882,10 @@ function xlecxOpenTag(name, page, whitch, makeNewPage, updateTabIndex) {
 	if (name == null) return
 	makeNewPage = makeNewPage || false
 	if (updateTabIndex == null) updateTabIndex = true
-	var pageContent
+	var pageContent, pageId
 	if (makeNewPage) {
-		var id = createNewTab(`xlecxOpenTag('${name}', ${page}, ${whitch}, false, false)`)
-		pageContent = document.getElementById(id)
+		pageId = createNewTab(`xlecxOpenTag('${name}', ${page}, ${whitch}, false, false)`)
+		pageContent = document.getElementById(pageId)
 	} else {
 		var browser_tabs = document.getElementById('browser-tabs')
 		var pageId = browser_tabs.getAttribute('pid')
@@ -902,6 +907,7 @@ function xlecxOpenTag(name, page, whitch, makeNewPage, updateTabIndex) {
 				pageContent.innerHTML = `<br><div class="alert alert-danger">${err}</div><button class="btn btn-primary" style="display:block;margin:3px auto" onclick="reloadTab()">Reload</button>`
 				return
 			}
+			document.getElementById('browser-tabs').querySelector(`[pi="${pageId}"]`).getElementsByTagName('span')[0].textContent = `${name} - ${page}`
 			xlecxOpenTagContentMaker(result, pageContent, name, whitch)
 		})
 	} else if (whitch == 2) {
@@ -911,6 +917,7 @@ function xlecxOpenTag(name, page, whitch, makeNewPage, updateTabIndex) {
 				pageContent.innerHTML = `<br><div class="alert alert-danger">${err}</div><button class="btn btn-primary" style="display:block;margin:3px auto" onclick="reloadTab()">Reload</button>`
 				return
 			}
+			document.getElementById('browser-tabs').querySelector(`[pi="${pageId}"]`).getElementsByTagName('span')[0].textContent = `${name} - ${page}`
 			xlecxOpenTagContentMaker(result, pageContent, name, whitch)
 		})
 	} else if (whitch == 3) {
@@ -920,6 +927,7 @@ function xlecxOpenTag(name, page, whitch, makeNewPage, updateTabIndex) {
 				pageContent.innerHTML = `<br><div class="alert alert-danger">${err}</div><button class="btn btn-primary" style="display:block;margin:3px auto" onclick="reloadTab()">Reload</button>`
 				return
 			}
+			document.getElementById('browser-tabs').querySelector(`[pi="${pageId}"]`).getElementsByTagName('span')[0].textContent = `${name} - ${page}`
 			xlecxOpenTagContentMaker(result, pageContent, name, whitch)
 		})
 	} else {
@@ -929,6 +937,7 @@ function xlecxOpenTag(name, page, whitch, makeNewPage, updateTabIndex) {
 				pageContent.innerHTML = `<br><div class="alert alert-danger">${err}</div><button class="btn btn-primary" style="display:block;margin:3px auto" onclick="reloadTab()">Reload</button>`
 				return
 			}
+			document.getElementById('browser-tabs').querySelector(`[pi="${pageId}"]`).getElementsByTagName('span')[0].textContent = `${name} - ${page}`
 			xlecxOpenTagContentMaker(result, pageContent, name, whitch)
 		})
 	}
