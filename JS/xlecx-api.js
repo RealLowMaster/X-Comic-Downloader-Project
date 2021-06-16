@@ -81,7 +81,7 @@ class XlecxAPI {
 					arr.content.push({
 						"id": this.lastSlash(gg),
 						"title": li[i].getElementsByClassName('th-title')[0].textContent,
-						"thumb": li[i].getElementsByTagName('img')[0].getAttribute('src'),
+						"thumb": li[i].getElementsByTagName('img')[0].getAttribute('src').replace('http://xlecx.com', ''),
 						"pages": Number(bb),
 						"url": gg
 					})
@@ -241,7 +241,7 @@ class XlecxAPI {
 					arr.content.push({
 						"id": this.lastSlash(gg),
 						"title": li[i].getElementsByClassName('th-title')[0].textContent,
-						"thumb": li[i].getElementsByTagName('img')[0].getAttribute('src'),
+						"thumb": li[i].getElementsByTagName('img')[0].getAttribute('src').replace('http://xlecx.com', ''),
 						"pages": Number(bb),
 						"url": gg
 					})
@@ -405,7 +405,8 @@ class XlecxAPI {
 				var bb = 0
 				if (raw == true) {
 					for (var i=0; i<gg.length; i++) {
-						bb = this.baseURL+gg[i].getAttribute('data-src');
+						bb = this.baseURL+gg[i].getAttribute('data-src')
+						bb = bb.replace('http://xlecx.com', '')
 						arr.images.push({
 							"src": bb.replace("/thumbs/", "/"),
 							"thumb": bb
@@ -414,6 +415,7 @@ class XlecxAPI {
 				} else {
 					for (var i=0; i<gg.length; i++) {
 						bb = gg[i].getAttribute('data-src')
+						bb = bb.replace('http://xlecx.com', '')
 						arr.images.push({
 							"src": bb.replace("/thumbs/", "/"),
 							"thumb": bb
@@ -520,7 +522,7 @@ class XlecxAPI {
 					arr.content.push({
 						"id": this.lastSlash(gg),
 						"title": li[i].getElementsByClassName('th-title')[0].textContent,
-						"thumb": li[i].getElementsByTagName('img')[0].getAttribute('src'),
+						"thumb": li[i].getElementsByTagName('img')[0].getAttribute('src').replace('http://xlecx.com', ''),
 						"pages": Number(bb),
 						"url": gg
 					})
@@ -620,7 +622,7 @@ class XlecxAPI {
 					arr.content.push({
 						"id": this.lastSlash(gg),
 						"title": li[i].getElementsByClassName('th-title')[0].textContent,
-						"thumb": li[i].getElementsByTagName('img')[0].getAttribute('src'),
+						"thumb": li[i].getElementsByTagName('img')[0].getAttribute('src').replace('http://xlecx.com', ''),
 						"pages": Number(bb),
 						"url": gg
 					})
@@ -720,7 +722,7 @@ class XlecxAPI {
 					arr.content.push({
 						"id": this.lastSlash(gg),
 						"title": li[i].getElementsByClassName('th-title')[0].textContent,
-						"thumb": li[i].getElementsByTagName('img')[0].getAttribute('src'),
+						"thumb": li[i].getElementsByTagName('img')[0].getAttribute('src').replace('http://xlecx.com', ''),
 						"pages": Number(bb),
 						"url": gg
 					})
@@ -820,7 +822,7 @@ class XlecxAPI {
 					arr.content.push({
 						"id": this.lastSlash(gg),
 						"title": li[i].getElementsByClassName('th-title')[0].textContent,
-						"thumb": li[i].getElementsByTagName('img')[0].getAttribute('src'),
+						"thumb": li[i].getElementsByTagName('img')[0].getAttribute('src').replace('http://xlecx.com', ''),
 						"pages": Number(bb),
 						"url": gg
 					})
