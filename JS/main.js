@@ -8,9 +8,10 @@ const defaultSetting = {
 	"max_per_page": 18,
 	"spin_color": 0,
 	"post_img_num_in_row": 0,
-	"img_graphic": 0,
+	"img_graphic": 1,
 	"pagination_width": 5,
-	"connection_timeout": 10000
+	"connection_timeout": 10000,
+	"show_not_when_dl_finish": true
 }
 var setting, tabs = [], db = {}, downloadingList = [], addingGroups = [], addingArtists = [], addingParody = [], addingTag = []
 
@@ -152,6 +153,29 @@ async function makeDatabaseIndexs() {
 function fileExt(str) {
 	var base = new String(str).substring(str.lastIndexOf('.') + 1)
 	return base
+}
+
+// Alerts
+function PopAlert(txt, style) {
+	txt = txt || null
+	if (txt == null) return
+	style = style || 'success'
+	var id = new Date().getTime()
+	var alertElement = document.createElement('div')
+	alertElement.classList.add('pop-alert')
+	alertElement.classList.add(`pop-alert-${style}`)
+	alertElement.textContent = txt
+	document.getElementsByTagName('body')[0].appendChild(alertElement)
+	setTimeout(() => {
+		var bottom, alerts = document.getElementsByClassName('pop-alert')
+		for (var i = 0; i < alerts.length; i++) {
+			bottom = Number(alerts[i].style.bottom.replace('px', '')) || 0
+			alerts[i].style.bottom = (bottom+45)+'px'
+		}
+	}, 300)
+	setTimeout(() => {
+		alertElement.remove()
+	}, 4000)
 }
 
 // Apply Setting
@@ -406,7 +430,7 @@ function reloadTab() {
 	tabs[tabIndexId].reload()
 }
 
-async function comicDownloader(index, result, quality, callback) {
+async function comicDownloader(index, result, quality, shortName, callback) {
 	const date = new Date()
 	const random = Math.floor(Math.random() * 1000)
 	const url = downloadingList[index][1][downloadingList[index][0]]
@@ -425,9 +449,9 @@ async function comicDownloader(index, result, quality, callback) {
 		downloaderRow.getElementsByTagName('div')[0].getElementsByTagName('div')[0].style.width = percentage+'%'
 		downloaderRow.getElementsByTagName('p')[0].getElementsByTagName('span')[0].textContent = `(${downloadingList[index][0]}/${max})`
 		if (downloadingList[index][0] == max) {
-			callback(index, result, quality)
+			callback(index, result, quality, shortName)
 		} else {
-			comicDownloader(index, result, quality, callback)
+			comicDownloader(index, result, quality, shortName, callback)
 		}
 	}).catch((err) => {
 		downloadingList[index][3][downloadingList[index][1]] = [url]
@@ -436,7 +460,7 @@ async function comicDownloader(index, result, quality, callback) {
 		if (downloadingList[index][0] == max) {
 			callback(index, result, quality)
 		} else {
-			comicDownloader(index, result, quality, callback)
+			comicDownloader(index, result, quality, shortName, callback)
 		}
 	})
 }
@@ -1152,7 +1176,7 @@ function xlecxDownloader(id) {
 			if (result.artists != undefined) sendingResult.artists = result.artists
 			if (result.parody != undefined)	sendingResult.parody = result.parody
 			if (result.tags != undefined)	sendingResult.tags = result.tags
-			comicDownloader(downloadIndex, sendingResult, quality, async(index, gottenResult, gottenQuality) => {
+			comicDownloader(downloadIndex, sendingResult, quality, name, async(index, gottenResult, gottenQuality, shortName) => {
 				db.index.findOne({_id:1}, (err, cIndex) => {
 					if (err) { error(err); return }
 					db.comics.insert({n:gottenResult.title.toLowerCase(), i:downloadingList[index][3], q:gottenQuality, s:0, p:downloadingList[index][4], _id:cIndex.i}, (err, doc) => {
@@ -1166,7 +1190,7 @@ function xlecxDownloader(id) {
 	
 						// Groups
 						if (groups != null) {
-							var list = []
+							var groupsList = []
 							for (var i in groups) {
 								groupsList.push(groups[i].name)
 							}
@@ -1237,6 +1261,8 @@ function xlecxDownloader(id) {
 	
 						document.getElementById(`${downloadingList[index][2]}`).remove()
 						downloadingList[index] = null
+						if (setting.show_not_when_dl_finish == true)
+							PopAlert(`Comic (${shortName}) Downloaded.`)
 						var downloader = document.getElementById('downloader')
 						if (downloader.children.length == 0) {
 							downloader.setAttribute('style', null)
@@ -1250,7 +1276,7 @@ function xlecxDownloader(id) {
 }
 
 function dl() {
-	console.log(downloadingList)
+	PopAlert('test')
 }
 
 $(document).ready(() => {

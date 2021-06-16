@@ -567,6 +567,29 @@ img {
 	right: 4px;
 }
 
+/* Pop Alert */
+.pop-alert {
+	display: inline-block;
+	padding: 10px;
+	background-color: transparent;
+	color: #222;
+	border: 1px solid transparent;
+	border-radius: 3px;
+	font-size: 16px;
+	font-weight: 300;
+	position: fixed;
+	bottom: -40px;
+	left: 10px;
+	box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+	transition: .3s;
+}
+
+.pop-alert-success {
+	background-color: #458a00;
+	color: #fff;
+	border-color: #447500;
+}
+
 .child-draggable > img {
 	-webkit-user-drag: auto;
 }
