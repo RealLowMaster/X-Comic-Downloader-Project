@@ -385,6 +385,21 @@ function openComic(id) {
 	findComic()
 }
 
+function closeComicPanel() {
+	var comic_panel = document.getElementById('comic-panel')
+	var title_container = document.getElementById('c-p-t')
+	var tags_container = document.getElementById('c-p-ts')
+	var image_container = document.getElementById('c-p-i')
+
+	comic_panel.style.display = 'none'
+
+	title_container.textContent = ''
+	tags_container.innerHTML = ''
+	image_container.innerHTML = ''
+
+	comic_panel.setAttribute('cid', id)
+}
+
 async function repairImageUpdateDatabase(comic_id, imageIndex, imageName, passImageList) {
 	passImageList[imageIndex] = imageName
 	await db.comics.update({_id:comic_id}, { $set: {i:passImageList} }, {}, (err) => {

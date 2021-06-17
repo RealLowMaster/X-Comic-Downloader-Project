@@ -473,6 +473,30 @@ img {
 	left: 0;
 }
 
+.comic-panel-close-btn {
+	display: flex;
+	width: 30px;
+	height: 30px;
+	background-color: transparent;
+	color: #3334;
+	border: 1px solid #3334;
+	border-radius: 50%;
+	text-align: center;
+	align-items: center;
+	justify-content: center;
+	position: fixed;
+	top: 10px;
+	right: 10px;
+	cursor: pointer;
+	transition: .2s;
+}
+
+.comic-panel-close-btn:hover {
+	background-color: #111;
+	color: #fff;
+	border-color: #222;
+}
+
 .comic-panel-title {
 	display: block;
 	width: 100%;
