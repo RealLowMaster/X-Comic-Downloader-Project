@@ -478,11 +478,9 @@ function reloadTab() {
 	tabs[tabIndexId].reload()
 }
 
-async function comicDownloader(index, result, quality, shortName, callback) {
-	const date = new Date()
-	const random = Math.floor(Math.random() * 1000)
+async function comicDownloader(time, index, result, quality, shortName, callback) {
 	const url = downloadingList[index][1][downloadingList[index][0]]
-	const saveName = `${date.getTime()}-${random}.${fileExt(url)}`
+	const saveName = `${time}-${downloadingList[index][0]}.${fileExt(url)}`
 	var option = {
 		url: url,
 		dest: dirUL+`/${saveName}`
@@ -499,16 +497,16 @@ async function comicDownloader(index, result, quality, shortName, callback) {
 		if (downloadingList[index][0] == max) {
 			callback(index, result, quality, shortName)
 		} else {
-			comicDownloader(index, result, quality, shortName, callback)
+			comicDownloader(time, index, result, quality, shortName, callback)
 		}
 	}).catch((err) => {
 		downloadingList[index][3][downloadingList[index][1]] = [url]
 		downloaderRow.getElementsByTagName('div')[0].getElementsByTagName('div')[0].style.width = percentage+'%'
 		downloaderRow.getElementsByTagName('p')[0].getElementsByTagName('span')[0].textContent = `(${downloadingList[index][0]}/${max})`
 		if (downloadingList[index][0] == max) {
-			callback(index, result, quality)
+			callback(index, result, quality, shortName)
 		} else {
-			comicDownloader(index, result, quality, shortName, callback)
+			comicDownloader(time, index, result, quality, shortName, callback)
 		}
 	})
 }
@@ -1233,7 +1231,8 @@ function xlecxDownloader(id) {
 			if (result.artists != undefined) sendingResult.artists = result.artists
 			if (result.parody != undefined)	sendingResult.parody = result.parody
 			if (result.tags != undefined)	sendingResult.tags = result.tags
-			comicDownloader(downloadIndex, sendingResult, quality, name, async(index, gottenResult, gottenQuality, shortName) => {
+			const date = new Date().getTime()
+			comicDownloader(date, downloadIndex, sendingResult, quality, name, async(index, gottenResult, gottenQuality, shortName) => {
 				db.index.findOne({_id:1}, (err, cIndex) => {
 					if (err) { error(err); return }
 					db.comics.insert({n:gottenResult.title.toLowerCase(), i:downloadingList[index][3], q:gottenQuality, s:0, p:downloadingList[index][4], _id:cIndex.i}, (err, doc) => {
