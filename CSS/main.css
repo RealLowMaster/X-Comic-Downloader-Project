@@ -468,7 +468,8 @@ img {
 	height: 100%;
 	padding: 10px;
 	background-color: #fff;
-	position: absolute;
+	overflow-y: auto;
+	position: fixed;
 	top: 0;
 	left: 0;
 }
@@ -532,10 +533,6 @@ img {
 	cursor: pointer;
 }
 
-.comic-panel-tags > button:hover {
-	color: #d20068;
-}
-
 .comic-panel-image-container-1x1 {
 	display: block;
 	padding: 10px;
@@ -582,6 +579,48 @@ img {
 .repair-image > button:hover {
 	background-color: #d20068;
 	color: #fff;
+}
+
+.comic-panel-darkmode {
+	background-color: #333 !important;
+	color: #fff;
+}
+
+.comic-panel-darkmode .comic-panel-close-btn {
+	color: #eee6;
+	border-color: #eee6;
+}
+
+.comic-panel-darkmode .comic-panel-close-btn:hover {
+	background-color: #fff;
+	color: #222;
+}
+
+.comic-panel-darkmode .comic-panel-title {
+	background-color: #282828 !important;
+	color: #fff !important;
+}
+
+.comic-panel-darkmode .comic-panel-tags > button {
+	background-color: #222 !important;
+	color: #ccc;
+}
+
+.comic-panel-darkmode .comic-panel-image-container-1x1 {
+	background-color: #282828 !important;
+}
+
+.comic-panel-darkmode .repair-image {
+	background-color: #333;
+	border-color: #282828;
+}
+
+.comic-panel-darkmode .repair-image > p {
+	color: #ff7b00;
+}
+
+.comic-panel-tags > button:hover {
+	color: #d20068;
 }
 
 /* Pagination */

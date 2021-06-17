@@ -12,7 +12,7 @@ const defaultSetting = {
 	"pagination_width": 5,
 	"connection_timeout": 10000,
 	"show_not_when_dl_finish": true,
-	"comic_panel_theme": 0
+	"comic_panel_theme": 1
 }
 const sites = ['xlecx']
 var setting, tabs = [], db = {}, downloadingList = [], addingGroups = [], addingArtists = [], addingParody = [], addingTag = []
@@ -479,6 +479,10 @@ function openComic(id) {
 		})
 	}
 
+	if (setting.comic_panel_theme == 1)
+		comic_panel.classList.add('comic-panel-darkmode')
+	else
+		comic_panel.classList.remove('comic-panel-darkmode')
 	comic_panel.setAttribute('cid', id)
 	findComic()
 }
