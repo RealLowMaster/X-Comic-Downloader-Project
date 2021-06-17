@@ -11,8 +11,10 @@ const defaultSetting = {
 	"img_graphic": 1,
 	"pagination_width": 5,
 	"connection_timeout": 10000,
-	"show_not_when_dl_finish": true
+	"show_not_when_dl_finish": true,
+	"comic_panel_theme": 0
 }
+const sites = ['xlecx']
 var setting, tabs = [], db = {}, downloadingList = [], addingGroups = [], addingArtists = [], addingParody = [], addingTag = []
 
 // Directions
@@ -345,7 +347,90 @@ function pagination(total_pages, page) {
 }
 
 function openComic(id) {
-	console.log(id)
+	id = id || null
+	if (id == null) { error('Comic not Found.'); return }
+	var comic_panel = document.getElementById('comic-panel')
+	var title_container = document.getElementById('c-p-t')
+	var tags_container = document.getElementById('c-p-ts')
+	var image_container = document.getElementById('c-p-i')
+	var name, images, html = ''
+
+	title_container.textContent = ''
+	tags_container.innerHTML = ''
+	image_container.innerHTML = ''
+
+	const findComic = async() => {
+		await db.comics.findOne({_id:Number(id)}, (err, doc) => {
+			if (err) { error(err); return }
+			name = doc.n || null
+			if (name == null) return
+			images = doc.i
+
+			title_container.textContent = name
+
+			for (var i in images) {
+				if (typeof(images[i]) == 'object') {
+					html += `<div class="repair-image" id="${i}"><p>Image hasn't Been Download Currectly.</p><button onclick="repairImage(${i})">Repair</button></div>`
+				} else {
+					html += `<img src="${dirUL}/${images[i]}">`
+				}
+			}
+			image_container.innerHTML = html
+
+			comic_panel.style.display = 'block'
+		})
+	}
+
+	comic_panel.setAttribute('cid', id)
+	findComic()
+}
+
+async function repairImageUpdateDatabase(comic_id, imageIndex, imageName, passImageList) {
+	passImageList[imageIndex] = imageName
+	await db.comics.update({_id:comic_id}, { $set: {i:passImageList} }, {}, (err) => {
+		if (err) error(err)
+		var image_container = document.getElementById('c-p-i')
+		var element = document.createElement('img')
+		element.setAttribute('src', `${dirUL}/${imageName}`)
+		var repairElement = document.getElementById(imageIndex)
+		image_container.insertBefore(element, repairElement)
+		repairElement.remove()
+	})
+}
+
+async function repairImageFindDatabase(comic_id, imageIndex, imageName) {
+	await db.comics.findOne({_id:comic_id}, (err, doc) => {
+		if (err) { error(err); return }
+		repairImageUpdateDatabase(comic_id, imageIndex, imageName, doc.i)
+	})
+}
+
+async function repairImageDownloadImage(comic_id, imageIndex, imageUrl) {
+	const time = new Date().getTime()
+	var saveName = `r${time}-${imageIndex}.${fileExt(imageUrl)}`
+	var option = {
+		url: imageUrl,
+		dest: dirUL+`/${saveName}`
+	}
+
+	await ImageDownloader.image(option).then(({ filename }) => {
+		repairImageFindDatabase(comic_id, imageIndex, saveName)
+	}).catch((err) => {
+		error('Sorry There is a Problem in Repairing Image, Please check Internet Connection.<br>'+err)
+		document.getElementById(imageIndex).innerHTML = `<p>Image hasn't Been Download Currectly.</p><button onclick="${imageIndex}">Repair</button>`
+	})
+}
+
+async function repairImage(imageIndex) {
+	var comic_id = Number(document.getElementById('comic-panel').getAttribute('cid'))
+	var repairElement = document.getElementById(imageIndex)
+	repairElement.innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
+	await db.comics.findOne({_id:comic_id}, (err, doc) => {
+		if (err) { error(err); return }
+		var imageUrl = doc.i[imageIndex][0] || null
+		if (imageUrl == null) { error('Image Url Is Missed!'); return }
+		repairImageDownloadImage(comic_id, imageIndex, imageUrl)
+	})
 }
 
 // Browser
@@ -536,7 +621,7 @@ async function comicDownloader(time, index, result, quality, shortName, callback
 			comicDownloader(time, index, result, quality, shortName, callback)
 		}
 	}).catch((err) => {
-		downloadingList[index][3][downloadingList[index][1]] = [url]
+		downloadingList[index][3][downloadingList[index][0]] = [url]
 		downloaderRow.getElementsByTagName('div')[0].getElementsByTagName('div')[0].style.width = percentage+'%'
 		downloaderRow.getElementsByTagName('p')[0].getElementsByTagName('span')[0].textContent = `(${downloadingList[index][0]}/${max})`
 		if (downloadingList[index][0] == max) {
@@ -1368,7 +1453,19 @@ function xlecxDownloader(id) {
 }
 
 function dl() {
-	PopAlert('test')
+	const url = 'adafaefawfwadwqw.jwqdwpq'
+	const time = new Date().getTime()
+	const saveName = `${time}-0.${fileExt(url)}`
+	var option = {
+		url: url,
+		dest: dirUL+`/${saveName}`
+	}
+
+	ImageDownloader.image(option).then(({ filename }) => {
+		
+	}).catch((err) => {
+		console.log([url])
+	})
 }
 
 $(document).ready(() => {

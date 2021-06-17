@@ -461,6 +461,105 @@ img {
 	background-color: #025ba7;
 }
 
+/* Comic Panel */
+.comic-panel {
+	display: none;
+	width: 100%;
+	height: 100%;
+	padding: 10px;
+	background-color: #fff;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.comic-panel-title {
+	display: block;
+	width: 100%;
+	padding: 10px;
+	margin: 20px auto;
+	background-color: #eee;
+	color: #222;
+	font-size: 1.3rem;
+	text-transform: capitalize;
+	box-shadow: 0 1px 5px 0 rgba(0,0,0,0.3);
+}
+
+.comic-panel-tags {
+	display: block;
+	width: 100%;
+}
+
+.comic-panel-tags {
+	display: block;
+	line-height: 30px;
+	padding: 0 10px;
+	font: 13px 'Open Sans', Arial, Helvetica, sans-serif;
+}
+
+.comic-panel-tags > button {
+	display: inline-block;
+	padding: 0 10px;
+	margin: 0 0 10px 5px;
+	background-color: #eee;
+	color: #333;
+	line-height: 30px;
+	text-transform: capitalize;
+	cursor: pointer;
+}
+
+.comic-panel-tags > button:hover {
+	color: #d20068;
+}
+
+.comic-panel-image-container-1x1 {
+	display: block;
+	padding: 10px;
+	margin: 0 10px 10px 10px;
+	background-color: #e8e8e8;
+	text-align: center;
+}
+
+.comic-panel-image-container-1x1 > img {
+	display: block;
+	max-width: 100%;
+	height: auto;
+	margin: 15px auto;
+	object-fit: cover;
+	object-position: center;
+}
+
+.repair-image {
+	display: block;
+	width: 98%;
+	padding: 13px;
+	margin: 25px auto;
+	background-color: #fff;
+	border: 1px solid #ddd;
+	text-align: center;
+}
+
+.repair-image > p {
+	display: block;
+	width: 100%;
+	padding: 10px;
+	color: #e00;
+}
+
+.repair-image > button {
+	display: inline-block;
+	padding: 10px;
+	margin: 10px auto;
+	background-color: #eee;
+	color: #222;
+	cursor: pointer;
+}
+
+.repair-image > button:hover {
+	background-color: #d20068;
+	color: #fff;
+}
+
 /* Pagination */
 .pagination-rounded {
 	display: block;
