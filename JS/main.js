@@ -12,7 +12,7 @@ const defaultSetting = {
 	"pagination_width": 5,
 	"connection_timeout": 10000,
 	"show_not_when_dl_finish": true,
-	"comic_panel_theme": 1
+	"comic_panel_theme": 0
 }
 const sites = ['xlecx']
 var setting, tabs = [], db = {}, downloadingList = [], addingGroups = [], addingArtists = [], addingParody = [], addingTag = []
@@ -785,6 +785,7 @@ function createNewXlecxTab(id, pageNumber) {
 			page.innerHTML = `<br><div class="alert alert-danger">${err}</div><button class="btn btn-primary" style="display:block;margin:3px auto" onclick="reloadTab()">Reload</button>`
 			return
 		}
+		console.log(result.pagination)
 		document.getElementById('browser-tabs').querySelector(`[pi="${id}"]`).getElementsByTagName('span')[0].textContent = `Page ${pageNumber}`
 		var container = document.createElement('div')
 		container.classList.add("xlecx-container")
@@ -831,7 +832,7 @@ function createNewXlecxTab(id, pageNumber) {
 				element.textContent = result.pagination[i][0]
 			} else {
 				element.textContent = result.pagination[i][0]
-				element.setAttribute('p', result.pagination[i][0])
+				element.setAttribute('p', result.pagination[i][1])
 				element.onmousedown = e => {
 					e.preventDefault()
 					xlecxChangePage(Number(e.target.getAttribute('p')), checkMiddleMouseClick(e))
@@ -1075,7 +1076,7 @@ function xlecxOpenCategory(name, page, shortName, makeNewPage, updateTabIndex) {
 				element.textContent = result.pagination[i][0]
 			} else {
 				element.textContent = result.pagination[i][0]
-				element.setAttribute('p', result.pagination[i][0])
+				element.setAttribute('p', result.pagination[i][1])
 				element.onmousedown = e => {
 					e.preventDefault()
 					xlecxOpenCategory(name, Number(e.target.getAttribute('p')), shortName, checkMiddleMouseClick(e))
@@ -1150,7 +1151,7 @@ function xlecxOpenTagContentMaker(result, pageContent, name, whitch) {
 				element.textContent = result.pagination[i][0]
 			} else {
 				element.textContent = result.pagination[i][0]
-				element.setAttribute('p', result.pagination[i][0])
+				element.setAttribute('p', result.pagination[i][1])
 				element.onmousedown = e => {
 					e.preventDefault()
 					xlecxOpenTag(name, Number(e.target.getAttribute('p')), whitch, checkMiddleMouseClick(e))
