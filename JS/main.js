@@ -344,6 +344,9 @@ window.onresize = () => {
 
 function activateTab(who) {
 	var pageId = who.getAttribute('pi')
+	var pageContainer = document.getElementById('browser-pages')
+	var passScoll = pageContainer.scrollTop
+	var scrollValue = Number(who.getAttribute('sv')) || 0
 	page = document.getElementById(pageId) || null
 	if (page == null) return
 
@@ -353,14 +356,15 @@ function activateTab(who) {
 		var passTab = document.getElementById('browser-tabs').querySelector(`[pi="${passId}"]`) || null
 		if (passTab != null) {
 			passTab.setAttribute('active', null)
+			passTab.setAttribute('sv', passScoll)
 			document.getElementById(passId).setAttribute('style', null)
 		}
 	}
 	tabsContainer.setAttribute('pid', pageId)
 	who.setAttribute('active', true)
 	var tpage = document.getElementById(pageId)
-	tpage.scrollTop = 1
 	tpage.setAttribute('style', 'display:block')
+	pageContainer.scrollTop = scrollValue
 }
 
 function checkTabLimit() {
