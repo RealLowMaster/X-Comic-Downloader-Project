@@ -222,43 +222,75 @@ function getDragAfterElement(container, x) {
 function loadComics(page, search) {
 	page = page || 1
 	search = search || null
-	/*
-	var mc = $('#movies-container')
-	mc.children().remove()
-	var min = 0, max, allPages, id, name, image
+	var RegSearch
+	if (search != null) {
+		search = search.toLowerCase()
+		RegSearch = new RegExp(search)
+	}
+	var comic_container = document.getElementById('comic-container')
+	comic_container.innerHTML = ''
+	var min = 0, max, allPages, id, name, image, pages, html = ''
 	var max_per_page = setting.max_per_page
 
-	max = doc.length
-	allPages = Math.ceil(doc.length / max_per_page)
-	if (doc.length >= max_per_page) {
-		min = (max_per_page * page) - max_per_page
-		max = min + max_per_page
-		if (max > doc.length) max = doc.length
+	const working = (doc) => {
+		max = doc.length
+		allPages = Math.ceil(doc.length / max_per_page)
+		if (doc.length >= max_per_page) {
+			min = (max_per_page * page) - max_per_page
+			max = min + max_per_page
+			if (max > doc.length) max = doc.length
+		}
+
+		for (let i=min; i < max; i++) {
+			id = doc[i]._id || null
+			if (id == null) return
+			name = doc[i].n || null
+			if (name == null) return
+			image = doc[i].i[0] || null
+			if (typeof(image) == 'object')
+				image = 'Image/no-img-300x300.png'
+			else
+				image = `${dirUL}/${image}`
+			pages = doc[i].i.length || null
+			if (pages == null) { PopAlert(`PostID: ${id} Has No Image.`, 'danger') }
+			html += `<div class="comic" onclick="openComic(${id})"><img src="${image}"><span>${pages}</span><p>${name}</p></div>`
+		}
+		comic_container.innerHTML = html
+		
+		// Pagination
+		var thisPagination = pagination(allPages, page)
+		pagination(allPages, page, 'loadMovies({page})')
+		html = '<div>'
+		for (var i in thisPagination) {
+			if (thisPagination[i][1] == null)
+				html += `<button disabled>${thisPagination[i][0]}</button>`
+			else
+				html += `<button onclick="loadComics(${thisPagination[i][1]}, ${search})">${thisPagination[i][0]}</button>`
+		}
+		html += '</div>'
+		document.getElementById('pagination').innerHTML = html
+
+		comic_container.setAttribute('page', page)
 	}
 
-
-	pagination(allPages, page, 'loadMovies({page})')
-	$('#movies-container').attr('page', page)
-	*/
-
-	var comic_container = document.getElementById('comic-container')
-	var html = ''
-	for (var i = 0; i < 15; i++) {
-		html += '<div class="comic"><img src=""><span>12</span><p>Title</p></div>'
+	const findComicsBySearch = async() => {
+		await db.comics.find({n:RegSearch}).sort({_id:-1}).exec((err, doc) => {
+			if (err) { error(err); return }
+			working(doc)
+		})
 	}
-	comic_container.innerHTML = html
 
-	// Pagination
-	var thisPagination = pagination(10, 1)
-	html = '<div>'
-	for (var i in thisPagination) {
-		if (thisPagination[i][1] == null)
-			html += `<button disabled>${thisPagination[i][0]}</button>`
-		else
-			html += `<button onclick="loadComics(${thisPagination[i][1]}, ${search})">${thisPagination[i][0]}</button>`
+	const findComics = async() => {
+		await db.comics.find({}).sort({_id:-1}).exec((err, doc) => {
+			if (err) { error(err); return }
+			working(doc)
+		})
 	}
-	html += '</div>'
-	document.getElementById('pagination').innerHTML = html
+
+	if (search == null)
+		findComics()
+	else
+		findComicsBySearch()
 }
 
 function pagination(total_pages, page) {
@@ -310,6 +342,10 @@ function pagination(total_pages, page) {
 	if (page < total_pages) arr.push(['Next', page + 1])
 
 	return arr
+}
+
+function openComic(id) {
+	console.log(id)
 }
 
 // Browser

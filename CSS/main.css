@@ -454,6 +454,7 @@ img {
 	color: #fff;
 	font-size: 16px;
 	line-height: 1.4;
+	text-transform: capitalize;
 }
 
 .comic:hover {
@@ -588,6 +589,12 @@ img {
 	background-color: #458a00;
 	color: #fff;
 	border-color: #447500;
+}
+
+.pop-alert-danger {
+	background-color: #8a0012;
+	color: #fff;
+	border-color: #750010;
 }
 
 .dragging {
