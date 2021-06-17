@@ -351,13 +351,107 @@ function openComic(id) {
 	if (id == null) { error('Comic not Found.'); return }
 	var comic_panel = document.getElementById('comic-panel')
 	var title_container = document.getElementById('c-p-t')
+	var groups_container = document.getElementById('c-p-g')
+	var artists_container = document.getElementById('c-p-a')
+	var parodies_container = document.getElementById('c-p-p')
 	var tags_container = document.getElementById('c-p-ts')
 	var image_container = document.getElementById('c-p-i')
 	var name, images, html = ''
 
 	title_container.textContent = ''
+	groups_container.innerHTML = ''
+	artists_container.innerHTML = ''
+	parodies_container.innerHTML = ''
 	tags_container.innerHTML = ''
 	image_container.innerHTML = ''
+
+	const findGroupName = async(id) => {
+		await db.groups.findOne({_id:id}, (err, doc) => {
+			if (err) { error(err); return }
+			groups_container.innerHTML += `<button>${doc.n}</button>`
+		})
+	}
+
+	const findGroupRow = async() => {
+		await db.comic_groups.findOne({c:Number(id)}, (err, doc) => {
+			if (err) { error(err); return }
+			var checkDoc = doc || null
+			if (checkDoc != null) {
+				var groups = doc.t || null
+				if (groups == null) return
+				groups_container.innerHTML = 'Groups: '
+				for (var i in groups) {
+					findGroupName(groups[i])
+				}
+			}
+		})
+	}
+
+	const findArtistName = async(id) => {
+		await db.artists.findOne({_id:id}, (err, doc) => {
+			if (err) { error(err); return }
+			artists_container.innerHTML += `<button>${doc.n}</button>`
+		})
+	}
+
+	const findArtistRow = async() => {
+		await db.comic_artists.findOne({c:Number(id)}, (err, doc) => {
+			if (err) { error(err); return }
+			var checkDoc = doc || null
+			if (checkDoc != null) {
+				var artists = doc.t || null
+				if (artists == null) return
+				artists_container.innerHTML = 'Artists: '
+				for (var i in artists) {
+					findArtistName(artists[i])
+				}
+			}
+		})
+	}
+
+	const findParodyName = async(id) => {
+		await db.parodies.findOne({_id:id}, (err, doc) => {
+			if (err) { error(err); return }
+			parodies_container.innerHTML += `<button>${doc.n}</button>`
+		})
+	}
+
+	const findParodyRow = async() => {
+		await db.comic_parodies.findOne({c:Number(id)}, (err, doc) => {
+			if (err) { error(err); return }
+			var checkDoc = doc || null
+			if (checkDoc != null) {
+				var parodies = doc.t || null
+				if (parodies == null) return
+				parodies_container.innerHTML = 'Parody: '
+				for (var i in parodies) {
+					findParodyName(parodies[i])
+				}
+			}
+		})
+	}
+
+	const findTagName = async(id) => {
+		await db.tags.findOne({_id:id}, (err, doc) => {
+			if (err) { error(err); return }
+			tags_container.innerHTML += `<button>${doc.n}</button>`
+		})
+	}
+
+	const findTagRow = async() => {
+		await db.comic_tags.findOne({c:Number(id)}, (err, doc) => {
+			if (err) { error(err); return }
+			var checkDoc = doc || null
+			if (checkDoc != null) {
+				var tags = doc.t || null
+				if (tags == null) return
+				tags_container.innerHTML = 'Tags: '
+				for (var i in tags) {
+					findTagName(tags[i])
+				}
+			}
+		})
+	}
 
 	const findComic = async() => {
 		await db.comics.findOne({_id:Number(id)}, (err, doc) => {
@@ -377,6 +471,10 @@ function openComic(id) {
 			}
 			image_container.innerHTML = html
 
+			findGroupRow()
+			findArtistRow()
+			findParodyRow()
+			findTagRow()
 			comic_panel.style.display = 'block'
 		})
 	}
@@ -388,16 +486,22 @@ function openComic(id) {
 function closeComicPanel() {
 	var comic_panel = document.getElementById('comic-panel')
 	var title_container = document.getElementById('c-p-t')
+	var groups_container = document.getElementById('c-p-g')
+	var artists_container = document.getElementById('c-p-a')
+	var parodies_container = document.getElementById('c-p-p')
 	var tags_container = document.getElementById('c-p-ts')
 	var image_container = document.getElementById('c-p-i')
 
 	comic_panel.style.display = 'none'
 
 	title_container.textContent = ''
+	groups_container.innerHTML = ''
+	artists_container.innerHTML = ''
+	parodies_container.innerHTML = ''
 	tags_container.innerHTML = ''
 	image_container.innerHTML = ''
 
-	comic_panel.setAttribute('cid', id)
+	comic_panel.setAttribute('cid', null)
 }
 
 async function repairImageUpdateDatabase(comic_id, imageIndex, imageName, passImageList) {
