@@ -182,6 +182,42 @@ function PopAlert(txt, style) {
 if (setting.img_graphic > 1) setting.img_graphic = 1
 xlecx.timeout = setting.connection_timeout
 
+// Make Tabs Draggable
+const tabsContainer = document.getElementById('browser-tabs')
+const tabsContainerTabs = tabsContainer.querySelectorAll('div')
+tabsContainerTabs.forEach(dragable => {
+	dragable.addEventListener('dragstart',() => {
+		dragable.classList.add('dragging')
+	})
+
+	dragable.addEventListener('dragend', () => {
+		dragable.classList.remove('dragging')
+	})
+})
+tabsContainer.addEventListener('dragover', e => {
+	e.preventDefault()
+	const afterElement = getDragAfterElement(tabsContainer, e.clientX)
+	const draggable = document.querySelector('.dragging')
+	if (afterElement == null) {
+		tabsContainer.append(draggable)
+	} else {
+		tabsContainer.insertBefore(draggable, afterElement)
+	}
+})
+
+function getDragAfterElement(container, x) {
+	const draggableElemnets = [...container.querySelectorAll('div:not(.dragging)')]
+	return draggableElemnets.reduce((closest, child) => {
+		const box = child.getBoundingClientRect()
+		const offset = x - box.left - box.width / 2
+		if (offset < 0 && offset > closest.offset) {
+			return { offset: offset, element: child }
+		} else {
+			return closest
+		}
+	}, { offset: Number.NEGATIVE_INFINITY }).element
+}
+
 // Comics
 function loadComics(page, search) {
 	page = page || 1
@@ -346,13 +382,21 @@ function createNewTab(history) {
 	var randomNumber = Math.floor(Math.random() * 500)
 	var newTabId = `${date.getTime()}-${randomNumber}`
 	var page = document.createElement('div')
+	var element = document.createElement('div')
+	element.classList.add('browser-tab')
+	element.setAttribute('onclick', 'activateTab(this)')
+	element.setAttribute('pi', newTabId)
+	element.setAttribute('ti', tabIndex)
+	element.setAttribute('draggable', true)
+	element.innerHTML = `<span>${newTabId}</span> <button onclick="removeTab('${newTabId}')">X</button>`
+	element.addEventListener('dragstart',() => { element.classList.add('dragging') })
+	element.addEventListener('dragend', () => { element.classList.remove('dragging') })
 
 	tabs[tabIndex] = new Tab(newTabId)
 	tabs[tabIndex].history.push(history)
-
 	page.setAttribute('class', 'browser-page')
 	page.setAttribute('id', newTabId)
-	document.getElementById('browser-tabs').innerHTML += `<div class="browser-tab" onclick="activateTab(this)" pi="${newTabId}" ti="${tabIndex}"><span>${newTabId}</span> <button onclick="removeTab('${newTabId}')">X</button></div>`
+	tabsContainer.appendChild(element)
 	page.innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
 	document.getElementById('browser-pages').appendChild(page)
 

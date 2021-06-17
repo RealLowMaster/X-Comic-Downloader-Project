@@ -590,6 +590,11 @@ img {
 	border-color: #447500;
 }
 
+.dragging {
+	background-color: #eee;
+	opacity: .4;
+}
+
 .child-draggable > img {
 	-webkit-user-drag: auto;
 }
