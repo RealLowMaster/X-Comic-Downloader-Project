@@ -43,7 +43,7 @@
 	<div class="comic-panel" id="comic-panel" cid="">
 		<button class="comic-panel-close-btn" onclick="closeComicPanel()">X</button>
 
-		<button class="comic-panel-repair-info-btn" title="Repair Info" onclick="repairComicInfo()">R</button>
+		<button class="comic-panel-repair-info-btn" title="Repair Info" onclick="document.getElementById('comic-action-panel').style.display='flex'">R</button>
 
 		<p class="comic-panel-title" id="c-p-t">Title</p>
 
@@ -60,12 +60,12 @@
 	<div class="comic-action-panel" id="comic-action-panel">
 		<div onclick="document.getElementById('comic-action-panel').style.display='none'"></div>
 		<div>
-			<button>Repair Comic Name</button>
-			<button>Repair Comic Groups</button>
-			<button>Repair Comic Artists</button>
-			<button>Repair Comic Parodies</button>
-			<button>Repair Comic Tags</button>
-			<button>Repair Comic Images</button>
+			<button onclick="repairComicInfo(0)">Repair Comic Name</button>
+			<button onclick="repairComicInfo(1)">Repair Comic Groups</button>
+			<button onclick="repairComicInfo(2)">Repair Comic Artists</button>
+			<button onclick="repairComicInfo(3)">Repair Comic Parodies</button>
+			<button onclick="repairComicInfo(4)">Repair Comic Tags</button>
+			<button onclick="repairComicInfo(5)">Repair Comic Images</button>
 		</div>
 	</div>
 
