@@ -15,7 +15,7 @@ const defaultSetting = {
 	"comic_panel_theme": 0
 }
 const sites = [['xlecx', 'xlecxRepairComicInfoGetInfo({id}, {whitch})']]
-var setting, tabs = [], db = {}, downloadingList = [], addingGroups = [], addingArtists = [], addingParody = [], addingTag = []
+var setting, tabs = [], db = {}, downloadingList = []
 
 // Directions
 var dirRoot = path.join(__dirname)
@@ -646,7 +646,7 @@ function createNewTab(history) {
 	element.setAttribute('pi', newTabId)
 	element.setAttribute('ti', tabIndex)
 	element.setAttribute('draggable', true)
-	element.innerHTML = `<span>${newTabId}</span> <button onclick="removeTab('${newTabId}')">X</button>`
+	element.innerHTML = `<span><span class="spin spin-primary" style="width:22px;height:22px"></span></span> <button onclick="removeTab('${newTabId}')">X</button>`
 	element.addEventListener('dragstart',() => { element.classList.add('dragging') })
 	element.addEventListener('dragend', () => { element.classList.remove('dragging') })
 
@@ -789,13 +789,15 @@ function createNewXlecxTab(id, pageNumber) {
 	var page = document.getElementById(id)
 	pageNumber = pageNumber || 1
 
+	var tabArea = document.getElementById('browser-tabs').querySelector(`[pi="${id}"]`).getElementsByTagName('span')[0]
+	tabArea.innerHTML = '<span class="spin spin-primary" style="width:22px;height:22px"></span>'
 	xlecx.getPage({page:pageNumber, random:true, category:true}, (err, result) => {
 		page.innerHTML = ''
 		if (err) {
 			page.innerHTML = `<br><div class="alert alert-danger">${err}</div><button class="btn btn-primary" style="display:block;margin:3px auto" onclick="reloadTab()">Reload</button>`
 			return
 		}
-		document.getElementById('browser-tabs').querySelector(`[pi="${id}"]`).getElementsByTagName('span')[0].textContent = `Page ${pageNumber}`
+		tabArea.innerHTML = `Page ${pageNumber}`
 		var container = document.createElement('div')
 		container.classList.add("xlecx-container")
 		var elementContainerContainer = null
@@ -889,14 +891,16 @@ function xlecxOpenPost(makeNewPage, id, updateTabIndex) {
 		if (updateTabIndex == true)
 			tabs[tabIndexId].addHistory(`xlecxOpenPost(false, "${id}", false)`)
 	}
-	
+
+	var tabArea = document.getElementById('browser-tabs').querySelector(`[pi="${pageId}"]`).getElementsByTagName('span')[0]
+	tabArea.innerHTML = '<span class="spin spin-primary" style="width:22px;height:22px"></span>'
 	xlecx.getComic(id, false, (err, result) => {
 		page.innerHTML = ''
 		if (err) {
 			page.innerHTML = `<br><div class="alert alert-danger">${err}</div><button class="btn btn-primary" style="display:block;margin:3px auto" onclick="reloadTab()">Reload</button>`
 			return
 		}
-		document.getElementById('browser-tabs').querySelector(`[pi="${pageId}"]`).getElementsByTagName('span')[0].textContent = result.title
+		tabArea.innerHTML = result.title
 		var containerContainer = document.createElement('div')
 		containerContainer.classList.add('xlecx-container-one-row')
 		containerContainer.innerHTML = `<button class="xlecx-download-btn" onclick="xlecxDownloader('${id}')">Download</button>`
@@ -1033,6 +1037,8 @@ function xlecxOpenCategory(name, page, shortName, makeNewPage, updateTabIndex) {
 			tabs[tabIndexId].addHistory(`xlecxOpenCategory('${name}', ${page}, '${shortName}', false, false)`)
 	}
 
+	var tabArea = document.getElementById('browser-tabs').querySelector(`[pi="${pageId}"]`).getElementsByTagName('span')[0]
+	tabArea.innerHTML = '<span class="spin spin-primary" style="width:22px;height:22px"></span>'
 	pageContent.innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
 	xlecx.getCategory(name, {page:page, random:true, category:true}, (err, result) => {
 		pageContent.innerHTML = ''
@@ -1040,7 +1046,7 @@ function xlecxOpenCategory(name, page, shortName, makeNewPage, updateTabIndex) {
 			page.innerHTML = `<br><div class="alert alert-danger">${err}</div><button class="btn btn-primary" style="display:block;margin:3px auto" onclick="reloadTab()">Reload</button>`
 			return
 		}
-		document.getElementById('browser-tabs').querySelector(`[pi="${pageId}"]`).getElementsByTagName('span')[0].textContent = `${shortName} - ${page}`
+		tabArea.innerHTML = `${shortName} - ${page}`
 		var container = document.createElement('div')
 		container.classList.add("xlecx-container")
 		var elementContainerContainer = null
@@ -1199,6 +1205,8 @@ function xlecxOpenTag(name, page, whitch, makeNewPage, updateTabIndex) {
 		}
 	}
 
+	var tabArea = document.getElementById('browser-tabs').querySelector(`[pi="${pageId}"]`).getElementsByTagName('span')[0]
+	tabArea.innerHTML = '<span class="spin spin-primary" style="width:22px;height:22px"></span>'
 	pageContent.innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
 	if (whitch == 1) {
 		xlecx.getGroup(name, {page:page, category:true}, (err, result) => {
@@ -1207,7 +1215,7 @@ function xlecxOpenTag(name, page, whitch, makeNewPage, updateTabIndex) {
 				pageContent.innerHTML = `<br><div class="alert alert-danger">${err}</div><button class="btn btn-primary" style="display:block;margin:3px auto" onclick="reloadTab()">Reload</button>`
 				return
 			}
-			document.getElementById('browser-tabs').querySelector(`[pi="${pageId}"]`).getElementsByTagName('span')[0].textContent = `${name} - ${page}`
+			tabArea.textContent = `${name} - ${page}`
 			xlecxOpenTagContentMaker(result, pageContent, name, whitch)
 		})
 	} else if (whitch == 2) {
@@ -1217,7 +1225,7 @@ function xlecxOpenTag(name, page, whitch, makeNewPage, updateTabIndex) {
 				pageContent.innerHTML = `<br><div class="alert alert-danger">${err}</div><button class="btn btn-primary" style="display:block;margin:3px auto" onclick="reloadTab()">Reload</button>`
 				return
 			}
-			document.getElementById('browser-tabs').querySelector(`[pi="${pageId}"]`).getElementsByTagName('span')[0].textContent = `${name} - ${page}`
+			tabArea.textContent = `${name} - ${page}`
 			xlecxOpenTagContentMaker(result, pageContent, name, whitch)
 		})
 	} else if (whitch == 3) {
@@ -1227,7 +1235,7 @@ function xlecxOpenTag(name, page, whitch, makeNewPage, updateTabIndex) {
 				pageContent.innerHTML = `<br><div class="alert alert-danger">${err}</div><button class="btn btn-primary" style="display:block;margin:3px auto" onclick="reloadTab()">Reload</button>`
 				return
 			}
-			document.getElementById('browser-tabs').querySelector(`[pi="${pageId}"]`).getElementsByTagName('span')[0].textContent = `${name} - ${page}`
+			tabArea.textContent = `${name} - ${page}`
 			xlecxOpenTagContentMaker(result, pageContent, name, whitch)
 		})
 	} else {
@@ -1237,7 +1245,7 @@ function xlecxOpenTag(name, page, whitch, makeNewPage, updateTabIndex) {
 				pageContent.innerHTML = `<br><div class="alert alert-danger">${err}</div><button class="btn btn-primary" style="display:block;margin:3px auto" onclick="reloadTab()">Reload</button>`
 				return
 			}
-			document.getElementById('browser-tabs').querySelector(`[pi="${pageId}"]`).getElementsByTagName('span')[0].textContent = `${name} - ${page}`
+			tabArea.textContent = `${name} - ${page}`
 			xlecxOpenTagContentMaker(result, pageContent, name, whitch)
 		})
 	}
