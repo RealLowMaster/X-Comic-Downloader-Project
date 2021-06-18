@@ -2,6 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const nedb = require('nedb')
 const ImageDownloader = require('image-downloader')
+const { type } = require('os')
 require('v8-compile-cache')
 const xlecx = new XlecxAPI()
 const defaultSetting = {
@@ -1852,6 +1853,25 @@ async function xlecxRepairComicInfoGetInfo(id, whitch) {
 				})
 				break
 			case 5:
+				var neededResult = result.images || null
+				if (neededResult == null) {
+					PopAlert('This Comic has no Image.', 'danger')
+					return
+				}
+				db.comics.findOne({_id:comic_id}, (err, doc) => {
+					if (err) { error(err); return }
+					if (doc.i == undefined) return
+					var newImageList = []
+					for (var i in doc.i) {
+						if (typeof(doc.i[i]) == 'object')
+							newImageList.push([doc.i[i][0], i])
+					}
+					if (newImageList.length == 0) {
+						PopAlert('All Images are Good, no Need To Repair.', 'danger')
+						return
+					}
+					console.log(newImageList)
+				})
 				break
 		}
 	})
