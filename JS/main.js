@@ -14,7 +14,7 @@ const defaultSetting = {
 	"show_not_when_dl_finish": true,
 	"comic_panel_theme": 0
 }
-const sites = ['xlecx']
+const sites = [['xlecx', 'xlecxRepairComicInfoGetInfo({id}, {whitch})']]
 var setting, tabs = [], db = {}, downloadingList = [], addingGroups = [], addingArtists = [], addingParody = [], addingTag = []
 
 // Directions
@@ -553,6 +553,16 @@ async function repairImage(imageIndex) {
 		var imageUrl = doc.i[imageIndex][0] || null
 		if (imageUrl == null) { error('Image Url Is Missed!'); return }
 		repairImageDownloadImage(comic_id, imageIndex, imageUrl)
+	})
+}
+
+async function repairComicInfo() {
+	var id = Number(document.getElementById('comic-panel').getAttribute('cid'))
+	await db.comics.findOne({_id:id}, (err, doc) => {
+		if (err) { error(err); return }
+		if (doc.s == undefined) return
+		if (doc.s == undefined) return
+		eval(sites[doc.s][1].replace('{id}', `'${doc.p}'`).replace('{whitch}', 4))
 	})
 }
 
@@ -1445,7 +1455,7 @@ function xlecxDownloader(id) {
 		if (num > 0) { error('You Already Have This Comic.'); return }
 		xlecx.getComic(id, false, (err, result) => {
 			if (err) { error(err); return }
-	
+			
 			var downloader = document.getElementById('downloader')
 			downloader.setAttribute('style', 'display:block')
 			var element = document.createElement('div')
@@ -1576,19 +1586,33 @@ function xlecxDownloader(id) {
 	})
 }
 
-function dl() {
-	const url = 'adafaefawfwadwqw.jwqdwpq'
-	const time = new Date().getTime()
-	const saveName = `${time}-0.${fileExt(url)}`
-	var option = {
-		url: url,
-		dest: dirUL+`/${saveName}`
+async function xlecxRepairComicInfoGetInfo(id, whitch) {
+	switch (whitch) {
+		case 0:
+			break
+		case 1:
+			break
+		case 2:
+			break
+		case 3:
+			break
+		case 4:
+			await xlecx.getComic(id, false, (err, result) => {
+				if (err) { error(err); return }
+				const neededResult = result.tags || null
+				if (neededResult == null) return
+				console.log(neededResult)
+			})
+			break
+		case 5:
+			break
 	}
+}
 
-	ImageDownloader.image(option).then(({ filename }) => {
-		
-	}).catch((err) => {
-		console.log([url])
+function dl() {
+	xlecx.getComic('479-transformers-sex-comics-free.html', false, (err, result) => {
+		if (err) { error(err); return }
+		console.log(result.tags)
 	})
 }
 

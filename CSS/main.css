@@ -474,7 +474,8 @@ img {
 	left: 0;
 }
 
-.comic-panel-close-btn {
+.comic-panel-close-btn,
+.comic-panel-repair-info-btn {
 	display: flex;
 	width: 30px;
 	height: 30px;
@@ -487,15 +488,21 @@ img {
 	justify-content: center;
 	position: fixed;
 	top: 10px;
-	right: 10px;
+	right: 15px;
 	cursor: pointer;
 	transition: .2s;
 }
 
-.comic-panel-close-btn:hover {
+.comic-panel-close-btn:hover,
+.comic-panel-repair-info-btn:hover {
 	background-color: #111;
 	color: #fff;
 	border-color: #222;
+}
+
+.comic-panel-repair-info-btn {
+	right: auto;
+	left: 15px;
 }
 
 .comic-panel-title {
