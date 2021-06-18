@@ -1679,6 +1679,7 @@ function xlecxDownloader(id) {
 }
 
 async function xlecxRepairComicInfoGetInfo(id, whitch) {
+	var comic_id = Number(document.getElementById('comic-panel').getAttribute('cid'))
 	switch (whitch) {
 		case 0:
 			break
@@ -1693,9 +1694,15 @@ async function xlecxRepairComicInfoGetInfo(id, whitch) {
 				if (err) { error(err); return }
 				const neededResult = result.tags || null
 				if (neededResult == null) return
+				var tagsList = []
 				for (var i in neededResult) {
-					xlecxCreateTag(neededResult[i], index)
+					tagsList.push(neededResult[i].name)
 				}
+				db.index.findOne({_id:4}, (err, doc) => {
+					if (err) { error(err); return }
+					var tagIndex = doc.i
+					xlecxCreateTag(tagsList, tagIndex, true, comic_id)
+				})
 			})
 			break
 		case 5:
