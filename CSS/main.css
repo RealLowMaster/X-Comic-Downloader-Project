@@ -255,6 +255,7 @@ img {
 	display: block;
 	width: 100%;
 	max-width: 100%;
+	text-transform: capitalize;
 	word-break: normal;
 	overflow: hidden;
 }
@@ -858,6 +859,7 @@ img {
 	background-color: #282828;
 	font-family: 'Open Sans', Arial, Helvetica, sans-serif;
 	font-size: 24px;
+	text-transform: capitalize;
 }
 
 .xlecx-post-tags {
@@ -873,6 +875,7 @@ img {
 	margin: 0 0 10px 5px;
 	background-color: #222;
 	color: #ccc;
+	text-transform: capitalize;
 	line-height: 30px;
 	cursor: pointer;
 }
