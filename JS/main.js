@@ -1084,6 +1084,7 @@ function xlecxOpenCategory(name, page, shortName, makeNewPage, updateTabIndex) {
 		elementContainerContainer.appendChild(elementContainer)
 
 		// Pagination
+		console.log(result.pagination)
 		elementContainer = document.createElement('div')
 		elementContainer.classList.add("xlecx-pagination")
 		for (var i = 0; i < result.pagination.length; i++) {

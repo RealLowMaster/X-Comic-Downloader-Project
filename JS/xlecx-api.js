@@ -273,27 +273,25 @@ class XlecxAPI {
 
 				// Pagination
 				if (pagination == true) {
-					li = htmlDoc.getElementById('bottom-nav') || null
-					if (li != null) {
-						li = li.querySelector('.navigation').children || null
-						var value, pPage
-						arr.pagination = []
-						for (var i = 0; i < li.length; i++) {
-							if (li[i].textContent == "")
-								if (i == li.length - 1)
-									value = ">"
-								else
-									value = "<"
+					var value, pPage
+					arr.pagination = [];
+					li = htmlDoc.getElementById('bottom-nav').querySelector('.navigation').children
+					for (var i = 0; i < li.length; i++) {
+						if (li[i].textContent == "")
+							if (i == li.length - 1)
+								value = ">"
 							else
-								value = li[i].textContent
-							
-							if (li[i].getAttribute('href') == null)
-								pPage = null
-							else
-								pPage = Number(li[i].getAttribute('href').replace((this.baseURL+this.groupURL+name+'/page/').replace(' ', '%20'), '').replace('/', ''))
-							
-							arr.pagination.push([value, pPage])
-						}
+								value = "<"
+						else
+							value = li[i].textContent
+						
+						if (li[i].getAttribute('href') == null)
+							pPage = null
+						else
+							pPage = Number(li[i].getAttribute('href').replace(this.baseURL+'/'+name+'/page/', '').replace('/', ''))
+						
+						
+						arr.pagination.push([value, pPage])
 					}
 				}
 
