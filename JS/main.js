@@ -779,6 +779,410 @@ function checkIsDownloading(id) {
 		return false
 }
 
+// Add New Xlecx Groups
+async function AddGroupUpdateList(comicId, groupsList, repairing) {
+	repairing = repairing || false
+	if (repairing == true) {
+		var newGroupList = []
+		for (var i in groupsList) {
+			newGroupList.push(groupsList[i][0])
+		}
+		await db.comic_groups.update({c:comicId}, { $set: {t:newGroupList} }, {}, (err) => {
+			if (err) { error(err); return }
+			PopAlert('Comic Groups Has Been Repaired!')
+			var html = 'Groups: '
+			for (var i in groupsList) {
+				html += `<button>${groupsList[i][1]}</button>`
+			}
+			document.getElementById('c-p-g').innerHTML = html
+		})
+	} else {
+		await db.comic_groups.update({c:comicId}, { $set: {t:groupsList} }, {}, (err) => {
+			if (err) error(err)
+		})
+	}
+}
+
+async function AddGroupCreateGroupIdList(comicId, groupsList, groupsListIndex, groupstNewList, repairing) {
+	groupsListIndex = groupsListIndex || 0
+	groupstNewList = groupstNewList || []
+	repairing = repairing || false
+	await db.groups.findOne({n:groupsList[groupsListIndex].toLowerCase()}, (err, doc) => {
+		if (err) { error(err); return }
+		if (repairing == true)
+			groupstNewList.push([doc._id, doc.n])
+		else
+			groupstNewList.push(doc._id)
+		if (groupsListIndex == groupsList.length - 1)
+			AddGroupUpdateList(comicId, groupstNewList, repairing)
+		else
+			AddGroupCreateGroupIdList(comicId, groupsList, groupsListIndex + 1, groupstNewList, repairing)
+	})
+}
+
+async function AddGroupAddGroupRow(comicId, index, groupsList, repairing) {
+	repairing = repairing || false
+	await db.comic_groups.insert({c:comicId, t:[], _id:index}, err => {
+		if (err) { error(err); return }
+		AddGroupCreateGroupIdList(comicId, groupsList, 0, [], repairing)
+		update_index(index, 7)
+	})
+}
+
+async function AddGroup(comicId, groupsList, repairing) {
+	repairing = repairing || false
+	await db.comic_groups.count({c:comicId}, (err, num) => {
+		if (err) { error(err); return }
+		if (num == 0) {
+			db.index.findOne({_id:7}, (err, doc) => {
+				if (err) { error(err); return }
+				var index = doc.i
+				AddGroupAddGroupRow(comicId, index, groupsList, repairing)
+			})
+		} else {
+			AddGroupCreateGroupIdList(comicId, groupsList, 0, [], repairing)
+		}
+	})
+}
+
+async function CreateGroupInsert(groupName, index) {
+	await db.groups.insert({n:groupName.toLowerCase(), _id:index}, (err) => {
+		if (err) { error(err); return }
+	})
+}
+
+async function CreateGroup(groupsList, index, groupsAddToList, comicId, groupsListIndex, repairing) {
+	groupsListIndex = groupsListIndex || 0
+	groupsAddToList = groupsAddToList || false
+	repairing = repairing || false
+	await db.groups.count({n:groupsList[groupsListIndex].toLowerCase()}, (err, num) => {
+		if (err) { error(err); return }
+		if (num == 0) {
+			CreateGroupInsert(groupsList[groupsListIndex], index).then(() => {
+				if (groupsListIndex == groupsList.length - 1) {
+					update_index(index, 6)
+					if (groupsAddToList == true) {
+						AddGroup(comicId, groupsList, repairing)
+					}
+				} else {
+					CreateGroup(groupsList, index + 1, groupsAddToList, comicId, groupsListIndex + 1, repairing)
+				}
+			})
+		} else {
+			if (groupsListIndex == groupsList.length - 1) {
+				update_index(index , 6)
+				if (groupsAddToList == true) {
+					AddGroup(comicId, groupsList, repairing)
+				}
+			} else
+				CreateGroup(groupsList, index, groupsAddToList, comicId, groupsListIndex + 1, repairing)
+		}
+	})
+}
+
+// Add New Xlecx Artist
+async function AddArtistUpdateList(comicId, artistsList, repairing) {
+	repairing = repairing || false
+	if (repairing == true) {
+		var newArtistList = []
+		for (var i in artistsList) {
+			newArtistList.push(artistsList[i][0])
+		}
+		await db.comic_artists.update({c:comicId}, { $set: {t:newArtistList} }, {}, (err) => {
+			if (err) { error(err); return }
+			PopAlert('Comic Artists Has Been Repaired!')
+			var html = 'Artists: '
+			for (var i in artistsList) {
+				html += `<button>${artistsList[i][1]}</button>`
+			}
+			document.getElementById('c-p-a').innerHTML = html
+		})
+	} else {
+		await db.comic_artists.update({c:comicId}, { $set: {t:artistsList} }, {}, (err) => {
+			if (err) error(err)
+		})
+	}
+}
+
+async function AddArtistCreateArtistIdList(comicId, artistsList, artistsListIndex, artistsNewList, repairing) {
+	artistsListIndex = artistsListIndex || 0
+	artistsNewList = artistsNewList || []
+	repairing = repairing || false
+	await db.artists.findOne({n:artistsList[artistsListIndex].toLowerCase()}, (err, doc) => {
+		if (err) { error(err); return }
+		if (repairing == true)
+			artistsNewList.push([doc._id, doc.n])
+		else
+			artistsNewList.push(doc._id)
+		if (artistsListIndex == artistsList.length - 1)
+			AddArtistUpdateList(comicId, artistsNewList, repairing)
+		else
+			AddArtistCreateArtistIdList(comicId, artistsList, artistsListIndex + 1, artistsNewList, repairing)
+	})
+}
+
+async function AddArtistAddArtistRow(comicId, index, artistsList, repairing) {
+	repairing = repairing || false
+	await db.comic_artists.insert({c:comicId, t:[], _id:index}, err => {
+		if (err) { error(err); return }
+		AddArtistCreateArtistIdList(comicId, artistsList, 0, [], repairing)
+		update_index(index, 3)
+	})
+}
+
+async function AddArtist(comicId, artistsList, repairing) {
+	repairing = repairing || false
+	await db.comic_artists.count({c:comicId}, (err, num) => {
+		if (err) { error(err); return }
+		if (num == 0) {
+			db.index.findOne({_id:3}, (err, doc) => {
+				if (err) { error(err); return }
+				var index = doc.i
+				AddArtistAddArtistRow(comicId, index, artistsList, repairing)
+			})
+		} else {
+			AddArtistCreateArtistIdList(comicId, artistsList, 0, [], repairing)
+		}
+	})
+}
+
+async function CreateArtistInsert(artistName, index) {
+	await db.artists.insert({n:artistName.toLowerCase(), _id:index}, (err) => {
+		if (err) { error(err); return }
+	})
+}
+
+async function CreateArtist(artistsList, index, artistsAddToList, comicId, artistsListIndex, repairing) {
+	artistsListIndex = artistsListIndex || 0
+	artistsAddToList = artistsAddToList || false
+	repairing = repairing || false
+	await db.artists.count({n:artistsList[artistsListIndex].toLowerCase()}, (err, num) => {
+		if (err) { error(err); return }
+		if (num == 0) {
+			CreateArtistInsert(artistsList[artistsListIndex], index).then(() => {
+				if (artistsListIndex == artistsList.length - 1) {
+					update_index(index, 2)
+					if (artistsAddToList == true) {
+						AddArtist(comicId, artistsList, repairing)
+					}
+				} else {
+					CreateArtist(artistsList, index + 1, artistsAddToList, comicId, artistsListIndex + 1, repairing)
+				}
+			})
+		} else {
+			if (artistsListIndex == artistsList.length - 1) {
+				update_index(index , 2)
+				if (artistsAddToList == true) {
+					AddArtist(comicId, artistsList, repairing)
+				}
+			} else
+				CreateArtist(artistsList, index, artistsAddToList, comicId, artistsListIndex + 1, repairing)
+		}
+	})
+}
+
+// Add New Xlecx Parody
+async function AddParodyUpdateList(comicId, parodyList, repairing) {
+	repairing = repairing || false
+	if (repairing == true) {
+		var newParodyList = []
+		for (var i in parodyList) {
+			newParodyList.push(parodyList[i][0])
+		}
+		await db.comic_parodies.update({c:comicId}, { $set: {t:newParodyList} }, {}, (err) => {
+			if (err) { error(err); return }
+			PopAlert('Comic Parodies Has Been Repaired!')
+			var html = 'Parody: '
+			for (var i in parodyList) {
+				html += `<button>${parodyList[i][1]}</button>`
+			}
+			document.getElementById('c-p-p').innerHTML = html
+		})
+	} else {
+		await db.comic_parodies.update({c:comicId}, { $set: {t:parodyList} }, {}, (err) => {
+			if (err) error(err)
+		})
+	}
+}
+
+async function AddParodyCreateParodyIdList(comicId, parodyList, parodyListIndex, parodyNewList, repairing) {
+	parodyListIndex = parodyListIndex || 0
+	parodyNewList = parodyNewList || []
+	repairing = repairing || false
+	await db.parodies.findOne({n:parodyList[parodyListIndex].toLowerCase()}, (err, doc) => {
+		if (err) { error(err); return }
+		if (repairing == true)
+			parodyNewList.push([doc._id, doc.n])
+		else
+			parodyNewList.push(doc._id)
+		if (parodyListIndex == parodyList.length - 1) {
+			AddParodyUpdateList(comicId, parodyNewList, repairing)
+		} else
+			AddParodyCreateParodyIdList(comicId, parodyList, parodyListIndex + 1, parodyNewList, repairing)
+	})
+}
+
+async function AddParodyAddParodyRow(comicId, index, parodyList, repairing) {
+	repairing = repairing || false
+	await db.comic_parodies.insert({c:comicId, t:[], _id:index}, err => {
+		if (err) { error(err); return }
+		AddParodyCreateParodyIdList(comicId, parodyList, 0, [], repairing)
+		update_index(index, 9)
+	})
+}
+
+async function AddParody(comicId, parodyList, repairing) {
+	repairing = repairing || false
+	await db.comic_parodies.count({c:comicId}, (err, num) => {
+		if (err) { error(err); return }
+		if (num == 0) {
+			db.index.findOne({_id:9}, (err, doc) => {
+				if (err) { error(err); return }
+				var index = doc.i
+				AddParodyAddParodyRow(comicId, index, parodyList, repairing)
+			})
+		} else {
+			AddParodyCreateParodyIdList(comicId, parodyList, 0, [], repairing)
+		}
+	})
+}
+
+async function CreateParodyInsert(parodyName, index) {
+	await db.parodies.insert({n:parodyName.toLowerCase(), _id:index}, (err) => {
+		if (err) { error(err); return }
+	})
+}
+
+async function CreateParody(parodyList, index, parodyAddToList, comicId, parodyListIndex, repairing) {
+	parodyListIndex = parodyListIndex || 0
+	parodyAddToList = parodyAddToList || false
+	repairing = repairing || false
+	await db.parodies.count({n:parodyList[parodyListIndex].toLowerCase()}, (err, num) => {
+		if (err) { error(err); return }
+		if (num == 0) {
+			CreateParodyInsert(parodyList[parodyListIndex], index).then(() => {
+				if (parodyListIndex == parodyList.length - 1) {
+					update_index(index, 8)
+					if (parodyAddToList == true) {
+						AddParody(comicId, parodyList, repairing)
+					}
+				} else {
+					CreateParody(parodyList, index + 1, parodyAddToList, comicId, parodyListIndex + 1, repairing)
+				}
+			})
+		} else {
+			if (parodyListIndex == parodyList.length - 1) {
+				update_index(index , 8)
+				if (parodyAddToList == true) {
+					AddParody(comicId, parodyList, repairing)
+				}
+			} else
+				CreateParody(parodyList, index, parodyAddToList, comicId, parodyListIndex + 1, repairing)
+		}
+	})
+}
+
+// Add New Xlecx Tag
+async function AddTagUpdateList(comicId, tagList, repairing) {
+	repairing = repairing || false
+	if (repairing == true) {
+		var newTagList = []
+		for (var i in tagList) {
+			newTagList.push(tagList[i][0])
+		}
+		await db.comic_tags.update({c:comicId}, { $set: {t:newTagList} }, {}, (err) => {
+			if (err) { error(err); return }
+			PopAlert('Comic Tags Has Been Repaired!')
+			var html = 'Tags: '
+			for (var i in tagList) {
+				html += `<button>${tagList[i][1]}</button>`
+			}
+			document.getElementById('c-p-ts').innerHTML = html
+		})
+	} else {
+		await db.comic_tags.update({c:comicId}, { $set: {t:tagList} }, {}, (err) => {
+			if (err) error(err)
+		})
+	}
+}
+
+async function AddTagCreateTagIdList(comicId, tagList, tagListIndex, newList, repairing) {
+	tagListIndex = tagListIndex || 0
+	newList = newList || []
+	repairing = repairing || false
+	await db.tags.findOne({n:tagList[tagListIndex].toLowerCase()}, (err, doc) => {
+		if (err) { error(err); return }
+		if (repairing == true)
+			newList.push([doc._id, doc.n])
+		else
+			newList.push(doc._id)
+		if (tagListIndex == tagList.length - 1)
+			AddTagUpdateList(comicId, newList, repairing)
+		else
+			AddTagCreateTagIdList(comicId, tagList, tagListIndex + 1, newList, repairing)
+	})
+}
+
+async function AddTagAddTagRow(comicId, index, tagList, repairing) {
+	repairing = repairing || false
+	await db.comic_tags.insert({c:comicId, t:[], _id:index}, err => {
+		if (err) { error(err); return }
+		AddTagCreateTagIdList(comicId, tagList, 0, [], repairing)
+		update_index(index, 5)
+	})
+}
+
+async function AddTag(comicId, tagList, repairing) {
+	repairing = repairing || false
+	await db.comic_tags.count({c:comicId}, (err, num) => {
+		if (err) { error(err); return }
+		if (num == 0) {
+			db.index.findOne({_id:5}, (err, doc) => {
+				if (err) { error(err); return }
+				var index = doc.i
+				AddTagAddTagRow(comicId, index, tagList, repairing)
+			})
+		} else {
+			AddTagCreateTagIdList(comicId, tagList, 0, [], repairing)
+		}
+	})
+}
+
+async function CreateTagInsert(tagName, index) {
+	await db.tags.insert({n:tagName.toLowerCase(), _id:index}, (err) => {
+		if (err) { error(err); return }
+	})
+}
+
+async function CreateTag(tagList, index, addToList, comicId, tagListIndex, repairing) {
+	tagListIndex = tagListIndex || 0
+	addToList = addToList || false
+	repairing = repairing || false
+	await db.tags.count({n:tagList[tagListIndex].toLowerCase()}, (err, num) => {
+		if (err) { error(err); return }
+		if (num == 0) {
+			CreateTagInsert(tagList[tagListIndex], index).then(() => {
+				if (tagListIndex == tagList.length - 1) {
+					update_index(index, 4)
+					if (addToList == true) {
+						AddTag(comicId, tagList, repairing)
+					}
+				} else {
+					CreateTag(tagList, index + 1, addToList, comicId, tagListIndex + 1, repairing)
+				}
+			})
+		} else {
+			if (tagListIndex == tagList.length - 1) {
+				update_index(index , 4)
+				if (addToList == true) {
+					AddTag(comicId, tagList, repairing)
+				}
+			} else
+				CreateTag(tagList, index, addToList, comicId, tagListIndex + 1, repairing)
+		}
+	})
+}
+
 // Xlecx
 function openXlecxBrowser() {
 	document.getElementById('add-new-tab').setAttribute('onclick', "createNewXlecxTab(createNewTab('xlecxChangePage(1, false, false)'))")
@@ -1084,7 +1488,6 @@ function xlecxOpenCategory(name, page, shortName, makeNewPage, updateTabIndex) {
 		elementContainerContainer.appendChild(elementContainer)
 
 		// Pagination
-		console.log(result.pagination)
 		elementContainer = document.createElement('div')
 		elementContainer.classList.add("xlecx-pagination")
 		for (var i = 0; i < result.pagination.length; i++) {
@@ -1254,410 +1657,6 @@ function xlecxOpenTag(name, page, whitch, makeNewPage, updateTabIndex) {
 	}
 }
 
-// Add New Xlecx Groups
-async function xlecxAddGroupUpdateList(comicId, groupsList, repairing) {
-	repairing = repairing || false
-	if (repairing == true) {
-		var newGroupList = []
-		for (var i in groupsList) {
-			newGroupList.push(groupsList[i][0])
-		}
-		await db.comic_groups.update({c:comicId}, { $set: {t:newGroupList} }, {}, (err) => {
-			if (err) { error(err); return }
-			PopAlert('Comic Groups Has Been Repaired!')
-			var html = 'Groups: '
-			for (var i in groupsList) {
-				html += `<button>${groupsList[i][1]}</button>`
-			}
-			document.getElementById('c-p-g').innerHTML = html
-		})
-	} else {
-		await db.comic_groups.update({c:comicId}, { $set: {t:groupsList} }, {}, (err) => {
-			if (err) error(err)
-		})
-	}
-}
-
-async function xlecxAddGroupCreateGroupIdList(comicId, groupsList, groupsListIndex, groupstNewList, repairing) {
-	groupsListIndex = groupsListIndex || 0
-	groupstNewList = groupstNewList || []
-	repairing = repairing || false
-	await db.groups.findOne({n:groupsList[groupsListIndex].toLowerCase()}, (err, doc) => {
-		if (err) { error(err); return }
-		if (repairing == true)
-			groupstNewList.push([doc._id, doc.n])
-		else
-			groupstNewList.push(doc._id)
-		if (groupsListIndex == groupsList.length - 1)
-			xlecxAddGroupUpdateList(comicId, groupstNewList, repairing)
-		else
-			xlecxAddGroupCreateGroupIdList(comicId, groupsList, groupsListIndex + 1, groupstNewList, repairing)
-	})
-}
-
-async function xlecxAddGroupAddGroupRow(comicId, index, groupsList, repairing) {
-	repairing = repairing || false
-	await db.comic_groups.insert({c:comicId, t:[], _id:index}, err => {
-		if (err) { error(err); return }
-		xlecxAddGroupCreateGroupIdList(comicId, groupsList, 0, [], repairing)
-		update_index(index, 7)
-	})
-}
-
-async function xlecxAddGroup(comicId, groupsList, repairing) {
-	repairing = repairing || false
-	await db.comic_groups.count({c:comicId}, (err, num) => {
-		if (err) { error(err); return }
-		if (num == 0) {
-			db.index.findOne({_id:7}, (err, doc) => {
-				if (err) { error(err); return }
-				var index = doc.i
-				xlecxAddGroupAddGroupRow(comicId, index, groupsList, repairing)
-			})
-		} else {
-			xlecxAddGroupCreateGroupIdList(comicId, groupsList, 0, [], repairing)
-		}
-	})
-}
-
-async function xlecxCreateGroupInsert(groupName, index) {
-	await db.groups.insert({n:groupName.toLowerCase(), _id:index}, (err) => {
-		if (err) { error(err); return }
-	})
-}
-
-async function xlecxCreateGroup(groupsList, index, groupsAddToList, comicId, groupsListIndex, repairing) {
-	groupsListIndex = groupsListIndex || 0
-	groupsAddToList = groupsAddToList || false
-	repairing = repairing || false
-	await db.groups.count({n:groupsList[groupsListIndex].toLowerCase()}, (err, num) => {
-		if (err) { error(err); return }
-		if (num == 0) {
-			xlecxCreateGroupInsert(groupsList[groupsListIndex], index).then(() => {
-				if (groupsListIndex == groupsList.length - 1) {
-					update_index(index, 6)
-					if (groupsAddToList == true) {
-						xlecxAddGroup(comicId, groupsList, repairing)
-					}
-				} else {
-					xlecxCreateGroup(groupsList, index + 1, groupsAddToList, comicId, groupsListIndex + 1, repairing)
-				}
-			})
-		} else {
-			if (groupsListIndex == groupsList.length - 1) {
-				update_index(index , 6)
-				if (groupsAddToList == true) {
-					xlecxAddGroup(comicId, groupsList, repairing)
-				}
-			} else
-				xlecxCreateGroup(groupsList, index, groupsAddToList, comicId, groupsListIndex + 1, repairing)
-		}
-	})
-}
-
-// Add New Xlecx Artist
-async function xlecxAddArtistUpdateList(comicId, artistsList, repairing) {
-	repairing = repairing || false
-	if (repairing == true) {
-		var newArtistList = []
-		for (var i in artistsList) {
-			newArtistList.push(artistsList[i][0])
-		}
-		await db.comic_artists.update({c:comicId}, { $set: {t:newArtistList} }, {}, (err) => {
-			if (err) { error(err); return }
-			PopAlert('Comic Artists Has Been Repaired!')
-			var html = 'Artists: '
-			for (var i in artistsList) {
-				html += `<button>${artistsList[i][1]}</button>`
-			}
-			document.getElementById('c-p-a').innerHTML = html
-		})
-	} else {
-		await db.comic_artists.update({c:comicId}, { $set: {t:artistsList} }, {}, (err) => {
-			if (err) error(err)
-		})
-	}
-}
-
-async function xlecxAddArtistCreateArtistIdList(comicId, artistsList, artistsListIndex, artistsNewList, repairing) {
-	artistsListIndex = artistsListIndex || 0
-	artistsNewList = artistsNewList || []
-	repairing = repairing || false
-	await db.artists.findOne({n:artistsList[artistsListIndex].toLowerCase()}, (err, doc) => {
-		if (err) { error(err); return }
-		if (repairing == true)
-			artistsNewList.push([doc._id, doc.n])
-		else
-			artistsNewList.push(doc._id)
-		if (artistsListIndex == artistsList.length - 1)
-			xlecxAddArtistUpdateList(comicId, artistsNewList, repairing)
-		else
-			xlecxAddArtistCreateArtistIdList(comicId, artistsList, artistsListIndex + 1, artistsNewList, repairing)
-	})
-}
-
-async function xlecxAddArtistAddArtistRow(comicId, index, artistsList, repairing) {
-	repairing = repairing || false
-	await db.comic_artists.insert({c:comicId, t:[], _id:index}, err => {
-		if (err) { error(err); return }
-		xlecxAddArtistCreateArtistIdList(comicId, artistsList, 0, [], repairing)
-		update_index(index, 3)
-	})
-}
-
-async function xlecxAddArtist(comicId, artistsList, repairing) {
-	repairing = repairing || false
-	await db.comic_artists.count({c:comicId}, (err, num) => {
-		if (err) { error(err); return }
-		if (num == 0) {
-			db.index.findOne({_id:3}, (err, doc) => {
-				if (err) { error(err); return }
-				var index = doc.i
-				xlecxAddArtistAddArtistRow(comicId, index, artistsList, repairing)
-			})
-		} else {
-			xlecxAddArtistCreateArtistIdList(comicId, artistsList, 0, [], repairing)
-		}
-	})
-}
-
-async function xlecxCreateArtistInsert(artistName, index) {
-	await db.artists.insert({n:artistName.toLowerCase(), _id:index}, (err) => {
-		if (err) { error(err); return }
-	})
-}
-
-async function xlecxCreateArtist(artistsList, index, artistsAddToList, comicId, artistsListIndex, repairing) {
-	artistsListIndex = artistsListIndex || 0
-	artistsAddToList = artistsAddToList || false
-	repairing = repairing || false
-	await db.artists.count({n:artistsList[artistsListIndex].toLowerCase()}, (err, num) => {
-		if (err) { error(err); return }
-		if (num == 0) {
-			xlecxCreateArtistInsert(artistsList[artistsListIndex], index).then(() => {
-				if (artistsListIndex == artistsList.length - 1) {
-					update_index(index, 2)
-					if (artistsAddToList == true) {
-						xlecxAddArtist(comicId, artistsList, repairing)
-					}
-				} else {
-					xlecxCreateArtist(artistsList, index + 1, artistsAddToList, comicId, artistsListIndex + 1, repairing)
-				}
-			})
-		} else {
-			if (artistsListIndex == artistsList.length - 1) {
-				update_index(index , 2)
-				if (artistsAddToList == true) {
-					xlecxAddArtist(comicId, artistsList, repairing)
-				}
-			} else
-				xlecxCreateArtist(artistsList, index, artistsAddToList, comicId, artistsListIndex + 1, repairing)
-		}
-	})
-}
-
-// Add New Xlecx Parody
-async function xlecxAddParodyUpdateList(comicId, parodyList, repairing) {
-	repairing = repairing || false
-	if (repairing == true) {
-		var newParodyList = []
-		for (var i in parodyList) {
-			newParodyList.push(parodyList[i][0])
-		}
-		await db.comic_parodies.update({c:comicId}, { $set: {t:newParodyList} }, {}, (err) => {
-			if (err) { error(err); return }
-			PopAlert('Comic Parodies Has Been Repaired!')
-			var html = 'Parody: '
-			for (var i in parodyList) {
-				html += `<button>${parodyList[i][1]}</button>`
-			}
-			document.getElementById('c-p-p').innerHTML = html
-		})
-	} else {
-		await db.comic_parodies.update({c:comicId}, { $set: {t:parodyList} }, {}, (err) => {
-			if (err) error(err)
-		})
-	}
-}
-
-async function xlecxAddParodyCreateParodyIdList(comicId, parodyList, parodyListIndex, parodyNewList, repairing) {
-	parodyListIndex = parodyListIndex || 0
-	parodyNewList = parodyNewList || []
-	repairing = repairing || false
-	await db.parodies.findOne({n:parodyList[parodyListIndex].toLowerCase()}, (err, doc) => {
-		if (err) { error(err); return }
-		if (repairing == true)
-			parodyNewList.push([doc._id, doc.n])
-		else
-			parodyNewList.push(doc._id)
-		if (parodyListIndex == parodyList.length - 1) {
-			xlecxAddParodyUpdateList(comicId, parodyNewList, repairing)
-		} else
-			xlecxAddParodyCreateParodyIdList(comicId, parodyList, parodyListIndex + 1, parodyNewList, repairing)
-	})
-}
-
-async function xlecxAddParodyAddParodyRow(comicId, index, parodyList, repairing) {
-	repairing = repairing || false
-	await db.comic_parodies.insert({c:comicId, t:[], _id:index}, err => {
-		if (err) { error(err); return }
-		xlecxAddParodyCreateParodyIdList(comicId, parodyList, 0, [], repairing)
-		update_index(index, 9)
-	})
-}
-
-async function xlecxAddParody(comicId, parodyList, repairing) {
-	repairing = repairing || false
-	await db.comic_parodies.count({c:comicId}, (err, num) => {
-		if (err) { error(err); return }
-		if (num == 0) {
-			db.index.findOne({_id:9}, (err, doc) => {
-				if (err) { error(err); return }
-				var index = doc.i
-				xlecxAddParodyAddParodyRow(comicId, index, parodyList, repairing)
-			})
-		} else {
-			xlecxAddParodyCreateParodyIdList(comicId, parodyList, 0, [], repairing)
-		}
-	})
-}
-
-async function xlecxCreateParodyInsert(parodyName, index) {
-	await db.parodies.insert({n:parodyName.toLowerCase(), _id:index}, (err) => {
-		if (err) { error(err); return }
-	})
-}
-
-async function xlecxCreateParody(parodyList, index, parodyAddToList, comicId, parodyListIndex, repairing) {
-	parodyListIndex = parodyListIndex || 0
-	parodyAddToList = parodyAddToList || false
-	repairing = repairing || false
-	await db.parodies.count({n:parodyList[parodyListIndex].toLowerCase()}, (err, num) => {
-		if (err) { error(err); return }
-		if (num == 0) {
-			xlecxCreateParodyInsert(parodyList[parodyListIndex], index).then(() => {
-				if (parodyListIndex == parodyList.length - 1) {
-					update_index(index, 8)
-					if (parodyAddToList == true) {
-						xlecxAddParody(comicId, parodyList, repairing)
-					}
-				} else {
-					xlecxCreateParody(parodyList, index + 1, parodyAddToList, comicId, parodyListIndex + 1, repairing)
-				}
-			})
-		} else {
-			if (parodyListIndex == parodyList.length - 1) {
-				update_index(index , 8)
-				if (parodyAddToList == true) {
-					xlecxAddParody(comicId, parodyList, repairing)
-				}
-			} else
-				xlecxCreateParody(parodyList, index, parodyAddToList, comicId, parodyListIndex + 1, repairing)
-		}
-	})
-}
-
-// Add New Xlecx Tag
-async function xlecxAddTagUpdateList(comicId, tagList, repairing) {
-	repairing = repairing || false
-	if (repairing == true) {
-		var newTagList = []
-		for (var i in tagList) {
-			newTagList.push(tagList[i][0])
-		}
-		await db.comic_tags.update({c:comicId}, { $set: {t:newTagList} }, {}, (err) => {
-			if (err) { error(err); return }
-			PopAlert('Comic Tags Has Been Repaired!')
-			var html = 'Tags: '
-			for (var i in tagList) {
-				html += `<button>${tagList[i][1]}</button>`
-			}
-			document.getElementById('c-p-ts').innerHTML = html
-		})
-	} else {
-		await db.comic_tags.update({c:comicId}, { $set: {t:tagList} }, {}, (err) => {
-			if (err) error(err)
-		})
-	}
-}
-
-async function xlecxAddTagCreateTagIdList(comicId, tagList, tagListIndex, newList, repairing) {
-	tagListIndex = tagListIndex || 0
-	newList = newList || []
-	repairing = repairing || false
-	await db.tags.findOne({n:tagList[tagListIndex].toLowerCase()}, (err, doc) => {
-		if (err) { error(err); return }
-		if (repairing == true)
-			newList.push([doc._id, doc.n])
-		else
-			newList.push(doc._id)
-		if (tagListIndex == tagList.length - 1)
-			xlecxAddTagUpdateList(comicId, newList, repairing)
-		else
-			xlecxAddTagCreateTagIdList(comicId, tagList, tagListIndex + 1, newList, repairing)
-	})
-}
-
-async function xlecxAddTagAddTagRow(comicId, index, tagList, repairing) {
-	repairing = repairing || false
-	await db.comic_tags.insert({c:comicId, t:[], _id:index}, err => {
-		if (err) { error(err); return }
-		xlecxAddTagCreateTagIdList(comicId, tagList, 0, [], repairing)
-		update_index(index, 5)
-	})
-}
-
-async function xlecxAddTag(comicId, tagList, repairing) {
-	repairing = repairing || false
-	await db.comic_tags.count({c:comicId}, (err, num) => {
-		if (err) { error(err); return }
-		if (num == 0) {
-			db.index.findOne({_id:5}, (err, doc) => {
-				if (err) { error(err); return }
-				var index = doc.i
-				xlecxAddTagAddTagRow(comicId, index, tagList, repairing)
-			})
-		} else {
-			xlecxAddTagCreateTagIdList(comicId, tagList, 0, [], repairing)
-		}
-	})
-}
-
-async function xlecxCreateTagInsert(tagName, index) {
-	await db.tags.insert({n:tagName.toLowerCase(), _id:index}, (err) => {
-		if (err) { error(err); return }
-	})
-}
-
-async function xlecxCreateTag(tagList, index, addToList, comicId, tagListIndex, repairing) {
-	tagListIndex = tagListIndex || 0
-	addToList = addToList || false
-	repairing = repairing || false
-	await db.tags.count({n:tagList[tagListIndex].toLowerCase()}, (err, num) => {
-		if (err) { error(err); return }
-		if (num == 0) {
-			xlecxCreateTagInsert(tagList[tagListIndex], index).then(() => {
-				if (tagListIndex == tagList.length - 1) {
-					update_index(index, 4)
-					if (addToList == true) {
-						xlecxAddTag(comicId, tagList, repairing)
-					}
-				} else {
-					xlecxCreateTag(tagList, index + 1, addToList, comicId, tagListIndex + 1, repairing)
-				}
-			})
-		} else {
-			if (tagListIndex == tagList.length - 1) {
-				update_index(index , 4)
-				if (addToList == true) {
-					xlecxAddTag(comicId, tagList, repairing)
-				}
-			} else
-				xlecxCreateTag(tagList, index, addToList, comicId, tagListIndex + 1, repairing)
-		}
-	})
-}
-
 function xlecxDownloader(id) {
 	if (checkIsDownloading(id)) { error('You are Downloading This Comic.'); return }
 	db.comics.count({s:0, p:id}, (err, num) => {
@@ -1718,7 +1717,7 @@ function xlecxDownloader(id) {
 							db.index.findOne({_id:6}, (err, doc) => {
 								if (err) { error(err); return }
 								var groupsIndex = doc.i
-								xlecxCreateGroup(groupsList, groupsIndex, true, id)
+								CreateGroup(groupsList, groupsIndex, true, id)
 							})
 						}
 
@@ -1731,7 +1730,7 @@ function xlecxDownloader(id) {
 							db.index.findOne({_id:2}, (err, doc) => {
 								if (err) { error(err); return }
 								var artistsIndex = doc.i
-								xlecxCreateArtist(artistsList, artistsIndex, true, id)
+								CreateArtist(artistsList, artistsIndex, true, id)
 							})
 						}
 
@@ -1744,7 +1743,7 @@ function xlecxDownloader(id) {
 							db.index.findOne({_id:8}, (err, doc) => {
 								if (err) { error(err); return }
 								var parodyIndex = doc.i
-								xlecxCreateParody(parodyList, parodyIndex, true, id)
+								CreateParody(parodyList, parodyIndex, true, id)
 							})
 						}
 	
@@ -1757,7 +1756,7 @@ function xlecxDownloader(id) {
 							db.index.findOne({_id:4}, (err, doc) => {
 								if (err) { error(err); return }
 								var tagIndex = doc.i
-								xlecxCreateTag(tagsList, tagIndex, true, id)
+								CreateTag(tagsList, tagIndex, true, id)
 							})
 						}
 	
@@ -1802,7 +1801,7 @@ async function xlecxRepairComicInfoGetInfo(id, whitch) {
 				db.index.findOne({_id:6}, (err, doc) => {
 					if (err) { error(err); return }
 					var groupsIndex = doc.i
-					xlecxCreateGroup(groupsList, groupsIndex, true, comic_id, 0, true)
+					CreateGroup(groupsList, groupsIndex, true, comic_id, 0, true)
 				})
 				break
 			case 2:
@@ -1818,7 +1817,7 @@ async function xlecxRepairComicInfoGetInfo(id, whitch) {
 				db.index.findOne({_id:2}, (err, doc) => {
 					if (err) { error(err); return }
 					var artistsIndex = doc.i
-					xlecxCreateArtist(artistsList, artistsIndex, true, comic_id, 0, true)
+					CreateArtist(artistsList, artistsIndex, true, comic_id, 0, true)
 				})
 				break
 			case 3:
@@ -1834,7 +1833,7 @@ async function xlecxRepairComicInfoGetInfo(id, whitch) {
 				db.index.findOne({_id:8}, (err, doc) => {
 					if (err) { error(err); return }
 					var parodyIndex = doc.i
-					xlecxCreateParody(parodyList, parodyIndex, true, comic_id, 0, true)
+					CreateParody(parodyList, parodyIndex, true, comic_id, 0, true)
 				})
 				break
 			case 4:
@@ -1850,7 +1849,7 @@ async function xlecxRepairComicInfoGetInfo(id, whitch) {
 				db.index.findOne({_id:4}, (err, doc) => {
 					if (err) { error(err); return }
 					var tagIndex = doc.i
-					xlecxCreateTag(tagsList, tagIndex, true, comic_id, 0, true)
+					CreateTag(tagsList, tagIndex, true, comic_id, 0, true)
 				})
 				break
 			case 5:
