@@ -53,7 +53,7 @@ class XlecxAPI {
 
 		var xhr = new XMLHttpRequest()
 		xhr.open("GET", url, true)
-		xhr.timeout = 4000
+		xhr.timeout = this.timeout
 
 		xhr.onload = () => {
 			var parser = new DOMParser()
@@ -876,5 +876,105 @@ class XlecxAPI {
 		}
 
 		xhr.send()
+	}
+
+	search(text, options = {page:1, pagination:true, category:false}, callback) {
+		text = text || null
+		if (text == null) throw "Text value can't Be Null."
+		const page = options.page || 1
+		const pagination = options.pagination || true
+		const category = options.category || false
+		callback = callback || null
+		const url = this.baseURL+this.searchURL
+
+		if (callback == null) throw "You can't Set Callback as Null."
+		if (typeof callback != 'function') throw "The Type of Callback Should Be a Function."
+
+		fetch(url, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded'
+			},
+			body: `do=search&subaction=search&search_start=${page}&full_search=0&result_from=${(page - 1) * 15 + 1}&story=${text}`
+		}).then(response => {
+			return response.text()
+		}).then(html => {
+			
+			var parser = new DOMParser()
+			var htmlDoc = parser.parseFromString(html, 'text/html')
+			var gg = 0, bb = 0, arr = {}, li, hasPost = false
+			// Category
+			if (category == true) {
+				arr.categories = []
+				li = htmlDoc.getElementsByClassName('side-bc')[0].getElementsByTagName('a')
+				var regexp = RegExp('/', 'g')
+				for (var i=0; i<li.length; i++) {
+					arr.categories.push({ "name": li[i].textContent, "url": li[i].getAttribute('href').replace(this.baseURL+'/', '').replace(regexp, '') })
+				}
+			}
+
+			li = htmlDoc.getElementById('dle-content').getElementsByClassName('th-in')
+			if (li.length != 0) {
+				arr.content = []
+				hasPost = true
+				// Content
+				for (var i=0; i<li.length; i++) {
+					gg = li[i].getElementsByClassName('th-img img-resp-h')[0].getAttribute('href')
+					bb = li[i].getElementsByClassName('th-time icon-l')[0]
+					if (bb != undefined) {
+						bb = bb.textContent
+						bb = bb.replace(' img', '')
+						bb = bb.replace(' images', '')
+						bb = bb.replace(' pages', '')
+					} else {
+						bb = 0
+					}
+					
+					arr.content.push({
+						"id": this.lastSlash(gg),
+						"title": li[i].getElementsByClassName('th-title')[0].textContent,
+						"thumb": li[i].getElementsByTagName('img')[0].getAttribute('src').replace('http://xlecx.com', ''),
+						"pages": Number(bb),
+						"url": gg
+					})
+				}
+
+				// Pagination
+				if (pagination == true) {
+					var value, pPage
+					li = htmlDoc.getElementById('bottom-nav') || null
+					if (li != null) {
+						arr.pagination = []
+						li = li.querySelector('.navigation').children
+						for (var i = 0; i < li.length; i++) {
+							if (li[i].textContent == "")
+								if (i == li.length - 1)
+									value = ">"
+								else
+									value = "<"
+							else
+								value = li[i].textContent
+							
+							if (li[i].getAttribute('href') == null)
+								pPage = null
+							else
+								pPage = Number(li[i].getAttribute('onclick').replace('javascript:list_submit(', '').replace('); return(false)', ''))
+							
+							
+							arr.pagination.push([value, pPage])
+						}
+					}
+				}
+			}
+
+			if (hasPost == false && category == false)
+				arr = null
+
+			callback(null, arr)
+
+		}).catch(err => {
+			// callback(err, null)
+			console.log(err)
+		})
 	}
 }

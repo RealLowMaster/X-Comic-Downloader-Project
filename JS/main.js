@@ -1878,9 +1878,9 @@ async function xlecxRepairComicInfoGetInfo(id, whitch) {
 }
 
 function dl() {
-	xlecx.getComic('479-transformers-sex-comics-free.html', false, (err, result) => {
+	xlecx.search('The asdsadSlutty Girl', {page:1, category:true}, (err, result) => {
 		if (err) { error(err); return }
-		console.log(result.tags)
+		console.log(result)
 	})
 }
 
