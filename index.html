@@ -47,7 +47,6 @@
 
 		<p class="comic-panel-title" id="c-p-t"></p>
 
-		
 		<div class="comic-panel-tags" id="c-p-g"></div>
 		<div class="comic-panel-tags" id="c-p-a"></div>
 		<div class="comic-panel-tags" id="c-p-p"></div>
@@ -88,6 +87,10 @@
 			<button class="browser-tool-btn" id="browser-prev-btn" onclick="changeHistory()">Prev</button>
 			<button class="browser-tool-btn" id="browser-next-btn" onclick="changeHistory(true)">Next</button>
 			<button class="browser-tool-btn" id="browser-reload-btn" onclick="reloadTab()">Reload</button>
+			<form class="browser-tool-search-form" id="browser-tool-search-form">
+				<input type="text" placeholder="Search..." id="browser-tool-search-input">
+				<button type="submit">Search</button>
+			</form>
 			<button class="browser-tool-close-browser" onclick="closeBrowser()">X</button>
 		</div>
 		<div class="browser-pages-container" id="browser-pages"></div>
