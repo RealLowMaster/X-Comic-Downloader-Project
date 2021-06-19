@@ -791,6 +791,22 @@ document.getElementById('browser-tool-search-form').addEventListener('submit', e
 	}
 })
 
+// Add Comic To Have
+async function CreateHaveInsert(site, id, index) {
+	await db.have.insert({s:site, i:id, _id:index}, err => {
+		if (err) { error(err); return }
+		update_index(index, 11)
+	})
+}
+
+async function CreateHave(site, id) {
+	await db.index.findOne({_id:11}, (err, doc) => {
+		if (err) { error(err); return }
+		var index = doc.i
+		CreateHaveInsert(site, id, index)
+	})
+}
+
 // Add New Groups
 async function AddGroupUpdateList(comicId, groupsList, repairing) {
 	repairing = repairing || false
@@ -1768,7 +1784,7 @@ function xlecxSearch(text, page, makeNewPage, updateTabIndex) {
 
 function xlecxDownloader(id) {
 	if (checkIsDownloading(id)) { error('You are Downloading This Comic.'); return }
-	db.comics.count({s:0, p:id}, (err, num) => {
+	db.have.count({s:0, i:id}, (err, num) => {
 		if (err) { error(err); return}
 		if (num > 0) { error('You Already Have This Comic.'); return }
 		xlecx.getComic(id, false, (err, result) => {
@@ -1805,8 +1821,8 @@ function xlecxDownloader(id) {
 			if (result.parody != undefined)	sendingResult.parody = result.parody
 			if (result.tags != undefined)	sendingResult.tags = result.tags
 			const date = new Date().getTime()
-			comicDownloader(date, downloadIndex, sendingResult, quality, name, async(index, gottenResult, gottenQuality, shortName) => {
-				await db.index.findOne({_id:1}, (err, cIndex) => {
+			comicDownloader(date, downloadIndex, sendingResult, quality, name, (index, gottenResult, gottenQuality, shortName) => {
+				db.index.findOne({_id:1}, (err, cIndex) => {
 					if (err) { error(err); return }
 					db.comics.insert({n:gottenResult.title.toLowerCase(), i:downloadingList[index][3], q:gottenQuality, s:0, p:downloadingList[index][4], _id:cIndex.i}, (err, doc) => {
 						if (err) { error(err); return }
@@ -1816,6 +1832,9 @@ function xlecxDownloader(id) {
 						var artists = gottenResult.artists || null
 						var parody = gottenResult.parody || null
 						var tags = gottenResult.tags || null
+
+						// Add Comic To Have
+						CreateHave(doc.s, doc.p)
 
 						// Groups
 						if (groups != null) {
