@@ -750,6 +750,8 @@ function activateTab(who) {
 	var tpage = document.getElementById(pageId)
 	tpage.setAttribute('style', 'display:block')
 	pageContainer.scrollTop = scrollValue
+
+	document.getElementById('browser-tool-search-input').value = who.getAttribute('search')
 }
 
 function checkTabLimit() {
@@ -776,6 +778,7 @@ function createNewTab(history) {
 	element.setAttribute('onclick', 'activateTab(this)')
 	element.setAttribute('pi', newTabId)
 	element.setAttribute('ti', tabIndex)
+	element.setAttribute('search', '')
 	element.setAttribute('draggable', true)
 	element.innerHTML = `<span><span class="spin spin-primary" style="width:22px;height:22px"></span></span> <button onclick="removeTab('${newTabId}')">X</button>`
 	element.addEventListener('dragstart',() => { element.classList.add('dragging') })
@@ -947,8 +950,11 @@ function browserError(err, id) {
 document.getElementById('browser-tool-search-form').addEventListener('submit', e => {
 	e.preventDefault()
 	var input = document.getElementById('browser-tool-search-input')
+	var browser_tabs = document.getElementById('browser-tabs')
+	var tabId = browser_tabs.getAttribute('pid')
 	var checkText = input.value.replace(/ /g, '')
 	if (checkText.length > 0) {
+		browser_tabs.querySelector(`[pi="${tabId}"]`).setAttribute('search', input.value)
 		eval(sites[thisSite][2].replace('{text}', `'${input.value}'`))
 	}
 })
