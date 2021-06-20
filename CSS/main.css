@@ -1029,6 +1029,7 @@ img {
 	padding: 5px;
 	margin: 10px 5px;
 	background-color: #111;
+	overflow: hidden;
 	position: relative;
 	cursor: pointer;
 	transition: .2s;
@@ -1071,6 +1072,25 @@ img {
 	position: absolute;
 	top: 0;
 	left: 0;	
+}
+
+.xlecx-post-container > div > button {
+	padding: 8px;
+	background-color: #222a;
+	color: #fff;
+	border-radius: 0 7px 7px 0;
+	position: absolute;
+	top: 15px;
+	left: -60px;
+	cursor: pointer;
+	z-index: +100;
+	transition: .2s;
+}
+
+.xlecx-post-container > div > button:hover {
+	left: 0;
+	background-color: #fff;
+	color: #222;
 }
 
 .xlecx-post-container > div:hover {
