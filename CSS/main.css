@@ -932,6 +932,7 @@ img {
 	font-family: 'Open Sans', Arial, Helvetica, sans-serif;
 	font-size: 24px;
 	text-transform: capitalize;
+	user-select: text;
 }
 
 .xlecx-container-one-row > div > .browser-comic-have {

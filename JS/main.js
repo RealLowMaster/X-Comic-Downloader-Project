@@ -14,7 +14,7 @@ const defaultSetting = {
 	"connection_timeout": 10000,
 	"show_not_when_dl_finish": true,
 	"comic_panel_theme": 0,
-	"downloader_mode": 0
+	"downloader_mode": 1
 }
 const sites = [['xlecx', 'xlecxRepairComicInfoGetInfo({id}, {whitch})', 'xlecxSearch({text}, 1)']]
 var setting, tabs = [], db = {}, downloadingList = [], repairingComics = [], thisSite
@@ -926,7 +926,8 @@ async function comicDownloader(index, result, quality, siteIndex) {
 function checkIsDownloading(id) {
 	var arr = []
 	for (var i in downloadingList) {
-		arr.push(downloadingList[i][4])
+		if (downloadingList[i] != null)
+			arr.push(downloadingList[i][4])
 	}
 
 	if (arr.indexOf(id) > -1)
@@ -2105,7 +2106,7 @@ function xlecxOpenTag(name, page, whitch, makeNewPage, updateTabIndex) {
 		xlecx.getGroup(name, {page:page, category:true}, (err, result) => {
 			pageContent.innerHTML = ''
 			if (err) {
-				pageContent.innerHTML = `<br><div class="alert alert-danger">${err}</div><button class="btn btn-primary" style="display:block;margin:3px auto" onclick="reloadTab()">Reload</button>`
+				browserError(err, pageId)
 				return
 			}
 			tabArea.textContent = `${name} - ${page}`
@@ -2115,7 +2116,7 @@ function xlecxOpenTag(name, page, whitch, makeNewPage, updateTabIndex) {
 		xlecx.getArtist(name, {page:page, category:true}, (err, result) => {
 			pageContent.innerHTML = ''
 			if (err) {
-				pageContent.innerHTML = `<br><div class="alert alert-danger">${err}</div><button class="btn btn-primary" style="display:block;margin:3px auto" onclick="reloadTab()">Reload</button>`
+				browserError(err, pageId)
 				return
 			}
 			tabArea.textContent = `${name} - ${page}`
@@ -2125,7 +2126,7 @@ function xlecxOpenTag(name, page, whitch, makeNewPage, updateTabIndex) {
 		xlecx.getParody(name, {page:page, category:true}, (err, result) => {
 			pageContent.innerHTML = ''
 			if (err) {
-				pageContent.innerHTML = `<br><div class="alert alert-danger">${err}</div><button class="btn btn-primary" style="display:block;margin:3px auto" onclick="reloadTab()">Reload</button>`
+				browserError(err, pageId)
 				return
 			}
 			tabArea.textContent = `${name} - ${page}`
@@ -2135,7 +2136,7 @@ function xlecxOpenTag(name, page, whitch, makeNewPage, updateTabIndex) {
 		xlecx.getTag(name, {page:page, category:true}, (err, result) => {
 			pageContent.innerHTML = ''
 			if (err) {
-				pageContent.innerHTML = `<br><div class="alert alert-danger">${err}</div><button class="btn btn-primary" style="display:block;margin:3px auto" onclick="reloadTab()">Reload</button>`
+				browserError(err, pageId)
 				return
 			}
 			tabArea.textContent = `${name} - ${page}`
