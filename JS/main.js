@@ -934,6 +934,14 @@ function checkIsDownloading(id) {
 		return false
 }
 
+function browserError(err, id) {
+	var page = document.getElementById(id)
+	var tabArea = document.getElementById('browser-tabs').querySelector(`[pi="${id}"]`).getElementsByTagName('span')[0]
+
+	page.innerHTML = `<br><div class="alert alert-danger">${err}</div><button class="btn btn-primary" style="display:block;margin:3px auto" onclick="reloadTab()">Reload</button>`
+	tabArea.innerHTML = '*Error*'
+}
+
 document.getElementById('browser-tool-search-form').addEventListener('submit', e => {
 	e.preventDefault()
 	var input = document.getElementById('browser-tool-search-input')
@@ -1474,10 +1482,10 @@ function createNewXlecxTab(id, pageNumber) {
 	xlecx.getPage({page:pageNumber, random:true, category:true}, (err, result) => {
 		page.innerHTML = ''
 		if (err) {
-			page.innerHTML = `<br><div class="alert alert-danger">${err}</div><button class="btn btn-primary" style="display:block;margin:3px auto" onclick="reloadTab()">Reload</button>`
+			browserError(err, id)
 			return
 		}
-		tabArea.innerHTML = `Page ${pageNumber}`
+		tabArea.textContent = `Page ${pageNumber}`
 		var container = document.createElement('div')
 		container.classList.add("xlecx-container")
 		var elementContainerContainer = null
@@ -1767,7 +1775,7 @@ function xlecxOpenPost(makeNewPage, id, updateTabIndex) {
 						page.innerHTML = `<br><div class="alert alert-danger">${err}</div><button class="btn btn-primary" style="display:block;margin:3px auto" onclick="reloadTab()">Reload</button>`
 						return
 					}
-					tabArea.innerHTML = result.title
+					tabArea.textContent = result.title
 					var containerContainer = document.createElement('div')
 					containerContainer.classList.add('xlecx-container-one-row')
 					var container = document.createElement('div')
@@ -1919,7 +1927,7 @@ function xlecxOpenCategory(name, page, shortName, makeNewPage, updateTabIndex) {
 			page.innerHTML = `<br><div class="alert alert-danger">${err}</div><button class="btn btn-primary" style="display:block;margin:3px auto" onclick="reloadTab()">Reload</button>`
 			return
 		}
-		tabArea.innerHTML = `${shortName} - ${page}`
+		tabArea.textContent = `${shortName} - ${page}`
 		var container = document.createElement('div')
 		container.classList.add("xlecx-container")
 		var elementContainerContainer = null
@@ -2156,7 +2164,7 @@ function xlecxSearch(text, page, makeNewPage, updateTabIndex) {
 			page.innerHTML = `<br><div class="alert alert-danger">${err}</div><button class="btn btn-primary" style="display:block;margin:3px auto" onclick="reloadTab()">Reload</button>`
 			return
 		}
-		tabArea.innerHTML = `${text} - ${page}`
+		tabArea.textContent = `${text} - ${page}`
 		var container = document.createElement('div')
 		container.classList.add("xlecx-container")
 		var elementContainerContainer = document.createElement('div')
