@@ -2385,13 +2385,9 @@ async function xlecxRepairComicInfoGetInfo(id, whitch) {
 }
 
 function dl() {
-	db.tags.find({}, (err, doc) => {
+	xlecx.getPage({page:1000, random:true, category:true}, (err, doc) => {
 		if (err) { error(err); return }
-		for (var i in doc) {
-			db.newTag.insert({n:doc[i].n, _id:(Number(i)+1)}, err => {
-				if (err) {error(err);return}
-			})
-		}
+		console.log(doc)
 	})
 }
 

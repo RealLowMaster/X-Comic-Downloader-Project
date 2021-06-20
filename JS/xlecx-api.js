@@ -51,20 +51,51 @@ class XlecxAPI {
 		if (callback == null) throw "You can't Set Callback as Null."
 		if (typeof callback != 'function') throw "The Type of Callback Should Be a Function."
 
-		var xhr = new XMLHttpRequest()
-		xhr.open("GET", url, true)
-		xhr.timeout = this.timeout
-
-		xhr.onload = () => {
+		fetch(url).then(response => {
+			return response.text()
+		}).then(html => {
 			var parser = new DOMParser()
-			var htmlDoc = parser.parseFromString(xhr.responseText, 'text/html')
-			var gg = 0
-			var bb = 0
+			var htmlDoc = parser.parseFromString(html, 'text/html')
+			var gg = 0, bb = 0, li, arr = {}, hasPost = false
+			
+			// Category
+			if (category == true) {
+				arr.categories = []
+				var li = htmlDoc.getElementsByClassName('side-bc')[0].getElementsByTagName('a')
+				var regexp = RegExp('/', 'g')
+				for (var i=0; i<li.length; i++) {
+					arr.categories.push({ "name": li[i].textContent, "url": li[i].getAttribute('href').replace(this.baseURL+'/', '').replace(regexp, '') })
+				}
+			}
 
-			var arr = { "content": [] }
+			// Random
+			if (random == true) {
+				arr.random = []
+				li = htmlDoc.getElementsByClassName('main')[0].children
+				for (var i=2; i<=13; i++) {
+					gg = li[i].getElementsByClassName('th-img img-resp-h')[0].getAttribute('href')
+					bb = li[i].getElementsByClassName('th-time icon-l')[0]
+					if (bb != undefined) {
+						bb = bb.textContent
+						bb = bb.replace(' img', '').replace(' images', '').replace(' pages', '')
+					} else {
+						bb = 0
+					}
+
+					arr.random.push({
+						"id": this.lastSlash(gg),
+						"title": li[i].getElementsByClassName('th-title')[0].textContent,
+						"thumb": li[i].getElementsByTagName('img')[0].getAttribute('src').replace('http://xlecx.com', ''),
+						"pages": Number(bb),
+						"url": gg
+					})
+				}
+			}
+
 			var li = htmlDoc.getElementById('dle-content').getElementsByClassName('th-in')
-			if (li.length != 0 && xhr.status != 404) {
-
+			if (li.length != 0) {
+				arr.content = []
+				hasPost = true
 				// Content
 				for (var i=0; i<li.length; i++) {
 					gg = li[i].getElementsByClassName('th-img img-resp-h')[0].getAttribute('href')
@@ -74,9 +105,8 @@ class XlecxAPI {
 						bb = bb.replace(' img', '')
 						bb = bb.replace(' images', '')
 						bb = bb.replace(' pages', '')
-					} else {
+					} else
 						bb = 0
-					}
 					
 					arr.content.push({
 						"id": this.lastSlash(gg),
@@ -85,30 +115,6 @@ class XlecxAPI {
 						"pages": Number(bb),
 						"url": gg
 					})
-				}
-
-				// Random
-				if (random == true) {
-					arr.random = []
-					li = htmlDoc.getElementsByClassName('main')[0].children
-					for (var i=2; i<=13; i++) {
-						gg = li[i].getElementsByClassName('th-img img-resp-h')[0].getAttribute('href')
-						bb = li[i].getElementsByClassName('th-time icon-l')[0]
-						if (bb != undefined) {
-							bb = bb.textContent
-							bb = bb.replace(' img', '').replace(' images', '').replace(' pages', '')
-						} else {
-							bb = 0
-						}
-
-						arr.random.push({
-							"id": this.lastSlash(gg),
-							"title": li[i].getElementsByClassName('th-title')[0].textContent,
-							"thumb": li[i].getElementsByTagName('img')[0].getAttribute('src').replace('http://xlecx.com', ''),
-							"pages": Number(bb),
-							"url": gg
-						})
-					}
 				}
 
 				// Pagination
@@ -134,31 +140,15 @@ class XlecxAPI {
 						arr.pagination.push([value, pPage])
 					}
 				}
+			}
 
-				// Category
-				if (category == true) {
-					arr.categories = []
-					var li = htmlDoc.getElementsByClassName('side-bc')[0].getElementsByTagName('a')
-					var regexp = RegExp('/', 'g')
-					for (var i=0; i<li.length; i++) {
-						arr.categories.push({ "name": li[i].textContent, "url": li[i].getAttribute('href').replace(this.baseURL+'/', '').replace(regexp, '') })
-					}
-				}
-			} else
+			if (hasPost == false && category == false && random == false)
 				arr = null
 
 			callback(null, arr)
-		}
-
-		xhr.ontimeout = (e) => {
-			callback("Connection Timeout", null)
-		}
-
-		xhr.onerror = () => {
-			callback("An error occurred during the proceres, Check Internet Connection.", null)
-		}
-
-		xhr.send()
+		}).catch(err => {
+			callback(err, null)
+		})
 	}
 
 	getCategories(callback) {
@@ -926,9 +916,8 @@ class XlecxAPI {
 						bb = bb.replace(' img', '')
 						bb = bb.replace(' images', '')
 						bb = bb.replace(' pages', '')
-					} else {
+					} else
 						bb = 0
-					}
 					
 					arr.content.push({
 						"id": this.lastSlash(gg),
@@ -973,8 +962,7 @@ class XlecxAPI {
 			callback(null, arr)
 
 		}).catch(err => {
-			// callback(err, null)
-			console.log(err)
+			callback(err, null)
 		})
 	}
 }
