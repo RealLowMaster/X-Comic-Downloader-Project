@@ -11,7 +11,6 @@ const defaultSetting = {
 	"post_img_num_in_row": 0,
 	"img_graphic": 1,
 	"pagination_width": 5,
-	"connection_timeout": 10000,
 	"show_not_when_dl_finish": true,
 	"comic_panel_theme": 0,
 	"downloader_mode": 1
@@ -300,7 +299,6 @@ function PopAlert(txt, style) {
 
 // Apply Setting
 if (setting.img_graphic > 1) setting.img_graphic = 1
-xlecx.timeout = setting.connection_timeout
 
 // Make Tabs Draggable
 const tabsContainer = document.getElementById('browser-tabs')
@@ -2385,7 +2383,7 @@ async function xlecxRepairComicInfoGetInfo(id, whitch) {
 }
 
 function dl() {
-	xlecx.getPage({page:1000, random:true, category:true}, (err, doc) => {
+	xlecx.getTag('mmf threesome', {page:1, pagination:true, category:true}, (err, doc) => {
 		if (err) { error(err); return }
 		console.log(doc)
 	})
