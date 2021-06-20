@@ -604,6 +604,7 @@ function openComic(id) {
 			findParodyRow()
 			findTagRow()
 			comic_panel.style.display = 'block'
+			comic_panel.scrollTop = 0
 		})
 	}
 
