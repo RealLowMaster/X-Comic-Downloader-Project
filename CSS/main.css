@@ -758,16 +758,25 @@ img {
 .downloader {
 	display: none;
 	width: 200px;
-	height: 150px;
+	max-height: 150px;
 	padding: 10px 0;
 	background-color: #1119;
 	border: 1px solid #111a;
 	border-radius: 7px;
 	overflow-y: auto;
 	position: fixed;
-	top: 15px;
-	right: 20px;
+	top: 80px;
+	right: -175px;
 	z-index: 99999;
+	transition: .3s;
+}
+
+.downloader:hover {
+	right: 20px;
+}
+
+.downloader-fixed {
+	right: 20px !important;
 }
 
 .downloader::-webkit-scrollbar {
