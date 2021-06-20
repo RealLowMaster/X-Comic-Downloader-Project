@@ -905,25 +905,6 @@ img {
 	text-align: center;
 }
 
-.xlecx-download-btn {
-	width: 80px;
-	padding: 8px 10px;
-	background-color: #222a;
-	color: #fff;
-	font-size: 12px;
-	position: sticky;
-	top: 10px;
-	left: 0px;
-	cursor: pointer;
-	transition: .2s;
-}
-
-.xlecx-download-btn:hover {
-	background-color: #fff;
-	color: #222;
-	box-shadow: 0 1px 6px 0 rgba(0,0,0,0.3);
-}
-
 .xlecx-container-one-row {
 	display: block;
 	width: 100%;
@@ -951,6 +932,48 @@ img {
 	font-family: 'Open Sans', Arial, Helvetica, sans-serif;
 	font-size: 24px;
 	text-transform: capitalize;
+}
+
+.xlecx-container-one-row > div > .browser-comic-have {
+	display: block;
+	text-align: right;
+}
+
+.xlecx-container-one-row > div > .browser-comic-have > span,
+.xlecx-container-one-row > div > .browser-comic-have > button {
+	display: inline-block;
+	padding: 10px;
+	background-color: rgb(37, 131, 0);
+	color: #fff;
+	border-radius: 7px 0 0 7px;
+	font-size: 12px;
+}
+
+.xlecx-container-one-row > div > .browser-comic-have > button:first-child {
+	background-color: #222a;
+	cursor: pointer;
+	transition: .2s;
+}
+
+.xlecx-container-one-row > div > .browser-comic-have > button:first-child:hover {
+	background-color: #00b1e7aa;
+	color: #fff;
+	box-shadow: 0 1px 6px 0 rgba(0,0,0,0.3);
+}
+
+.xlecx-container-one-row > div > .browser-comic-have > .add-to-have {
+	margin-right: 10px;
+	background-color: #fff;
+	color: #222;
+	border-radius: 0 7px 7px 0;
+	cursor: pointer;
+	transition: .2s;
+}
+
+.xlecx-container-one-row > div > .browser-comic-have > .add-to-have:hover {
+	background-color: #00b1e7aa;
+	color: #fff;
+	box-shadow: 0 1px 6px 0 rgba(0,0,0,0.3);
 }
 
 .xlecx-post-tags {
