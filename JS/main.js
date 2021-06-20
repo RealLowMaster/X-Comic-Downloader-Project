@@ -1907,13 +1907,13 @@ function xlecxOpenCategory(name, page, shortName, makeNewPage, updateTabIndex) {
 	if (name == null || shortName == null) return
 	makeNewPage = makeNewPage || false
 	if (updateTabIndex == null) updateTabIndex = true
-	var pageContent
+	var pageContent, pageId
 	if (makeNewPage) {
-		var id = createNewTab(`xlecxOpenCategory('${name}', ${page}, '${shortName}', false, false)`)
-		pageContent = document.getElementById(id)
+		pageId = createNewTab(`xlecxOpenCategory('${name}', ${page}, '${shortName}', false, false)`)
+		pageContent = document.getElementById(pageId)
 	} else {
 		var browser_tabs = document.getElementById('browser-tabs')
-		var pageId = browser_tabs.getAttribute('pid')
+		pageId = browser_tabs.getAttribute('pid')
 		var tabIndexId = Number(browser_tabs.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))
 
 		pageContent = document.getElementById(document.getElementById('browser-tabs').getAttribute('pid'))
