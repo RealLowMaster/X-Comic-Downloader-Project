@@ -777,6 +777,7 @@ function createNewTab(history) {
 	element.setAttribute('pi', newTabId)
 	element.setAttribute('ti', tabIndex)
 	element.setAttribute('search', '')
+	element.setAttribute('isReloading', true)
 	element.setAttribute('draggable', true)
 	element.innerHTML = `<span><span class="spin spin-primary" style="width:22px;height:22px"></span></span> <button onclick="removeTab('${newTabId}')">X</button>`
 	element.addEventListener('dragstart',() => { element.classList.add('dragging') })
@@ -862,8 +863,11 @@ function changeHistory(next) {
 function reloadTab() {
 	var browser_tabs = document.getElementById('browser-tabs')
 	var pageId = browser_tabs.getAttribute('pid')
-	var tabIndexId = Number(browser_tabs.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))
-	tabs[tabIndexId].reload()
+	var tab = browser_tabs.querySelector(`[pi="${pageId}"]`)
+	if (tab.getAttribute('isReloading') == 'false') {
+		tab.setAttribute('isReloading', true)
+		tabs[Number(tab.getAttribute('ti'))].reload()
+	}
 }
 
 function MakeDownloadList(name, id, list) {
@@ -1483,9 +1487,11 @@ function createNewXlecxTab(id, pageNumber) {
 	var page = document.getElementById(id)
 	pageNumber = pageNumber || 1
 
-	var tabArea = document.getElementById('browser-tabs').querySelector(`[pi="${id}"]`).getElementsByTagName('span')[0]
+	var tab = document.getElementById('browser-tabs').querySelector(`[pi="${id}"]`)
+	var tabArea = tab.getElementsByTagName('span')[0]
 	tabArea.innerHTML = '<span class="spin spin-primary" style="width:22px;height:22px"></span>'
 	xlecx.getPage({page:pageNumber, random:true, category:true}, (err, result) => {
+		tab.setAttribute('isReloading', false)
 		page.innerHTML = ''
 		if (err) {
 			browserError(err, id)
@@ -1590,7 +1596,8 @@ function xlecxOpenPost(makeNewPage, id, updateTabIndex) {
 			tabs[tabIndexId].addHistory(`xlecxOpenPost(false, "${id}", false)`)
 	}
 
-	var tabArea = document.getElementById('browser-tabs').querySelector(`[pi="${pageId}"]`).getElementsByTagName('span')[0]
+	var tab = document.getElementById('browser-tabs').querySelector(`[pi="${pageId}"]`)
+	var tabArea = tab.getElementsByTagName('span')[0]
 	tabArea.innerHTML = '<span class="spin spin-primary" style="width:22px;height:22px"></span>'
 	db.have.findOne({s:0, i:id}, (err, haveDoc) => {
 		if (err) { error(err); return }
@@ -1747,6 +1754,7 @@ function xlecxOpenPost(makeNewPage, id, updateTabIndex) {
 						name = doc.n || null
 						if (name == null) return
 						images = doc.i
+						tab.setAttribute('isReloading', false)
 	
 						tabArea.textContent = name
 						title_container.textContent = name
@@ -1780,6 +1788,7 @@ function xlecxOpenPost(makeNewPage, id, updateTabIndex) {
 				findComic()
 			} else {
 				xlecx.getComic(id, false, (err, result) => {
+					tab.setAttribute('isReloading', false)
 					page.innerHTML = ''
 					if (err) {
 						browserError(err, pageId)
@@ -1928,10 +1937,12 @@ function xlecxOpenCategory(name, page, shortName, makeNewPage, updateTabIndex) {
 			tabs[tabIndexId].addHistory(`xlecxOpenCategory('${name}', ${page}, '${shortName}', false, false)`)
 	}
 
-	var tabArea = document.getElementById('browser-tabs').querySelector(`[pi="${pageId}"]`).getElementsByTagName('span')[0]
+	var tab = document.getElementById('browser-tabs').querySelector(`[pi="${pageId}"]`)
+	var tabArea = tab.getElementsByTagName('span')[0]
 	tabArea.innerHTML = '<span class="spin spin-primary" style="width:22px;height:22px"></span>'
 	pageContent.innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
 	xlecx.getCategory(name, {page:page, random:true, category:true}, (err, result) => {
+		tab.setAttribute('isReloading', false)
 		pageContent.innerHTML = ''
 		if (err) {
 			browserError(err, pageId)
@@ -2103,11 +2114,13 @@ function xlecxOpenTag(name, page, whitch, makeNewPage, updateTabIndex) {
 		}
 	}
 
-	var tabArea = document.getElementById('browser-tabs').querySelector(`[pi="${pageId}"]`).getElementsByTagName('span')[0]
+	var tab = document.getElementById('browser-tabs').querySelector(`[pi="${pageId}"]`)
+	var tabArea = tab.getElementsByTagName('span')[0]
 	tabArea.innerHTML = '<span class="spin spin-primary" style="width:22px;height:22px"></span>'
 	pageContent.innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
 	if (whitch == 1) {
 		xlecx.getGroup(name, {page:page, category:true}, (err, result) => {
+			tab.setAttribute('isReloading', false)
 			pageContent.innerHTML = ''
 			if (err) {
 				browserError(err, pageId)
@@ -2118,6 +2131,7 @@ function xlecxOpenTag(name, page, whitch, makeNewPage, updateTabIndex) {
 		})
 	} else if (whitch == 2) {
 		xlecx.getArtist(name, {page:page, category:true}, (err, result) => {
+			tab.setAttribute('isReloading', false)
 			pageContent.innerHTML = ''
 			if (err) {
 				browserError(err, pageId)
@@ -2128,6 +2142,7 @@ function xlecxOpenTag(name, page, whitch, makeNewPage, updateTabIndex) {
 		})
 	} else if (whitch == 3) {
 		xlecx.getParody(name, {page:page, category:true}, (err, result) => {
+			tab.setAttribute('isReloading', false)
 			pageContent.innerHTML = ''
 			if (err) {
 				browserError(err, pageId)
@@ -2138,6 +2153,7 @@ function xlecxOpenTag(name, page, whitch, makeNewPage, updateTabIndex) {
 		})
 	} else {
 		xlecx.getTag(name, {page:page, category:true}, (err, result) => {
+			tab.setAttribute('isReloading', false)
 			pageContent.innerHTML = ''
 			if (err) {
 				browserError(err, pageId)
@@ -2172,10 +2188,12 @@ function xlecxSearch(text, page, makeNewPage, updateTabIndex) {
 		}
 	}
 
-	var tabArea = document.getElementById('browser-tabs').querySelector(`[pi="${pageId}"]`).getElementsByTagName('span')[0]
+	var tab = document.getElementById('browser-tabs').querySelector(`[pi="${pageId}"]`)
+	var tabArea = tab.getElementsByTagName('span')[0]
 	tabArea.innerHTML = '<span class="spin spin-primary" style="width:22px;height:22px"></span>'
 	pageContent.innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
 	xlecx.search(text, {page:page, category:true}, (err, result) => {
+		tab.setAttribute('isReloading', false)
 		pageContent.innerHTML = ''
 		if (err) {
 			page.innerHTML = `<br><div class="alert alert-danger">${err}</div><button class="btn btn-primary" style="display:block;margin:3px auto" onclick="reloadTab()">Reload</button>`
