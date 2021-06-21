@@ -305,8 +305,7 @@ function PopAlert(txt, style) {
 
 // Apply Setting
 if (setting.img_graphic > 1) setting.img_graphic = 1
-if (setting.lazy_loading == 0)
-	imageLazyLoadingOptions.rootMargin = "0px 0px 1000px 0px"
+if (setting.lazy_loading == 0) imageLazyLoadingOptions.rootMargin = "0px 0px 1000px 0px"
 
 // Make Tabs Draggable
 const tabsContainer = document.getElementById('browser-tabs')
@@ -828,17 +827,20 @@ function createNewTab(history) {
 }
 
 function removeTab(id) {
-	var removingTab = document.getElementById('browser-tabs').querySelector(`[pi="${id}"]`)
+	var browser_tabs = document.getElementById('browser-tabs')
+	var removingTab = browser_tabs.querySelector(`[pi="${id}"]`)
 	tabs[Number(removingTab.getAttribute('ti'))] = null
-	var btabs = document.getElementById('browser-tabs').children
+	var btabs = browser_tabs.children
 	var index = Array.prototype.slice.call(btabs).indexOf(removingTab)
 	
-	if (index == 0) {
-		if (1 <= btabs.length - 1) {
-			activateTab(btabs[1])
+	if (browser_tabs.getAttribute('pid') == id) {
+		if (index == 0) {
+			if (1 <= btabs.length - 1) {
+				activateTab(btabs[1])
+			}
+		} else {
+			activateTab(btabs[index - 1])
 		}
-	} else {
-		activateTab(btabs[index - 1])
 	}
 
 	if (btabs.length == 1) {
