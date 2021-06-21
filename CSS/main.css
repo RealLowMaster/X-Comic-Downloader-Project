@@ -583,6 +583,8 @@ img {
 
 .comic-panel-image-container-1x1 > img {
 	display: block;
+	min-width: 50px;
+	min-height: 80px;
 	max-width: 100%;
 	height: auto;
 	margin: 15px auto;

@@ -391,7 +391,7 @@ function loadComics(page, search) {
 				image = `${dirUL}/${image}`
 			pages = doc[i].i.length || null
 			if (pages == null) { PopAlert(`PostID: ${id} Has No Image.`, 'danger') }
-			html += `<div class="comic" onclick="openComic(${id})"><img src="${image}"><span>${pages}</span><p>${name}</p></div>`
+			html += `<div class="comic" onclick="openComic(${id})"><img src="${image}" loading="lazy"><span>${pages}</span><p>${name}</p></div>`
 		}
 		comic_container.innerHTML = html
 		
@@ -611,7 +611,7 @@ function openComic(id) {
 				if (typeof(images[i]) == 'object') {
 					html += `<div class="repair-image" id="${i}"><p>Image hasn't Been Download Currectly.</p><button onclick="repairImage(${i})">Repair</button></div>`
 				} else {
-					html += `<img src="${dirUL}/${images[i]}">`
+					html += `<img src="${dirUL}/${images[i]}" loading="lazy">`
 				}
 			}
 			image_container.innerHTML = html
