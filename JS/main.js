@@ -16,8 +16,13 @@ const defaultSetting = {
 	"downloader_mode": 1,
 	"lazy_loading": 1
 }
+const imageLazyLoadingOptions = {
+	root: document.getElementById('browser-pages'),
+	threshold: 0,
+	rootMargin: "0px 0px 300px 0px"
+}
 const sites = [['xlecx', 'xlecxRepairComicInfoGetInfo({id}, {whitch})', 'xlecxSearch({text}, 1)']]
-var setting, tabs = [], db = {}, downloadingList = [], repairingComics = [], thisSite, imageLazyLoadingOptions = {}
+var setting, tabs = [], db = {}, downloadingList = [], repairingComics = [], thisSite
 
 // Directions
 var dirRoot = path.join(__dirname)
@@ -300,11 +305,8 @@ function PopAlert(txt, style) {
 
 // Apply Setting
 if (setting.img_graphic > 1) setting.img_graphic = 1
-if (setting.lazy_loading == 0) {
-	console.log('Lazy Loading = false')
-	imageLazyLoadingOptions.threshold = 0
-	imageLazyLoadingOptions.rootMargin = '0px 0px 300px 0px'
-}
+if (setting.lazy_loading == 0)
+	imageLazyLoadingOptions.rootMargin = "0px 0px 1000px 0px"
 
 // Make Tabs Draggable
 const tabsContainer = document.getElementById('browser-tabs')
