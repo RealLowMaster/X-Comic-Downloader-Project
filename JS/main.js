@@ -1522,7 +1522,7 @@ function createNewXlecxTab(id, pageNumber) {
 		elementContainer.classList.add("xlecx-post-container")
 		for (var i = 0; i < result.content.length; i++) {
 			element = document.createElement('div')
-			element.innerHTML = `<img src="${xlecx.baseURL+result.content[i].thumb}"><span>${result.content[i].pages}</span><p>${result.content[i].title}</p><button onclick="xlecxDownloader('${result.content[i].id}')">Download</button>`
+			element.innerHTML = `<img src="${xlecx.baseURL+result.content[i].thumb}" loading="lazy"><span>${result.content[i].pages}</span><p>${result.content[i].title}</p><button onclick="xlecxDownloader('${result.content[i].id}')">Download</button>`
 			miniElement = document.createElement('div')
 			miniElement.setAttribute('id', result.content[i].id)
 			miniElement.onmousedown = e => {
@@ -1560,7 +1560,7 @@ function createNewXlecxTab(id, pageNumber) {
 		elementContainer.classList.add("xlecx-post-container")
 		for (var i = 0; i < result.random.length; i++) {
 			element = document.createElement('div')
-			element.innerHTML = `<img src="${xlecx.baseURL+result.random[i].thumb}"><span>${result.random[i].pages}</span><p>${result.random[i].title}</p><button onclick="xlecxDownloader('${result.random[i].id}')">Download</button>`
+			element.innerHTML = `<img src="${xlecx.baseURL+result.random[i].thumb}" loading="lazy"><span>${result.random[i].pages}</span><p>${result.random[i].title}</p><button onclick="xlecxDownloader('${result.random[i].id}')">Download</button>`
 			miniElement = document.createElement('div')
 			miniElement.setAttribute('id', result.random[i].id)
 			miniElement.onmousedown = e => {
@@ -1972,7 +1972,7 @@ function xlecxOpenCategory(name, page, shortName, makeNewPage, updateTabIndex) {
 		elementContainer.classList.add("xlecx-post-container")
 		for (var i = 0; i < result.content.length; i++) {
 			element = document.createElement('div')
-			element.innerHTML = `<img src="${xlecx.baseURL+result.content[i].thumb}"><span>${result.content[i].pages}</span><p>${result.content[i].title}</p><button onclick="xlecxDownloader('${result.content[i].id}')">Download</button>`
+			element.innerHTML = `<img src="${xlecx.baseURL+result.content[i].thumb}" loading="lazy"><span>${result.content[i].pages}</span><p>${result.content[i].title}</p><button onclick="xlecxDownloader('${result.content[i].id}')">Download</button>`
 			miniElement = document.createElement('div')
 			miniElement.setAttribute('id', result.content[i].id)
 			miniElement.onmousedown = e => {
@@ -2010,7 +2010,7 @@ function xlecxOpenCategory(name, page, shortName, makeNewPage, updateTabIndex) {
 		elementContainer.classList.add("xlecx-post-container")
 		for (var i = 0; i < result.random.length; i++) {
 			element = document.createElement('div')
-			element.innerHTML = `<img src="${xlecx.baseURL+result.random[i].thumb}"><span>${result.random[i].pages}</span><p>${result.random[i].title}</p><button onclick="xlecxDownloader('${result.random[i].id}')">Download</button>`
+			element.innerHTML = `<img src="${xlecx.baseURL+result.random[i].thumb}" loading="lazy"><span>${result.random[i].pages}</span><p>${result.random[i].title}</p><button onclick="xlecxDownloader('${result.random[i].id}')">Download</button>`
 			miniElement = document.createElement('div')
 			miniElement.setAttribute('id', result.random[i].id)
 			miniElement.onmousedown = e => {
@@ -2052,7 +2052,7 @@ function xlecxOpenTagContentMaker(result, pageContent, name, whitch) {
 	elementContainer.classList.add("xlecx-post-container")
 	for (var i = 0; i < result.content.length; i++) {
 		element = document.createElement('div')
-		element.innerHTML = `<img src="${xlecx.baseURL+result.content[i].thumb}"><span>${result.content[i].pages}</span><p>${result.content[i].title}</p><button onclick="xlecxDownloader('${result.content[i].id}')">Download</button>`
+		element.innerHTML = `<img src="${xlecx.baseURL+result.content[i].thumb}" loading="lazy"><span>${result.content[i].pages}</span><p>${result.content[i].title}</p><button onclick="xlecxDownloader('${result.content[i].id}')">Download</button>`
 		miniElement = document.createElement('div')
 		miniElement.setAttribute('id', result.content[i].id)
 		miniElement.onmousedown = e => {
@@ -2224,7 +2224,7 @@ function xlecxSearch(text, page, makeNewPage, updateTabIndex) {
 			elementContainer.classList.add("xlecx-post-container")
 			for (var i = 0; i < result.content.length; i++) {
 				element = document.createElement('div')
-				element.innerHTML = `<img src="${xlecx.baseURL+result.content[i].thumb}"><span>${result.content[i].pages}</span><p>${result.content[i].title}</p><button onclick="xlecxDownloader('${result.content[i].id}')">Download</button>`
+				element.innerHTML = `<img src="${xlecx.baseURL+result.content[i].thumb}" loading="lazy"><span>${result.content[i].pages}</span><p>${result.content[i].title}</p><button onclick="xlecxDownloader('${result.content[i].id}')">Download</button>`
 				miniElement = document.createElement('div')
 				miniElement.setAttribute('id', result.content[i].id)
 				miniElement.onmousedown = e => {
