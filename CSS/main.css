@@ -1005,6 +1005,8 @@ img {
 
 .xlecx-image-container-1x1 > img {
 	display: block;
+	min-width: 50px;
+	min-height: 150px;
 	max-width: 100%;
 	height: auto;
 	margin: 10px auto;

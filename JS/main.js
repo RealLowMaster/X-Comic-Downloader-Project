@@ -336,6 +336,25 @@ function getDragAfterElement(container, x) {
 	}, { offset: Number.NEGATIVE_INFINITY }).element
 }
 
+// Image Loading
+function preloadImage(img) {
+	const src = img.getAttribute('data-src')
+	if (!src)
+		return
+	
+	img.src = src
+}
+
+const imageLoadingObserver = new IntersectionObserver((entries, imageLoadingObserver) => {
+	entries.forEach(entry => {
+		if (!entry.isIntersecting)
+			return
+
+		preloadImage(entry.target)
+		imageLoadingObserver.unobserve(entry.target)
+	})
+})
+
 // Comics
 function loadComics(page, search) {
 	page = page || 1
@@ -1877,10 +1896,15 @@ function xlecxOpenPost(makeNewPage, id, updateTabIndex) {
 					element = document.createElement('div')
 					element.classList.add('xlecx-image-container-1x1')
 					for (var i = 0; i < result.images.length; i++) {
-						element.innerHTML += `<img src="${xlecx.baseURL}/${result.images[i].thumb}" loading="lazy">`
+						element.innerHTML += `<img data-src="${xlecx.baseURL}/${result.images[i].thumb}">`
 					}
+					var images = element.querySelectorAll('[data-src]')
 					container.appendChild(element)
 					containerContainer.appendChild(container)
+
+					images.forEach(image => {
+						imageLoadingObserver.observe(image)
+					})
 	
 					page.appendChild(containerContainer)
 				})
