@@ -21,7 +21,7 @@ const imageLazyLoadingOptions = {
 	threshold: 0,
 	rootMargin: "0px 0px 300px 0px"
 }
-const sites = [['xlecx', 'xlecxRepairComicInfoGetInfo({id}, {whitch})', 'xlecxSearch({text}, 1)']]
+const sites = [['xlecx', 'xlecxRepairComicInfoGetInfo({id}, {whitch})', 'xlecxSearch({text}, 1)', 'xlecxChangePage(1, false, true)']]
 var setting, tabs = [], db = {}, downloadingList = [], repairingComics = [], thisSite
 
 // Directions
@@ -817,10 +817,11 @@ function createNewTab(history) {
 	page.innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
 	document.getElementById('browser-pages').appendChild(page)
 
-	document.getElementById('browser-prev-btn').setAttribute('style', null)
-	document.getElementById('browser-next-btn').setAttribute('style', null)
-	document.getElementById('browser-reload-btn').setAttribute('style', null)
-	document.getElementById('browser-tool-search-form').setAttribute('style', null)
+	document.getElementById('browser-home-btn').style.display = 'inline-block'
+	document.getElementById('browser-prev-btn').style.display = 'inline-block'
+	document.getElementById('browser-next-btn').style.display = 'inline-block'
+	document.getElementById('browser-reload-btn').style.display = 'inline-block'
+	document.getElementById('browser-tool-search-form').style.display = 'inline-block'
 
 	updateTabSize()
 	return newTabId
@@ -844,10 +845,11 @@ function removeTab(id) {
 	}
 
 	if (btabs.length == 1) {
-		document.getElementById('browser-prev-btn').setAttribute('style', 'display:none')
-		document.getElementById('browser-next-btn').setAttribute('style', 'display:none')
-		document.getElementById('browser-reload-btn').setAttribute('style', 'display:none')
-		document.getElementById('browser-tool-search-form').setAttribute('style', 'display:none')
+		document.getElementById('browser-home-btn').style.display = 'none'
+		document.getElementById('browser-prev-btn').style.display = 'none'
+		document.getElementById('browser-next-btn').style.display = 'none'
+		document.getElementById('browser-reload-btn').style.display = 'none'
+		document.getElementById('browser-tool-search-form').style.display = 'none'
 	}
 
 	removingTab.remove()
@@ -866,6 +868,12 @@ function checkMiddleMouseClick(event) {
 		isRightMB = event.button == 3
 
 	return isRightMB
+}
+
+function browserHome() {
+	var browser_tabs = document.getElementById('browser-tabs')
+	var tabIndex = Number(browser_tabs.querySelector(`[pi="${browser_tabs.getAttribute('pid')}"]`).getAttribute('ti'))
+	if (tabs[tabIndex].history[tabs[tabIndex].history.length - 1].replace(', false)', ', true)') != sites[thisSite][3]) eval(sites[thisSite][3])
 }
 
 function changeHistory(next) {
@@ -1619,7 +1627,7 @@ function xlecxOpenPost(makeNewPage, id, updateTabIndex) {
 	var pageId = browser_tabs.getAttribute('pid')
 	var page
 	if (makeNewPage) {
-		pageId = createNewTab(`xlecxOpenPost(false, "${id}", false)`)
+		pageId = createNewTab(`xlecxOpenPost(false, '${id}', false)`)
 		page = document.getElementById(pageId)
 	} else {
 		var tabIndexId = Number(browser_tabs.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))
@@ -1628,7 +1636,7 @@ function xlecxOpenPost(makeNewPage, id, updateTabIndex) {
 		page.innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
 
 		if (updateTabIndex == true)
-			tabs[tabIndexId].addHistory(`xlecxOpenPost(false, "${id}", false)`)
+			tabs[tabIndexId].addHistory(`xlecxOpenPost(false, '${id}', false)`)
 	}
 
 	var tab = document.getElementById('browser-tabs').querySelector(`[pi="${pageId}"]`)
