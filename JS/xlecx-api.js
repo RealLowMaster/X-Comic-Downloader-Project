@@ -6,7 +6,6 @@ class XlecxAPI {
 		this.parodyURL = '/xfsearch/parody/'
 		this.tagURL = '/tags/'
 		this.searchURL = '/index.php?do=search'
-		this.timeout = 10000
 	}
 
 	lastSlash(str) {
