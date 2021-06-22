@@ -7,7 +7,6 @@ require('v8-compile-cache')
 const xlecx = new XlecxAPI()
 const defaultSetting = {
 	"max_per_page": 18,
-	"spin_color": 0,
 	"post_img_container_theme": 0,
 	"img_graphic": 1,
 	"pagination_width": 5,
@@ -15,7 +14,7 @@ const defaultSetting = {
 	"comic_panel_theme": 0,
 	"hover_downloader": true,
 	"lazy_loading": true,
-	"developer": false
+	"developer_mode": false
 }
 const imageLazyLoadingOptions = {
 	root: document.getElementById('browser-pages'),
@@ -264,7 +263,8 @@ function PopAlert(txt, style) {
 
 // Apply Setting
 if (setting.img_graphic > 1) setting.img_graphic = 1
-if (setting.lazy_loading == 0) imageLazyLoadingOptions.rootMargin = "0px 0px 1200px 0px"
+if (setting.img_graphic < 0) setting.img_graphic = 0
+if (setting.lazy_loading == false) imageLazyLoadingOptions.rootMargin = "0px 0px 1200px 0px"
 
 // Make Tabs Draggable
 const tabsContainer = document.getElementById('browser-tabs')
@@ -1468,6 +1468,19 @@ async function CreateComic(index, gottenResult, gottenQuality, images, siteIndex
 			reloadLoadingComics()
 		})
 	})
+}
+
+// Setting
+function openSetting() {
+
+}
+
+function saveSetting() {
+	
+}
+
+function closeSetting() {
+
 }
 
 function test() {

@@ -46,7 +46,7 @@ function createNewXlecxTab(id, pageNumber) {
 		elementContainer.classList.add("xlecx-post-container")
 		for (var i = 0; i < result.content.length; i++) {
 			element = document.createElement('div')
-			if (setting.lazy_loading == 0)
+			if (setting.lazy_loading == false)
 				element.innerHTML = `<img src="${xlecx.baseURL+result.content[i].thumb}"><span>${result.content[i].pages}</span><p>${result.content[i].title}</p><button onclick="xlecxDownloader('${result.content[i].id}')">Download</button>`
 			else
 				element.innerHTML = `<img src="${xlecx.baseURL+result.content[i].thumb}" loading="lazy"><span>${result.content[i].pages}</span><p>${result.content[i].title}</p><button onclick="xlecxDownloader('${result.content[i].id}')">Download</button>`
@@ -87,7 +87,7 @@ function createNewXlecxTab(id, pageNumber) {
 		elementContainer.classList.add("xlecx-post-container")
 		for (var i = 0; i < result.random.length; i++) {
 			element = document.createElement('div')
-			if (setting.lazy_loading == 0)
+			if (setting.lazy_loading == false)
 				element.innerHTML = `<img src="${xlecx.baseURL+result.random[i].thumb}"><span>${result.random[i].pages}</span><p>${result.random[i].title}</p><button onclick="xlecxDownloader('${result.random[i].id}')">Download</button>`
 			else
 				element.innerHTML = `<img src="${xlecx.baseURL+result.random[i].thumb}" loading="lazy"><span>${result.random[i].pages}</span><p>${result.random[i].title}</p><button onclick="xlecxDownloader('${result.random[i].id}')">Download</button>`
@@ -507,7 +507,7 @@ function xlecxOpenCategory(name, page, shortName, makeNewPage, updateTabIndex) {
 		elementContainer.classList.add("xlecx-post-container")
 		for (var i = 0; i < result.content.length; i++) {
 			element = document.createElement('div')
-			if (setting.lazy_loading == 0)
+			if (setting.lazy_loading == false)
 				element.innerHTML = `<img src="${xlecx.baseURL+result.content[i].thumb}"><span>${result.content[i].pages}</span><p>${result.content[i].title}</p><button onclick="xlecxDownloader('${result.content[i].id}')">Download</button>`
 			else
 				element.innerHTML = `<img src="${xlecx.baseURL+result.content[i].thumb}" loading="lazy"><span>${result.content[i].pages}</span><p>${result.content[i].title}</p><button onclick="xlecxDownloader('${result.content[i].id}')">Download</button>`
@@ -548,7 +548,7 @@ function xlecxOpenCategory(name, page, shortName, makeNewPage, updateTabIndex) {
 		elementContainer.classList.add("xlecx-post-container")
 		for (var i = 0; i < result.random.length; i++) {
 			element = document.createElement('div')
-			if (setting.lazy_loading == 0)
+			if (setting.lazy_loading == false)
 				element.innerHTML = `<img src="${xlecx.baseURL+result.random[i].thumb}"><span>${result.random[i].pages}</span><p>${result.random[i].title}</p><button onclick="xlecxDownloader('${result.random[i].id}')">Download</button>`
 			else
 				element.innerHTML = `<img src="${xlecx.baseURL+result.random[i].thumb}" loading="lazy"><span>${result.random[i].pages}</span><p>${result.random[i].title}</p><button onclick="xlecxDownloader('${result.random[i].id}')">Download</button>`
@@ -593,7 +593,7 @@ function xlecxOpenTagContentMaker(result, pageContent, name, whitch) {
 	elementContainer.classList.add("xlecx-post-container")
 	for (var i = 0; i < result.content.length; i++) {
 		element = document.createElement('div')
-		if (setting.lazy_loading == 0)
+		if (setting.lazy_loading == false)
 			element.innerHTML = `<img src="${xlecx.baseURL+result.content[i].thumb}"><span>${result.content[i].pages}</span><p>${result.content[i].title}</p><button onclick="xlecxDownloader('${result.content[i].id}')">Download</button>`
 		else
 			element.innerHTML = `<img src="${xlecx.baseURL+result.content[i].thumb}" loading="lazy"><span>${result.content[i].pages}</span><p>${result.content[i].title}</p><button onclick="xlecxDownloader('${result.content[i].id}')">Download</button>`
@@ -768,7 +768,7 @@ function xlecxSearch(text, page, makeNewPage, updateTabIndex) {
 			elementContainer.classList.add("xlecx-post-container")
 			for (var i = 0; i < result.content.length; i++) {
 				element = document.createElement('div')
-				if (setting.lazy_loading == 0)
+				if (setting.lazy_loading == false)
 					element.innerHTML = `<img src="${xlecx.baseURL+result.content[i].thumb}"><span>${result.content[i].pages}</span><p>${result.content[i].title}</p><button onclick="xlecxDownloader('${result.content[i].id}')">Download</button>`
 				else
 					element.innerHTML = `<img src="${xlecx.baseURL+result.content[i].thumb}" loading="lazy"><span>${result.content[i].pages}</span><p>${result.content[i].title}</p><button onclick="xlecxDownloader('${result.content[i].id}')">Download</button>`
