@@ -14,12 +14,13 @@ const defaultSetting = {
 	"show_not_when_dl_finish": true,
 	"comic_panel_theme": 0,
 	"downloader_mode": 1,
-	"lazy_loading": 1
+	"lazy_loading": 1,
+	"developer": 0
 }
 const imageLazyLoadingOptions = {
 	root: document.getElementById('browser-pages'),
 	threshold: 0,
-	rootMargin: "0px 0px 300px 0px"
+	rootMargin: "0px 0px 350px 0px"
 }
 const sites = [['xlecx', 'xlecxRepairComicInfoGetInfo({id}, {whitch})', 'xlecxSearch({text}, 1)', 'xlecxChangePage(1, false, true)']]
 var setting, tabs = [], db = {}, downloadingList = [], repairingComics = [], thisSite
@@ -28,48 +29,6 @@ var setting, tabs = [], db = {}, downloadingList = [], repairingComics = [], thi
 var dirRoot = path.join(__dirname)
 var dirDB = path.join(__dirname+'/db')
 var dirUL = path.join(__dirname+'/Download')
-
-// Error
-function error(txt, onclick, t1) {
-	var err = txt.toString()
-	if (t1 != null) err = err.replace(/{var1}/gi, t1)
-	err = err.replace(/\n/gi, '<br>')
-	var element = document.createElement('div')
-	element.classList.add('error')
-
-	var html = `<div></div><div><p>${err}</p>`
-	if (onclick == null) {
-		html += '<button class="btn btn-danger" onclick="$(this).parent(\'div\').parent(\'.error\').remove()">OK</button></div></div>'
-	} else {
-		html += `<button onclick="${onclick}">OK</button></div>`
-	}
-	element.innerHTML = html
-
-	document.getElementsByTagName('body')[0].appendChild(element)
-}
-
-function errorSelector(txt, t1, bgClose, buttons) {
-	var err = txt || null
-	if (t1 != null && err != null) err = err.replace(/{var1}/gi, t1)
-	if (err != null) err = err.replace(/\n/gi, '<br>')
-
-	bgClose = bgClose || false
-	var bgCloseValue = ''
-	if (bgClose == true) bgCloseValue = `$(this).parent('.error').remove()`
-	var html = `<div class="error"><div onclick="${bgCloseValue}"></div><div style="text-align:center">`
-	if (err != null) html += `<p>${err}</p>`
-	
-	buttons = buttons || null
-	if (buttons != null && typeof(buttons) == 'object') for (let i=0; i<buttons.length; i++) {
-		let name = buttons[i][0] || "Ok"
-		let style = buttons[i][1] || ""
-		let onclick = buttons[i][2] || "$(this).parent('div').parent('.error').remove()"
-		html += `<button class="btn btn-danger m-2" style="${style}" onclick="${onclick}">${name}</button>`
-	}
-	html += '</div></div>'
-
-	$('#main').append(html);
-}
 
 // Get Json
 function getJSON(src) {
@@ -722,7 +681,7 @@ async function repairComicInfo(whitch) {
 
 // Browser
 function closeBrowser() {
-	document.getElementById('browser').setAttribute('style', null)
+	document.getElementById('browser').style.display = 'none'
 	thisSite = null
 	tabs = []
 	document.getElementById('browser-pages').innerHTML = ''
@@ -1516,7 +1475,7 @@ function openXlecxBrowser() {
 	thisSite = 0
 	document.getElementById('add-new-tab').setAttribute('onclick', "createNewXlecxTab(createNewTab('xlecxChangePage(1, false, false)'))")
 	createNewXlecxTab(createNewTab('xlecxChangePage(1, false, false)'))
-	document.getElementById('browser').setAttribute('style', 'display:grid')
+	document.getElementById('browser').style.display = 'grid'
 }
 
 function createNewXlecxTab(id, pageNumber) {
@@ -2461,13 +2420,10 @@ async function xlecxRepairComicInfoGetInfo(id, whitch) {
 }
 
 function dl() {
-	xlecx.getTag('mmf threesome', {page:1, pagination:true, category:true}, (err, doc) => {
-		if (err) { error(err); return }
-		console.log(doc)
-	})
+	error('sadasda')
 }
 
-$(document).ready(() => {
+document.addEventListener('readystatechange', e => {
 	makeDatabaseIndexs()
 	loadComics()
-});
+})

@@ -1,10 +1,40 @@
-var ok = 'Ok';
-var dir = 'ltr';
-function error(err) {
-    let html = '<div class="action-error"><div><p style="direction:'+dir+'">'+err+'</p><button type="button" onclick="$(this).parents(\'.action-error\').remove()" style="direction:'+dir+'">'+ok+'</button></div></div>';
-	$('body').append(html);
+function error(txt, onclick, t1) {
+	var err = txt.toString()
+	if (t1 != null) err = err.replace(/{var1}/gi, t1)
+	err = err.replace(/\n/gi, '<br>')
+	var element = document.createElement('div')
+	element.classList.add('error')
+
+	var html = `<div></div><div><p>${err}</p>`
+	if (onclick == null) {
+		html += `<button class="btn btn-danger" onclick="this.parentElement.parentElement.remove()">OK</button></div></div>`
+	} else {
+		html += `<button onclick="${onclick}">OK</button></div>`
+	}
+	element.innerHTML = html
+
+	document.getElementsByTagName('body')[0].appendChild(element)
 }
 
-function errorList(list) {
-    console.log(list);
+function errorSelector(txt, t1, bgClose, buttons) {
+	var err = txt || null
+	if (t1 != null && err != null) err = err.replace(/{var1}/gi, t1)
+	if (err != null) err = err.replace(/\n/gi, '<br>')
+
+	bgClose = bgClose || false
+	var bgCloseValue = ''
+	if (bgClose == true) bgCloseValue = `this.parentElement.remove()`
+	var html = `<div class="error"><div onclick="${bgCloseValue}"></div><div style="text-align:center">`
+	if (err != null) html += `<p>${err}</p>`
+	
+	buttons = buttons || null
+	if (buttons != null && typeof(buttons) == 'object') for (let i=0; i<buttons.length; i++) {
+		let name = buttons[i][0] || "Ok"
+		let style = buttons[i][1] || ""
+		let onclick = buttons[i][2] || "this.parentElement.parentElement.remove()"
+		html += `<button class="btn btn-danger m-2" style="${style}" onclick="${onclick}">${name}</button>`
+	}
+	html += '</div></div>'
+
+	$('#main').append(html);
 }
