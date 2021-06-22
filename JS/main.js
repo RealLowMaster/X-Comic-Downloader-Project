@@ -6,13 +6,13 @@ const { type } = require('os')
 require('v8-compile-cache')
 const xlecx = new XlecxAPI()
 const defaultSetting = {
-	"max_per_page": 18,
+	"comic_panel_theme": 0,
 	"post_img_container_theme": 0,
+	"hover_downloader": true,
+	"max_per_page": 18,
 	"img_graphic": 1,
 	"pagination_width": 5,
 	"notification_download_finish": true,
-	"comic_panel_theme": 0,
-	"hover_downloader": true,
 	"lazy_loading": true,
 	"developer_mode": false
 }
@@ -236,6 +236,23 @@ async function makeDatabaseIndexs() {
 function fileExt(str) {
 	var base = new String(str).substring(str.lastIndexOf('.') + 1)
 	return base
+}
+
+function select(who, value) {
+	var parent = who.parentElement.parentElement
+	var overflow = parent.getElementsByTagName('div')[1]
+	var text = who.textContent
+
+	parent.getElementsByTagName('div')[0].textContent = text
+	overflow.style.display = 'none'
+	overflow.querySelector(`[onclick="select(this, ${parent.getAttribute('value')})"]`).removeAttribute('active')
+	parent.setAttribute('value', value)
+}
+
+function openSelect(who) {
+	var overflow = who.getElementsByTagName('div')[1]
+	overflow.style.display = 'block'
+	overflow.querySelector(`[onclick="select(this, ${who.getAttribute('value')})"]`).setAttribute('active', '')
 }
 
 // Alerts
@@ -1472,15 +1489,15 @@ async function CreateComic(index, gottenResult, gottenQuality, images, siteIndex
 
 // Setting
 function openSetting() {
-
+	document.getElementById('setting-panel').style.display = 'block'
 }
 
 function saveSetting() {
-	
+
 }
 
 function closeSetting() {
-
+	document.getElementById('setting-panel').style.display = 'none'
 }
 
 function test() {

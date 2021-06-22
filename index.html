@@ -98,5 +98,62 @@
 		</div>
 		<div class="browser-pages-container" id="browser-pages"></div>
 	</div>
+
+	<!-- Setting -->
+	<div class="setting-panel" id="setting-panel" style="display: block;">
+
+		<br>
+
+		<p class="row-title">Theme</p>
+		<div class="row">
+			<div class="col-6 pr-5 pl-5">
+				<div class="input-row">
+					<label class="input-row-label">Offline Comic Theme</label>
+					<div class="input-row-selector" id="s_comic_panel_theme" value="0">
+						<div onclick="openSelect(this.parentElement)">Light Mode</div>
+						<div class="input-row-selector-overflow">
+							<p onclick="select(this, 0)">Light Mode</p>
+							<p onclick="select(this, 1)">Dark Mode</p>
+							<p onclick="select(this, 2)">Daadsark Mode</p>
+							<p onclick="select(this, 3)">Dagrtgrk Mode</p>
+						</div>
+						<span></span>
+					</div>
+					<p class="input-row-helper">The Downloaded Comic Viewing Panel Theme.</p>
+				</div>
+			</div>
+			<div class="col-6 pr-5 pl-5">
+
+			</div>
+		</div>
+
+		<br><br><br><br>
+
+		<p class="row-title">Notification</p>
+		<div class="row">
+			<div class="col-6 pr-5 pl-5">
+				<div class="input-row">
+					<label class="input-row-label">Download Has Been Finished</label>
+					<br>
+					<p class="input-row-helper">The Downloaded Comic Viewing Panel Theme.</p>
+				</div>
+			</div>
+			<div class="col-6 pr-5 pl-5">
+
+			</div>
+		</div>
+
+		<br><br>
+
+		<div class="row">
+			<div class="col-6 pr-5 pl-5">
+				<button onclick="saveSetting()">Save</button>
+				<button onclick="closeSetting()">Cancel</button>
+			</div>
+			<div class="col-6 pr-5 pl-5"></div>
+		</div>
+
+		
+	</div>
 </body>
 </html>
