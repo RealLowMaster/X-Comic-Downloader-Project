@@ -1472,7 +1472,7 @@ async function CreateComic(index, gottenResult, gottenQuality, images, siteIndex
 			if (isDownloading == true) {
 				var shortName = gottenResult.title
 				if (shortName.length > 26) shortName = shortName.substr(0, 23)+'...'
-				if (setting.show_not_when_dl_finish == true)
+				if (setting.notification_download_finish == true)
 					PopAlert(`Comic (${shortName}) Downloaded.`)
 				document.getElementById(`${downloadingList[index][2]}`).remove()
 				downloadingList[index] = null
@@ -1501,7 +1501,10 @@ function closeSetting() {
 }
 
 function test() {
-	error('sadasda')
+	xlecx.getTag('stuck in wall', {page:2, category:true}, (err, doc) => {
+		if (err) { error(err); return }
+		console.log(doc)
+	})
 }
 
 document.addEventListener('readystatechange', e => {

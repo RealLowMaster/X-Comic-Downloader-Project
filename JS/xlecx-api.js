@@ -56,14 +56,14 @@ class XlecxAPI {
 			var parser = new DOMParser()
 			var htmlDoc = parser.parseFromString(html, 'text/html')
 			var gg = 0, bb = 0, li, arr = {}, hasPost = false
+			const slashReg = new RegExp('/', 'g')
 			
 			// Category
 			if (category == true) {
 				arr.categories = []
 				li = htmlDoc.getElementsByClassName('side-bc')[0].getElementsByTagName('a')
-				var regexp = RegExp('/', 'g')
 				for (var i=0; i<li.length; i++) {
-					arr.categories.push({ "name": li[i].textContent, "url": li[i].getAttribute('href').replace(this.baseURL+'/', '').replace(regexp, '') })
+					arr.categories.push({ "name": li[i].textContent, "url": li[i].getAttribute('href').replace(this.baseURL+'/', '').replace(slashReg, '') })
 				}
 			}
 
@@ -133,7 +133,7 @@ class XlecxAPI {
 						if (li[i].getAttribute('href') == null)
 							pPage = null
 						else
-							pPage = Number(li[i].getAttribute('href').replace(this.baseURL+'/page/', '').replace('/', ''))
+							pPage = Number(li[i].getAttribute('href').replace(this.baseURL+'/page/', '').replace(slashReg, ''))
 						
 						
 						arr.pagination.push([value, pPage])
@@ -162,12 +162,12 @@ class XlecxAPI {
 		}).then(html => {
 			var parser = new DOMParser()
 			var htmlDoc = parser.parseFromString(html, 'text/html')
+			const slashReg = new RegExp('/', 'g')
 
 			var arr = []
 			var li = htmlDoc.getElementsByClassName('side-bc')[0].getElementsByTagName('a')
-			var regexp = RegExp('/', 'g')
 			for (var i=0; i<li.length; i++) {
-				arr.push({ "name": li[i].textContent, "url": li[i].getAttribute('href').replace(this.baseURL, '').replace(regexp, '') })
+				arr.push({ "name": li[i].textContent, "url": li[i].getAttribute('href').replace(this.baseURL, '').replace(slashReg, '') })
 			}
 
 			callback(null, arr)
@@ -195,14 +195,14 @@ class XlecxAPI {
 			var parser = new DOMParser()
 			var htmlDoc = parser.parseFromString(html, 'text/html')
 			var gg = 0, bb = 0, li, arr = {}, hasPost = false
+			const slashReg = new RegExp('/', 'g')
 			
 			// Category
 			if (category == true) {
 				arr.categories = []
 				var li = htmlDoc.getElementsByClassName('side-bc')[0].getElementsByTagName('a')
-				var regexp = RegExp('/', 'g')
 				for (var i=0; i<li.length; i++) {
-					arr.categories.push({ "name": li[i].textContent, "url": li[i].getAttribute('href').replace(this.baseURL+'/', '').replace(regexp, '') })
+					arr.categories.push({ "name": li[i].textContent, "url": li[i].getAttribute('href').replace(this.baseURL+'/', '').replace(slashReg, '') })
 				}
 			}
 
@@ -258,7 +258,7 @@ class XlecxAPI {
 				// Pagination
 				if (pagination == true) {
 					var value, pPage
-					arr.pagination = [];
+					arr.pagination = []
 					li = htmlDoc.getElementById('bottom-nav').querySelector('.navigation').children
 					for (var i = 0; i < li.length; i++) {
 						if (li[i].textContent == "")
@@ -272,7 +272,7 @@ class XlecxAPI {
 						if (li[i].getAttribute('href') == null)
 							pPage = null
 						else
-							pPage = Number(li[i].getAttribute('href').replace(this.baseURL+'/'+name+'/page/', '').replace('/', ''))
+							pPage = Number(li[i].getAttribute('href').replace((this.baseURL+'/'+name+'/page/').replace(/ /g, '%20'), '').replace(slashReg, ''))
 						
 						
 						arr.pagination.push([value, pPage])
@@ -441,14 +441,15 @@ class XlecxAPI {
 			var parser = new DOMParser()
 			var htmlDoc = parser.parseFromString(html, 'text/html')
 			var gg = 0, bb = 0, li, arr = {}, hasPost = false
+			const slashReg = new RegExp('/', 'g')
+			console.log(slashReg)
 			
 			// Category
 			if (category == true) {
 				arr.categories = []
 				li = htmlDoc.getElementsByClassName('side-bc')[0].getElementsByTagName('a')
-				var regexp = RegExp('/', 'g')
 				for (var i=0; i<li.length; i++) {
-					arr.categories.push({ "name": li[i].textContent, "url": li[i].getAttribute('href').replace(this.baseURL+'/', '').replace(regexp, '') })
+					arr.categories.push({ "name": li[i].textContent, "url": li[i].getAttribute('href').replace(this.baseURL+'/', '').replace(slashReg, '') })
 				}
 			}
 
@@ -495,8 +496,12 @@ class XlecxAPI {
 							
 							if (li[i].getAttribute('href') == null)
 								pPage = null
-							else
-								pPage = Number(li[i].getAttribute('href').replace((this.baseURL+this.groupURL+name+'/page/').replace(' ', '%20'), '').replace('/', ''))
+							else {
+								pPage = Number(li[i].getAttribute('href').replace((this.baseURL+this.groupURL+name+'/page/').replace(/ /g, '%20'), '').replace(slashReg, ''))
+								if (Number.isNaN(pPage)) {
+									pPage = 1
+								}
+							}
 							
 							arr.pagination.push([value, pPage])
 						}
@@ -531,14 +536,14 @@ class XlecxAPI {
 			var parser = new DOMParser()
 			var htmlDoc = parser.parseFromString(html, 'text/html')
 			var gg = 0, bb = 0, li, arr = {}, hasPost = false
+			const slashReg = new RegExp('/', 'g')
 			
 			// Category
 			if (category == true) {
 				arr.categories = []
 				li = htmlDoc.getElementsByClassName('side-bc')[0].getElementsByTagName('a')
-				var regexp = RegExp('/', 'g')
 				for (var i=0; i<li.length; i++) {
-					arr.categories.push({ "name": li[i].textContent, "url": li[i].getAttribute('href').replace(this.baseURL+'/', '').replace(regexp, '') })
+					arr.categories.push({ "name": li[i].textContent, "url": li[i].getAttribute('href').replace(this.baseURL+'/', '').replace(slashReg, '') })
 				}
 			}
 
@@ -585,8 +590,12 @@ class XlecxAPI {
 							
 							if (li[i].getAttribute('href') == null)
 								pPage = null
-							else
-								pPage = Number(li[i].getAttribute('href').replace((this.baseURL+this.artistURL+name+'/page/').replace(' ', '%20'), '').replace('/', ''))
+							else {
+								pPage = Number(li[i].getAttribute('href').replace((this.baseURL+this.artistURL+name+'/page/').replace(/ /g, '%20'), '').replace(slashReg, ''))
+								if (Number.isNaN(pPage)) {
+									pPage = 1
+								}
+							}
 							
 							arr.pagination.push([value, pPage])
 						}
@@ -621,14 +630,14 @@ class XlecxAPI {
 			var parser = new DOMParser()
 			var htmlDoc = parser.parseFromString(html, 'text/html')
 			var gg = 0, bb = 0, li, arr = {}, hasPost = false
+			const slashReg = new RegExp('/', 'g')
 			
 			// Category
 			if (category == true) {
 				arr.categories = []
 				li = htmlDoc.getElementsByClassName('side-bc')[0].getElementsByTagName('a')
-				var regexp = RegExp('/', 'g')
 				for (var i=0; i<li.length; i++) {
-					arr.categories.push({ "name": li[i].textContent, "url": li[i].getAttribute('href').replace(this.baseURL+'/', '').replace(regexp, '') })
+					arr.categories.push({ "name": li[i].textContent, "url": li[i].getAttribute('href').replace(this.baseURL+'/', '').replace(slashReg, '') })
 				}
 			}
 
@@ -675,8 +684,12 @@ class XlecxAPI {
 							
 							if (li[i].getAttribute('href') == null)
 								pPage = null
-							else
-								pPage = Number(li[i].getAttribute('href').replace((this.baseURL+this.parodyURL+name+'/page/').replace(' ', '%20'), '').replace('/', ''))
+							else {
+								pPage = Number(li[i].getAttribute('href').replace((this.baseURL+this.parodyURL+name+'/page/').replace(/ /g, '%20'), '').replace(slashReg, ''))
+								if (Number.isNaN(pPage)) {
+									pPage = 1
+								}
+							}
 							
 							arr.pagination.push([value, pPage])
 						}
@@ -711,14 +724,14 @@ class XlecxAPI {
 			var parser = new DOMParser()
 			var htmlDoc = parser.parseFromString(html, 'text/html')
 			var gg = 0, bb = 0, li, arr = {}, hasPost = false
+			const slashReg = new RegExp('/', 'g')
 			
 			// Category
 			if (category == true) {
 				arr.categories = []
 				li = htmlDoc.getElementsByClassName('side-bc')[0].getElementsByTagName('a')
-				var regexp = RegExp('/', 'g')
 				for (var i=0; i<li.length; i++) {
-					arr.categories.push({ "name": li[i].textContent, "url": li[i].getAttribute('href').replace(this.baseURL+'/', '').replace(regexp, '') })
+					arr.categories.push({ "name": li[i].textContent, "url": li[i].getAttribute('href').replace(this.baseURL+'/', '').replace(slashReg, '') })
 				}
 			}
 
@@ -765,8 +778,12 @@ class XlecxAPI {
 							
 							if (li[i].getAttribute('href') == null)
 								pPage = null
-							else
-								pPage = Number(li[i].getAttribute('href').replace((this.baseURL+this.tagURL+name+'/page/').replace(' ', '%20'), '').replace('/', ''))
+							else {
+								pPage = Number(li[i].getAttribute('href').replace((this.baseURL+this.tagURL+name+'/page/').replace(/ /g, '%20'), '').replace(slashReg, ''))
+								if (Number.isNaN(pPage)) {
+									pPage = 1
+								}
+							}
 							
 							arr.pagination.push([value, pPage])
 						}
@@ -804,17 +821,17 @@ class XlecxAPI {
 		}).then(response => {
 			return response.text()
 		}).then(html => {
-			
 			var parser = new DOMParser()
 			var htmlDoc = parser.parseFromString(html, 'text/html')
 			var gg = 0, bb = 0, arr = {}, li, hasPost = false
+			const slashReg = new RegExp('/', 'g')
+			
 			// Category
 			if (category == true) {
 				arr.categories = []
 				li = htmlDoc.getElementsByClassName('side-bc')[0].getElementsByTagName('a')
-				var regexp = RegExp('/', 'g')
 				for (var i=0; i<li.length; i++) {
-					arr.categories.push({ "name": li[i].textContent, "url": li[i].getAttribute('href').replace(this.baseURL+'/', '').replace(regexp, '') })
+					arr.categories.push({ "name": li[i].textContent, "url": li[i].getAttribute('href').replace(this.baseURL+'/', '').replace(slashReg, '') })
 				}
 			}
 
@@ -861,9 +878,12 @@ class XlecxAPI {
 							
 							if (li[i].getAttribute('href') == null)
 								pPage = null
-							else
+							else {
 								pPage = Number(li[i].getAttribute('onclick').replace('javascript:list_submit(', '').replace('); return(false)', ''))
-							
+								if (Number.isNaN(pPage)) {
+									pPage = 1
+								}
+							}
 							
 							arr.pagination.push([value, pPage])
 						}

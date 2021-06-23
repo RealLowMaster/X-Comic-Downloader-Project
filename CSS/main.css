@@ -1283,7 +1283,7 @@ img {
 }
 
 .input-row-selector-overflow > p {
-	border-width: 0 0 1px 0;
+	border-width: 0;
 	border-radius: 0;
 	cursor: pointer;
 	transition: .2s;
@@ -1323,13 +1323,16 @@ img {
 	position: absolute;
 	left: 50%;
 	transform: translate(-50%, -50%);
+	transition: .2s;
+
+	--color: #222;
 	--size: 6px;
 }
 
 .input-row-selector > span::before {
 	border-left: var(--size) solid transparent;
 	border-right: var(--size) solid transparent;
-	border-bottom: var(--size) solid #222;
+	border-bottom: var(--size) solid var(--color);
 
 	top: 35%;
 }
@@ -1337,9 +1340,18 @@ img {
 .input-row-selector > span::after {
 	border-left: var(--size) solid transparent;
 	border-right: var(--size) solid transparent;
-	border-top: var(--size) solid #222;
+	border-top: var(--size) solid var(--color);
 
 	top: 65%;
+}
+
+.input-row-selector:hover > span {
+	background-color: #0af;
+}
+
+.input-row-selector:hover > span::before,
+.input-row-selector:hover > span::after {
+	--color: #fff;
 }
 
 .input-row-input:hover,
