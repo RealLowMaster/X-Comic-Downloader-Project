@@ -402,15 +402,14 @@ img {
 	display: inline-block;
 	width: 60px;
 	height: 60px;
-	border-color: #ddd;
-	background-color: transparent;
-	border-width: 2px 2px 2px 0;
-	border-style: solid;
+	border: 10px solid #dddddd;
+	border-top-color: transparent;
 	border-radius: 50%;
-	animation-name: spin;
-	animation-duration: 2000ms;
-	animation-iteration-count: infinite;
-	animation-timing-function: linear;
+	animation: spin 1s ease infinite;
+}
+
+.spin-sm {
+	border-width: 4px;
 }
 
 .spin-fast {
@@ -418,7 +417,7 @@ img {
 }
 
 .spin-primary {
-	border-color: #0ba1b4;
+	border-top-color: #3498DB;
 }
 
 .spin-success {
@@ -426,11 +425,8 @@ img {
 }
 
 @keyframes spin {
-	from {
-		transform:rotate(0deg);
-	}
 	to {
-		transform:rotate(360deg);
+		transform: rotate(1turn);
 	}
 }
 
@@ -1397,7 +1393,6 @@ img {
 .input-row-checkbox > div > input[type="checkbox"]:checked {
 	background-color: #28B463;
 }
-
 
 .input-row-checkbox > div > input[type="checkbox"]::before {
 	content: '';

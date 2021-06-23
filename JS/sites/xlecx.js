@@ -13,7 +13,7 @@ function createNewXlecxTab(id, pageNumber) {
 
 	var tab = document.getElementById('browser-tabs').querySelector(`[pi="${id}"]`)
 	var tabArea = tab.getElementsByTagName('span')[0]
-	tabArea.innerHTML = '<span class="spin spin-primary" style="width:22px;height:22px"></span>'
+	tabArea.innerHTML = '<span class="spin spin-sm spin-primary" style="width:22px;height:22px"></span>'
 	xlecx.getPage({page:pageNumber, random:true, category:true}, (err, result) => {
 		tab.setAttribute('isReloading', false)
 		page.innerHTML = ''
