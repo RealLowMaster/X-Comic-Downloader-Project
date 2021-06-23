@@ -1366,6 +1366,77 @@ img {
 	color: #888;
 }
 
+.input-row-checkbox {
+	display: grid;
+	grid-template-columns: 11fr 45px;
+	width: 100%;
+}
+
+.input-row-checkbox > label {
+	display: flex;
+	align-items: center;
+	padding-bottom: 4px;
+}
+
+.input-row-checkbox > div > input[type="checkbox"] {
+	width: 45px;
+	height: 25px;
+	background-color: #eee;
+	border: 1px solid #4f4f4f;
+	border-radius: 3px;
+	position: relative;
+	box-shadow: -5px -5px 20px rgba(255,255,255,.1),
+				5px 5px 10px rgba(0,0,0,.2),
+				inset -2px -2px 5px rgba(80,80,80,.1),
+				inset 2px 2px 5px rgba(80,80,80,.5);
+	appearance: none;
+	cursor: pointer;
+	transition: .5s;
+}
+
+.input-row-checkbox > div > input[type="checkbox"]:checked {
+	background-color: #28B463;
+}
+
+
+.input-row-checkbox > div > input[type="checkbox"]::before {
+	content: '';
+	width: 50%;
+	height: 25px;
+	background: linear-gradient(to top, #000, #555);
+	border-radius: 3px;
+	position: absolute;
+	top: -1px;
+	left: 0;
+	box-shadow: 0 0 0 1px #232323;
+	transform: scale(.9, .87);
+	transition: .5s;
+}
+
+.input-row-checkbox > div > input[type="checkbox"]:checked::before {
+	left: 50%;
+}
+
+.input-row-checkbox > div > input[type="checkbox"]::after {
+	content: '';
+	width: 4px;
+	height: 12px;
+	background-color: #fff;
+	border-radius: 1px;
+	position: absolute;
+	top: calc(50% - 6.5px);
+	left: 5px;
+	transition: .5s;
+}
+
+.input-row-checkbox > div > input[type="checkbox"]:checked::after {
+	left: calc(50% + 6px);
+	background-color: #2ECC71;
+	box-shadow: 0 0 5px #2ECC71,
+				0 0 15px #2ECC71,
+				0 0 30px #2ECC71;
+}
+
 .pl-5 {
 	padding-left: 15px !important;
 }

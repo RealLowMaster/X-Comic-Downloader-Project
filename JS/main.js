@@ -250,6 +250,10 @@ function select(who, value) {
 }
 
 function openSelect(who) {
+	var overflows = document.getElementsByClassName('input-row-selector-overflow')
+	for (var i = 0; i < overflows.length; i++) {
+		overflows[i].style.display = 'none'
+	}
 	var overflow = who.getElementsByTagName('div')[1]
 	overflow.style.display = 'block'
 	overflow.querySelector(`[onclick="select(this, ${who.getAttribute('value')})"]`).setAttribute('active', '')
