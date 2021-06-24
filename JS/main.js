@@ -261,7 +261,6 @@ function openSelect(who) {
 function inputLimit(who, max) {
 	if (who == null || max == null) return
 	var value = who.value
-	console.log(value)
 
 	if (value > max)
 		who.value = max
@@ -1516,8 +1515,7 @@ function setLuanchTimeSettings(reloadSettingPanel) {
 
 	document.getElementById('s_max_per_page').value = setting.max_per_page
 
-	if (setting.hover_downloader == true)
-		document.getElementById('s_hover_downloader').checked = true
+	if (setting.hover_downloader == true) document.getElementById('s_hover_downloader').checked = true
 	
 	if (setting.notification_download_finish == true) document.getElementById('s_notification_download_finish').checked = true
 
@@ -1525,7 +1523,6 @@ function setLuanchTimeSettings(reloadSettingPanel) {
 
 
 	if (reloadSettingPanel == false) {
-		console.log(false)
 		if (setting.hover_downloader == false)
 			document.getElementById('downloader').classList.add('downloader-fixed')
 
@@ -1535,7 +1532,38 @@ function setLuanchTimeSettings(reloadSettingPanel) {
 }
 
 function saveSetting() {
+	const newMaxPerPage = Number(document.getElementById('s_max_per_page').value)
 
+	if (setting.max_per_page != newMaxPerPage) reloadLoadingComics()
+
+	setting.comic_panel_theme = Number(document.getElementById('s_comic_panel_theme').getAttribute('value'))
+	setting.img_graphic = Number(document.getElementById('s_img_graphic').getAttribute('value'))
+	setting.max_per_page = newMaxPerPage
+	setting.hover_downloader = document.getElementById('s_hover_downloader').checked
+	setting.notification_download_finish = document.getElementById('s_notification_download_finish').checked
+	setting.lazy_loading = document.getElementById('s_lazy_loading').checked
+
+	if (setting.hover_downloader == false)
+		document.getElementById('downloader').classList.add('downloader-fixed')
+	else
+		document.getElementById('downloader').classList.remove('downloader-fixed')
+
+	switch (setting.comic_panel_theme) {
+		case 0:
+			document.getElementById('comic-panel').classList.remove('comic-panel-darkmode')
+			break
+		case 1:
+			document.getElementById('comic-panel').classList.add('comic-panel-darkmode')
+			break
+	}
+
+	fs.writeFile('./setting.cfg', JSON.stringify(setting), (err) => {
+		if (err) {
+			PopAlert(err, 'danger')
+			return
+		}
+		document.getElementById('setting-panel').style.display = 'none'
+	})
 }
 
 function closeSetting() {
