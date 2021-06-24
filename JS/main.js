@@ -301,7 +301,8 @@ if (setting.max_per_page < 1) setting.max_per_page = 1
 if (typeof(setting.max_per_page) != 'number') setting.max_per_page = 18
 if (setting.img_graphic > 1) setting.img_graphic = 1
 if (setting.img_graphic < 0) setting.img_graphic = 0
-if (typeof(setting.notification_download_finish) != 'boolean') setting.lazy_loading = true
+if (typeof(setting.notification_download_finish) != 'boolean') setting.notification_download_finish = true
+if (typeof(setting.hover_downloader) != 'boolean') setting.hover_downloader = true
 if (typeof(setting.lazy_loading) != 'boolean') setting.lazy_loading = true
 if (setting.lazy_loading == false) imageLazyLoadingOptions.rootMargin = "0px 0px 1200px 0px"
 
@@ -1502,7 +1503,8 @@ async function CreateComic(index, gottenResult, gottenQuality, images, siteIndex
 }
 
 // Setting
-function setLuanchTimeSettings() {
+function setLuanchTimeSettings(reloadSettingPanel) {
+	reloadSettingPanel = reloadSettingPanel || false
 	var s_comic_panel_theme = document.getElementById('s_comic_panel_theme')
 	var s_img_graphic = document.getElementById('s_img_graphic')
 
@@ -1514,9 +1516,7 @@ function setLuanchTimeSettings() {
 
 	document.getElementById('s_max_per_page').value = setting.max_per_page
 
-	if (setting.hover_downloader == false)
-		document.getElementById('downloader').classList.add('downloader-fixed')
-	else
+	if (setting.hover_downloader == true)
 		document.getElementById('s_hover_downloader').checked = true
 	
 	if (setting.notification_download_finish == true) document.getElementById('s_notification_download_finish').checked = true
@@ -1524,8 +1524,14 @@ function setLuanchTimeSettings() {
 	if (setting.lazy_loading == true) document.getElementById('s_lazy_loading').checked = true
 
 
-	if (setting.comic_panel_theme == 1)
-		document.getElementById('comic-panel').classList.add('comic-panel-darkmode')
+	if (reloadSettingPanel == false) {
+		console.log(false)
+		if (setting.hover_downloader == false)
+			document.getElementById('downloader').classList.add('downloader-fixed')
+
+		if (setting.comic_panel_theme == 1)
+			document.getElementById('comic-panel').classList.add('comic-panel-darkmode')
+	}
 }
 
 function saveSetting() {
@@ -1534,6 +1540,7 @@ function saveSetting() {
 
 function closeSetting() {
 	document.getElementById('setting-panel').style.display = 'none'
+	setLuanchTimeSettings(true)
 }
 
 function test() {
@@ -1545,6 +1552,6 @@ function test() {
 
 document.addEventListener('readystatechange', e => {
 	makeDatabaseIndexs()
-	setLuanchTimeSettings()
+	setLuanchTimeSettings(false)
 	loadComics()
 })
