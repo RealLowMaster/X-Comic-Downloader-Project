@@ -26,7 +26,7 @@
 			<div class="top-menu">
 				<div>
 					<button onclick="document.getElementById('site-menu').setAttribute('active', true)">Sites</button>
-					<button onclick="openSetting()">Setting</button>
+					<button onclick="document.getElementById('setting-panel').style.display = 'block'">Setting</button>
 					<button onclick="test()">Test</button>
 				</div>
 				<div></div>
@@ -100,7 +100,7 @@
 	</div>
 
 	<!-- Setting -->
-	<div class="setting-panel" id="setting-panel" style="display: block;">
+	<div class="setting-panel" id="setting-panel">
 
 		<br>
 
@@ -109,8 +109,8 @@
 			<div class="col-6 pr-5 pl-5">
 				<div class="input-row">
 					<label class="input-row-label">Offline Comic Theme</label>
-					<div class="input-row-selector" id="s_comic_panel_theme" value="0">
-						<div onclick="openSelect(this.parentElement)">Light Mode</div>
+					<div class="input-row-selector" id="s_comic_panel_theme" value>
+						<div onclick="openSelect(this.parentElement)"></div>
 						<div class="input-row-selector-overflow">
 							<p onclick="select(this, 0)">Light Mode</p>
 							<p onclick="select(this, 1)">Dark Mode</p>
@@ -119,14 +119,23 @@
 					</div>
 					<p class="input-row-helper">The Downloaded Comic Viewing Panel Theme.</p>
 				</div>
+
+				<br>
+
+				<div class="input-row">
+					<label class="input-row-label">Max Comics in a Page (Offline)</label>
+					<input class="input-row-input" type="number" oninput="inputLimit(this, 34)" id="s_max_per_page">
+					<p class="input-row-helper">The Maximum Amount of Comics That Should Show in Offline Parts.<br>Min: 8, Max: 34</p>
+				</div>
 			</div>
+
 			<div class="col-6 pr-5 pl-5">
 				<br>
 				<div class="input-row">
 					<div class="input-row-checkbox">
 						<label>Hoverable Downloader</label>
 						<div>
-							<input type="checkbox" name="hover_downloader" id="s_hover_downloader">
+							<input type="checkbox" id="s_hover_downloader">
 						</div>
 					</div>
 					<p class="input-row-helper">Hover The Downloader For Showed Up.</p>
@@ -134,28 +143,67 @@
 			</div>
 		</div>
 
-		<br><br><br><br>
+		<br><br><br>
 
 		<p class="row-title">Notification</p>
 		<div class="row">
 			<div class="col-6 pr-5 pl-5">
 				<div class="input-row">
-					<label class="input-row-label">Download Has Been Finished</label>
-					<br>
-					<p class="input-row-helper">The Downloaded Comic Viewing Panel Theme.</p>
+					<div class="input-row-checkbox">
+						<label>Download Finished</label>
+						<div>
+							<input type="checkbox" id="s_notification_download_finish">
+						</div>
+					</div>
+					<p class="input-row-helper">Show Notification When Download Finished.</p>
 				</div>
 			</div>
+
 			<div class="col-6 pr-5 pl-5">
 
 			</div>
 		</div>
 
-		<br><br>
+		<br><br><br>
+
+		<p class="row-title">Other</p>
+		<div class="row">
+			<div class="col-6 pr-5 pl-5">
+				<br>
+
+				<div class="input-row">
+					<div class="input-row-checkbox">
+						<label>Lazy Loading</label>
+						<div>
+							<input type="checkbox" id="s_lazy_loading">
+						</div>
+					</div>
+					<p class="input-row-helper">This Ability is Recommend.<br>Do not Download The Images That aren't in viewport.</p>
+				</div>
+			</div>
+
+			<div class="col-6 pr-5 pl-5">
+				<div class="input-row">
+					<label class="input-row-label">Downloading Image Quality</label>
+					<div class="input-row-selector" id="s_img_graphic" value>
+						<div onclick="openSelect(this.parentElement)"></div>
+						<div class="input-row-selector-overflow">
+							<p onclick="select(this, 0)">Low</p>
+							<p onclick="select(this, 1)">High</p>
+						</div>
+						<span></span>
+					</div>
+					<p class="input-row-helper">Recommend (High).<br>The Quality of Downloading Images.<br>If (High) Software will check if Comic Have High Quality Image Then it will Download it, But If It Doesn't Then it will Download Low Quality.</p>
+				</div>
+			</div>
+		</div>
+
+		<br><br><br>
 
 		<div class="row">
 			<div class="col-6 pr-5 pl-5">
-				<button onclick="saveSetting()">Save</button>
-				<button onclick="closeSetting()">Cancel</button>
+				<button onclick="saveSetting()" class="btn btn-primary">Save</button>
+				<button onclick="closeSetting()" class="btn btn-danger">Cancel</button>
 			</div>
 			<div class="col-6 pr-5 pl-5"></div>
 		</div>

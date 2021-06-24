@@ -128,7 +128,7 @@ function xlecxOpenPost(makeNewPage, id, updateTabIndex) {
 
 	var tab = document.getElementById('browser-tabs').querySelector(`[pi="${pageId}"]`)
 	var tabArea = tab.getElementsByTagName('span')[0]
-	tabArea.innerHTML = '<span class="spin spin-primary" style="width:22px;height:22px"></span>'
+	tabArea.innerHTML = '<span class="spin spin-sm spin-primary" style="width:22px;height:22px"></span>'
 	db.have.findOne({s:0, i:id}, (err, haveDoc) => {
 		if (err) { error(err); return }
 		var have_in_have
@@ -474,7 +474,7 @@ function xlecxOpenCategory(name, page, shortName, makeNewPage, updateTabIndex) {
 
 	var tab = document.getElementById('browser-tabs').querySelector(`[pi="${pageId}"]`)
 	var tabArea = tab.getElementsByTagName('span')[0]
-	tabArea.innerHTML = '<span class="spin spin-primary" style="width:22px;height:22px"></span>'
+	tabArea.innerHTML = '<span class="spin spin-sm spin-primary" style="width:22px;height:22px"></span>'
 	pageContent.innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
 	xlecx.getCategory(name, {page:page, random:true, category:true}, (err, result) => {
 		tab.setAttribute('isReloading', false)
@@ -660,7 +660,7 @@ function xlecxOpenTag(name, page, whitch, makeNewPage, updateTabIndex) {
 
 	var tab = document.getElementById('browser-tabs').querySelector(`[pi="${pageId}"]`)
 	var tabArea = tab.getElementsByTagName('span')[0]
-	tabArea.innerHTML = '<span class="spin spin-primary" style="width:22px;height:22px"></span>'
+	tabArea.innerHTML = '<span class="spin spin-sm spin-primary" style="width:22px;height:22px"></span>'
 	pageContent.innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
 	if (whitch == 1) {
 		xlecx.getGroup(name, {page:page, category:true}, (err, result) => {
@@ -734,7 +734,7 @@ function xlecxSearch(text, page, makeNewPage, updateTabIndex) {
 
 	var tab = document.getElementById('browser-tabs').querySelector(`[pi="${pageId}"]`)
 	var tabArea = tab.getElementsByTagName('span')[0]
-	tabArea.innerHTML = '<span class="spin spin-primary" style="width:22px;height:22px"></span>'
+	tabArea.innerHTML = '<span class="spin spin-sm spin-primary" style="width:22px;height:22px"></span>'
 	pageContent.innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
 	xlecx.search(text, {page:page, category:true}, (err, result) => {
 		tab.setAttribute('isReloading', false)

@@ -11,7 +11,6 @@ const defaultSetting = {
 	"hover_downloader": true,
 	"max_per_page": 18,
 	"img_graphic": 1,
-	"pagination_width": 5,
 	"notification_download_finish": true,
 	"lazy_loading": true,
 	"developer_mode": false
@@ -259,6 +258,17 @@ function openSelect(who) {
 	overflow.querySelector(`[onclick="select(this, ${who.getAttribute('value')})"]`).setAttribute('active', '')
 }
 
+function inputLimit(who, max) {
+	if (who == null || max == null) return
+	var value = who.value
+	console.log(value)
+
+	if (value > max)
+		who.value = max
+	else if (value < 1)
+		who.value = 1
+}
+
 // Alerts
 function PopAlert(txt, style) {
 	txt = txt || null
@@ -283,8 +293,16 @@ function PopAlert(txt, style) {
 }
 
 // Apply Setting
+if (typeof(setting.comic_panel_theme) != 'number' || setting.comic_panel_theme < 0) setting.comic_panel_theme = 0
+if (setting.comic_panel_theme > 1) setting.comic_panel_theme = 1
+if (typeof(setting.img_graphic) != 'number' || setting.img_graphic < 0) setting.img_graphic = 0
+if (setting.img_graphic > 1) setting.img_graphic = 1
+if (setting.max_per_page < 1) setting.max_per_page = 1
+if (typeof(setting.max_per_page) != 'number') setting.max_per_page = 18
 if (setting.img_graphic > 1) setting.img_graphic = 1
 if (setting.img_graphic < 0) setting.img_graphic = 0
+if (typeof(setting.notification_download_finish) != 'boolean') setting.lazy_loading = true
+if (typeof(setting.lazy_loading) != 'boolean') setting.lazy_loading = true
 if (setting.lazy_loading == false) imageLazyLoadingOptions.rootMargin = "0px 0px 1200px 0px"
 
 // Make Tabs Draggable
@@ -422,7 +440,7 @@ function loadComics(page, search) {
 }
 
 function pagination(total_pages, page) {
-	var arr = [], min = 1, max = 1, bdot = false, fdot = false, bfirst = false, ffirst = false, pagination_width = setting.pagination_width
+	var arr = [], min = 1, max = 1, bdot = false, fdot = false, bfirst = false, ffirst = false, pagination_width = 5
 	if (total_pages > pagination_width - 1) {
 		if (page == 1) {
 			min = 1
@@ -612,10 +630,6 @@ function openComic(id) {
 		})
 	}
 
-	if (setting.comic_panel_theme == 1)
-		comic_panel.classList.add('comic-panel-darkmode')
-	else
-		comic_panel.classList.remove('comic-panel-darkmode')
 	comic_panel.setAttribute('cid', id)
 	findComic()
 }
@@ -893,10 +907,6 @@ function MakeDownloadList(name, id, list) {
 	list = list || null
 	if (name == null || id == null || list == null) return
 	var downloader = document.getElementById('downloader')
-	if (setting.downloader_mode == 0)
-		downloader.classList.add('downloader-fixed')
-	else
-		downloader.classList.remove('downloader-fixed')
 	downloader.style.display = 'block'
 	var element = document.createElement('div')
 	if (name.length > 19) name = name.substr(0, 16)+'...'
@@ -1492,8 +1502,30 @@ async function CreateComic(index, gottenResult, gottenQuality, images, siteIndex
 }
 
 // Setting
-function openSetting() {
-	document.getElementById('setting-panel').style.display = 'block'
+function setLuanchTimeSettings() {
+	var s_comic_panel_theme = document.getElementById('s_comic_panel_theme')
+	var s_img_graphic = document.getElementById('s_img_graphic')
+
+	s_comic_panel_theme.setAttribute('value', setting.comic_panel_theme)
+	s_img_graphic.setAttribute('value', setting.img_graphic)
+
+	s_comic_panel_theme.getElementsByTagName('div')[0].textContent = s_comic_panel_theme.getElementsByTagName('div')[1].querySelector(`[onclick="select(this, ${setting.comic_panel_theme})"]`).textContent
+	s_img_graphic.getElementsByTagName('div')[0].textContent = s_img_graphic.getElementsByTagName('div')[1].querySelector(`[onclick="select(this, ${setting.img_graphic})"]`).textContent
+
+	document.getElementById('s_max_per_page').value = setting.max_per_page
+
+	if (setting.hover_downloader == false)
+		document.getElementById('downloader').classList.add('downloader-fixed')
+	else
+		document.getElementById('s_hover_downloader').checked = true
+	
+	if (setting.notification_download_finish == true) document.getElementById('s_notification_download_finish').checked = true
+
+	if (setting.lazy_loading == true) document.getElementById('s_lazy_loading').checked = true
+
+
+	if (setting.comic_panel_theme == 1)
+		document.getElementById('comic-panel').classList.add('comic-panel-darkmode')
 }
 
 function saveSetting() {
@@ -1513,5 +1545,6 @@ function test() {
 
 document.addEventListener('readystatechange', e => {
 	makeDatabaseIndexs()
+	setLuanchTimeSettings()
 	loadComics()
 })
