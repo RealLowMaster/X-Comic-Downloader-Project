@@ -372,7 +372,7 @@ function loadComics(page, search) {
 	var comic_container = document.getElementById('comic-container')
 	comic_container.innerHTML = ''
 	comic_container.setAttribute('page', page)
-	var min = 0, max, allPages, id, name, image, pages, html = ''
+	var min = 0, max, allPages, id, name, image, pages, repair, html = ''
 	var max_per_page = setting.max_per_page
 
 	const working = (doc) => {
@@ -389,14 +389,19 @@ function loadComics(page, search) {
 			if (id == null) return
 			name = doc[i].n || null
 			if (name == null) return
-			image = doc[i].i[0] || null
-			if (typeof(image) == 'object')
-				image = 'Image/no-img-300x300.png'
-			else
-				image = `${dirUL}/${image}`
-			pages = doc[i].i.length || null
-			if (pages == null) { PopAlert(`PostID: ${id} Has No Image.`, 'danger') }
-			html += `<div class="comic" onclick="openComic(${id})"><img src="${image}" loading="lazy"><span>${pages}</span><p>${name}</p></div>`
+			repair = doc[i].m || null
+			image = doc[i].i || null
+			if (repair == null || repair.length == 0)
+				image = `${dirUL}/${image}-0.${doc[i].f[0][2]}`
+			else {
+				if (repair.indexOf(0) > -1)
+					image = 'Image/no-img-300x300.png'
+				else
+					image = `${dirUL}/${image}-0.${doc[i].f[0][2]}`
+			}
+				
+			
+			html += `<div class="comic" onclick="openComic(${id})"><img src="${image}" loading="lazy"><span>${doc[i].c}</span><p>${name}</p></div>`
 		}
 		comic_container.innerHTML = html
 		
@@ -498,7 +503,7 @@ function reloadLoadingComics() {
 
 function openComic(id) {
 	id = id || null
-	if (id == null) { error('Comic not Found.'); return }
+	if (id == null) { error('Id Can\'t be Null.'); return }
 	var comic_panel = document.getElementById('comic-panel')
 	var title_container = document.getElementById('c-p-t')
 	var groups_container = document.getElementById('c-p-g')
@@ -506,7 +511,7 @@ function openComic(id) {
 	var parodies_container = document.getElementById('c-p-p')
 	var tags_container = document.getElementById('c-p-ts')
 	var image_container = document.getElementById('c-p-i')
-	var name, images, html = ''
+	var name, image, ImagesCount, formats, formatIndex = 0, html = ''
 
 	title_container.textContent = ''
 	groups_container.innerHTML = ''
@@ -608,15 +613,42 @@ function openComic(id) {
 			if (err) { error(err); return }
 			name = doc.n || null
 			if (name == null) return
-			images = doc.i
+			ImagesCount = doc.c || null
+			if (ImagesCount == null) return
+			formats = doc.f || null
+			if (formats == null) return
+			image = doc.i
 
 			title_container.textContent = name
 
-			for (var i in images) {
-				if (typeof(images[i]) == 'object') {
-					html += `<div class="repair-image" id="${i}"><p>Image hasn't Been Download Currectly.</p><button onclick="repairImage(${i})">Repair</button></div>`
-				} else {
-					html += `<img src="${dirUL}/${images[i]}" loading="lazy">`
+			var lastIndex = formats[0][1]
+			var thisForamat = formats[0][2]
+			var repair = doc.m || null
+			if (repair == null || repair.length == 0) {
+				for (var i = 0; i < ImagesCount; i++) {
+					if (i <= lastIndex)
+						html += `<img src="${dirUL}/${image}-${i}.${thisForamat}" loading="lazy">`
+					else {
+						formatIndex++
+						lastIndex = formats[formatIndex][1]
+						thisForamat = formats[formatIndex][2]
+						html += `<img src="${dirUL}/${image}-${i}.${thisForamat}" loading="lazy">`
+					}
+				}
+			} else {
+				for (var i = 0; i < ImagesCount; i++) {
+					if (repair.indexOf(i) > -1) {
+						html += `<div class="repair-image" id="${i}"><p>Image hasn't Been Download Currectly.</p><button onclick="repairImage(${i}, ${repair.indexOf(i)}, ${image})">Repair</button></div>`
+					} else {
+						if (i <= lastIndex)
+							html += `<img src="${dirUL}/${image}-${i}.${thisForamat}" loading="lazy">`
+						else {
+							formatIndex++
+							lastIndex = formats[formatIndex][1]
+							thisForamat = formats[formatIndex][2]
+							html += `<img src="${dirUL}/${image}-${i}.${thisForamat}" loading="lazy">`
+						}
+					}
 				}
 			}
 			image_container.innerHTML = html
@@ -655,51 +687,85 @@ function closeComicPanel() {
 	comic_panel.setAttribute('cid', null)
 }
 
-async function repairImageUpdateDatabase(comic_id, imageIndex, imageName, passImageList) {
-	passImageList[imageIndex] = imageName
-	await db.comics.update({_id:comic_id}, { $set: {i:passImageList} }, {}, (err) => {
-		if (err) error(err)
-		var image_container = document.getElementById('c-p-i')
-		var element = document.createElement('img')
-		element.setAttribute('src', `${dirUL}/${imageName}`)
-		var repairElement = document.getElementById(imageIndex)
-		image_container.insertBefore(element, repairElement)
-		repairElement.remove()
+async function repairImageUpdateDatabase(comic_id, imageIndex, imageBaseName, imageFormat, repairIndex, passRepair, passRepairURLs) {
+	var newRepair = [], newRepairURLs = [], rawRepair = 0, rawRepairURLs = 0
+
+	for (var j in passRepair) {
+		if (passRepair != null && j != repairIndex) rawRepair++
+	}
+	for (var j in passRepairURLs) {
+		if (passRepairURLs != null && j != repairIndex) rawRepairURLs++
+	}
+
+	for (var i in passRepair) {
+		if (i != repairIndex)
+			newRepair.push(passRepair[i])
+		else {
+			if (rawRepair == 0)
+				newRepair = null
+			else {
+				if (i != passRepair.length - 1) newRepair.push(null)
+			}
+		}
+	}
+	for (var i in passRepairURLs) {
+		if (i != repairIndex)
+			newRepairURLs.push(passRepairURLs[i])
+		else {
+			if (rawRepairURLs == 0)
+				newRepairURLs = null
+			else {
+				if (i != passRepairURLs.length - 1) newRepairURLs.push(null)
+			}
+		}
+	}
+
+	await db.comics.update({_id:comic_id}, { $set: {m:newRepair, r:newRepairURLs} }, {}, err => {
+		if (err) { error(err); return }
+		var repairElement = document.getElementById(imageIndex) || null
+		if (repairElement != null) {
+			var newImage = document.createElement('img')
+			newImage.setAttribute('src', `${dirUL}/${imageBaseName}-${imageIndex}.${imageFormat}`)
+			document.getElementById('c-p-i').insertBefore(newImage, repairElement)
+			repairElement.remove()
+		}
 	})
 }
 
-async function repairImageFindDatabase(comic_id, imageIndex, imageName) {
+async function repairImageFindDatabase(comic_id, repairIndex, imageFormat, imageIndex) {
 	await db.comics.findOne({_id:comic_id}, (err, doc) => {
 		if (err) { error(err); return }
-		repairImageUpdateDatabase(comic_id, imageIndex, imageName, doc.i)
+		repairImageUpdateDatabase(comic_id, imageIndex, doc.i, imageFormat, repairIndex, doc.m, doc.r)
 	})
 }
 
-async function repairImageDownloadImage(comic_id, imageIndex, imageUrl) {
-	const time = new Date().getTime()
-	var saveName = `r${time}-${imageIndex}.${fileExt(imageUrl)}`
+async function repairImageDownloadImage(comic_id, imageIndex, imageUrl, repairIndex, imageId) {
+	var imageFormat = fileExt(imageUrl)
+	var saveName = `${imageId}-${imageIndex}.${imageFormat}`
 	var option = {
 		url: imageUrl,
 		dest: dirUL+`/${saveName}`
 	}
 
 	await ImageDownloader.image(option).then(({ filename }) => {
-		repairImageFindDatabase(comic_id, imageIndex, saveName)
+		repairImageFindDatabase(comic_id, repairIndex, imageFormat, imageIndex)
 	}).catch((err) => {
-		error('Sorry There is a Problem in Repairing Image, Please check Internet Connection.<br>'+err)
-		document.getElementById(imageIndex).innerHTML = `<p>Image hasn't Been Download Currectly.</p><button onclick="${imageIndex}">Repair</button>`
+		PopAlert('Sorry There is a Problem in Repairing Image, Please check Internet Connection.<br>'+err, 'danger')
+		document.getElementById(imageIndex).innerHTML = `<p>Image hasn't Been Download Currectly.</p><button onclick="repairImage(${imageIndex}, ${repairIndex}, ${imageId})">Repair</button>`
 	})
 }
 
-async function repairImage(imageIndex) {
+async function repairImage(imageIndex, repairIndex, imageId) {
 	var comic_id = Number(document.getElementById('comic-panel').getAttribute('cid'))
 	var repairElement = document.getElementById(imageIndex)
 	repairElement.innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
 	await db.comics.findOne({_id:comic_id}, (err, doc) => {
 		if (err) { error(err); return }
-		var imageUrl = doc.i[imageIndex][0] || null
+		var imageUrl = doc.r || null
 		if (imageUrl == null) { error('Image Url Is Missed!'); return }
-		repairImageDownloadImage(comic_id, imageIndex, imageUrl)
+		imageUrl = imageUrl[repairIndex]
+		if (imageUrl == null) { error('Image Url Is Missed!'); return }
+		repairImageDownloadImage(comic_id, imageIndex, imageUrl, repairIndex, imageId)
 	})
 }
 
@@ -915,7 +981,7 @@ function MakeDownloadList(name, id, list) {
 	downloadingList[index] = [0, [], new Date().getTime(), [], id]
 	element.setAttribute('id', downloadingList[index][2])
 	element.setAttribute('i', index)
-	element.innerHTML = `<span class="spin spin-fast spin-success"></span><p>${name} <span>(0/${list.length})</span></p><div><div></div></div>`
+	element.innerHTML = `<span class="spin spin-sm spin-fast spin-success"></span><p>${name} <span>(0/${list.length})</span></p><div><div></div></div>`
 	downloader.appendChild(element)
 	downloadingList[index][1] = list
 
@@ -1008,6 +1074,7 @@ function AddToHave(site, id) {
 	CreateHave(site, id)
 	var page = document.getElementById(document.getElementById('browser-tabs').getAttribute('pid'))
 	page.getElementsByClassName('browser-comic-have')[0].innerHTML = '<span>You Have This Comic.<span>'
+	PopAlert('Comic Added To Have List.')
 }
 
 // Add New Groups
@@ -1572,9 +1639,35 @@ function closeSetting() {
 }
 
 function test() {
-	xlecx.getTag('stuck in wall', {page:2, category:true}, (err, doc) => {
+	console.log(tabs)
+}
+
+function mybeNeedable() {
+	db.comics.find({}, (err, doc) => {
 		if (err) { error(err); return }
-		console.log(doc)
+		for (var i = 0; i < doc.length; i++) {
+			var formatList = [], firstIndex = 0, lastIndex = 0, thisFormat
+			thisFormat = fileExt(doc[i].i[0])
+			for (var j = 1; j < doc[i].i.length; j++) {
+				lastIndex++
+				if (fileExt(doc[i].i[j]) == thisFormat) {
+					if (j == doc[i].i.length - 1)
+						formatList.push([firstIndex, lastIndex, thisFormat])
+				} else {
+					formatList.push([firstIndex, lastIndex - 1, thisFormat])
+
+					thisFormat = fileExt(doc[i].i[j])
+					firstIndex = lastIndex
+
+					if (j == doc[i].i.length - 1)
+						formatList.push([firstIndex, lastIndex, thisFormat])
+				}
+			}
+			
+			db.test.insert({n:doc[i].n, i:doc[i].i[0].replace('-0.jpg', '').replace('-0.jpeg', '').replace('-0.png', '').replace('-0.gif', '').replace('-0.webp', ''), c:doc[i].i.length, f:formatList, q:doc[i].q, s:doc[i].s, p:doc[i].p, _id:doc[i]._id}, err => {
+				if (err) { error(err); return}
+			})
+		}
 	})
 }
 

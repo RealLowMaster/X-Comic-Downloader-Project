@@ -813,10 +813,10 @@ function xlecxSearch(text, page, makeNewPage, updateTabIndex) {
 }
 
 function xlecxDownloader(id) {
-	if (checkIsDownloading(id)) { error('You are Downloading This Comic.'); return }
+	if (checkIsDownloading(id)) { PopAlert('You are Downloading This Comic.', 'danger'); return }
 	db.have.count({s:0, i:id}, (err, num) => {
 		if (err) { error(err); return }
-		if (num > 0) { error('You Already Have This Comic.'); return }
+		if (num > 0) { PopAlert('You Already Have This Comic.', 'danger'); return }
 		xlecx.getComic(id, false, (err, result) => {
 			if (err) { error(err); return }
 			

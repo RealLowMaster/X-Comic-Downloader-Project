@@ -421,7 +421,7 @@ img {
 }
 
 .spin-success {
-	border-color: #05a451;
+	border-top-color: #05a451;
 }
 
 @keyframes spin {
