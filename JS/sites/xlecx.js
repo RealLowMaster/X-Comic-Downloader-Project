@@ -283,17 +283,44 @@ function xlecxOpenPost(makeNewPage, id, updateTabIndex) {
 						if (err) { error(err); return }
 						name = doc.n || null
 						if (name == null) return
-						images = doc.i
+						ImagesCount = doc.c || null
+						if (ImagesCount == null) return
+						formats = doc.f || null
+						if (formats == null) return
+						image = doc.i
+
 						tab.setAttribute('isReloading', false)
-	
 						tabArea.textContent = name
 						title_container.textContent = name
-	
-						for (var i in images) {
-							if (typeof(images[i]) == 'object') {
-								html += `<div class="repair-image" id="${i}"><p>Image hasn't Been Download Currectly.</p><button onclick="repairImage(${i})">Repair</button></div>`
-							} else {
-								html += `<img src="${dirUL}/${images[i]}">`
+
+						var lastIndex = formats[0][1]
+						var thisForamat = formats[0][2]
+						var repair = doc.m || null
+						if (repair == null || repair.length == 0) {
+							for (var i = 0; i < ImagesCount; i++) {
+								if (i <= lastIndex)
+									html += `<img src="${dirUL}/${image}-${i}.${thisForamat}" loading="lazy">`
+								else {
+									formatIndex++
+									lastIndex = formats[formatIndex][1]
+									thisForamat = formats[formatIndex][2]
+									html += `<img src="${dirUL}/${image}-${i}.${thisForamat}" loading="lazy">`
+								}
+							}
+						} else {
+							for (var i = 0; i < ImagesCount; i++) {
+								if (repair.indexOf(i) > -1) {
+									html += `<div class="repair-image" id="${i}"><p>Image hasn't Been Download Currectly.</p><button onclick="repairImage(${i}, ${repair.indexOf(i)}, ${image})">Repair</button></div>`
+								} else {
+									if (i <= lastIndex)
+										html += `<img src="${dirUL}/${image}-${i}.${thisForamat}" loading="lazy">`
+									else {
+										formatIndex++
+										lastIndex = formats[formatIndex][1]
+										thisForamat = formats[formatIndex][2]
+										html += `<img src="${dirUL}/${image}-${i}.${thisForamat}" loading="lazy">`
+									}
+								}
 							}
 						}
 						image_container.innerHTML = html

@@ -978,7 +978,7 @@ function MakeDownloadList(name, id, list) {
 	if (name.length > 19) name = name.substr(0, 16)+'...'
 	var index = downloadingList.length
 
-	downloadingList[index] = [0, [], new Date().getTime(), [], id]
+	downloadingList[index] = [0, [], new Date().getTime(), id, [], []]
 	element.setAttribute('id', downloadingList[index][2])
 	element.setAttribute('i', index)
 	element.innerHTML = `<span class="spin spin-sm spin-fast spin-success"></span><p>${name} <span>(0/${list.length})</span></p><div><div></div></div>`
@@ -1001,20 +1001,54 @@ async function comicDownloader(index, result, quality, siteIndex) {
 	var percentage = (100 / max) * downloadingList[index][0]
 	var downloaderRow = document.getElementById(`${downloadingList[index][2]}`)
 	await ImageDownloader.image(option).then(({ filename }) => {
-		downloadingList[index][3][downloadingList[index][0]] = saveName
 		downloaderRow.getElementsByTagName('div')[0].getElementsByTagName('div')[0].style.width = percentage+'%'
 		downloaderRow.getElementsByTagName('p')[0].getElementsByTagName('span')[0].textContent = `(${downloadingList[index][0]}/${max})`
 		if (downloadingList[index][0] == max) {
-			CreateComic(index, result, quality, downloadingList[index][3], siteIndex, downloadingList[index][4], true)
+			var formatList = [], firstIndex = 0, lastIndex = 0
+			var thisFormat = fileExt(downloadingList[index][1][0])
+			for (var j = 1; j < downloadingList[index][1].length; j++) {
+				lastIndex++
+				if (fileExt(downloadingList[index][1][j]) == thisFormat) {
+					if (j == downloadingList[index][1].length - 1)
+						formatList.push([firstIndex, lastIndex, thisFormat])
+				} else {
+					formatList.push([firstIndex, lastIndex - 1, thisFormat])
+		
+					thisFormat = fileExt(downloadingList[index][1][j])
+					firstIndex = lastIndex
+		
+					if (j == downloadingList[index][1].length - 1)
+						formatList.push([firstIndex, lastIndex, thisFormat])
+				}
+			}
+			CreateComic(index, result, quality, downloadingList[index][2], siteIndex, downloadingList[index][3], downloadingList[index][1].length, formatList, downloadingList[index][4], downloadingList[index][5], true)
 		} else {
 			comicDownloader(index, result, quality, siteIndex)
 		}
 	}).catch(err => {
-		downloadingList[index][3][downloadingList[index][0]] = [url]
 		downloaderRow.getElementsByTagName('div')[0].getElementsByTagName('div')[0].style.width = percentage+'%'
 		downloaderRow.getElementsByTagName('p')[0].getElementsByTagName('span')[0].textContent = `(${downloadingList[index][0]}/${max})`
+		downloadingList[index][4].push(downloadingList[index][0] - 1)
+		downloadingList[index][5].push(downloadingList[index][1][downloadingList[index][0] - 1])
 		if (downloadingList[index][0] == max) {
-			CreateComic(index, result, quality, downloadingList[index][3], siteIndex, downloadingList[index][4], true)
+			var formatList = [], firstIndex = 0, lastIndex = 0
+			var thisFormat = fileExt(downloadingList[index][1][0])
+			for (var j = 1; j < downloadingList[index][1].length; j++) {
+				lastIndex++
+				if (fileExt(downloadingList[index][1][j]) == thisFormat) {
+					if (j == downloadingList[index][1].length - 1)
+						formatList.push([firstIndex, lastIndex, thisFormat])
+				} else {
+					formatList.push([firstIndex, lastIndex - 1, thisFormat])
+		
+					thisFormat = fileExt(downloadingList[index][1][j])
+					firstIndex = lastIndex
+		
+					if (j == downloadingList[index][1].length - 1)
+						formatList.push([firstIndex, lastIndex, thisFormat])
+				}
+			}
+			CreateComic(index, result, quality, downloadingList[index][2], siteIndex, downloadingList[index][3], downloadingList[index][1].length, formatList, downloadingList[index][4], downloadingList[index][5], true)
 		} else {
 			comicDownloader(index, result, quality, siteIndex)
 		}
@@ -1482,11 +1516,24 @@ async function CreateTag(tagList, index, addToList, comicId, tagListIndex, repai
 }
 
 // Add New Comic
-async function CreateComic(index, gottenResult, gottenQuality, images, siteIndex, comic_id, isDownloading) {
+async function CreateComic(index, gottenResult, quality, image, siteIndex, comic_id, imagesCount, formats, repair, repairURLs, isDownloading) {
 	isDownloading = isDownloading || false
 	await db.index.findOne({_id:1}, (err, cIndex) => {
 		if (err) { error(err); return }
-		db.comics.insert({n:gottenResult.title.toLowerCase(), i:images, q:gottenQuality, s:siteIndex, p:comic_id, _id:cIndex.i}, (err, doc) => {
+		const insertInfo = {}
+
+		insertInfo.n = gottenResult.title.toLowerCase()
+		insertInfo.i = image
+		insertInfo.c = imagesCount
+		insertInfo.f = formats
+		if (repair != null && repair.length > 0) insertInfo.m = repair
+		if (repairURLs != null && repairURLs.length > 0) insertInfo.r = repairURLs
+		insertInfo.q = quality
+		insertInfo.s = siteIndex
+		insertInfo.p = comic_id
+		insertInfo._id = cIndex.i
+		console.log(insertInfo)
+		db.comics.insert(insertInfo, (err, doc) => {
 			if (err) { error(err); return }
 			update_index(cIndex.i, 1)
 			var id = doc._id
@@ -1640,35 +1687,6 @@ function closeSetting() {
 
 function test() {
 	console.log(tabs)
-}
-
-function mybeNeedable() {
-	db.comics.find({}, (err, doc) => {
-		if (err) { error(err); return }
-		for (var i = 0; i < doc.length; i++) {
-			var formatList = [], firstIndex = 0, lastIndex = 0, thisFormat
-			thisFormat = fileExt(doc[i].i[0])
-			for (var j = 1; j < doc[i].i.length; j++) {
-				lastIndex++
-				if (fileExt(doc[i].i[j]) == thisFormat) {
-					if (j == doc[i].i.length - 1)
-						formatList.push([firstIndex, lastIndex, thisFormat])
-				} else {
-					formatList.push([firstIndex, lastIndex - 1, thisFormat])
-
-					thisFormat = fileExt(doc[i].i[j])
-					firstIndex = lastIndex
-
-					if (j == doc[i].i.length - 1)
-						formatList.push([firstIndex, lastIndex, thisFormat])
-				}
-			}
-			
-			db.test.insert({n:doc[i].n, i:doc[i].i[0].replace('-0.jpg', '').replace('-0.jpeg', '').replace('-0.png', '').replace('-0.gif', '').replace('-0.webp', ''), c:doc[i].i.length, f:formatList, q:doc[i].q, s:doc[i].s, p:doc[i].p, _id:doc[i]._id}, err => {
-				if (err) { error(err); return}
-			})
-		}
-	})
 }
 
 document.addEventListener('readystatechange', e => {
