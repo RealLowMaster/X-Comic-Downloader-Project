@@ -19,8 +19,7 @@
   "license": "ISC",
   "dependencies": {
     "image-downloader": "^4.0.2",
-    "nedb": "^1.8.0",
-    "v8-compile-cache": "^2.3.0"
+    "nedb": "^1.8.0"
   },
   "devDependencies": {
     "electron": "^13.1.1",

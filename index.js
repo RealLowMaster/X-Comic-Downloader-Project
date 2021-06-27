@@ -1,13 +1,15 @@
 const { app, BrowserWindow } = require('electron')
-require('v8-compile-cache');
+require('v8-compile-cache')
 
 function createWindow () {
 	const win = new BrowserWindow({
+		icon: __dirname+'/Image/favicon.ico',
 		width: 800,
 		height: 600,
 		minWidth: 800,
 		minHeight: 600,
 		webPreferences: {
+			enableRemoteModule: true,
 			nodeIntegration: true,
 			contextIsolation: false
 		}
@@ -17,6 +19,8 @@ function createWindow () {
 
 	win.loadFile('index.html')
 }
+
+app.setAppUserModelId("X Comic Downloader")
 
 app.whenReady().then(() => {
 	createWindow()

@@ -1,9 +1,8 @@
+const { remote } = require('electron')
 const fs = require('fs')
 const path = require('path')
 const nedb = require('nedb')
 const ImageDownloader = require('image-downloader')
-const { type } = require('os')
-require('v8-compile-cache')
 const xlecx = new XlecxAPI()
 const defaultSetting = {
 	"comic_panel_theme": 0,
@@ -1605,8 +1604,14 @@ async function CreateComic(index, gottenResult, quality, image, siteIndex, comic
 			if (isDownloading == true) {
 				var shortName = gottenResult.title
 				if (shortName.length > 26) shortName = shortName.substr(0, 23)+'...'
-				if (setting.notification_download_finish == true)
-					PopAlert(`Comic (${shortName}) Downloaded.`)
+				PopAlert(`Comic (${shortName}) Downloaded.`)
+				if (setting.notification_download_finish == true && remote.Notification.isSupported()) {
+					const not = new Notification({ title: 'Comic Download Finished.', body: gottenResult.title, icon:'Image/favicon.ico'})
+					not.show()
+					setTimeout(() => {
+						not.close()
+					}, 2000)
+				}
 				document.getElementById(`${downloadingList[index][2]}`).remove()
 				downloadingList[index] = null
 				var downloader = document.getElementById('downloader')
@@ -1691,7 +1696,12 @@ function closeSetting() {
 }
 
 function test() {
-	console.log(tabs)
+	console.log(remote.Notification.isSupported())
+	const not = new remote.Notification({title: 'test', body:'body', icon:'Image/favicon.ico'})
+	not.show()
+	setTimeout(() => {
+		not.close()
+	}, 2000)
 }
 
 document.addEventListener('readystatechange', e => {
