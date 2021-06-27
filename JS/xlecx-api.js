@@ -74,18 +74,16 @@ class XlecxAPI {
 				for (var i=2; i<=13; i++) {
 					gg = li[i].getElementsByClassName('th-img img-resp-h')[0].getAttribute('href')
 					bb = li[i].getElementsByClassName('th-time icon-l')[0]
-					if (bb != undefined) {
-						bb = bb.textContent
-						bb = bb.replace(' img', '').replace(' images', '').replace(' pages', '')
-					} else {
-						bb = 0
-					}
+					if (bb != undefined)
+						bb = Number(bb.textContent.replace('img', '').replace('images', '').replace('pages', '').replace('page', '').replace(/ /g, ''))
+					else
+						bb = null
 
 					arr.random.push({
 						"id": this.lastSlash(gg),
 						"title": li[i].getElementsByClassName('th-title')[0].textContent,
 						"thumb": li[i].getElementsByTagName('img')[0].getAttribute('src').replace('http://xlecx.com', ''),
-						"pages": Number(bb),
+						"pages": bb,
 						"url": gg
 					})
 				}
@@ -99,19 +97,16 @@ class XlecxAPI {
 				for (var i=0; i<li.length; i++) {
 					gg = li[i].getElementsByClassName('th-img img-resp-h')[0].getAttribute('href')
 					bb = li[i].getElementsByClassName('th-time icon-l')[0]
-					if (bb != undefined) {
-						bb = bb.textContent
-						bb = bb.replace(' img', '')
-						bb = bb.replace(' images', '')
-						bb = bb.replace(' pages', '')
-					} else
-						bb = 0
+					if (bb != undefined)
+						bb = Number(bb.textContent.replace('img', '').replace('images', '').replace('pages', '').replace('page', '').replace(/ /g, ''))
+					else
+						bb = null
 					
 					arr.content.push({
 						"id": this.lastSlash(gg),
 						"title": li[i].getElementsByClassName('th-title')[0].textContent,
 						"thumb": li[i].getElementsByTagName('img')[0].getAttribute('src').replace('http://xlecx.com', ''),
-						"pages": Number(bb),
+						"pages": bb,
 						"url": gg
 					})
 				}
@@ -213,18 +208,16 @@ class XlecxAPI {
 				for (var i=2; i<=13; i++) {
 					gg = li[i].getElementsByClassName('th-img img-resp-h')[0].getAttribute('href')
 					bb = li[i].getElementsByClassName('th-time icon-l')[0]
-					if (bb != undefined) {
-						bb = bb.textContent
-						bb = bb.replace(' img', '').replace(' images', '').replace(' pages', '')
-					} else {
-						bb = 0
-					}
+					if (bb != undefined)
+						bb = Number(bb.textContent.replace('img', '').replace('images', '').replace('pages', '').replace('page', '').replace(/ /g, ''))
+					else
+						bb = null
 
 					arr.random.push({
 						"id": this.lastSlash(gg),
 						"title": li[i].getElementsByClassName('th-title')[0].textContent,
 						"thumb": li[i].getElementsByTagName('img')[0].getAttribute('src').replace('http://xlecx.com', ''),
-						"pages": Number(bb),
+						"pages": bb,
 						"url": gg
 					})
 				}
@@ -238,19 +231,16 @@ class XlecxAPI {
 				for (var i=0; i<li.length; i++) {
 					gg = li[i].getElementsByClassName('th-img img-resp-h')[0].getAttribute('href')
 					bb = li[i].getElementsByClassName('th-time icon-l')[0]
-					if (bb != undefined) {
-						bb = bb.textContent;
-						bb = bb.replace(' img', '')
-						bb = bb.replace(' images', '')
-						bb = bb.replace(' pages', '')
-					} else
-						bb = 0
+					if (bb != undefined)
+						bb = Number(bb.textContent.replace('img', '').replace('images', '').replace('pages', '').replace('page', '').replace(/ /g, ''))
+					else
+						bb = null
 	
 					arr.content.push({
 						"id": this.lastSlash(gg),
 						"title": li[i].getElementsByClassName('th-title')[0].textContent,
 						"thumb": li[i].getElementsByTagName('img')[0].getAttribute('src').replace('http://xlecx.com', ''),
-						"pages": Number(bb),
+						"pages": bb,
 						"url": gg
 					})
 				}
@@ -442,7 +432,6 @@ class XlecxAPI {
 			var htmlDoc = parser.parseFromString(html, 'text/html')
 			var gg = 0, bb = 0, li, arr = {}, hasPost = false
 			const slashReg = new RegExp('/', 'g')
-			console.log(slashReg)
 			
 			// Category
 			if (category == true) {
@@ -461,19 +450,16 @@ class XlecxAPI {
 				for (var i=0; i<li.length; i++) {
 					gg = li[i].getElementsByClassName('th-img img-resp-h')[0].getAttribute('href')
 					bb = li[i].getElementsByClassName('th-time icon-l')[0]
-					if (bb != undefined) {
-						bb = bb.textContent;
-						bb = bb.replace(' img', '')
-						bb = bb.replace(' images', '')
-						bb = bb.replace(' pages', '')
-					} else
-						bb = 0
+					if (bb != undefined)
+						bb = Number(bb.textContent.replace('img', '').replace('images', '').replace('pages', '').replace('page', '').replace(/ /g, ''))
+					else
+						bb = null
 	
 					arr.content.push({
 						"id": this.lastSlash(gg),
 						"title": li[i].getElementsByClassName('th-title')[0].textContent,
 						"thumb": li[i].getElementsByTagName('img')[0].getAttribute('src').replace('http://xlecx.com', ''),
-						"pages": Number(bb),
+						"pages": bb,
 						"url": gg
 					})
 				}
@@ -555,19 +541,16 @@ class XlecxAPI {
 				for (var i=0; i<li.length; i++) {
 					gg = li[i].getElementsByClassName('th-img img-resp-h')[0].getAttribute('href')
 					bb = li[i].getElementsByClassName('th-time icon-l')[0]
-					if (bb != undefined) {
-						bb = bb.textContent
-						bb = bb.replace(' img', '')
-						bb = bb.replace(' images', '')
-						bb = bb.replace(' pages', '')
-					} else
-						bb = 0
+					if (bb != undefined)
+						bb = Number(bb.textContent.replace('img', '').replace('images', '').replace('pages', '').replace('page', '').replace(/ /g, ''))
+					else
+						bb = null
 
 					arr.content.push({
 						"id": this.lastSlash(gg),
 						"title": li[i].getElementsByClassName('th-title')[0].textContent,
 						"thumb": li[i].getElementsByTagName('img')[0].getAttribute('src').replace('http://xlecx.com', ''),
-						"pages": Number(bb),
+						"pages": bb,
 						"url": gg
 					})
 				}
@@ -649,19 +632,16 @@ class XlecxAPI {
 				for (var i=0; i<li.length; i++) {
 					gg = li[i].getElementsByClassName('th-img img-resp-h')[0].getAttribute('href')
 					bb = li[i].getElementsByClassName('th-time icon-l')[0]
-					if (bb != undefined) {
-						bb = bb.textContent;
-						bb = bb.replace(' img', '')
-						bb = bb.replace(' images', '')
-						bb = bb.replace(' pages', '')
-					} else
-						bb = 0
+					if (bb != undefined)
+						bb = Number(bb.textContent.replace('img', '').replace('images', '').replace('pages', '').replace('page', '').replace(/ /g, ''))
+					else
+						bb = null
 
 					arr.content.push({
 						"id": this.lastSlash(gg),
 						"title": li[i].getElementsByClassName('th-title')[0].textContent,
 						"thumb": li[i].getElementsByTagName('img')[0].getAttribute('src').replace('http://xlecx.com', ''),
-						"pages": Number(bb),
+						"pages": bb,
 						"url": gg
 					})
 				}
@@ -743,19 +723,16 @@ class XlecxAPI {
 				for (var i=0; i<li.length; i++) {
 					gg = li[i].getElementsByClassName('th-img img-resp-h')[0].getAttribute('href')
 					bb = li[i].getElementsByClassName('th-time icon-l')[0]
-					if (bb != undefined) {
-						bb = bb.textContent
-						bb = bb.replace(' img', '')
-						bb = bb.replace(' images', '')
-						bb = bb.replace(' pages', '')
-					} else
-						bb = 0
+					if (bb != undefined)
+						bb = Number(bb.textContent.replace('img', '').replace('images', '').replace('pages', '').replace('page', '').replace(/ /g, ''))
+					else
+						bb = null
 
 					arr.content.push({
 						"id": this.lastSlash(gg),
 						"title": li[i].getElementsByClassName('th-title')[0].textContent,
 						"thumb": li[i].getElementsByTagName('img')[0].getAttribute('src').replace('http://xlecx.com', ''),
-						"pages": Number(bb),
+						"pages": bb,
 						"url": gg
 					})
 				}
@@ -843,19 +820,16 @@ class XlecxAPI {
 				for (var i=0; i<li.length; i++) {
 					gg = li[i].getElementsByClassName('th-img img-resp-h')[0].getAttribute('href')
 					bb = li[i].getElementsByClassName('th-time icon-l')[0]
-					if (bb != undefined) {
-						bb = bb.textContent
-						bb = bb.replace(' img', '')
-						bb = bb.replace(' images', '')
-						bb = bb.replace(' pages', '')
-					} else
-						bb = 0
+					if (bb != undefined)
+						bb = Number(bb.textContent.replace('img', '').replace('images', '').replace('pages', '').replace('page', '').replace(/ /g, ''))
+					else
+						bb = null
 					
 					arr.content.push({
 						"id": this.lastSlash(gg),
 						"title": li[i].getElementsByClassName('th-title')[0].textContent,
 						"thumb": li[i].getElementsByTagName('img')[0].getAttribute('src').replace('http://xlecx.com', ''),
-						"pages": Number(bb),
+						"pages": bb,
 						"url": gg
 					})
 				}

@@ -110,11 +110,8 @@ Did {
 }
 "https://xlecx.org/uploads/posts/2021-06/1623967989_darkness_002.jpg"
 Tasks => {
-    Add Image Name Then add length
     Ctrl + k | Ctrl + 0
-	Fix PageNumber = NaN => Artist Shadman
 	Reset Setting Scroll
-	Fix The Loud House Pagination
 	Make Waiting For Starting Download
     Update .btn Style
     Add Dipuclish Tab Ability

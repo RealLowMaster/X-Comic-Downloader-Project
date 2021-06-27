@@ -785,9 +785,15 @@ function closeBrowser() {
 	document.getElementById('browser').style.display = 'none'
 	thisSite = null
 	tabs = []
-	document.getElementById('browser-pages').innerHTML = ''
+	var pages = document.getElementById('browser-pages').children
+	for (var i = 0; i < pages.length; i++) {
+		pages[i].remove()
+	}
 	var browser_tabs = document.getElementById('browser-tabs')
-	browser_tabs.innerHTML = ''
+	var tabsHTML = browser_tabs.children
+	for (var i = 0; i < tabsHTML.length; i++) {
+		tabsHTML[i].remove()
+	}
 	browser_tabs.setAttribute('pid', '')
 	document.getElementById('add-new-tab').setAttribute('onclick', null)
 }
@@ -1532,7 +1538,6 @@ async function CreateComic(index, gottenResult, quality, image, siteIndex, comic
 		insertInfo.s = siteIndex
 		insertInfo.p = comic_id
 		insertInfo._id = cIndex.i
-		console.log(insertInfo)
 		db.comics.insert(insertInfo, (err, doc) => {
 			if (err) { error(err); return }
 			update_index(cIndex.i, 1)
