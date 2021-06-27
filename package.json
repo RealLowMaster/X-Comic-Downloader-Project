@@ -3,26 +3,17 @@
   "version": "1.0.0",
   "description": "A Software for Downloading Adult or Hentai Comic and Manga.",
   "main": "index.js",
+  "author": "Mehdi Enayatzadeh",
+  "license": "MIT",
   "scripts": {
     "start": "electron ."
   },
-  "keywords": [
-    "software",
-    "downloader",
-    "comic",
-    "hentai",
-    "adult",
-    "manage",
-    "nsfw"
-  ],
-  "author": "Mehdi Enayatzadeh",
-  "license": "ISC",
+  "devDependencies": {
+    "electron": "^13.1.4",
+    "electron-builder": "^22.11.7"
+  },
   "dependencies": {
     "image-downloader": "^4.0.2",
     "nedb": "^1.8.0"
-  },
-  "devDependencies": {
-    "electron": "^13.1.1",
-    "electron-wix-msi": "^3.2.0"
   }
 }
