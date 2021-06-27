@@ -23,9 +23,9 @@ const sites = [['xlecx', 'xlecxRepairComicInfoGetInfo({id}, {whitch})', 'xlecxSe
 var setting, tabs = [], db = {}, downloadingList = [], repairingComics = [], thisSite
 
 // Directions
-var dirRoot = path.join(__dirname)
-var dirDB = path.join(__dirname+'/db')
-var dirUL = path.join(__dirname+'/Download')
+var dirRoot = path.join(__dirname).replace('\\app.asar', '')
+var dirDB = dirRoot+'\\db'
+var dirUL = dirRoot+'\\Download'
 
 // Get Json
 function getJSON(src) {
@@ -1605,13 +1605,8 @@ async function CreateComic(index, gottenResult, quality, image, siteIndex, comic
 				var shortName = gottenResult.title
 				if (shortName.length > 26) shortName = shortName.substr(0, 23)+'...'
 				PopAlert(`Comic (${shortName}) Downloaded.`)
-				if (setting.notification_download_finish == true && remote.Notification.isSupported()) {
-					const not = new Notification({ title: 'Comic Download Finished.', body: gottenResult.title, icon:'Image/favicon.ico'})
-					not.show()
-					setTimeout(() => {
-						not.close()
-					}, 2000)
-				}
+				if (setting.notification_download_finish == true && remote.Notification.isSupported())
+					new remote.Notification({title: 'Comic Download Finished.', body: gottenResult.title, icon:'Image/favicon.ico'}).show()
 				document.getElementById(`${downloadingList[index][2]}`).remove()
 				downloadingList[index] = null
 				var downloader = document.getElementById('downloader')

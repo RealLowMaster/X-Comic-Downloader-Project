@@ -4,9 +4,39 @@
   "description": "A Software for Downloading Adult or Hentai Comic and Manga.",
   "main": "index.js",
   "author": "Mehdi Enayatzadeh",
-  "license": "MIT",
+  "license": "CC0-1.0",
+  "keywords": [
+    "software",
+    "nsfw",
+    "downloader",
+    "comic",
+    "manga",
+    "hentai",
+    "adult"
+  ],
+  "build": {
+    "appId": "com.x-comic-downloader.id",
+    "productName": "X Comic Downloader",
+    "copyright": "Copyright © 2021 Mehdi Enayatzadeh",
+    "compression": "store",
+    "directories": {
+      "output": "build"
+    },
+    "win": {
+      "target": "NSIS",
+      "publisherName": "Mehdi Enayatzadeh",
+      "icon": "Image/favicon.ico"
+    },
+    "asar": true,
+    "nsis": {
+      "allowToChangeInstallationDirectory": true,
+      "oneClick": false
+    }
+  },
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "build": "electron-builder --dir",
+    "dist": "electron-builder"
   },
   "devDependencies": {
     "electron": "^13.1.4",

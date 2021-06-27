@@ -1,1 +1,1 @@
-node build.js
+yarn run dist
