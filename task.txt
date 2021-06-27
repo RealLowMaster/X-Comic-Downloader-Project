@@ -111,7 +111,6 @@ Did {
 "https://xlecx.org/uploads/posts/2021-06/1623967989_darkness_002.jpg"
 Tasks => {
     Ctrl + k | Ctrl + 0
-	Reset Setting Scroll
 	Make Waiting For Starting Download
     Update .btn Style
     Add Dipuclish Tab Ability
