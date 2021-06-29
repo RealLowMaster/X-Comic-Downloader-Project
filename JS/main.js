@@ -17,15 +17,15 @@ const defaultSetting = {
 const imageLazyLoadingOptions = {
 	root: document.getElementById('browser-pages'),
 	threshold: 0,
-	rootMargin: "0px 0px 350px 0px"
+	rootMargin: "0px 0px 300px 0px"
 }
 const sites = [['xlecx', 'xlecxRepairComicInfoGetInfo({id}, {whitch})', 'xlecxSearch({text}, 1)', 'xlecxChangePage(1, false, true)']]
 var setting, tabs = [], db = {}, downloadingList = [], repairingComics = [], thisSite
 
 // Directions
-var dirRoot = path.join(__dirname).replace('\\app.asar', '')
-var dirDB = dirRoot+'\\db'
-var dirUL = dirRoot+'\\Download'
+const dirRoot = path.join(__dirname).replace('\\app.asar', '')
+const dirDB = dirRoot+'\\db'
+const dirUL = dirRoot+'\\Download'
 
 // Get Json
 function getJSON(src) {
@@ -45,7 +45,7 @@ if (!fs.existsSync(dirRoot+'/setting.cfg')) {
 	setting = defaultSetting
 	fs.writeFile(dirRoot+'/setting.cfg', JSON.stringify(defaultSetting), (err) => { if (err) error(err) })
 } else {
-	setting = getJSON(dirRoot+'./setting.cfg')
+	setting = getJSON(dirRoot+'/setting.cfg')
 }
 if (setting.max_per_page < 1) setting.max_per_page = 18
 

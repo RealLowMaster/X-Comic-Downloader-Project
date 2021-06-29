@@ -114,6 +114,7 @@ Tasks => {
 	Make Waiting For Starting Download
     Add Ability To Cancel Downlaod
     Remove Electron Window Frame And Make a Custome One
+    Add Report Bug Button
     Update .btn Style
     Add Dipuclish Tab Ability
     Add Repair All Crashed Image Button

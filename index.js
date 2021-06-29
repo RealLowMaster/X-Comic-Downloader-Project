@@ -1,4 +1,13 @@
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, globalShortcut } = require('electron')
+const path = require('path')
+const fs = require('fs')
+const dirRoot = path.join(__dirname).replace('\\app.asar', '')
+var setting = { "developer_mode": false }
+
+if (fs.existsSync(dirRoot+'/setting.cfg')) {
+	let settingFile = fs.readFileSync(dirRoot+'/setting.cfg')
+	setting = JSON.parse(settingFile)
+}
 
 function createWindow () {
 	const win = new BrowserWindow({
@@ -15,6 +24,16 @@ function createWindow () {
 	})
 
 	win.maximize(true)
+	win.setMenu(null)
+
+	if (setting.developer_mode == true) {
+		globalShortcut.register('CommandOrControl+Shift+I', () => {
+			win.webContents.toggleDevTools()
+		})
+		globalShortcut.register('CommandOrControl+R', () => {
+			win.webContents.reload()
+		})
+	}
 
 	win.loadFile('index.html')
 }
