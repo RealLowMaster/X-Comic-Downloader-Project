@@ -843,18 +843,17 @@ function activateTab(who) {
 	document.getElementById('browser-tool-search-input').value = who.getAttribute('search')
 }
 
-function checkTabLimit() {
-	var limit = 35
-	var tabs = document.getElementById('browser-tabs').getElementsByTagName('div').length
-
-	if (tabs >= limit)
+function IsTabsAtLimit() {
+	const limit = 35
+	const tabsCount = document.getElementById('browser-tabs').getElementsByTagName('div').length
+	if (tabsCount >= limit)
 		return true
 	else
 		return false
 }
 
 function createNewTab(history) {
-	if (checkTabLimit()) return null
+	if (IsTabsAtLimit()) return null
 
 	history = history || null
 	var tabIndex = tabs.length
@@ -1060,11 +1059,11 @@ async function comicDownloader(index, result, quality, siteIndex) {
 	})
 }
 
-function checkIsDownloading(id) {
+function IsDownloading(id) {
+	console.log(id)
 	var arr = []
 	for (var i in downloadingList) {
-		if (downloadingList[i] != null)
-			arr.push(downloadingList[i][4])
+		if (downloadingList[i] != null) arr.push(downloadingList[i][3])
 	}
 
 	if (arr.indexOf(id) > -1)
@@ -1083,10 +1082,10 @@ function browserError(err, id) {
 
 document.getElementById('browser-tool-search-form').addEventListener('submit', e => {
 	e.preventDefault()
-	var input = document.getElementById('browser-tool-search-input')
-	var browser_tabs = document.getElementById('browser-tabs')
-	var tabId = browser_tabs.getAttribute('pid')
-	var checkText = input.value.replace(/ /g, '')
+	const input = document.getElementById('browser-tool-search-input')
+	const browser_tabs = document.getElementById('browser-tabs')
+	const tabId = browser_tabs.getAttribute('pid')
+	const checkText = input.value.replace(/ /g, '')
 	if (checkText.length > 0) {
 		browser_tabs.querySelector(`[pi="${tabId}"]`).setAttribute('search', input.value)
 		eval(sites[thisSite][2].replace('{text}', `'${input.value}'`))

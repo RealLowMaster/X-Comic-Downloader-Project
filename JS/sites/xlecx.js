@@ -2,11 +2,14 @@
 function openXlecxBrowser() {
 	thisSite = 0
 	document.getElementById('add-new-tab').setAttribute('onclick', "createNewXlecxTab(createNewTab('xlecxChangePage(1, false, false)'))")
-	createNewXlecxTab(createNewTab('xlecxChangePage(1, false, false)'))
+	const id = createNewTab('xlecxChangePage(1, false, false)')
+	if (id == null) { PopAlert('You Can\'t Make Any More Tab.', 'danger'); return }
+	createNewXlecxTab(id)
 	document.getElementById('browser').style.display = 'grid'
 }
 
 function createNewXlecxTab(id, pageNumber) {
+	if (id == null) { PopAlert('You Can\'t Make Any More Tab.', 'danger'); return }
 	activateTab(document.getElementById('browser-tabs').querySelector(`[pi="${id}"]`))
 	var page = document.getElementById(id)
 	pageNumber = pageNumber || 1
@@ -135,6 +138,7 @@ function xlecxOpenPost(makeNewPage, id, updateTabIndex) {
 	var page, pageId
 	if (makeNewPage) {
 		pageId = createNewTab(`xlecxOpenPost(false, '${id}', false)`)
+		if (pageId == null) { PopAlert('You Can\'t Make Any More Tab.', 'danger'); return }
 		page = document.getElementById(pageId)
 	} else {
 		pageId = browser_tabs.getAttribute('pid')
@@ -481,6 +485,7 @@ function xlecxChangePage(page, makeNewPage, updateTabIndex) {
 	var id, pageContent
 	if (makeNewPage) {
 		id = createNewTab(`xlecxChangePage(${page}, false, false)`)
+		if (id == null) { PopAlert('You Can\'t Make Any More Tab.', 'danger'); return }
 		pageContent = document.getElementById(id)
 	} else {
 		var browser_tabs = document.getElementById('browser-tabs')
@@ -509,6 +514,7 @@ function xlecxOpenCategory(name, page, shortName, makeNewPage, updateTabIndex) {
 	var pageContent, pageId
 	if (makeNewPage) {
 		pageId = createNewTab(`xlecxOpenCategory('${name}', ${page}, '${shortName}', false, false)`)
+		if (pageId == null) { PopAlert('You Can\'t Make Any More Tab.', 'danger'); return }
 		pageContent = document.getElementById(pageId)
 	} else {
 		var browser_tabs = document.getElementById('browser-tabs')
@@ -546,6 +552,7 @@ function xlecxOpenCategory(name, page, shortName, makeNewPage, updateTabIndex) {
 			element.setAttribute('c', result.categories[i].url)
 			element.textContent = result.categories[i].name
 			element.onmousedown = e => {
+				e.preventDefault()
 				xlecxOpenCategory(e.target.getAttribute('c'), 1, e.target.textContent, checkMiddleMouseClick(e))
 			}
 			elementContainer.appendChild(element)
@@ -725,6 +732,7 @@ function xlecxOpenTag(name, page, whitch, makeNewPage, updateTabIndex) {
 	var pageContent, pageId
 	if (makeNewPage) {
 		pageId = createNewTab(`xlecxOpenTag('${name}', ${page}, ${whitch}, false, false)`)
+		if (pageId == null) { PopAlert('You Can\'t Make Any More Tab.', 'danger'); return }
 		pageContent = document.getElementById(pageId)
 	} else {
 		var browser_tabs = document.getElementById('browser-tabs')
@@ -794,27 +802,21 @@ function xlecxOpenTag(name, page, whitch, makeNewPage, updateTabIndex) {
 	}
 }
 
-function xlecxSearch(text, page, makeNewPage, updateTabIndex) {
+function xlecxSearch(text, page, updateTabIndex) {
 	text = text || null
 	if (text == null) return
 	page = page || 1
-	makeNewPage = makeNewPage || false
 	if (updateTabIndex == null) updateTabIndex = true
-	var pageContent, pageId
-	if (makeNewPage) {
-		pageId = createNewTab(`xlecxSearch('${text}', ${page}, false, false)`)
-		pageContent = document.getElementById(pageId)
-	} else {
-		var browser_tabs = document.getElementById('browser-tabs')
-		var pageId = browser_tabs.getAttribute('pid')
+	var pageContent
+	const browser_tabs = document.getElementById('browser-tabs')
+	const pageId = browser_tabs.getAttribute('pid')
 
-		pageContent = document.getElementById(pageId)
-		pageContent.innerHTML = ''
+	pageContent = document.getElementById(pageId)
+	pageContent.innerHTML = ''
 
-		if (updateTabIndex == true) {
-			var tabIndexId = Number(browser_tabs.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))
-			tabs[tabIndexId].addHistory(`xlecxSearch('${text}', ${page}, false, false)`)
-		}
+	if (updateTabIndex == true) {
+		var tabIndexId = Number(browser_tabs.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))
+		tabs[tabIndexId].addHistory(`xlecxSearch('${text}', ${page}, false)`)
 	}
 
 	var tab = document.getElementById('browser-tabs').querySelector(`[pi="${pageId}"]`)
@@ -842,6 +844,7 @@ function xlecxSearch(text, page, makeNewPage, updateTabIndex) {
 			element.setAttribute('c', result.categories[i].url)
 			element.textContent = result.categories[i].name
 			element.onmousedown = e => {
+				e.preventDefault()
 				xlecxOpenCategory(e.target.getAttribute('c'), 1, e.target.textContent, checkMiddleMouseClick(e))
 			}
 			elementContainer.appendChild(element)
@@ -909,7 +912,7 @@ function xlecxSearch(text, page, makeNewPage, updateTabIndex) {
 }
 
 function xlecxDownloader(id) {
-	if (checkIsDownloading(id)) { PopAlert('You are Downloading This Comic.', 'danger'); return }
+	if (IsDownloading(id)) { PopAlert('You are Downloading This Comic.', 'danger'); return }
 	db.have.count({s:0, i:id}, (err, num) => {
 		if (err) { error(err); return }
 		if (num > 0) { PopAlert('You Already Have This Comic.', 'danger'); return }

@@ -1,10 +1,13 @@
 {
   "name": "x-comic-downloader",
   "version": "1.0.0",
-  "description": "A Software for Downloading Adult or Hentai Comic and Manga.",
+  "description": "A Software for Downloading Adult and Hentai Comic and Manga and Manage Theme.",
   "main": "index.js",
-  "author": "Mehdi Enayatzadeh",
-  "license": "CC0-1.0",
+  "author": {
+    "name": "Mehdi Enayatzadeh"
+  },
+  "license": "MIT",
+  "private": true,
   "keywords": [
     "software",
     "nsfw",
@@ -45,5 +48,12 @@
   "dependencies": {
     "image-downloader": "^4.0.2",
     "nedb": "^1.8.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/LowMaster/x-comic-downloader.git"
+  },
+  "bugs": {
+    "url": "https://github.com/RealLowMaster/X-Comic-Downloader/issues"
   }
 }
