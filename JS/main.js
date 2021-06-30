@@ -1093,23 +1093,30 @@ document.getElementById('browser-tool-search-form').addEventListener('submit', e
 })
 
 // Add Comic To Have
-async function CreateHaveInsert(site, id, index) {
-	await db.have.insert({s:site, i:id, _id:index}, err => {
+async function CreateHaveInsert(site, id, index, downloaded) {
+	downloaded = downloaded || false
+	const insertInfo = {}
+	insertInfo.s = site
+	insertInfo.i = id
+	if (downloaded == true) insertInfo.d = 0
+	insertInfo._id = index
+	await db.have.insert(insertInfo, err => {
 		if (err) { error(err); return }
 		update_index(index, 11)
 	})
 }
 
-async function CreateHave(site, id) {
+async function CreateHave(site, id, downloaded) {
+	downloaded = downloaded || false
 	await db.index.findOne({_id:11}, (err, doc) => {
 		if (err) { error(err); return }
 		var index = doc.i
-		CreateHaveInsert(site, id, index)
+		CreateHaveInsert(site, id, index, downloaded)
 	})
 }
 
 function AddToHave(site, id) {
-	CreateHave(site, id)
+	CreateHave(site, id, false)
 	var page = document.getElementById(document.getElementById('browser-tabs').getAttribute('pid'))
 	page.getElementsByClassName('browser-comic-have')[0].innerHTML = '<span>You Have This Comic.<span>'
 	PopAlert('Comic Added To Have List.')
@@ -1545,7 +1552,7 @@ async function CreateComic(comicIndex, gottenResult, quality, image, siteIndex, 
 		const tags = gottenResult.tags || null
 
 		// Add Comic To Have
-		CreateHave(doc.s, doc.p)
+		CreateHave(doc.s, doc.p, true)
 
 		// Groups
 		if (groups != null) {
@@ -1687,7 +1694,7 @@ function closeSetting() {
 }
 
 function test() {
-	console.log(lastComicId, downloadingList)
+	console.log('test')
 }
 
 document.addEventListener('readystatechange', e => {

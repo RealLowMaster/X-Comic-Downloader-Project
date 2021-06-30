@@ -60,6 +60,7 @@ DB => {
     have 11 => {
         site = s
         comic_real_id = i
+        downloaded = d
         _id
     }
 }
@@ -111,10 +112,11 @@ Did {
 "https://xlecx.org/uploads/posts/2021-06/1623967989_darkness_002.jpg"
 Tasks => {
     Ctrl + k | Ctrl + 0
-    Make Downloading Indexing Work Better When Downloading Multi-comic
 	Make Waiting For Starting Download
+    Add Multi-Downloading Limit
     Add Ability To Cancel Downlaod
     Remove Electron Window Frame And Make a Custome One
+    Add Add To Have Button To Comic Overview
     Add Report Bug Button
     Add Remove Comic
     Update .btn Style
