@@ -20,7 +20,7 @@ const imageLazyLoadingOptions = {
 	rootMargin: "0px 0px 300px 0px"
 }
 const sites = [['xlecx', 'xlecxRepairComicInfoGetInfo({id}, {whitch})', 'xlecxSearch({text}, 1)', 'xlecxChangePage(1, false, true)']]
-var setting, tabs = [], db = {}, downloadingList = [], repairingComics = [], thisSite
+var setting, tabs = [], db = {}, downloadingList = [], repairingComics = [], thisSite, lastComicId
 
 // Directions
 const dirRoot = path.join(__dirname).replace('\\app.asar', '')
@@ -982,7 +982,8 @@ function MakeDownloadList(name, id, list) {
 	if (name.length > 19) name = name.substr(0, 16)+'...'
 	var index = downloadingList.length
 
-	downloadingList[index] = [0, [], new Date().getTime(), id, [], []]
+	downloadingList[index] = [0, [], new Date().getTime(), id, [], [], [], lastComicId]
+	lastComicId++
 	element.setAttribute('id', downloadingList[index][2])
 	element.setAttribute('i', index)
 	element.innerHTML = `<span class="spin spin-sm spin-fast spin-success"></span><p>${name} <span>(0/${list.length})</span></p><div><div></div></div>`
@@ -1025,7 +1026,7 @@ async function comicDownloader(index, result, quality, siteIndex) {
 						formatList.push([firstIndex, lastIndex, thisFormat])
 				}
 			}
-			CreateComic(index, result, quality, downloadingList[index][2], siteIndex, downloadingList[index][3], downloadingList[index][1].length, formatList, downloadingList[index][4], downloadingList[index][5], true)
+			CreateComic(downloadingList[index][7], result, quality, downloadingList[index][2], siteIndex, downloadingList[index][3], downloadingList[index][1].length, formatList, downloadingList[index][4], downloadingList[index][5], index, true)
 		} else {
 			comicDownloader(index, result, quality, siteIndex)
 		}
@@ -1052,7 +1053,7 @@ async function comicDownloader(index, result, quality, siteIndex) {
 						formatList.push([firstIndex, lastIndex, thisFormat])
 				}
 			}
-			CreateComic(index, result, quality, downloadingList[index][2], siteIndex, downloadingList[index][3], downloadingList[index][1].length, formatList, downloadingList[index][4], downloadingList[index][5], true)
+			CreateComic(downloadingList[index][7], result, quality, downloadingList[index][2], siteIndex, downloadingList[index][3], downloadingList[index][1].length, formatList, downloadingList[index][4], downloadingList[index][5], index, true)
 		} else {
 			comicDownloader(index, result, quality, siteIndex)
 		}
@@ -1060,7 +1061,6 @@ async function comicDownloader(index, result, quality, siteIndex) {
 }
 
 function IsDownloading(id) {
-	console.log(id)
 	var arr = []
 	for (var i in downloadingList) {
 		if (downloadingList[i] != null) arr.push(downloadingList[i][3])
@@ -1520,102 +1520,99 @@ async function CreateTag(tagList, index, addToList, comicId, tagListIndex, repai
 }
 
 // Add New Comic
-async function CreateComic(index, gottenResult, quality, image, siteIndex, comic_id, imagesCount, formats, repair, repairURLs, isDownloading) {
+async function CreateComic(comicIndex, gottenResult, quality, image, siteIndex, comic_id, imagesCount, formats, repair, repairURLs, index, isDownloading) {
+	if (typeof(index) != 'number') index = null
 	isDownloading = isDownloading || false
-	await db.index.findOne({_id:1}, (err, cIndex) => {
+	const insertInfo = {}
+
+	insertInfo.n = gottenResult.title.toLowerCase()
+	insertInfo.i = image
+	insertInfo.c = imagesCount
+	insertInfo.f = formats
+	if (repair != null && repair.length > 0) insertInfo.m = repair
+	if (repairURLs != null && repairURLs.length > 0) insertInfo.r = repairURLs
+	insertInfo.q = quality
+	insertInfo.s = siteIndex
+	insertInfo.p = comic_id
+	insertInfo._id = comicIndex
+	await db.comics.insert(insertInfo, (err, doc) => {
 		if (err) { error(err); return }
-		const insertInfo = {}
+		fix_index(1)
+		const id = doc._id
+		const groups = gottenResult.groups || null
+		const artists = gottenResult.artists || null
+		const parody = gottenResult.parody || null
+		const tags = gottenResult.tags || null
 
-		insertInfo.n = gottenResult.title.toLowerCase()
-		insertInfo.i = image
-		insertInfo.c = imagesCount
-		insertInfo.f = formats
-		if (repair != null && repair.length > 0) insertInfo.m = repair
-		if (repairURLs != null && repairURLs.length > 0) insertInfo.r = repairURLs
-		insertInfo.q = quality
-		insertInfo.s = siteIndex
-		insertInfo.p = comic_id
-		insertInfo._id = cIndex.i
-		db.comics.insert(insertInfo, (err, doc) => {
-			if (err) { error(err); return }
-			update_index(cIndex.i, 1)
-			var id = doc._id
-			var groups = gottenResult.groups || null
-			var artists = gottenResult.artists || null
-			var parody = gottenResult.parody || null
-			var tags = gottenResult.tags || null
+		// Add Comic To Have
+		CreateHave(doc.s, doc.p)
 
-			// Add Comic To Have
-			CreateHave(doc.s, doc.p)
-
-			// Groups
-			if (groups != null) {
-				var groupsList = []
-				for (var i in groups) {
-					groupsList.push(groups[i].name)
-				}
-				db.index.findOne({_id:6}, (err, doc) => {
-					if (err) { error(err); return }
-					var groupsIndex = doc.i
-					CreateGroup(groupsList, groupsIndex, true, id)
-				})
+		// Groups
+		if (groups != null) {
+			const groupsList = []
+			for (var i in groups) {
+				groupsList.push(groups[i].name)
 			}
+			db.index.findOne({_id:6}, (err, doc) => {
+				if (err) { error(err); return }
+				var groupsIndex = doc.i
+				CreateGroup(groupsList, groupsIndex, true, id)
+			})
+		}
 
-			// Artists
-			if (artists != null) {
-				var artistsList = []
-				for (var i in artists) {
-					artistsList.push(artists[i].name)
-				}
-				db.index.findOne({_id:2}, (err, doc) => {
-					if (err) { error(err); return }
-					var artistsIndex = doc.i
-					CreateArtist(artistsList, artistsIndex, true, id)
-				})
+		// Artists
+		if (artists != null) {
+			const artistsList = []
+			for (var i in artists) {
+				artistsList.push(artists[i].name)
 			}
+			db.index.findOne({_id:2}, (err, doc) => {
+				if (err) { error(err); return }
+				const artistsIndex = doc.i
+				CreateArtist(artistsList, artistsIndex, true, id)
+			})
+		}
 
-			// Parody
-			if (parody != null) {
-				var parodyList = []
-				for (var i in parody) {
-					parodyList.push(parody[i].name)
-				}
-				db.index.findOne({_id:8}, (err, doc) => {
-					if (err) { error(err); return }
-					var parodyIndex = doc.i
-					CreateParody(parodyList, parodyIndex, true, id)
-				})
+		// Parody
+		if (parody != null) {
+			const parodyList = []
+			for (var i in parody) {
+				parodyList.push(parody[i].name)
 			}
+			db.index.findOne({_id:8}, (err, doc) => {
+				if (err) { error(err); return }
+				var parodyIndex = doc.i
+				CreateParody(parodyList, parodyIndex, true, id)
+			})
+		}
 
-			// Tags
-			if (tags != null) {
-				var tagsList = []
-				for (var i in tags) {
-					tagsList.push(tags[i].name)
-				}
-				db.index.findOne({_id:4}, (err, doc) => {
-					if (err) { error(err); return }
-					var tagIndex = doc.i
-					CreateTag(tagsList, tagIndex, true, id)
-				})
+		// Tags
+		if (tags != null) {
+			const tagsList = []
+			for (var i in tags) {
+				tagsList.push(tags[i].name)
 			}
+			db.index.findOne({_id:4}, (err, doc) => {
+				if (err) { error(err); return }
+				var tagIndex = doc.i
+				CreateTag(tagsList, tagIndex, true, id)
+			})
+		}
 
-			if (isDownloading == true) {
-				var shortName = gottenResult.title
-				if (shortName.length > 26) shortName = shortName.substr(0, 23)+'...'
-				PopAlert(`Comic (${shortName}) Downloaded.`)
-				if (setting.notification_download_finish == true && remote.Notification.isSupported())
-					new remote.Notification({title: 'Comic Download Finished.', body: gottenResult.title, icon:'Image/favicon.ico'}).show()
-				document.getElementById(`${downloadingList[index][2]}`).remove()
-				downloadingList[index] = null
-				var downloader = document.getElementById('downloader')
-				if (downloader.children.length == 0) {
-					downloader.style.display = 'none'
-					downloadingList = []
-				}
+		if (isDownloading == true && index != null) {
+			var shortName = gottenResult.title
+			if (shortName.length > 26) shortName = shortName.substr(0, 23)+'...'
+			PopAlert(`Comic (${shortName}) Downloaded.`)
+			if (setting.notification_download_finish == true && remote.Notification.isSupported()) new remote.Notification({title: 'Comic Download Finished.', body: gottenResult.title, icon:'Image/favicon.ico'}).show()
+			document.getElementById(`${downloadingList[index][2]}`).remove()
+			downloadingList[index] = null
+			var downloader = document.getElementById('downloader')
+			if (downloader.children.length == 0) {
+				downloader.style.display = 'none'
+				downloadingList = []
 			}
-			reloadLoadingComics()
-		})
+		}
+		reloadLoadingComics()
 	})
 }
 
@@ -1690,16 +1687,20 @@ function closeSetting() {
 }
 
 function test() {
-	console.log(remote.Notification.isSupported())
-	const not = new remote.Notification({title: 'test', body:'body', icon:'Image/favicon.ico'})
-	not.show()
-	setTimeout(() => {
-		not.close()
-	}, 2000)
+	console.log(lastComicId, downloadingList)
 }
 
 document.addEventListener('readystatechange', e => {
-	makeDatabaseIndexs()
-	setLuanchTimeSettings(false)
-	loadComics()
+		makeDatabaseIndexs().then(() => {
+			db.index.findOne({_id:1}, (err, doc) => {
+				if (err) { error(err); return }
+				if (doc == undefined)
+					lastComicId = 1
+				else
+					lastComicId = doc.i || null
+				if (lastComicId == null) { error('Indexing Problem.'); return }
+				setLuanchTimeSettings(false)
+				loadComics()
+			})
+		})
 })

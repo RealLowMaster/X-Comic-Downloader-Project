@@ -111,18 +111,18 @@ Did {
 "https://xlecx.org/uploads/posts/2021-06/1623967989_darkness_002.jpg"
 Tasks => {
     Ctrl + k | Ctrl + 0
+    Make Downloading Indexing Work Better When Downloading Multi-comic
 	Make Waiting For Starting Download
     Add Ability To Cancel Downlaod
     Remove Electron Window Frame And Make a Custome One
     Add Report Bug Button
+    Add Remove Comic
     Update .btn Style
     Add Dipuclish Tab Ability
     Add Repair All Crashed Image Button
 	Make Tabs Work Better
     Fix net::ERR_CONNECTION_REFUSED in xlecx-api without VPN
     Add Child-Draggable To Setting
-    Make Downloading Indexing Work Better When Downloading Multi-comic
     Make Pagination Better
-    Add Developer Mode
     Create NHentai API
 }
