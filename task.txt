@@ -119,6 +119,8 @@ Tasks => {
     Add Add To Have Button To Comic Overview
     Add Report Bug Button
     Add Remove Comic
+    Add Search To Offline Part
+    Add PopAlert() To Save Setting
     Update .btn Style
     Add Dipuclish Tab Ability
     Add Repair All Crashed Image Button

@@ -784,15 +784,9 @@ function closeBrowser() {
 	document.getElementById('browser').style.display = 'none'
 	thisSite = null
 	tabs = []
-	var pages = document.getElementById('browser-pages').children
-	for (var i = 0; i < pages.length; i++) {
-		pages[i].remove()
-	}
+	document.getElementById('browser-pages').innerHTML = ''
 	var browser_tabs = document.getElementById('browser-tabs')
-	var tabsHTML = browser_tabs.children
-	for (var i = 0; i < tabsHTML.length; i++) {
-		tabsHTML[i].remove()
-	}
+	browser_tabs.innerHTML = ''
 	browser_tabs.setAttribute('pid', '')
 	document.getElementById('add-new-tab').setAttribute('onclick', null)
 }
