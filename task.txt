@@ -117,13 +117,13 @@ Tasks => {
     Ctrl + k | Ctrl + 0
 	Make Waiting For Starting Download
     Add Multi-Downloading Limit
-	Multi-Downloading Work Better
     Add Ability To Cancel Downlaod
     Remove Electron Window Frame And Make a Custome One
     Add Add To Have Button To Comic Overview
     Add Report Bug Button
     Add Remove Comic
     Add Search To Offline Part
+    Add function Indexing Error When Setting a lastIndexs
     Add PopAlert() To Save Setting
     Update .btn Style
     Add Dipuclish Tab Ability

@@ -20,7 +20,7 @@ const imageLazyLoadingOptions = {
 	rootMargin: "0px 0px 300px 0px"
 }
 const sites = [['xlecx', 'xlecxRepairComicInfoGetInfo({id}, {whitch})', 'xlecxSearch({text}, 1)', 'xlecxChangePage(1, false, true)']]
-var setting, tabs = [], db = {}, downloadingList = [], repairingComics = [], thisSite, lastComicId
+var setting, tabs = [], db = {}, downloadingList = [], repairingComics = [], thisSite, lastComicId, lastHaveId
 
 // Directions
 const dirRoot = path.join(__dirname).replace('\\app.asar', '')
@@ -976,8 +976,9 @@ function MakeDownloadList(name, id, list) {
 	if (name.length > 19) name = name.substr(0, 16)+'...'
 	var index = downloadingList.length
 
-	downloadingList[index] = [0, [], new Date().getTime(), id, [], [], [], lastComicId]
+	downloadingList[index] = [0, [], new Date().getTime(), id, [], [], [], [lastComicId, lastHaveId]]
 	lastComicId++
+	lastHaveId++
 	element.setAttribute('id', downloadingList[index][2])
 	element.setAttribute('i', index)
 	element.innerHTML = `<span class="spin spin-sm spin-fast spin-success"></span><p>${name} <span>(0/${list.length})</span></p><div><div></div></div>`
@@ -1020,7 +1021,7 @@ async function comicDownloader(index, result, quality, siteIndex) {
 						formatList.push([firstIndex, lastIndex, thisFormat])
 				}
 			}
-			CreateComic(downloadingList[index][7], result, quality, downloadingList[index][2], siteIndex, downloadingList[index][3], downloadingList[index][1].length, formatList, downloadingList[index][4], downloadingList[index][5], index, true)
+			CreateComic(downloadingList[index][7][0], downloadingList[index][7][1], result, quality, downloadingList[index][2], siteIndex, downloadingList[index][3], downloadingList[index][1].length, formatList, downloadingList[index][4], downloadingList[index][5], index, true)
 		} else {
 			comicDownloader(index, result, quality, siteIndex)
 		}
@@ -1047,7 +1048,7 @@ async function comicDownloader(index, result, quality, siteIndex) {
 						formatList.push([firstIndex, lastIndex, thisFormat])
 				}
 			}
-			CreateComic(downloadingList[index][7], result, quality, downloadingList[index][2], siteIndex, downloadingList[index][3], downloadingList[index][1].length, formatList, downloadingList[index][4], downloadingList[index][5], index, true)
+			CreateComic(downloadingList[index][7][0], downloadingList[index][7][1], result, quality, downloadingList[index][2], siteIndex, downloadingList[index][3], downloadingList[index][1].length, formatList, downloadingList[index][4], downloadingList[index][5], index, true)
 		} else {
 			comicDownloader(index, result, quality, siteIndex)
 		}
@@ -1096,21 +1097,28 @@ async function CreateHaveInsert(site, id, index, downloaded) {
 	insertInfo._id = index
 	await db.have.insert(insertInfo, err => {
 		if (err) { error(err); return }
-		update_index(index, 11)
+		fix_index(11)
 	})
 }
 
-async function CreateHave(site, id, downloaded) {
+async function CreateHave(site, id, index, downloaded) {
+	index = index || null
 	downloaded = downloaded || false
-	await db.index.findOne({_id:11}, (err, doc) => {
-		if (err) { error(err); return }
-		var index = doc.i
+
+	if (index != null) {
 		CreateHaveInsert(site, id, index, downloaded)
-	})
+	} else {
+		await db.index.findOne({_id:11}, (err, doc) => {
+			if (err) { error(err); return }
+			const haveIndex = doc.i
+			CreateHaveInsert(site, id, haveIndex, downloaded)
+		})
+	}
 }
 
 function AddToHave(site, id) {
-	CreateHave(site, id, false)
+	CreateHave(site, id, lastHaveId, false)
+	lastHaveId++
 	var page = document.getElementById(document.getElementById('browser-tabs').getAttribute('pid'))
 	page.getElementsByClassName('browser-comic-have')[0].innerHTML = '<span>You Have This Comic.<span>'
 	PopAlert('Comic Added To Have List.')
@@ -1521,7 +1529,7 @@ async function CreateTag(tagList, index, addToList, comicId, tagListIndex, repai
 }
 
 // Add New Comic
-async function CreateComic(comicIndex, gottenResult, quality, image, siteIndex, comic_id, imagesCount, formats, repair, repairURLs, index, isDownloading) {
+async function CreateComic(comicIndex, haveIndex, gottenResult, quality, image, siteIndex, comic_id, imagesCount, formats, repair, repairURLs, index, isDownloading) {
 	if (typeof(index) != 'number') index = null
 	isDownloading = isDownloading || false
 	const insertInfo = {}
@@ -1546,7 +1554,7 @@ async function CreateComic(comicIndex, gottenResult, quality, image, siteIndex, 
 		const tags = gottenResult.tags || null
 
 		// Add Comic To Have
-		CreateHave(doc.s, doc.p, true)
+		CreateHave(doc.s, doc.p, haveIndex, true)
 
 		// Groups
 		if (groups != null) {
@@ -1688,7 +1696,7 @@ function closeSetting() {
 }
 
 function test() {
-	console.log('test')
+	console.log(downloadingList)
 }
 
 document.addEventListener('readystatechange', e => {
@@ -1700,8 +1708,16 @@ document.addEventListener('readystatechange', e => {
 				else
 					lastComicId = doc.i || null
 				if (lastComicId == null) { error('Indexing Problem.'); return }
-				setLuanchTimeSettings(false)
-				loadComics()
+				db.index.findOne({_id:11}, (err, haveDoc) => {
+					if (err) { error(err); return }
+					if (doc == undefined)
+						lastHaveId = 1
+					else
+						lastHaveId = haveDoc.i || null
+					if (lastHaveId == null) { error('Indexing Problem.'); return }
+					setLuanchTimeSettings(false)
+					loadComics()
+				})
 			})
 		})
 })
