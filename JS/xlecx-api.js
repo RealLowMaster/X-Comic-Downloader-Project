@@ -75,7 +75,7 @@ class XlecxAPI {
 					gg = li[i].getElementsByClassName('th-img img-resp-h')[0].getAttribute('href')
 					bb = li[i].getElementsByClassName('th-time icon-l')[0]
 					if (bb != undefined)
-						bb = Number(bb.textContent.replace('img', '').replace('images', '').replace('pages', '').replace('page', '').replace(/ /g, ''))
+						bb = Number(bb.textContent.replace('img', '').replace('images', '').replace('pages', '').replace('page', '').replace('стр.', '').replace(/ /g, ''))
 					else
 						bb = null
 
@@ -98,7 +98,7 @@ class XlecxAPI {
 					gg = li[i].getElementsByClassName('th-img img-resp-h')[0].getAttribute('href')
 					bb = li[i].getElementsByClassName('th-time icon-l')[0]
 					if (bb != undefined)
-						bb = Number(bb.textContent.replace('img', '').replace('images', '').replace('pages', '').replace('page', '').replace(/ /g, ''))
+						bb = Number(bb.textContent.replace('img', '').replace('images', '').replace('pages', '').replace('page', '').replace('стр.', '').replace(/ /g, ''))
 					else
 						bb = null
 					
@@ -209,7 +209,7 @@ class XlecxAPI {
 					gg = li[i].getElementsByClassName('th-img img-resp-h')[0].getAttribute('href')
 					bb = li[i].getElementsByClassName('th-time icon-l')[0]
 					if (bb != undefined)
-						bb = Number(bb.textContent.replace('img', '').replace('images', '').replace('pages', '').replace('page', '').replace(/ /g, ''))
+						bb = Number(bb.textContent.replace('img', '').replace('images', '').replace('pages', '').replace('page', '').replace('стр.', '').replace(/ /g, ''))
 					else
 						bb = null
 
@@ -232,7 +232,7 @@ class XlecxAPI {
 					gg = li[i].getElementsByClassName('th-img img-resp-h')[0].getAttribute('href')
 					bb = li[i].getElementsByClassName('th-time icon-l')[0]
 					if (bb != undefined)
-						bb = Number(bb.textContent.replace('img', '').replace('images', '').replace('pages', '').replace('page', '').replace(/ /g, ''))
+						bb = Number(bb.textContent.replace('img', '').replace('images', '').replace('pages', '').replace('page', '').replace('стр.', '').replace(/ /g, ''))
 					else
 						bb = null
 	
@@ -451,7 +451,7 @@ class XlecxAPI {
 					gg = li[i].getElementsByClassName('th-img img-resp-h')[0].getAttribute('href')
 					bb = li[i].getElementsByClassName('th-time icon-l')[0]
 					if (bb != undefined)
-						bb = Number(bb.textContent.replace('img', '').replace('images', '').replace('pages', '').replace('page', '').replace(/ /g, ''))
+						bb = Number(bb.textContent.replace('img', '').replace('images', '').replace('pages', '').replace('page', '').replace('стр.', '').replace(/ /g, ''))
 					else
 						bb = null
 	
@@ -542,7 +542,7 @@ class XlecxAPI {
 					gg = li[i].getElementsByClassName('th-img img-resp-h')[0].getAttribute('href')
 					bb = li[i].getElementsByClassName('th-time icon-l')[0]
 					if (bb != undefined)
-						bb = Number(bb.textContent.replace('img', '').replace('images', '').replace('pages', '').replace('page', '').replace(/ /g, ''))
+						bb = Number(bb.textContent.replace('img', '').replace('images', '').replace('pages', '').replace('page', '').replace('стр.', '').replace(/ /g, ''))
 					else
 						bb = null
 
@@ -633,7 +633,7 @@ class XlecxAPI {
 					gg = li[i].getElementsByClassName('th-img img-resp-h')[0].getAttribute('href')
 					bb = li[i].getElementsByClassName('th-time icon-l')[0]
 					if (bb != undefined)
-						bb = Number(bb.textContent.replace('img', '').replace('images', '').replace('pages', '').replace('page', '').replace(/ /g, ''))
+						bb = Number(bb.textContent.replace('img', '').replace('images', '').replace('pages', '').replace('page', '').replace('стр.', '').replace(/ /g, ''))
 					else
 						bb = null
 
@@ -724,7 +724,7 @@ class XlecxAPI {
 					gg = li[i].getElementsByClassName('th-img img-resp-h')[0].getAttribute('href')
 					bb = li[i].getElementsByClassName('th-time icon-l')[0]
 					if (bb != undefined)
-						bb = Number(bb.textContent.replace('img', '').replace('images', '').replace('pages', '').replace('page', '').replace(/ /g, ''))
+						bb = Number(bb.textContent.replace('img', '').replace('images', '').replace('pages', '').replace('page', '').replace('стр.', '').replace(/ /g, ''))
 					else
 						bb = null
 
@@ -821,7 +821,7 @@ class XlecxAPI {
 					gg = li[i].getElementsByClassName('th-img img-resp-h')[0].getAttribute('href')
 					bb = li[i].getElementsByClassName('th-time icon-l')[0]
 					if (bb != undefined)
-						bb = Number(bb.textContent.replace('img', '').replace('images', '').replace('pages', '').replace('page', '').replace(/ /g, ''))
+						bb = Number(bb.textContent.replace('img', '').replace('images', '').replace('pages', '').replace('page', '').replace('стр.', '').replace(/ /g, ''))
 					else
 						bb = null
 					

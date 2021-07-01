@@ -105,6 +105,9 @@ Add Comic {
     Web Of Shadows
     Shadman
     Spiralling Descent Of A Kennel Bitch
+    Tom Girl
+    Fred Perry
+    Lewdua
 }
 Did {
     Make Repairing Systems Part 6++ = Next = Complete All Image Repairing
@@ -114,6 +117,7 @@ Tasks => {
     Ctrl + k | Ctrl + 0
 	Make Waiting For Starting Download
     Add Multi-Downloading Limit
+	Multi-Downloading Work Better
     Add Ability To Cancel Downlaod
     Remove Electron Window Frame And Make a Custome One
     Add Add To Have Button To Comic Overview
