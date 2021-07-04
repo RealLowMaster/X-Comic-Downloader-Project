@@ -521,6 +521,16 @@ img {
 	background-color: #025ba7;
 }
 
+/* Comics Counter */
+#comics-counter {
+	background-color: transparent;
+	color: #111;
+	font-size: 12px;
+	position: absolute;
+	bottom: 10px;
+	right: 20px;
+}
+
 /* Comic Panel */
 .comic-panel {
 	display: none;

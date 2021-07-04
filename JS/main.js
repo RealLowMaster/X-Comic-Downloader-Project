@@ -484,6 +484,7 @@ function loadComics(page, search) {
 		await db.comics.find({n:RegSearch}).sort({_id:-1}).exec((err, doc) => {
 			if (err) { error(err); return }
 			working(doc)
+			document.getElementById('comics-counter').textContent = 'Comics: '+doc.length
 		})
 	}
 
@@ -491,6 +492,7 @@ function loadComics(page, search) {
 		await db.comics.find({}).sort({_id:-1}).exec((err, doc) => {
 			if (err) { error(err); return }
 			working(doc)
+			document.getElementById('comics-counter').textContent = 'Comics: '+doc.length
 		})
 	}
 
