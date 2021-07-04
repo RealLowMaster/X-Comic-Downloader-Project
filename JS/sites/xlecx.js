@@ -52,8 +52,7 @@ function createNewXlecxTab(id, pageNumber) {
 			element = document.createElement('div')
 			valueStorage = ''
 
-			if (setting.lazy_loading == true)
-				valueStorage = ' loading="lazy"'
+			if (setting.lazy_loading == true) valueStorage = ' loading="lazy"'
 
 			html = `<img src="${xlecx.baseURL+result.content[i].thumb}"${valueStorage}>`
 
@@ -168,6 +167,7 @@ function xlecxOpenPost(makeNewPage, id, updateTabIndex) {
 			db.comics.findOne({s:0, p:id}, (err, doc) => {
 				if (err) { error(err); return }
 				page.innerHTML = ''
+				const passId = id
 				id = doc._id
 				var comic_container = document.createElement('div')
 				comic_container.classList.add('xlecx-container-one-row')
@@ -360,6 +360,47 @@ function xlecxOpenPost(makeNewPage, id, updateTabIndex) {
 						container.appendChild(tags_container)
 						container.appendChild(image_container)
 						comic_container.appendChild(container)
+						xlecx.getComicRelated(passId, (err, result) => {
+							if (err) return
+							if (result != null) {
+								var bigContainer = document.createElement('div')
+								element = document.createElement('p')
+								element.classList.add('xlecx-post-title')
+								element.textContent = 'Related:'
+								bigContainer.appendChild(element)
+			
+								container = document.createElement('div')
+								container.classList.add('xlecx-post-container')
+								for (var i = 0; i < result.length; i++) {
+									element = document.createElement('div')
+									valueStorage = ''
+			
+									if (setting.lazy_loading == true) valueStorage = ' loading="lazy"'
+									
+									html = `<img src="${xlecx.baseURL+result[i].thumb}"${valueStorage}>`
+			
+									if (result[i].pages == null)
+										valueStorage = ''
+									else
+										valueStorage = `<span>${result[i].pages}</span>`
+			
+									html += `${valueStorage}<p>${result[i].title}</p><button onclick="xlecxDownloader('${result[i].id}')">Download</button>`
+									element.innerHTML = html
+									miniElement = document.createElement('div')
+									miniElement.setAttribute('id', result[i].id)
+									miniElement.onmousedown = e => {
+										e.preventDefault()
+										xlecxOpenPost(checkMiddleMouseClick(e), e.target.getAttribute('id'))
+									}
+									element.appendChild(miniElement)
+									container.appendChild(element)
+								}
+								bigContainer.appendChild(container)
+			
+			
+								comic_container.appendChild(bigContainer)
+							}
+						})
 						page.appendChild(comic_container)
 					})
 				}
@@ -463,6 +504,45 @@ function xlecxOpenPost(makeNewPage, id, updateTabIndex) {
 				var images = element.querySelectorAll('[data-src]')
 				container.appendChild(element)
 				containerContainer.appendChild(container)
+
+				if (result.related != undefined) {
+					var bigContainer = document.createElement('div')
+					element = document.createElement('p')
+					element.classList.add('xlecx-post-title')
+					element.textContent = 'Related:'
+					bigContainer.appendChild(element)
+
+					container = document.createElement('div')
+					container.classList.add('xlecx-post-container')
+					for (var i = 0; i < result.related.length; i++) {
+						element = document.createElement('div')
+						valueStorage = ''
+
+						if (setting.lazy_loading == true) valueStorage = ' loading="lazy"'
+						
+						html = `<img src="${xlecx.baseURL+result.related[i].thumb}"${valueStorage}>`
+
+						if (result.related[i].pages == null)
+							valueStorage = ''
+						else
+							valueStorage = `<span>${result.related[i].pages}</span>`
+
+						html += `${valueStorage}<p>${result.related[i].title}</p><button onclick="xlecxDownloader('${result.related[i].id}')">Download</button>`
+						element.innerHTML = html
+						miniElement = document.createElement('div')
+						miniElement.setAttribute('id', result.related[i].id)
+						miniElement.onmousedown = e => {
+							e.preventDefault()
+							xlecxOpenPost(checkMiddleMouseClick(e), e.target.getAttribute('id'))
+						}
+						element.appendChild(miniElement)
+						container.appendChild(element)
+					}
+					bigContainer.appendChild(container)
+
+
+					containerContainer.appendChild(bigContainer)
+				}
 
 				images.forEach(image => {
 					imageLoadingObserver.observe(image)

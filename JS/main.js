@@ -1788,7 +1788,7 @@ function closeSetting() {
 }
 
 function test() {
-	xlecx.getComic('21945-priorities.html', {}, (err, result) => {
+	xlecx.getComicRelated('21945-psadasrioritiasasfasdes.html', (err, result) => {
 		if (err) { error(err); return }
 		console.log(result)
 	})

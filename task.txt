@@ -123,6 +123,7 @@ Tasks => {
     Add Add To Have Button To Comic Overview
     Add Report Bug Button
     Add Remove Comic
+    Make Related Post For Offline Comics Better
     Add Search To Offline Part
     Make Repair Part Work Better
     Add function Indexing Error When Setting a lastIndexs
