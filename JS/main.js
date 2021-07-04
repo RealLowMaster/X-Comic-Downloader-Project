@@ -406,7 +406,7 @@ function preloadImage(img) {
 	img.src = src
 }
 
-const imageLoadingObserver = new IntersectionObserver((entries, imageLoadingObserver) => {
+var imageLoadingObserver = new IntersectionObserver((entries, imageLoadingObserver) => {
 	entries.forEach(entry => {
 		if (!entry.isIntersecting)
 			return
@@ -1725,6 +1725,7 @@ function saveSetting(justSave) {
 	justSave = justSave || false
 	var reload = false
 	if (justSave == false) {
+		const lazy_loading = document.getElementById('s_lazy_loading').checked
 		const newMaxPerPage = Number(document.getElementById('s_max_per_page').value)
 		const file_location = document.getElementById('s_file_location').getAttribute('location')
 
@@ -1735,7 +1736,24 @@ function saveSetting(justSave) {
 		setting.max_per_page = newMaxPerPage
 		setting.hover_downloader = document.getElementById('s_hover_downloader').checked
 		setting.notification_download_finish = document.getElementById('s_notification_download_finish').checked
-		setting.lazy_loading = document.getElementById('s_lazy_loading').checked
+
+		if (lazy_loading != setting.lazy_loading) {
+			setting.lazy_loading = lazy_loading
+			if (lazy_loading == true)
+				imageLazyLoadingOptions.rootMargin = "0px 0px 300px 0px"
+			else
+				imageLazyLoadingOptions.rootMargin = "0px 0px 1200px 0px"
+
+			imageLoadingObserver = new IntersectionObserver((entries, imageLoadingObserver) => {
+				entries.forEach(entry => {
+					if (!entry.isIntersecting)
+						return
+			
+					preloadImage(entry.target)
+					imageLoadingObserver.unobserve(entry.target)
+				})
+			}, imageLazyLoadingOptions)
+		}
 
 		if (file_location != setting.file_location) {
 			reload = true
