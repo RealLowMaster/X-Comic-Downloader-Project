@@ -367,7 +367,7 @@ function xlecxOpenPost(makeNewPage, id, updateTabIndex) {
 				findComic()
 			})
 		} else {
-			xlecx.getComic(id, false, (err, result) => {
+			xlecx.getComic(id, {}, (err, result) => {
 				if (document.getElementById(pageId) == undefined) return
 				tab.setAttribute('isReloading', false)
 				page.innerHTML = ''
@@ -912,7 +912,7 @@ function xlecxDownloader(id) {
 	db.have.count({s:0, i:id}, (err, num) => {
 		if (err) { error(err); return }
 		if (num > 0) { PopAlert('You Already Have This Comic.', 'danger'); return }
-		xlecx.getComic(id, false, (err, result) => {
+		xlecx.getComic(id, {related:false}, (err, result) => {
 			if (err) { error(err); return }
 			
 			var name = result.title, quality = 0, downloadImageList = []
@@ -943,7 +943,7 @@ function xlecxDownloader(id) {
 
 async function xlecxRepairComicInfoGetInfo(id, whitch) {
 	var comic_id = Number(document.getElementById('comic-panel').getAttribute('cid'))
-	await xlecx.getComic(id, false, (err, result) => {
+	await xlecx.getComic(id, {related:false}, (err, result) => {
 		if (err) { error(err); return }
 		switch (whitch) {
 			case 0:

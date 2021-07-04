@@ -1788,7 +1788,10 @@ function closeSetting() {
 }
 
 function test() {
-	console.log(downloadingList)
+	xlecx.getComic('21945-priorities.html', {}, (err, result) => {
+		if (err) { error(err); return }
+		console.log(result)
+	})
 }
 
 document.addEventListener('readystatechange', e => {

@@ -279,8 +279,9 @@ class XlecxAPI {
 		})
 	}
 
-	getComic(id, raw, callback) {
-		raw = raw || false
+	getComic(id, options = {raw:false, related:true}, callback) {
+		const raw = options.raw || false
+		const related = options.related || true
 		const url = this.baseURL+'/'+id
 		callback = callback || null
 
@@ -371,6 +372,31 @@ class XlecxAPI {
 							"src": bb.replace("/thumbs/", "/"),
 							"thumb": bb
 						})
+					}
+				}
+
+				// Related
+				if (related == true) {
+					gg = htmlDoc.getElementById('dle-content').getElementsByClassName('floats clearfix')
+					if (gg.length > 0) {
+						arr.related = []
+						li = gg[0].getElementsByClassName('thumb')
+						for (var i = 0; i < li.length; i++) {
+							gg = li[i].getElementsByClassName('th-img img-resp-h')[0].getAttribute('href')
+							bb = li[i].getElementsByClassName('th-time icon-l')[0]
+							if (bb != undefined)
+								bb = Number(bb.textContent.replace('img', '').replace('images', '').replace('pages', '').replace('page', '').replace('стр.', '').replace(/ /g, ''))
+							else
+								bb = null
+
+							arr.related.push({
+								"id": this.lastSlash(gg),
+								"title": li[i].getElementsByClassName('th-title')[0].textContent,
+								"thumb": li[i].getElementsByTagName('img')[0].getAttribute('src').replace('http://xlecx.com', ''),
+								"pages": bb,
+								"url": gg
+							})
+						}
 					}
 				}
 			} else
