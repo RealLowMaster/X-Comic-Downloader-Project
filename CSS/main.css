@@ -1434,6 +1434,24 @@ img {
 				0 0 30px #2ECC71;
 }
 
+.input-row-file > label {
+	font-size: 14px;
+	overflow: hidden;
+}
+
+.input-row-file > div > button {
+	padding: 4px;
+	color: #fff;
+	background-color: #025bd7;
+	border-radius: 15px;
+	cursor: pointer;
+	transition: .2s;
+}
+
+.input-row-file > div > button:hover {
+	background-color: #013ac7;
+}
+
 .pl-5 {
 	padding-left: 15px !important;
 }

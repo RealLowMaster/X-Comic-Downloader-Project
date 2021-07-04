@@ -12,6 +12,7 @@ const defaultSetting = {
 	"img_graphic": 1,
 	"notification_download_finish": true,
 	"lazy_loading": true,
+	"file_location": null,
 	"developer_mode": false
 }
 const imageLazyLoadingOptions = {
@@ -20,12 +21,112 @@ const imageLazyLoadingOptions = {
 	rootMargin: "0px 0px 300px 0px"
 }
 const sites = [['xlecx', 'xlecxRepairComicInfoGetInfo({id}, {whitch})', 'xlecxSearch({text}, 1)', 'xlecxChangePage(1, false, true)']]
-var setting, tabs = [], db = {}, downloadingList = [], repairingComics = [], thisSite, lastComicId, lastHaveId
+var setting, dirDB, dirUL, tabs = [], db = {}, downloadingList = [], repairingComics = [], thisSite, lastComicId, lastHaveId
 
-// Directions
+// Needable Functions
+function fileExt(str) {
+	var base = new String(str).substring(str.lastIndexOf('.') + 1)
+	return base
+}
+
+function lastSlash(str, backSlasg) {
+	backSlasg = backSlasg || '/'
+	const base = new String(str).substring(str.lastIndexOf(backSlasg) + 1)
+	return base
+}
+
+function select(who, value) {
+	var parent = who.parentElement.parentElement
+	var overflow = parent.getElementsByTagName('div')[1]
+	var text = who.textContent
+
+	parent.getElementsByTagName('div')[0].textContent = text
+	overflow.style.display = 'none'
+	overflow.querySelector(`[onclick="select(this, ${parent.getAttribute('value')})"]`).removeAttribute('active')
+	parent.setAttribute('value', value)
+}
+
+function openSelect(who) {
+	var overflows = document.getElementsByClassName('input-row-selector-overflow')
+	for (var i = 0; i < overflows.length; i++) {
+		overflows[i].style.display = 'none'
+	}
+	var overflow = who.getElementsByTagName('div')[1]
+	overflow.style.display = 'block'
+	overflow.querySelector(`[onclick="select(this, ${who.getAttribute('value')})"]`).setAttribute('active', '')
+}
+
+function inputLimit(who, max) {
+	if (who == null || max == null) return
+	var value = who.value
+
+	if (value > max)
+		who.value = max
+	else if (value < 1)
+		who.value = 1
+}
+
+function ChooseDirectory(title, callback) {
+	title = title || 'Choose Directory'
+	callback = callback || null
+
+	if (callback == null) throw 'Callback function Can\'t Be Null.'
+	if (typeof(callback) != 'function') throw 'Callback Should Be Function.'
+
+	const choosedDirectory = remote.dialog.showOpenDialogSync({title:title, properties:['openDirectory']})
+
+	if (choosedDirectory == undefined)
+		callback('Canceled', null)
+	else
+		callback(null, choosedDirectory[0])
+}
+
+function GetFileLocation(who, repeat) {
+	who = who || null
+	if (repeat == undefined || repeat == null) repeat = true
+	ChooseDirectory('Choose Directory For Saving Downloaded Comics', (err, result) => {
+		if (err) {
+			if (repeat == true) GetFileLocation(who)
+			return
+		}
+		if (who == null) {
+			dirDB = result+'\\ComicsDB'
+			dirUL = result+'\\DownloadedComics'
+			setting.file_location = result
+			saveSetting(true)
+		} else {
+			who.setAttribute('location', result)
+			const s_file_location_label = who.parentElement.parentElement.children[0]
+			if (result.match(/[\\]/g).length > 1)
+				s_file_location_label.textContent = result.substr(0,2)+'\\...\\'+lastSlash(result, '\\')
+			else
+				s_file_location_label.textContent = result
+			s_file_location_label.setAttribute('title', result)
+		}
+	})
+}
+
+// Create Setting
 const dirRoot = path.join(__dirname).replace('\\app.asar', '')
-const dirDB = dirRoot+'\\db'
-const dirUL = dirRoot+'\\Download'
+if (!fs.existsSync(dirRoot+'/setting.cfg')) {
+	setting = defaultSetting
+	fs.writeFileSync(dirRoot+'/setting.cfg', JSON.stringify(defaultSetting), {encoding:"utf8"})
+} else {
+	setting = getJSON(dirRoot+'/setting.cfg')
+}
+
+// Get Direction
+if (setting.file_location == null)
+	GetFileLocation()
+else {
+	if (!fs.existsSync(setting.file_location)) {
+		GetFileLocation()
+	} else {
+		dirDB = setting.file_location+'\\ComicsDB'
+		dirUL = setting.file_location+'\\DownloadedComics'
+	}
+	
+}
 
 // Get Json
 function getJSON(src) {
@@ -41,13 +142,6 @@ function getJSON(src) {
 // Create Main Roots
 if (!fs.existsSync(dirDB)) fs.mkdirSync(dirDB)
 if (!fs.existsSync(dirUL)) fs.mkdirSync(dirUL)
-if (!fs.existsSync(dirRoot+'/setting.cfg')) {
-	setting = defaultSetting
-	fs.writeFile(dirRoot+'/setting.cfg', JSON.stringify(defaultSetting), (err) => { if (err) error(err) })
-} else {
-	setting = getJSON(dirRoot+'/setting.cfg')
-}
-if (setting.max_per_page < 1) setting.max_per_page = 18
 
 // Create Database
 db.index = new nedb({ filename: dirDB+'/index', autoload: true })
@@ -228,43 +322,6 @@ async function makeDatabaseIndexs() {
 	await count_index(10)
 	// have
 	await count_index(11)
-}
-
-// Needable Functions
-function fileExt(str) {
-	var base = new String(str).substring(str.lastIndexOf('.') + 1)
-	return base
-}
-
-function select(who, value) {
-	var parent = who.parentElement.parentElement
-	var overflow = parent.getElementsByTagName('div')[1]
-	var text = who.textContent
-
-	parent.getElementsByTagName('div')[0].textContent = text
-	overflow.style.display = 'none'
-	overflow.querySelector(`[onclick="select(this, ${parent.getAttribute('value')})"]`).removeAttribute('active')
-	parent.setAttribute('value', value)
-}
-
-function openSelect(who) {
-	var overflows = document.getElementsByClassName('input-row-selector-overflow')
-	for (var i = 0; i < overflows.length; i++) {
-		overflows[i].style.display = 'none'
-	}
-	var overflow = who.getElementsByTagName('div')[1]
-	overflow.style.display = 'block'
-	overflow.querySelector(`[onclick="select(this, ${who.getAttribute('value')})"]`).setAttribute('active', '')
-}
-
-function inputLimit(who, max) {
-	if (who == null || max == null) return
-	var value = who.value
-
-	if (value > max)
-		who.value = max
-	else if (value < 1)
-		who.value = 1
 }
 
 // Alerts
@@ -1628,8 +1685,9 @@ async function CreateComic(comicIndex, haveIndex, gottenResult, quality, image, 
 // Setting
 function setLuanchTimeSettings(reloadSettingPanel) {
 	reloadSettingPanel = reloadSettingPanel || false
-	var s_comic_panel_theme = document.getElementById('s_comic_panel_theme')
-	var s_img_graphic = document.getElementById('s_img_graphic')
+	const s_comic_panel_theme = document.getElementById('s_comic_panel_theme')
+	const s_img_graphic = document.getElementById('s_img_graphic')
+	const s_file_location = document.getElementById('s_file_location')
 
 	s_comic_panel_theme.setAttribute('value', setting.comic_panel_theme)
 	s_img_graphic.setAttribute('value', setting.img_graphic)
@@ -1645,49 +1703,63 @@ function setLuanchTimeSettings(reloadSettingPanel) {
 
 	if (setting.lazy_loading == true) document.getElementById('s_lazy_loading').checked = true
 
+	s_file_location.setAttribute('location', setting.file_location)
+	const s_file_location_label = s_file_location.parentElement.parentElement.children[0]
+
+	if (setting.file_location.match(/[\\]/g).length > 1)
+		s_file_location_label.textContent = setting.file_location.substr(0,2)+'\\...\\'+lastSlash(setting.file_location, '\\')
+	else
+		s_file_location_label.textContent = setting.file_location
+	s_file_location_label.setAttribute('title', setting.file_location)
 
 	if (reloadSettingPanel == false) {
-		if (setting.hover_downloader == false)
-			document.getElementById('downloader').classList.add('downloader-fixed')
+		if (setting.hover_downloader == false) document.getElementById('downloader').classList.add('downloader-fixed')
 
-		if (setting.comic_panel_theme == 1)
-			document.getElementById('comic-panel').classList.add('comic-panel-darkmode')
+		if (setting.comic_panel_theme == 1) document.getElementById('comic-panel').classList.add('comic-panel-darkmode')
 	}
 }
 
-function saveSetting() {
-	const newMaxPerPage = Number(document.getElementById('s_max_per_page').value)
+function saveSetting(justSave) {
+	justSave = justSave || false
+	var reload = false
+	if (justSave == false) {
+		const newMaxPerPage = Number(document.getElementById('s_max_per_page').value)
+		const file_location = document.getElementById('s_file_location').getAttribute('location')
 
-	if (setting.max_per_page != newMaxPerPage) reloadLoadingComics()
+		if (setting.max_per_page != newMaxPerPage) reloadLoadingComics()
 
-	setting.comic_panel_theme = Number(document.getElementById('s_comic_panel_theme').getAttribute('value'))
-	setting.img_graphic = Number(document.getElementById('s_img_graphic').getAttribute('value'))
-	setting.max_per_page = newMaxPerPage
-	setting.hover_downloader = document.getElementById('s_hover_downloader').checked
-	setting.notification_download_finish = document.getElementById('s_notification_download_finish').checked
-	setting.lazy_loading = document.getElementById('s_lazy_loading').checked
+		setting.comic_panel_theme = Number(document.getElementById('s_comic_panel_theme').getAttribute('value'))
+		setting.img_graphic = Number(document.getElementById('s_img_graphic').getAttribute('value'))
+		setting.max_per_page = newMaxPerPage
+		setting.hover_downloader = document.getElementById('s_hover_downloader').checked
+		setting.notification_download_finish = document.getElementById('s_notification_download_finish').checked
+		setting.lazy_loading = document.getElementById('s_lazy_loading').checked
 
-	if (setting.hover_downloader == false)
-		document.getElementById('downloader').classList.add('downloader-fixed')
-	else
-		document.getElementById('downloader').classList.remove('downloader-fixed')
+		if (file_location != setting.file_location) {
+			reload = true
+			setting.file_location = file_location
+		}
 
-	switch (setting.comic_panel_theme) {
-		case 0:
-			document.getElementById('comic-panel').classList.remove('comic-panel-darkmode')
-			break
-		case 1:
-			document.getElementById('comic-panel').classList.add('comic-panel-darkmode')
-			break
+		if (setting.hover_downloader == false)
+			document.getElementById('downloader').classList.add('downloader-fixed')
+		else
+			document.getElementById('downloader').classList.remove('downloader-fixed')
+
+		switch (setting.comic_panel_theme) {
+			case 0:
+				document.getElementById('comic-panel').classList.remove('comic-panel-darkmode')
+				break
+			case 1:
+				document.getElementById('comic-panel').classList.add('comic-panel-darkmode')
+				break
+		}
 	}
 
-	fs.writeFile('./setting.cfg', JSON.stringify(setting), (err) => {
-		if (err) {
-			PopAlert(err, 'danger')
-			return
-		}
+	fs.writeFileSync(dirRoot+'/setting.cfg', JSON.stringify(setting), {encoding:"utf8"})
+	if (reload == true)
+		remote.getCurrentWindow().reload()
+	else
 		document.getElementById('setting-panel').style.display = 'none'
-	})
 }
 
 function closeSetting() {

@@ -27,7 +27,6 @@
 				<div>
 					<button onclick="document.getElementById('site-menu').setAttribute('active', true)">Sites</button>
 					<button onclick="document.getElementById('setting-panel').style.display='block';document.getElementById('setting-panel').scrollTop=0">Setting</button>
-					<button onclick="test()">Test</button>
 				</div>
 				<div></div>
 				<div></div>
@@ -180,6 +179,18 @@
 					</div>
 					<p class="input-row-helper">This Ability is Recommend.<br>Do not Download The Images That aren't in viewport.</p>
 				</div>
+
+				<br><br><br><br>
+
+				<div class="input-row">
+					<div class="input-row-checkbox input-row-file">
+						<label title=""></label>
+						<div>
+							<button type="button" id="s_file_location" location="" onclick="GetFileLocation(this, false)">Choose</button>
+						</div>
+					</div>
+					<p class="input-row-helper">Choose a Location For Saving Downloaded Comics.<br>If you Change The Location Software will Reload.</p>
+				</div>
 			</div>
 
 			<div class="col-6 pr-5 pl-5">
@@ -202,7 +213,7 @@
 
 		<div class="row">
 			<div class="col-6 pr-5 pl-5">
-				<button onclick="saveSetting()" class="btn btn-primary">Save</button>
+				<button onclick="saveSetting(false)" class="btn btn-primary">Save</button>
 				<button onclick="closeSetting()" class="btn btn-danger">Cancel</button>
 			</div>
 			<div class="col-6 pr-5 pl-5"></div>
