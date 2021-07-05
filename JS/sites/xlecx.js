@@ -32,6 +32,13 @@ function createNewXlecxTab(id, pageNumber) {
 
 		// Categories
 		elementContainer = document.createElement('div')
+		element = document.createElement('button')
+		element.textContent = 'All Tags'
+		element.onmousedown = e => {
+			e.preventDefault()
+			xlecxOpenAllTags(checkMiddleMouseClick(e))
+		}
+		elementContainer.appendChild(element)
 		for (var i = 0; i < result.categories.length; i++) {
 			element = document.createElement('button')
 			element.setAttribute('c', result.categories[i].url)
@@ -1026,6 +1033,90 @@ function xlecxSearch(text, page, updateTabIndex) {
 		container.appendChild(elementContainerContainer)
 		pageContent.appendChild(container)
 		clearDownloadedComics(pageContent, 0)
+	})
+}
+
+function xlecxOpenAllTags(makeNewPage, updateTabIndex) {
+	makeNewPage = makeNewPage || false
+	if (updateTabIndex == null) updateTabIndex = true
+	var page, pageId
+	if (makeNewPage) {
+		pageId = createNewTab('xlecxOpenAllTags(false, false)')
+		if (pageId == null) { PopAlert('You Can\'t Make Any More Tab.', 'danger'); return }
+		page = document.getElementById(pageId)
+	} else {
+		const browser_tabs = document.getElementById('browser-tabs')
+		const passPageId = browser_tabs.getAttribute('pid')
+		const passImageCon = document.getElementById(passPageId).querySelector('[img-con="true"]')
+		if (passImageCon != undefined) {
+			const passImages = passImageCon.children
+			for (let i = 0; i < passImages.length; i++) {
+				passImages[i].removeAttribute('data-src')
+				passImages[i].removeAttribute('src')
+			}
+		}
+		pageId = passPageId
+		const tabIndexId = Number(browser_tabs.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))
+		page = document.getElementById(pageId)
+		page.innerHTML = ''
+		page.innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
+
+		if (updateTabIndex == true) tabs[tabIndexId].addHistory('xlecxOpenAllTags(false, false)')
+	}
+
+	const tab = document.getElementById('browser-tabs').querySelector(`[pi="${pageId}"]`)
+	const tabArea = tab.getElementsByTagName('span')[0]
+	tabArea.innerHTML = '<span class="spin spin-sm spin-primary" style="width:22px;height:22px"></span>'
+	xlecx.getAllTags(true, (err, result) => {
+		if (document.getElementById(pageId) == undefined) return
+		tab.setAttribute('isReloading', false)
+		page.innerHTML = ''
+		if (err) {
+			browserError(err, pageId)
+			return
+		}
+		tabArea.textContent = 'All Tags'
+		var container = document.createElement('div')
+		container.classList.add("xlecx-container")
+		var elementContainerContainer, elementContainer, element, miniElement, html, valueStorage
+
+		// Categories
+		elementContainer = document.createElement('div')
+		for (var i = 0; i < result.categories.length; i++) {
+			element = document.createElement('button')
+			element.setAttribute('c', result.categories[i].url)
+			element.textContent = result.categories[i].name
+			element.onmousedown = e => {
+				e.preventDefault()
+				xlecxOpenCategory(e.target.getAttribute('c'), 1, e.target.textContent, checkMiddleMouseClick(e))
+			}
+			elementContainer.appendChild(element)
+		}
+		container.appendChild(elementContainer)
+
+		// Tags
+		elementContainerContainer = document.createElement('div')
+		elementContainerContainer.style.backgroundColor = '#333'
+		element = document.createElement('div')
+		element.classList.add('xlecx-tags-search')
+		element.innerHTML = '<input type="text" oninput="" placeholder="Search in Tags...">'
+		elementContainerContainer.appendChild(element)
+		elementContainer = document.createElement('div')
+		elementContainer.classList.add('xlecx-post-tags')
+		for (let i = 0; i < result.tags.length; i++) {
+			element = document.createElement('button')
+			element.innerHTML = result.tags[i].name
+			element.onmousedown = e => {
+				e.preventDefault()
+				xlecxOpenTag(e.target.textContent, 1, 4, checkMiddleMouseClick(e))
+			}
+			elementContainer.appendChild(element)
+		}
+		elementContainerContainer.appendChild(elementContainer)
+
+		container.appendChild(elementContainerContainer)
+
+		page.appendChild(container)
 	})
 }
 

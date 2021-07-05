@@ -13,32 +13,6 @@ class XlecxAPI {
 		return base
 	}
 
-	checkConnection(callback) {
-		callback = callback || null
-
-		if (callback == null) throw "You can't Set Callback as Null."
-		if (typeof callback != 'function') throw "The Type of Callback Should Be a Function."
-
-		var xhr = new XMLHttpRequest()
-		xhr.open("GET", url, true)
-
-		xhr.timeout = this.timeout
-
-		xhr.onload = () => {
-			callback(null, true)
-		}
-
-		xhr.ontimeout = (e) => {
-			callback("Connection Timeout", false)
-		}
-
-		xhr.onerror = () => {
-			callback("An error occurred during the proceres, Check Internet Connection.", false)
-		}
-
-		xhr.send()
-	}
-
 	getPage(options = {page:1, random:false, pagination:true, category:false}, callback) {
 		const page = options.page || 1
 		const random = options.random || false
@@ -53,9 +27,10 @@ class XlecxAPI {
 		fetch(url).then(response => {
 			return response.text()
 		}).then(html => {
-			var parser = new DOMParser()
-			var htmlDoc = parser.parseFromString(html, 'text/html')
-			var gg = 0, bb = 0, li, arr = {}, hasPost = false
+			const parser = new DOMParser()
+			const htmlDoc = parser.parseFromString(html, 'text/html')
+			const arr = {}
+			var gg = 0, bb = 0, li, hasPost = false
 			const slashReg = new RegExp('/', 'g')
 			
 			// Category
@@ -155,8 +130,8 @@ class XlecxAPI {
 		fetch(url).then(response => {
 			return response.text()
 		}).then(html => {
-			var parser = new DOMParser()
-			var htmlDoc = parser.parseFromString(html, 'text/html')
+			const parser = new DOMParser()
+			const htmlDoc = parser.parseFromString(html, 'text/html')
 			const slashReg = new RegExp('/', 'g')
 
 			var arr = []
@@ -187,9 +162,10 @@ class XlecxAPI {
 		fetch(url).then(response => {
 			return response.text()
 		}).then(html => {
-			var parser = new DOMParser()
-			var htmlDoc = parser.parseFromString(html, 'text/html')
-			var gg = 0, bb = 0, li, arr = {}, hasPost = false
+			const parser = new DOMParser()
+			const htmlDoc = parser.parseFromString(html, 'text/html')
+			const arr = {}
+			var gg = 0, bb = 0, li, hasPost = false
 			const slashReg = new RegExp('/', 'g')
 			
 			// Category
@@ -270,8 +246,7 @@ class XlecxAPI {
 				}
 			}
 
-			if (hasPost == false && category == false && random == false)
-				arr = null
+			if (hasPost == false && category == false && random == false) arr = null
 
 			callback(null, arr)
 		}).catch(err => {
@@ -291,9 +266,10 @@ class XlecxAPI {
 		fetch(url).then(response => {
 			return response.text()
 		}).then(html => {
-			var parser = new DOMParser()
-			var htmlDoc = parser.parseFromString(html, 'text/html')
-			var gg = 0, bb = 0, arr = {}
+			const parser = new DOMParser()
+			const htmlDoc = parser.parseFromString(html, 'text/html')
+			const arr = {}
+			var gg = 0, bb = 0
 
 			var li = htmlDoc.getElementById('dle-content').getElementsByClassName('full-in')
 			if (li.length != 0) {
@@ -306,10 +282,9 @@ class XlecxAPI {
 					arr.groups = []
 					var t = info[0].getElementsByTagName('a')
 					for (var i=0; i<t.length; i++) {
-						gg = t[i].getAttribute('href')
 						arr.groups.push({
 							"name": t[i].textContent,
-							"url": gg
+							"url": t[i].getAttribute('href')
 						})
 					}
 				}
@@ -319,10 +294,9 @@ class XlecxAPI {
 					arr.artists = []
 					var t = info[1].getElementsByTagName('a')
 					for (var i=0; i<t.length; i++) {
-						gg = t[i].getAttribute('href')
 						arr.artists.push({
 							"name": t[i].textContent,
-							"url": gg
+							"url": t[i].getAttribute('href')
 						})
 					}
 				}
@@ -332,10 +306,9 @@ class XlecxAPI {
 					arr.parody = []
 					var t = info[2].getElementsByTagName('a')
 					for (var i=0; i<t.length; i++) {
-						gg = t[i].getAttribute('href')
 						arr.parody.push({
 							"name": t[i].textContent,
-							"url": gg
+							"url": t[i].getAttribute('href')
 						})
 					}
 				}
@@ -345,10 +318,9 @@ class XlecxAPI {
 					arr.tags = []
 					var t = info[3].getElementsByTagName('a')
 					for (var i=0; i<t.length; i++) {
-						gg = t[i].getAttribute('href')
 						arr.tags.push({
 							"name": t[i].textContent,
-							"url": gg
+							"url": t[i].getAttribute('href')
 						})
 					}
 				}
@@ -420,8 +392,8 @@ class XlecxAPI {
 		fetch(url).then(response => {
 			return response.text()
 		}).then(html => {
-			var parser = new DOMParser()
-			var htmlDoc = parser.parseFromString(html, 'text/html')
+			const parser = new DOMParser()
+			const htmlDoc = parser.parseFromString(html, 'text/html')
 			var gg = 0, bb = 0, arr = []
 
 			var li = htmlDoc.getElementById('dle-content').getElementsByClassName('full-in')
@@ -459,7 +431,8 @@ class XlecxAPI {
 		})
 	}
 
-	getAllTags(callback) {
+	getAllTags(category = false, callback = (error = '', result = {}) => {}) {
+		category = category || false
 		const url = this.baseURL+'/tags/'
 		callback = callback || null
 
@@ -469,17 +442,28 @@ class XlecxAPI {
 		fetch(url).then(response => {
 			return response.text()
 		}).then(html => {
-			var parser = new DOMParser()
-			var htmlDoc = parser.parseFromString(html, 'text/html')
-			var gg = 0, arr = []
+			const parser = new DOMParser()
+			const htmlDoc = parser.parseFromString(html, 'text/html')
+			const slashReg = new RegExp('/', 'g')
+			const arr = {}
+			var gg = 0
 
 			var li = htmlDoc.getElementsByClassName('clouds_xsmall')
+			arr.tags = []
 			for (var i=0; i<li.length; i++) {
 				gg = li[i].children[0]
-				arr.push({
+				arr.tags.push({
 					"name": gg.textContent,
 					"url": gg.getAttribute('href')
 				})
+			}
+
+			if (category == true) {
+				arr.categories = []
+				li = htmlDoc.getElementsByClassName('side-bc')[0].getElementsByTagName('a')
+				for (var i=0; i<li.length; i++) {
+					arr.categories.push({ "name": li[i].textContent, "url": li[i].getAttribute('href').replace(this.baseURL+'/', '').replace(slashReg, '') })
+				}
 			}
 				
 
@@ -504,9 +488,10 @@ class XlecxAPI {
 		fetch(url).then(response => {
 			return response.text()
 		}).then(html => {
-			var parser = new DOMParser()
-			var htmlDoc = parser.parseFromString(html, 'text/html')
-			var gg = 0, bb = 0, li, arr = {}, hasPost = false
+			const parser = new DOMParser()
+			const htmlDoc = parser.parseFromString(html, 'text/html')
+			const arr = {}
+			var gg = 0, bb = 0, li, hasPost = false
 			const slashReg = new RegExp('/', 'g')
 			
 			// Category
@@ -595,9 +580,10 @@ class XlecxAPI {
 		fetch(url).then(response => {
 			return response.text()
 		}).then(html => {
-			var parser = new DOMParser()
-			var htmlDoc = parser.parseFromString(html, 'text/html')
-			var gg = 0, bb = 0, li, arr = {}, hasPost = false
+			const parser = new DOMParser()
+			const htmlDoc = parser.parseFromString(html, 'text/html')
+			const arr = {}
+			var gg = 0, bb = 0, li, hasPost = false
 			const slashReg = new RegExp('/', 'g')
 			
 			// Category
@@ -686,9 +672,10 @@ class XlecxAPI {
 		fetch(url).then(response => {
 			return response.text()
 		}).then(html => {
-			var parser = new DOMParser()
-			var htmlDoc = parser.parseFromString(html, 'text/html')
-			var gg = 0, bb = 0, li, arr = {}, hasPost = false
+			const parser = new DOMParser()
+			const htmlDoc = parser.parseFromString(html, 'text/html')
+			const arr = {}
+			var gg = 0, bb = 0, li, hasPost = false
 			const slashReg = new RegExp('/', 'g')
 			
 			// Category
@@ -777,9 +764,10 @@ class XlecxAPI {
 		fetch(url).then(response => {
 			return response.text()
 		}).then(html => {
-			var parser = new DOMParser()
-			var htmlDoc = parser.parseFromString(html, 'text/html')
-			var gg = 0, bb = 0, li, arr = {}, hasPost = false
+			const parser = new DOMParser()
+			const htmlDoc = parser.parseFromString(html, 'text/html')
+			const arr = {}
+			var gg = 0, bb = 0, li, hasPost = false
 			const slashReg = new RegExp('/', 'g')
 			
 			// Category
@@ -874,10 +862,11 @@ class XlecxAPI {
 		}).then(response => {
 			return response.text()
 		}).then(html => {
-			var parser = new DOMParser()
-			var htmlDoc = parser.parseFromString(html, 'text/html')
-			var gg = 0, bb = 0, arr = {}, li, hasPost = false
+			const parser = new DOMParser()
+			const htmlDoc = parser.parseFromString(html, 'text/html')
 			const slashReg = new RegExp('/', 'g')
+			const arr = {}
+			var gg = 0, bb = 0, li, hasPost = false
 			
 			// Category
 			if (category == true) {
