@@ -284,19 +284,28 @@ img {
 
 .browser-tab > button {
 	display: block;
+	width: 15px;
+	height: 16px;
+	color: #999;
+	background-color: #aaa4;
+	border-radius: 50%;
+	font-size: 0.7rem;
+	font-weight: 600;
 	position: absolute;
 	top: 4px;
 	right: 6px;
-	color: transparent;
-	background-color: transparent;
-	font-size: 0.9rem;
-	font-weight: 600;
 	z-index: +1;
 	transition: color 0.2s;
 }
 
+.browser-tab:hover > button {
+	color: #bbb;
+	background-color: #ccc6;
+}
+
 .browser-tab > button:hover {
 	color: #f00;
+	background-color: #f005;
 }
 
 .browser-tools-container {
@@ -1045,10 +1054,10 @@ img {
 
 .xlecx-image-container-1x1 > img {
 	display: block;
-	min-width: 50px;
-	min-height: 150px;
-	max-width: 100%;
 	height: auto;
+	min-width: 50px;
+	min-height: 200px;
+	max-width: 100%;
 	margin: 10px auto;
 	object-fit: cover;
 	object-position: center;

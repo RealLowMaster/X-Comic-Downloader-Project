@@ -66,7 +66,7 @@ DB => {
 }
 
 Add Comic {
-    Scratter
+	League Of Legends
     The Cummoner
     Breaking The Rules
     Deku and Froppy SMASH!
@@ -126,6 +126,7 @@ Tasks => {
     Make Related Post For Offline Comics Better
     Add Search To Offline Part
     Make Repair Part Work Better
+	Add Jump Page To EveryThing
     Add function Indexing Error When Setting a lastIndexs
     Add PopAlert() To Save Setting
     Update .btn Style
