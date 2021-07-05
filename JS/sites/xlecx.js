@@ -134,16 +134,6 @@ function createNewXlecxTab(id, pageNumber) {
 function xlecxOpenPost(makeNewPage, id, updateTabIndex) {
 	makeNewPage = makeNewPage || false
 	if (updateTabIndex == null) updateTabIndex = true
-	const browser_tabs = document.getElementById('browser-tabs')
-	const passPageId = browser_tabs.getAttribute('pid')
-	const passImageCon = document.getElementById(passPageId).querySelector('[img-con="true"]')
-	if (passImageCon != undefined) {
-		const passImages = passImageCon.children
-		for (let i = 0; i < passImages.length; i++) {
-			passImages[i].removeAttribute('data-src')
-			passImages[i].removeAttribute('src')
-		}
-	}
 	
 	var page, pageId
 	if (makeNewPage) {
@@ -151,6 +141,16 @@ function xlecxOpenPost(makeNewPage, id, updateTabIndex) {
 		if (pageId == null) { PopAlert('You Can\'t Make Any More Tab.', 'danger'); return }
 		page = document.getElementById(pageId)
 	} else {
+		const browser_tabs = document.getElementById('browser-tabs')
+		const passPageId = browser_tabs.getAttribute('pid')
+		const passImageCon = document.getElementById(passPageId).querySelector('[img-con="true"]')
+		if (passImageCon != undefined) {
+			const passImages = passImageCon.children
+			for (let i = 0; i < passImages.length; i++) {
+				passImages[i].removeAttribute('data-src')
+				passImages[i].removeAttribute('src')
+			}
+		}
 		pageId = passPageId
 		const tabIndexId = Number(browser_tabs.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))
 		page = document.getElementById(pageId)
@@ -830,23 +830,22 @@ function xlecxOpenTag(name, page, whitch, makeNewPage, updateTabIndex) {
 	if (name == null) return
 	makeNewPage = makeNewPage || false
 	if (updateTabIndex == null) updateTabIndex = true
-	const browser_tabs = document.getElementById('browser-tabs')
-	const passPageId = browser_tabs.getAttribute('pid')
-	const passImageCon = document.getElementById(passPageId).querySelector('[img-con="true"]')
-	if (passImageCon != undefined) {
-		const passImages = passImageCon.children
-		for (let i = 0; i < passImages.length; i++) {
-			passImages[i].removeAttribute('data-src')
-			passImages[i].removeAttribute('src')
-		}
-	}
-
 	var pageContent, pageId
 	if (makeNewPage) {
 		pageId = createNewTab(`xlecxOpenTag('${name}', ${page}, ${whitch}, false, false)`)
 		if (pageId == null) { PopAlert('You Can\'t Make Any More Tab.', 'danger'); return }
 		pageContent = document.getElementById(pageId)
 	} else {
+		const browser_tabs = document.getElementById('browser-tabs')
+		const passPageId = browser_tabs.getAttribute('pid')
+		const passImageCon = document.getElementById(passPageId).querySelector('[img-con="true"]')
+		if (passImageCon != undefined) {
+			const passImages = passImageCon.children
+			for (let i = 0; i < passImages.length; i++) {
+				passImages[i].removeAttribute('data-src')
+				passImages[i].removeAttribute('src')
+			}
+		}
 		pageId = passPageId
 		pageContent = document.getElementById(pageId)
 		pageContent.innerHTML = ''
