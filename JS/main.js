@@ -848,7 +848,6 @@ function closeBrowser() {
 	tabs = []
 	const browser_pages_container = document.getElementById('browser-pages')
 	const browser_pages = browser_pages_container.children
-	console.log(browser_pages)
 	for (let i = 0; i < browser_pages.length; i++) {
 		var passImageCon = browser_pages[i].querySelector('[img-con="true"]')
 		if (passImageCon != undefined) {
@@ -1149,6 +1148,47 @@ function browserError(err, id) {
 	tabArea.innerHTML = '*Error*'
 }
 
+function removeDownloadedComicsDownloadButton(site, id, parent, btn, haveCallback, downloadedCallback) {
+	IsHavingComic(site, id, (have, downloaded) => {
+		if (have == true) {
+			if (downloaded == true)
+				downloadedCallback(parent, btn)
+			else
+				haveCallback(parent, btn)
+		}
+	})
+}
+
+function clearDownloadedComics(content, site) {
+	switch (site) {
+		case 0:
+			const postContainers = content.getElementsByClassName('xlecx-post-container')
+			for (let i = 0; i < postContainers.length; i++) {
+				var mainComics = postContainers[i].children
+				for (let j = 0; j < mainComics.length; j++) {
+					var id = mainComics[j].getElementsByTagName('button')[0]
+					if (id != undefined) {
+						id = id.getAttribute('cid')
+						removeDownloadedComicsDownloadButton(0, id, mainComics[j], mainComics[j].getElementsByTagName('button')[0], (parent, btn) => {
+							btn.remove()
+							var element = document.createElement('button')
+							element.classList.add('comic-had')
+							element.textContent = 'Had'
+							parent.appendChild(element)
+						}, (parent, btn) => {
+							btn.remove()
+							var element = document.createElement('button')
+							element.classList.add('comic-downloaded')
+							element.textContent = 'Downloaded'
+							parent.appendChild(element)
+						})
+					}
+				}
+			}
+			break
+	}
+}
+
 document.getElementById('browser-tool-search-form').addEventListener('submit', e => {
 	e.preventDefault()
 	const input = document.getElementById('browser-tool-search-input')
@@ -1196,6 +1236,21 @@ function AddToHave(site, id) {
 	var page = document.getElementById(document.getElementById('browser-tabs').getAttribute('pid'))
 	page.getElementsByClassName('browser-comic-have')[0].innerHTML = '<span>You Have This Comic.<span>'
 	PopAlert('Comic Added To Have List.')
+}
+
+// Check That We Have Comic Or Not
+function IsHavingComic(site, id, callback) {
+	db.have.findOne({s:site, i:id}, (err, doc) => {
+		if (err) { error(err); return }
+		if (doc == null)
+			callback(false, false)
+		else {
+			if (doc.d != null && doc.d == 0)
+				callback(true, true)
+			else
+				callback(true, false)
+		}
+	})
 }
 
 // Add New Groups

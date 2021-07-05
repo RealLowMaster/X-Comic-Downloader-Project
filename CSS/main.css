@@ -1145,6 +1145,22 @@ img {
 	color: #222;
 }
 
+.xlecx-post-container > div > .comic-downloaded,
+.xlecx-post-container > div > .comic-had {
+	padding: 6px !important;
+	background-color: #207000 !important;
+	color: #fff !important;
+	font-size: 14px !important;
+	top: 19px;
+	left: -75px;
+	cursor: default !important;
+}
+
+.xlecx-post-container > div > .comic-had {
+	background-color: #D68910 !important;
+	left: -22px;
+}
+
 .xlecx-post-container > div:hover {
 	background-color: #a7025b;
 }
