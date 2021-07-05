@@ -122,6 +122,9 @@ Tasks => {
     Remove Electron Window Frame And Make a Custome One
     Add Add To Have Button To Comic Overview
     Add Report Bug Button
+    Add All Tags
+    Make CreateTag() with Zero Problem
+    Add Faver
     Add Remove Comic
     Make Related Post For Offline Comics Better
     Add Search To Offline Part

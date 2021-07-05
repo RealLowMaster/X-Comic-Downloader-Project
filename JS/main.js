@@ -12,6 +12,7 @@ const defaultSetting = {
 	"img_graphic": 1,
 	"notification_download_finish": true,
 	"lazy_loading": true,
+	"tabs_limit": 32,
 	"file_location": null,
 	"developer_mode": false
 }
@@ -360,6 +361,8 @@ if (typeof(setting.notification_download_finish) != 'boolean') setting.notificat
 if (typeof(setting.hover_downloader) != 'boolean') setting.hover_downloader = true
 if (typeof(setting.lazy_loading) != 'boolean') setting.lazy_loading = true
 if (setting.lazy_loading == false) imageLazyLoadingOptions.rootMargin = "0px 0px 1200px 0px"
+if (typeof(setting.tabs_limit) != 'number') setting.tabs_limit = 32
+if (setting.tabs_limit < 1) setting.tabs_limit = 1
 
 // Make Tabs Draggable
 const tabsContainer = document.getElementById('browser-tabs')
@@ -843,11 +846,22 @@ function closeBrowser() {
 	document.getElementById('browser').style.display = 'none'
 	thisSite = null
 	tabs = []
-	document.getElementById('browser-pages').innerHTML = ''
-	var browser_tabs = document.getElementById('browser-tabs')
+	const browser_pages = document.getElementById('browser-pages').children
+	for (let i = 0; i < browser_pages.length; i++) {
+		var passImageCon = browser_pages[i].querySelector('[img-con="true"]')
+		if (passImageCon != undefined) {
+			var passImages = passImageCon.children
+			for (let j = 0; j < passImages.length; j++) {
+				passImages[j].removeAttribute('data-src')
+				passImages[j].removeAttribute('src')
+			}
+		}
+		browser_pages[i].remove()
+	}
+	const browser_tabs = document.getElementById('browser-tabs')
 	browser_tabs.innerHTML = ''
 	browser_tabs.setAttribute('pid', '')
-	document.getElementById('add-new-tab').setAttribute('onclick', null)
+	document.getElementById('add-new-tab').setAttribute('onclick', '')
 }
 
 function updateTabSize() {
@@ -897,9 +911,8 @@ function activateTab(who) {
 }
 
 function IsTabsAtLimit() {
-	const limit = 35
 	const tabsCount = document.getElementById('browser-tabs').getElementsByTagName('div').length
-	if (tabsCount >= limit)
+	if (tabsCount >= setting.tabs_limit)
 		return true
 	else
 		return false

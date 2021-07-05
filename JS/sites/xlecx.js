@@ -11,16 +11,16 @@ function openXlecxBrowser() {
 function createNewXlecxTab(id, pageNumber) {
 	if (id == null) { PopAlert('You Can\'t Make Any More Tab.', 'danger'); return }
 	activateTab(document.getElementById('browser-tabs').querySelector(`[pi="${id}"]`))
-	var page = document.getElementById(id)
+	const pageContent = document.getElementById(id)
 	pageNumber = pageNumber || 1
 
-	var tab = document.getElementById('browser-tabs').querySelector(`[pi="${id}"]`)
-	var tabArea = tab.getElementsByTagName('span')[0]
+	const tab = document.getElementById('browser-tabs').querySelector(`[pi="${id}"]`)
+	const tabArea = tab.getElementsByTagName('span')[0]
 	tabArea.innerHTML = '<span class="spin spin-sm spin-primary" style="width:22px;height:22px"></span>'
 	xlecx.getPage({page:pageNumber, random:true, category:true}, (err, result) => {
 		if (document.getElementById(id) == undefined) return
 		tab.setAttribute('isReloading', false)
-		page.innerHTML = ''
+		pageContent.innerHTML = ''
 		if (err) {
 			browserError(err, id)
 			return
@@ -126,32 +126,41 @@ function createNewXlecxTab(id, pageNumber) {
 		elementContainerContainer.appendChild(elementContainer)
 		container.appendChild(elementContainerContainer)
 
-		page.appendChild(container)
+		pageContent.appendChild(container)
 	})
 }
 
 function xlecxOpenPost(makeNewPage, id, updateTabIndex) {
 	makeNewPage = makeNewPage || false
 	if (updateTabIndex == null) updateTabIndex = true
-	var browser_tabs = document.getElementById('browser-tabs')
+	const browser_tabs = document.getElementById('browser-tabs')
+	const passPageId = browser_tabs.getAttribute('pid')
+	const passImageCon = document.getElementById(passPageId).querySelector('[img-con="true"]')
+	if (passImageCon != undefined) {
+		const passImages = passImageCon.children
+		for (let i = 0; i < passImages.length; i++) {
+			passImages[i].removeAttribute('data-src')
+			passImages[i].removeAttribute('src')
+		}
+	}
+	
 	var page, pageId
 	if (makeNewPage) {
 		pageId = createNewTab(`xlecxOpenPost(false, '${id}', false)`)
 		if (pageId == null) { PopAlert('You Can\'t Make Any More Tab.', 'danger'); return }
 		page = document.getElementById(pageId)
 	} else {
-		pageId = browser_tabs.getAttribute('pid')
-		var tabIndexId = Number(browser_tabs.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))
+		pageId = passPageId
+		const tabIndexId = Number(browser_tabs.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))
 		page = document.getElementById(pageId)
 		page.innerHTML = ''
 		page.innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
 
-		if (updateTabIndex == true)
-			tabs[tabIndexId].addHistory(`xlecxOpenPost(false, '${id}', false)`)
+		if (updateTabIndex == true) tabs[tabIndexId].addHistory(`xlecxOpenPost(false, '${id}', false)`)
 	}
 
-	var tab = document.getElementById('browser-tabs').querySelector(`[pi="${pageId}"]`)
-	var tabArea = tab.getElementsByTagName('span')[0]
+	const tab = document.getElementById('browser-tabs').querySelector(`[pi="${pageId}"]`)
+	const tabArea = tab.getElementsByTagName('span')[0]
 	tabArea.innerHTML = '<span class="spin spin-sm spin-primary" style="width:22px;height:22px"></span>'
 	db.have.findOne({s:0, i:id}, (err, haveDoc) => {
 		if (err) { error(err); return }
@@ -498,6 +507,7 @@ function xlecxOpenPost(makeNewPage, id, updateTabIndex) {
 				// Images
 				element = document.createElement('div')
 				element.classList.add('xlecx-image-container-1x1')
+				element.setAttribute('img-con', true)
 				for (var i = 0; i < result.images.length; i++) {
 					element.innerHTML += `<img data-src="${xlecx.baseURL}/${result.images[i].thumb}">`
 				}
@@ -587,25 +597,34 @@ function xlecxOpenCategory(name, page, shortName, makeNewPage, updateTabIndex) {
 	if (name == null || shortName == null) return
 	makeNewPage = makeNewPage || false
 	if (updateTabIndex == null) updateTabIndex = true
+	const browser_tabs = document.getElementById('browser-tabs')
+	const passPageId = browser_tabs.getAttribute('pid')
+	const passImageCon = document.getElementById(passPageId).querySelector('[img-con="true"]')
+	if (passImageCon != undefined) {
+		const passImages = passImageCon.children
+		for (let i = 0; i < passImages.length; i++) {
+			passImages[i].removeAttribute('data-src')
+			passImages[i].removeAttribute('src')
+		}
+	}
+	
 	var pageContent, pageId
 	if (makeNewPage) {
 		pageId = createNewTab(`xlecxOpenCategory('${name}', ${page}, '${shortName}', false, false)`)
 		if (pageId == null) { PopAlert('You Can\'t Make Any More Tab.', 'danger'); return }
 		pageContent = document.getElementById(pageId)
 	} else {
-		var browser_tabs = document.getElementById('browser-tabs')
-		pageId = browser_tabs.getAttribute('pid')
-		var tabIndexId = Number(browser_tabs.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))
+		pageId = passPageId
+		const tabIndexId = Number(browser_tabs.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))
 
 		pageContent = document.getElementById(document.getElementById('browser-tabs').getAttribute('pid'))
 		pageContent.innerHTML = ''
 
-		if (updateTabIndex == true)
-			tabs[tabIndexId].addHistory(`xlecxOpenCategory('${name}', ${page}, '${shortName}', false, false)`)
+		if (updateTabIndex == true) tabs[tabIndexId].addHistory(`xlecxOpenCategory('${name}', ${page}, '${shortName}', false, false)`)
 	}
 
-	var tab = document.getElementById('browser-tabs').querySelector(`[pi="${pageId}"]`)
-	var tabArea = tab.getElementsByTagName('span')[0]
+	const tab = document.getElementById('browser-tabs').querySelector(`[pi="${pageId}"]`)
+	const tabArea = tab.getElementsByTagName('span')[0]
 	tabArea.innerHTML = '<span class="spin spin-sm spin-primary" style="width:22px;height:22px"></span>'
 	pageContent.innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
 	xlecx.getCategory(name, {page:page, random:true, category:true}, (err, result) => {
@@ -805,15 +824,24 @@ function xlecxOpenTag(name, page, whitch, makeNewPage, updateTabIndex) {
 	if (name == null) return
 	makeNewPage = makeNewPage || false
 	if (updateTabIndex == null) updateTabIndex = true
+	const browser_tabs = document.getElementById('browser-tabs')
+	const passPageId = browser_tabs.getAttribute('pid')
+	const passImageCon = document.getElementById(passPageId).querySelector('[img-con="true"]')
+	if (passImageCon != undefined) {
+		const passImages = passImageCon.children
+		for (let i = 0; i < passImages.length; i++) {
+			passImages[i].removeAttribute('data-src')
+			passImages[i].removeAttribute('src')
+		}
+	}
+
 	var pageContent, pageId
 	if (makeNewPage) {
 		pageId = createNewTab(`xlecxOpenTag('${name}', ${page}, ${whitch}, false, false)`)
 		if (pageId == null) { PopAlert('You Can\'t Make Any More Tab.', 'danger'); return }
 		pageContent = document.getElementById(pageId)
 	} else {
-		var browser_tabs = document.getElementById('browser-tabs')
-		var pageId = browser_tabs.getAttribute('pid')
-
+		pageId = passPageId
 		pageContent = document.getElementById(pageId)
 		pageContent.innerHTML = ''
 
@@ -886,17 +914,25 @@ function xlecxSearch(text, page, updateTabIndex) {
 	var pageContent
 	const browser_tabs = document.getElementById('browser-tabs')
 	const pageId = browser_tabs.getAttribute('pid')
+	const passImageCon = document.getElementById(pageId).querySelector('[img-con="true"]')
+	if (passImageCon != undefined) {
+		const passImages = passImageCon.children
+		for (let i = 0; i < passImages.length; i++) {
+			passImages[i].removeAttribute('data-src')
+			passImages[i].removeAttribute('src')
+		}
+	}
 
 	pageContent = document.getElementById(pageId)
 	pageContent.innerHTML = ''
 
 	if (updateTabIndex == true) {
-		var tabIndexId = Number(browser_tabs.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))
+		const tabIndexId = Number(browser_tabs.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))
 		tabs[tabIndexId].addHistory(`xlecxSearch('${text}', ${page}, false)`)
 	}
 
-	var tab = document.getElementById('browser-tabs').querySelector(`[pi="${pageId}"]`)
-	var tabArea = tab.getElementsByTagName('span')[0]
+	const tab = document.getElementById('browser-tabs').querySelector(`[pi="${pageId}"]`)
+	const tabArea = tab.getElementsByTagName('span')[0]
 	tabArea.innerHTML = '<span class="spin spin-sm spin-primary" style="width:22px;height:22px"></span>'
 	pageContent.innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
 	xlecx.search(text, {page:page, category:true}, (err, result) => {
