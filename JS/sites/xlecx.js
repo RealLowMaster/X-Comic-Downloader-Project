@@ -1099,7 +1099,13 @@ function xlecxOpenAllTags(makeNewPage, updateTabIndex) {
 		elementContainerContainer.style.backgroundColor = '#333'
 		element = document.createElement('div')
 		element.classList.add('xlecx-tags-search')
-		element.innerHTML = '<input type="text" oninput="" placeholder="Search in Tags...">'
+		element.innerHTML = '<input type="text" oninput="searchFilter(this.value, this.parentElement.parentElement.getElementsByClassName(\'xlecx-post-tags\')[0], this.parentElement.parentElement.getElementsByClassName(\'alert alert-danger\')[0])" placeholder="Search in Tags...">'
+		elementContainerContainer.appendChild(element)
+		element = document.createElement('div')
+		element.classList.add('alert')
+		element.classList.add('alert-danger')
+		element.style.display = 'none'
+		element.textContent = 'No Tag has been Found.'
 		elementContainerContainer.appendChild(element)
 		elementContainer = document.createElement('div')
 		elementContainer.classList.add('xlecx-post-tags')

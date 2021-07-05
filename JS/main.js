@@ -1148,6 +1148,30 @@ function browserError(err, id) {
 	tabArea.innerHTML = '*Error*'
 }
 
+function searchFilter(txt, database, alert) {
+	txt = txt.toLowerCase()
+	var counter = 0
+	const datas = database.children
+	if (txt.length > 0) {
+		for (let i = 0; i < datas.length; i++) {
+			if (datas[i].textContent.toLowerCase().indexOf(txt) > -1) {
+				datas[i].style.display = 'inline-block'
+				counter++
+			} else
+				datas[i].style.display = 'none'
+		}
+		if (counter > 0)
+			alert.style.display = 'none'
+		else
+			alert.style.display = 'block'
+	} else {
+		for (let i = 0; i < datas.length; i++) {
+			datas[i].style.display = 'inline-block'
+		}
+		alert.style.display = 'none'
+	}
+}
+
 function removeDownloadedComicsDownloadButton(site, id, parent, btn, haveCallback, downloadedCallback) {
 	IsHavingComic(site, id, (have, downloaded) => {
 		if (have == true) {

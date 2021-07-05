@@ -954,11 +954,25 @@ img {
 }
 
 .xlecx-tags-search {
-	
+	display: flex;
+	width: 100%;
+	justify-content: center;
+	align-items: center;
+	padding: 10px;
+	margin-bottom: 20px;
 }
 
 .xlecx-tags-search > input {
-
+	display: block;
+	width: 400px;
+	padding: 8px 10px;
+	background-color: #fff;
+	color: #222;
+	border: 1px solid #222;
+	border-radius: 3px;
+	font-size: 1rem;
+	text-align: left;
+	box-shadow: 0 6px 6px #222a;
 }
 
 .xlecx-container-one-row {

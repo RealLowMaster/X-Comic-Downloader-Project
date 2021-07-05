@@ -111,8 +111,9 @@ Add Comic {
 }
 Did {
     Make Repairing Systems Part 6++ = Next = Complete All Image Repairing
+    All Tags To xlecx Browser Part 1
 }
-"https://xlecx.org/uploads/posts/2021-06/1623967989_darkness_002.jpg"
+
 Tasks => {
     Ctrl + k | Ctrl + 0
     Add Search To All Tags
