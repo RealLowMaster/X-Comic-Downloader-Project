@@ -1765,7 +1765,7 @@ async function CreateComic(comicIndex, haveIndex, gottenResult, quality, image, 
 			var shortName = gottenResult.title
 			if (shortName.length > 26) shortName = shortName.substr(0, 23)+'...'
 			PopAlert(`Comic (${shortName}) Downloaded.`)
-			if (setting.notification_download_finish == true && remote.Notification.isSupported()) new remote.Notification({title: 'Comic Download Finished.', body: gottenResult.title, icon:'Image/favicon.ico'}).show()
+			if (setting.notification_download_finish == true && remote.Notification.isSupported()) new remote.Notification({title: 'Comic Download Finished.', body: gottenResult.title}).show()
 			document.getElementById(`${downloadingList[index][2]}`).remove()
 			downloadingList[index] = null
 			var downloader = document.getElementById('downloader')
