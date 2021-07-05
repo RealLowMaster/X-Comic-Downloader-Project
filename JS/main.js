@@ -846,7 +846,9 @@ function closeBrowser() {
 	document.getElementById('browser').style.display = 'none'
 	thisSite = null
 	tabs = []
-	const browser_pages = document.getElementById('browser-pages').children
+	const browser_pages_container = document.getElementById('browser-pages')
+	const browser_pages = browser_pages_container.children
+	console.log(browser_pages)
 	for (let i = 0; i < browser_pages.length; i++) {
 		var passImageCon = browser_pages[i].querySelector('[img-con="true"]')
 		if (passImageCon != undefined) {
@@ -856,8 +858,8 @@ function closeBrowser() {
 				passImages[j].removeAttribute('src')
 			}
 		}
-		browser_pages[i].remove()
 	}
+	browser_pages_container.innerHTML = ''
 	const browser_tabs = document.getElementById('browser-tabs')
 	browser_tabs.innerHTML = ''
 	browser_tabs.setAttribute('pid', '')
