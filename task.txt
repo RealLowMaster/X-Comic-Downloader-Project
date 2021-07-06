@@ -131,7 +131,6 @@ Tasks => {
     Add Repair All Crashed Image Button
 	Make Tabs Work Better
     Fix net::ERR_CONNECTION_REFUSED in xlecx-api without VPN
-    Add Child-Draggable To Setting
     Make Pagination Better
     Create NHentai API
 }

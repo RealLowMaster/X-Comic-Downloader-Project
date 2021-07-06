@@ -610,6 +610,7 @@ img {
 	font-size: 16px;
 	line-height: 1.4;
 	text-transform: capitalize;
+	user-select: text;
 }
 
 .comic:hover {
@@ -679,6 +680,7 @@ img {
 	color: #222;
 	font-size: 1.3rem;
 	text-transform: capitalize;
+	user-select: text;
 	box-shadow: 0 1px 5px 0 rgba(0,0,0,0.3);
 }
 
@@ -702,6 +704,7 @@ img {
 	color: #333;
 	line-height: 30px;
 	text-transform: capitalize;
+	user-select: text;
 	cursor: pointer;
 }
 
@@ -1147,8 +1150,9 @@ img {
 	margin: 0 0 10px 5px;
 	background-color: #222;
 	color: #ccc;
-	text-transform: capitalize;
 	line-height: 30px;
+	text-transform: capitalize;
+	user-select: text;
 	cursor: pointer;
 }
 
