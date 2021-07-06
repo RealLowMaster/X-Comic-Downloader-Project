@@ -1095,7 +1095,7 @@ function MakeDownloadList(name, id, list) {
 	lastHaveId++
 	element.setAttribute('id', downloadingList[index][2])
 	element.setAttribute('i', index)
-	element.innerHTML = `<span class="spin spin-sm spin-fast spin-success"></span><p>${name} <span>(0/${list.length})</span></p><div><div></div></div>`
+	element.innerHTML = `<span class="spin spin-sm spin-fast spin-success"></span><p>${name} <span>(0/${list.length})</span></p><div><div></div></div><button onclick="cancelDownload(${index})">x</button>`
 	downloader.appendChild(element)
 	downloadingList[index][1] = list
 
@@ -1103,6 +1103,7 @@ function MakeDownloadList(name, id, list) {
 }
 
 async function comicDownloader(index, result, quality, siteIndex) {
+	if (downloadingList[index][0] == null) return
 	const child = document.getElementById(downloadingList[index][2])
 	const indexOfDownloader = Array.prototype.indexOf.call(child.parentNode.children, child)
 	if (indexOfDownloader > (setting.download_limit - 1)) {
@@ -1123,8 +1124,13 @@ async function comicDownloader(index, result, quality, siteIndex) {
 	var percentage = (100 / max) * downloadingList[index][0]
 	var downloaderRow = document.getElementById(`${downloadingList[index][2]}`)
 	await ImageDownloader.image(option).then(({ filename }) => {
+		if (downloadingList[index] == undefined) {
+			fs.unlinkSync(filename)
+			return
+		}
 		downloaderRow.getElementsByTagName('div')[0].getElementsByTagName('div')[0].style.width = percentage+'%'
 		downloaderRow.getElementsByTagName('p')[0].getElementsByTagName('span')[0].textContent = `(${downloadingList[index][0]}/${max})`
+		downloadingList[index][6].push(filename)
 		if (downloadingList[index][0] == max) {
 			var formatList = [], firstIndex = 0, lastIndex = 0
 			var thisFormat = fileExt(downloadingList[index][1][0])
@@ -1147,6 +1153,7 @@ async function comicDownloader(index, result, quality, siteIndex) {
 		} else
 			comicDownloader(index, result, quality, siteIndex)
 	}).catch(err => {
+		if (downloadingList[index] == undefined) return
 		downloaderRow.getElementsByTagName('div')[0].getElementsByTagName('div')[0].style.width = percentage+'%'
 		downloaderRow.getElementsByTagName('p')[0].getElementsByTagName('span')[0].textContent = `(${downloadingList[index][0]}/${max})`
 		downloadingList[index][4].push(downloadingList[index][0] - 1)
@@ -1165,14 +1172,26 @@ async function comicDownloader(index, result, quality, siteIndex) {
 					thisFormat = fileExt(downloadingList[index][1][j])
 					firstIndex = lastIndex
 		
-					if (j == downloadingList[index][1].length - 1)
-						formatList.push([firstIndex, lastIndex, thisFormat])
+					if (j == downloadingList[index][1].length - 1) formatList.push([firstIndex, lastIndex, thisFormat])
 				}
 			}
 			CreateComic(downloadingList[index][7][0], downloadingList[index][7][1], result, quality, downloadingList[index][2], siteIndex, downloadingList[index][3], downloadingList[index][1].length, formatList, downloadingList[index][4], downloadingList[index][5], index, true)
 		} else
 			comicDownloader(index, result, quality, siteIndex)
 	})
+}
+
+function cancelDownload(index) {
+	downloadingList[index][0] = null
+	for (let i = 0; i < downloadingList[index][6].length; i++) {
+		fs.unlinkSync(downloadingList[index][6][i])
+	}
+	document.getElementById(downloadingList[index][2]).remove()
+	const downloader = document.getElementById('downloader')
+	if (downloader.children.length == 0) {
+		downloader.style.display = 'none'
+		downloadingList = []
+	}
 }
 
 function IsDownloading(id) {

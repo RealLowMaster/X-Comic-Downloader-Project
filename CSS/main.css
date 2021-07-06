@@ -920,7 +920,7 @@ img {
 	width: 3px;
 }
 
-.downloader *:not(span) {
+.downloader *:not(span):not(button) {
 	display: block;
 	width: 100%;
 }
@@ -935,6 +935,14 @@ img {
 	position: relative;
 }
 
+.downloader > div > span {
+	width: 15px;
+	height: 15px;
+	position: absolute;
+	top: 4px;
+	right: 4px;
+}
+
 .downloader > div > p {
 	width: 92%;
 	margin: 0 0 6px 0;
@@ -946,6 +954,7 @@ img {
 }
 
 .downloader > div > div {
+	width: 90%;
 	height: 3px;
 	background-color: #eeea;
 }
@@ -958,12 +967,22 @@ img {
 	transition: .2s;
 }
 
-.downloader > div > span {
+.downloader > div > button {
 	width: 15px;
 	height: 15px;
+	background-color: #E74C3C;
+	color: #fff;
+	border-radius: 50%;
+	font-size: 11px;
 	position: absolute;
-	top: 4px;
+	bottom: 8px;
 	right: 4px;
+	cursor: pointer;
+	transition: .2s;
+}
+
+.downloader > div > button:hover {
+	background-color: #A93226;
 }
 
 /* Pop Alert */
