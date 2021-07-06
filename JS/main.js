@@ -23,7 +23,7 @@ const imageLazyLoadingOptions = {
 	rootMargin: "0px 0px 300px 0px"
 }
 const sites = [['xlecx', 'xlecxRepairComicInfoGetInfo({id}, {whitch})', 'xlecxSearch({text}, 1)', 'xlecxChangePage(1, false, true)']]
-var setting, dirDB, dirUL, tabs = [], db = {}, downloadingList = [], repairingComics = [], thisSite, lastComicId, lastHaveId, searchTimer
+var setting, dirDB, dirUL, tabs = [], db = {}, downloadingList = [], repairingComics = [], thisSite, lastComicId, lastHaveId, searchTimer, needReload = true
 
 // Needable Functions
 function fileExt(str) {
@@ -878,6 +878,8 @@ async function repairComicInfo(whitch) {
 
 // Browser
 function closeBrowser() {
+	needReload = true
+	reloadLoadingComics()
 	document.getElementById('browser').style.display = 'none'
 	thisSite = null
 	tabs = []
@@ -1809,7 +1811,7 @@ async function CreateComic(comicIndex, haveIndex, gottenResult, quality, image, 
 				downloadingList = []
 			}
 		}
-		reloadLoadingComics()
+		if (needReload == true) reloadLoadingComics()
 	})
 }
 

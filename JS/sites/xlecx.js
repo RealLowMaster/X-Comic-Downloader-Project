@@ -1,6 +1,7 @@
 // Xlecx
 function openXlecxBrowser() {
 	thisSite = 0
+	needReload = false
 	document.getElementById('add-new-tab').setAttribute('onclick', "createNewXlecxTab(createNewTab('xlecxChangePage(1, false, false)'))")
 	const id = createNewTab('xlecxChangePage(1, false, false)')
 	if (id == null) { PopAlert('You Can\'t Make Any More Tab.', 'danger'); return }
