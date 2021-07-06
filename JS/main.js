@@ -13,6 +13,7 @@ const defaultSetting = {
 	"notification_download_finish": true,
 	"lazy_loading": true,
 	"tabs_limit": 32,
+	"search_speed": 2,
 	"file_location": null,
 	"developer_mode": false
 }
@@ -22,7 +23,7 @@ const imageLazyLoadingOptions = {
 	rootMargin: "0px 0px 300px 0px"
 }
 const sites = [['xlecx', 'xlecxRepairComicInfoGetInfo({id}, {whitch})', 'xlecxSearch({text}, 1)', 'xlecxChangePage(1, false, true)']]
-var setting, dirDB, dirUL, tabs = [], db = {}, downloadingList = [], repairingComics = [], thisSite, lastComicId, lastHaveId
+var setting, dirDB, dirUL, tabs = [], db = {}, downloadingList = [], repairingComics = [], thisSite, lastComicId, lastHaveId, searchTimer
 
 // Needable Functions
 function fileExt(str) {
@@ -363,6 +364,9 @@ if (typeof(setting.lazy_loading) != 'boolean') setting.lazy_loading = true
 if (setting.lazy_loading == false) imageLazyLoadingOptions.rootMargin = "0px 0px 1200px 0px"
 if (typeof(setting.tabs_limit) != 'number') setting.tabs_limit = 32
 if (setting.tabs_limit < 1) setting.tabs_limit = 1
+if (typeof(setting.search_speed) != 'number') setting.search_speed = 2
+if (setting.search_speed > 3) setting.search_speed = 3
+if (setting.search_speed < 0) setting.search_speed = 0
 
 // Make Tabs Draggable
 const tabsContainer = document.getElementById('browser-tabs')
@@ -431,7 +435,7 @@ function loadComics(page, search) {
 	var comic_container = document.getElementById('comic-container')
 	comic_container.innerHTML = ''
 	comic_container.setAttribute('page', page)
-	var min = 0, max, allPages, id, name, image, pages, repair, html = ''
+	var min = 0, max, allPages, id, name, image, repair, html = ''
 	var max_per_page = setting.max_per_page
 
 	const working = (doc) => {
@@ -459,28 +463,33 @@ function loadComics(page, search) {
 					image = `${dirUL}/${image}-0.${doc[i].f[0][2]}`
 			}
 				
-			
 			html += `<div class="comic" onclick="openComic(${id})"><img src="${image}" loading="lazy"><span>${doc[i].c}</span><p>${name}</p></div>`
 		}
 		comic_container.innerHTML = html
 		
 		// Pagination
-		var thisPagination = pagination(allPages, page)
-		if (thisPagination.length > 0) {
-			html = '<div>'
-			for (var i in thisPagination) {
-				if (thisPagination[i][1] == null)
-					html += `<button disabled>${thisPagination[i][0]}</button>`
-				else
-					html += `<button onclick="loadComics(${thisPagination[i][1]}, ${search})">${thisPagination[i][0]}</button>`
-			}
-			html += '</div>'
-			document.getElementById('pagination').innerHTML = html
-			document.getElementById('pagination').style.display = 'block'
+		if (allPages > 1) {
+			document.getElementById('offline-search-form').style.display = 'flex'
+			var thisPagination = pagination(allPages, page)
+				html = '<div>'
+				for (var i in thisPagination) {
+					if (thisPagination[i][1] == null)
+						html += `<button disabled>${thisPagination[i][0]}</button>`
+					else
+						html += `<button onclick="loadComics(${thisPagination[i][1]}, '${search}')">${thisPagination[i][0]}</button>`
+				}
+				html += '</div>'
+				document.getElementById('pagination').innerHTML = html
+				document.getElementById('pagination').style.display = 'block'
 		} else {
-			comic_container.innerHTML = '<br><div class="alert alert-danger">There is no Comic Downloaded.</div>'
+			if (search == null) document.getElementById('offline-search-form').style.display = 'none'
 			document.getElementById('pagination').style.display = 'none'
 		}
+		
+		if (doc.length == 0 && search != null)
+			comic_container.innerHTML = '<br><div class="alert alert-danger">No Comic has been Found.</div>'
+		else if (doc.length == 0 && search == null)
+			comic_container.innerHTML = '<br><div class="alert alert-danger">There is no Comic Downloaded.</div>'
 	}
 
 	const findComicsBySearch = async() => {
@@ -556,10 +565,36 @@ function pagination(total_pages, page) {
 	return arr
 }
 
+function searchComics(value) {
+	var search_speed
+	switch (setting.search_speed) {
+		case 0:
+			search_speed = 0
+			break
+		case 1:
+			search_speed = 300
+			break
+		case 2:
+			search_speed = 700
+			break
+		case 3:
+			search_speed = 1000
+			break
+	}
+	clearTimeout(searchTimer)
+	if (value.length > 0) {
+		searchTimer = setTimeout(() => {
+			loadComics(1, value)
+		}, search_speed)
+	} else
+		loadComics(1, null)
+}
+
 function reloadLoadingComics() {
 	var page = Number(document.getElementById('comic-container').getAttribute('page')) || null
-	var search = ''
-	loadComics(page)
+	var search = document.getElementById('offline-search-form-input').value || null
+	if (search == null || search.length == 0) search = null
+	loadComics(page, search)
 }
 
 function openComic(id) {
@@ -1783,13 +1818,16 @@ function setLuanchTimeSettings(reloadSettingPanel) {
 	reloadSettingPanel = reloadSettingPanel || false
 	const s_comic_panel_theme = document.getElementById('s_comic_panel_theme')
 	const s_img_graphic = document.getElementById('s_img_graphic')
+	const s_search_speed = document.getElementById('s_search_speed')
 	const s_file_location = document.getElementById('s_file_location')
 
 	s_comic_panel_theme.setAttribute('value', setting.comic_panel_theme)
 	s_img_graphic.setAttribute('value', setting.img_graphic)
+	s_search_speed.setAttribute('value', setting.search_speed)
 
 	s_comic_panel_theme.getElementsByTagName('div')[0].textContent = s_comic_panel_theme.getElementsByTagName('div')[1].querySelector(`[onclick="select(this, ${setting.comic_panel_theme})"]`).textContent
 	s_img_graphic.getElementsByTagName('div')[0].textContent = s_img_graphic.getElementsByTagName('div')[1].querySelector(`[onclick="select(this, ${setting.img_graphic})"]`).textContent
+	s_search_speed.getElementsByTagName('div')[0].textContent = s_search_speed.getElementsByTagName('div')[1].querySelector(`[onclick="select(this, ${setting.search_speed})"]`).textContent
 
 	document.getElementById('s_max_per_page').value = setting.max_per_page
 
@@ -1827,6 +1865,7 @@ function saveSetting(justSave) {
 
 		setting.comic_panel_theme = Number(document.getElementById('s_comic_panel_theme').getAttribute('value'))
 		setting.img_graphic = Number(document.getElementById('s_img_graphic').getAttribute('value'))
+		setting.search_speed = Number(document.getElementById('s_search_speed').getAttribute('value'))
 		setting.max_per_page = newMaxPerPage
 		setting.hover_downloader = document.getElementById('s_hover_downloader').checked
 		setting.notification_download_finish = document.getElementById('s_notification_download_finish').checked
