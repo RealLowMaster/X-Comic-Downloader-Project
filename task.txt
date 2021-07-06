@@ -68,8 +68,6 @@ DB => {
 Add Comic {
 	League Of Legends
     The Cummoner
-    Breaking The Rules
-    Deku and Froppy SMASH!
     Business Casual
     Fallout 4 Vault Meat
     Next Summer
@@ -105,8 +103,6 @@ Add Comic {
     Web Of Shadows
     Shadman
     Spiralling Descent Of A Kennel Bitch
-    Tom Girl
-    Fred Perry
     Lewdua
 }
 Did {
@@ -116,6 +112,7 @@ Did {
 
 Tasks => {
     Ctrl + k | Ctrl + 0
+    Update UI
     Make Loading Comics Work With Downloaded Comics
 	Make Waiting For Starting Download
     Add Multi-Downloading Limit

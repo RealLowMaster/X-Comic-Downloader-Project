@@ -952,7 +952,7 @@ function createNewTab(history) {
 	document.getElementById('browser-prev-btn').style.display = 'inline-block'
 	document.getElementById('browser-next-btn').style.display = 'inline-block'
 	document.getElementById('browser-reload-btn').style.display = 'inline-block'
-	document.getElementById('browser-tool-search-form').style.display = 'inline-block'
+	document.getElementById('browser-tool-search-form').style.display = 'flex'
 
 	updateTabSize()
 	return newTabId

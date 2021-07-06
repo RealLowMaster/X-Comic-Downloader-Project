@@ -76,6 +76,10 @@ img {
 	align-items: center;
 }
 
+.top-menu > div:first-child {
+	padding-left: 2px;
+}
+
 .top-menu > div > button {
 	display: flex;
 	height: 100%;
@@ -105,26 +109,26 @@ img {
 }
 
 .btn-primary {
-	background-color: #0af;
-	border-color: #0ad;
+	background-color: #3498DB;
+	border-color: #2E86C1;
 	color: #fff;
 }
 
 .btn-primary:hover {
-	background-color: #0ad;
-	border-color: #0ac;
+	background-color: #5DADE2;
+	border-color: #3498DB;
 	color: #fff;
 }
 
 .btn-danger {
-	background-color: #d22;
-	border-color: #b22;
+	background-color: #C0392B;
+	border-color: #A93226;
 	color: #fff;
 }
 
 .btn-danger:hover {
-	background-color: #b22;
-	border-color: #b11;
+	background-color: #A93226;
+	border-color: #C0392B;
 	color: #fff;
 }
 
@@ -223,10 +227,11 @@ img {
 	display: block;
 	width: 35px;
 	height: 35px;
+	padding: 5px;
 	background-color: #fff;
 	border-radius: 50%;
 	border: 1px solid #eee;
-	box-shadow: 0 1px 10px 0 rgba(0,0,0,0.2);
+	box-shadow: 0 0 3px 0 rgba(0,0,0,0.2);
 	position: fixed;
 	top: 2px;
 	right: 10px;
@@ -234,10 +239,23 @@ img {
 	transition: .2s;
 }
 
-.borwser-add-tab-btn:hover,
-.browser-tool-close-browser:hover {
-	transform: translate(0, -1px);
-	box-shadow: 0 10px 10px 1px rgba(0,0,0,0.3);
+.borwser-add-tab-btn > svg {
+	width: 100%;
+	height: 100%;
+}
+
+.borwser-add-tab-btn > svg > g > path:first-child {
+	fill: #000;
+}
+
+.borwser-add-tab-btn > svg > g > path:last-child {
+	fill: #555;
+}
+
+.borwser-add-tab-btn:hover {
+	transform: rotate(360deg);
+	background-color: #eee;
+	box-shadow: 0 0 3px 0 rgba(0,0,0,0.6);
 }
 
 .browser-tab {
@@ -309,73 +327,140 @@ img {
 }
 
 .browser-tools-container {
-	display: block;
+	display: grid;
+	grid-template-columns: 3fr 6fr 3fr;
 	width: 100%;
-	padding: 4px 10px;
 	background-color: #fff;
 	position: relative;
 	overflow: hidden;
 	box-shadow: 0 4px 5px 0 rgba(0,0,0,0.1);
 }
 
-.browser-tool-btn {
-	display: inline-block;
-	min-width: 60px;
-	height: 100%;
-	padding: 2px;
-	margin: 0 3px;
-	background-color: #eee;
-	color: #222;
+.browser-tools-container > div {
+	display: flex;
+	align-items: center;
+}
+
+.browser-tools-container > div:first-child {
+	padding-left: 2px;
+}
+
+.browser-tools-container > div:first-child > button {
+	display: flex;
+	width: 30px;
+	height: 30px;
+	justify-content: center;
+	align-items: center;
+	padding: 5px;
+	margin-right: 4px;
+	background-color: #fff;
 	border: 1px solid #ddd;
-	font-size: 14px;
-	box-shadow: 0 2px 3px 0 rgba(0,0,0,0.1);
+	border-radius: 50%;
 	cursor: pointer;
 	transition: .2s;
 }
 
-.browser-tool-btn:hover {
-	background-color: #fff;
-	color: #111;
-	box-shadow: 0 1px 6px 0 rgba(0,0,0,0.2);
-	transform: translate(0, -2px);
+.browser-tools-container > div:first-child > button > svg {
+	width: 100%;
+	height: 100%;
+}
+
+.browser-tools-container > div:first-child > button:hover {
+	transform: rotate(360deg);
+	background-color: #eee;
+	border-color: #0af;
 }
 
 .browser-tool-close-browser {
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	width: 30px;
-	height: 30px;
-	background-color: #e00;
-	color: #fff;
-	border: 1px solid #d00;
-	border-radius: 50%;
+	height: 100%;
+	padding: 5px;
+	background-color: #eee;
+	color: #d55;
+	border: 0 solid #ddd;
+	border-width: 1px 0 1px 1px;
+	border-radius: 50px 0 0 50px;
 	box-shadow: 0 1px 10px 0 rgba(0,0,0,0.2);
 	font-size: 14px;
 	position: absolute;
-	top: 4px;
-	right: 10px;
+	top: 0;
+	right: 0;
 	cursor: pointer;
 	transition: .2s;
 }
 
+.browser-tool-close-browser > svg {
+	width: 100%;
+	height: 100%;
+}
+
+.browser-tool-close-browser > svg > g > path:first-child {
+	fill: #e22;
+}
+
+.browser-tool-close-browser > svg > g > path:last-child {
+	fill: #d66;
+}
+
+.browser-tool-close-browser:hover {
+	transform: rotate(360deg);
+	width: 33px;
+	background-color: #d33;
+	color: #fff;
+	border-radius: 50px;
+	right: 2px;
+}
+
+.browser-tool-close-browser:hover > svg > g > path:first-child {
+	fill: #fff;
+}
+
+.browser-tool-close-browser:hover > svg > g > path:last-child {
+	fill: #ddd;
+}
+
 .browser-tool-search-form {
-	display: inline-block;
-	padding-left: 30px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 100%;
 }
 
 .browser-tool-search-form > input {
 	display: inline-block;
-	width: 150px;
+	height: 90%;
+	width: 200px;
 	padding: 5px 10px;
 	background-color: #fff;
 	color: #222;
 	border: 1px solid #eee;
+	border-radius: 10px 0 0 10px;
+	transition: .2s;
 }
 
 .browser-tool-search-form > button {
 	display: inline-block;
-	padding: 5px;
+	height: 90%;
+	padding: 6px 7px 6px 4px;
 	background-color: #eee;
 	color: #222;
 	border: 1px solid #ddd;
+	border-radius: 0 10px 10px 0;
+	cursor: pointer;
+	transition: .2s;
+}
+
+.browser-tool-search-form > button > svg {
+	height: 100%;
+}
+
+.browser-tool-search-form > button:hover {
+	background-color: #ddd;
+	color: #3498DB;
 }
 
 .browser-tool-search-form > input:hover,
@@ -447,7 +532,7 @@ img {
 	background-color: #ddd;
 	color: #222;
 	border: 1px solid #ccc;
-	border-radius: 1px;
+	border-radius: 5px;
 	font-size: 16px;
 	font-weight: 600;
 	text-shadow: 0 0 5px rgba(0,0,0,0.3);
@@ -455,9 +540,10 @@ img {
 }
 
 .alert-danger {
-	background-color: #e00;
+	background-color: #E74C3C;
 	color: #fff;
-	border-color: #c00;
+	border-color: #CB4335;
+	box-shadow: 0 0 5px 0 #cb443591;
 }
 
 /* Setting */
@@ -1500,14 +1586,14 @@ img {
 .input-row-file > div > button {
 	padding: 4px;
 	color: #fff;
-	background-color: #025bd7;
+	background-color: #3498DB;
 	border-radius: 15px;
 	cursor: pointer;
 	transition: .2s;
 }
 
 .input-row-file > div > button:hover {
-	background-color: #013ac7;
+	background-color: #2E86C1;
 }
 
 .pl-5 {
