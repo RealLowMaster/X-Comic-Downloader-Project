@@ -11,6 +11,7 @@ if (fs.existsSync(dirRoot+'/setting.cfg')) {
 
 function createWindow () {
 	const win = new BrowserWindow({
+		show: false,
 		icon: __dirname+'/Image/favicon.ico',
 		width: 800,
 		height: 600,
@@ -37,7 +38,15 @@ function createWindow () {
 		})
 	}
 
+	win.addListener('close', e => {
+		e.preventDefault()
+	})
+
 	win.loadFile('index.html')
+
+	win.once('ready-to-show', () => {
+		win.show()
+	})
 }
 
 app.setAppUserModelId("X Comic Downloader")

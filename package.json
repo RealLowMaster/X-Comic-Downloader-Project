@@ -21,7 +21,7 @@
     "appId": "com.x-comic-downloader.id",
     "productName": "X Comic Downloader",
     "copyright": "Copyright © 2021 Mehdi Enayatzadeh",
-    "compression": "store",
+    "compression": "maximum",
     "directories": {
       "output": "build"
     },

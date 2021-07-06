@@ -1102,8 +1102,8 @@ function MakeDownloadList(name, id, list) {
 	return index
 }
 
-async function comicDownloader(index, result, quality, siteIndex) {
-	if (downloadingList[index][0] == null) return
+function comicDownloader(index, result, quality, siteIndex) {
+	if (downloadingList[index] == undefined || downloadingList[index][0] == null) return
 	const child = document.getElementById(downloadingList[index][2])
 	const indexOfDownloader = Array.prototype.indexOf.call(child.parentNode.children, child)
 	if (indexOfDownloader > (setting.download_limit - 1)) {
@@ -1123,30 +1123,29 @@ async function comicDownloader(index, result, quality, siteIndex) {
 	var max = downloadingList[index][1].length
 	var percentage = (100 / max) * downloadingList[index][0]
 	var downloaderRow = document.getElementById(`${downloadingList[index][2]}`)
-	await ImageDownloader.image(option).then(({ filename }) => {
+
+	ImageDownloader.image(option).then(({ filename }) => {
 		if (downloadingList[index] == undefined) {
 			fs.unlinkSync(filename)
 			return
 		}
+		downloadingList[index][6].push(filename)
 		downloaderRow.getElementsByTagName('div')[0].getElementsByTagName('div')[0].style.width = percentage+'%'
 		downloaderRow.getElementsByTagName('p')[0].getElementsByTagName('span')[0].textContent = `(${downloadingList[index][0]}/${max})`
-		downloadingList[index][6].push(filename)
 		if (downloadingList[index][0] == max) {
 			var formatList = [], firstIndex = 0, lastIndex = 0
 			var thisFormat = fileExt(downloadingList[index][1][0])
 			for (var j = 1; j < downloadingList[index][1].length; j++) {
 				lastIndex++
 				if (fileExt(downloadingList[index][1][j]) == thisFormat) {
-					if (j == downloadingList[index][1].length - 1)
-						formatList.push([firstIndex, lastIndex, thisFormat])
+					if (j == downloadingList[index][1].length - 1) formatList.push([firstIndex, lastIndex, thisFormat])
 				} else {
 					formatList.push([firstIndex, lastIndex - 1, thisFormat])
 		
 					thisFormat = fileExt(downloadingList[index][1][j])
 					firstIndex = lastIndex
 		
-					if (j == downloadingList[index][1].length - 1)
-						formatList.push([firstIndex, lastIndex, thisFormat])
+					if (j == downloadingList[index][1].length - 1) formatList.push([firstIndex, lastIndex, thisFormat])
 				}
 			}
 			CreateComic(downloadingList[index][7][0], downloadingList[index][7][1], result, quality, downloadingList[index][2], siteIndex, downloadingList[index][3], downloadingList[index][1].length, formatList, downloadingList[index][4], downloadingList[index][5], index, true)
@@ -1164,8 +1163,7 @@ async function comicDownloader(index, result, quality, siteIndex) {
 			for (var j = 1; j < downloadingList[index][1].length; j++) {
 				lastIndex++
 				if (fileExt(downloadingList[index][1][j]) == thisFormat) {
-					if (j == downloadingList[index][1].length - 1)
-						formatList.push([firstIndex, lastIndex, thisFormat])
+					if (j == downloadingList[index][1].length - 1) formatList.push([firstIndex, lastIndex, thisFormat])
 				} else {
 					formatList.push([firstIndex, lastIndex - 1, thisFormat])
 		
@@ -1187,10 +1185,26 @@ function cancelDownload(index) {
 		fs.unlinkSync(downloadingList[index][6][i])
 	}
 	document.getElementById(downloadingList[index][2]).remove()
+	downloadingList[index] = null
 	const downloader = document.getElementById('downloader')
 	if (downloader.children.length == 0) {
 		downloader.style.display = 'none'
 		downloadingList = []
+	}
+}
+
+function cancelAllDownloads(closeApp) {
+	closeApp = closeApp || false
+
+	if (closeApp == true) setting.download_limit = 0
+
+	for (let i = 0; i < downloadingList.length; i++) {
+		if (downloadingList[i] != null) cancelDownload(i)
+	}
+
+	if (closeApp == true) {
+		remote.getCurrentWindow().removeAllListeners()
+		remote.app.quit()
 	}
 }
 
@@ -1960,25 +1974,46 @@ function test() {
 	})
 }
 
-document.addEventListener('readystatechange', e => {
-		makeDatabaseIndexs().then(() => {
-			db.index.findOne({_id:1}, (err, doc) => {
+document.addEventListener('readystatechange', () => {
+
+	remote.getCurrentWindow().addListener('close', e => {
+		e.preventDefault()
+		if (downloadingList.length > 0) {
+			errorSelector('You are Downloading Comics, Are you sure you want To Close Software?', null, false, [
+				[
+					"Yes",
+					"btn btn-primary m-2",
+					"cancelAllDownloads(true)"
+				],
+				[
+					"No",
+					"btn btn-danger m-2"
+				]
+			])
+		} else {
+			remote.getCurrentWindow().removeAllListeners()
+			remote.app.quit()
+		}
+	})
+
+	makeDatabaseIndexs().then(() => {
+		db.index.findOne({_id:1}, (err, doc) => {
+			if (err) { error(err); return }
+			if (doc == undefined)
+				lastComicId = 1
+			else
+				lastComicId = doc.i || null
+			if (lastComicId == null) { error('Indexing Problem.'); return }
+			db.index.findOne({_id:11}, (err, haveDoc) => {
 				if (err) { error(err); return }
 				if (doc == undefined)
-					lastComicId = 1
+					lastHaveId = 1
 				else
-					lastComicId = doc.i || null
-				if (lastComicId == null) { error('Indexing Problem.'); return }
-				db.index.findOne({_id:11}, (err, haveDoc) => {
-					if (err) { error(err); return }
-					if (doc == undefined)
-						lastHaveId = 1
-					else
-						lastHaveId = haveDoc.i || null
-					if (lastHaveId == null) { error('Indexing Problem.'); return }
-					setLuanchTimeSettings(false)
-					loadComics()
-				})
+					lastHaveId = haveDoc.i || null
+				if (lastHaveId == null) { error('Indexing Problem.'); return }
+				setLuanchTimeSettings(false)
+				loadComics()
 			})
 		})
+	})
 })
