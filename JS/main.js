@@ -427,6 +427,7 @@ var imageLoadingObserver = new IntersectionObserver((entries, imageLoadingObserv
 function loadComics(page, search) {
 	page = page || 1
 	search = search || null
+	if (search == 'null') search = null
 	var RegSearch
 	if (search != null) {
 		search = search.toLowerCase()
