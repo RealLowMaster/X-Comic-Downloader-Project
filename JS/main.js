@@ -1338,8 +1338,22 @@ function AddToHave(site, id) {
 	CreateHave(site, id, lastHaveId, false)
 	lastHaveId++
 	var page = document.getElementById(document.getElementById('browser-tabs').getAttribute('pid'))
-	page.getElementsByClassName('browser-comic-have')[0].innerHTML = '<span>You Have This Comic.<span>'
+	page.getElementsByClassName('browser-comic-have')[0].innerHTML = `<button class="remove-from-have" onclick="RemoveFromHave(0, '${id}', this)">You Have This Comic.</button>`
 	PopAlert('Comic Added To Have List.')
+}
+
+function RemoveFromHave(site, id, who) {
+	who = who || null
+	db.have.remove({s:site, i:id}, {}, (err, num) => {
+		if (err) { error(err); return }
+		if (num == 1) {
+			if (who != null) {
+				const parent = who.parentElement
+				parent.innerHTML = `<button onclick="xlecxDownloader('${id}')">Download</button><button class="add-to-have" onclick="AddToHave(${site}, '${id}')">Add To Have</button>`
+			}
+			PopAlert('Comic Removed From Have List.')
+		}
+	})
 }
 
 // Check That We Have Comic Or Not

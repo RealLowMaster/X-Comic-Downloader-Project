@@ -371,7 +371,7 @@ function xlecxOpenPost(makeNewPage, id, updateTabIndex) {
 						findTagRow()
 	
 						container.appendChild(title_container)
-						container.innerHTML += '<div class="browser-comic-have"><span>You Have This Comic.<span></div>'
+						container.innerHTML += '<div class="browser-comic-have"><span>You Downloaded This Comic.<span></div>'
 						container.appendChild(groups_container)
 						container.appendChild(artists_container)
 						container.appendChild(parodies_container)
@@ -445,7 +445,7 @@ function xlecxOpenPost(makeNewPage, id, updateTabIndex) {
 				if (have_in_have == false)
 					container.innerHTML += `<div class="browser-comic-have"><button onclick="xlecxDownloader('${id}')">Download</button><button class="add-to-have" onclick="AddToHave(0, '${id}')">Add To Have</button><div>`
 				else
-					container.innerHTML += '<div class="browser-comic-have"><span>You Have This Comic.<span></div>'
+					container.innerHTML += `<div class="browser-comic-have"><button class="remove-from-have" onclick="RemoveFromHave(0, '${id}', this)">You Have This Comic.</button></div>`
 
 				// Groups
 				if (result.groups != undefined) {
