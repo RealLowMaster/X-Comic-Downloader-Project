@@ -13,7 +13,8 @@ const defaultSetting = {
 	"notification_download_finish": true,
 	"lazy_loading": true,
 	"tabs_limit": 32,
-	"search_speed": 2,
+	"search_speed": 1,
+	"download_limit": 5,
 	"file_location": null,
 	"developer_mode": false
 }
@@ -367,6 +368,8 @@ if (setting.tabs_limit < 1) setting.tabs_limit = 1
 if (typeof(setting.search_speed) != 'number') setting.search_speed = 2
 if (setting.search_speed > 3) setting.search_speed = 3
 if (setting.search_speed < 0) setting.search_speed = 0
+if (typeof(setting.download_limit) != 'number') setting.download_limit = 5
+if (setting.download_limit < 1) setting.download_limit = 1
 
 // Make Tabs Draggable
 const tabsContainer = document.getElementById('browser-tabs')
@@ -1100,6 +1103,14 @@ function MakeDownloadList(name, id, list) {
 }
 
 async function comicDownloader(index, result, quality, siteIndex) {
+	const child = document.getElementById(downloadingList[index][2])
+	const indexOfDownloader = Array.prototype.indexOf.call(child.parentNode.children, child)
+	if (indexOfDownloader > (setting.download_limit - 1)) {
+		setTimeout(() => {
+			comicDownloader(index, result, quality, siteIndex)
+		}, 1000)
+		return
+	}
 	const url = downloadingList[index][1][downloadingList[index][0]]
 	const saveName = `${downloadingList[index][2]}-${downloadingList[index][0]}.${fileExt(url)}`
 	var option = {
@@ -1133,9 +1144,8 @@ async function comicDownloader(index, result, quality, siteIndex) {
 				}
 			}
 			CreateComic(downloadingList[index][7][0], downloadingList[index][7][1], result, quality, downloadingList[index][2], siteIndex, downloadingList[index][3], downloadingList[index][1].length, formatList, downloadingList[index][4], downloadingList[index][5], index, true)
-		} else {
+		} else
 			comicDownloader(index, result, quality, siteIndex)
-		}
 	}).catch(err => {
 		downloaderRow.getElementsByTagName('div')[0].getElementsByTagName('div')[0].style.width = percentage+'%'
 		downloaderRow.getElementsByTagName('p')[0].getElementsByTagName('span')[0].textContent = `(${downloadingList[index][0]}/${max})`
@@ -1160,9 +1170,8 @@ async function comicDownloader(index, result, quality, siteIndex) {
 				}
 			}
 			CreateComic(downloadingList[index][7][0], downloadingList[index][7][1], result, quality, downloadingList[index][2], siteIndex, downloadingList[index][3], downloadingList[index][1].length, formatList, downloadingList[index][4], downloadingList[index][5], index, true)
-		} else {
+		} else
 			comicDownloader(index, result, quality, siteIndex)
-		}
 	})
 }
 
@@ -1804,7 +1813,7 @@ async function CreateComic(comicIndex, haveIndex, gottenResult, quality, image, 
 			if (shortName.length > 26) shortName = shortName.substr(0, 23)+'...'
 			PopAlert(`Comic (${shortName}) Downloaded.`)
 			if (setting.notification_download_finish == true && remote.Notification.isSupported()) new remote.Notification({title: 'Comic Download Finished.', body: gottenResult.title}).show()
-			document.getElementById(`${downloadingList[index][2]}`).remove()
+			document.getElementById(downloadingList[index][2]).remove()
 			downloadingList[index] = null
 			var downloader = document.getElementById('downloader')
 			if (downloader.children.length == 0) {
@@ -1833,6 +1842,7 @@ function setLuanchTimeSettings(reloadSettingPanel) {
 	s_search_speed.getElementsByTagName('div')[0].textContent = s_search_speed.getElementsByTagName('div')[1].querySelector(`[onclick="select(this, ${setting.search_speed})"]`).textContent
 
 	document.getElementById('s_max_per_page').value = setting.max_per_page
+	document.getElementById('s_download_limit').value = setting.download_limit
 
 	if (setting.hover_downloader == true) document.getElementById('s_hover_downloader').checked = true
 	
@@ -1872,6 +1882,7 @@ function saveSetting(justSave) {
 		setting.max_per_page = newMaxPerPage
 		setting.hover_downloader = document.getElementById('s_hover_downloader').checked
 		setting.notification_download_finish = document.getElementById('s_notification_download_finish').checked
+		setting.download_limit = Number(document.getElementById('s_download_limit').value)
 
 		if (lazy_loading != setting.lazy_loading) {
 			setting.lazy_loading = lazy_loading

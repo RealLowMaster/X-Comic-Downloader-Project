@@ -134,7 +134,7 @@
 				<div class="input-row">
 					<label class="input-row-label">Max Comics in a Page (Offline)</label>
 					<input class="input-row-input" type="number" oninput="inputLimit(this, 34)" id="s_max_per_page">
-					<p class="input-row-helper">The Maximum Amount of Comics That Should Show in Offline Parts.<br>Min: 8, Max: 34</p>
+					<p class="input-row-helper">The Maximum Amount of Comics That Should Show in Offline Parts.<br>Min: 1, Max: 34</p>
 				</div>
 			</div>
 
@@ -187,10 +187,18 @@
 							<input type="checkbox" id="s_lazy_loading">
 						</div>
 					</div>
-					<p class="input-row-helper">This Ability is Recommend.<br>Do not Download The Images That aren't in viewport.</p>
+					<p class="input-row-helper">This Ability is Recommend.<br>Do not Start Loading The Images That aren't in viewport.</p>
 				</div>
 
-				<br><br><br><br>
+				<br><br>
+
+				<div class="input-row">
+					<label class="input-row-label">Max Multi-Downloading Comics</label>
+					<input class="input-row-input" type="number" oninput="inputLimit(this, 12)" id="s_download_limit">
+					<p class="input-row-helper">The Maximum Amount of Comics That Can Be Downloading At Same Time.<br>Min: 1, Max: 12</p>
+				</div>
+
+				<br><br>
 
 				<div class="input-row">
 					<p class="input-row-label">Download Location</p>
