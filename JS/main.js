@@ -2005,12 +2005,24 @@ function test() {
 	})
 }
 
-document.addEventListener('readystatechange', () => {
+document.addEventListener("DOMContentLoaded", () => {
+	const rt = document.getElementById('runtime-loading')
+	const rt_progress = document.getElementById('rt-l-p')
+	const rt_width_persent = (100 / 9)
+	let width_counter = 0
 
 	GetSettingFile()
+	width_counter += rt_width_persent
+	rt_progress.style.width = width_counter+'%'
 	GetDirection()
+	width_counter += rt_width_persent
+	rt_progress.style.width = width_counter+'%'
 	CreateDatabase()
+	width_counter += rt_width_persent
+	rt_progress.style.width = width_counter+'%'
 	CheckSettings()
+	width_counter += rt_width_persent
+	rt_progress.style.width = width_counter+'%'
 
 	remote.getCurrentWindow().addListener('close', e => {
 		e.preventDefault()
@@ -2031,6 +2043,8 @@ document.addEventListener('readystatechange', () => {
 			remote.app.quit()
 		}
 	})
+	width_counter += rt_width_persent
+	rt_progress.style.width = width_counter+'%'
 
 	makeDatabaseIndexs().then(() => {
 		db.index.findOne({_id:1}, (err, doc) => {
@@ -2040,6 +2054,8 @@ document.addEventListener('readystatechange', () => {
 			else
 				lastComicId = doc.i || null
 			if (lastComicId == null) { error('Indexing Problem.'); return }
+			width_counter += rt_width_persent
+			rt_progress.style.width = width_counter+'%'
 			db.index.findOne({_id:11}, (err, haveDoc) => {
 				if (err) { error(err); return }
 				if (doc == undefined)
@@ -2047,8 +2063,15 @@ document.addEventListener('readystatechange', () => {
 				else
 					lastHaveId = haveDoc.i || null
 				if (lastHaveId == null) { error('Indexing Problem.'); return }
+				width_counter += rt_width_persent
+				rt_progress.style.width = width_counter+'%'
 				setLuanchTimeSettings(false)
+				width_counter += rt_width_persent
+				rt_progress.style.width = width_counter+'%'
 				loadComics()
+				width_counter += rt_width_persent
+				rt_progress.style.width = width_counter+'%'
+				rt.remove()
 			})
 		})
 	})
