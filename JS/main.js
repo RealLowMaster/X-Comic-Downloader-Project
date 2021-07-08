@@ -1311,6 +1311,24 @@ function clearDownloadedComics(content, site) {
 	}
 }
 
+function changeButtonsToDownloading(id) {
+	const comic_page_btns = document.querySelectorAll(`[ccid="${id}"]`)
+	const comic_overview_btns = document.querySelectorAll(`[cid="${id}"]`)
+	var element, parent
+
+	for (let i = 0; i < comic_page_btns.length; i++) {
+		comic_page_btns[i].innerHTML = '<p>Downloading... <span class="spin spin-success"></span><p>'
+	}
+
+	for (let i = 0; i < comic_overview_btns.length; i++) {
+		parent = comic_overview_btns[i].parentElement
+		comic_overview_btns[i].remove()
+		element = document.createElement('cid')
+		element.innerHTML = '<span class="spin spin-success"></span>'
+		parent.appendChild(element)
+	}
+}
+
 document.getElementById('browser-tool-search-form').addEventListener('submit', e => {
 	e.preventDefault()
 	const input = document.getElementById('browser-tool-search-input')

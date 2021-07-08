@@ -443,7 +443,7 @@ function xlecxOpenPost(makeNewPage, id, updateTabIndex) {
 				var element, miniElement
 				container.innerHTML = `<p class="xlecx-post-title">${result.title}</p>`
 				if (have_in_have == false)
-					container.innerHTML += `<div class="browser-comic-have"><button onclick="xlecxDownloader('${id}')">Download</button><button class="add-to-have" onclick="AddToHave(0, '${id}')">Add To Have</button><div>`
+					container.innerHTML += `<div class="browser-comic-have" ccid="${id}"><button onclick="xlecxDownloader('${id}')">Download</button><button class="add-to-have" onclick="AddToHave(0, '${id}')">Add To Have</button><div>`
 				else
 					container.innerHTML += `<div class="browser-comic-have"><button class="remove-from-have" onclick="RemoveFromHave(0, '${id}', this)">You Have This Comic.</button></div>`
 
@@ -1131,6 +1131,7 @@ function xlecxDownloader(id) {
 	if (IsDownloading(id)) { PopAlert('You are Downloading This Comic.', 'danger'); return }
 	IsHavingComic(0, id, (have, downloaded) => {
 		if (have == true) { PopAlert('You Already Have This Comic.', 'danger'); return }
+		changeButtonsToDownloading(id)
 		xlecx.getComic(id, {related:false}, (err, result) => {
 			if (err) { error(err); return }
 			

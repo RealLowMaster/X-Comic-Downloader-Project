@@ -1169,6 +1169,20 @@ div { display: block; }
 	font-size: 12px;
 }
 
+.xlecx-container-one-row > div > .browser-comic-have > p {
+	display: inline-flex;
+	align-items: center;
+	font-size: 14px;
+	text-align: right;
+}
+
+.xlecx-container-one-row > div > .browser-comic-have > p > .spin {
+	width: 25px;
+	height: 25px;
+	margin: 0 15px 0 10px;
+	border-width: 4px;
+}
+
 .xlecx-container-one-row > div > .browser-comic-have > .remove-from-have {
 	cursor: pointer;
 	transition: .2s;
@@ -1343,6 +1357,25 @@ div { display: block; }
 
 .xlecx-post-container > div:hover {
 	background-color: #a7025b;
+}
+
+.xlecx-post-container > div > cid {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 7px;
+	background-color: #222a;
+	border-radius: 0 7px 7px 0;
+	position: absolute;
+	top: 15px;
+	left: 0;
+}
+
+.xlecx-post-container > div > cid > .spin {
+	width: 20px;
+	height: 20px;
+	margin: 0;
+	border-width: 4px;
 }
 
 .xlecx-pagination {
