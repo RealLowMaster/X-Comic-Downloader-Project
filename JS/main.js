@@ -116,71 +116,150 @@ function ChooseDirectory(title, callback) {
 		callback(null, choosedDirectory[0])
 }
 
-function GetFileLocation(who, repeat) {
-	who = who || null
-	if (repeat == undefined || repeat == null) repeat = true
+function GetFileLocationCallback(err, result) {
+	if (err) {
+		ChooseDirectory('Choose Directory For Saving Downloaded Comics', GetFileLocationCallback)
+		return
+	}
+	if (!fs.existsSync(result)) {
+		ChooseDirectory(`No Such Directory Called '${lastSlash(result, '\\')}'. Choose Another One.`, GetFileLocationCallback)
+		return
+	}
+	dirDB = result+'\\ComicsDB'
+	dirUL = result+'\\DownloadedComics'
+	setting.file_location = result
+	saveSetting(true)
+}
+
+function GetFileLocationForInput(who) {
 	ChooseDirectory('Choose Directory For Saving Downloaded Comics', (err, result) => {
-		if (err) {
-			if (repeat == true) GetFileLocation(who)
+		if (err) { return }
+		if (!fs.existsSync(result)) {
+			PopAlert(`No Such Directory Called '${lastSlash(result, '\\')}'.`, 'danger')
 			return
 		}
-		if (who == null) {
-			dirDB = result+'\\ComicsDB'
-			dirUL = result+'\\DownloadedComics'
-			setting.file_location = result
-			saveSetting(true)
-		} else {
-			who.setAttribute('location', result)
-			const s_file_location_label = who.parentElement.parentElement.children[0]
-			if (result.match(/[\\]/g).length > 1)
-				s_file_location_label.textContent = result.substr(0,2)+'\\...\\'+lastSlash(result, '\\')
-			else
-				s_file_location_label.textContent = result
-			s_file_location_label.setAttribute('title', result)
-		}
+
+		who.setAttribute('location', result)
+		const s_file_location_label = who.parentElement.parentElement.children[0]
+		if (result.match(/[\\]/g).length > 1)
+			s_file_location_label.textContent = result.substr(0,2)+'\\...\\'+lastSlash(result, '\\')
+		else
+			s_file_location_label.textContent = result
+		s_file_location_label.setAttribute('title', result)
 	})
 }
 
-// Create Setting
+// Main Loading Stuff
 const dirRoot = path.join(__dirname).replace('\\app.asar', '')
-if (!fs.existsSync(dirRoot+'/setting.cfg')) {
-	setting = defaultSetting
-	fs.writeFileSync(dirRoot+'/setting.cfg', JSON.stringify(defaultSetting), {encoding:"utf8"})
-} else {
-	setting = getJSON(dirRoot+'/setting.cfg')
-}
-
-// Get Direction
-if (setting.file_location == null)
-	GetFileLocation()
-else {
-	if (!fs.existsSync(setting.file_location)) {
-		GetFileLocation()
+function GetSettingFile() {
+	if (!fs.existsSync(dirRoot+'/setting.cfg')) {
+		setting = defaultSetting
+		fs.writeFileSync(dirRoot+'/setting.cfg', JSON.stringify(defaultSetting), {encoding:"utf8"})
 	} else {
-		dirDB = setting.file_location+'\\ComicsDB'
-		dirUL = setting.file_location+'\\DownloadedComics'
-	}
-	
+		setting = getJSON(dirRoot+'/setting.cfg')
+	}	
 }
 
-// Create Main Roots
-if (!fs.existsSync(dirDB)) fs.mkdirSync(dirDB)
-if (!fs.existsSync(dirUL)) fs.mkdirSync(dirUL)
+function GetDirection() {
+	if (setting.file_location == null)
+		ChooseDirectory('Choose Directory For Saving Downloaded Comics', GetFileLocationCallback)
+	else {
+		if (!fs.existsSync(setting.file_location))
+			ChooseDirectory('Choose Directory For Saving Downloaded Comics', GetFileLocationCallback)
+		else {
+			dirDB = setting.file_location+'\\ComicsDB'
+			dirUL = setting.file_location+'\\DownloadedComics'
+		}
+		
+	}
 
-// Create Database
-db.index = new nedb({ filename: dirDB+'/index', autoload: true })
-db.comics = new nedb({ filename: dirDB+'/comics', autoload: true })
-db.artists = new nedb({ filename: dirDB+'/artists', autoload: true })
-db.comic_artists = new nedb({ filename: dirDB+'/comic_artists', autoload: true })
-db.tags = new nedb({ filename: dirDB+'/tags', autoload: true })
-db.comic_tags = new nedb({ filename: dirDB+'/comic_tags', autoload: true })
-db.groups = new nedb({ filename: dirDB+'/groups', autoload: true })
-db.comic_groups = new nedb({ filename: dirDB+'/comic_groups', autoload: true })
-db.parodies = new nedb({ filename: dirDB+'/parodies', autoload: true })
-db.comic_parodies = new nedb({ filename: dirDB+'/comic_parodies', autoload: true })
-db.playlist = new nedb({ filename: dirDB+'/playlist', autoload: true })
-db.have = new nedb({ filename: dirDB+'/have', autoload: true })
+	if (!fs.existsSync(dirDB)) fs.mkdirSync(dirDB)
+	if (!fs.existsSync(dirUL)) fs.mkdirSync(dirUL)
+}
 
+function CreateDatabase() {
+	db.index = new nedb({ filename: dirDB+'/index', autoload: true })
+	db.comics = new nedb({ filename: dirDB+'/comics', autoload: true })
+	db.artists = new nedb({ filename: dirDB+'/artists', autoload: true })
+	db.comic_artists = new nedb({ filename: dirDB+'/comic_artists', autoload: true })
+	db.tags = new nedb({ filename: dirDB+'/tags', autoload: true })
+	db.comic_tags = new nedb({ filename: dirDB+'/comic_tags', autoload: true })
+	db.groups = new nedb({ filename: dirDB+'/groups', autoload: true })
+	db.comic_groups = new nedb({ filename: dirDB+'/comic_groups', autoload: true })
+	db.parodies = new nedb({ filename: dirDB+'/parodies', autoload: true })
+	db.comic_parodies = new nedb({ filename: dirDB+'/comic_parodies', autoload: true })
+	db.playlist = new nedb({ filename: dirDB+'/playlist', autoload: true })
+	db.have = new nedb({ filename: dirDB+'/have', autoload: true })
+}
+
+function CheckSettings() {
+	if (typeof(setting.comic_panel_theme) != 'number' || setting.comic_panel_theme < 0) setting.comic_panel_theme = 0
+	if (setting.comic_panel_theme > 1) setting.comic_panel_theme = 1
+	if (typeof(setting.img_graphic) != 'number' || setting.img_graphic < 0) setting.img_graphic = 0
+	if (setting.img_graphic > 1) setting.img_graphic = 1
+	if (setting.max_per_page < 1) setting.max_per_page = 1
+	if (typeof(setting.max_per_page) != 'number') setting.max_per_page = 18
+	if (setting.img_graphic > 1) setting.img_graphic = 1
+	if (setting.img_graphic < 0) setting.img_graphic = 0
+	if (typeof(setting.notification_download_finish) != 'boolean') setting.notification_download_finish = true
+	if (typeof(setting.hover_downloader) != 'boolean') setting.hover_downloader = true
+	if (typeof(setting.lazy_loading) != 'boolean') setting.lazy_loading = true
+	if (setting.lazy_loading == false) imageLazyLoadingOptions.rootMargin = "0px 0px 1200px 0px"
+	if (typeof(setting.tabs_limit) != 'number') setting.tabs_limit = 32
+	if (setting.tabs_limit < 1) setting.tabs_limit = 1
+	if (typeof(setting.search_speed) != 'number') setting.search_speed = 2
+	if (setting.search_speed > 3) setting.search_speed = 3
+	if (setting.search_speed < 0) setting.search_speed = 0
+	if (typeof(setting.download_limit) != 'number') setting.download_limit = 5
+	if (setting.download_limit < 1) setting.download_limit = 1
+	if (typeof(setting.developer_mode) != 'boolean') setting.developer_mode = false
+	if (setting.developer_mode == true) {
+		window.addEventListener('keydown', e => {
+			if (e.ctrlKey && e.shiftKey && e.which == 73)
+				remote.getCurrentWebContents().toggleDevTools()
+			else if (e.ctrlKey && e.which == 82)
+				remote.getCurrentWebContents().reload()
+		})
+	}
+}
+
+// Make Tabs Draggable
+const tabsContainer = document.getElementById('browser-tabs')
+const tabsContainerTabs = tabsContainer.querySelectorAll('div')
+tabsContainerTabs.forEach(dragable => {
+	dragable.addEventListener('dragstart',() => {
+		dragable.classList.add('dragging')
+	})
+
+	dragable.addEventListener('dragend', () => {
+		dragable.classList.remove('dragging')
+	})
+})
+tabsContainer.addEventListener('dragover', e => {
+	e.preventDefault()
+	const afterElement = getDragAfterElement(tabsContainer, e.clientX)
+	const draggable = document.querySelector('.dragging')
+	if (afterElement == null) {
+		tabsContainer.append(draggable)
+	} else {
+		tabsContainer.insertBefore(draggable, afterElement)
+	}
+})
+
+function getDragAfterElement(container, x) {
+	const draggableElemnets = [...container.querySelectorAll('div:not(.dragging)')]
+	return draggableElemnets.reduce((closest, child) => {
+		const box = child.getBoundingClientRect()
+		const offset = x - box.left - box.width / 2
+		if (offset < 0 && offset > closest.offset) {
+			return { offset: offset, element: child }
+		} else {
+			return closest
+		}
+	}, { offset: Number.NEGATIVE_INFINITY }).element
+}
+
+// Database Main Stuff
 const insert_index = async(id) => {
 	await db.index.insert({ i:1, _id:id }, (err) => { if (err) error(err) })
 }
@@ -346,72 +425,6 @@ async function makeDatabaseIndexs() {
 	await count_index(10)
 	// have
 	await count_index(11)
-}
-
-// Apply Setting
-if (typeof(setting.comic_panel_theme) != 'number' || setting.comic_panel_theme < 0) setting.comic_panel_theme = 0
-if (setting.comic_panel_theme > 1) setting.comic_panel_theme = 1
-if (typeof(setting.img_graphic) != 'number' || setting.img_graphic < 0) setting.img_graphic = 0
-if (setting.img_graphic > 1) setting.img_graphic = 1
-if (setting.max_per_page < 1) setting.max_per_page = 1
-if (typeof(setting.max_per_page) != 'number') setting.max_per_page = 18
-if (setting.img_graphic > 1) setting.img_graphic = 1
-if (setting.img_graphic < 0) setting.img_graphic = 0
-if (typeof(setting.notification_download_finish) != 'boolean') setting.notification_download_finish = true
-if (typeof(setting.hover_downloader) != 'boolean') setting.hover_downloader = true
-if (typeof(setting.lazy_loading) != 'boolean') setting.lazy_loading = true
-if (setting.lazy_loading == false) imageLazyLoadingOptions.rootMargin = "0px 0px 1200px 0px"
-if (typeof(setting.tabs_limit) != 'number') setting.tabs_limit = 32
-if (setting.tabs_limit < 1) setting.tabs_limit = 1
-if (typeof(setting.search_speed) != 'number') setting.search_speed = 2
-if (setting.search_speed > 3) setting.search_speed = 3
-if (setting.search_speed < 0) setting.search_speed = 0
-if (typeof(setting.download_limit) != 'number') setting.download_limit = 5
-if (setting.download_limit < 1) setting.download_limit = 1
-if (typeof(setting.developer_mode) != 'boolean') setting.developer_mode = false
-if (setting.developer_mode == true) {
-	window.addEventListener('keydown', e => {
-		if (e.ctrlKey && e.shiftKey && e.which == 73)
-			remote.getCurrentWebContents().toggleDevTools()
-		else if (e.ctrlKey && e.which == 82)
-			remote.getCurrentWebContents().reload()
-	})
-}
-
-// Make Tabs Draggable
-const tabsContainer = document.getElementById('browser-tabs')
-const tabsContainerTabs = tabsContainer.querySelectorAll('div')
-tabsContainerTabs.forEach(dragable => {
-	dragable.addEventListener('dragstart',() => {
-		dragable.classList.add('dragging')
-	})
-
-	dragable.addEventListener('dragend', () => {
-		dragable.classList.remove('dragging')
-	})
-})
-tabsContainer.addEventListener('dragover', e => {
-	e.preventDefault()
-	const afterElement = getDragAfterElement(tabsContainer, e.clientX)
-	const draggable = document.querySelector('.dragging')
-	if (afterElement == null) {
-		tabsContainer.append(draggable)
-	} else {
-		tabsContainer.insertBefore(draggable, afterElement)
-	}
-})
-
-function getDragAfterElement(container, x) {
-	const draggableElemnets = [...container.querySelectorAll('div:not(.dragging)')]
-	return draggableElemnets.reduce((closest, child) => {
-		const box = child.getBoundingClientRect()
-		const offset = x - box.left - box.width / 2
-		if (offset < 0 && offset > closest.offset) {
-			return { offset: offset, element: child }
-		} else {
-			return closest
-		}
-	}, { offset: Number.NEGATIVE_INFINITY }).element
 }
 
 // Image Loading
@@ -1994,6 +2007,11 @@ function test() {
 }
 
 document.addEventListener('readystatechange', () => {
+
+	GetSettingFile()
+	GetDirection()
+	CreateDatabase()
+	CheckSettings()
 
 	remote.getCurrentWindow().addListener('close', e => {
 		e.preventDefault()
