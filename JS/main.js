@@ -951,7 +951,6 @@ function activateTab(who) {
 	page = document.getElementById(pageId) || null
 	if (page == null) return
 
-	var tabsContainer = document.getElementById('browser-tabs')
 	var passId = tabsContainer.getAttribute('pid') || null
 	if (passId != null) {
 		var passTab = document.getElementById('browser-tabs').querySelector(`[pi="${passId}"]`) || null
