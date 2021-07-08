@@ -139,7 +139,21 @@
 			</div>
 
 			<div class="col-6 pr-5 pl-5">
-				<br>
+				<div class="input-row">
+					<label class="input-row-label">Pagination Theme</label>
+					<div class="input-row-selector" id="s_pagination_theme" value>
+						<div onclick="openSelect(this.parentElement)"></div>
+						<div class="input-row-selector-overflow">
+							<p onclick="select(this, 0)">Blue Mode</p>
+							<p onclick="select(this, 1)">Green Mode</p>
+						</div>
+						<span></span>
+					</div>
+					<p class="input-row-helper">The Downloaded Comic Pagination Theme.</p>
+				</div>
+
+				<br><br>
+
 				<div class="input-row">
 					<div class="input-row-checkbox">
 						<label>Hoverable Downloader</label>

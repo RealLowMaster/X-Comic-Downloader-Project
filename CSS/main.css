@@ -908,8 +908,6 @@ div { display: block; }
 	justify-content: center;
 	align-items: center;
 	padding: 10px;
-	background-color: #d75b02;
-	border-radius: 50px;
 }
 
 .pagination-rounded > div > button {
@@ -917,24 +915,42 @@ div { display: block; }
 	height: 40px;
 	padding: 0 9px;
 	margin: 0 3px;
-	background-color: #eee;
-	border: 1px solid #ddd;
+	background-color: #EBF5FB;
+	border: 1px solid #D6EAF8;
 	color: #222;
 	font-size: 15px;
 	text-align: center;
 	cursor: pointer;
+	transition: .2s;
 }
 
-.pagination-rounded > div > button:hover {
-	background-color: #ccc;
-	border-color: #bbb;
+.pagination-rounded > div > button:not(:disabled):hover {
+	transform: scale(1.1);
+	background-color: #3498DB;
+	color: #fff;
+	border-color: #2E86C1;
 }
 
 .pagination-rounded > div > button:disabled {
-	background-color: #025bd7;
+	background-color: #3498DB;
 	color: #fff;
-	border-color: #014ba7;
+	border-color: #2E86C1;
 	cursor: default;
+}
+
+.pagination-green-mode > div > button {
+	background-color: #E9F7EF;
+	border-color: #D4EFDF;
+}
+
+.pagination-green-mode > div > button:not(:disabled):hover {
+	background-color: #229954;
+	border-color: #1E8449;
+}
+
+.pagination-green-mode > div > button:disabled {
+	background-color: #229954;
+	border-color: #1E8449;
 }
 
 /* Downloader */
