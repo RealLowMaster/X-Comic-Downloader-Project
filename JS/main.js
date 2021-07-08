@@ -69,6 +69,38 @@ function inputLimit(who, max) {
 		who.value = 1
 }
 
+function getJSON(src) {
+	var xmlHttp = null
+
+	xmlHttp = new XMLHttpRequest()
+	xmlHttp.open("GET", src, false)
+	xmlHttp.send(null)
+	var obj = JSON.parse(xmlHttp.responseText)
+	return obj
+}
+
+function PopAlert(txt, style) {
+	txt = txt || null
+	if (txt == null) return
+	style = style || 'success'
+	var id = new Date().getTime()
+	var alertElement = document.createElement('div')
+	alertElement.classList.add('pop-alert')
+	alertElement.classList.add(`pop-alert-${style}`)
+	alertElement.textContent = txt
+	document.getElementsByTagName('body')[0].appendChild(alertElement)
+	setTimeout(() => {
+		var bottom, alerts = document.getElementsByClassName('pop-alert')
+		for (var i = 0; i < alerts.length; i++) {
+			bottom = Number(alerts[i].style.bottom.replace('px', '')) || 0
+			alerts[i].style.bottom = (bottom+45)+'px'
+		}
+	}, 300)
+	setTimeout(() => {
+		alertElement.remove()
+	}, 4000)
+}
+
 function ChooseDirectory(title, callback) {
 	title = title || 'Choose Directory'
 	callback = callback || null
@@ -129,17 +161,6 @@ else {
 		dirUL = setting.file_location+'\\DownloadedComics'
 	}
 	
-}
-
-// Get Json
-function getJSON(src) {
-	var xmlHttp = null
-
-	xmlHttp = new XMLHttpRequest()
-	xmlHttp.open("GET", src, false)
-	xmlHttp.send(null)
-	var obj = JSON.parse(xmlHttp.responseText)
-	return obj
 }
 
 // Create Main Roots
@@ -327,29 +348,6 @@ async function makeDatabaseIndexs() {
 	await count_index(11)
 }
 
-// Alerts
-function PopAlert(txt, style) {
-	txt = txt || null
-	if (txt == null) return
-	style = style || 'success'
-	var id = new Date().getTime()
-	var alertElement = document.createElement('div')
-	alertElement.classList.add('pop-alert')
-	alertElement.classList.add(`pop-alert-${style}`)
-	alertElement.textContent = txt
-	document.getElementsByTagName('body')[0].appendChild(alertElement)
-	setTimeout(() => {
-		var bottom, alerts = document.getElementsByClassName('pop-alert')
-		for (var i = 0; i < alerts.length; i++) {
-			bottom = Number(alerts[i].style.bottom.replace('px', '')) || 0
-			alerts[i].style.bottom = (bottom+45)+'px'
-		}
-	}, 300)
-	setTimeout(() => {
-		alertElement.remove()
-	}, 4000)
-}
-
 // Apply Setting
 if (typeof(setting.comic_panel_theme) != 'number' || setting.comic_panel_theme < 0) setting.comic_panel_theme = 0
 if (setting.comic_panel_theme > 1) setting.comic_panel_theme = 1
@@ -370,6 +368,15 @@ if (setting.search_speed > 3) setting.search_speed = 3
 if (setting.search_speed < 0) setting.search_speed = 0
 if (typeof(setting.download_limit) != 'number') setting.download_limit = 5
 if (setting.download_limit < 1) setting.download_limit = 1
+if (typeof(setting.developer_mode) != 'boolean') setting.developer_mode = false
+if (setting.developer_mode == true) {
+	window.addEventListener('keydown', e => {
+		if (e.ctrlKey && e.shiftKey && e.which == 73)
+			remote.getCurrentWebContents().toggleDevTools()
+		else if (e.ctrlKey && e.which == 82)
+			remote.getCurrentWebContents().reload()
+	})
+}
 
 // Make Tabs Draggable
 const tabsContainer = document.getElementById('browser-tabs')
@@ -410,9 +417,7 @@ function getDragAfterElement(container, x) {
 // Image Loading
 function preloadImage(img) {
 	const src = img.getAttribute('data-src')
-	if (!src)
-		return
-	
+	if (!src) return
 	img.src = src
 }
 

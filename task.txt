@@ -104,6 +104,8 @@ Add Comic {
     Shadman
     Spiralling Descent Of A Kennel Bitch
     Lewdua
+	Shedding
+	Peculiart
 }
 Did {
     Make Repairing Systems Part 6++ = Next = Complete All Image Repairing
@@ -111,6 +113,8 @@ Did {
 
 Tasks => {
     Ctrl + k | Ctrl + 0
+	Fix Artist => Elvche
+	Add Notification That Download Started
     Make Close Window Event Work Better For Deleting Images
 	Make Waiting For Starting Download
     Remove Electron Window Frame And Make a Custome One
