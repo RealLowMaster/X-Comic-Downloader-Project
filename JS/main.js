@@ -1204,7 +1204,7 @@ function cancelDownload(index) {
 	document.getElementById(downloadingList[index][2]).remove()
 	changeButtonsToDownloading(downloadingList[index][3], true)
 	downloadingList[index] = null
-	PopAlert('Download Canceled.', 'danger')
+	PopAlert('Download Canceled.', 'warning')
 	const downloader = document.getElementById('downloader')
 	if (downloader.children.length == 0) {
 		downloader.style.display = 'none'
@@ -1318,8 +1318,6 @@ function changeButtonsToDownloading(id, backward) {
 	const comic_page_btns = document.querySelectorAll(`[ccid="${id}"]`)
 	const comic_overview_btns = document.querySelectorAll(`[cid="${id}"]`)
 	var element, parent
-
-	console.log(comic_page_btns)
 
 	if (backward == false) {
 		for (let i = 0; i < comic_page_btns.length; i++) {

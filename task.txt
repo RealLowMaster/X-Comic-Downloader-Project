@@ -115,9 +115,7 @@ Tasks => {
     Ctrl + k | Ctrl + 0
 	Fix Artist => Elvche
     Update Errors Name Fail Fetch To Download Failed Or Something Like That
-	Add Notification That Download Started
     Make Close Window Event Work Better For Deleting Images
-	Make Waiting For Starting Download
     Remove Electron Window Frame And Make a Custome One
     Add Report Bug Button
     Make CreateTag() with Zero Problem
