@@ -698,6 +698,11 @@ div { display: block; }
 	transition: .2s;
 }
 
+.comic-panel-repair-info-btn > svg {
+	width: 20px;
+	height: 20px;
+}
+
 .comic-panel-close-btn:hover,
 .comic-panel-repair-info-btn:hover {
 	background-color: #111;
@@ -802,12 +807,14 @@ div { display: block; }
 	color: #fff;
 }
 
-.comic-panel-darkmode .comic-panel-close-btn {
+.comic-panel-darkmode .comic-panel-close-btn,
+.comic-panel-darkmode .comic-panel-repair-info-btn {
 	color: #eee6;
 	border-color: #eee6;
 }
 
-.comic-panel-darkmode .comic-panel-close-btn:hover {
+.comic-panel-darkmode .comic-panel-close-btn:hover,
+.comic-panel-darkmode .comic-panel-repair-info-btn:hover {
 	background-color: #fff;
 	color: #222;
 }
