@@ -294,16 +294,6 @@ const fix_index = async(id) => {
 				}
 			})
 			break
-		case 3:
-			db.comic_artists.find({}, (err, doc) => {
-				if (err) { error(err); return }
-				const len = doc.length
-				if (len > 0) {
-					const neededId = doc[len - 1]._id
-					update_index(neededId, 3)
-				}
-			})
-			break
 		case 4:
 			db.tags.find({}, (err, doc) => {
 				if (err) { error(err); return }
@@ -311,16 +301,6 @@ const fix_index = async(id) => {
 				if (len > 0) {
 					const neededId = doc[len - 1]._id
 					update_index(neededId, 4)
-				}
-			})
-			break
-		case 5:
-			db.comic_tags.find({}, (err, doc) => {
-				if (err) { error(err); return }
-				const len = doc.length
-				if (len > 0) {
-					const neededId = doc[len - 1]._id
-					update_index(neededId, 5)
 				}
 			})
 			break
@@ -334,16 +314,6 @@ const fix_index = async(id) => {
 				}
 			})
 			break
-		case 7:
-			db.comic_groups.find({}, (err, doc) => {
-				if (err) { error(err); return }
-				const len = doc.length
-				if (len > 0) {
-					const neededId = doc[len - 1]._id
-					update_index(neededId, 7)
-				}
-			})
-			break
 		case 8:
 			db.parodies.find({}, (err, doc) => {
 				if (err) { error(err); return }
@@ -351,16 +321,6 @@ const fix_index = async(id) => {
 				if (len > 0) {
 					const neededId = doc[len - 1]._id
 					update_index(neededId, 8)
-				}
-			})
-			break
-		case 9:
-			db.comic_parodies.find({}, (err, doc) => {
-				if (err) { error(err); return }
-				const len = doc.length
-				if (len > 0) {
-					const neededId = doc[len - 1]._id
-					update_index(neededId, 9)
 				}
 			})
 			break
@@ -408,20 +368,12 @@ async function makeDatabaseIndexs() {
 	await count_index(1)
 	// artists
 	await count_index(2)
-	// comic_artists
-	await count_index(3)
 	// tags
 	await count_index(4)
-	// comic_tags
-	await count_index(5)
 	// groups
 	await count_index(6)
-	// comic_groups
-	await count_index(7)
 	// parodies
 	await count_index(8)
-	// comic_parodies
-	await count_index(9)
 	// playlist
 	await count_index(10)
 	// have
@@ -647,7 +599,7 @@ function openComic(id) {
 	}
 
 	const findGroupRow = async() => {
-		await db.comic_groups.findOne({c:Number(id)}, (err, doc) => {
+		await db.comic_groups.findOne({_id:Number(id)}, (err, doc) => {
 			if (err) { error(err); return }
 			var checkDoc = doc || null
 			if (checkDoc != null) {
@@ -669,7 +621,7 @@ function openComic(id) {
 	}
 
 	const findArtistRow = async() => {
-		await db.comic_artists.findOne({c:Number(id)}, (err, doc) => {
+		await db.comic_artists.findOne({_id:Number(id)}, (err, doc) => {
 			if (err) { error(err); return }
 			var checkDoc = doc || null
 			if (checkDoc != null) {
@@ -691,7 +643,7 @@ function openComic(id) {
 	}
 
 	const findParodyRow = async() => {
-		await db.comic_parodies.findOne({c:Number(id)}, (err, doc) => {
+		await db.comic_parodies.findOne({_id:Number(id)}, (err, doc) => {
 			if (err) { error(err); return }
 			var checkDoc = doc || null
 			if (checkDoc != null) {
@@ -713,7 +665,7 @@ function openComic(id) {
 	}
 
 	const findTagRow = async() => {
-		await db.comic_tags.findOne({c:Number(id)}, (err, doc) => {
+		await db.comic_tags.findOne({_id:Number(id)}, (err, doc) => {
 			if (err) { error(err); return }
 			var checkDoc = doc || null
 			if (checkDoc != null) {
@@ -776,6 +728,7 @@ function openComic(id) {
 			findArtistRow()
 			findParodyRow()
 			findTagRow()
+			comic_panel.setAttribute('sid', doc.s)
 			comic_panel.style.display = 'block'
 			comic_panel.scrollTop = 0
 		})
@@ -804,6 +757,7 @@ function closeComicPanel() {
 	image_container.innerHTML = ''
 
 	comic_panel.setAttribute('cid', null)
+	comic_panel.setAttribute('sid', null)
 }
 
 async function repairImageUpdateDatabase(comic_id, imageIndex, imageBaseName, imageFormat, repairIndex, passRepair, passRepairURLs) {
@@ -1492,7 +1446,7 @@ async function AddGroupUpdateList(comicId, groupsList, repairing) {
 		for (var i in groupsList) {
 			newGroupList.push(groupsList[i][0])
 		}
-		await db.comic_groups.update({c:comicId}, { $set: {t:newGroupList} }, {}, (err) => {
+		await db.comic_groups.update({_id:comicId}, { $set: {t:newGroupList} }, {}, (err) => {
 			if (err) { error(err); return }
 			PopAlert('Comic Groups Has Been Repaired!')
 			var html = 'Groups: '
@@ -1502,7 +1456,7 @@ async function AddGroupUpdateList(comicId, groupsList, repairing) {
 			document.getElementById('c-p-g').innerHTML = html
 		})
 	} else {
-		await db.comic_groups.update({c:comicId}, { $set: {t:groupsList} }, {}, (err) => {
+		await db.comic_groups.update({_id:comicId}, { $set: {t:groupsList} }, {}, (err) => {
 			if (err) error(err)
 		})
 	}
@@ -1525,28 +1479,22 @@ async function AddGroupCreateGroupIdList(comicId, groupsList, groupsListIndex, g
 	})
 }
 
-async function AddGroupAddGroupRow(comicId, index, groupsList, repairing) {
+async function AddGroupAddGroupRow(comicId, groupsList, repairing) {
 	repairing = repairing || false
-	await db.comic_groups.insert({c:comicId, t:[], _id:index}, err => {
+	await db.comic_groups.insert({t:[], _id:comicId}, err => {
 		if (err) { error(err); return }
 		AddGroupCreateGroupIdList(comicId, groupsList, 0, [], repairing)
-		fix_index(7)
 	})
 }
 
 async function AddGroup(comicId, groupsList, repairing) {
 	repairing = repairing || false
-	await db.comic_groups.count({c:comicId}, (err, num) => {
+	await db.comic_groups.findOne({_id:comicId}, (err, doc) => {
 		if (err) { error(err); return }
-		if (num == 0) {
-			db.index.findOne({_id:7}, (err, doc) => {
-				if (err) { error(err); return }
-				var index = doc.i
-				AddGroupAddGroupRow(comicId, index, groupsList, repairing)
-			})
-		} else {
+		if (doc == undefined)
+			AddGroupAddGroupRow(comicId, groupsList, repairing)
+		else
 			AddGroupCreateGroupIdList(comicId, groupsList, 0, [], repairing)
-		}
 	})
 }
 
@@ -1593,7 +1541,7 @@ async function AddArtistUpdateList(comicId, artistsList, repairing) {
 		for (var i in artistsList) {
 			newArtistList.push(artistsList[i][0])
 		}
-		await db.comic_artists.update({c:comicId}, { $set: {t:newArtistList} }, {}, (err) => {
+		await db.comic_artists.update({_id:comicId}, { $set: {t:newArtistList} }, {}, (err) => {
 			if (err) { error(err); return }
 			PopAlert('Comic Artists Has Been Repaired!')
 			var html = 'Artists: '
@@ -1603,7 +1551,7 @@ async function AddArtistUpdateList(comicId, artistsList, repairing) {
 			document.getElementById('c-p-a').innerHTML = html
 		})
 	} else {
-		await db.comic_artists.update({c:comicId}, { $set: {t:artistsList} }, {}, (err) => {
+		await db.comic_artists.update({_id:comicId}, { $set: {t:artistsList} }, {}, (err) => {
 			if (err) error(err)
 		})
 	}
@@ -1626,28 +1574,22 @@ async function AddArtistCreateArtistIdList(comicId, artistsList, artistsListInde
 	})
 }
 
-async function AddArtistAddArtistRow(comicId, index, artistsList, repairing) {
+async function AddArtistAddArtistRow(comicId, artistsList, repairing) {
 	repairing = repairing || false
-	await db.comic_artists.insert({c:comicId, t:[], _id:index}, err => {
+	await db.comic_artists.insert({t:[], _id:comicId}, err => {
 		if (err) { error(err); return }
 		AddArtistCreateArtistIdList(comicId, artistsList, 0, [], repairing)
-		fix_index(3)
 	})
 }
 
 async function AddArtist(comicId, artistsList, repairing) {
 	repairing = repairing || false
-	await db.comic_artists.count({c:comicId}, (err, num) => {
+	await db.comic_artists.findOne({_id:comicId}, (err, doc) => {
 		if (err) { error(err); return }
-		if (num == 0) {
-			db.index.findOne({_id:3}, (err, doc) => {
-				if (err) { error(err); return }
-				var index = doc.i
-				AddArtistAddArtistRow(comicId, index, artistsList, repairing)
-			})
-		} else {
+		if (doc == undefined)
+			AddArtistAddArtistRow(comicId, artistsList, repairing)
+		else
 			AddArtistCreateArtistIdList(comicId, artistsList, 0, [], repairing)
-		}
 	})
 }
 
@@ -1694,7 +1636,7 @@ async function AddParodyUpdateList(comicId, parodyList, repairing) {
 		for (var i in parodyList) {
 			newParodyList.push(parodyList[i][0])
 		}
-		await db.comic_parodies.update({c:comicId}, { $set: {t:newParodyList} }, {}, (err) => {
+		await db.comic_parodies.update({_id:comicId}, { $set: {t:newParodyList} }, {}, (err) => {
 			if (err) { error(err); return }
 			PopAlert('Comic Parodies Has Been Repaired!')
 			var html = 'Parody: '
@@ -1704,7 +1646,7 @@ async function AddParodyUpdateList(comicId, parodyList, repairing) {
 			document.getElementById('c-p-p').innerHTML = html
 		})
 	} else {
-		await db.comic_parodies.update({c:comicId}, { $set: {t:parodyList} }, {}, (err) => {
+		await db.comic_parodies.update({_id:comicId}, { $set: {t:parodyList} }, {}, (err) => {
 			if (err) error(err)
 		})
 	}
@@ -1720,35 +1662,29 @@ async function AddParodyCreateParodyIdList(comicId, parodyList, parodyListIndex,
 			parodyNewList.push([doc._id, doc.n])
 		else
 			parodyNewList.push(doc._id)
-		if (parodyListIndex == parodyList.length - 1) {
+		if (parodyListIndex == parodyList.length - 1)
 			AddParodyUpdateList(comicId, parodyNewList, repairing)
-		} else
+		else
 			AddParodyCreateParodyIdList(comicId, parodyList, parodyListIndex + 1, parodyNewList, repairing)
 	})
 }
 
-async function AddParodyAddParodyRow(comicId, index, parodyList, repairing) {
+async function AddParodyAddParodyRow(comicId, parodyList, repairing) {
 	repairing = repairing || false
-	await db.comic_parodies.insert({c:comicId, t:[], _id:index}, err => {
+	await db.comic_parodies.insert({t:[], _id:comicId}, err => {
 		if (err) { error(err); return }
 		AddParodyCreateParodyIdList(comicId, parodyList, 0, [], repairing)
-		fix_index(9)
 	})
 }
 
 async function AddParody(comicId, parodyList, repairing) {
 	repairing = repairing || false
-	await db.comic_parodies.count({c:comicId}, (err, num) => {
+	await db.comic_parodies.findOne({_id:comicId}, (err, doc) => {
 		if (err) { error(err); return }
-		if (num == 0) {
-			db.index.findOne({_id:9}, (err, doc) => {
-				if (err) { error(err); return }
-				var index = doc.i
-				AddParodyAddParodyRow(comicId, index, parodyList, repairing)
-			})
-		} else {
+		if (doc == undefined)
+			AddParodyAddParodyRow(comicId, parodyList, repairing)
+		else
 			AddParodyCreateParodyIdList(comicId, parodyList, 0, [], repairing)
-		}
 	})
 }
 
@@ -1795,7 +1731,7 @@ async function AddTagUpdateList(comicId, tagList, repairing) {
 		for (var i in tagList) {
 			newTagList.push(tagList[i][0])
 		}
-		await db.comic_tags.update({c:comicId}, { $set: {t:newTagList} }, {}, (err) => {
+		await db.comic_tags.update({_id:comicId}, { $set: {t:newTagList} }, {}, (err) => {
 			if (err) { error(err); return }
 			PopAlert('Comic Tags Has Been Repaired!')
 			var html = 'Tags: '
@@ -1805,7 +1741,7 @@ async function AddTagUpdateList(comicId, tagList, repairing) {
 			document.getElementById('c-p-ts').innerHTML = html
 		})
 	} else {
-		await db.comic_tags.update({c:comicId}, { $set: {t:tagList} }, {}, (err) => {
+		await db.comic_tags.update({_id:comicId}, { $set: {t:tagList} }, {}, (err) => {
 			if (err) error(err)
 		})
 	}
@@ -1828,28 +1764,22 @@ async function AddTagCreateTagIdList(comicId, tagList, tagListIndex, newList, re
 	})
 }
 
-async function AddTagAddTagRow(comicId, index, tagList, repairing) {
+async function AddTagAddTagRow(comicId, tagList, repairing) {
 	repairing = repairing || false
-	await db.comic_tags.insert({c:comicId, t:[], _id:index}, err => {
+	await db.comic_tags.insert({t:[], _id:comicId}, err => {
 		if (err) { error(err); return }
 		AddTagCreateTagIdList(comicId, tagList, 0, [], repairing)
-		fix_index(5)
 	})
 }
 
 async function AddTag(comicId, tagList, repairing) {
 	repairing = repairing || false
-	await db.comic_tags.count({c:comicId}, (err, num) => {
+	await db.comic_tags.findOne({_id:comicId}, (err, doc) => {
 		if (err) { error(err); return }
-		if (num == 0) {
-			db.index.findOne({_id:5}, (err, doc) => {
-				if (err) { error(err); return }
-				var index = doc.i
-				AddTagAddTagRow(comicId, index, tagList, repairing)
-			})
-		} else {
+		if (doc == undefined)
+			AddTagAddTagRow(comicId, tagList, repairing)
+		else
 			AddTagCreateTagIdList(comicId, tagList, 0, [], repairing)
-		}
 	})
 }
 
@@ -1984,6 +1914,45 @@ async function CreateComic(comicIndex, haveIndex, gottenResult, quality, image, 
 		}
 		if (needReload == true) reloadLoadingComics()
 	})
+}
+
+// Delete a Comic
+function deleteComic(site, id) {
+	const errors = document.getElementsByClassName('error')
+	for (let i = 0; i < errors.length; i++) {
+		errors[i].remove()
+	}
+	document.getElementById('comic-action-panel').style.display='none'
+	closeComicPanel()
+
+	const wt = document.getElementById('waiting-loading')
+	const wt_progress = document.getElementById('wt-l-p')
+	const wt_width_persent = (100 / 9)
+	let width_counter = 0
+
+	wt.getElementsByTagName('p')[0].textContent = 'Deleting...'
+	wt.style.display = 'flex'
+
+	db.findOne({s:site, p:id}, (err, doc) => {
+		if (err) { wt.style.display = 'none'; error(err); return }
+		if (doc == undefined) { wt.style.display = 'none'; error('Comic Not Found.'); return }
+
+
+	})
+}
+
+function askForDeletingComic(site, id) {
+	errorSelector('Are you sure you want To Delete This Comic ?', null, false, [
+		[
+			"Yes",
+			"btn btn-danger m-2",
+			`deleteComic(${site}, ${id})`
+		],
+		[
+			"No",
+			"btn btn-primary m-2"
+		]
+	])
 }
 
 // Setting

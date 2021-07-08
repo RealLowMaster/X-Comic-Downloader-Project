@@ -227,7 +227,7 @@ function xlecxOpenPost(makeNewPage, id, updateTabIndex) {
 				}
 	
 				const findGroupRow = async() => {
-					await db.comic_groups.findOne({c:Number(id)}, (err, doc) => {
+					await db.comic_groups.findOne({_id:Number(id)}, (err, doc) => {
 						if (err) { error(err); return }
 						var checkDoc = doc || null
 						if (checkDoc != null) {
@@ -255,7 +255,7 @@ function xlecxOpenPost(makeNewPage, id, updateTabIndex) {
 				}
 	
 				const findArtistRow = async() => {
-					await db.comic_artists.findOne({c:Number(id)}, (err, doc) => {
+					await db.comic_artists.findOne({_id:Number(id)}, (err, doc) => {
 						if (err) { error(err); return }
 						var checkDoc = doc || null
 						if (checkDoc != null) {
@@ -283,7 +283,7 @@ function xlecxOpenPost(makeNewPage, id, updateTabIndex) {
 				}
 	
 				const findParodyRow = async() => {
-					await db.comic_parodies.findOne({c:Number(id)}, (err, doc) => {
+					await db.comic_parodies.findOne({_id:Number(id)}, (err, doc) => {
 						if (err) { error(err); return }
 						var checkDoc = doc || null
 						if (checkDoc != null) {
@@ -311,7 +311,7 @@ function xlecxOpenPost(makeNewPage, id, updateTabIndex) {
 				}
 	
 				const findTagRow = async() => {
-					await db.comic_tags.findOne({c:Number(id)}, (err, doc) => {
+					await db.comic_tags.findOne({_id:Number(id)}, (err, doc) => {
 						if (err) { error(err); return }
 						var checkDoc = doc || null
 						if (checkDoc != null) {
