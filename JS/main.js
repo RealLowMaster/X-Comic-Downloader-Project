@@ -1202,6 +1202,7 @@ function cancelDownload(index) {
 		fs.unlinkSync(downloadingList[index][6][i])
 	}
 	document.getElementById(downloadingList[index][2]).remove()
+	changeButtonsToDownloading(downloadingList[index][3], true)
 	downloadingList[index] = null
 	PopAlert('Download Canceled.', 'danger')
 	const downloader = document.getElementById('downloader')
@@ -1311,21 +1312,39 @@ function clearDownloadedComics(content, site) {
 	}
 }
 
-function changeButtonsToDownloading(id) {
+function changeButtonsToDownloading(id, backward) {
+	backward = backward || false
 	const comic_page_btns = document.querySelectorAll(`[ccid="${id}"]`)
 	const comic_overview_btns = document.querySelectorAll(`[cid="${id}"]`)
 	var element, parent
 
-	for (let i = 0; i < comic_page_btns.length; i++) {
-		comic_page_btns[i].innerHTML = '<p>Downloading... <span class="spin spin-success"></span><p>'
-	}
-
-	for (let i = 0; i < comic_overview_btns.length; i++) {
-		parent = comic_overview_btns[i].parentElement
-		comic_overview_btns[i].remove()
-		element = document.createElement('cid')
-		element.innerHTML = '<span class="spin spin-success"></span>'
-		parent.appendChild(element)
+	if (backward == false) {
+		for (let i = 0; i < comic_page_btns.length; i++) {
+			comic_page_btns[i].innerHTML = '<p>Downloading... <span class="spin spin-success"></span><p>'
+		}
+	
+		for (let i = 0; i < comic_overview_btns.length; i++) {
+			parent = comic_overview_btns[i].parentElement
+			comic_overview_btns[i].remove()
+			element = document.createElement('cid')
+			element.setAttribute('cid', id)
+			element.innerHTML = '<span class="spin spin-success"></span>'
+			parent.appendChild(element)
+		}
+	} else {
+		for (let i = 0; i < comic_page_btns.length; i++) {
+			comic_page_btns[i].innerHTML = `<button onclick="xlecxDownloader('${id}')">Download</button><button class="add-to-have" onclick="AddToHave(0, '${id}')">Add To Have</button>`
+		}
+	
+		for (let i = 0; i < comic_overview_btns.length; i++) {
+			parent = comic_overview_btns[i].parentElement
+			comic_overview_btns[i].remove()
+			element = document.createElement('button')
+			element.setAttribute('cid', id)
+			element.setAttribute('onclick', "xlecxDownloader(this.getAttribute('cid'))")
+			element.textContent = 'Download'
+			parent.appendChild(element)
+		}
 	}
 }
 
