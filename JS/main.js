@@ -1203,6 +1203,7 @@ function cancelDownload(index) {
 	}
 	document.getElementById(downloadingList[index][2]).remove()
 	downloadingList[index] = null
+	PopAlert('Download Canceled.', 'danger')
 	const downloader = document.getElementById('downloader')
 	if (downloader.children.length == 0) {
 		downloader.style.display = 'none'

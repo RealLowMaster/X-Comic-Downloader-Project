@@ -1155,6 +1155,7 @@ function xlecxDownloader(id) {
 			if (result.artists != undefined) sendingResult.artists = result.artists
 			if (result.parody != undefined)	sendingResult.parody = result.parody
 			if (result.tags != undefined)	sendingResult.tags = result.tags
+			PopAlert(`Download Started. '${name}'`)
 			comicDownloader(downloadIndex, sendingResult, quality, 0)
 		})
 	})
