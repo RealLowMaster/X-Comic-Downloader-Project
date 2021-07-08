@@ -109,7 +109,6 @@ Add Comic {
 }
 Did {
     Make Repairing Systems Part 6++ = Next = Complete All Image Repairing
-    Make changeButtonsToDownloading() Part 3++
 }
 
 Tasks => {

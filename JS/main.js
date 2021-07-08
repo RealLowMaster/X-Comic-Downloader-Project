@@ -1319,6 +1319,8 @@ function changeButtonsToDownloading(id, backward) {
 	const comic_overview_btns = document.querySelectorAll(`[cid="${id}"]`)
 	var element, parent
 
+	console.log(comic_page_btns)
+
 	if (backward == false) {
 		for (let i = 0; i < comic_page_btns.length; i++) {
 			comic_page_btns[i].innerHTML = '<p>Downloading... <span class="spin spin-success"></span><p>'

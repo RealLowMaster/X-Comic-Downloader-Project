@@ -69,7 +69,11 @@ function createNewXlecxTab(id, pageNumber) {
 			else
 				valueStorage = `<span>${result.content[i].pages}</span>`
 
-			html += `${valueStorage}<p>${result.content[i].title}</p><button cid="${result.content[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
+			html += `${valueStorage}<p>${result.content[i].title}</p>`
+			if (IsDownloading(result.content[i].id))
+				html += `<cid cid="${result.content[i].id}"><span class="spin spin-success"></span></cid>`
+			else
+				html += `<button cid="${result.content[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
 			element.innerHTML = html
 			miniElement = document.createElement('div')
 			miniElement.setAttribute('id', result.content[i].id)
@@ -120,7 +124,11 @@ function createNewXlecxTab(id, pageNumber) {
 			else
 				valueStorage = `<span>${result.random[i].pages}</span>`
 
-			html += `${valueStorage}<p>${result.random[i].title}</p><button cid="${result.random[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
+			html += `${valueStorage}<p>${result.random[i].title}</p>`
+			if (IsDownloading(result.random[i].id))
+				html += `<cid cid="${result.random[i].id}"><span class="spin spin-success"></span></cid>`
+			else
+				html += `<button cid="${result.random[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
 			element.innerHTML = html
 			miniElement = document.createElement('div')
 			miniElement.setAttribute('id', result.random[i].id)
@@ -402,7 +410,11 @@ function xlecxOpenPost(makeNewPage, id, updateTabIndex) {
 									else
 										valueStorage = `<span>${result[i].pages}</span>`
 			
-									html += `${valueStorage}<p>${result[i].title}</p><button cid="${result[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
+									html += `${valueStorage}<p>${result[i].title}</p>`
+									if (IsDownloading(result[i].id))
+										html += `<cid cid="${result[i].id}"><span class="spin spin-success"></span></cid>`
+									else
+										html += `<button cid="${result[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
 									element.innerHTML = html
 									miniElement = document.createElement('div')
 									miniElement.setAttribute('id', result[i].id)
@@ -442,10 +454,12 @@ function xlecxOpenPost(makeNewPage, id, updateTabIndex) {
 				var container = document.createElement('div')
 				var element, miniElement
 				container.innerHTML = `<p class="xlecx-post-title">${result.title}</p>`
-				if (have_in_have == false)
-					container.innerHTML += `<div class="browser-comic-have" ccid="${id}"><button onclick="xlecxDownloader('${id}')">Download</button><button class="add-to-have" onclick="AddToHave(0, '${id}')">Add To Have</button><div>`
+				if (have_in_have == true)
+					container.innerHTML += `<div class="browser-comic-have" ccid="${id}"><button class="remove-from-have" onclick="RemoveFromHave(0, '${id}', this)">You Have This Comic.</button></div>`
+				else if (IsDownloading(id))
+					container.innerHTML += `<div class="browser-comic-have" ccid="${id}"><p>Downloading... <span class="spin spin-success"></span><p></div>`
 				else
-					container.innerHTML += `<div class="browser-comic-have"><button class="remove-from-have" onclick="RemoveFromHave(0, '${id}', this)">You Have This Comic.</button></div>`
+					container.innerHTML += `<div class="browser-comic-have" ccid="${id}"><button onclick="xlecxDownloader('${id}')">Download</button><button class="add-to-have" onclick="AddToHave(0, '${id}')">Add To Have</button><div>`
 
 				// Groups
 				if (result.groups != undefined) {
@@ -548,7 +562,11 @@ function xlecxOpenPost(makeNewPage, id, updateTabIndex) {
 						else
 							valueStorage = `<span>${result.related[i].pages}</span>`
 
-						html += `${valueStorage}<p>${result.related[i].title}</p><button cid="${result.related[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
+						html += `${valueStorage}<p>${result.related[i].title}</p>`
+						if (IsDownloading(result.related[i].id))
+							html += `<cid cid="${result.related[i].id}"><span class="spin spin-success"></span></cid>`
+						else
+							html += `<button cid="${result.related[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
 						element.innerHTML = html
 						miniElement = document.createElement('div')
 						miniElement.setAttribute('id', result.related[i].id)
@@ -684,7 +702,11 @@ function xlecxOpenCategory(name, page, shortName, makeNewPage, updateTabIndex) {
 			else
 				valueStorage = `<span>${result.content[i].pages}</span>`
 
-			html += `${valueStorage}<p>${result.content[i].title}</p><button cid="${result.content[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
+			html += `${valueStorage}<p>${result.content[i].title}</p>`
+			if (IsDownloading(result.content[i].id))
+				html += `<cid cid="${result.content[i].id}"><span class="spin spin-success"></span></cid>`
+			else
+				html += `<button cid="${result.content[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
 			element.innerHTML = html
 			miniElement = document.createElement('div')
 			miniElement.setAttribute('id', result.content[i].id)
@@ -735,7 +757,11 @@ function xlecxOpenCategory(name, page, shortName, makeNewPage, updateTabIndex) {
 			else
 				valueStorage = `<span>${result.random[i].pages}</span>`
 
-			html += `${valueStorage}<p>${result.random[i].title}</p><button cid="${result.random[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
+			html += `${valueStorage}<p>${result.random[i].title}</p>`
+			if (IsDownloading(result.random[i].id))
+				html += `<cid cid="${result.random[i].id}"><span class="spin spin-success"></span></cid>`
+			else
+				html += `<button cid="${result.random[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
 			element.innerHTML = html
 			miniElement = document.createElement('div')
 			miniElement.setAttribute('id', result.random[i].id)
@@ -791,7 +817,11 @@ function xlecxOpenTagContentMaker(result, pageContent, name, whitch) {
 		else
 			valueStorage = `<span>${result.content[i].pages}</span>`
 
-		html += `${valueStorage}<p>${result.content[i].title}</p><button cid="${result.content[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
+		html += `${valueStorage}<p>${result.content[i].title}</p>`
+		if (IsDownloading(result.content[i].id))
+			html += `<cid cid="${result.content[i].id}"><span class="spin spin-success"></span></cid>`
+		else
+			html += `<button cid="${result.content[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
 		element.innerHTML = html
 		miniElement = document.createElement('div')
 		miniElement.setAttribute('id', result.content[i].id)
@@ -994,7 +1024,11 @@ function xlecxSearch(text, page, updateTabIndex) {
 				else
 					valueStorage = `<span>${result.content[i].pages}</span>`
 
-				html += `${valueStorage}<p>${result.content[i].title}</p><button cid="${result.content[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
+				html += `${valueStorage}<p>${result.content[i].title}</p>`
+				if (IsDownloading(result.content[i].id))
+					html += `<cid cid="${result.content[i].id}"><span class="spin spin-success"></span></cid>`
+				else
+					html += `<button cid="${result.content[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
 				element.innerHTML = html
 				miniElement = document.createElement('div')
 				miniElement.setAttribute('id', result.content[i].id)
@@ -1133,7 +1167,6 @@ function xlecxDownloader(id) {
 		if (have == true) { PopAlert('You Already Have This Comic.', 'danger'); return }
 		changeButtonsToDownloading(id)
 		xlecx.getComic(id, {related:false}, (err, result) => {
-			console.log(id)
 			if (err) { error(err); changeButtonsToDownloading(id, true); return }
 			
 			var name = result.title, quality = 0, downloadImageList = []
