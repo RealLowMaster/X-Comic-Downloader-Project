@@ -1133,7 +1133,8 @@ function xlecxDownloader(id) {
 		if (have == true) { PopAlert('You Already Have This Comic.', 'danger'); return }
 		changeButtonsToDownloading(id)
 		xlecx.getComic(id, {related:false}, (err, result) => {
-			if (err) { error(err); return }
+			console.log(id)
+			if (err) { error(err); changeButtonsToDownloading(id, true); return }
 			
 			var name = result.title, quality = 0, downloadImageList = []
 			if (result.images[0].src == result.images[0].thumb)

@@ -1277,7 +1277,7 @@ function removeDownloadedComicsDownloadButton(site, id, parent, btn, haveCallbac
 			if (downloaded == true)
 				downloadedCallback(parent, btn)
 			else
-				haveCallback(parent, btn)
+				haveCallback(parent, btn, id)
 		}
 	})
 }
@@ -1292,9 +1292,10 @@ function clearDownloadedComics(content, site) {
 					var id = mainComics[j].getElementsByTagName('button')[0]
 					if (id != undefined) {
 						id = id.getAttribute('cid')
-						removeDownloadedComicsDownloadButton(0, id, mainComics[j], mainComics[j].getElementsByTagName('button')[0], (parent, btn) => {
+						removeDownloadedComicsDownloadButton(0, id, mainComics[j], mainComics[j].getElementsByTagName('button')[0], (parent, btn, lastId) => {
 							btn.remove()
 							var element = document.createElement('button')
+							element.setAttribute('cid', lastId)
 							element.classList.add('comic-had')
 							element.textContent = 'Had'
 							parent.appendChild(element)
@@ -1348,6 +1349,60 @@ function changeButtonsToDownloading(id, backward) {
 	}
 }
 
+function changeButtonsToDownloaded(id, have, haveBackward) {
+	have = have || false
+	const comic_page_btns = document.querySelectorAll(`[ccid="${id}"]`)
+	const comic_overview_btns = document.querySelectorAll(`[cid="${id}"]`)
+	var element, parent
+
+	if (have == false) {
+		for (let i = 0; i < comic_page_btns.length; i++) {
+			comic_page_btns[i].innerHTML = '<span>You Downloaded This Comic.<span></span></span>'
+		}
+	
+		for (let i = 0; i < comic_overview_btns.length; i++) {
+			parent = comic_overview_btns[i].parentElement
+			comic_overview_btns[i].remove()
+			element = document.createElement('button')
+			element.classList.add('comic-downloaded')
+			element.textContent = 'Downloaded'
+			parent.appendChild(element)
+		}
+	} else {
+		haveBackward = haveBackward || false
+
+		if (haveBackward == false) {
+			for (let i = 0; i < comic_page_btns.length; i++) {
+				comic_page_btns[i].innerHTML = `<button class="remove-from-have" onclick="RemoveFromHave(0, '${id}', this)">You Have This Comic.</button>`
+			}
+		
+			for (let i = 0; i < comic_overview_btns.length; i++) {
+				parent = comic_overview_btns[i].parentElement
+				comic_overview_btns[i].remove()
+				element = document.createElement('button')
+				element.setAttribute('cid', id)
+				element.classList.add('comic-had')
+				element.textContent = 'Had'
+				parent.appendChild(element)
+			}
+		} else {
+			for (let i = 0; i < comic_page_btns.length; i++) {
+				comic_page_btns[i].innerHTML = `<button onclick="xlecxDownloader('${id}')">Download</button><button class="add-to-have" onclick="AddToHave(0, '${id}')">Add To Have</button>`
+			}
+		
+			for (let i = 0; i < comic_overview_btns.length; i++) {
+				parent = comic_overview_btns[i].parentElement
+				comic_overview_btns[i].remove()
+				element = document.createElement('button')
+				element.setAttribute('cid', id)
+				element.setAttribute('onclick', "xlecxDownloader(this.getAttribute('cid'))")
+				element.textContent = 'Download'
+				parent.appendChild(element)
+			}
+		}
+	}
+}
+
 document.getElementById('browser-tool-search-form').addEventListener('submit', e => {
 	e.preventDefault()
 	const input = document.getElementById('browser-tool-search-input')
@@ -1394,6 +1449,7 @@ function AddToHave(site, id) {
 	lastHaveId++
 	var page = document.getElementById(document.getElementById('browser-tabs').getAttribute('pid'))
 	page.getElementsByClassName('browser-comic-have')[0].innerHTML = `<button class="remove-from-have" onclick="RemoveFromHave(0, '${id}', this)">You Have This Comic.</button>`
+	changeButtonsToDownloaded(id, true, false)
 	PopAlert('Comic Added To Have List.')
 }
 
@@ -1406,6 +1462,7 @@ function RemoveFromHave(site, id, who) {
 				const parent = who.parentElement
 				parent.innerHTML = `<button onclick="xlecxDownloader('${id}')">Download</button><button class="add-to-have" onclick="AddToHave(${site}, '${id}')">Add To Have</button>`
 			}
+			changeButtonsToDownloaded(id, true, true)
 			PopAlert('Comic Removed From Have List.')
 		}
 	})
@@ -1917,6 +1974,7 @@ async function CreateComic(comicIndex, haveIndex, gottenResult, quality, image, 
 			if (setting.notification_download_finish == true && remote.Notification.isSupported()) new remote.Notification({title: 'Comic Download Finished.', body: gottenResult.title}).show()
 			document.getElementById(downloadingList[index][2]).remove()
 			downloadingList[index] = null
+			changeButtonsToDownloaded(doc.p, false, false)
 			var downloader = document.getElementById('downloader')
 			if (downloader.children.length == 0) {
 				downloader.style.display = 'none'

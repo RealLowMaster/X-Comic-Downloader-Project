@@ -109,12 +109,13 @@ Add Comic {
 }
 Did {
     Make Repairing Systems Part 6++ = Next = Complete All Image Repairing
-    Make changeButtonsToDownloading() Part 1++
+    Make changeButtonsToDownloading() Part 3++
 }
 
 Tasks => {
     Ctrl + k | Ctrl + 0
 	Fix Artist => Elvche
+    Update Errors Name Fail Fetch To Download Failed Or Something Like That
 	Add Notification That Download Started
     Make Close Window Event Work Better For Deleting Images
 	Make Waiting For Starting Download
