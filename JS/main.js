@@ -728,7 +728,6 @@ function openComic(id) {
 			findArtistRow()
 			findParodyRow()
 			findTagRow()
-			comic_panel.setAttribute('sid', doc.s)
 			comic_panel.style.display = 'block'
 			comic_panel.scrollTop = 0
 		})
@@ -1917,7 +1916,7 @@ async function CreateComic(comicIndex, haveIndex, gottenResult, quality, image, 
 }
 
 // Delete a Comic
-function deleteComic(site, id) {
+function deleteComic(id) {
 	const errors = document.getElementsByClassName('error')
 	for (let i = 0; i < errors.length; i++) {
 		errors[i].remove()
@@ -1926,27 +1925,146 @@ function deleteComic(site, id) {
 	closeComicPanel()
 
 	const wt = document.getElementById('waiting-loading')
+	const wt_text = wt.getElementsByTagName('p')[0]
 	const wt_progress = document.getElementById('wt-l-p')
-	const wt_width_persent = (100 / 9)
+	const wt_width_persent = (100 / 8)
 	let width_counter = 0
 
-	wt.getElementsByTagName('p')[0].textContent = 'Deleting...'
 	wt.style.display = 'flex'
+	wt_text.textContent = 'Removing Comic From Database...'
+	wt_progress.style.width = width_counter
 
-	db.findOne({s:site, p:id}, (err, doc) => {
+	db.comics.findOne({_id:id}, (err, doc) => {
 		if (err) { wt.style.display = 'none'; error(err); return }
 		if (doc == undefined) { wt.style.display = 'none'; error('Comic Not Found.'); return }
+		const ImagesId = doc.i
+		const ImagesFormats = doc.f
+		const ImagesCount = doc.c
+		const repair = doc.m || null
+		var repairImagesURLs = null
+		const site = doc.s
+		const post_id = doc.p
 
+		if (repair != null && repair.length > 0) repairImagesURLs = doc.r
 
+		const remove_have = () => {
+			db.have.remove({s:site, i:post_id}, {}, err => {
+				if (err) { wt.style.display = 'none'; error(err); return }
+
+				width_counter += wt_width_persent
+				wt_progress.style.width = width_counter+'%'
+				wt.style.display = 'none'
+				PopAlert('Comic Deleted.', 'warning')
+				reloadLoadingComics()
+			})
+		}
+
+		const remove_tags = () => {
+			db.comic_tags.remove({_id:id}, {}, err => {
+				if (err) { wt.style.display = 'none'; error(err); return }
+
+				width_counter += wt_width_persent
+				wt_text.textContent = 'Removing Comic Have From Database...'
+				wt_progress.style.width = width_counter+'%'
+				remove_have()
+			})
+		}
+
+		const remove_parodies = () => {
+			db.comic_parodies.remove({_id:id}, {}, err => {
+				if (err) { wt.style.display = 'none'; error(err); return }
+
+				width_counter += wt_width_persent
+				wt_text.textContent = 'Removing Comic Tags From Database...'
+				wt_progress.style.width = width_counter+'%'
+				remove_tags()
+			})
+		}
+
+		const remove_artists = () => {
+			db.comic_artists.remove({_id:id}, {}, err => {
+				if (err) { wt.style.display = 'none'; error(err); return }
+
+				width_counter += wt_width_persent
+				wt_text.textContent = 'Removing Comic Parodies From Database...'
+				wt_progress.style.width = width_counter+'%'
+				remove_parodies()
+			})
+		}
+
+		const remove_groups = () => {
+			db.comic_groups.remove({_id:id}, {}, err => {
+				if (err) { wt.style.display = 'none'; error(err); return }
+
+				width_counter += wt_width_persent
+				wt_text.textContent = 'Removing Comic Artists From Database...'
+				wt_progress.style.width = width_counter+'%'
+				remove_artists()
+			})
+		}
+
+		const delete_images = () => {
+			var formatIndex = 0, thisUrl
+			var lastIndex = ImagesFormats[0][1]
+			var thisForamat = ImagesFormats[0][2]
+			if (repair == null || repair.length == 0) {
+				for (var i = 0; i < ImagesCount; i++) {
+					if (i <= lastIndex)
+						thisUrl = `${dirUL}/${ImagesId}-${i}.${thisForamat}`
+					else {
+						formatIndex++
+						lastIndex = ImagesFormats[formatIndex][1]
+						thisForamat = ImagesFormats[formatIndex][2]
+						thisUrl = `${dirUL}/${ImagesId}-${i}.${thisForamat}`
+					}
+
+					fs.unlinkSync(thisUrl)
+				}
+			} else {
+				for (var i = 0; i < ImagesCount; i++) {
+					if (repair.indexOf(i) == -1) {
+						if (i <= lastIndex)
+							thisUrl = `${dirUL}/${ImagesId}-${i}.${thisForamat}`
+						else {
+							formatIndex++
+							lastIndex = ImagesFormats[formatIndex][1]
+							thisForamat = ImagesFormats[formatIndex][2]
+							thisUrl = `${dirUL}/${ImagesId}-${i}.${thisForamat}`
+						}
+
+						fs.unlinkSync(thisUrl)
+					}
+				}
+			}
+
+			width_counter += wt_width_persent
+			wt_text.textContent = 'Removing Comic Groups From Database...'
+			wt_progress.style.width = width_counter+'%'
+			remove_groups()
+		}
+
+		const remove_comic = () => {
+			db.comics.remove({_id:id}, {}, err => {
+				if (err) { wt.style.display = 'none'; error(err); return }
+
+				width_counter += wt_width_persent
+				wt_text.textContent = 'Deleting Comic Images...'
+				wt_progress.style.width = width_counter+'%'
+
+				delete_images()
+			})
+		}
+
+		remove_comic()
 	})
 }
 
-function askForDeletingComic(site, id) {
+function askForDeletingComic(id) {
 	errorSelector('Are you sure you want To Delete This Comic ?', null, false, [
 		[
 			"Yes",
 			"btn btn-danger m-2",
-			`deleteComic(${site}, ${id})`
+			`deleteComic(${id})`
 		],
 		[
 			"No",
@@ -2065,6 +2183,8 @@ function saveSetting(justSave) {
 				document.getElementById('pagination').classList.add('pagination-green-mode')
 				break
 		}
+
+		PopAlert('Setting Saved.')
 	}
 
 	fs.writeFileSync(dirRoot+'/setting.cfg', JSON.stringify(setting), {encoding:"utf8"})
@@ -2080,10 +2200,7 @@ function closeSetting() {
 }
 
 function test() {
-	xlecx.getComicRelated('21945-psadasrioritiasasfasdes.html', (err, result) => {
-		if (err) { error(err); return }
-		console.log(result)
-	})
+	console.log('testing')
 }
 
 document.addEventListener("DOMContentLoaded", () => {

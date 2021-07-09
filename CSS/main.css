@@ -1043,7 +1043,7 @@ div { display: block; }
 	font-size: 16px;
 	font-weight: 300;
 	position: fixed;
-	bottom: -40px;
+	bottom: -42px;
 	left: 10px;
 	box-shadow: 0 5px 10px rgba(0,0,0,0.3);
 	transition: .3s;

@@ -19,36 +19,33 @@ DB => {
         name = n
         _id
     }
-    comic_artists 3 => {
-        comic_id = c
+    comic_artists {
         artists = t = []
-        _id
+        _id => Comic Id
     }
     tags 4 => {
         name = n
         _id
     }
-    comic_tags 5 => {
-        comic_id = c
+    comic_tags {
         tags = t = []
+        _id => Comic Id
     }
     groups 6 => {
         name = n
         _id
     }
-    comic_groups 7 => {
-        comic_id = c
+    comic_groups {
         groups = t = []
-        _id
+        _id => Comic Id
     }
     parodies 8 => {
         name = n
         _id
     }
-    comic_parodies 9 => {
-        comic_id = c
+    comic_parodies {
         parodies = t = []
-        _id
+        _id => Comic Id
     }
     playlist 10 => {
         name = n
@@ -66,6 +63,8 @@ DB => {
 }
 
 Add Comic {
+    Fix Artists Big and Small Letters Like => prism girls != Prism Girls
+    Add Ability That Check Post Updated Image
     League Of Legends
     The Cummoner
     Business Casual
@@ -112,8 +111,10 @@ Did {
 }
 
 Tasks => {
+	Fix Closing Tab To Remove Images In it
     Ctrl + k | Ctrl + 0
 	Fix Artist => Elvche
+	Fix Comic => Mr. Fatcock Monthly
     Update Errors Name Fail Fetch To Download Failed Or Something Like That
     Make Close Window Event Work Better For Deleting Images
     Remove Electron Window Frame And Make a Custome One
