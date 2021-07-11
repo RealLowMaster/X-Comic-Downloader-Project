@@ -116,6 +116,7 @@ class XlecxAPI {
 
 			callback(null, arr)
 		}).catch(err => {
+			if (err == 'TypeError: Failed to fetch') err = 'Connection Timeout, Check Internet Connection.'
 			callback(err, null)
 		})
 	}
@@ -142,6 +143,7 @@ class XlecxAPI {
 
 			callback(null, arr)
 		}).catch(err => {
+			if (err == 'TypeError: Failed to fetch') err = 'Connection Timeout, Check Internet Connection.'
 			callback(err, null)
 		})
 	}
@@ -250,6 +252,7 @@ class XlecxAPI {
 
 			callback(null, arr)
 		}).catch(err => {
+			if (err == 'TypeError: Failed to fetch') err = 'Connection Timeout, Check Internet Connection.'
 			callback(err, null)
 		})
 	}
@@ -378,6 +381,7 @@ class XlecxAPI {
 
 			callback(null, arr)
 		}).catch(err => {
+			if (err == 'TypeError: Failed to fetch') err = 'Connection Timeout, Check Internet Connection.'
 			callback(err, null)
 		})
 	}
@@ -427,6 +431,7 @@ class XlecxAPI {
 
 			callback(null, arr)
 		}).catch(err => {
+			if (err == 'TypeError: Failed to fetch') err = 'Connection Timeout, Check Internet Connection.'
 			callback(err, null)
 		})
 	}
@@ -469,6 +474,7 @@ class XlecxAPI {
 
 			callback(null, arr)
 		}).catch(err => {
+			if (err == 'TypeError: Failed to fetch') err = 'Connection Timeout, Check Internet Connection.'
 			callback(err, null)
 		})
 	}
@@ -561,6 +567,7 @@ class XlecxAPI {
 
 			callback(null, arr)
 		}).catch(err => {
+			if (err == 'TypeError: Failed to fetch') err = 'Connection Timeout, Check Internet Connection.'
 			callback(err, null)
 		})
 	}
@@ -653,6 +660,7 @@ class XlecxAPI {
 
 			callback(null, arr)
 		}).catch(err => {
+			if (err == 'TypeError: Failed to fetch') err = 'Connection Timeout, Check Internet Connection.'
 			callback(err, null)
 		})
 	}
@@ -745,6 +753,7 @@ class XlecxAPI {
 
 			callback(null, arr)
 		}).catch(err => {
+			if (err == 'TypeError: Failed to fetch') err = 'Connection Timeout, Check Internet Connection.'
 			callback(err, null)
 		})
 	}
@@ -837,6 +846,7 @@ class XlecxAPI {
 
 			callback(null, arr)
 		}).catch(err => {
+			if (err == 'TypeError: Failed to fetch') err = 'Connection Timeout, Check Internet Connection.'
 			callback(err, null)
 		})
 	}
@@ -936,6 +946,7 @@ class XlecxAPI {
 			callback(null, arr)
 
 		}).catch(err => {
+			if (err == 'TypeError: Failed to fetch') err = 'Connection Timeout, Check Internet Connection.'
 			callback(err, null)
 		})
 	}

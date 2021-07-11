@@ -23,11 +23,6 @@ function createNewXlecxTab(id, pageNumber) {
 		tab.setAttribute('isReloading', false)
 		pageContent.innerHTML = ''
 		if (err) {
-			var a = err
-			if (typeof(err) == 'object') err = JSON.stringify(err)
-			// str.replace('TypeError: Failed to fetch', 'Connection Timeout, Check Internet Connection.')
-			console.log(typeof(err), typeof(a), err, a)
-			// err.replace('TypeError: Failed to fetch', 'Connection Timeout, Check Internet Connection.')
 			browserError(err, id)
 			return
 		}
@@ -1173,7 +1168,7 @@ function xlecxDownloader(id) {
 		const downloaderIndex = AddDownloaderList()
 		changeButtonsToDownloading(id)
 		xlecx.getComic(id, {related:false}, (err, result) => {
-			if (err) { RemoveDownloaderList(downloaderIndex); PopAlert('Connection Timeout, Check Internet Connection.', 'danger'); changeButtonsToDownloading(id, true); return }
+			if (err) { RemoveDownloaderList(downloaderIndex); PopAlert(err, 'danger'); changeButtonsToDownloading(id, true); return }
 			
 			var name = result.title, quality = 0, downloadImageList = []
 			if (result.images[0].src == result.images[0].thumb)
