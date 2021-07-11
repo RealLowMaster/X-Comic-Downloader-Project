@@ -23,6 +23,11 @@ function createNewXlecxTab(id, pageNumber) {
 		tab.setAttribute('isReloading', false)
 		pageContent.innerHTML = ''
 		if (err) {
+			var a = err
+			if (typeof(err) == 'object') err = JSON.stringify(err)
+			// str.replace('TypeError: Failed to fetch', 'Connection Timeout, Check Internet Connection.')
+			console.log(typeof(err), typeof(a), err, a)
+			// err.replace('TypeError: Failed to fetch', 'Connection Timeout, Check Internet Connection.')
 			browserError(err, id)
 			return
 		}
@@ -1165,9 +1170,10 @@ function xlecxDownloader(id) {
 	if (IsDownloading(id)) { PopAlert('You are Downloading This Comic.', 'danger'); return }
 	IsHavingComic(0, id, (have, downloaded) => {
 		if (have == true) { PopAlert('You Already Have This Comic.', 'danger'); return }
+		const downloaderIndex = AddDownloaderList()
 		changeButtonsToDownloading(id)
 		xlecx.getComic(id, {related:false}, (err, result) => {
-			if (err) { error(err); changeButtonsToDownloading(id, true); return }
+			if (err) { RemoveDownloaderList(downloaderIndex); PopAlert('Connection Timeout, Check Internet Connection.', 'danger'); changeButtonsToDownloading(id, true); return }
 			
 			var name = result.title, quality = 0, downloadImageList = []
 			if (result.images[0].src == result.images[0].thumb)
@@ -1182,7 +1188,7 @@ function xlecxDownloader(id) {
 					downloadImageList.push(xlecx.baseURL+result.images[i].src)
 			}
 	
-			var downloadIndex = MakeDownloadList(name, id, downloadImageList)
+			MakeDownloadList(downloaderIndex, name, id, downloadImageList)
 	
 			var sendingResult = {}
 			sendingResult.title = result.title
@@ -1191,7 +1197,7 @@ function xlecxDownloader(id) {
 			if (result.parody != undefined)	sendingResult.parody = result.parody
 			if (result.tags != undefined)	sendingResult.tags = result.tags
 			PopAlert(`Download Started. '${name}'`, 'primary')
-			comicDownloader(downloadIndex, sendingResult, quality, 0)
+			comicDownloader(downloaderIndex, sendingResult, quality, 0)
 		})
 	})
 }

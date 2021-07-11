@@ -1050,7 +1050,33 @@ function reloadTab() {
 	}
 }
 
-function MakeDownloadList(name, id, list) {
+function AddDownloaderList() {
+	const index = downloadingList.length
+	downloadingList[index] = [0, [], new Date().getTime(), null, [], [], [], [null, null]]
+
+	return index
+}
+
+function SetDownloaderList(index, id) {
+	downloadingList[index][3] = id
+	downloadingList[index][7][0] = lastComicId
+	downloadingList[index][7][1] = lastHaveId
+	lastComicId++
+	lastHaveId++
+}
+
+function RemoveDownloaderList(index) {
+	const dl_element = document.getElementById(downloadingList[index][2])
+	downloadingList[index] = null
+	const downloader = document.getElementById('downloader')
+	if (dl_element != undefined)  dl_element.remove()
+	if (downloader.children.length == 0) {
+		downloader.style.display = 'none'
+		downloadingList = []
+	}
+}
+
+function MakeDownloadList(index, name, id, list) {
 	id = id || null
 	name = name || null
 	list = list || null
@@ -1059,11 +1085,8 @@ function MakeDownloadList(name, id, list) {
 	downloader.style.display = 'block'
 	var element = document.createElement('div')
 	if (name.length > 19) name = name.substr(0, 16)+'...'
-	var index = downloadingList.length
 
-	downloadingList[index] = [0, [], new Date().getTime(), id, [], [], [], [lastComicId, lastHaveId]]
-	lastComicId++
-	lastHaveId++
+	SetDownloaderList(index, id)
 	element.setAttribute('id', downloadingList[index][2])
 	element.setAttribute('i', index)
 	element.innerHTML = `<span class="spin spin-sm spin-fast spin-success"></span><p>${name} <span>(0/${list.length})</span></p><div><div></div></div><button onclick="cancelDownload(${index})">x</button>`
@@ -1155,15 +1178,9 @@ function cancelDownload(index) {
 	for (let i = 0; i < downloadingList[index][6].length; i++) {
 		fs.unlinkSync(downloadingList[index][6][i])
 	}
-	document.getElementById(downloadingList[index][2]).remove()
 	changeButtonsToDownloading(downloadingList[index][3], true)
-	downloadingList[index] = null
+	RemoveDownloaderList(index)
 	PopAlert('Download Canceled.', 'warning')
-	const downloader = document.getElementById('downloader')
-	if (downloader.children.length == 0) {
-		downloader.style.display = 'none'
-		downloadingList = []
-	}
 }
 
 function cancelAllDownloads(closeApp) {

@@ -63,19 +63,7 @@ DB => {
 }
 
 Add Comic {
-    Fix Artists Big and Small Letters Like => prism girls != Prism Girls
-    Add Ability That Check Post Updated Image
     League Of Legends
-    The Cummoner
-    Business Casual
-    Fallout 4 Vault Meat
-    Next Summer
-    Gravity Fucks - Nothing Is What It Seems
-    Honey Pot
-    Johnny-Sex
-    Spoils of Victory
-    Incog Shorts
-    Hung Princes and Horny Elves
     Gravity Falls - Secrets Of The Woods
     2 Girls 1 Prince
     This Romantic World
@@ -105,12 +93,16 @@ Add Comic {
     Lewdua
 	Shedding
 	Peculiart
+	milftoon
 }
 Did {
     Make Repairing Systems Part 6++ = Next = Complete All Image Repairing
 }
 
 Tasks => {
+	Make Downloading Waiting Button Work Better
+	Fix Artists Big and Small Letters Like => prism girls != Prism Girls
+    Add Ability That Check Post Updated Image
 	Fix Closing Tab To Remove Images In it
     Ctrl + k | Ctrl + 0
 	Fix Artist => Elvche
