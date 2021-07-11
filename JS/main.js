@@ -872,9 +872,8 @@ function closeBrowser() {
 		}
 	}
 	browser_pages_container.innerHTML = ''
-	const browser_tabs = document.getElementById('browser-tabs')
-	browser_tabs.innerHTML = ''
-	browser_tabs.setAttribute('pid', '')
+	tabsContainer.innerHTML = ''
+	tabsContainer.setAttribute('pid', '')
 	document.getElementById('add-new-tab').setAttribute('onclick', '')
 }
 
@@ -971,20 +970,17 @@ function createNewTab(history) {
 }
 
 function removeTab(id) {
-	var browser_tabs = document.getElementById('browser-tabs')
-	var removingTab = browser_tabs.querySelector(`[pi="${id}"]`)
+	const removingTab = tabsContainer.querySelector(`[pi="${id}"]`)
 	tabs[Number(removingTab.getAttribute('ti'))] = null
-	var btabs = browser_tabs.children
-	var index = Array.prototype.slice.call(btabs).indexOf(removingTab)
+	const btabs = tabsContainer.children
+	const index = Array.prototype.slice.call(btabs).indexOf(removingTab)
 	
-	if (browser_tabs.getAttribute('pid') == id) {
+	if (tabsContainer.getAttribute('pid') == id) {
 		if (index == 0) {
-			if (1 <= btabs.length - 1) {
+			if (1 <= btabs.length - 1)
 				activateTab(btabs[1])
-			}
-		} else {
+		} else
 			activateTab(btabs[index - 1])
-		}
 	}
 
 	if (btabs.length == 1) {
@@ -1014,16 +1010,14 @@ function checkMiddleMouseClick(event) {
 }
 
 function browserHome() {
-	var browser_tabs = document.getElementById('browser-tabs')
-	var tabIndex = Number(browser_tabs.querySelector(`[pi="${browser_tabs.getAttribute('pid')}"]`).getAttribute('ti'))
+	var tabIndex = Number(tabsContainer.querySelector(`[pi="${tabsContainer.getAttribute('pid')}"]`).getAttribute('ti'))
 	if (tabs[tabIndex].history[tabs[tabIndex].history.length - 1].replace(', false)', ', true)') != sites[thisSite][3]) eval(sites[thisSite][3])
 }
 
 function changeHistory(next) {
 	next = next || false
-	var browser_tabs = document.getElementById('browser-tabs')
-	var pageId = browser_tabs.getAttribute('pid')
-	var tabIndexId = Number(browser_tabs.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))
+	var pageId = tabsContainer.getAttribute('pid')
+	var tabIndexId = Number(tabsContainer.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))
 
 	if (next == true) {
 		if (tabs[tabIndexId].activeHistory != tabs[tabIndexId].history.length - 1) {
@@ -1041,9 +1035,8 @@ function changeHistory(next) {
 }
 
 function reloadTab() {
-	var browser_tabs = document.getElementById('browser-tabs')
-	var pageId = browser_tabs.getAttribute('pid')
-	var tab = browser_tabs.querySelector(`[pi="${pageId}"]`)
+	var pageId = tabsContainer.getAttribute('pid')
+	var tab = tabsContainer.querySelector(`[pi="${pageId}"]`)
 	if (tab.getAttribute('isReloading') == 'false') {
 		tab.setAttribute('isReloading', true)
 		tabs[Number(tab.getAttribute('ti'))].reload()
@@ -1377,11 +1370,10 @@ function changeButtonsToDownloaded(id, have, haveBackward) {
 document.getElementById('browser-tool-search-form').addEventListener('submit', e => {
 	e.preventDefault()
 	const input = document.getElementById('browser-tool-search-input')
-	const browser_tabs = document.getElementById('browser-tabs')
-	const tabId = browser_tabs.getAttribute('pid')
+	const tabId = tabsContainer.getAttribute('pid')
 	const checkText = input.value.replace(/ /g, '')
 	if (checkText.length > 0) {
-		browser_tabs.querySelector(`[pi="${tabId}"]`).setAttribute('search', input.value)
+		tabsContainer.querySelector(`[pi="${tabId}"]`).setAttribute('search', input.value)
 		eval(sites[thisSite][2].replace('{text}', `'${input.value}'`))
 	}
 })
