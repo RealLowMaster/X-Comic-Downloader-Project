@@ -25,7 +25,7 @@ const imageLazyLoadingOptions = {
 	rootMargin: "0px 0px 300px 0px"
 }
 const sites = [['xlecx', 'xlecxRepairComicInfoGetInfo({id}, {whitch})', 'xlecxSearch({text}, 1)', 'xlecxChangePage(1, false, true)']]
-var setting, dirDB, dirUL, tabs = [], db = {}, downloadingList = [], repairingComics = [], thisSite, lastComicId, lastHaveId, searchTimer, needReload = true
+var setting, dirDB, dirUL, tabs = [], db = {}, downloadingList = [], repairingComics = [], thisSite, lastComicId, lastHaveId, searchTimer, needReload = true, activeTabComicId = null
 
 // Needable Functions
 function fileExt(str) {
@@ -858,6 +858,7 @@ function closeBrowser() {
 	reloadLoadingComics()
 	document.getElementById('browser').style.display = 'none'
 	thisSite = null
+	activeTabComicId = null
 	tabs = []
 	const browser_pages_container = document.getElementById('browser-pages')
 	const browser_pages = browser_pages_container.children
@@ -873,15 +874,14 @@ function closeBrowser() {
 	}
 	browser_pages_container.innerHTML = ''
 	tabsContainer.innerHTML = ''
-	tabsContainer.setAttribute('pid', '')
 	document.getElementById('add-new-tab').setAttribute('onclick', '')
 }
 
 function updateTabSize() {
-	var windowWidth = window.innerWidth
-	var tabs = document.getElementById('browser-tabs').getElementsByTagName('div')
+	const windowWidth = window.innerWidth
+	const tabs = tabsContainer.getElementsByTagName('div')
 	if ((windowWidth / 200) <= tabs.length) {
-		var tabWidth = (windowWidth - 60) / tabs.length
+		const tabWidth = (windowWidth - 60) / tabs.length
 		for (var i = 0; i < tabs.length; i++) {
 			tabs[i].style.width = tabWidth+'px'
 		}
@@ -897,33 +897,31 @@ window.onresize = () => {
 }
 
 function activateTab(who) {
-	var pageId = who.getAttribute('pi')
-	var pageContainer = document.getElementById('browser-pages')
-	var passScoll = pageContainer.scrollTop
-	var scrollValue = Number(who.getAttribute('sv')) || 0
+	const pageId = who.getAttribute('pi')
+	const pageContainer = document.getElementById('browser-pages')
+	const passScoll = pageContainer.scrollTop
+	const scrollValue = Number(who.getAttribute('sv')) || 0
 	page = document.getElementById(pageId) || null
 	if (page == null) return
 
-	var passId = tabsContainer.getAttribute('pid') || null
-	if (passId != null) {
-		var passTab = document.getElementById('browser-tabs').querySelector(`[pi="${passId}"]`) || null
+	if (activeTabComicId != null) {
+		const passTab = tabsContainer.querySelector(`[pi="${activeTabComicId}"]`) || null
 		if (passTab != null) {
 			passTab.setAttribute('active', null)
 			passTab.setAttribute('sv', passScoll)
-			document.getElementById(passId).setAttribute('style', null)
+			document.getElementById(activeTabComicId).setAttribute('style', null)
 		}
 	}
-	tabsContainer.setAttribute('pid', pageId)
+	activeTabComicId = pageId
 	who.setAttribute('active', true)
-	var tpage = document.getElementById(pageId)
-	tpage.setAttribute('style', 'display:block')
+	document.getElementById(pageId).setAttribute('style', 'display:block')
 	pageContainer.scrollTop = scrollValue
 
 	document.getElementById('browser-tool-search-input').value = who.getAttribute('search')
 }
 
 function IsTabsAtLimit() {
-	const tabsCount = document.getElementById('browser-tabs').getElementsByTagName('div').length
+	const tabsCount = tabsContainer.getElementsByTagName('div').length
 	if (tabsCount >= setting.tabs_limit)
 		return true
 	else
@@ -934,12 +932,12 @@ function createNewTab(history) {
 	if (IsTabsAtLimit()) return null
 
 	history = history || null
-	var tabIndex = tabs.length
-	var date = new Date()
-	var randomNumber = Math.floor(Math.random() * 500)
-	var newTabId = `${date.getTime()}-${randomNumber}`
-	var page = document.createElement('div')
-	var element = document.createElement('div')
+	const tabIndex = tabs.length
+	const date = new Date()
+	const randomNumber = Math.floor(Math.random() * 500)
+	const newTabId = `${date.getTime()}-${randomNumber}`
+	const page = document.createElement('div')
+	const element = document.createElement('div')
 	element.classList.add('browser-tab')
 	element.setAttribute('onclick', 'activateTab(this)')
 	element.setAttribute('pi', newTabId)
@@ -975,7 +973,7 @@ function removeTab(id) {
 	const btabs = tabsContainer.children
 	const index = Array.prototype.slice.call(btabs).indexOf(removingTab)
 	
-	if (tabsContainer.getAttribute('pid') == id) {
+	if (activeTabComicId == id) {
 		if (index == 0) {
 			if (1 <= btabs.length - 1)
 				activateTab(btabs[1])
@@ -984,6 +982,7 @@ function removeTab(id) {
 	}
 
 	if (btabs.length == 1) {
+		activeTabComicId = null
 		document.getElementById('browser-home-btn').style.display = 'none'
 		document.getElementById('browser-prev-btn').style.display = 'none'
 		document.getElementById('browser-next-btn').style.display = 'none'
@@ -1010,36 +1009,34 @@ function checkMiddleMouseClick(event) {
 }
 
 function browserHome() {
-	var tabIndex = Number(tabsContainer.querySelector(`[pi="${tabsContainer.getAttribute('pid')}"]`).getAttribute('ti'))
+	const tabIndex = Number(tabsContainer.querySelector(`[pi="${activeTabComicId}"]`).getAttribute('ti'))
 	if (tabs[tabIndex].history[tabs[tabIndex].history.length - 1].replace(', false)', ', true)') != sites[thisSite][3]) eval(sites[thisSite][3])
 }
 
 function changeHistory(next) {
 	next = next || false
-	var pageId = tabsContainer.getAttribute('pid')
-	var tabIndexId = Number(tabsContainer.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))
+	var tabIndexId = Number(tabsContainer.querySelector(`[pi="${activeTabComicId}"]`).getAttribute('ti'))
 
 	if (next == true) {
 		if (tabs[tabIndexId].activeHistory != tabs[tabIndexId].history.length - 1) {
-			document.getElementById(pageId).innerHTML = ''
-			document.getElementById(pageId).innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
+			document.getElementById(activeTabComicId).innerHTML = ''
+			document.getElementById(activeTabComicId).innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
 			tabs[tabIndexId].next()
 		}
 	} else {
 		if (tabs[tabIndexId].activeHistory != 0) {
-			document.getElementById(pageId).innerHTML = ''
-			document.getElementById(pageId).innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
+			document.getElementById(activeTabComicId).innerHTML = ''
+			document.getElementById(activeTabComicId).innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
 			tabs[tabIndexId].prev()
 		}
 	}
 }
 
 function reloadTab() {
-	var pageId = tabsContainer.getAttribute('pid')
-	var tab = tabsContainer.querySelector(`[pi="${pageId}"]`)
-	if (tab.getAttribute('isReloading') == 'false') {
-		tab.setAttribute('isReloading', true)
-		tabs[Number(tab.getAttribute('ti'))].reload()
+	const thisTab = tabsContainer.querySelector(`[pi="${activeTabComicId}"]`)
+	if (thisTab.getAttribute('isReloading') == 'false') {
+		thisTab.setAttribute('isReloading', true)
+		tabs[Number(thisTab.getAttribute('ti'))].reload()
 	}
 }
 
@@ -1204,8 +1201,8 @@ function IsDownloading(id) {
 }
 
 function browserError(err, id) {
-	var page = document.getElementById(id)
-	var tabArea = document.getElementById('browser-tabs').querySelector(`[pi="${id}"]`).getElementsByTagName('span')[0]
+	const page = document.getElementById(id)
+	const tabArea = tabsContainer.querySelector(`[pi="${id}"]`).getElementsByTagName('span')[0]
 
 	page.innerHTML = `<br><div class="alert alert-danger">${err}</div><button class="btn btn-primary" style="display:block;margin:3px auto" onclick="reloadTab()">Reload</button>`
 	tabArea.innerHTML = '*Error*'
@@ -1370,10 +1367,9 @@ function changeButtonsToDownloaded(id, have, haveBackward) {
 document.getElementById('browser-tool-search-form').addEventListener('submit', e => {
 	e.preventDefault()
 	const input = document.getElementById('browser-tool-search-input')
-	const tabId = tabsContainer.getAttribute('pid')
 	const checkText = input.value.replace(/ /g, '')
 	if (checkText.length > 0) {
-		tabsContainer.querySelector(`[pi="${tabId}"]`).setAttribute('search', input.value)
+		tabsContainer.querySelector(`[pi="${activeTabComicId}"]`).setAttribute('search', input.value)
 		eval(sites[thisSite][2].replace('{text}', `'${input.value}'`))
 	}
 })
@@ -1410,7 +1406,7 @@ async function CreateHave(site, id, index, downloaded) {
 function AddToHave(site, id) {
 	CreateHave(site, id, lastHaveId, false)
 	lastHaveId++
-	var page = document.getElementById(document.getElementById('browser-tabs').getAttribute('pid'))
+	const page = document.getElementById(activeTabComicId)
 	page.getElementsByClassName('browser-comic-have')[0].innerHTML = `<button class="remove-from-have" onclick="RemoveFromHave(0, '${id}', this)">You Have This Comic.</button>`
 	changeButtonsToDownloaded(id, true, false)
 	PopAlert('Comic Added To Have List.')
