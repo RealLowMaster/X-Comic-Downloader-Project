@@ -990,8 +990,9 @@ function removeTab(id) {
 			if (1 <= btabs.length - 1) activateTab(btabs[1])
 		} else if (btabs[index + 1] != undefined) activateTab(btabs[index + 1])
 		else activateTab(btabs[index - 1])
-			
-	} else {
+	}
+
+	if (btabs.length == 1) {
 		activeTabComicId = null
 		document.getElementById('browser-home-btn').style.display = 'none'
 		document.getElementById('browser-prev-btn').style.display = 'none'
