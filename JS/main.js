@@ -407,11 +407,11 @@ function loadComics(page, search) {
 		search = search.toLowerCase()
 		RegSearch = new RegExp(search)
 	}
-	var comic_container = document.getElementById('comic-container')
+	const comic_container = document.getElementById('comic-container')
 	comic_container.innerHTML = ''
 	comic_container.setAttribute('page', page)
 	var min = 0, max, allPages, id, name, image, repair, html = ''
-	var max_per_page = setting.max_per_page
+	const max_per_page = setting.max_per_page
 
 	const working = (doc) => {
 		max = doc.length
@@ -2141,16 +2141,18 @@ function saveSetting(justSave) {
 	var reload = false
 	if (justSave == false) {
 		const lazy_loading = document.getElementById('s_lazy_loading').checked
-		const newMaxPerPage = Number(document.getElementById('s_max_per_page').value)
+		const max_per_page = Number(document.getElementById('s_max_per_page').value)
 		const file_location = document.getElementById('s_file_location').getAttribute('location')
 
-		if (setting.max_per_page != newMaxPerPage) reloadLoadingComics()
+		if (setting.max_per_page != max_per_page) {
+			setting.max_per_page = max_per_page
+			reloadLoadingComics()
+		}
 
 		setting.comic_panel_theme = Number(document.getElementById('s_comic_panel_theme').getAttribute('value'))
 		setting.pagination_theme = Number(document.getElementById('s_pagination_theme').getAttribute('value'))
 		setting.img_graphic = Number(document.getElementById('s_img_graphic').getAttribute('value'))
 		setting.search_speed = Number(document.getElementById('s_search_speed').getAttribute('value'))
-		setting.max_per_page = newMaxPerPage
 		setting.hover_downloader = document.getElementById('s_hover_downloader').checked
 		setting.notification_download_finish = document.getElementById('s_notification_download_finish').checked
 		setting.download_limit = Number(document.getElementById('s_download_limit').value)

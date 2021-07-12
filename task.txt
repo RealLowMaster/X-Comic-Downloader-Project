@@ -110,7 +110,6 @@ Tasks => {
     Add Report Bug Button
     Make CreateTag() with Zero Problem
     Add Faver
-    Add Remove Comic
     Make Related Post For Offline Comics Better
     Make Repair Part Work Better
 	Add Jump Page To EveryThing
