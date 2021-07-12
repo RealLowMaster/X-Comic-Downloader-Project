@@ -601,6 +601,14 @@ function xlecxChangePage(page, makeNewPage, updateTabIndex) {
 		pageContent = document.getElementById(id)
 	} else {
 		id = activeTabComicId
+		const passImageCon = document.getElementById(id).querySelector('[img-con="true"]')
+		if (passImageCon != undefined) {
+			const passImages = passImageCon.children
+			for (let i = 0; i < passImages.length; i++) {
+				passImages[i].removeAttribute('data-src')
+				passImages[i].removeAttribute('src')
+			}
+		}
 		pageContent = document.getElementById(id)
 		pageContent.innerHTML = ''
 

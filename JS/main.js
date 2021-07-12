@@ -975,6 +975,15 @@ function removeTab(id) {
 	tabs[Number(removingTab.getAttribute('ti'))] = null
 	const btabs = tabsContainer.children
 	const index = Array.prototype.slice.call(btabs).indexOf(removingTab)
+
+	const passImageCon = document.getElementById(id).querySelector('[img-con="true"]')
+	if (passImageCon != undefined) {
+		const passImages = passImageCon.children
+		for (let i = 0; i < passImages.length; i++) {
+			passImages[i].removeAttribute('data-src')
+			passImages[i].removeAttribute('src')
+		}
+	}
 	
 	if (activeTabComicId == id) {
 		if (index == 0) {
