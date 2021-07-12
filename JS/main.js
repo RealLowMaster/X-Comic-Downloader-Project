@@ -984,17 +984,14 @@ function removeTab(id) {
 			passImages[i].removeAttribute('src')
 		}
 	}
-	
-	if (activeTabComicId == id) {
+
+	if (activeTabComicId == id && btabs.length != 1) {
 		if (index == 0) {
 			if (1 <= btabs.length - 1) activateTab(btabs[1])
-		} else if (btabs[index + 1] != undefined)
-			activateTab(btabs[index + 1])
-		else
-			activateTab(btabs[index - 1])
-	}
-
-	if (btabs.length == 1) {
+		} else if (btabs[index + 1] != undefined) activateTab(btabs[index + 1])
+		else activateTab(btabs[index - 1])
+			
+	} else {
 		activeTabComicId = null
 		document.getElementById('browser-home-btn').style.display = 'none'
 		document.getElementById('browser-prev-btn').style.display = 'none'
