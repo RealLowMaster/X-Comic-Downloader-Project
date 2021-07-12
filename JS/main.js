@@ -954,6 +954,7 @@ function createNewTab(history) {
 	page.setAttribute('class', 'browser-page')
 	page.setAttribute('id', newTabId)
 	tabsContainer.appendChild(element)
+	
 	page.innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
 	document.getElementById('browser-pages').appendChild(page)
 
@@ -962,6 +963,8 @@ function createNewTab(history) {
 	document.getElementById('browser-next-btn').style.display = 'inline-block'
 	document.getElementById('browser-reload-btn').style.display = 'inline-block'
 	document.getElementById('browser-tool-search-form').style.display = 'flex'
+
+	if (tabsContainer.children.length == 1) activateTab(element)
 
 	updateTabSize()
 	return newTabId

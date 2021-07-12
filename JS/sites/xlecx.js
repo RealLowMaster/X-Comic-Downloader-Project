@@ -5,7 +5,6 @@ function openXlecxBrowser() {
 	document.getElementById('add-new-tab').setAttribute('onclick', "createNewXlecxTab(createNewTab('xlecxChangePage(1, false, false)'))")
 	const id = createNewTab('xlecxChangePage(1, false, false)')
 	if (id == null) { PopAlert('You Can\'t Make Any More Tab.', 'danger'); return }
-	activateTab(tabsContainer.querySelector(`[pi="${id}"]`))
 	createNewXlecxTab(id)
 	document.getElementById('browser').style.display = 'grid'
 }
@@ -157,7 +156,8 @@ function xlecxOpenPost(makeNewPage, id, updateTabIndex) {
 		if (pageId == null) { PopAlert('You Can\'t Make Any More Tab.', 'danger'); return }
 		page = document.getElementById(pageId)
 	} else {
-		const passImageCon = document.getElementById(activeTabComicId).querySelector('[img-con="true"]')
+		pageId = activeTabComicId
+		const passImageCon = document.getElementById(pageId).querySelector('[img-con="true"]')
 		if (passImageCon != undefined) {
 			const passImages = passImageCon.children
 			for (let i = 0; i < passImages.length; i++) {
@@ -165,7 +165,6 @@ function xlecxOpenPost(makeNewPage, id, updateTabIndex) {
 				passImages[i].removeAttribute('src')
 			}
 		}
-		pageId = activeTabComicId
 		page = document.getElementById(pageId)
 		page.innerHTML = ''
 		page.innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
@@ -605,7 +604,7 @@ function xlecxChangePage(page, makeNewPage, updateTabIndex) {
 		pageContent = document.getElementById(id)
 		pageContent.innerHTML = ''
 
-		if (updateTabIndex == true) tabs[Number(tabsContainer.querySelector(`[pi="${activeTabComicId}"]`).getAttribute('ti'))].addHistory(`xlecxChangePage(${page}, false, false)`)
+		if (updateTabIndex == true) tabs[Number(tabsContainer.querySelector(`[pi="${id}"]`).getAttribute('ti'))].addHistory(`xlecxChangePage(${page}, false, false)`)
 	}
 
 	pageContent.innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
@@ -619,7 +618,8 @@ function xlecxOpenCategory(name, page, shortName, makeNewPage, updateTabIndex) {
 	if (name == null || shortName == null) return
 	makeNewPage = makeNewPage || false
 	if (updateTabIndex == null) updateTabIndex = true
-	const passImageCon = document.getElementById(activeTabComicId).querySelector('[img-con="true"]')
+	var pageId = activeTabComicId
+	const passImageCon = document.getElementById(pageId).querySelector('[img-con="true"]')
 	if (passImageCon != undefined) {
 		const passImages = passImageCon.children
 		for (let i = 0; i < passImages.length; i++) {
@@ -628,13 +628,12 @@ function xlecxOpenCategory(name, page, shortName, makeNewPage, updateTabIndex) {
 		}
 	}
 	
-	var pageContent, pageId
+	var pageContent
 	if (makeNewPage) {
 		pageId = createNewTab(`xlecxOpenCategory('${name}', ${page}, '${shortName}', false, false)`)
 		if (pageId == null) { PopAlert('You Can\'t Make Any More Tab.', 'danger'); return }
 		pageContent = document.getElementById(pageId)
 	} else {
-		pageId = activeTabComicId
 		pageContent = document.getElementById(pageId)
 		pageContent.innerHTML = ''
 
@@ -862,7 +861,8 @@ function xlecxOpenTag(name, page, whitch, makeNewPage, updateTabIndex) {
 		if (pageId == null) { PopAlert('You Can\'t Make Any More Tab.', 'danger'); return }
 		pageContent = document.getElementById(pageId)
 	} else {
-		const passImageCon = document.getElementById(activeTabComicId).querySelector('[img-con="true"]')
+		pageId = activeTabComicId
+		const passImageCon = document.getElementById(pageId).querySelector('[img-con="true"]')
 		if (passImageCon != undefined) {
 			const passImages = passImageCon.children
 			for (let i = 0; i < passImages.length; i++) {
@@ -870,7 +870,6 @@ function xlecxOpenTag(name, page, whitch, makeNewPage, updateTabIndex) {
 				passImages[i].removeAttribute('src')
 			}
 		}
-		pageId = activeTabComicId
 		pageContent = document.getElementById(pageId)
 		pageContent.innerHTML = ''
 
@@ -1059,7 +1058,8 @@ function xlecxOpenAllTags(makeNewPage, updateTabIndex) {
 		if (pageId == null) { PopAlert('You Can\'t Make Any More Tab.', 'danger'); return }
 		page = document.getElementById(pageId)
 	} else {
-		const passImageCon = document.getElementById(activeTabComicId).querySelector('[img-con="true"]')
+		pageId = activeTabComicId
+		const passImageCon = document.getElementById(pageId).querySelector('[img-con="true"]')
 		if (passImageCon != undefined) {
 			const passImages = passImageCon.children
 			for (let i = 0; i < passImages.length; i++) {
@@ -1067,7 +1067,6 @@ function xlecxOpenAllTags(makeNewPage, updateTabIndex) {
 				passImages[i].removeAttribute('src')
 			}
 		}
-		pageId = activeTabComicId
 		page = document.getElementById(pageId)
 		page.innerHTML = ''
 		page.innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
