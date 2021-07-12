@@ -987,9 +987,10 @@ function removeTab(id) {
 	
 	if (activeTabComicId == id) {
 		if (index == 0) {
-			if (1 <= btabs.length - 1)
-				activateTab(btabs[1])
-		} else
+			if (1 <= btabs.length - 1) activateTab(btabs[1])
+		} else if (btabs[index + 1] != undefined)
+			activateTab(btabs[index + 1])
+		else
 			activateTab(btabs[index - 1])
 	}
 
