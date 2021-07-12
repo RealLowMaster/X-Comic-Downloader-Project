@@ -445,6 +445,11 @@ function loadComics(page, search) {
 		// Pagination
 		if (allPages > 1) {
 			document.getElementById('offline-search-form').style.display = 'flex'
+			document.getElementById('jump-page-container').style.display = 'inline-block'
+			const jp_i = document.getElementById('jp-i')
+			jp_i.setAttribute('oninput', `inputLimit(this, ${allPages});searchComics(document.getElementById('offline-search-form-input').value, Number(this.value))`)
+			jp_i.value = page
+			document.getElementById('jp-m-p').textContent = allPages
 			var thisPagination = pagination(allPages, page)
 				html = '<div>'
 				for (var i in thisPagination) {
@@ -459,6 +464,7 @@ function loadComics(page, search) {
 		} else {
 			if (search == null) document.getElementById('offline-search-form').style.display = 'none'
 			document.getElementById('pagination').style.display = 'none'
+			document.getElementById('jump-page-container').style.display = 'none'
 		}
 		
 		if (doc.length == 0 && search != null)
@@ -540,29 +546,40 @@ function pagination(total_pages, page) {
 	return arr
 }
 
-function searchComics(value) {
+function searchComics(value, page) {
 	var search_speed
-	switch (setting.search_speed) {
-		case 0:
-			search_speed = 0
-			break
-		case 1:
-			search_speed = 300
-			break
-		case 2:
-			search_speed = 700
-			break
-		case 3:
-			search_speed = 1000
-			break
+	if (page == undefined) {
+		switch (setting.search_speed) {
+			case 0:
+				search_speed = 0
+				break
+			case 1:
+				search_speed = 300
+				break
+			case 2:
+				search_speed = 700
+				break
+			case 3:
+				search_speed = 1000
+				break
+		}
 	}
+
 	clearTimeout(searchTimer)
 	if (value.length > 0) {
-		searchTimer = setTimeout(() => {
+		if (search_speed == 0) {
 			loadComics(1, value)
-		}, search_speed)
-	} else
-		loadComics(1, null)
+		} else {
+			searchTimer = setTimeout(() => {
+				loadComics(1, value)
+			}, search_speed)
+		}
+	} else if (page != undefined) {
+		page = page || 1
+		searchTimer = setTimeout(() => {
+			loadComics(page, value)
+		}, 330)
+	} else loadComics(1, null)
 }
 
 function reloadLoadingComics() {

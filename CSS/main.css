@@ -938,6 +938,25 @@ div { display: block; }
 	border-color: #1E8449;
 }
 
+/* Jump Page < */
+.jump-page {
+	display: inline-block;
+	padding: 6px;
+	background-color: #fff;
+	border: 1px solid #ddd;
+	border-radius: 3px;
+}
+
+.jump-page > input {
+	width: 40px;
+	color: #222;
+}
+
+.jump-page > span {
+	color: #222;
+}
+/* Jump Page > */
+
 /* Downloader */
 .downloader {
 	display: none;
