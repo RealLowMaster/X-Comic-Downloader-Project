@@ -112,7 +112,6 @@ Tasks => {
     Add Faver
     Make Related Post For Offline Comics Better
     Make Repair Part Work Better
-	Add Jump Page To EveryThing
     Add Dipuclish Tab Ability
     Add Repair All Crashed Image Button
 	Make Tabs Work Better

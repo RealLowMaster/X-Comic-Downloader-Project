@@ -24,7 +24,18 @@ const imageLazyLoadingOptions = {
 	threshold: 0,
 	rootMargin: "0px 0px 300px 0px"
 }
-const sites = [['xlecx', 'xlecxRepairComicInfoGetInfo({id}, {whitch})', 'xlecxSearch({text}, 1)', 'xlecxChangePage(1, false, true)']]
+const sites = [
+	[
+		'xlecx',
+		'xlecxRepairComicInfoGetInfo({id}, {whitch})',
+		'xlecxSearch({text}, 1)',
+		'xlecxChangePage(1, false, true)',
+		'xlecxJumpPage({index}, {page})'
+	]
+]
+const bjp = document.getElementById('browser-jump-page-container')
+const bjp_i = document.getElementById('bjp-i')
+const bjp_m_p = document.getElementById('bjp-m-p')
 var setting, dirDB, dirUL, tabs = [], db = {}, downloadingList = [], repairingComics = [], thisSite, lastComicId, lastHaveId, searchTimer, needReload = true, activeTabComicId = null
 
 // Needable Functions
@@ -917,7 +928,8 @@ function activateTab(who) {
 	const pageId = who.getAttribute('pi')
 	const pageContainer = document.getElementById('browser-pages')
 	const passScoll = pageContainer.scrollTop
-	const scrollValue = Number(who.getAttribute('sv')) || 0
+	const scrollValue = Number(who.getAttribute('sv'))
+	const max_pages = Number(who.getAttribute('mp'))
 	page = document.getElementById(pageId) || null
 	if (page == null) return
 
@@ -934,7 +946,14 @@ function activateTab(who) {
 	document.getElementById(pageId).setAttribute('style', 'display:block')
 	pageContainer.scrollTop = scrollValue
 
-	document.getElementById('browser-tool-search-input').value = who.getAttribute('search')
+	document.getElementById('browser-tool-search-input').value = who.getAttribute('s')
+
+	if (max_pages > 0) {
+		bjp.style.display = 'inline-block'
+		bjp_i.value = Number(who.getAttribute('tp'))
+		bjp_i.setAttribute('oninput', `inputLimit(this, ${max_pages});browserJumpPage(${Number(who.getAttribute('jp'))}, Number(this.value))`)
+		bjp_m_p.textContent = max_pages
+	} else bjp.style.display = 'none'
 }
 
 function IsTabsAtLimit() {
@@ -959,7 +978,11 @@ function createNewTab(history) {
 	element.setAttribute('onclick', 'activateTab(this)')
 	element.setAttribute('pi', newTabId)
 	element.setAttribute('ti', tabIndex)
-	element.setAttribute('search', '')
+	element.setAttribute('sv', 0)
+	element.setAttribute('jp', 0)
+	element.setAttribute('tp', 1)
+	element.setAttribute('mp', 0)
+	element.setAttribute('s', '')
 	element.setAttribute('isReloading', true)
 	element.setAttribute('draggable', true)
 	element.innerHTML = `<span><span class="spin spin-primary" style="width:22px;height:22px"></span></span> <button onclick="removeTab('${newTabId}')">X</button>`
@@ -1016,6 +1039,7 @@ function removeTab(id) {
 		document.getElementById('browser-next-btn').style.display = 'none'
 		document.getElementById('browser-reload-btn').style.display = 'none'
 		document.getElementById('browser-tool-search-form').style.display = 'none'
+		bjp.style.display = 'none'
 	}
 
 	removingTab.remove()
@@ -1066,6 +1090,12 @@ function reloadTab() {
 		thisTab.setAttribute('isReloading', true)
 		tabs[Number(thisTab.getAttribute('ti'))].reload()
 	}
+}
+
+function browserJumpPage(index, page) {
+	const exec = sites[thisSite][4].replace('{index}', index).replace('{page}', page)
+	clearTimeout(searchTimer)
+	eval(exec)
 }
 
 function AddDownloaderList() {
@@ -1397,7 +1427,7 @@ document.getElementById('browser-tool-search-form').addEventListener('submit', e
 	const input = document.getElementById('browser-tool-search-input')
 	const checkText = input.value.replace(/ /g, '')
 	if (checkText.length > 0) {
-		tabsContainer.querySelector(`[pi="${activeTabComicId}"]`).setAttribute('search', input.value)
+		tabsContainer.querySelector(`[pi="${activeTabComicId}"]`).setAttribute('s', input.value)
 		eval(sites[thisSite][2].replace('{text}', `'${input.value}'`))
 	}
 })

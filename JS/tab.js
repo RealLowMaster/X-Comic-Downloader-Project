@@ -3,6 +3,7 @@ class Tab {
         this.pageId = id
         this.history = []
         this.activeHistory = 0
+        this.options = null
     }
 
     addHistory(text) {

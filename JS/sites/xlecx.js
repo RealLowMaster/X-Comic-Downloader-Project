@@ -14,8 +14,15 @@ function createNewXlecxTab(id, pageNumber) {
 	const pageContent = document.getElementById(id)
 	pageNumber = pageNumber || 1
 
+	if (activeTabComicId == id) {
+		bjp.style.display = 'none'
+		bjp_i.setAttribute('oninput', '')
+	}
+
 	const tab = tabsContainer.querySelector(`[pi="${id}"]`)
 	const tabArea = tab.getElementsByTagName('span')[0]
+	tab.setAttribute('isReloading', true)
+	tab.setAttribute('mp', 0)
 	tabArea.innerHTML = '<span class="spin spin-sm spin-primary" style="width:22px;height:22px"></span>'
 	xlecx.getPage({page:pageNumber, random:true, category:true}, (err, result) => {
 		if (document.getElementById(id) == undefined) return
@@ -29,6 +36,21 @@ function createNewXlecxTab(id, pageNumber) {
 		var container = document.createElement('div')
 		container.classList.add("xlecx-container")
 		var elementContainerContainer, elementContainer, element, miniElement, html, valueStorage
+
+		if (result.pagination[result.pagination.length - 1][1] > result.pagination[result.pagination.length - 2][1]) valueStorage = result.pagination[result.pagination.length - 1][1]
+		else valueStorage = result.pagination[result.pagination.length - 2][1]
+
+		if (valueStorage == null) valueStorage = pageNumber
+
+		tab.setAttribute('jp', 1)
+		tab.setAttribute('tp', pageNumber)
+		tab.setAttribute('mp', valueStorage)
+		if (activeTabComicId == id) {
+			bjp.style.display = 'inline-block'
+			bjp_i.value = pageNumber
+			bjp_i.setAttribute('oninput', `inputLimit(this, ${valueStorage});browserJumpPage(1, Number(this.value))`)
+			bjp_m_p.textContent = valueStorage
+		}
 
 		// Categories
 		elementContainer = document.createElement('div')
@@ -172,8 +194,15 @@ function xlecxOpenPost(makeNewPage, id, updateTabIndex) {
 		if (updateTabIndex == true) tabs[Number(tabsContainer.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))].addHistory(`xlecxOpenPost(false, '${id}', false)`)
 	}
 
+	if (activeTabComicId == pageId) {
+		bjp.style.display = 'none'
+		bjp_i.setAttribute('oninput', '')
+	}
+
 	const tab = tabsContainer.querySelector(`[pi="${pageId}"]`)
 	const tabArea = tab.getElementsByTagName('span')[0]
+	tab.setAttribute('isReloading', true)
+	tab.setAttribute('mp', 0)
 	tabArea.innerHTML = '<span class="spin spin-sm spin-primary" style="width:22px;height:22px"></span>'
 	db.have.findOne({s:0, i:id}, (err, haveDoc) => {
 		if (err) { error(err); return }
@@ -187,6 +216,8 @@ function xlecxOpenPost(makeNewPage, id, updateTabIndex) {
 		
 		if (have_comic == true) {
 			db.comics.findOne({s:0, p:id}, (err, doc) => {
+				if (document.getElementById(pageId) == undefined) return
+				tab.setAttribute('isReloading', false)
 				if (err) { error(err); return }
 				page.innerHTML = ''
 				const passId = id
@@ -648,8 +679,17 @@ function xlecxOpenCategory(name, page, shortName, makeNewPage, updateTabIndex) {
 		if (updateTabIndex == true) tabs[Number(tabsContainer.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))].addHistory(`xlecxOpenCategory('${name}', ${page}, '${shortName}', false, false)`)
 	}
 
+	tabs[Number(tabsContainer.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))].options = [name, shortName]
+
+	if (activeTabComicId == pageId) {
+		bjp.style.display = 'none'
+		bjp_i.setAttribute('oninput', '')
+	}
+
 	const tab = tabsContainer.querySelector(`[pi="${pageId}"]`)
 	const tabArea = tab.getElementsByTagName('span')[0]
+	tab.setAttribute('isReloading', true)
+	tab.setAttribute('mp', 0)
 	tabArea.innerHTML = '<span class="spin spin-sm spin-primary" style="width:22px;height:22px"></span>'
 	pageContent.innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
 	xlecx.getCategory(name, {page:page, random:true, category:true}, (err, result) => {
@@ -664,6 +704,22 @@ function xlecxOpenCategory(name, page, shortName, makeNewPage, updateTabIndex) {
 		var container = document.createElement('div')
 		container.classList.add("xlecx-container")
 		var elementContainerContainer, elementContainer, element, miniElement, html, valueStorage
+
+		if (result.pagination == undefined) valueStorage = 0
+		else if (result.pagination[result.pagination.length - 1][1] > result.pagination[result.pagination.length - 2][1]) valueStorage = result.pagination[result.pagination.length - 1][1]
+		else valueStorage = result.pagination[result.pagination.length - 2][1]
+
+		if (valueStorage == null) valueStorage = page
+
+		tab.setAttribute('jp', 2)
+		tab.setAttribute('tp', page)
+		tab.setAttribute('mp', valueStorage)
+		if (activeTabComicId == pageId && valueStorage != 0) {
+			bjp.style.display = 'inline-block'
+			bjp_i.value = page
+			bjp_i.setAttribute('oninput', `inputLimit(this, ${valueStorage});browserJumpPage(2, Number(this.value))`)
+			bjp_m_p.textContent = valueStorage
+		}
 
 		// Categories
 		elementContainer = document.createElement('div')
@@ -884,58 +940,141 @@ function xlecxOpenTag(name, page, whitch, makeNewPage, updateTabIndex) {
 		if (updateTabIndex == true) tabs[Number(tabsContainer.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))].addHistory(`xlecxOpenTag('${name}', ${page}, ${whitch}, false, false)`)
 	}
 
-	var tab = tabsContainer.querySelector(`[pi="${pageId}"]`)
-	var tabArea = tab.getElementsByTagName('span')[0]
+	tabs[Number(tabsContainer.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))].options = [name, whitch]
+
+	if (activeTabComicId == pageId) {
+		bjp.style.display = 'none'
+		bjp_i.setAttribute('oninput', '')
+	}
+
+	const tab = tabsContainer.querySelector(`[pi="${pageId}"]`)
+	const tabArea = tab.getElementsByTagName('span')[0]
+	tab.setAttribute('isReloading', true)
+	tab.setAttribute('mp', 0)
 	tabArea.innerHTML = '<span class="spin spin-sm spin-primary" style="width:22px;height:22px"></span>'
 	pageContent.innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
-	if (whitch == 1) {
-		xlecx.getGroup(name, {page:page, category:true}, (err, result) => {
-			if (document.getElementById(pageId) == undefined) return
-			tab.setAttribute('isReloading', false)
-			pageContent.innerHTML = ''
-			if (err) {
-				browserError(err, pageId)
-				return
-			}
-			tabArea.textContent = `${name} - ${page}`
-			xlecxOpenTagContentMaker(result, pageContent, name, whitch)
-		})
-	} else if (whitch == 2) {
-		xlecx.getArtist(name, {page:page, category:true}, (err, result) => {
-			if (document.getElementById(pageId) == undefined) return
-			tab.setAttribute('isReloading', false)
-			pageContent.innerHTML = ''
-			if (err) {
-				browserError(err, pageId)
-				return
-			}
-			tabArea.textContent = `${name} - ${page}`
-			xlecxOpenTagContentMaker(result, pageContent, name, whitch)
-		})
-	} else if (whitch == 3) {
-		xlecx.getParody(name, {page:page, category:true}, (err, result) => {
-			if (document.getElementById(pageId) == undefined) return
-			tab.setAttribute('isReloading', false)
-			pageContent.innerHTML = ''
-			if (err) {
-				browserError(err, pageId)
-				return
-			}
-			tabArea.textContent = `${name} - ${page}`
-			xlecxOpenTagContentMaker(result, pageContent, name, whitch)
-		})
-	} else {
-		xlecx.getTag(name, {page:page, category:true}, (err, result) => {
-			if (document.getElementById(pageId) == undefined) return
-			tab.setAttribute('isReloading', false)
-			pageContent.innerHTML = ''
-			if (err) {
-				browserError(err, pageId)
-				return
-			}
-			tabArea.textContent = `${name} - ${page}`
-			xlecxOpenTagContentMaker(result, pageContent, name, whitch)
-		})
+
+	switch (whitch) {
+		case 1:
+			xlecx.getGroup(name, {page:page, category:true}, (err, result) => {
+				if (document.getElementById(pageId) == undefined) return
+				tab.setAttribute('isReloading', false)
+				pageContent.innerHTML = ''
+				if (err) {
+					browserError(err, pageId)
+					return
+				}
+				tabArea.textContent = `${name} - ${page}`
+				var valueStorage
+	
+				if (result.pagination == undefined) valueStorage = 0
+				else if (result.pagination[result.pagination.length - 1][1] > result.pagination[result.pagination.length - 2][1]) valueStorage = result.pagination[result.pagination.length - 1][1]
+				else valueStorage = result.pagination[result.pagination.length - 2][1]
+	
+				if (valueStorage == null) valueStorage = page
+	
+				tab.setAttribute('jp', 3)
+				tab.setAttribute('tp', page)
+				tab.setAttribute('mp', valueStorage)
+				if (activeTabComicId == pageId && valueStorage != 0) {
+					bjp.style.display = 'inline-block'
+					bjp_i.value = page
+					bjp_i.setAttribute('oninput', `inputLimit(this, ${valueStorage});browserJumpPage(3, Number(this.value))`)
+					bjp_m_p.textContent = valueStorage
+				}
+				xlecxOpenTagContentMaker(result, pageContent, name, whitch)
+			})
+			break
+		case 2:
+			xlecx.getArtist(name, {page:page, category:true}, (err, result) => {
+				if (document.getElementById(pageId) == undefined) return
+				tab.setAttribute('isReloading', false)
+				pageContent.innerHTML = ''
+				if (err) {
+					browserError(err, pageId)
+					return
+				}
+				tabArea.textContent = `${name} - ${page}`
+				var valueStorage
+	
+				if (result.pagination == undefined) valueStorage = 0
+				else if (result.pagination[result.pagination.length - 1][1] > result.pagination[result.pagination.length - 2][1]) valueStorage = result.pagination[result.pagination.length - 1][1]
+				else valueStorage = result.pagination[result.pagination.length - 2][1]
+	
+				if (valueStorage == null) valueStorage = page
+	
+				tab.setAttribute('jp', 3)
+				tab.setAttribute('tp', page)
+				tab.setAttribute('mp', valueStorage)
+				if (activeTabComicId == pageId && valueStorage != 0) {
+					bjp.style.display = 'inline-block'
+					bjp_i.value = page
+					bjp_i.setAttribute('oninput', `inputLimit(this, ${valueStorage});browserJumpPage(3, Number(this.value))`)
+					bjp_m_p.textContent = valueStorage
+				}
+				xlecxOpenTagContentMaker(result, pageContent, name, whitch)
+			})
+			break
+		case 3:
+			xlecx.getParody(name, {page:page, category:true}, (err, result) => {
+				if (document.getElementById(pageId) == undefined) return
+				tab.setAttribute('isReloading', false)
+				pageContent.innerHTML = ''
+				if (err) {
+					browserError(err, pageId)
+					return
+				}
+				tabArea.textContent = `${name} - ${page}`
+				var valueStorage
+	
+				if (result.pagination == undefined) valueStorage = 0
+				else if (result.pagination[result.pagination.length - 1][1] > result.pagination[result.pagination.length - 2][1]) valueStorage = result.pagination[result.pagination.length - 1][1]
+				else valueStorage = result.pagination[result.pagination.length - 2][1]
+	
+				if (valueStorage == null) valueStorage = page
+	
+				tab.setAttribute('jp', 3)
+				tab.setAttribute('tp', page)
+				tab.setAttribute('mp', valueStorage)
+				if (activeTabComicId == pageId && valueStorage != 0) {
+					bjp.style.display = 'inline-block'
+					bjp_i.value = page
+					bjp_i.setAttribute('oninput', `inputLimit(this, ${valueStorage});browserJumpPage(3, Number(this.value))`)
+					bjp_m_p.textContent = valueStorage
+				}
+				xlecxOpenTagContentMaker(result, pageContent, name, whitch)
+			})
+			break
+		case 4:
+			xlecx.getTag(name, {page:page, category:true}, (err, result) => {
+				if (document.getElementById(pageId) == undefined) return
+				tab.setAttribute('isReloading', false)
+				pageContent.innerHTML = ''
+				if (err) {
+					browserError(err, pageId)
+					return
+				}
+				tabArea.textContent = `${name} - ${page}`
+				var valueStorage
+	
+				if (result.pagination == undefined) valueStorage = 0
+				else if (result.pagination[result.pagination.length - 1][1] > result.pagination[result.pagination.length - 2][1]) valueStorage = result.pagination[result.pagination.length - 1][1]
+				else valueStorage = result.pagination[result.pagination.length - 2][1]
+	
+				if (valueStorage == null) valueStorage = page
+	
+				tab.setAttribute('jp', 3)
+				tab.setAttribute('tp', page)
+				tab.setAttribute('mp', valueStorage)
+				if (activeTabComicId == pageId && valueStorage != 0) {
+					bjp.style.display = 'inline-block'
+					bjp_i.value = page
+					bjp_i.setAttribute('oninput', `inputLimit(this, ${valueStorage});browserJumpPage(3, Number(this.value))`)
+					bjp_m_p.textContent = valueStorage
+				}
+				xlecxOpenTagContentMaker(result, pageContent, name, whitch)
+			})
+			break
 	}
 }
 
@@ -960,8 +1099,15 @@ function xlecxSearch(text, page, updateTabIndex) {
 
 	if (updateTabIndex == true) tabs[Number(tabsContainer.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))].addHistory(`xlecxSearch('${text}', ${page}, false)`)
 
+	if (activeTabComicId == pageId) {
+		bjp.style.display = 'none'
+		bjp_i.setAttribute('oninput', '')
+	}
+	
 	const tab = tabsContainer.querySelector(`[pi="${pageId}"]`)
 	const tabArea = tab.getElementsByTagName('span')[0]
+	tab.setAttribute('isReloading', true)
+	tab.setAttribute('mp', 0)
 	tabArea.innerHTML = '<span class="spin spin-sm spin-primary" style="width:22px;height:22px"></span>'
 	pageContent.innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
 	xlecx.search(text, {page:page, category:true}, (err, result) => {
@@ -977,6 +1123,22 @@ function xlecxSearch(text, page, updateTabIndex) {
 		container.classList.add("xlecx-container")
 		var elementContainerContainer = document.createElement('div')
 		var elementContainer, element, miniElement, html, valueStorage
+
+		if (result.pagination == undefined) valueStorage = 0
+		else if (result.pagination[result.pagination.length - 1][1] > result.pagination[result.pagination.length - 2][1]) valueStorage = result.pagination[result.pagination.length - 1][1]
+		else valueStorage = result.pagination[result.pagination.length - 2][1]
+
+		if (valueStorage == null) valueStorage = page
+
+		tab.setAttribute('jp', 0)
+		tab.setAttribute('tp', page)
+		tab.setAttribute('mp', valueStorage)
+		if (activeTabComicId == pageId && valueStorage != 0) {
+			bjp.style.display = 'inline-block'
+			bjp_i.value = page
+			bjp_i.setAttribute('oninput', `inputLimit(this, ${valueStorage});browserJumpPage(0, Number(this.value))`)
+			bjp_m_p.textContent = valueStorage
+		}
 
 		// Categories
 		elementContainer = document.createElement('div')
@@ -1142,6 +1304,33 @@ function xlecxOpenAllTags(makeNewPage, updateTabIndex) {
 
 		page.appendChild(container)
 	})
+}
+
+function xlecxJumpPage(index, page) {
+	switch (index) {
+		case 0:
+			searchTimer = setTimeout(() => {
+				xlecxSearch(tabsContainer.querySelector(`[pi="${activeTabComicId}"]`).getAttribute('s'), page)
+			}, 185)
+			break
+		case 1:
+			searchTimer = setTimeout(() => {
+				xlecxChangePage(page, false)
+			}, 185)
+			break
+		case 2:
+			const thisTabIndex2 = Number(tabsContainer.querySelector(`[pi="${activeTabComicId}"]`).getAttribute('ti'))
+			searchTimer = setTimeout(() => {
+				xlecxOpenCategory(tabs[thisTabIndex2].options[0], page, tabs[thisTabIndex2].options[1], false)
+			}, 185)
+			break
+		case 3:
+			const thisTabIndex3 = Number(tabsContainer.querySelector(`[pi="${activeTabComicId}"]`).getAttribute('ti'))
+			searchTimer = setTimeout(() => {
+				xlecxOpenTag(tabs[thisTabIndex3].options[0], page, tabs[thisTabIndex3].options[1], false)
+			}, 185)
+			break
+	}
 }
 
 function xlecxDownloader(id) {
