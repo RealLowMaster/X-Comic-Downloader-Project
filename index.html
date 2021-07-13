@@ -23,7 +23,7 @@
 	<div class="main">
 		<!-- Top Menu -->
 		<div>
-			<div class="top-menu">
+			<div class="top-menu" id="top-menu">
 				<div>
 					<button onclick="document.getElementById('site-menu').setAttribute('active', true)">Sites</button>
 					<button onclick="document.getElementById('setting-panel').style.display='block';document.getElementById('setting-panel').scrollTop=0">Setting</button>
@@ -42,7 +42,7 @@
 		</div>
 
 		<!-- Body -->
-		<div>
+		<div id="main-body">
 			<div id="comic-container" page=""></div>
 			<div class="pagination-rounded" id="pagination"></div>
 			<p id="comics-counter"></p>
@@ -126,7 +126,22 @@
 		<div class="row">
 			<div class="col-6 pr-5 pl-5">
 				<div class="input-row">
-					<label class="input-row-label">Offline Comic Theme</label>
+					<label class="input-row-label">Theme</label>
+					<div class="input-row-selector" id="s_offline_theme" value>
+						<div onclick="openSelect(this.parentElement)"></div>
+						<div class="input-row-selector-overflow">
+							<p onclick="select(this, 0)">Light Mode</p>
+							<p onclick="select(this, 1)">Dark Mode</p>
+						</div>
+						<span></span>
+					</div>
+					<p class="input-row-helper">The App Normal Theme.</p>
+				</div>
+
+				<br>
+
+				<div class="input-row">
+					<label class="input-row-label">Comic Theme</label>
 					<div class="input-row-selector" id="s_comic_panel_theme" value>
 						<div onclick="openSelect(this.parentElement)"></div>
 						<div class="input-row-selector-overflow">
@@ -135,15 +150,19 @@
 						</div>
 						<span></span>
 					</div>
-					<p class="input-row-helper">The Downloaded Comic Viewing Panel Theme.</p>
+					<p class="input-row-helper">The Downloaded Comic Panel Theme.</p>
 				</div>
 
-				<br>
+				<br><br>
 
 				<div class="input-row">
-					<label class="input-row-label">Max Comics in a Page (Offline)</label>
-					<input class="input-row-input" type="number" oninput="inputLimit(this, 34)" id="s_max_per_page">
-					<p class="input-row-helper">The Maximum Amount of Comics That Should Show in Offline Parts.<br>Min: 1, Max: 34</p>
+					<div class="input-row-checkbox">
+						<label>Hoverable Downloader</label>
+						<div>
+							<input type="checkbox" id="s_hover_downloader">
+						</div>
+					</div>
+					<p class="input-row-helper">Hover The Downloader For Showed Up.</p>
 				</div>
 			</div>
 
@@ -161,16 +180,12 @@
 					<p class="input-row-helper">The Downloaded Comic Pagination Theme.</p>
 				</div>
 
-				<br><br>
+				<br>
 
 				<div class="input-row">
-					<div class="input-row-checkbox">
-						<label>Hoverable Downloader</label>
-						<div>
-							<input type="checkbox" id="s_hover_downloader">
-						</div>
-					</div>
-					<p class="input-row-helper">Hover The Downloader For Showed Up.</p>
+					<label class="input-row-label">Max Comics in a Page</label>
+					<input class="input-row-input" type="number" oninput="inputLimit(this, 34)" id="s_max_per_page">
+					<p class="input-row-helper">The Maximum Amount of Comics That Should Show in Offline Parts.<br>Min: 1, Max: 34</p>
 				</div>
 			</div>
 		</div>
@@ -231,7 +246,7 @@
 							<button type="button" id="s_file_location" location="" onclick="GetFileLocationForInput(this)">Choose</button>
 						</div>
 					</div>
-					<p class="input-row-helper">Choose a Location For Saving Downloaded Comics.<br>If you Change The Location Software will Reload.</p>
+					<p class="input-row-helper">Choose a Location For Saving Downloaded Comics.<br>If you Change The Location App will Reload.</p>
 				</div>
 			</div>
 
@@ -246,7 +261,7 @@
 						</div>
 						<span></span>
 					</div>
-					<p class="input-row-helper">Recommend (High).<br>The Quality of Downloading Images.<br>If (High) Software will check if Comic Have High Quality Image Then it will Download it, But If It Doesn't Then it will Download Low Quality.</p>
+					<p class="input-row-helper">Recommend (High).<br>The Quality of Downloading Images.<br>(If High) App will check if Comic Have High Quality Image Then it will Download it, But If It Doesn't Then it will Download Low Quality.</p>
 				</div>
 
 				<br><br>

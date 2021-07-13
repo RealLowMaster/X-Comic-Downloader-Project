@@ -7,7 +7,7 @@ const xlecx = new XlecxAPI()
 const defaultSetting = {
 	"comic_panel_theme": 0,
 	"pagination_theme": 1,
-	"post_img_container_theme": 0,
+	"offline_theme": 0,
 	"hover_downloader": true,
 	"max_per_page": 18,
 	"img_graphic": 1,
@@ -209,8 +209,9 @@ function CheckSettings() {
 	if (setting.comic_panel_theme > 1) setting.comic_panel_theme = 1
 	if (typeof(setting.pagination_theme) != 'number' || setting.pagination_theme < 0) setting.pagination_theme = 0
 	if (setting.pagination_theme > 1) setting.pagination_theme = 1
-	if (setting.max_per_page < 1) setting.max_per_page = 1
+	if (typeof(setting.offline_theme) != 'number') setting.offline_theme = 0
 	if (typeof(setting.max_per_page) != 'number') setting.max_per_page = 18
+	if (setting.max_per_page < 1) setting.max_per_page = 1
 	if (typeof(setting.img_graphic) != 'number' || setting.img_graphic < 0) setting.img_graphic = 0
 	if (setting.img_graphic > 1) setting.img_graphic = 1
 	if (typeof(setting.notification_download_finish) != 'boolean') setting.notification_download_finish = true
@@ -947,7 +948,6 @@ function activateTab(who) {
 	pageContainer.scrollTop = scrollValue
 
 	document.getElementById('browser-tool-search-input').value = who.getAttribute('s')
-
 	if (max_pages > 0) {
 		bjp.style.display = 'inline-block'
 		bjp_i.value = Number(who.getAttribute('tp'))
@@ -2140,17 +2140,20 @@ function askForDeletingComic(id) {
 function setLuanchTimeSettings(reloadSettingPanel) {
 	reloadSettingPanel = reloadSettingPanel || false
 	const s_comic_panel_theme = document.getElementById('s_comic_panel_theme')
+	const s_offline_theme = document.getElementById('s_offline_theme')
 	const s_pagination_theme = document.getElementById('s_pagination_theme')
 	const s_img_graphic = document.getElementById('s_img_graphic')
 	const s_search_speed = document.getElementById('s_search_speed')
 	const s_file_location = document.getElementById('s_file_location')
 
 	s_comic_panel_theme.setAttribute('value', setting.comic_panel_theme)
+	s_offline_theme.setAttribute('value', setting.offline_theme)
 	s_pagination_theme.setAttribute('value', setting.pagination_theme)
 	s_img_graphic.setAttribute('value', setting.img_graphic)
 	s_search_speed.setAttribute('value', setting.search_speed)
 
 	s_comic_panel_theme.getElementsByTagName('div')[0].textContent = s_comic_panel_theme.getElementsByTagName('div')[1].querySelector(`[onclick="select(this, ${setting.comic_panel_theme})"]`).textContent
+	s_offline_theme.getElementsByTagName('div')[0].textContent = s_offline_theme.getElementsByTagName('div')[1].querySelector(`[onclick="select(this, ${setting.offline_theme})"]`).textContent
 	s_pagination_theme.getElementsByTagName('div')[0].textContent = s_pagination_theme.getElementsByTagName('div')[1].querySelector(`[onclick="select(this, ${setting.pagination_theme})"]`).textContent
 	s_img_graphic.getElementsByTagName('div')[0].textContent = s_img_graphic.getElementsByTagName('div')[1].querySelector(`[onclick="select(this, ${setting.img_graphic})"]`).textContent
 	s_search_speed.getElementsByTagName('div')[0].textContent = s_search_speed.getElementsByTagName('div')[1].querySelector(`[onclick="select(this, ${setting.search_speed})"]`).textContent
@@ -2176,6 +2179,13 @@ function setLuanchTimeSettings(reloadSettingPanel) {
 	if (reloadSettingPanel == false) {
 		if (setting.hover_downloader == false) document.getElementById('downloader').classList.add('downloader-fixed')
 
+		if (setting.offline_theme == 1) {
+			document.getElementById('setting-panel').classList.add('setting-darkmode')
+			document.getElementById('site-menu').classList.add('action-menu-darkmode')
+			document.getElementById('top-menu').classList.add('top-menu-darkmode')
+			document.getElementById('main-body').classList.add('main-body-darkmode')
+		}
+
 		if (setting.comic_panel_theme == 1) document.getElementById('comic-panel').classList.add('comic-panel-darkmode')
 
 		if (setting.pagination_theme == 1) document.getElementById('pagination').classList.add('pagination-green-mode')
@@ -2196,6 +2206,7 @@ function saveSetting(justSave) {
 		}
 
 		setting.comic_panel_theme = Number(document.getElementById('s_comic_panel_theme').getAttribute('value'))
+		setting.offline_theme = Number(document.getElementById('s_offline_theme').getAttribute('value'))
 		setting.pagination_theme = Number(document.getElementById('s_pagination_theme').getAttribute('value'))
 		setting.img_graphic = Number(document.getElementById('s_img_graphic').getAttribute('value'))
 		setting.search_speed = Number(document.getElementById('s_search_speed').getAttribute('value'))
@@ -2226,10 +2237,23 @@ function saveSetting(justSave) {
 			setting.file_location = file_location
 		}
 
-		if (setting.hover_downloader == false)
-			document.getElementById('downloader').classList.add('downloader-fixed')
-		else
-			document.getElementById('downloader').classList.remove('downloader-fixed')
+		if (setting.hover_downloader == false) document.getElementById('downloader').classList.add('downloader-fixed')
+		else document.getElementById('downloader').classList.remove('downloader-fixed')
+
+		switch (setting.offline_theme) {
+			case 0:
+				document.getElementById('setting-panel').classList.remove('setting-darkmode')
+				document.getElementById('site-menu').classList.remove('action-menu-darkmode')
+				document.getElementById('top-menu').classList.remove('top-menu-darkmode')
+				document.getElementById('main-body').classList.remove('main-body-darkmode')
+				break
+			case 1:
+				document.getElementById('setting-panel').classList.add('setting-darkmode')
+				document.getElementById('site-menu').classList.add('action-menu-darkmode')
+				document.getElementById('top-menu').classList.add('top-menu-darkmode')
+				document.getElementById('main-body').classList.add('main-body-darkmode')
+				break
+		}
 
 		switch (setting.comic_panel_theme) {
 			case 0:
