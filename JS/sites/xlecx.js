@@ -1082,27 +1082,37 @@ function xlecxOpenTag(name, page, whitch, makeNewPage, updateTabIndex) {
 	}
 }
 
-function xlecxSearch(text, page, updateTabIndex) {
+function xlecxSearch(text, page, makeNewPage, updateTabIndex) {
 	text = text || null
 	if (text == null) return
 	text = text.replace("\\'", "'")
 	page = page || 1
+	makeNewPage = makeNewPage || false
 	if (updateTabIndex == null) updateTabIndex = true
-	var pageContent
-	const pageId = activeTabComicId
-	const passImageCon = document.getElementById(pageId).querySelector('[img-con="true"]')
-	if (passImageCon != undefined) {
-		const passImages = passImageCon.children
-		for (let i = 0; i < passImages.length; i++) {
-			passImages[i].removeAttribute('data-src')
-			passImages[i].removeAttribute('src')
+
+	var pageContent, pageId
+	if (makeNewPage) {
+		pageId = createNewTab(`xlecxSearch('${text}', ${page}, false, false)`)
+		if (pageId == null) { PopAlert('You Can\'t Make Any More Tab.', 'danger'); return }
+		pageContent = document.getElementById(pageId)
+	} else {
+		pageId = activeTabComicId
+		const passImageCon = document.getElementById(pageId).querySelector('[img-con="true"]')
+		if (passImageCon != undefined) {
+			const passImages = passImageCon.children
+			for (let i = 0; i < passImages.length; i++) {
+				passImages[i].removeAttribute('data-src')
+				passImages[i].removeAttribute('src')
+			}
 		}
+		pageContent = document.getElementById(pageId)
+		pageContent.innerHTML = ''
+
+		if (updateTabIndex == true) tabs[Number(tabsContainer.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))].addHistory(`xlecxSearch('${text}', ${page}, false, false)`)
 	}
 
 	pageContent = document.getElementById(pageId)
 	pageContent.innerHTML = ''
-
-	if (updateTabIndex == true) tabs[Number(tabsContainer.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))].addHistory(`xlecxSearch('${text}', ${page}, false)`)
 
 	if (activeTabComicId == pageId) {
 		bjp.style.display = 'none'

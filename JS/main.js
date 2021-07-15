@@ -28,7 +28,7 @@ const sites = [
 	[
 		'xlecx',
 		'xlecxRepairComicInfoGetInfo({id}, {whitch})',
-		'xlecxSearch({text}, 1)',
+		'xlecxSearch({text}, 1, false)',
 		'xlecxChangePage(1, false, true)',
 		'xlecxJumpPage({index}, {page})'
 	]
