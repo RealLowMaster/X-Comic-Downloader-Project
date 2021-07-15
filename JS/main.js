@@ -36,7 +36,7 @@ const sites = [
 const bjp = document.getElementById('browser-jump-page-container')
 const bjp_i = document.getElementById('bjp-i')
 const bjp_m_p = document.getElementById('bjp-m-p')
-var setting, dirDB, dirUL, tabs = [], db = {}, downloadingList = [], repairingComics = [], thisSite, lastComicId, lastHaveId, searchTimer, needReload = true, activeTabComicId = null
+var setting, dirDB, dirUL, tabs = [], db = {}, downloadingList = [], repairingComics = [], thisSite, lastComicId, lastHaveId, searchTimer, needReload = true, activeTabComicId = null, activeTabIndex = null
 
 // Needable Functions
 function fileExt(str) {
@@ -887,6 +887,7 @@ function closeBrowser() {
 	reloadLoadingComics()
 	document.getElementById('browser').style.display = 'none'
 	thisSite = null
+	activeTabIndex = null
 	activeTabComicId = null
 	tabs = []
 	const browser_pages_container = document.getElementById('browser-pages')
@@ -926,33 +927,29 @@ window.onresize = () => {
 }
 
 function activateTab(who) {
-	const pageId = who.getAttribute('pi')
 	const pageContainer = document.getElementById('browser-pages')
-	const passScoll = pageContainer.scrollTop
-	const scrollValue = Number(who.getAttribute('sv'))
-	const max_pages = Number(who.getAttribute('mp'))
-	page = document.getElementById(pageId) || null
-	if (page == null) return
+	if (document.getElementById(who.getAttribute('pi')) == undefined) return
 
-	if (activeTabComicId != null) {
+	if (activeTabIndex != null) {
 		const passTab = tabsContainer.querySelector(`[pi="${activeTabComicId}"]`) || null
 		if (passTab != null) {
-			passTab.setAttribute('active', null)
-			passTab.setAttribute('sv', passScoll)
-			document.getElementById(activeTabComicId).setAttribute('style', null)
+			passTab.setAttribute('active', '')
+			tabs[activeTabIndex].sc = pageContainer.scrollTop
+			document.getElementById(activeTabComicId).style.display = 'none'
 		}
 	}
-	activeTabComicId = pageId
+	activeTabIndex = Number(who.getAttribute('ti'))
+	activeTabComicId = tabs[activeTabIndex].pageId
 	who.setAttribute('active', true)
-	document.getElementById(pageId).setAttribute('style', 'display:block')
-	pageContainer.scrollTop = scrollValue
+	document.getElementById(activeTabComicId).style.display = 'block'
+	pageContainer.scrollTop = tabs[activeTabIndex].sc
 
 	document.getElementById('browser-tool-search-input').value = who.getAttribute('s')
-	if (max_pages > 0) {
+	if (tabs[activeTabIndex].mp != 0) {
 		bjp.style.display = 'inline-block'
 		bjp_i.value = Number(who.getAttribute('tp'))
-		bjp_i.setAttribute('oninput', `inputLimit(this, ${max_pages});browserJumpPage(${Number(who.getAttribute('jp'))}, Number(this.value))`)
-		bjp_m_p.textContent = max_pages
+		bjp_i.setAttribute('oninput', `inputLimit(this, ${tabs[activeTabIndex].mp});browserJumpPage(${Number(who.getAttribute('jp'))}, Number(this.value))`)
+		bjp_m_p.textContent = tabs[activeTabIndex].mp
 	} else bjp.style.display = 'none'
 }
 
@@ -970,26 +967,20 @@ function createNewTab(history) {
 	history = history || null
 	const tabIndex = tabs.length
 	const date = new Date()
-	const randomNumber = Math.floor(Math.random() * 500)
-	const newTabId = `${date.getTime()}-${randomNumber}`
+	const randomNumber = Math.floor(Math.random() * 9)
+	const newTabId = `${date.getTime()}${randomNumber}`
 	const page = document.createElement('div')
 	const element = document.createElement('div')
 	element.classList.add('browser-tab')
 	element.setAttribute('onclick', 'activateTab(this)')
 	element.setAttribute('pi', newTabId)
 	element.setAttribute('ti', tabIndex)
-	element.setAttribute('sv', 0)
-	element.setAttribute('jp', 0)
-	element.setAttribute('tp', 1)
-	element.setAttribute('mp', 0)
-	element.setAttribute('s', '')
-	element.setAttribute('isReloading', true)
 	element.setAttribute('draggable', true)
 	element.innerHTML = `<span><span class="spin spin-primary" style="width:22px;height:22px"></span></span> <button onclick="removeTab('${newTabId}')">X</button>`
 	element.addEventListener('dragstart',() => { element.classList.add('dragging') })
 	element.addEventListener('dragend', () => { element.classList.remove('dragging') })
 
-	tabs[tabIndex] = new Tab(newTabId)
+	tabs[tabIndex] = new Tab(newTabId, 0, '', 0, 1, 0, true)
 	tabs[tabIndex].history.push(history)
 	page.setAttribute('class', 'browser-page')
 	page.setAttribute('id', newTabId)
@@ -1026,6 +1017,7 @@ function removeTab(id) {
 	}
 
 	if (activeTabComicId == id && btabs.length != 1) {
+		activeTabIndex = null
 		if (index == 0) {
 			if (1 <= btabs.length - 1) activateTab(btabs[1])
 		} else if (btabs[index + 1] != undefined) activateTab(btabs[index + 1])
@@ -1033,6 +1025,8 @@ function removeTab(id) {
 	}
 
 	if (btabs.length == 1) {
+		tabs = []
+		activeTabIndex = null
 		activeTabComicId = null
 		document.getElementById('browser-home-btn').style.display = 'none'
 		document.getElementById('browser-prev-btn').style.display = 'none'
@@ -1061,34 +1055,30 @@ function checkMiddleMouseClick(event) {
 }
 
 function browserHome() {
-	const tabIndex = Number(tabsContainer.querySelector(`[pi="${activeTabComicId}"]`).getAttribute('ti'))
-	if (tabs[tabIndex].history[tabs[tabIndex].history.length - 1].replace(', false)', ', true)') != sites[thisSite][3]) eval(sites[thisSite][3])
+	if (tabs[activeTabIndex].history[tabs[activeTabIndex].history.length - 1].replace(', false)', ', true)') != sites[thisSite][3]) eval(sites[thisSite][3])
 }
 
 function changeHistory(next) {
 	next = next || false
-	var tabIndexId = Number(tabsContainer.querySelector(`[pi="${activeTabComicId}"]`).getAttribute('ti'))
-
 	if (next == true) {
-		if (tabs[tabIndexId].activeHistory != tabs[tabIndexId].history.length - 1) {
+		if (tabs[activeTabIndex].activeHistory != tabs[activeTabIndex].history.length - 1) {
 			document.getElementById(activeTabComicId).innerHTML = ''
 			document.getElementById(activeTabComicId).innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
-			tabs[tabIndexId].next()
+			tabs[activeTabIndex].next()
 		}
 	} else {
-		if (tabs[tabIndexId].activeHistory != 0) {
+		if (tabs[activeTabIndex].activeHistory != 0) {
 			document.getElementById(activeTabComicId).innerHTML = ''
 			document.getElementById(activeTabComicId).innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
-			tabs[tabIndexId].prev()
+			tabs[activeTabIndex].prev()
 		}
 	}
 }
 
 function reloadTab() {
-	const thisTab = tabsContainer.querySelector(`[pi="${activeTabComicId}"]`)
-	if (thisTab.getAttribute('isReloading') == 'false') {
-		thisTab.setAttribute('isReloading', true)
-		tabs[Number(thisTab.getAttribute('ti'))].reload()
+	if (tabs[activeTabIndex].ir == false) {
+		tabs[activeTabIndex].ir = true
+		tabs[activeTabIndex].reload()
 	}
 }
 
@@ -1427,9 +1417,10 @@ document.getElementById('browser-tool-search-form').addEventListener('submit', e
 	const input = document.getElementById('browser-tool-search-input')
 	const checkText = input.value.replace(/ /g, '')
 	if (checkText.length > 0) {
-		tabsContainer.querySelector(`[pi="${activeTabComicId}"]`).setAttribute('s', input.value)
-		eval(sites[thisSite][2].replace('{text}', `'${input.value}'`))
-	}
+		tabs[activeTabIndex].s = input.value
+		eval(sites[thisSite][2].replace('{text}', `'${input.value.replace("'", "\\'")}'`))
+	} else
+		tabs[activeTabIndex].s = ''
 })
 
 // Add Comic To Have

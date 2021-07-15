@@ -64,42 +64,20 @@ DB => {
 
 Add Comic {
     League Of Legends
-    Gravity Falls - Secrets Of The Woods
-    2 Girls 1 Prince
-    This Romantic World
-    An Indcecent Proposal
-    How to Train Your Dragon
-    Ritual Release
-    Loli Club Star Wars
-    Mr Meeseeks
-    Bowsette's Bondage Bastille
-    Slutfire
-    OK-shotaKOn
-    Under(her)tail: Monster-GirlEdition 1 Reset
-    Crazy Insane Sex
-    Dino D.N.A.s
-    The Amazing World of Nicole - Biology Lesson
-    Gravity Falls - One Summer Of Pleasure
-    Adventure Time - Jake Fuck Finn
-    Roshutsu Sex Soldier Satsuki
-    Bird Hunting
-    A-Force - Strip Poker Stars
-    December Collage: Korra
     The Rock Cocks
     Deviants
-    Web Of Shadows
-    Shadman
-    Spiralling Descent Of A Kennel Bitch
-    Lewdua
-	Shedding
-	Peculiart
 	milftoon
+	Tracy Scops
 }
 Did {
     Make Repairing Systems Part 6++ = Next = Complete All Image Repairing
 }
 
 Tasks => {
+    Make pageContainer in ActiveTab => Global
+	Fix Artist => Peculiart | Pagination Open New Tab | Searching
+	Make Multi-Downloading More Performance
+	Fix Searching Problem With ' Like => Bowsette's Bondage Bastille
 	Fix Artists Big and Small Letters Like => prism girls != Prism Girls
     Add Ability That Check Post Updated Image
     Ctrl + k | Ctrl + 0

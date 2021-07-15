@@ -21,12 +21,13 @@ function createNewXlecxTab(id, pageNumber) {
 
 	const tab = tabsContainer.querySelector(`[pi="${id}"]`)
 	const tabArea = tab.getElementsByTagName('span')[0]
-	tab.setAttribute('isReloading', true)
-	tab.setAttribute('mp', 0)
+	const thisTabIndex = Number(tab.getAttribute('ti'))
+	tabs[thisTabIndex].ir = true
+	tabs[thisTabIndex].mp = 0
 	tabArea.innerHTML = '<span class="spin spin-sm spin-primary" style="width:22px;height:22px"></span>'
 	xlecx.getPage({page:pageNumber, random:true, category:true}, (err, result) => {
 		if (document.getElementById(id) == undefined) return
-		tab.setAttribute('isReloading', false)
+		tabs[thisTabIndex].ir = false
 		pageContent.innerHTML = ''
 		if (err) {
 			browserError(err, id)
@@ -42,9 +43,9 @@ function createNewXlecxTab(id, pageNumber) {
 
 		if (valueStorage == null) valueStorage = pageNumber
 
-		tab.setAttribute('jp', 1)
-		tab.setAttribute('tp', pageNumber)
-		tab.setAttribute('mp', valueStorage)
+		tabs[thisTabIndex].jp = 1
+		tabs[thisTabIndex].tp = pageNumber
+		tabs[thisTabIndex].mp = valueStorage
 		if (activeTabComicId == id) {
 			bjp.style.display = 'inline-block'
 			bjp_i.value = pageNumber
@@ -201,8 +202,9 @@ function xlecxOpenPost(makeNewPage, id, updateTabIndex) {
 
 	const tab = tabsContainer.querySelector(`[pi="${pageId}"]`)
 	const tabArea = tab.getElementsByTagName('span')[0]
-	tab.setAttribute('isReloading', true)
-	tab.setAttribute('mp', 0)
+	const thisTabIndex = Number(tab.getAttribute('ti'))
+	tabs[thisTabIndex].ir = true
+	tabs[thisTabIndex].mp = 0
 	tabArea.innerHTML = '<span class="spin spin-sm spin-primary" style="width:22px;height:22px"></span>'
 	db.have.findOne({s:0, i:id}, (err, haveDoc) => {
 		if (err) { error(err); return }
@@ -217,7 +219,7 @@ function xlecxOpenPost(makeNewPage, id, updateTabIndex) {
 		if (have_comic == true) {
 			db.comics.findOne({s:0, p:id}, (err, doc) => {
 				if (document.getElementById(pageId) == undefined) return
-				tab.setAttribute('isReloading', false)
+				tabs[thisTabIndex].ir = false
 				if (err) { error(err); return }
 				page.innerHTML = ''
 				const passId = id
@@ -469,7 +471,7 @@ function xlecxOpenPost(makeNewPage, id, updateTabIndex) {
 		} else {
 			xlecx.getComic(id, {}, (err, result) => {
 				if (document.getElementById(pageId) == undefined) return
-				tab.setAttribute('isReloading', false)
+				tabs[thisTabIndex].ir = false
 				page.innerHTML = ''
 				if (err) {
 					browserError(err, pageId)
@@ -688,13 +690,14 @@ function xlecxOpenCategory(name, page, shortName, makeNewPage, updateTabIndex) {
 
 	const tab = tabsContainer.querySelector(`[pi="${pageId}"]`)
 	const tabArea = tab.getElementsByTagName('span')[0]
-	tab.setAttribute('isReloading', true)
-	tab.setAttribute('mp', 0)
+	const thisTabIndex = Number(tab.getAttribute('ti'))
+	tabs[thisTabIndex].ir = true
+	tabs[thisTabIndex].mp = 0
 	tabArea.innerHTML = '<span class="spin spin-sm spin-primary" style="width:22px;height:22px"></span>'
 	pageContent.innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
 	xlecx.getCategory(name, {page:page, random:true, category:true}, (err, result) => {
 		if (document.getElementById(pageId) == undefined) return
-		tab.setAttribute('isReloading', false)
+		tabs[thisTabIndex].ir = false
 		pageContent.innerHTML = ''
 		if (err) {
 			browserError(err, pageId)
@@ -711,9 +714,9 @@ function xlecxOpenCategory(name, page, shortName, makeNewPage, updateTabIndex) {
 
 		if (valueStorage == null) valueStorage = page
 
-		tab.setAttribute('jp', 2)
-		tab.setAttribute('tp', page)
-		tab.setAttribute('mp', valueStorage)
+		tabs[thisTabIndex].jp = 2
+		tabs[thisTabIndex].tp = page
+		tabs[thisTabIndex].mp = valueStorage
 		if (activeTabComicId == pageId && valueStorage != 0) {
 			bjp.style.display = 'inline-block'
 			bjp_i.value = page
@@ -949,8 +952,9 @@ function xlecxOpenTag(name, page, whitch, makeNewPage, updateTabIndex) {
 
 	const tab = tabsContainer.querySelector(`[pi="${pageId}"]`)
 	const tabArea = tab.getElementsByTagName('span')[0]
-	tab.setAttribute('isReloading', true)
-	tab.setAttribute('mp', 0)
+	const thisTabIndex = Number(tab.getAttribute('ti'))
+	tabs[thisTabIndex].ir = true
+	tabs[thisTabIndex].mp = 0
 	tabArea.innerHTML = '<span class="spin spin-sm spin-primary" style="width:22px;height:22px"></span>'
 	pageContent.innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
 
@@ -958,7 +962,7 @@ function xlecxOpenTag(name, page, whitch, makeNewPage, updateTabIndex) {
 		case 1:
 			xlecx.getGroup(name, {page:page, category:true}, (err, result) => {
 				if (document.getElementById(pageId) == undefined) return
-				tab.setAttribute('isReloading', false)
+				tabs[thisTabIndex].ir = false
 				pageContent.innerHTML = ''
 				if (err) {
 					browserError(err, pageId)
@@ -973,9 +977,9 @@ function xlecxOpenTag(name, page, whitch, makeNewPage, updateTabIndex) {
 	
 				if (valueStorage == null) valueStorage = page
 	
-				tab.setAttribute('jp', 3)
-				tab.setAttribute('tp', page)
-				tab.setAttribute('mp', valueStorage)
+				tabs[thisTabIndex].jp = 3
+				tabs[thisTabIndex].tp = page
+				tabs[thisTabIndex].mp = valueStorage
 				if (activeTabComicId == pageId && valueStorage != 0) {
 					bjp.style.display = 'inline-block'
 					bjp_i.value = page
@@ -988,7 +992,7 @@ function xlecxOpenTag(name, page, whitch, makeNewPage, updateTabIndex) {
 		case 2:
 			xlecx.getArtist(name, {page:page, category:true}, (err, result) => {
 				if (document.getElementById(pageId) == undefined) return
-				tab.setAttribute('isReloading', false)
+				tabs[thisTabIndex].ir = false
 				pageContent.innerHTML = ''
 				if (err) {
 					browserError(err, pageId)
@@ -1003,9 +1007,9 @@ function xlecxOpenTag(name, page, whitch, makeNewPage, updateTabIndex) {
 	
 				if (valueStorage == null) valueStorage = page
 	
-				tab.setAttribute('jp', 3)
-				tab.setAttribute('tp', page)
-				tab.setAttribute('mp', valueStorage)
+				tabs[thisTabIndex].jp = 3
+				tabs[thisTabIndex].tp = page
+				tabs[thisTabIndex].mp = valueStorage
 				if (activeTabComicId == pageId && valueStorage != 0) {
 					bjp.style.display = 'inline-block'
 					bjp_i.value = page
@@ -1018,7 +1022,7 @@ function xlecxOpenTag(name, page, whitch, makeNewPage, updateTabIndex) {
 		case 3:
 			xlecx.getParody(name, {page:page, category:true}, (err, result) => {
 				if (document.getElementById(pageId) == undefined) return
-				tab.setAttribute('isReloading', false)
+				tabs[thisTabIndex].ir = false
 				pageContent.innerHTML = ''
 				if (err) {
 					browserError(err, pageId)
@@ -1033,9 +1037,9 @@ function xlecxOpenTag(name, page, whitch, makeNewPage, updateTabIndex) {
 	
 				if (valueStorage == null) valueStorage = page
 	
-				tab.setAttribute('jp', 3)
-				tab.setAttribute('tp', page)
-				tab.setAttribute('mp', valueStorage)
+				tabs[thisTabIndex].jp = 3
+				tabs[thisTabIndex].tp = page
+				tabs[thisTabIndex].mp = valueStorage
 				if (activeTabComicId == pageId && valueStorage != 0) {
 					bjp.style.display = 'inline-block'
 					bjp_i.value = page
@@ -1048,7 +1052,7 @@ function xlecxOpenTag(name, page, whitch, makeNewPage, updateTabIndex) {
 		case 4:
 			xlecx.getTag(name, {page:page, category:true}, (err, result) => {
 				if (document.getElementById(pageId) == undefined) return
-				tab.setAttribute('isReloading', false)
+				tabs[thisTabIndex].ir = false
 				pageContent.innerHTML = ''
 				if (err) {
 					browserError(err, pageId)
@@ -1063,9 +1067,9 @@ function xlecxOpenTag(name, page, whitch, makeNewPage, updateTabIndex) {
 	
 				if (valueStorage == null) valueStorage = page
 	
-				tab.setAttribute('jp', 3)
-				tab.setAttribute('tp', page)
-				tab.setAttribute('mp', valueStorage)
+				tabs[thisTabIndex].jp = 3
+				tabs[thisTabIndex].tp = page
+				tabs[thisTabIndex].mp = valueStorage
 				if (activeTabComicId == pageId && valueStorage != 0) {
 					bjp.style.display = 'inline-block'
 					bjp_i.value = page
@@ -1081,6 +1085,7 @@ function xlecxOpenTag(name, page, whitch, makeNewPage, updateTabIndex) {
 function xlecxSearch(text, page, updateTabIndex) {
 	text = text || null
 	if (text == null) return
+	text = text.replace("\\'", "'")
 	page = page || 1
 	if (updateTabIndex == null) updateTabIndex = true
 	var pageContent
@@ -1106,19 +1111,20 @@ function xlecxSearch(text, page, updateTabIndex) {
 	
 	const tab = tabsContainer.querySelector(`[pi="${pageId}"]`)
 	const tabArea = tab.getElementsByTagName('span')[0]
-	tab.setAttribute('isReloading', true)
-	tab.setAttribute('mp', 0)
+	const thisTabIndex = Number(tab.getAttribute('ti'))
+	tabs[thisTabIndex].ir = true
+	tabs[thisTabIndex].mp = 0
 	tabArea.innerHTML = '<span class="spin spin-sm spin-primary" style="width:22px;height:22px"></span>'
 	pageContent.innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
 	xlecx.search(text, {page:page, category:true}, (err, result) => {
 		if (document.getElementById(pageId) == undefined) return
-		tab.setAttribute('isReloading', false)
+		tabs[thisTabIndex].ir = false
 		pageContent.innerHTML = ''
 		if (err) {
 			page.innerHTML = `<br><div class="alert alert-danger">${err}</div><button class="btn btn-primary" style="display:block;margin:3px auto" onclick="reloadTab()">Reload</button>`
 			return
 		}
-		tabArea.textContent = `${text} - ${page}`
+		tabArea.textContent = `S: ${text} - ${page}`
 		var container = document.createElement('div')
 		container.classList.add("xlecx-container")
 		var elementContainerContainer = document.createElement('div')
@@ -1130,9 +1136,9 @@ function xlecxSearch(text, page, updateTabIndex) {
 
 		if (valueStorage == null) valueStorage = page
 
-		tab.setAttribute('jp', 0)
-		tab.setAttribute('tp', page)
-		tab.setAttribute('mp', valueStorage)
+		tabs[thisTabIndex].jp = 0
+		tabs[thisTabIndex].tp = page
+		tabs[thisTabIndex].mp = valueStorage
 		if (activeTabComicId == pageId && valueStorage != 0) {
 			bjp.style.display = 'inline-block'
 			bjp_i.value = page
@@ -1246,10 +1252,13 @@ function xlecxOpenAllTags(makeNewPage, updateTabIndex) {
 
 	const tab = tabsContainer.querySelector(`[pi="${pageId}"]`)
 	const tabArea = tab.getElementsByTagName('span')[0]
+	const thisTabIndex = Number(tab.getAttribute('ti'))
+	tabs[thisTabIndex].ir = true
+	tabs[thisTabIndex].mp = 0
 	tabArea.innerHTML = '<span class="spin spin-sm spin-primary" style="width:22px;height:22px"></span>'
 	xlecx.getAllTags(true, (err, result) => {
 		if (document.getElementById(pageId) == undefined) return
-		tab.setAttribute('isReloading', false)
+		tabs[thisTabIndex].ir = false
 		page.innerHTML = ''
 		if (err) {
 			browserError(err, pageId)
@@ -1310,7 +1319,7 @@ function xlecxJumpPage(index, page) {
 	switch (index) {
 		case 0:
 			searchTimer = setTimeout(() => {
-				xlecxSearch(tabsContainer.querySelector(`[pi="${activeTabComicId}"]`).getAttribute('s'), page)
+				xlecxSearch(tabs[activeTabIndex].s.replace("'", "\\'"), page)
 			}, 185)
 			break
 		case 1:
@@ -1319,15 +1328,13 @@ function xlecxJumpPage(index, page) {
 			}, 185)
 			break
 		case 2:
-			const thisTabIndex2 = Number(tabsContainer.querySelector(`[pi="${activeTabComicId}"]`).getAttribute('ti'))
 			searchTimer = setTimeout(() => {
-				xlecxOpenCategory(tabs[thisTabIndex2].options[0], page, tabs[thisTabIndex2].options[1], false)
+				xlecxOpenCategory(tabs[activeTabIndex].options[0], page, tabs[activeTabIndex].options[1], false)
 			}, 185)
 			break
 		case 3:
-			const thisTabIndex3 = Number(tabsContainer.querySelector(`[pi="${activeTabComicId}"]`).getAttribute('ti'))
 			searchTimer = setTimeout(() => {
-				xlecxOpenTag(tabs[thisTabIndex3].options[0], page, tabs[thisTabIndex3].options[1], false)
+				xlecxOpenTag(tabs[activeTabIndex].options[0], page, tabs[activeTabIndex].options[1], false)
 			}, 185)
 			break
 	}
