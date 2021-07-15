@@ -947,8 +947,8 @@ function activateTab(who) {
 	document.getElementById('browser-tool-search-input').value = who.getAttribute('s')
 	if (tabs[activeTabIndex].mp != 0) {
 		bjp.style.display = 'inline-block'
-		bjp_i.value = Number(who.getAttribute('tp'))
-		bjp_i.setAttribute('oninput', `inputLimit(this, ${tabs[activeTabIndex].mp});browserJumpPage(${Number(who.getAttribute('jp'))}, Number(this.value))`)
+		bjp_i.value = Number(tabs[activeTabIndex].tp)
+		bjp_i.setAttribute('oninput', `inputLimit(this, ${tabs[activeTabIndex].mp});browserJumpPage(${tabs[activeTabIndex].jp}, Number(this.value))`)
 		bjp_m_p.textContent = tabs[activeTabIndex].mp
 	} else bjp.style.display = 'none'
 }

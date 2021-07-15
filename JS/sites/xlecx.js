@@ -1329,7 +1329,7 @@ function xlecxJumpPage(index, page) {
 	switch (index) {
 		case 0:
 			searchTimer = setTimeout(() => {
-				xlecxSearch(tabs[activeTabIndex].s.replace("'", "\\'"), page)
+				xlecxSearch(tabs[activeTabIndex].s.replace("'", "\\'"), page, false)
 			}, 185)
 			break
 		case 1:
