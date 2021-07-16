@@ -74,10 +74,7 @@ Did {
 }
 
 Tasks => {
-    Make pageContainer in ActiveTab => Global
-	Fix Artist => Peculiart | Pagination Open New Tab | Searching
 	Make Multi-Downloading More Performance
-	Fix Searching Problem With ' Like => Bowsette's Bondage Bastille
 	Fix Artists Big and Small Letters Like => prism girls != Prism Girls
     Add Ability That Check Post Updated Image
     Ctrl + k | Ctrl + 0
