@@ -1518,7 +1518,7 @@ async function AddGroupCreateGroupIdList(comicId, groupsList, groupsListIndex, g
 	groupsListIndex = groupsListIndex || 0
 	groupstNewList = groupstNewList || []
 	repairing = repairing || false
-	await db.groups.findOne({n:groupsList[groupsListIndex]}, (err, doc) => {
+	await db.groups.findOne({n:groupsList[groupsListIndex].toLowerCase()}, (err, doc) => {
 		if (err) { error(err); return }
 		if (repairing == true)
 			groupstNewList.push([doc._id, doc.n])
@@ -1551,7 +1551,7 @@ async function AddGroup(comicId, groupsList, repairing) {
 }
 
 async function CreateGroupInsert(groupName, index) {
-	await db.groups.insert({n:groupName, _id:index}, (err) => {
+	await db.groups.insert({n:groupName.toLowerCase(), _id:index}, (err) => {
 		if (err) { error(err); return }
 	})
 }
@@ -1560,7 +1560,7 @@ async function CreateGroup(groupsList, index, groupsAddToList, comicId, groupsLi
 	groupsListIndex = groupsListIndex || 0
 	groupsAddToList = groupsAddToList || false
 	repairing = repairing || false
-	await db.groups.count({n:groupsList[groupsListIndex]}, (err, num) => {
+	await db.groups.count({n:groupsList[groupsListIndex].toLowerCase()}, (err, num) => {
 		if (err) { error(err); return }
 		if (num == 0) {
 			CreateGroupInsert(groupsList[groupsListIndex], index).then(() => {
@@ -1613,7 +1613,7 @@ async function AddArtistCreateArtistIdList(comicId, artistsList, artistsListInde
 	artistsListIndex = artistsListIndex || 0
 	artistsNewList = artistsNewList || []
 	repairing = repairing || false
-	await db.artists.findOne({n:artistsList[artistsListIndex]}, (err, doc) => {
+	await db.artists.findOne({n:artistsList[artistsListIndex].toLowerCase()}, (err, doc) => {
 		if (err) { error(err); return }
 		if (repairing == true)
 			artistsNewList.push([doc._id, doc.n])
@@ -1646,7 +1646,7 @@ async function AddArtist(comicId, artistsList, repairing) {
 }
 
 async function CreateArtistInsert(artistName, index) {
-	await db.artists.insert({n:artistName, _id:index}, (err) => {
+	await db.artists.insert({n:artistName.toLowerCase(), _id:index}, (err) => {
 		if (err) { error(err); return }
 	})
 }
@@ -1655,7 +1655,7 @@ async function CreateArtist(artistsList, index, artistsAddToList, comicId, artis
 	artistsListIndex = artistsListIndex || 0
 	artistsAddToList = artistsAddToList || false
 	repairing = repairing || false
-	await db.artists.count({n:artistsList[artistsListIndex]}, (err, num) => {
+	await db.artists.count({n:artistsList[artistsListIndex].toLowerCase()}, (err, num) => {
 		if (err) { error(err); return }
 		if (num == 0) {
 			CreateArtistInsert(artistsList[artistsListIndex], index).then(() => {
@@ -1708,7 +1708,7 @@ async function AddParodyCreateParodyIdList(comicId, parodyList, parodyListIndex,
 	parodyListIndex = parodyListIndex || 0
 	parodyNewList = parodyNewList || []
 	repairing = repairing || false
-	await db.parodies.findOne({n:parodyList[parodyListIndex]}, (err, doc) => {
+	await db.parodies.findOne({n:parodyList[parodyListIndex].toLowerCase()}, (err, doc) => {
 		if (err) { error(err); return }
 		if (repairing == true)
 			parodyNewList.push([doc._id, doc.n])
@@ -1741,7 +1741,7 @@ async function AddParody(comicId, parodyList, repairing) {
 }
 
 async function CreateParodyInsert(parodyName, index) {
-	await db.parodies.insert({n:parodyName, _id:index}, (err) => {
+	await db.parodies.insert({n:parodyName.toLowerCase(), _id:index}, (err) => {
 		if (err) { error(err); return }
 	})
 }
@@ -1750,7 +1750,7 @@ async function CreateParody(parodyList, index, parodyAddToList, comicId, parodyL
 	parodyListIndex = parodyListIndex || 0
 	parodyAddToList = parodyAddToList || false
 	repairing = repairing || false
-	await db.parodies.count({n:parodyList[parodyListIndex]}, (err, num) => {
+	await db.parodies.count({n:parodyList[parodyListIndex].toLowerCase()}, (err, num) => {
 		if (err) { error(err); return }
 		if (num == 0) {
 			CreateParodyInsert(parodyList[parodyListIndex], index).then(() => {
@@ -1803,7 +1803,7 @@ async function AddTagCreateTagIdList(comicId, tagList, tagListIndex, newList, re
 	tagListIndex = tagListIndex || 0
 	newList = newList || []
 	repairing = repairing || false
-	await db.tags.findOne({n:tagList[tagListIndex]}, (err, doc) => {
+	await db.tags.findOne({n:tagList[tagListIndex].toLowerCase()}, (err, doc) => {
 		if (err) { error(err); return }
 		if (repairing == true)
 			newList.push([doc._id, doc.n])
@@ -1836,7 +1836,7 @@ async function AddTag(comicId, tagList, repairing) {
 }
 
 async function CreateTagInsert(tagName, index) {
-	await db.tags.insert({n:tagName, _id:index}, (err) => {
+	await db.tags.insert({n:tagName.toLowerCase(), _id:index}, (err) => {
 		if (err) { error(err); return }
 	})
 }
@@ -1845,7 +1845,7 @@ async function CreateTag(tagList, index, addToList, comicId, tagListIndex, repai
 	tagListIndex = tagListIndex || 0
 	addToList = addToList || false
 	repairing = repairing || false
-	await db.tags.count({n:tagList[tagListIndex]}, (err, num) => {
+	await db.tags.count({n:tagList[tagListIndex].toLowerCase()}, (err, num) => {
 		if (err) { error(err); return }
 		if (num == 0) {
 			CreateTagInsert(tagList[tagListIndex], index).then(() => {
