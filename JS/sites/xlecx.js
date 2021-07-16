@@ -215,166 +215,133 @@ function xlecxOpenPost(makeNewPage, id, updateTabIndex) {
 			have_in_have = true
 			if (haveDoc.d != undefined) have_comic = true
 		}
-		
-		if (have_comic == true) {
-			db.comics.findOne({s:0, p:id}, (err, doc) => {
-				if (document.getElementById(pageId) == undefined) return
-				tabs[thisTabIndex].ir = false
-				if (err) { error(err); return }
-				page.innerHTML = ''
-				const passId = id
-				id = doc._id
-				var comic_container = document.createElement('div')
-				comic_container.classList.add('xlecx-container-one-row')
-				var container = document.createElement('div')
-	
-				var title_container = document.createElement('p')
-				title_container.classList.add('xlecx-post-title')
-				var groups_container = document.createElement('div')
-				groups_container.classList.add('xlecx-post-tags')
-				var artists_container = document.createElement('div')
-				artists_container.classList.add('xlecx-post-tags')
-				var parodies_container = document.createElement('div')
-				parodies_container.classList.add('xlecx-post-tags')
-				var tags_container = document.createElement('div')
-				tags_container.classList.add('xlecx-post-tags')
-				var image_container = document.createElement('div')
-				image_container.classList.add('xlecx-image-container-1x1')
-				var name, images, html = '', formatIndex = 0
-				
-				const findGroupName = async(id) => {
-					await db.groups.findOne({_id:id}, (err, doc) => {
-						if (err) { error(err); return }
-						group_element = document.createElement('button')
-						group_element.textContent = doc.n
-						group_element.onmousedown = e => {
-							e.preventDefault()
-							xlecxOpenTag(e.target.textContent, 1, 1, checkMiddleMouseClick(e))
-						}
-						groups_container.appendChild(group_element)
-					})
-				}
-	
-				const findGroupRow = async() => {
-					await db.comic_groups.findOne({_id:Number(id)}, (err, doc) => {
-						if (err) { error(err); return }
-						var checkDoc = doc || null
-						if (checkDoc != null) {
-							var groups = doc.t || null
-							if (groups == null) return
-							groups_container.textContent = 'Groups: '
-							for (var i in groups) {
-								findGroupName(groups[i])
-							}
-						}
-					})
-				}
-	
-				const findArtistName = async(id) => {
-					await db.artists.findOne({_id:id}, (err, doc) => {
-						if (err) { error(err); return }
-						artists_element = document.createElement('button')
-						artists_element.textContent = doc.n
-						artists_element.onmousedown = e => {
-							e.preventDefault()
-							xlecxOpenTag(e.target.textContent, 1, 2, checkMiddleMouseClick(e))
-						}
-						artists_container.appendChild(artists_element)
-					})
-				}
-	
-				const findArtistRow = async() => {
-					await db.comic_artists.findOne({_id:Number(id)}, (err, doc) => {
-						if (err) { error(err); return }
-						var checkDoc = doc || null
-						if (checkDoc != null) {
-							var artists = doc.t || null
-							if (artists == null) return
-							artists_container.textContent = 'Artists: '
-							for (var i in artists) {
-								findArtistName(artists[i])
-							}
-						}
-					})
-				}
-	
-				const findParodyName = async(id) => {
-					await db.parodies.findOne({_id:id}, (err, doc) => {
-						if (err) { error(err); return }
-						var parody_element = document.createElement('button')
-						parody_element.textContent = doc.n
-						parody_element.onmousedown = e => {
-							e.preventDefault()
-							xlecxOpenTag(e.target.textContent, 1, 3, checkMiddleMouseClick(e))
-						}
-						parodies_container.appendChild(parody_element)
-					})
-				}
-	
-				const findParodyRow = async() => {
-					await db.comic_parodies.findOne({_id:Number(id)}, (err, doc) => {
-						if (err) { error(err); return }
-						var checkDoc = doc || null
-						if (checkDoc != null) {
-							var parodies = doc.t || null
-							if (parodies == null) return
-							parodies_container.textContent = 'Parody: '
-							for (var i in parodies) {
-								findParodyName(parodies[i])
-							}
-						}
-					})
-				}
-	
-				const findTagName = async(id) => {
-					await db.tags.findOne({_id:id}, (err, doc) => {
-						if (err) { error(err); return }
-						var tag_element = document.createElement('button')
-						tag_element.textContent = doc.n
-						tag_element.onmousedown = e => {
-							e.preventDefault()
-							xlecxOpenTag(e.target.textContent, 1, 4, checkMiddleMouseClick(e))
-						}
-						tags_container.appendChild(tag_element)
-					})
-				}
-	
-				const findTagRow = async() => {
-					await db.comic_tags.findOne({_id:Number(id)}, (err, doc) => {
-						if (err) { error(err); return }
-						var checkDoc = doc || null
-						if (checkDoc != null) {
-							var tags = doc.t || null
-							if (tags == null) return
-							tags_container.textContent = 'Tag: '
-							for (var i in tags) {
-								findTagName(tags[i])
-							}
-						}
-					})
-				}
-	
-				const findComic = async() => {
-					await db.comics.findOne({_id:Number(id)}, (err, doc) => {
-						if (document.getElementById(pageId) == undefined) return
-						if (err) { error(err); return }
-						name = doc.n || null
-						if (name == null) return
-						ImagesCount = doc.c || null
-						if (ImagesCount == null) return
-						formats = doc.f || null
-						if (formats == null) return
-						image = doc.i
 
-						tab.setAttribute('isReloading', false)
-						tabArea.textContent = name
-						title_container.textContent = name
+		xlecx.getComic(id, {}, (err, result) => {
+			if (document.getElementById(pageId) == undefined) return
+			tabs[thisTabIndex].ir = false
+			page.innerHTML = ''
+			if (err) {
+				browserError(err, pageId)
+				return
+			}
+			tabArea.textContent = result.title
+			var image_container = document.createElement('div')
+			image_container.classList.add('xlecx-image-container-1x1')
+			var containerContainer = document.createElement('div')
+			containerContainer.classList.add('xlecx-container-one-row')
+			var container = document.createElement('div')
+			var element, miniElement
+			container.innerHTML = `<p class="xlecx-post-title">${result.title}</p>`
+			if (have_comic == true)
+				container.innerHTML += '<div class="browser-comic-have"><span>You Downloaded This Comic.<span></div>'
+			else if (have_in_have == true)
+				container.innerHTML += `<div class="browser-comic-have" ccid="${id}"><button class="remove-from-have" onclick="RemoveFromHave(0, '${id}', this)">You Have This Comic.</button></div>`
+			else if (IsDownloading(id))
+				container.innerHTML += `<div class="browser-comic-have" ccid="${id}"><p>Downloading... <span class="spin spin-success"></span><p></div>`
+			else
+				container.innerHTML += `<div class="browser-comic-have" ccid="${id}"><button onclick="xlecxDownloader('${id}')">Download</button><button class="add-to-have" onclick="AddToHave(0, '${id}')">Add To Have</button><div>`
 
-						var lastIndex = formats[0][1]
-						var thisForamat = formats[0][2]
-						var repair = doc.m || null
-						if (repair == null || repair.length == 0) {
-							for (var i = 0; i < ImagesCount; i++) {
+			// Groups
+			if (result.groups != undefined) {
+				element = document.createElement('div')
+				element.classList.add('xlecx-post-tags')
+				element.innerHTML = "Group: "
+				for(var i = 0; i < result.groups.length; i++) {
+					miniElement = document.createElement('button')
+					miniElement.innerHTML = result.groups[i].name
+					miniElement.onmousedown = e => {
+						e.preventDefault()
+						xlecxOpenTag(e.target.textContent, 1, 1, checkMiddleMouseClick(e))
+					}
+					element.appendChild(miniElement)
+				}
+				container.append(element)
+			}
+
+			// Artists
+			if (result.artists != undefined) {
+				element = document.createElement('div')
+				element.classList.add('xlecx-post-tags')
+				element.innerHTML = "Artist: "
+				for(var i = 0; i < result.artists.length; i++) {
+					miniElement = document.createElement('button')
+					miniElement.innerHTML = result.artists[i].name
+					miniElement.onmousedown = e => {
+						e.preventDefault()
+						xlecxOpenTag(e.target.textContent, 1, 2, checkMiddleMouseClick(e))
+					}
+					element.appendChild(miniElement)
+				}
+				container.append(element)
+			}
+
+			// Parody
+			if (result.parody != undefined) {
+				element = document.createElement('div')
+				element.classList.add('xlecx-post-tags')
+				element.innerHTML = "Parody: "
+				for(var i = 0; i < result.parody.length; i++) {
+					miniElement = document.createElement('button')
+					miniElement.innerHTML = result.parody[i].name
+					miniElement.onmousedown = e => {
+						e.preventDefault()
+						xlecxOpenTag(e.target.textContent, 1, 3, checkMiddleMouseClick(e))
+					}
+					element.appendChild(miniElement)
+				}
+				container.append(element)
+			}
+
+			// Tags
+			if (result.tags != undefined) {
+				element = document.createElement('div')
+				element.classList.add('xlecx-post-tags')
+				element.innerHTML = "Tag: "
+				for(var i = 0; i < result.tags.length; i++) {
+					miniElement = document.createElement('button')
+					miniElement.innerHTML = result.tags[i].name
+					miniElement.onmousedown = e => {
+						e.preventDefault()
+						xlecxOpenTag(e.target.textContent, 1, 4, checkMiddleMouseClick(e))
+					}
+					element.appendChild(miniElement)
+				}
+				container.append(element)
+			}
+
+			// Images
+			if (have_comic == true) {
+				db.comics.findOne({s:0, p:id}, (err, doc) => {
+					if (err) { error(err); return }
+					id = doc._id
+					var image, html = '', formatIndex = 0
+					
+					if (err) { error(err); return }
+					ImagesCount = doc.c || null
+					if (ImagesCount == null) return
+					formats = doc.f || null
+					if (formats == null) return
+					image = doc.i
+
+					var lastIndex = formats[0][1]
+					var thisForamat = formats[0][2]
+					var repair = doc.m || null
+					if (repair == null || repair.length == 0) {
+						for (var i = 0; i < ImagesCount; i++) {
+							if (i <= lastIndex)
+								html += `<img src="${dirUL}/${image}-${i}.${thisForamat}" loading="lazy">`
+							else {
+								formatIndex++
+								lastIndex = formats[formatIndex][1]
+								thisForamat = formats[formatIndex][2]
+								html += `<img src="${dirUL}/${image}-${i}.${thisForamat}" loading="lazy">`
+							}
+						}
+					} else {
+						for (var i = 0; i < ImagesCount; i++) {
+							if (repair.indexOf(i) > -1) {
+								html += `<div class="repair-image" id="${i}"><p>Image hasn't Been Download Currectly.</p><button onclick="repairImage(${i}, ${repair.indexOf(i)}, ${image})">Repair</button></div>`
+							} else {
 								if (i <= lastIndex)
 									html += `<img src="${dirUL}/${image}-${i}.${thisForamat}" loading="lazy">`
 								else {
@@ -384,242 +351,71 @@ function xlecxOpenPost(makeNewPage, id, updateTabIndex) {
 									html += `<img src="${dirUL}/${image}-${i}.${thisForamat}" loading="lazy">`
 								}
 							}
-						} else {
-							for (var i = 0; i < ImagesCount; i++) {
-								if (repair.indexOf(i) > -1) {
-									html += `<div class="repair-image" id="${i}"><p>Image hasn't Been Download Currectly.</p><button onclick="repairImage(${i}, ${repair.indexOf(i)}, ${image})">Repair</button></div>`
-								} else {
-									if (i <= lastIndex)
-										html += `<img src="${dirUL}/${image}-${i}.${thisForamat}" loading="lazy">`
-									else {
-										formatIndex++
-										lastIndex = formats[formatIndex][1]
-										thisForamat = formats[formatIndex][2]
-										html += `<img src="${dirUL}/${image}-${i}.${thisForamat}" loading="lazy">`
-									}
-								}
-							}
 						}
-						image_container.innerHTML = html
-	
-						findGroupRow()
-						findArtistRow()
-						findParodyRow()
-						findTagRow()
-	
-						container.appendChild(title_container)
-						container.innerHTML += '<div class="browser-comic-have"><span>You Downloaded This Comic.<span></div>'
-						container.appendChild(groups_container)
-						container.appendChild(artists_container)
-						container.appendChild(parodies_container)
-						container.appendChild(tags_container)
-						container.appendChild(image_container)
-						comic_container.appendChild(container)
-						xlecx.getComicRelated(passId, (err, result) => {
-							if (err) return
-							if (result != null) {
-								var bigContainer = document.createElement('div')
-								element = document.createElement('p')
-								element.classList.add('xlecx-post-title')
-								element.textContent = 'Related:'
-								bigContainer.appendChild(element)
-			
-								container = document.createElement('div')
-								container.classList.add('xlecx-post-container')
-								for (var i = 0; i < result.length; i++) {
-									element = document.createElement('div')
-									valueStorage = ''
-			
-									if (setting.lazy_loading == true) valueStorage = ' loading="lazy"'
-									
-									html = `<img src="${xlecx.baseURL+result[i].thumb}"${valueStorage}>`
-			
-									if (result[i].pages == null)
-										valueStorage = ''
-									else
-										valueStorage = `<span>${result[i].pages}</span>`
-			
-									html += `${valueStorage}<p>${result[i].title}</p>`
-									if (IsDownloading(result[i].id))
-										html += `<cid cid="${result[i].id}"><span class="spin spin-success"></span></cid>`
-									else
-										html += `<button cid="${result[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
-									element.innerHTML = html
-									miniElement = document.createElement('div')
-									miniElement.setAttribute('id', result[i].id)
-									miniElement.onmousedown = e => {
-										e.preventDefault()
-										xlecxOpenPost(checkMiddleMouseClick(e), e.target.getAttribute('id'))
-									}
-									element.appendChild(miniElement)
-									container.appendChild(element)
-								}
-								bigContainer.appendChild(container)
-			
-			
-								comic_container.appendChild(bigContainer)
-								clearDownloadedComics(page, 0)
-							}
-						})
-						page.appendChild(comic_container)
-						
-					})
-				}
-	
-				findComic()
-			})
-		} else {
-			xlecx.getComic(id, {}, (err, result) => {
-				if (document.getElementById(pageId) == undefined) return
-				tabs[thisTabIndex].ir = false
-				page.innerHTML = ''
-				if (err) {
-					browserError(err, pageId)
-					return
-				}
-				tabArea.textContent = result.title
-				var containerContainer = document.createElement('div')
-				containerContainer.classList.add('xlecx-container-one-row')
-				var container = document.createElement('div')
-				var element, miniElement
-				container.innerHTML = `<p class="xlecx-post-title">${result.title}</p>`
-				if (have_in_have == true)
-					container.innerHTML += `<div class="browser-comic-have" ccid="${id}"><button class="remove-from-have" onclick="RemoveFromHave(0, '${id}', this)">You Have This Comic.</button></div>`
-				else if (IsDownloading(id))
-					container.innerHTML += `<div class="browser-comic-have" ccid="${id}"><p>Downloading... <span class="spin spin-success"></span><p></div>`
-				else
-					container.innerHTML += `<div class="browser-comic-have" ccid="${id}"><button onclick="xlecxDownloader('${id}')">Download</button><button class="add-to-have" onclick="AddToHave(0, '${id}')">Add To Have</button><div>`
-
-				// Groups
-				if (result.groups != undefined) {
-					element = document.createElement('div')
-					element.classList.add('xlecx-post-tags')
-					element.innerHTML = "Group: "
-					for(var i = 0; i < result.groups.length; i++) {
-						miniElement = document.createElement('button')
-						miniElement.innerHTML = result.groups[i].name
-						miniElement.onmousedown = e => {
-							e.preventDefault()
-							xlecxOpenTag(e.target.textContent, 1, 1, checkMiddleMouseClick(e))
-						}
-						element.appendChild(miniElement)
 					}
-					container.append(element)
-				}
-
-				// Artists
-				if (result.artists != undefined) {
-					element = document.createElement('div')
-					element.classList.add('xlecx-post-tags')
-					element.innerHTML = "Artist: "
-					for(var i = 0; i < result.artists.length; i++) {
-						miniElement = document.createElement('button')
-						miniElement.innerHTML = result.artists[i].name
-						miniElement.onmousedown = e => {
-							e.preventDefault()
-							xlecxOpenTag(e.target.textContent, 1, 2, checkMiddleMouseClick(e))
-						}
-						element.appendChild(miniElement)
-					}
-					container.append(element)
-				}
-
-				// Parody
-				if (result.parody != undefined) {
-					element = document.createElement('div')
-					element.classList.add('xlecx-post-tags')
-					element.innerHTML = "Parody: "
-					for(var i = 0; i < result.parody.length; i++) {
-						miniElement = document.createElement('button')
-						miniElement.innerHTML = result.parody[i].name
-						miniElement.onmousedown = e => {
-							e.preventDefault()
-							xlecxOpenTag(e.target.textContent, 1, 3, checkMiddleMouseClick(e))
-						}
-						element.appendChild(miniElement)
-					}
-					container.append(element)
-				}
-
-				// Tags
-				if (result.tags != undefined) {
-					element = document.createElement('div')
-					element.classList.add('xlecx-post-tags')
-					element.innerHTML = "Tag: "
-					for(var i = 0; i < result.tags.length; i++) {
-						miniElement = document.createElement('button')
-						miniElement.innerHTML = result.tags[i].name
-						miniElement.onmousedown = e => {
-							e.preventDefault()
-							xlecxOpenTag(e.target.textContent, 1, 4, checkMiddleMouseClick(e))
-						}
-						element.appendChild(miniElement)
-					}
-					container.append(element)
-				}
-
-				// Images
-				element = document.createElement('div')
-				element.classList.add('xlecx-image-container-1x1')
-				element.setAttribute('img-con', true)
+					image_container.innerHTML = html
+				})
+			} else {
+				image_container.setAttribute('img-con', true)
 				for (var i = 0; i < result.images.length; i++) {
-					element.innerHTML += `<img data-src="${xlecx.baseURL}/${result.images[i].thumb}">`
+					image_container.innerHTML += `<img data-src="${xlecx.baseURL}/${result.images[i].thumb}">`
 				}
-				var images = element.querySelectorAll('[data-src]')
-				container.appendChild(element)
-				containerContainer.appendChild(container)
-
-				if (result.related != undefined) {
-					var bigContainer = document.createElement('div')
-					element = document.createElement('p')
-					element.classList.add('xlecx-post-title')
-					element.textContent = 'Related:'
-					bigContainer.appendChild(element)
-
-					container = document.createElement('div')
-					container.classList.add('xlecx-post-container')
-					for (var i = 0; i < result.related.length; i++) {
-						element = document.createElement('div')
-						valueStorage = ''
-
-						if (setting.lazy_loading == true) valueStorage = ' loading="lazy"'
-						
-						html = `<img src="${xlecx.baseURL+result.related[i].thumb}"${valueStorage}>`
-
-						if (result.related[i].pages == null)
-							valueStorage = ''
-						else
-							valueStorage = `<span>${result.related[i].pages}</span>`
-
-						html += `${valueStorage}<p>${result.related[i].title}</p>`
-						if (IsDownloading(result.related[i].id))
-							html += `<cid cid="${result.related[i].id}"><span class="spin spin-success"></span></cid>`
-						else
-							html += `<button cid="${result.related[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
-						element.innerHTML = html
-						miniElement = document.createElement('div')
-						miniElement.setAttribute('id', result.related[i].id)
-						miniElement.onmousedown = e => {
-							e.preventDefault()
-							xlecxOpenPost(checkMiddleMouseClick(e), e.target.getAttribute('id'))
-						}
-						element.appendChild(miniElement)
-						container.appendChild(element)
-					}
-					bigContainer.appendChild(container)
-
-
-					containerContainer.appendChild(bigContainer)
-				}
+				var images = image_container.querySelectorAll('[data-src]')
 
 				images.forEach(image => {
 					imageLoadingObserver.observe(image)
 				})
+			}
 
-				page.appendChild(containerContainer)
-				clearDownloadedComics(page, 0)
-			})
-		}
+			container.appendChild(image_container)
+			containerContainer.appendChild(container)
+
+			if (result.related != undefined) {
+				var bigContainer = document.createElement('div')
+				element = document.createElement('p')
+				element.classList.add('xlecx-post-title')
+				element.textContent = 'Related:'
+				bigContainer.appendChild(element)
+
+				container = document.createElement('div')
+				container.classList.add('xlecx-post-container')
+				for (var i = 0; i < result.related.length; i++) {
+					element = document.createElement('div')
+					valueStorage = ''
+
+					if (setting.lazy_loading == true) valueStorage = ' loading="lazy"'
+					
+					html = `<img src="${xlecx.baseURL+result.related[i].thumb}"${valueStorage}>`
+
+					if (result.related[i].pages == null)
+						valueStorage = ''
+					else
+						valueStorage = `<span>${result.related[i].pages}</span>`
+
+					html += `${valueStorage}<p>${result.related[i].title}</p>`
+					if (IsDownloading(result.related[i].id))
+						html += `<cid cid="${result.related[i].id}"><span class="spin spin-success"></span></cid>`
+					else
+						html += `<button cid="${result.related[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
+					element.innerHTML = html
+					miniElement = document.createElement('div')
+					miniElement.setAttribute('id', result.related[i].id)
+					miniElement.onmousedown = e => {
+						e.preventDefault()
+						xlecxOpenPost(checkMiddleMouseClick(e), e.target.getAttribute('id'))
+					}
+					element.appendChild(miniElement)
+					container.appendChild(element)
+				}
+				bigContainer.appendChild(container)
+
+
+				containerContainer.appendChild(bigContainer)
+			}
+
+			page.appendChild(containerContainer)
+			clearDownloadedComics(page, 0)
+		})
 	})
 }
 
