@@ -1046,16 +1046,9 @@ function removeTab(id) {
 	updateTabSize()
 }
 
-function checkMiddleMouseClick(event) {
-	var isRightMB
+function WhichMouseButton(event) {
 	event = event || window.event
-
-	if ("which" in event)
-		isRightMB = event.which == 2
-	else if ("button" in e)
-		isRightMB = event.button == 3
-
-	return isRightMB
+	return event.which
 }
 
 function browserHome() {

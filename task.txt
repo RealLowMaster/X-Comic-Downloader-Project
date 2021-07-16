@@ -74,8 +74,8 @@ Did {
 }
 
 Tasks => {
+    Add Find Artist and ... To Offline Part
 	Make Multi-Downloading More Performance
-	Fix Artists Big and Small Letters Like => prism girls != Prism Girls
     Add Ability That Check Post Updated Image
     Ctrl + k | Ctrl + 0
     Make Close Window Event Work Better For Deleting Images
@@ -83,7 +83,6 @@ Tasks => {
     Add Report Bug Button
     Make CreateTag() with Zero Problem
     Add Faver
-    Make Related Post For Offline Comics Better
     Make Repair Part Work Better
     Add Dipuclish Tab Ability
     Add Repair All Crashed Image Button
