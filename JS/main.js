@@ -19,8 +19,9 @@ const defaultSetting = {
 	"file_location": null,
 	"developer_mode": false
 }
+const pageContainer = document.getElementById('browser-pages')
 const imageLazyLoadingOptions = {
-	root: document.getElementById('browser-pages'),
+	root: pageContainer,
 	threshold: 0,
 	rootMargin: "0px 0px 300px 0px"
 }
@@ -890,8 +891,7 @@ function closeBrowser() {
 	activeTabIndex = null
 	activeTabComicId = null
 	tabs = []
-	const browser_pages_container = document.getElementById('browser-pages')
-	const browser_pages = browser_pages_container.children
+	const browser_pages = pageContainer.children
 	for (let i = 0; i < browser_pages.length; i++) {
 		var passImageCon = browser_pages[i].querySelector('[img-con="true"]')
 		if (passImageCon != undefined) {
@@ -902,7 +902,7 @@ function closeBrowser() {
 			}
 		}
 	}
-	browser_pages_container.innerHTML = ''
+	pageContainer.innerHTML = ''
 	tabsContainer.innerHTML = ''
 	document.getElementById('add-new-tab').setAttribute('onclick', '')
 }
@@ -927,7 +927,6 @@ window.onresize = () => {
 }
 
 function activateTab(who) {
-	const pageContainer = document.getElementById('browser-pages')
 	if (document.getElementById(who.getAttribute('pi')) == undefined) return
 
 	if (activeTabIndex != null) {
@@ -987,7 +986,7 @@ function createNewTab(history) {
 	tabsContainer.appendChild(element)
 	
 	page.innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
-	document.getElementById('browser-pages').appendChild(page)
+	pageContainer.appendChild(page)
 
 	document.getElementById('browser-home-btn').style.display = 'inline-block'
 	document.getElementById('browser-prev-btn').style.display = 'inline-block'
