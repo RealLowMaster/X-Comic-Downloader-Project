@@ -19,9 +19,10 @@ const defaultSetting = {
 	"file_location": null,
 	"developer_mode": false
 }
+const comicPanel = document.getElementById('comic-panel')
 const pageContainer = document.getElementById('browser-pages')
 const imageLazyLoadingOptions = {
-	root: pageContainer,
+	root: comicPanel,
 	threshold: 0,
 	rootMargin: "0px 0px 300px 0px"
 }
@@ -405,7 +406,7 @@ function preloadImage(img) {
 	img.src = src
 }
 
-var imageLoadingObserver = new IntersectionObserver((entries, imageLoadingObserver) => {
+function ObserverFunction(entries, imageLoadingObserver) {
 	entries.forEach(entry => {
 		if (!entry.isIntersecting)
 			return
@@ -413,7 +414,9 @@ var imageLoadingObserver = new IntersectionObserver((entries, imageLoadingObserv
 		preloadImage(entry.target)
 		imageLoadingObserver.unobserve(entry.target)
 	})
-}, imageLazyLoadingOptions)
+}
+
+var imageLoadingObserver = new IntersectionObserver(ObserverFunction, imageLazyLoadingOptions)
 
 // Comics
 function loadComics(page, search) {
@@ -610,7 +613,6 @@ function reloadLoadingComics() {
 function openComic(id) {
 	id = id || null
 	if (id == null) { error('Id Can\'t be Null.'); return }
-	var comic_panel = document.getElementById('comic-panel')
 	var title_container = document.getElementById('c-p-t')
 	var groups_container = document.getElementById('c-p-g')
 	var artists_container = document.getElementById('c-p-a')
@@ -733,12 +735,12 @@ function openComic(id) {
 			if (repair == null || repair.length == 0) {
 				for (var i = 0; i < ImagesCount; i++) {
 					if (i <= lastIndex)
-						html += `<img src="${dirUL}/${image}-${i}.${thisForamat}" loading="lazy">`
+						html += `<img data-src="${dirUL}/${image}-${i}.${thisForamat}" loading="lazy">`
 					else {
 						formatIndex++
 						lastIndex = formats[formatIndex][1]
 						thisForamat = formats[formatIndex][2]
-						html += `<img src="${dirUL}/${image}-${i}.${thisForamat}" loading="lazy">`
+						html += `<img data-src="${dirUL}/${image}-${i}.${thisForamat}" loading="lazy">`
 					}
 				}
 			} else {
@@ -747,33 +749,38 @@ function openComic(id) {
 						html += `<div class="repair-image" id="${i}"><p>Image hasn't Been Download Currectly.</p><button onclick="repairImage(${i}, ${repair.indexOf(i)}, ${image})">Repair</button></div>`
 					} else {
 						if (i <= lastIndex)
-							html += `<img src="${dirUL}/${image}-${i}.${thisForamat}" loading="lazy">`
+							html += `<img data-src="${dirUL}/${image}-${i}.${thisForamat}" loading="lazy">`
 						else {
 							formatIndex++
 							lastIndex = formats[formatIndex][1]
 							thisForamat = formats[formatIndex][2]
-							html += `<img src="${dirUL}/${image}-${i}.${thisForamat}" loading="lazy">`
+							html += `<img data-src="${dirUL}/${image}-${i}.${thisForamat}" loading="lazy">`
 						}
 					}
 				}
 			}
 			image_container.innerHTML = html
 
+			const LoadingImages = image_container.getElementsByTagName('img')
+
+			for (let i = 0; i < LoadingImages.length; i++) {
+				imageLoadingObserver.observe(LoadingImages[i])
+			}
+
 			findGroupRow()
 			findArtistRow()
 			findParodyRow()
 			findTagRow()
-			comic_panel.style.display = 'block'
-			comic_panel.scrollTop = 0
+			comicPanel.style.display = 'block'
+			comicPanel.scrollTop = 0
 		})
 	}
 
-	comic_panel.setAttribute('cid', id)
+	comicPanel.setAttribute('cid', id)
 	findComic()
 }
 
 function closeComicPanel() {
-	var comic_panel = document.getElementById('comic-panel')
 	var title_container = document.getElementById('c-p-t')
 	var groups_container = document.getElementById('c-p-g')
 	var artists_container = document.getElementById('c-p-a')
@@ -781,7 +788,7 @@ function closeComicPanel() {
 	var tags_container = document.getElementById('c-p-ts')
 	var image_container = document.getElementById('c-p-i')
 
-	comic_panel.style.display = 'none'
+	comicPanel.style.display = 'none'
 
 	title_container.textContent = ''
 	groups_container.innerHTML = ''
@@ -790,8 +797,8 @@ function closeComicPanel() {
 	tags_container.innerHTML = ''
 	image_container.innerHTML = ''
 
-	comic_panel.setAttribute('cid', null)
-	comic_panel.setAttribute('sid', null)
+	comicPanel.setAttribute('cid', null)
+	comicPanel.setAttribute('sid', null)
 }
 
 async function repairImageUpdateDatabase(comic_id, imageIndex, imageBaseName, imageFormat, repairIndex, passRepair, passRepairURLs) {
@@ -863,7 +870,7 @@ async function repairImageDownloadImage(comic_id, imageIndex, imageUrl, repairIn
 }
 
 async function repairImage(imageIndex, repairIndex, imageId) {
-	var comic_id = Number(document.getElementById('comic-panel').getAttribute('cid'))
+	const comic_id = Number(comicPanel.getAttribute('cid'))
 	var repairElement = document.getElementById(imageIndex)
 	repairElement.innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
 	await db.comics.findOne({_id:comic_id}, (err, doc) => {
@@ -878,7 +885,7 @@ async function repairImage(imageIndex, repairIndex, imageId) {
 
 async function repairComicInfo(whitch) {
 	whitch = whitch || 0
-	var id = Number(document.getElementById('comic-panel').getAttribute('cid'))
+	var id = Number(comicPanel.getAttribute('cid'))
 	await db.comics.findOne({_id:id}, (err, doc) => {
 		if (err) { error(err); return }
 		if (doc.s == undefined) return
@@ -889,6 +896,8 @@ async function repairComicInfo(whitch) {
 
 // Browser
 function closeBrowser() {
+	imageLazyLoadingOptions.root = comicPanel
+	imageLoadingObserver = new IntersectionObserver(ObserverFunction, imageLazyLoadingOptions)
 	needReload = true
 	reloadLoadingComics()
 	document.getElementById('browser').style.display = 'none'
@@ -2174,7 +2183,7 @@ function setLuanchTimeSettings(reloadSettingPanel) {
 			document.getElementById('main-body').classList.add('main-body-darkmode')
 		}
 
-		if (setting.comic_panel_theme == 1) document.getElementById('comic-panel').classList.add('comic-panel-darkmode')
+		if (setting.comic_panel_theme == 1) comicPanel.classList.add('comic-panel-darkmode')
 
 		if (setting.pagination_theme == 1) document.getElementById('pagination').classList.add('pagination-green-mode')
 	}
@@ -2209,15 +2218,7 @@ function saveSetting(justSave) {
 			else
 				imageLazyLoadingOptions.rootMargin = "0px 0px 1200px 0px"
 
-			imageLoadingObserver = new IntersectionObserver((entries, imageLoadingObserver) => {
-				entries.forEach(entry => {
-					if (!entry.isIntersecting)
-						return
-			
-					preloadImage(entry.target)
-					imageLoadingObserver.unobserve(entry.target)
-				})
-			}, imageLazyLoadingOptions)
+			imageLoadingObserver = new IntersectionObserver(ObserverFunction, imageLazyLoadingOptions)
 		}
 
 		if (file_location != setting.file_location) {
@@ -2245,10 +2246,10 @@ function saveSetting(justSave) {
 
 		switch (setting.comic_panel_theme) {
 			case 0:
-				document.getElementById('comic-panel').classList.remove('comic-panel-darkmode')
+				comicPanel.classList.remove('comic-panel-darkmode')
 				break
 			case 1:
-				document.getElementById('comic-panel').classList.add('comic-panel-darkmode')
+				comicPanel.classList.add('comic-panel-darkmode')
 				break
 		}
 

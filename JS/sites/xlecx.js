@@ -1,5 +1,8 @@
 // Xlecx
 function openXlecxBrowser() {
+	imageLazyLoadingOptions.root = pageContainer
+
+	imageLoadingObserver = new IntersectionObserver(ObserverFunction, imageLazyLoadingOptions)
 	thisSite = 0
 	needReload = false
 	document.getElementById('add-new-tab').setAttribute('onclick', "createNewXlecxTab(createNewTab('xlecxChangePage(1, 0, false)'))")
@@ -356,17 +359,23 @@ function xlecxOpenPost(whitchbutton, id, updateTabIndex) {
 						}
 					}
 					image_container.innerHTML = html
+
+					const LoadingImages = image_container.getElementsByTagName('img')
+
+					for (let i = 0; i < LoadingImages.length; i++) {
+						imageLoadingObserver.observe(LoadingImages[i])
+					}
 				})
 			} else {
 				image_container.setAttribute('img-con', true)
 				for (var i = 0; i < result.images.length; i++) {
 					image_container.innerHTML += `<img data-src="${xlecx.baseURL}/${result.images[i].thumb}">`
 				}
-				var images = image_container.querySelectorAll('[data-src]')
+				const LoadingImages = image_container.getElementsByTagName('img')
 
-				images.forEach(image => {
-					imageLoadingObserver.observe(image)
-				})
+				for (let i = 0; i < LoadingImages.length; i++) {
+					imageLoadingObserver.observe(LoadingImages[i])
+				}
 			}
 
 			container.appendChild(image_container)
@@ -1195,7 +1204,7 @@ function xlecxDownloader(id) {
 }
 
 async function xlecxRepairComicInfoGetInfo(id, whitch) {
-	var comic_id = Number(document.getElementById('comic-panel').getAttribute('cid'))
+	var comic_id = Number(comicPanel.getAttribute('cid'))
 	await xlecx.getComic(id, {related:false}, (err, result) => {
 		if (err) { error(err); return }
 		switch (whitch) {
