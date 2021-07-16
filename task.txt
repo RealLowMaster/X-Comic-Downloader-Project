@@ -1,93 +1,93 @@
 DB => {
-    index => {
-        index = i
-        _id
-    }
-    comics 1 => {
-        name = n
-        images = i
-        ImagesCount = c
-        formats = f = []
-        repairImagesIndexs = m = []
-        repairImagesURLs = r = []
-        quality = q
-        site = s
-        post_id = p
-        _id
-    }
-    artists 2 => {
-        name = n
-        _id
-    }
-    comic_artists {
-        artists = t = []
-        _id => Comic Id
-    }
-    tags 4 => {
-        name = n
-        _id
-    }
-    comic_tags {
-        tags = t = []
-        _id => Comic Id
-    }
-    groups 6 => {
-        name = n
-        _id
-    }
-    comic_groups {
-        groups = t = []
-        _id => Comic Id
-    }
-    parodies 8 => {
-        name = n
-        _id
-    }
-    comic_parodies {
-        parodies = t = []
-        _id => Comic Id
-    }
-    playlist 10 => {
-        name = n
-        comics = c = [
-            comic_id = 0
-        ]
-        _id
-    }
-    have 11 => {
-        site = s
-        comic_real_id = i
-        downloaded = d
-        _id
-    }
+	index => {
+		index = i
+		_id
+	}
+	comics 1 => {
+		name = n
+		images = i
+		ImagesCount = c
+		formats = f = []
+		repairImagesIndexs = m = []
+		repairImagesURLs = r = []
+		quality = q
+		site = s
+		post_id = p
+		_id
+	}
+	artists 2 => {
+		name = n
+		_id
+	}
+	comic_artists {
+		artists = t = []
+		_id => Comic Id
+	}
+	tags 4 => {
+		name = n
+		_id
+	}
+	comic_tags {
+		tags = t = []
+		_id => Comic Id
+	}
+	groups 6 => {
+		name = n
+		_id
+	}
+	comic_groups {
+		groups = t = []
+		_id => Comic Id
+	}
+	parodies 8 => {
+		name = n
+		_id
+	}
+	comic_parodies {
+		parodies = t = []
+		_id => Comic Id
+	}
+	playlist 10 => {
+		name = n
+		comics = c = [
+		comic_id = 0
+	]
+	_id
+	}
+	have 11 => {
+		site = s
+		comic_real_id = i
+		downloaded = d
+		_id
+	}
 }
 
 Add Comic {
-    League Of Legends
-    The Rock Cocks
-    Deviants
+	League Of Legends
+	The Rock Cocks
+	Deviants
 	milftoon
 	Tracy Scops
 }
 Did {
-    Make Repairing Systems Part 6++ = Next = Complete All Image Repairing
+	Make Repairing Systems Part 6++ = Next = Complete All Image Repairing
 }
 
 Tasks => {
-    Disable Last Or Next Button From History
-    Add Find Artist and ... To Offline Part
+	Disable Last Or Next Button From History
+	Add Find Artist and ... To Offline Part
 	Make Multi-Downloading More Performance
-    Add Ability That Check Post Updated Image
-    Ctrl + k | Ctrl + 0
-    Make Close Window Event Work Better For Deleting Images
-    Remove Electron Window Frame And Make a Custome One
-    Add Report Bug Button
-    Make CreateTag() with Zero Problem
-    Add Faver
-    Make Repair Part Work Better
-    Add Dipuclish Tab Ability
-    Add Repair All Crashed Image Button
+	Add Ability That Check Post Updated Image
+	Ctrl + k | Ctrl + 0
+	Make Close Window Event Work Better For Deleting Images
+	Remove Electron Window Frame And Make a Custome One
+	Add Report Bug Button
+	Make CreateTag() with Zero Problem
+	Add Faver
+	Make Repair Part Work Better
+	Add Dipuclish Tab Ability
+	Add Repair All Crashed Image Button
 	Make Tabs Work Better
-    Fix net::ERR_CONNECTION_REFUSED in xlecx-api without VPN
-    Create NHentai API
+	Fix net::ERR_CONNECTION_REFUSED in xlecx-api without VPN
+	Create NHentai API
 }

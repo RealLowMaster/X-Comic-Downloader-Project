@@ -1,53 +1,53 @@
 .action-error {
-    display: flex;
-    width: 100%;
-    height: 100%;
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    margin: 0 auto;
-    background-color: rgba(0,0,0,0.8);
-    z-index: 99999999999;
+	display: flex;
+	width: 100%;
+	height: 100%;
+	justify-content: center;
+	align-items: center;
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	margin: 0 auto;
+	background-color: rgba(0,0,0,0.8);
+	z-index: 99999999999;
 }
 
 .action-error > div {
-    display: block;
-    width: 450px;
-    background-color: #fff;
-    border-radius: 10px;
-    padding: 15px;
-    box-shadow: 0 0 15px 0 rgba(255,255,255,0.6);
-    z-index: +1;
+	display: block;
+	width: 450px;
+	background-color: #fff;
+	border-radius: 10px;
+	padding: 15px;
+	box-shadow: 0 0 15px 0 rgba(255,255,255,0.6);
+	z-index: +1;
 }
 
 .action-error > div > p {
-    display: block;
-    width: 100%;
-    line-height: 1.5;
-    color: #222;
-    font-size: 1rem;
-    font-weight: 600;
-    padding: 5px;
-    margin: 0 auto 10px auto;
+	display: block;
+	width: 100%;
+	line-height: 1.5;
+	color: #222;
+	font-size: 1rem;
+	font-weight: 600;
+	padding: 5px;
+	margin: 0 auto 10px auto;
 }
 
 .action-error > div > button {
-    display: block;
-    width: 100px;
-    padding: 10px;
-    background-color: #d00;
-    border-radius: 3px;
-    color: #fff;
-    font-size: 1rem;
-    font-weight: 600;
-    margin: 20px auto 0 auto;
-    box-shadow: 0 0 10px 0 #dd0000aa;
-    cursor: pointer;
+	display: block;
+	width: 100px;
+	padding: 10px;
+	background-color: #d00;
+	border-radius: 3px;
+	color: #fff;
+	font-size: 1rem;
+	font-weight: 600;
+	margin: 20px auto 0 auto;
+	box-shadow: 0 0 10px 0 #dd0000aa;
+	cursor: pointer;
 }
 
 .action-error > div > button:hover {
-    background-color: #c00;
-    box-shadow: 0 0 15px 0 #cc0000aa;
+	background-color: #c00;
+	box-shadow: 0 0 15px 0 #cc0000aa;
 }

@@ -1,6 +1,4 @@
 const { app, BrowserWindow, globalShortcut } = require('electron')
-const path = require('path')
-const fs = require('fs')
 
 function createWindow () {
 	const win = new BrowserWindow({
