@@ -6,7 +6,7 @@ const ImageDownloader = require('image-downloader')
 const xlecx = new XlecxAPI()
 const defaultSetting = {
 	"comic_panel_theme": 0,
-	"pagination_theme": 1,
+	"pagination_theme": 0,
 	"offline_theme": 0,
 	"hover_downloader": true,
 	"max_per_page": 18,
@@ -170,11 +170,11 @@ function GetFileLocationForInput(who) {
 const dirRoot = path.join(__dirname).replace('\\app.asar', '')
 
 function GetSettingFile() {
-	if (!fs.existsSync(dirRoot+'/setting.cfg')) {
+	if (!fs.existsSync(dirRoot+'/setting.json')) {
 		setting = defaultSetting
-		fs.writeFileSync(dirRoot+'/setting.cfg', MakeJsonString(setting), {encoding:"utf8"})
+		fs.writeFileSync(dirRoot+'/setting.json', MakeJsonString(setting), {encoding:"utf8"})
 	} else {
-		setting = getJSON(dirRoot+'/setting.cfg')
+		setting = getJSON(dirRoot+'/setting.json')
 	}	
 }
 
@@ -2271,7 +2271,7 @@ function saveSetting(justSave) {
 		PopAlert('Setting Saved.')
 	}
 
-	fs.writeFileSync(dirRoot+'/setting.cfg', MakeJsonString(setting), {encoding:"utf8"})
+	fs.writeFileSync(dirRoot+'/setting.json', MakeJsonString(setting), {encoding:"utf8"})
 	if (reload == true)
 		remote.getCurrentWindow().reload()
 	else
