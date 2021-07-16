@@ -114,6 +114,10 @@ function PopAlert(txt, style) {
 	}, 4000)
 }
 
+function MakeJsonString(json) {
+	return JSON.stringify(json).replace(/,/g, ',\n\t').replace(/{/g, '{\n\t').replace(/}/g, '\n}').replace(/":/g, '": ')
+}
+
 function ChooseDirectory(title, callback) {
 	title = title || 'Choose Directory'
 	callback = callback || null
@@ -164,10 +168,11 @@ function GetFileLocationForInput(who) {
 
 // Main Loading Stuff
 const dirRoot = path.join(__dirname).replace('\\app.asar', '')
+
 function GetSettingFile() {
 	if (!fs.existsSync(dirRoot+'/setting.cfg')) {
 		setting = defaultSetting
-		fs.writeFileSync(dirRoot+'/setting.cfg', JSON.stringify(defaultSetting), {encoding:"utf8"})
+		fs.writeFileSync(dirRoot+'/setting.cfg', MakeJsonString(setting), {encoding:"utf8"})
 	} else {
 		setting = getJSON(dirRoot+'/setting.cfg')
 	}	
@@ -2266,7 +2271,7 @@ function saveSetting(justSave) {
 		PopAlert('Setting Saved.')
 	}
 
-	fs.writeFileSync(dirRoot+'/setting.cfg', JSON.stringify(setting), {encoding:"utf8"})
+	fs.writeFileSync(dirRoot+'/setting.cfg', MakeJsonString(setting), {encoding:"utf8"})
 	if (reload == true)
 		remote.getCurrentWindow().reload()
 	else

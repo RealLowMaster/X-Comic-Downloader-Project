@@ -78,8 +78,6 @@ Tasks => {
 	Fix Artists Big and Small Letters Like => prism girls != Prism Girls
     Add Ability That Check Post Updated Image
     Ctrl + k | Ctrl + 0
-	Fix Artist => Elvche
-	Fix Comic => Mr. Fatcock Monthly
     Make Close Window Event Work Better For Deleting Images
     Remove Electron Window Frame And Make a Custome One
     Add Report Bug Button
@@ -91,6 +89,5 @@ Tasks => {
     Add Repair All Crashed Image Button
 	Make Tabs Work Better
     Fix net::ERR_CONNECTION_REFUSED in xlecx-api without VPN
-    Make Pagination Better
     Create NHentai API
 }
