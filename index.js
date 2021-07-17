@@ -1,4 +1,4 @@
-const { app, BrowserWindow, globalShortcut } = require('electron')
+const { app, BrowserWindow } = require('electron')
 
 function createWindow () {
 	const win = new BrowserWindow({
@@ -19,15 +19,6 @@ function createWindow () {
 
 	win.maximize(true)
 	win.setMenu(null)
-
-	if (true) {
-		globalShortcut.register('CommandOrControl+Shift+I', () => {
-			win.webContents.toggleDevTools()
-		})
-		globalShortcut.register('CommandOrControl+R', () => {
-			win.webContents.reload()
-		})
-	}
 
 	win.addListener('close', e => {
 		e.preventDefault()

@@ -39,6 +39,7 @@ class Tab {
 	}
 
 	reload() {
+		this.ir = true
 		eval(this.history[this.activeHistory])
 	}
 }

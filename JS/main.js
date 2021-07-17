@@ -30,8 +30,8 @@ const sites = [
 	[
 		'xlecx',
 		'xlecxRepairComicInfoGetInfo({id}, {whitch})',
-		'xlecxSearch({text}, 1, false)',
-		'xlecxChangePage(1, false, true)',
+		'xlecxSearch({text}, 1, 0)',
+		'xlecxChangePage(1, 0, true)',
 		'xlecxJumpPage({index}, {page})'
 	]
 ]
@@ -735,12 +735,12 @@ function openComic(id) {
 			if (repair == null || repair.length == 0) {
 				for (var i = 0; i < ImagesCount; i++) {
 					if (i <= lastIndex)
-						html += `<img data-src="${dirUL}/${image}-${i}.${thisForamat}" loading="lazy">`
+						html += `<img data-src="${dirUL}/${image}-${i}.${thisForamat}">`
 					else {
 						formatIndex++
 						lastIndex = formats[formatIndex][1]
 						thisForamat = formats[formatIndex][2]
-						html += `<img data-src="${dirUL}/${image}-${i}.${thisForamat}" loading="lazy">`
+						html += `<img data-src="${dirUL}/${image}-${i}.${thisForamat}">`
 					}
 				}
 			} else {
@@ -749,12 +749,12 @@ function openComic(id) {
 						html += `<div class="repair-image" id="${i}"><p>Image hasn't Been Download Currectly.</p><button onclick="repairImage(${i}, ${repair.indexOf(i)}, ${image})">Repair</button></div>`
 					} else {
 						if (i <= lastIndex)
-							html += `<img data-src="${dirUL}/${image}-${i}.${thisForamat}" loading="lazy">`
+							html += `<img data-src="${dirUL}/${image}-${i}.${thisForamat}">`
 						else {
 							formatIndex++
 							lastIndex = formats[formatIndex][1]
 							thisForamat = formats[formatIndex][2]
-							html += `<img data-src="${dirUL}/${image}-${i}.${thisForamat}" loading="lazy">`
+							html += `<img data-src="${dirUL}/${image}-${i}.${thisForamat}">`
 						}
 					}
 				}
@@ -936,8 +936,22 @@ function updateTabSize() {
 	}
 }
 
-window.onresize = () => {
-	updateTabSize()
+window.onresize = () => { updateTabSize() }
+
+function checkBrowserTools(tabIndex) {
+	if (activeTabIndex == tabIndex) {
+		if (tabs[tabIndex].history[tabs[tabIndex].history.length - 1].replace(', false)', ', true)') == sites[thisSite][3]) document.getElementById('browser-home-btn').setAttribute('disabled', true)
+		else document.getElementById('browser-home-btn').removeAttribute('disabled')
+
+		if (tabs[tabIndex].activeHistory != tabs[tabIndex].history.length - 1) document.getElementById('browser-next-btn').removeAttribute('disabled')
+		else document.getElementById('browser-next-btn').setAttribute('disabled', true)
+
+		if (tabs[tabIndex].activeHistory != 0) document.getElementById('browser-prev-btn').removeAttribute('disabled')
+		else document.getElementById('browser-prev-btn').setAttribute('disabled', true)
+
+		if (tabs[tabIndex].ir == false) document.getElementById('browser-reload-btn').removeAttribute('disabled')
+		else document.getElementById('browser-reload-btn').setAttribute('disabled', true)
+	}
 }
 
 function activateTab(who) {
@@ -953,6 +967,7 @@ function activateTab(who) {
 	}
 	activeTabIndex = Number(who.getAttribute('ti'))
 	activeTabComicId = tabs[activeTabIndex].pageId
+	checkBrowserTools(activeTabIndex)
 	who.setAttribute('active', true)
 	document.getElementById(activeTabComicId).style.display = 'block'
 	pageContainer.scrollTop = tabs[activeTabIndex].sc
@@ -1060,32 +1075,16 @@ function WhichMouseButton(event) {
 	return event.which
 }
 
-function browserHome() {
-	if (tabs[activeTabIndex].history[tabs[activeTabIndex].history.length - 1].replace(', false)', ', true)') != sites[thisSite][3]) eval(sites[thisSite][3])
+function browserPrev() {
+	document.getElementById(activeTabComicId).innerHTML = ''
+	document.getElementById(activeTabComicId).innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
+	tabs[activeTabIndex].prev()
 }
 
-function changeHistory(next) {
-	next = next || false
-	if (next == true) {
-		if (tabs[activeTabIndex].activeHistory != tabs[activeTabIndex].history.length - 1) {
-			document.getElementById(activeTabComicId).innerHTML = ''
-			document.getElementById(activeTabComicId).innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
-			tabs[activeTabIndex].next()
-		}
-	} else {
-		if (tabs[activeTabIndex].activeHistory != 0) {
-			document.getElementById(activeTabComicId).innerHTML = ''
-			document.getElementById(activeTabComicId).innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
-			tabs[activeTabIndex].prev()
-		}
-	}
-}
-
-function reloadTab() {
-	if (tabs[activeTabIndex].ir == false) {
-		tabs[activeTabIndex].ir = true
-		tabs[activeTabIndex].reload()
-	}
+function browserNext() {
+	document.getElementById(activeTabComicId).innerHTML = ''
+	document.getElementById(activeTabComicId).innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
+	tabs[activeTabIndex].next()
 }
 
 function browserJumpPage(index, page) {

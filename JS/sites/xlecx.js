@@ -27,10 +27,12 @@ function createNewXlecxTab(id, pageNumber) {
 	const thisTabIndex = Number(tab.getAttribute('ti'))
 	tabs[thisTabIndex].ir = true
 	tabs[thisTabIndex].mp = 0
+	checkBrowserTools(thisTabIndex)
 	tabArea.innerHTML = '<span class="spin spin-sm spin-primary" style="width:22px;height:22px"></span>'
 	xlecx.getPage({page:pageNumber, random:true, category:true}, (err, result) => {
 		if (document.getElementById(id) == undefined) return
 		tabs[thisTabIndex].ir = false
+		checkBrowserTools(thisTabIndex)
 		pageContent.innerHTML = ''
 		if (err) {
 			browserError(err, id)
@@ -210,6 +212,7 @@ function xlecxOpenPost(whitchbutton, id, updateTabIndex) {
 	const thisTabIndex = Number(tab.getAttribute('ti'))
 	tabs[thisTabIndex].ir = true
 	tabs[thisTabIndex].mp = 0
+	checkBrowserTools(thisTabIndex)
 	tabArea.innerHTML = '<span class="spin spin-sm spin-primary" style="width:22px;height:22px"></span>'
 	db.have.findOne({s:0, i:id}, (err, haveDoc) => {
 		if (err) { error(err); return }
@@ -224,6 +227,7 @@ function xlecxOpenPost(whitchbutton, id, updateTabIndex) {
 		xlecx.getComic(id, {}, (err, result) => {
 			if (document.getElementById(pageId) == undefined) return
 			tabs[thisTabIndex].ir = false
+			checkBrowserTools(thisTabIndex)
 			page.innerHTML = ''
 			if (err) {
 				browserError(err, pageId)
@@ -334,12 +338,12 @@ function xlecxOpenPost(whitchbutton, id, updateTabIndex) {
 					if (repair == null || repair.length == 0) {
 						for (var i = 0; i < ImagesCount; i++) {
 							if (i <= lastIndex)
-								html += `<img src="${dirUL}/${image}-${i}.${thisForamat}" loading="lazy">`
+								html += `<img src="${dirUL}/${image}-${i}.${thisForamat}">`
 							else {
 								formatIndex++
 								lastIndex = formats[formatIndex][1]
 								thisForamat = formats[formatIndex][2]
-								html += `<img src="${dirUL}/${image}-${i}.${thisForamat}" loading="lazy">`
+								html += `<img src="${dirUL}/${image}-${i}.${thisForamat}">`
 							}
 						}
 					} else {
@@ -348,12 +352,12 @@ function xlecxOpenPost(whitchbutton, id, updateTabIndex) {
 								html += `<div class="repair-image" id="${i}"><p>Image hasn't Been Download Currectly.</p><button onclick="repairImage(${i}, ${repair.indexOf(i)}, ${image})">Repair</button></div>`
 							} else {
 								if (i <= lastIndex)
-									html += `<img src="${dirUL}/${image}-${i}.${thisForamat}" loading="lazy">`
+									html += `<img src="${dirUL}/${image}-${i}.${thisForamat}">`
 								else {
 									formatIndex++
 									lastIndex = formats[formatIndex][1]
 									thisForamat = formats[formatIndex][2]
-									html += `<img src="${dirUL}/${image}-${i}.${thisForamat}" loading="lazy">`
+									html += `<img src="${dirUL}/${image}-${i}.${thisForamat}">`
 								}
 							}
 						}
@@ -504,11 +508,13 @@ function xlecxOpenCategory(name, page, shortName, whitchbutton, updateTabIndex) 
 	const thisTabIndex = Number(tab.getAttribute('ti'))
 	tabs[thisTabIndex].ir = true
 	tabs[thisTabIndex].mp = 0
+	checkBrowserTools(thisTabIndex)
 	tabArea.innerHTML = '<span class="spin spin-sm spin-primary" style="width:22px;height:22px"></span>'
 	pageContent.innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
 	xlecx.getCategory(name, {page:page, random:true, category:true}, (err, result) => {
 		if (document.getElementById(pageId) == undefined) return
 		tabs[thisTabIndex].ir = false
+		checkBrowserTools(thisTabIndex)
 		pageContent.innerHTML = ''
 		if (err) {
 			browserError(err, pageId)
@@ -768,6 +774,7 @@ function xlecxOpenTag(name, page, whitch, whitchbutton, updateTabIndex) {
 	const thisTabIndex = Number(tab.getAttribute('ti'))
 	tabs[thisTabIndex].ir = true
 	tabs[thisTabIndex].mp = 0
+	checkBrowserTools(thisTabIndex)
 	tabArea.innerHTML = '<span class="spin spin-sm spin-primary" style="width:22px;height:22px"></span>'
 	pageContent.innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
 
@@ -776,6 +783,7 @@ function xlecxOpenTag(name, page, whitch, whitchbutton, updateTabIndex) {
 			xlecx.getGroup(name, {page:page, category:true}, (err, result) => {
 				if (document.getElementById(pageId) == undefined) return
 				tabs[thisTabIndex].ir = false
+				checkBrowserTools(thisTabIndex)
 				pageContent.innerHTML = ''
 				if (err) {
 					browserError(err, pageId)
@@ -806,6 +814,7 @@ function xlecxOpenTag(name, page, whitch, whitchbutton, updateTabIndex) {
 			xlecx.getArtist(name, {page:page, category:true}, (err, result) => {
 				if (document.getElementById(pageId) == undefined) return
 				tabs[thisTabIndex].ir = false
+				checkBrowserTools(thisTabIndex)
 				pageContent.innerHTML = ''
 				if (err) {
 					browserError(err, pageId)
@@ -836,6 +845,7 @@ function xlecxOpenTag(name, page, whitch, whitchbutton, updateTabIndex) {
 			xlecx.getParody(name, {page:page, category:true}, (err, result) => {
 				if (document.getElementById(pageId) == undefined) return
 				tabs[thisTabIndex].ir = false
+				checkBrowserTools(thisTabIndex)
 				pageContent.innerHTML = ''
 				if (err) {
 					browserError(err, pageId)
@@ -866,6 +876,7 @@ function xlecxOpenTag(name, page, whitch, whitchbutton, updateTabIndex) {
 			xlecx.getTag(name, {page:page, category:true}, (err, result) => {
 				if (document.getElementById(pageId) == undefined) return
 				tabs[thisTabIndex].ir = false
+				checkBrowserTools(thisTabIndex)
 				pageContent.innerHTML = ''
 				if (err) {
 					browserError(err, pageId)
@@ -939,11 +950,13 @@ function xlecxSearch(text, page, whitchbutton, updateTabIndex) {
 	const thisTabIndex = Number(tab.getAttribute('ti'))
 	tabs[thisTabIndex].ir = true
 	tabs[thisTabIndex].mp = 0
+	checkBrowserTools(thisTabIndex)
 	tabArea.innerHTML = '<span class="spin spin-sm spin-primary" style="width:22px;height:22px"></span>'
 	pageContent.innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
 	xlecx.search(text, {page:page, category:true}, (err, result) => {
 		if (document.getElementById(pageId) == undefined) return
 		tabs[thisTabIndex].ir = false
+		checkBrowserTools(thisTabIndex)
 		pageContent.innerHTML = ''
 		if (err) {
 			page.innerHTML = `<br><div class="alert alert-danger">${err}</div><button class="btn btn-primary" style="display:block;margin:3px auto" onclick="reloadTab()">Reload</button>`
@@ -1082,10 +1095,12 @@ function xlecxOpenAllTags(whitchbutton, updateTabIndex) {
 	const thisTabIndex = Number(tab.getAttribute('ti'))
 	tabs[thisTabIndex].ir = true
 	tabs[thisTabIndex].mp = 0
+	checkBrowserTools(thisTabIndex)
 	tabArea.innerHTML = '<span class="spin spin-sm spin-primary" style="width:22px;height:22px"></span>'
 	xlecx.getAllTags(true, (err, result) => {
 		if (document.getElementById(pageId) == undefined) return
 		tabs[thisTabIndex].ir = false
+		checkBrowserTools(thisTabIndex)
 		page.innerHTML = ''
 		if (err) {
 			browserError(err, pageId)
