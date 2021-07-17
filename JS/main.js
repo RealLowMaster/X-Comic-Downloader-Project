@@ -38,7 +38,7 @@ const sites = [
 const bjp = document.getElementById('browser-jump-page-container')
 const bjp_i = document.getElementById('bjp-i')
 const bjp_m_p = document.getElementById('bjp-m-p')
-var setting, dirDB, dirUL, tabs = [], db = {}, downloadingList = [], repairingComics = [], thisSite, lastComicId, lastHaveId, searchTimer, needReload = true, activeTabComicId = null, activeTabIndex = null
+var setting, dirDB, dirUL, tabs = [], db = {}, downloadingList = [], downloadCounter = 0, thisSite, lastComicId, lastHaveId, searchTimer, needReload = true, activeTabComicId = null, activeTabIndex = null
 
 // Needable Functions
 function fileExt(str) {
@@ -1097,8 +1097,7 @@ function browserJumpPage(index, page) {
 
 function AddDownloaderList() {
 	const index = downloadingList.length
-	downloadingList[index] = [0, [], new Date().getTime(), null, [], [], [], [null, null]]
-
+	downloadingList[index] = [0, [], new Date().getTime(), null, [], [], [], [null, null], null]
 	return index
 }
 
@@ -1106,6 +1105,8 @@ function SetDownloaderList(index, id) {
 	downloadingList[index][3] = id
 	downloadingList[index][7][0] = lastComicId
 	downloadingList[index][7][1] = lastHaveId
+	downloadCounter++
+	downloadingList[index][8] = downloadCounter
 	lastComicId++
 	lastHaveId++
 }
@@ -1113,11 +1114,22 @@ function SetDownloaderList(index, id) {
 function RemoveDownloaderList(index) {
 	const dl_element = document.getElementById(downloadingList[index][2])
 	downloadingList[index] = null
-	const downloader = document.getElementById('downloader')
-	if (dl_element != undefined)  dl_element.remove()
-	if (downloader.children.length == 0) {
-		downloader.style.display = 'none'
+	downloadCounter--
+	SetDownloadListNumbers()
+	if (dl_element != undefined) dl_element.remove()
+	if (downloadCounter == 0) {
 		downloadingList = []
+		document.getElementById('downloader').style.display = 'none'
+	}
+}
+
+function SetDownloadListNumbers() {
+	var counter = 1
+	for (let i in downloadingList) {
+		if (downloadingList[i] != null) {
+			downloadingList[i][8] = counter
+			counter++
+		}
 	}
 }
 
@@ -1143,9 +1155,7 @@ function MakeDownloadList(index, name, id, list) {
 
 function comicDownloader(index, result, quality, siteIndex) {
 	if (downloadingList[index] == undefined || downloadingList[index][0] == null) return
-	const child = document.getElementById(downloadingList[index][2])
-	const indexOfDownloader = Array.prototype.indexOf.call(child.parentNode.children, child)
-	if (indexOfDownloader > (setting.download_limit - 1)) {
+	if (downloadingList[index][8] > setting.download_limit) {
 		setTimeout(() => {
 			comicDownloader(index, result, quality, siteIndex)
 		}, 1000)
@@ -1966,10 +1976,11 @@ async function CreateComic(comicIndex, haveIndex, gottenResult, quality, image, 
 			document.getElementById(downloadingList[index][2]).remove()
 			downloadingList[index] = null
 			changeButtonsToDownloaded(doc.p, false, false)
-			var downloader = document.getElementById('downloader')
-			if (downloader.children.length == 0) {
-				downloader.style.display = 'none'
+			downloadCounter--
+			SetDownloadListNumbers()
+			if (downloadCounter == 0) {
 				downloadingList = []
+				document.getElementById('downloader').style.display = 'none'
 			}
 		}
 		if (needReload == true) reloadLoadingComics()

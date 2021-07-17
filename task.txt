@@ -75,13 +75,14 @@ Did {
 
 Tasks => {
 	Add Find Artist and ... To Offline Part
-	Make Multi-Downloading More Performance
+	Make Multi-Downloading Work Better
 	Add Ability That Check Post Updated Image
 	Ctrl + k | Ctrl + 0
 	Make Close Window Event Work Better For Deleting Images
 	Remove Electron Window Frame And Make a Custome One
 	Add Report Bug Button
 	Make CreateTag() with Zero Problem
+	Manage Repairing
 	Add Faver
 	Make Repair Part Work Better
 	Add Dipuclish Tab Ability

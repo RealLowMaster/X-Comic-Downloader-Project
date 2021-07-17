@@ -5,11 +5,11 @@
 	"hover_downloader": true,
 	"max_per_page": 18,
 	"img_graphic": 1,
-	"notification_download_finish": true,
+	"notification_download_finish": false,
 	"lazy_loading": true,
 	"tabs_limit": 32,
 	"search_speed": 1,
 	"download_limit": 5,
-	"file_location": "E:\\Game\\Game\\00",
+	"file_location": "E:\\Game\\Game\\00. test",
 	"developer_mode": true
 }
