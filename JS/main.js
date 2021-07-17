@@ -1249,7 +1249,7 @@ function browserError(err, id) {
 	const page = document.getElementById(id)
 	const tabArea = tabsContainer.querySelector(`[pi="${id}"]`).getElementsByTagName('span')[0]
 
-	page.innerHTML = `<br><div class="alert alert-danger">${err}</div><button class="btn btn-primary" style="display:block;margin:3px auto" onclick="reloadTab()">Reload</button>`
+	page.innerHTML = `<br><div class="alert alert-danger">${err}</div><button class="btn btn-primary" style="display:block;margin:3px auto" onclick="tabs[activeTabIndex].reload()">Reload</button>`
 	tabArea.innerHTML = '*Error*'
 }
 
