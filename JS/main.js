@@ -922,16 +922,18 @@ function closeBrowser() {
 }
 
 function updateTabSize() {
-	const windowWidth = window.innerWidth
-	const tabs = tabsContainer.getElementsByTagName('div')
-	if ((windowWidth / 200) <= tabs.length) {
-		const tabWidth = (windowWidth - 60) / tabs.length
-		for (var i = 0; i < tabs.length; i++) {
-			tabs[i].style.width = tabWidth+'px'
-		}
-	} else {
-		for (var i = 0; i < tabs.length; i++) {
-			tabs[i].style.width = '200px'
+	if (activeTabIndex != null) {
+		const windowWidth = window.innerWidth
+		const tabs = tabsContainer.getElementsByTagName('div')
+		if (((windowWidth - 60) / 200) <= tabs.length) {
+			const tabWidth = (windowWidth - 60) / tabs.length
+			for (var i = 0; i < tabs.length; i++) {
+				tabs[i].style.width = tabWidth+'px'
+			}
+		} else {
+			for (var i = 0; i < tabs.length; i++) {
+				tabs[i].style.width = '200px'
+			}
 		}
 	}
 }
