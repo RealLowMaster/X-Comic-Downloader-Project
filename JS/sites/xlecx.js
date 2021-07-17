@@ -658,6 +658,13 @@ function xlecxOpenTagContentMaker(result, pageContent, name, whitch) {
 
 	// Categories
 	elementContainer = document.createElement('div')
+	element = document.createElement('button')
+	element.textContent = 'All Tags'
+	element.onmousedown = e => {
+		e.preventDefault()
+		xlecxOpenAllTags(WhichMouseButton(e))
+	}
+	elementContainer.appendChild(element)
 	for (var i = 0; i < result.categories.length; i++) {
 		element = document.createElement('button')
 		element.setAttribute('c', result.categories[i].url)
@@ -986,6 +993,13 @@ function xlecxSearch(text, page, whitchbutton, updateTabIndex) {
 
 		// Categories
 		elementContainer = document.createElement('div')
+		element = document.createElement('button')
+		element.textContent = 'All Tags'
+		element.onmousedown = e => {
+			e.preventDefault()
+			xlecxOpenAllTags(WhichMouseButton(e))
+		}
+		elementContainer.appendChild(element)
 		for (var i = 0; i < result.categories.length; i++) {
 			element = document.createElement('button')
 			element.setAttribute('c', result.categories[i].url)

@@ -76,7 +76,6 @@ Did {
 
 Tasks => {
 	Add Find Artist and ... To Offline Part
-	Add All Tags To Everywhere
 	Make Multi-Downloading Work Better
 	Add Ability That Check Post Updated Image
 	Ctrl + k | Ctrl + 0
