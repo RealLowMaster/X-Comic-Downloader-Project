@@ -69,6 +69,7 @@ Add Comic {
 	milftoon
 	Tracy Scops
 }
+
 Did {
 	Make Repairing Systems Part 6++ = Next = Complete All Image Repairing
 }
@@ -82,7 +83,6 @@ Tasks => {
 	Make Close Window Event Work Better For Deleting Images
 	Remove Electron Window Frame And Make a Custome One
 	Add Report Bug Button
-	Make CreateTag() with Zero Problem
 	Manage Repairing
 	Add Faver
 	Make Repair Part Work Better

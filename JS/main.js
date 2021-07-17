@@ -42,7 +42,7 @@ const comicTagsContainer = document.getElementById('c-p-ts')
 const bjp = document.getElementById('browser-jump-page-container')
 const bjp_i = document.getElementById('bjp-i')
 const bjp_m_p = document.getElementById('bjp-m-p')
-var setting, dirDB, dirUL, tabs = [], db = {}, downloadingList = [], downloadCounter = 0, thisSite, lastComicId, lastHaveId, searchTimer, needReload = true, activeTabComicId = null, activeTabIndex = null
+var setting, dirDB, dirUL, tabs = [], db = {}, downloadingList = [], downloadCounter = 0, thisSite, lastComicId, lastHaveId, lastGroupId, lastArtistId, lastParodyId, lastTagId, searchTimer, needReload = true, activeTabComicId = null, activeTabIndex = null
 
 // Needable Functions
 function fileExt(str) {
@@ -1489,8 +1489,13 @@ function IsHavingComic(site, id, callback) {
 
 // Add New Groups
 function UpdateGroupList(comicId, newList) {
-	db.comic_groups.update({_id:comicId}, { $set: {t:newList} }, {}, (err) => {
-		if (err) { error('GroupListUpdate: '+err); return }
+	db.comic_groups.findOne({_id:comicId}, (err, doc) => {
+		if (err) { error('GroupListUpdateCheck: '+err); return }
+		if (doc != undefined) {
+			db.comic_groups.update({_id:comicId}, { $set: {t:newList} }, {}, (err) => {
+				if (err) { error('GroupListUpdate: '+err); return }
+			})
+		} else CreatGroupList(comicId, newList)
 		openComicGroups(comicId)
 		PopAlert('Comic Groups Has Been Repaired!')
 	})
@@ -1512,7 +1517,7 @@ function CreateGroupInsert(tagName, index, callback) {
 	db.groups.insert({n:tagName.toLowerCase(), _id:index}, callback)
 }
 
-function CreateGroup(tagList, index, comicId, tagListIndex, repairing, newList) {
+function CreateGroup(tagList, comicId, tagListIndex, repairing, newList) {
 	tagListIndex = tagListIndex || 0
 	newList = newList || []
 	repairing = repairing || false
@@ -1523,15 +1528,16 @@ function CreateGroup(tagList, index, comicId, tagListIndex, repairing, newList) 
 			if (tagListIndex == tagList.length - 1) {
 				fix_index(6)
 				AddGroupToList(comicId, newList, repairing)
-			} else CreateGroup(tagList, index, comicId, tagListIndex + 1, repairing, newList)
+			} else CreateGroup(tagList, comicId, tagListIndex + 1, repairing, newList)
 		} else {
-			CreateGroupInsert(tagList[tagListIndex], index, (err, newDoc) => {
+			lastGroupId++
+			CreateGroupInsert(tagList[tagListIndex], lastGroupId - 1, (err, newDoc) => {
 				if (err) { error('Group: '+err); return }
 				newList.push(newDoc._id)
 				if (tagListIndex == tagList.length - 1) {
 					fix_index(6)
 					AddGroupToList(comicId, newList, repairing)
-				} else CreateGroup(tagList, index + 1, comicId, tagListIndex + 1, repairing, newList)
+				} else CreateGroup(tagList, comicId, tagListIndex + 1, repairing, newList)
 			})
 		}
 	})
@@ -1539,8 +1545,13 @@ function CreateGroup(tagList, index, comicId, tagListIndex, repairing, newList) 
 
 // Add New Artist
 function UpdateArtistList(comicId, newList) {
-	db.comic_artists.update({_id:comicId}, { $set: {t:newList} }, {}, (err) => {
-		if (err) { error('ArtistListUpdate: '+err); return }
+	db.comic_artists.findOne({_id:comicId}, (err, doc) => {
+		if (err) { error('ArtistListUpdateCheck: '+err); return }
+		if (doc != undefined) {
+			db.comic_artists.update({_id:comicId}, { $set: {t:newList} }, {}, (err) => {
+				if (err) { error('ArtistListUpdate: '+err); return }
+			})
+		} else CreatArtistList(comicId, newList)
 		openComicArtists(comicId)
 		PopAlert('Comic Artists Has Been Repaired!')
 	})
@@ -1562,7 +1573,7 @@ function CreateArtistInsert(tagName, index, callback) {
 	db.artists.insert({n:tagName.toLowerCase(), _id:index}, callback)
 }
 
-function CreateArtist(tagList, index, comicId, tagListIndex, repairing, newList) {
+function CreateArtist(tagList, comicId, tagListIndex, repairing, newList) {
 	tagListIndex = tagListIndex || 0
 	newList = newList || []
 	repairing = repairing || false
@@ -1573,15 +1584,16 @@ function CreateArtist(tagList, index, comicId, tagListIndex, repairing, newList)
 			if (tagListIndex == tagList.length - 1) {
 				fix_index(2)
 				AddArtistToList(comicId, newList, repairing)
-			} else CreateArtist(tagList, index, comicId, tagListIndex + 1, repairing, newList)
+			} else CreateArtist(tagList, comicId, tagListIndex + 1, repairing, newList)
 		} else {
-			CreateArtistInsert(tagList[tagListIndex], index, (err, newDoc) => {
+			lastArtistId++
+			CreateArtistInsert(tagList[tagListIndex], lastArtistId - 1, (err, newDoc) => {
 				if (err) { error('Artist: '+err); return }
 				newList.push(newDoc._id)
 				if (tagListIndex == tagList.length - 1) {
 					fix_index(2)
 					AddArtistToList(comicId, newList, repairing)
-				} else CreateArtist(tagList, index + 1, comicId, tagListIndex + 1, repairing, newList)
+				} else CreateArtist(tagList, comicId, tagListIndex + 1, repairing, newList)
 			})
 		}
 	})
@@ -1589,8 +1601,13 @@ function CreateArtist(tagList, index, comicId, tagListIndex, repairing, newList)
 
 // Add New Parody
 function UpdateParodyList(comicId, newList) {
-	db.comic_parodies.update({_id:comicId}, { $set: {t:newList} }, {}, (err) => {
-		if (err) { error('ParodyListUpdate: '+err); return }
+	db.comic_parodies.findOne({_id:comicId}, (err, doc) => {
+		if (err) { error('ParodyListUpdateCheck: '+err); return }
+		if (doc != undefined) {
+			db.comic_parodies.update({_id:comicId}, { $set: {t:newList} }, {}, (err) => {
+				if (err) { error('ParodyListUpdate: '+err); return }
+			})
+		} else CreatParodyList(comicId, newList)
 		openComicParodies(comicId)
 		PopAlert('Comic Parodies Has Been Repaired!')
 	})
@@ -1612,7 +1629,7 @@ function CreateParodyInsert(tagName, index, callback) {
 	db.parodies.insert({n:tagName.toLowerCase(), _id:index}, callback)
 }
 
-function CreateParody(tagList, index, comicId, tagListIndex, repairing, newList) {
+function CreateParody(tagList, comicId, tagListIndex, repairing, newList) {
 	tagListIndex = tagListIndex || 0
 	newList = newList || []
 	repairing = repairing || false
@@ -1623,15 +1640,16 @@ function CreateParody(tagList, index, comicId, tagListIndex, repairing, newList)
 			if (tagListIndex == tagList.length - 1) {
 				fix_index(8)
 				AddParodyToList(comicId, newList, repairing)
-			} else CreateParody(tagList, index, comicId, tagListIndex + 1, repairing, newList)
+			} else CreateParody(tagList, comicId, tagListIndex + 1, repairing, newList)
 		} else {
-			CreateParodyInsert(tagList[tagListIndex], index, (err, newDoc) => {
+			lastParodyId++
+			CreateParodyInsert(tagList[tagListIndex], lastParodyId - 1, (err, newDoc) => {
 				if (err) { error('Parody: '+err); return }
 				newList.push(newDoc._id)
 				if (tagListIndex == tagList.length - 1) {
 					fix_index(8)
 					AddParodyToList(comicId, newList, repairing)
-				} else CreateParody(tagList, index + 1, comicId, tagListIndex + 1, repairing, newList)
+				} else CreateParody(tagList, comicId, tagListIndex + 1, repairing, newList)
 			})
 		}
 	})
@@ -1639,8 +1657,13 @@ function CreateParody(tagList, index, comicId, tagListIndex, repairing, newList)
 
 // Add New Tag
 function UpdateTagList(comicId, newList) {
-	db.comic_tags.update({_id:comicId}, { $set: {t:newList} }, {}, (err) => {
-		if (err) { error('TagListUpdate: '+err); return }
+	db.comic_tags.findOne({_id:comicId}, (err, doc) => {
+		if (err) { error('TagListUpdateCheck: '+err); return }
+		if (doc != undefined) {
+			db.comic_tags.update({_id:comicId}, { $set: {t:newList} }, {}, (err) => {
+				if (err) { error('TagListUpdate: '+err); return }
+			})
+		} else CreatTagList(comicId, newList)
 		openComicTags(comicId)
 		PopAlert('Comic Tags Has Been Repaired!')
 	})
@@ -1662,7 +1685,7 @@ function CreateTagInsert(tagName, index, callback) {
 	db.tags.insert({n:tagName.toLowerCase(), _id:index}, callback)
 }
 
-function CreateTag(tagList, index, comicId, tagListIndex, repairing, newList) {
+function CreateTag(tagList, comicId, tagListIndex, repairing, newList) {
 	tagListIndex = tagListIndex || 0
 	newList = newList || []
 	repairing = repairing || false
@@ -1673,15 +1696,16 @@ function CreateTag(tagList, index, comicId, tagListIndex, repairing, newList) {
 			if (tagListIndex == tagList.length - 1) {
 				fix_index(4)
 				AddTagToList(comicId, newList, repairing)
-			} else CreateTag(tagList, index, comicId, tagListIndex + 1, repairing, newList)
+			} else CreateTag(tagList, comicId, tagListIndex + 1, repairing, newList)
 		} else {
-			CreateTagInsert(tagList[tagListIndex], index, (err, newDoc) => {
+			lastTagId++
+			CreateTagInsert(tagList[tagListIndex], lastTagId - 1, (err, newDoc) => {
 				if (err) { error('Tag: '+err); return }
 				newList.push(newDoc._id)
 				if (tagListIndex == tagList.length - 1) {
 					fix_index(4)
 					AddTagToList(comicId, newList, repairing)
-				} else CreateTag(tagList, index + 1, comicId, tagListIndex + 1, repairing, newList)
+				} else CreateTag(tagList, comicId, tagListIndex + 1, repairing, newList)
 			})
 		}
 	})
@@ -1721,11 +1745,7 @@ async function CreateComic(comicIndex, haveIndex, gottenResult, quality, image, 
 			for (var i in groups) {
 				groupsList.push(groups[i].name)
 			}
-			db.index.findOne({_id:6}, (err, doc) => {
-				if (err) { error(err); return }
-				var groupsIndex = doc.i
-				CreateGroup(groupsList, groupsIndex, id)
-			})
+			CreateGroup(groupsList, id)
 		}
 
 		// Artists
@@ -1734,11 +1754,7 @@ async function CreateComic(comicIndex, haveIndex, gottenResult, quality, image, 
 			for (var i in artists) {
 				artistsList.push(artists[i].name)
 			}
-			db.index.findOne({_id:2}, (err, doc) => {
-				if (err) { error(err); return }
-				const artistsIndex = doc.i
-				CreateArtist(artistsList, artistsIndex, id)
-			})
+			CreateArtist(artistsList, id)
 		}
 
 		// Parody
@@ -1747,11 +1763,7 @@ async function CreateComic(comicIndex, haveIndex, gottenResult, quality, image, 
 			for (var i in parody) {
 				parodyList.push(parody[i].name)
 			}
-			db.index.findOne({_id:8}, (err, doc) => {
-				if (err) { error(err); return }
-				var parodyIndex = doc.i
-				CreateParody(parodyList, parodyIndex, id)
-			})
+			CreateParody(parodyList, id)
 		}
 
 		// Tags
@@ -1760,11 +1772,7 @@ async function CreateComic(comicIndex, haveIndex, gottenResult, quality, image, 
 			for (var i in tags) {
 				tagsList.push(tags[i].name)
 			}
-			db.index.findOne({_id:4}, (err, doc) => {
-				if (err) { error(err); return }
-				var tagIndex = doc.i
-				CreateTag(tagsList, tagIndex, id)
-			})
+			CreateTag(tagsList, id)
 		}
 
 		if (isDownloading == true && index != null) {
@@ -2089,13 +2097,13 @@ function closeSetting() {
 }
 
 function test() {
-	console.log('testing')
+	console.log(lastGroupId, lastArtistId, lastParodyId, lastTagId)
 }
 
 document.addEventListener("DOMContentLoaded", () => {
 	const rt = document.getElementById('runtime-loading')
 	const rt_progress = document.getElementById('rt-l-p')
-	const rt_width_persent = (100 / 9)
+	const rt_width_persent = (100 / 13)
 	let width_counter = 0
 
 	GetSettingFile()
@@ -2135,30 +2143,64 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	makeDatabaseIndexs().then(() => {
 		db.index.findOne({_id:1}, (err, doc) => {
-			if (err) { error(err); return }
-			if (doc == undefined)
-				lastComicId = 1
-			else
-				lastComicId = doc.i || null
-			if (lastComicId == null) { error('Indexing Problem.'); return }
+			if (err) { error('ComicIndexing: '+err); return }
+			if (doc == undefined) lastComicId = 1
+			else lastComicId = doc.i || null
+			if (lastComicId == null) { error('Comic Indexing Problem.'); return }
 			width_counter += rt_width_persent
 			rt_progress.style.width = width_counter+'%'
+
 			db.index.findOne({_id:11}, (err, haveDoc) => {
-				if (err) { error(err); return }
-				if (doc == undefined)
-					lastHaveId = 1
-				else
-					lastHaveId = haveDoc.i || null
-				if (lastHaveId == null) { error('Indexing Problem.'); return }
+				if (err) { error('HaveIndexing: '+err); return }
+				if (haveDoc == undefined) lastHaveId = 1
+				else lastHaveId = haveDoc.i || null
+				if (lastHaveId == null) { error('Have Indexing Problem.'); return }
 				width_counter += rt_width_persent
 				rt_progress.style.width = width_counter+'%'
-				setLuanchTimeSettings(false)
-				width_counter += rt_width_persent
-				rt_progress.style.width = width_counter+'%'
-				loadComics()
-				width_counter += rt_width_persent
-				rt_progress.style.width = width_counter+'%'
-				rt.remove()
+
+				db.index.findOne({_id:6}, (err, groupDoc) => {
+					if (err) { error('GroupIndexing: '+err); return }
+					if (groupDoc == undefined) lastGroupId = 1
+					else lastGroupId = groupDoc.i || null
+					if (lastGroupId == null) { error('Group Indexing Problem.'); return }
+					width_counter += rt_width_persent
+					rt_progress.style.width = width_counter+'%'
+
+					db.index.findOne({_id:2}, (err, artistDoc) => {
+						if (err) { error('ArtistIndexing: '+err); return }
+						if (artistDoc == undefined) lastArtistId = 1
+						else lastArtistId = artistDoc.i || null
+						if (lastArtistId == null) { error('Artist Indexing Problem.'); return }
+						width_counter += rt_width_persent
+						rt_progress.style.width = width_counter+'%'
+
+						db.index.findOne({_id:8}, (err, parodyDoc) => {
+							if (err) { error('ParodyIndexing: '+err); return }
+							if (parodyDoc == undefined) lastParodyId = 1
+							else lastParodyId = parodyDoc.i || null
+							if (lastParodyId == null) { error('Parody Indexing Problem.'); return }
+							width_counter += rt_width_persent
+							rt_progress.style.width = width_counter+'%'
+
+							db.index.findOne({_id:4}, (err, tagDoc) => {
+								if (err) { error('TagIndexing: '+err); return }
+								if (tagDoc == undefined) lastTagId = 1
+								else lastTagId = tagDoc.i || null
+								if (lastTagId == null) { error('Tag Indexing Problem.'); return }
+								width_counter += rt_width_persent
+								rt_progress.style.width = width_counter+'%'
+
+								setLuanchTimeSettings(false)
+								width_counter += rt_width_persent
+								rt_progress.style.width = width_counter+'%'
+								loadComics()
+								width_counter += rt_width_persent
+								rt_progress.style.width = width_counter+'%'
+								rt.remove()
+							})
+						})
+					})
+				})
 			})
 		})
 	})

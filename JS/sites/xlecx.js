@@ -1240,11 +1240,7 @@ async function xlecxRepairComicInfoGetInfo(id, whitch) {
 				for (var i in neededResult) {
 					groupsList.push(neededResult[i].name)
 				}
-				db.index.findOne({_id:6}, (err, doc) => {
-					if (err) { error(err); return }
-					var groupsIndex = doc.i
-					CreateGroup(groupsList, groupsIndex, comic_id, 0, true)
-				})
+				CreateGroup(groupsList, comic_id, 0, true)
 				break
 			case 2:
 				var neededResult = result.artists || null
@@ -1256,11 +1252,7 @@ async function xlecxRepairComicInfoGetInfo(id, whitch) {
 				for (var i in neededResult) {
 					artistsList.push(neededResult[i].name)
 				}
-				db.index.findOne({_id:2}, (err, doc) => {
-					if (err) { error(err); return }
-					var artistsIndex = doc.i
-					CreateArtist(artistsList, artistsIndex, comic_id, 0, true)
-				})
+				CreateArtist(artistsList, comic_id, 0, true)
 				break
 			case 3:
 				var neededResult = result.parody || null
@@ -1272,11 +1264,7 @@ async function xlecxRepairComicInfoGetInfo(id, whitch) {
 				for (var i in neededResult) {
 					parodyList.push(neededResult[i].name)
 				}
-				db.index.findOne({_id:8}, (err, doc) => {
-					if (err) { error(err); return }
-					var parodyIndex = doc.i
-					CreateParody(parodyList, parodyIndex, comic_id, 0, true)
-				})
+				CreateParody(parodyList, comic_id, 0, true)
 				break
 			case 4:
 				var neededResult = result.tags || null
@@ -1288,11 +1276,7 @@ async function xlecxRepairComicInfoGetInfo(id, whitch) {
 				for (var i in neededResult) {
 					tagsList.push(neededResult[i].name)
 				}
-				db.index.findOne({_id:4}, (err, doc) => {
-					if (err) { error(err); return }
-					var tagIndex = doc.i
-					CreateTag(tagsList, tagIndex, comic_id, 0, true)
-				})
+				CreateTag(tagsList, comic_id, 0, true)
 				break
 			case 5:
 				var neededResult = result.images || null
