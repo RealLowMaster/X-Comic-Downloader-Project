@@ -1243,7 +1243,7 @@ async function xlecxRepairComicInfoGetInfo(id, whitch) {
 				db.index.findOne({_id:6}, (err, doc) => {
 					if (err) { error(err); return }
 					var groupsIndex = doc.i
-					CreateGroup(groupsList, groupsIndex, true, comic_id, 0, true)
+					CreateGroup(groupsList, groupsIndex, comic_id, 0, true)
 				})
 				break
 			case 2:
@@ -1259,7 +1259,7 @@ async function xlecxRepairComicInfoGetInfo(id, whitch) {
 				db.index.findOne({_id:2}, (err, doc) => {
 					if (err) { error(err); return }
 					var artistsIndex = doc.i
-					CreateArtist(artistsList, artistsIndex, true, comic_id, 0, true)
+					CreateArtist(artistsList, artistsIndex, comic_id, 0, true)
 				})
 				break
 			case 3:
@@ -1275,7 +1275,7 @@ async function xlecxRepairComicInfoGetInfo(id, whitch) {
 				db.index.findOne({_id:8}, (err, doc) => {
 					if (err) { error(err); return }
 					var parodyIndex = doc.i
-					CreateParody(parodyList, parodyIndex, true, comic_id, 0, true)
+					CreateParody(parodyList, parodyIndex, comic_id, 0, true)
 				})
 				break
 			case 4:

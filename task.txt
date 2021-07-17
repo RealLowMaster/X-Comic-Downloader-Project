@@ -71,8 +71,6 @@ Add Comic {
 }
 Did {
 	Make Repairing Systems Part 6++ = Next = Complete All Image Repairing
-
-	Change Inserting Tags and ...
 }
 
 Tasks => {
