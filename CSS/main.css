@@ -996,8 +996,8 @@ div { display: block; }
 	border-radius: 7px;
 	overflow-y: auto;
 	position: fixed;
-	top: 80px;
 	right: -175px;
+	bottom: 50px;
 	z-index: 99999;
 	transition: .3s;
 }

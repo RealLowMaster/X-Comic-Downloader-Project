@@ -1,6 +1,6 @@
 const { remote } = require('electron')
 const fs = require('fs')
-const path = require('path')
+path = require('path')
 const nedb = require('nedb')
 const ImageDownloader = require('image-downloader')
 const xlecx = new XlecxAPI()
@@ -8,7 +8,7 @@ const defaultSetting = {
 	"comic_panel_theme": 0,
 	"pagination_theme": 0,
 	"offline_theme": 0,
-	"hover_downloader": true,
+	"hover_downloader": false,
 	"max_per_page": 18,
 	"img_graphic": 1,
 	"notification_download_finish": true,
@@ -173,6 +173,7 @@ function GetFileLocationForInput(who) {
 
 // Main Loading Stuff
 const dirRoot = path.join(__dirname).replace('\\app.asar', '')
+delete path
 
 function GetSettingFile() {
 	if (!fs.existsSync(dirRoot+'/setting.json')) {

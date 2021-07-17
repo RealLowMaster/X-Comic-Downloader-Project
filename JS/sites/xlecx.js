@@ -1,7 +1,6 @@
 // Xlecx
 function openXlecxBrowser() {
 	imageLazyLoadingOptions.root = pageContainer
-
 	imageLoadingObserver = new IntersectionObserver(ObserverFunction, imageLazyLoadingOptions)
 	thisSite = 0
 	needReload = false
