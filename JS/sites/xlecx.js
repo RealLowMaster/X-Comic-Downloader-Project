@@ -1291,7 +1291,7 @@ async function xlecxRepairComicInfoGetInfo(id, whitch) {
 				db.index.findOne({_id:4}, (err, doc) => {
 					if (err) { error(err); return }
 					var tagIndex = doc.i
-					CreateTag(tagsList, tagIndex, true, comic_id, 0, true)
+					CreateTag(tagsList, tagIndex, comic_id, 0, true)
 				})
 				break
 			case 5:

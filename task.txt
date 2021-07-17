@@ -71,10 +71,13 @@ Add Comic {
 }
 Did {
 	Make Repairing Systems Part 6++ = Next = Complete All Image Repairing
+
+	Change Inserting Tags and ...
 }
 
 Tasks => {
 	Add Find Artist and ... To Offline Part
+	Add All Tags To Everywhere
 	Make Multi-Downloading Work Better
 	Add Ability That Check Post Updated Image
 	Ctrl + k | Ctrl + 0
