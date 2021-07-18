@@ -156,14 +156,17 @@
 
 				<br><br>
 
-				<div class="input-row">
-					<div class="input-row-checkbox">
-						<label>Hoverable Downloader</label>
-						<div>
-							<input type="checkbox" id="s_hover_downloader">
-						</div>
+				<label class="input-row-label d-block mb-3">Waiting Quality</label>
+				<div class="column-selector">
+					<div id="s_waiting_quality" value>
+						<button onclick="columnSelector(this, 0)">Low</button>
+						<button onclick="columnSelector(this, 1)">Medium</button>
+						<button onclick="columnSelector(this, 2)">High</button>
 					</div>
-					<p class="input-row-helper">Hover The Downloader For Showed Up.</p>
+					<div id="waiting-preview">
+						<img class="spin" style="width:70px;height:70px;" src="Image/dual-ring-20.gif">
+						<img class="spin" style="width:70px;height:70px;" src="Image/infinity-20.gif">
+					</div>
 				</div>
 			</div>
 
@@ -187,6 +190,18 @@
 					<label class="input-row-label">Max Comics in a Page</label>
 					<input class="input-row-input" type="number" oninput="inputLimit(this, 34)" id="s_max_per_page">
 					<p class="input-row-helper">The Maximum Amount of Comics That Should Show in Offline Parts.<br>Min: 1, Max: 34</p>
+				</div>
+
+				<br><br>
+
+				<div class="input-row">
+					<div class="input-row-checkbox">
+						<label>Hoverable Downloader</label>
+						<div>
+							<input type="checkbox" id="s_hover_downloader">
+						</div>
+					</div>
+					<p class="input-row-helper">Hover The Downloader For Showed Up.</p>
 				</div>
 			</div>
 		</div>

@@ -8,6 +8,7 @@ const defaultSetting = {
 	"comic_panel_theme": 0,
 	"pagination_theme": 0,
 	"offline_theme": 0,
+	"waiting_quality": 1,
 	"hover_downloader": false,
 	"max_per_page": 18,
 	"img_graphic": 1,
@@ -76,6 +77,14 @@ function openSelect(who) {
 	var overflow = who.getElementsByTagName('div')[1]
 	overflow.style.display = 'block'
 	overflow.querySelector(`[onclick="select(this, ${who.getAttribute('value')})"]`).setAttribute('active', '')
+}
+
+function columnSelector(who, value) {
+	const parent = who.parentElement
+	const passValue = parent.getAttribute('value') || null
+	if (passValue != null) parent.querySelector(`[onclick="columnSelector(this, ${passValue})"]`).removeAttribute('active')
+	parent.setAttribute('value', value)
+	who.setAttribute('active', '')
 }
 
 function inputLimit(who, max) {
@@ -223,6 +232,9 @@ function CheckSettings() {
 	if (typeof(setting.pagination_theme) != 'number' || setting.pagination_theme < 0) setting.pagination_theme = 0
 	if (setting.pagination_theme > 1) setting.pagination_theme = 1
 	if (typeof(setting.offline_theme) != 'number') setting.offline_theme = 0
+	if (typeof(setting.waiting_quality) != 'number') setting.waiting_quality = 1
+	if (setting.waiting_quality > 2) setting.waiting_quality = 2
+	else if (setting.waiting_quality < 0) setting.waiting_quality = 0
 	if (typeof(setting.max_per_page) != 'number') setting.max_per_page = 18
 	if (setting.max_per_page < 1) setting.max_per_page = 1
 	if (typeof(setting.img_graphic) != 'number' || setting.img_graphic < 0) setting.img_graphic = 0
@@ -235,7 +247,7 @@ function CheckSettings() {
 	if (setting.tabs_limit < 1) setting.tabs_limit = 1
 	if (typeof(setting.search_speed) != 'number') setting.search_speed = 2
 	if (setting.search_speed > 3) setting.search_speed = 3
-	if (setting.search_speed < 0) setting.search_speed = 0
+	else if (setting.search_speed < 0) setting.search_speed = 0
 	if (typeof(setting.download_limit) != 'number') setting.download_limit = 5
 	if (setting.download_limit < 1) setting.download_limit = 1
 	if (typeof(setting.developer_mode) != 'boolean') setting.developer_mode = false

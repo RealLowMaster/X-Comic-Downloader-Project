@@ -64,17 +64,18 @@ DB => {
 
 Add Comic {
 	League Of Legends
-	The Rock Cocks
-	Deviants
 	milftoon
-	Tracy Scops
 }
 
 Did {
 	Make Repairing Systems Part 6++ = Next = Complete All Image Repairing
+	Change Wating From Animation To Gif Part 1++
 }
 
 Tasks => {
+	Change Waiting Mark From Element To Gif
+	Make Playlist Basics
+	Use Loading In Repairing
 	Add Find Artist and ... To Offline Part
 	Make Multi-Downloading Work Better
 	Add Ability That Check Post Updated Image
