@@ -68,50 +68,42 @@ div { display: block; }
 .main-body-darkmode { background-color: #222 !important }
 
 /* Menu */
-#runtime-loading,
-#waiting-loading {
-	display: flex;
+.waiting-loading {
+	display: none;
 	flex-flow: column;
 	justify-content: center;
 	align-items: center;
 	width: 100%;
 	height: 100%;
-	background-color: #fff;
+	background-color: #000d;
 	position: fixed;
 	top: 0;
 	left: 0;
 	z-index: 999999;
 }
 
-#runtime-loading > p,
-#waiting-loading > p {
+.waiting-loading > p {
 	display: block;
 	margin-bottom: 15px;
-	color: #222;
+	color: #fff;
 	text-align: center;
 	font-size: 16px;
 }
 
-#runtime-loading > div,
-#waiting-loading > div {
+.waiting-loading > div {
 	display: block;
 	width: 450px;
 	height: 4px;
 	background-color: #ddd;
 }
 
-#runtime-loading > div > div,
-#waiting-loading > div > div {
+.waiting-loading > div > div {
 	display: block;
 	width: 0;
 	height: 100%;
 	background-color: #3498DB;
 	transition: .2s;
 }
-
-#waiting-loading { display:none;background-color: #000d; }
-
-#waiting-loading > p { color: #fff; }
 
 .top-menu {
 	display: grid;

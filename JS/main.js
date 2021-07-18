@@ -35,6 +35,7 @@ const sites = [
 		'xlecxJumpPage({index}, {page})'
 	]
 ]
+const loading = new Loading(13)
 const comicGroupsContainer = document.getElementById('c-p-g')
 const comicArtistsContainer = document.getElementById('c-p-a')
 const comicParodyContainer = document.getElementById('c-p-p')
@@ -976,9 +977,7 @@ function createNewTab(history) {
 
 	history = history || null
 	const tabIndex = tabs.length
-	const date = new Date()
-	const randomNumber = Math.floor(Math.random() * 9)
-	const newTabId = `${date.getTime()}${randomNumber}`
+	const newTabId = `${new Date().getTime()}${Math.floor(Math.random() * 9)}`
 	const page = document.createElement('div')
 	const element = document.createElement('div')
 	element.classList.add('browser-tab')
@@ -1804,19 +1803,12 @@ function deleteComic(id) {
 	document.getElementById('comic-action-panel').style.display='none'
 	closeComicPanel()
 
-	const wt = document.getElementById('waiting-loading')
-	const wt_text = wt.getElementsByTagName('p')[0]
-	const wt_progress = document.getElementById('wt-l-p')
-	const wt_width_persent = (100 / 8)
-	let width_counter = 0
-
-	wt.style.display = 'flex'
-	wt_text.textContent = 'Removing Comic From Database...'
-	wt_progress.style.width = width_counter
+	loading.reset(7)
+	loading.show('Removing Comic From Database...')
 
 	db.comics.findOne({_id:id}, (err, doc) => {
-		if (err) { wt.style.display = 'none'; error(err); return }
-		if (doc == undefined) { wt.style.display = 'none'; error('Comic Not Found.'); return }
+		if (err) { loading.hide(); error(err); return }
+		if (doc == undefined) { loading.hide(); error('Comic Not Found.'); return }
 		const ImagesId = doc.i
 		const ImagesFormats = doc.f
 		const ImagesCount = doc.c
@@ -1829,11 +1821,9 @@ function deleteComic(id) {
 
 		const remove_have = () => {
 			db.have.remove({s:site, i:post_id}, {}, err => {
-				if (err) { wt.style.display = 'none'; error(err); return }
-
-				width_counter += wt_width_persent
-				wt_progress.style.width = width_counter+'%'
-				wt.style.display = 'none'
+				if (err) { loading.hide(); error(err); return }
+				loading.forward()
+				loading.hide()
 				PopAlert('Comic Deleted.', 'warning')
 				reloadLoadingComics()
 			})
@@ -1841,44 +1831,32 @@ function deleteComic(id) {
 
 		const remove_tags = () => {
 			db.comic_tags.remove({_id:id}, {}, err => {
-				if (err) { wt.style.display = 'none'; error(err); return }
-
-				width_counter += wt_width_persent
-				wt_text.textContent = 'Removing Comic Have From Database...'
-				wt_progress.style.width = width_counter+'%'
+				if (err) { loading.hide(); error(err); return }
+				loading.forward('Removing Comic Have From Database...')
 				remove_have()
 			})
 		}
 
 		const remove_parodies = () => {
 			db.comic_parodies.remove({_id:id}, {}, err => {
-				if (err) { wt.style.display = 'none'; error(err); return }
-
-				width_counter += wt_width_persent
-				wt_text.textContent = 'Removing Comic Tags From Database...'
-				wt_progress.style.width = width_counter+'%'
+				if (err) { loading.hide(); error(err); return }
+				loading.forward('Removing Comic Tags From Database...')
 				remove_tags()
 			})
 		}
 
 		const remove_artists = () => {
 			db.comic_artists.remove({_id:id}, {}, err => {
-				if (err) { wt.style.display = 'none'; error(err); return }
-
-				width_counter += wt_width_persent
-				wt_text.textContent = 'Removing Comic Parodies From Database...'
-				wt_progress.style.width = width_counter+'%'
+				if (err) { loading.hide(); error(err); return }
+				loading.forward('Removing Comic Parodies From Database...')
 				remove_parodies()
 			})
 		}
 
 		const remove_groups = () => {
 			db.comic_groups.remove({_id:id}, {}, err => {
-				if (err) { wt.style.display = 'none'; error(err); return }
-
-				width_counter += wt_width_persent
-				wt_text.textContent = 'Removing Comic Artists From Database...'
-				wt_progress.style.width = width_counter+'%'
+				if (err) { loading.hide(); error(err); return }
+				loading.forward('Removing Comic Artists From Database...')
 				remove_artists()
 			})
 		}
@@ -1916,21 +1894,14 @@ function deleteComic(id) {
 					}
 				}
 			}
-
-			width_counter += wt_width_persent
-			wt_text.textContent = 'Removing Comic Groups From Database...'
-			wt_progress.style.width = width_counter+'%'
+			loading.forward('Removing Comic Groups From Database...')
 			remove_groups()
 		}
 
 		const remove_comic = () => {
 			db.comics.remove({_id:id}, {}, err => {
-				if (err) { wt.style.display = 'none'; error(err); return }
-
-				width_counter += wt_width_persent
-				wt_text.textContent = 'Deleting Comic Images...'
-				wt_progress.style.width = width_counter+'%'
-
+				if (err) { loading.hide(); error(err); return }
+				loading.forward('Deleting Comic Images...')
 				delete_images()
 			})
 		}
@@ -2102,23 +2073,17 @@ function test() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-	const rt = document.getElementById('runtime-loading')
-	const rt_progress = document.getElementById('rt-l-p')
-	const rt_width_persent = (100 / 13)
-	let width_counter = 0
+	loading.reset(13)
+	loading.show('Geting Setting...', '#fff', '#222')
 
 	GetSettingFile()
-	width_counter += rt_width_persent
-	rt_progress.style.width = width_counter+'%'
+	loading.forward('Getting Directories...')
 	GetDirection()
-	width_counter += rt_width_persent
-	rt_progress.style.width = width_counter+'%'
+	loading.forward('Creating Databases...')
 	CreateDatabase()
-	width_counter += rt_width_persent
-	rt_progress.style.width = width_counter+'%'
+	loading.forward('Checking Settings...')
 	CheckSettings()
-	width_counter += rt_width_persent
-	rt_progress.style.width = width_counter+'%'
+	loading.forward('Set Window Event...')
 
 	remote.getCurrentWindow().addListener('close', e => {
 		e.preventDefault()
@@ -2139,8 +2104,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			remote.app.quit()
 		}
 	})
-	width_counter += rt_width_persent
-	rt_progress.style.width = width_counter+'%'
+	loading.forward('Comic Indexing...')
 
 	makeDatabaseIndexs().then(() => {
 		db.index.findOne({_id:1}, (err, doc) => {
@@ -2148,56 +2112,48 @@ document.addEventListener("DOMContentLoaded", () => {
 			if (doc == undefined) lastComicId = 1
 			else lastComicId = doc.i || null
 			if (lastComicId == null) { error('Comic Indexing Problem.'); return }
-			width_counter += rt_width_persent
-			rt_progress.style.width = width_counter+'%'
+			loading.forward('Have Indexing...')
 
 			db.index.findOne({_id:11}, (err, haveDoc) => {
 				if (err) { error('HaveIndexing: '+err); return }
 				if (haveDoc == undefined) lastHaveId = 1
 				else lastHaveId = haveDoc.i || null
 				if (lastHaveId == null) { error('Have Indexing Problem.'); return }
-				width_counter += rt_width_persent
-				rt_progress.style.width = width_counter+'%'
+				loading.forward('Groups Indexing...')
 
 				db.index.findOne({_id:6}, (err, groupDoc) => {
 					if (err) { error('GroupIndexing: '+err); return }
 					if (groupDoc == undefined) lastGroupId = 1
 					else lastGroupId = groupDoc.i || null
 					if (lastGroupId == null) { error('Group Indexing Problem.'); return }
-					width_counter += rt_width_persent
-					rt_progress.style.width = width_counter+'%'
+					loading.forward('Artists Indexing...')
 
 					db.index.findOne({_id:2}, (err, artistDoc) => {
 						if (err) { error('ArtistIndexing: '+err); return }
 						if (artistDoc == undefined) lastArtistId = 1
 						else lastArtistId = artistDoc.i || null
 						if (lastArtistId == null) { error('Artist Indexing Problem.'); return }
-						width_counter += rt_width_persent
-						rt_progress.style.width = width_counter+'%'
+						loading.forward('Parodies Indexing...')
 
 						db.index.findOne({_id:8}, (err, parodyDoc) => {
 							if (err) { error('ParodyIndexing: '+err); return }
 							if (parodyDoc == undefined) lastParodyId = 1
 							else lastParodyId = parodyDoc.i || null
 							if (lastParodyId == null) { error('Parody Indexing Problem.'); return }
-							width_counter += rt_width_persent
-							rt_progress.style.width = width_counter+'%'
+							loading.forward('Tags Indexing...')
 
 							db.index.findOne({_id:4}, (err, tagDoc) => {
 								if (err) { error('TagIndexing: '+err); return }
 								if (tagDoc == undefined) lastTagId = 1
 								else lastTagId = tagDoc.i || null
 								if (lastTagId == null) { error('Tag Indexing Problem.'); return }
-								width_counter += rt_width_persent
-								rt_progress.style.width = width_counter+'%'
+								loading.forward('Set Settings...')
 
 								setLuanchTimeSettings(false)
-								width_counter += rt_width_persent
-								rt_progress.style.width = width_counter+'%'
+								loading.forward('Load Comics...')
 								loadComics()
-								width_counter += rt_width_persent
-								rt_progress.style.width = width_counter+'%'
-								rt.remove()
+								loading.forward()
+								loading.hide()
 							})
 						})
 					})
