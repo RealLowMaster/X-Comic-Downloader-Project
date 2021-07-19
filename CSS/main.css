@@ -516,8 +516,8 @@ div { display: block; }
 /* Spin */
 .spin {
 	display: inline-block;
-	width: 60px;
-	height: 60px;
+	width: 30px;
+	height: 30px;
 	border-radius: 50%;
 	object-fit: cover;
 	object-position: center;
@@ -999,12 +999,12 @@ div { display: block; }
 	position: relative;
 }
 
-.downloader > div > span {
-	width: 15px;
-	height: 15px;
+.downloader > div > img {
+	width: 18px;
+	height: 18px;
 	position: absolute;
-	top: 4px;
-	right: 4px;
+	top: 3px;
+	right: 3px;
 }
 
 .downloader > div > p {
@@ -1214,8 +1214,8 @@ div { display: block; }
 }
 
 .xlecx-container-one-row > div > .browser-comic-have > p > .spin {
-	width: 25px;
-	height: 25px;
+	width: 27px;
+	height: 27px;
 	margin: 0 15px 0 10px;
 	border-width: 4px;
 }
@@ -1400,7 +1400,7 @@ div { display: block; }
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	padding: 7px;
+	padding: 4px;
 	background-color: #222a;
 	border-radius: 0 7px 7px 0;
 	position: absolute;
@@ -1409,8 +1409,8 @@ div { display: block; }
 }
 
 .xlecx-post-container > div > cid > .spin {
-	width: 20px;
-	height: 20px;
+	width: 27px;
+	height: 27px;
 	margin: 0;
 	border-width: 4px;
 }

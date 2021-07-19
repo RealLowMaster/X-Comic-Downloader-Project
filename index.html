@@ -159,15 +159,15 @@
 				<label class="input-row-label d-block mb-3">Waiting Quality</label>
 				<div class="column-selector">
 					<div id="s_waiting_quality" value>
-						<button onclick="columnSelector(this, 0)">Low</button>
-						<button onclick="columnSelector(this, 1)">Medium</button>
-						<button onclick="columnSelector(this, 2)">High</button>
+						<button cs="0" onclick="columnSelector(this, 0);changeWaitingPreview(10)">Low</button>
+						<button cs="1" onclick="columnSelector(this, 1);changeWaitingPreview(20)">Medium</button>
+						<button cs="2" onclick="columnSelector(this, 2);changeWaitingPreview(30)">High</button>
 					</div>
 					<div id="waiting-preview">
-						<img class="spin" style="width:70px;height:70px;" src="Image/dual-ring-20.gif">
-						<img class="spin" style="width:70px;height:70px;" src="Image/infinity-20.gif">
+						<img class="spin" style="width:70px;height:70px;" src>
 					</div>
 				</div>
+				<p class="input-row-helper">The Waiting Quality (FPS)<br>Higher FPS = Smother, But More CPU Usage<br>Low => 10 FPS<br>Medium => 20FPS (Recommend)<br>High => 30 FPS</p>
 			</div>
 
 			<div class="col-6 pr-5 pl-5">

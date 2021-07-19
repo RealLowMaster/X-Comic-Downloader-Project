@@ -44,7 +44,7 @@ const comicTagsContainer = document.getElementById('c-p-ts')
 const bjp = document.getElementById('browser-jump-page-container')
 const bjp_i = document.getElementById('bjp-i')
 const bjp_m_p = document.getElementById('bjp-m-p')
-var setting, dirDB, dirUL, tabs = [], db = {}, downloadingList = [], downloadCounter = 0, thisSite, lastComicId, lastHaveId, lastGroupId, lastArtistId, lastParodyId, lastTagId, searchTimer, needReload = true, activeTabComicId = null, activeTabIndex = null
+var setting, dirDB, dirUL, tabs = [], db = {}, downloadingList = [], downloadCounter = 0, thisSite, lastComicId, lastHaveId, lastGroupId, lastArtistId, lastParodyId, lastTagId, searchTimer, needReload = true, activeTabComicId = null, activeTabIndex = null, wt_fps
 
 // Needable Functions
 function fileExt(str) {
@@ -82,7 +82,7 @@ function openSelect(who) {
 function columnSelector(who, value) {
 	const parent = who.parentElement
 	const passValue = parent.getAttribute('value') || null
-	if (passValue != null) parent.querySelector(`[onclick="columnSelector(this, ${passValue})"]`).removeAttribute('active')
+	if (passValue != null) parent.querySelector(`[cs="${passValue}"]`).removeAttribute('active')
 	parent.setAttribute('value', value)
 	who.setAttribute('active', '')
 }
@@ -997,7 +997,7 @@ function createNewTab(history) {
 	element.setAttribute('pi', newTabId)
 	element.setAttribute('ti', tabIndex)
 	element.setAttribute('draggable', true)
-	element.innerHTML = `<span><span class="spin spin-primary" style="width:22px;height:22px"></span></span> <button onclick="removeTab('${newTabId}')">X</button>`
+	element.innerHTML = `<span><img class="spin" src="Image/dual-ring-primary-${wt_fps}.gif"></span> <button onclick="removeTab('${newTabId}')">X</button>`
 	element.addEventListener('dragstart',() => { element.classList.add('dragging') })
 	element.addEventListener('dragend', () => { element.classList.remove('dragging') })
 
@@ -1006,8 +1006,6 @@ function createNewTab(history) {
 	page.setAttribute('class', 'browser-page')
 	page.setAttribute('id', newTabId)
 	tabsContainer.appendChild(element)
-	
-	page.innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
 	pageContainer.appendChild(page)
 
 	document.getElementById('browser-home-btn').style.display = 'inline-block'
@@ -1137,7 +1135,7 @@ function MakeDownloadList(index, name, id, list) {
 	SetDownloaderList(index, id)
 	element.setAttribute('id', downloadingList[index][2])
 	element.setAttribute('i', index)
-	element.innerHTML = `<span class="spin spin-sm spin-fast spin-success"></span><p>${name} <span>(0/${list.length})</span></p><div><div></div></div><button onclick="cancelDownload(${index})">x</button>`
+	element.innerHTML = `<img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"><p>${name} <span>(0/${list.length})</span></p><div><div></div></div><button onclick="cancelDownload(${index})">x</button>`
 	downloader.appendChild(element)
 	downloadingList[index][1] = list
 
@@ -1338,7 +1336,7 @@ function changeButtonsToDownloading(id, backward) {
 
 	if (backward == false) {
 		for (let i = 0; i < comic_page_btns.length; i++) {
-			comic_page_btns[i].innerHTML = '<p>Downloading... <span class="spin spin-success"></span><p>'
+			comic_page_btns[i].innerHTML = `<p>Downloading... <img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"><p>`
 		}
 	
 		for (let i = 0; i < comic_overview_btns.length; i++) {
@@ -1346,7 +1344,7 @@ function changeButtonsToDownloading(id, backward) {
 			comic_overview_btns[i].remove()
 			element = document.createElement('cid')
 			element.setAttribute('cid', id)
-			element.innerHTML = '<span class="spin spin-success"></span>'
+			element.innerHTML = `<img class="spin" src="Image/dual-ring-success-${wt_fps}.gif">`
 			parent.appendChild(element)
 		}
 	} else {
@@ -1937,17 +1935,23 @@ function askForDeletingComic(id) {
 }
 
 // Setting
+function changeWaitingPreview(fps) {
+	const imgs = document.getElementById('waiting-preview').getElementsByTagName('img')
+	imgs[0].setAttribute('src', `Image/dual-ring-success-${fps}.gif`)
+}
+
 function setLuanchTimeSettings(reloadSettingPanel) {
 	reloadSettingPanel = reloadSettingPanel || false
 	const s_comic_panel_theme = document.getElementById('s_comic_panel_theme')
 	const s_offline_theme = document.getElementById('s_offline_theme')
+	const s_waiting_quality = document.getElementById('s_waiting_quality')
 	const s_pagination_theme = document.getElementById('s_pagination_theme')
 	const s_img_graphic = document.getElementById('s_img_graphic')
 	const s_search_speed = document.getElementById('s_search_speed')
 	const s_file_location = document.getElementById('s_file_location')
 
 	s_comic_panel_theme.setAttribute('value', setting.comic_panel_theme)
-	s_offline_theme.setAttribute('value', setting.offline_theme)
+	s_offline_theme.setAttribute('value', setting.offline_theme)	
 	s_pagination_theme.setAttribute('value', setting.pagination_theme)
 	s_img_graphic.setAttribute('value', setting.img_graphic)
 	s_search_speed.setAttribute('value', setting.search_speed)
@@ -1957,6 +1961,14 @@ function setLuanchTimeSettings(reloadSettingPanel) {
 	s_pagination_theme.getElementsByTagName('div')[0].textContent = s_pagination_theme.getElementsByTagName('div')[1].querySelector(`[onclick="select(this, ${setting.pagination_theme})"]`).textContent
 	s_img_graphic.getElementsByTagName('div')[0].textContent = s_img_graphic.getElementsByTagName('div')[1].querySelector(`[onclick="select(this, ${setting.img_graphic})"]`).textContent
 	s_search_speed.getElementsByTagName('div')[0].textContent = s_search_speed.getElementsByTagName('div')[1].querySelector(`[onclick="select(this, ${setting.search_speed})"]`).textContent
+
+	const wt_passValue = s_waiting_quality.getAttribute('value') || null
+	if (wt_passValue != null) s_waiting_quality.querySelector(`[cs="${wt_passValue}"]`).removeAttribute('active')
+	s_waiting_quality.querySelector(`[cs="${setting.waiting_quality}"]`).setAttribute('active', '')
+	wt_fps = setting.waiting_quality + 10 - setting.waiting_quality + (10 * setting.waiting_quality)
+	changeWaitingPreview(wt_fps)
+
+	s_waiting_quality.setAttribute('value', setting.waiting_quality)
 
 	document.getElementById('s_max_per_page').value = setting.max_per_page
 	document.getElementById('s_download_limit').value = setting.download_limit
@@ -1996,9 +2008,19 @@ function saveSetting(justSave) {
 	justSave = justSave || false
 	var reload = false
 	if (justSave == false) {
+		const waiting_quality = Number(document.getElementById('s_waiting_quality').getAttribute('value'))
 		const lazy_loading = document.getElementById('s_lazy_loading').checked
 		const max_per_page = Number(document.getElementById('s_max_per_page').value)
 		const file_location = document.getElementById('s_file_location').getAttribute('location')
+
+		if (setting.waiting_quality != waiting_quality) {
+			setting.waiting_quality = waiting_quality
+			wt_fps = waiting_quality + 10 - waiting_quality + (10 * waiting_quality)
+			const dl_imgs = document.getElementById('downloader').getElementsByTagName('img')
+			for (let i = 0; i < dl_imgs.length; i++) {
+				dl_imgs[i].setAttribute('src', `Image/dual-ring-success-${wt_fps}.gif`)
+			}
+		}
 
 		if (setting.max_per_page != max_per_page) {
 			setting.max_per_page = max_per_page

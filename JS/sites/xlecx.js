@@ -27,7 +27,8 @@ function createNewXlecxTab(id, pageNumber) {
 	tabs[thisTabIndex].ir = true
 	tabs[thisTabIndex].mp = 0
 	checkBrowserTools(thisTabIndex)
-	tabArea.innerHTML = '<span class="spin spin-sm spin-primary" style="width:22px;height:22px"></span>'
+	tabArea.innerHTML = `<img class="spin" src="Image/dual-ring-primary-${wt_fps}.gif">`
+	pageContent.innerHTML = `<div class="browser-page-loading"><img class="spin" style="width:60px;height:60px" src="Image/dual-ring-primary-${wt_fps}.gif"><p>Loading...</p></div>`
 	xlecx.getPage({page:pageNumber, random:true, category:true}, (err, result) => {
 		if (document.getElementById(id) == undefined) return
 		tabs[thisTabIndex].ir = false
@@ -97,7 +98,7 @@ function createNewXlecxTab(id, pageNumber) {
 
 			html += `${valueStorage}<p>${result.content[i].title}</p>`
 			if (IsDownloading(result.content[i].id))
-				html += `<cid cid="${result.content[i].id}"><span class="spin spin-success"></span></cid>`
+				html += `<cid cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid>`
 			else
 				html += `<button cid="${result.content[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
 			element.innerHTML = html
@@ -152,7 +153,7 @@ function createNewXlecxTab(id, pageNumber) {
 
 			html += `${valueStorage}<p>${result.random[i].title}</p>`
 			if (IsDownloading(result.random[i].id))
-				html += `<cid cid="${result.random[i].id}"><span class="spin spin-success"></span></cid>`
+				html += `<cid cid="${result.random[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid>`
 			else
 				html += `<button cid="${result.random[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
 			element.innerHTML = html
@@ -195,9 +196,6 @@ function xlecxOpenPost(whitchbutton, id, updateTabIndex) {
 			}
 		}
 		page = document.getElementById(pageId)
-		page.innerHTML = ''
-		page.innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
-
 		if (updateTabIndex == true) tabs[Number(tabsContainer.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))].addHistory(`xlecxOpenPost(0, '${id}', false)`)
 	}
 
@@ -212,7 +210,8 @@ function xlecxOpenPost(whitchbutton, id, updateTabIndex) {
 	tabs[thisTabIndex].ir = true
 	tabs[thisTabIndex].mp = 0
 	checkBrowserTools(thisTabIndex)
-	tabArea.innerHTML = '<span class="spin spin-sm spin-primary" style="width:22px;height:22px"></span>'
+	tabArea.innerHTML = `<img class="spin" src="Image/dual-ring-primary-${wt_fps}.gif">`
+	page.innerHTML = `<div class="browser-page-loading"><img class="spin" style="width:60px;height:60px" src="Image/dual-ring-primary-${wt_fps}.gif"><p>Loading...</p></div>`
 	db.have.findOne({s:0, i:id}, (err, haveDoc) => {
 		if (err) { error(err); return }
 		var have_in_have, have_comic = false
@@ -245,7 +244,7 @@ function xlecxOpenPost(whitchbutton, id, updateTabIndex) {
 			else if (have_in_have == true)
 				container.innerHTML += `<div class="browser-comic-have" ccid="${id}"><button class="remove-from-have" onclick="RemoveFromHave(0, '${id}', this)">You Have This Comic.</button></div>`
 			else if (IsDownloading(id))
-				container.innerHTML += `<div class="browser-comic-have" ccid="${id}"><p>Downloading... <span class="spin spin-success"></span><p></div>`
+				container.innerHTML += `<div class="browser-comic-have" ccid="${id}"><p>Downloading... <img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"><p></div>`
 			else
 				container.innerHTML += `<div class="browser-comic-have" ccid="${id}"><button onclick="xlecxDownloader('${id}')">Download</button><button class="add-to-have" onclick="AddToHave(0, '${id}')">Add To Have</button><div>`
 
@@ -408,7 +407,7 @@ function xlecxOpenPost(whitchbutton, id, updateTabIndex) {
 
 					html += `${valueStorage}<p>${result.related[i].title}</p>`
 					if (IsDownloading(result.related[i].id))
-						html += `<cid cid="${result.related[i].id}"><span class="spin spin-success"></span></cid>`
+						html += `<cid cid="${result.related[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid>`
 					else
 						html += `<button cid="${result.related[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
 					element.innerHTML = html
@@ -439,11 +438,10 @@ function xlecxChangePage(page, whitchbutton, updateTabIndex) {
 	if (whitchbutton == 2) makeNewPage = true
 	page = page || 1
 	if (updateTabIndex == null) updateTabIndex = true
-	var id, pageContent
+	var id
 	if (makeNewPage) {
 		id = createNewTab(`xlecxChangePage(${page}, 0, false)`)
 		if (id == null) { PopAlert('You Can\'t Make Any More Tab.', 'danger'); return }
-		pageContent = document.getElementById(id)
 	} else {
 		id = activeTabComicId
 		const passImageCon = document.getElementById(id).querySelector('[img-con="true"]')
@@ -454,13 +452,9 @@ function xlecxChangePage(page, whitchbutton, updateTabIndex) {
 				passImages[i].removeAttribute('src')
 			}
 		}
-		pageContent = document.getElementById(id)
-		pageContent.innerHTML = ''
 
 		if (updateTabIndex == true) tabs[Number(tabsContainer.querySelector(`[pi="${id}"]`).getAttribute('ti'))].addHistory(`xlecxChangePage(${page}, 0, false)`)
 	}
-
-	pageContent.innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
 	createNewXlecxTab(id, page)
 }
 
@@ -490,8 +484,6 @@ function xlecxOpenCategory(name, page, shortName, whitchbutton, updateTabIndex) 
 		pageContent = document.getElementById(pageId)
 	} else {
 		pageContent = document.getElementById(pageId)
-		pageContent.innerHTML = ''
-
 		if (updateTabIndex == true) tabs[Number(tabsContainer.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))].addHistory(`xlecxOpenCategory('${name}', ${page}, '${shortName}', 0, false)`)
 	}
 
@@ -508,8 +500,8 @@ function xlecxOpenCategory(name, page, shortName, whitchbutton, updateTabIndex) 
 	tabs[thisTabIndex].ir = true
 	tabs[thisTabIndex].mp = 0
 	checkBrowserTools(thisTabIndex)
-	tabArea.innerHTML = '<span class="spin spin-sm spin-primary" style="width:22px;height:22px"></span>'
-	pageContent.innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
+	tabArea.innerHTML = `<img class="spin" src="Image/dual-ring-primary-${wt_fps}.gif">`
+	pageContent.innerHTML = `<div class="browser-page-loading"><img class="spin" style="width:60px;height:60px" src="Image/dual-ring-primary-${wt_fps}.gif"><p>Loading...</p></div>`
 	xlecx.getCategory(name, {page:page, random:true, category:true}, (err, result) => {
 		if (document.getElementById(pageId) == undefined) return
 		tabs[thisTabIndex].ir = false
@@ -574,7 +566,7 @@ function xlecxOpenCategory(name, page, shortName, whitchbutton, updateTabIndex) 
 
 			html += `${valueStorage}<p>${result.content[i].title}</p>`
 			if (IsDownloading(result.content[i].id))
-				html += `<cid cid="${result.content[i].id}"><span class="spin spin-success"></span></cid>`
+				html += `<cid cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid>`
 			else
 				html += `<button cid="${result.content[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
 			element.innerHTML = html
@@ -629,7 +621,7 @@ function xlecxOpenCategory(name, page, shortName, whitchbutton, updateTabIndex) 
 
 			html += `${valueStorage}<p>${result.random[i].title}</p>`
 			if (IsDownloading(result.random[i].id))
-				html += `<cid cid="${result.random[i].id}"><span class="spin spin-success"></span></cid>`
+				html += `<cid cid="${result.random[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid>`
 			else
 				html += `<button cid="${result.random[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
 			element.innerHTML = html
@@ -696,7 +688,7 @@ function xlecxOpenTagContentMaker(result, pageContent, name, whitch) {
 
 		html += `${valueStorage}<p>${result.content[i].title}</p>`
 		if (IsDownloading(result.content[i].id))
-			html += `<cid cid="${result.content[i].id}"><span class="spin spin-success"></span></cid>`
+			html += `<cid cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid>`
 		else
 			html += `<button cid="${result.content[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
 		element.innerHTML = html
@@ -763,8 +755,6 @@ function xlecxOpenTag(name, page, whitch, whitchbutton, updateTabIndex) {
 			}
 		}
 		pageContent = document.getElementById(pageId)
-		pageContent.innerHTML = ''
-
 		if (updateTabIndex == true) tabs[Number(tabsContainer.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))].addHistory(`xlecxOpenTag('${name}', ${page}, ${whitch}, 0, false)`)
 	}
 
@@ -781,9 +771,8 @@ function xlecxOpenTag(name, page, whitch, whitchbutton, updateTabIndex) {
 	tabs[thisTabIndex].ir = true
 	tabs[thisTabIndex].mp = 0
 	checkBrowserTools(thisTabIndex)
-	tabArea.innerHTML = '<span class="spin spin-sm spin-primary" style="width:22px;height:22px"></span>'
-	pageContent.innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
-
+	tabArea.innerHTML = `<img class="spin" src="Image/dual-ring-primary-${wt_fps}.gif">`
+	pageContent.innerHTML = `<div class="browser-page-loading"><img class="spin" style="width:60px;height:60px" src="Image/dual-ring-primary-${wt_fps}.gif"><p>Loading...</p></div>`
 	switch (whitch) {
 		case 1:
 			xlecx.getGroup(name, {page:page, category:true}, (err, result) => {
@@ -938,8 +927,6 @@ function xlecxSearch(text, page, whitchbutton, updateTabIndex) {
 			}
 		}
 		pageContent = document.getElementById(pageId)
-		pageContent.innerHTML = ''
-
 		if (updateTabIndex == true) tabs[Number(tabsContainer.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))].addHistory(`xlecxSearch('${text}', ${page}, 0, false)`)
 	}
 
@@ -957,8 +944,8 @@ function xlecxSearch(text, page, whitchbutton, updateTabIndex) {
 	tabs[thisTabIndex].ir = true
 	tabs[thisTabIndex].mp = 0
 	checkBrowserTools(thisTabIndex)
-	tabArea.innerHTML = '<span class="spin spin-sm spin-primary" style="width:22px;height:22px"></span>'
-	pageContent.innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
+	tabArea.innerHTML = `<img class="spin" src="Image/dual-ring-primary-${wt_fps}.gif">`
+	pageContent.innerHTML = `<div class="browser-page-loading"><img class="spin" style="width:60px;height:60px" src="Image/dual-ring-primary-${wt_fps}.gif"><p>Loading...</p></div>`
 	xlecx.search(text, {page:page, category:true}, (err, result) => {
 		if (document.getElementById(pageId) == undefined) return
 		tabs[thisTabIndex].ir = false
@@ -1031,7 +1018,7 @@ function xlecxSearch(text, page, whitchbutton, updateTabIndex) {
 
 				html += `${valueStorage}<p>${result.content[i].title}</p>`
 				if (IsDownloading(result.content[i].id))
-					html += `<cid cid="${result.content[i].id}"><span class="spin spin-success"></span></cid>`
+					html += `<cid cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></span></cid>`
 				else
 					html += `<button cid="${result.content[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
 				element.innerHTML = html
@@ -1097,9 +1084,6 @@ function xlecxOpenAllTags(whitchbutton, updateTabIndex) {
 			}
 		}
 		page = document.getElementById(pageId)
-		page.innerHTML = ''
-		page.innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
-
 		if (updateTabIndex == true) tabs[Number(tabsContainer.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))].addHistory('xlecxOpenAllTags(0, false)')
 	}
 
@@ -1109,7 +1093,8 @@ function xlecxOpenAllTags(whitchbutton, updateTabIndex) {
 	tabs[thisTabIndex].ir = true
 	tabs[thisTabIndex].mp = 0
 	checkBrowserTools(thisTabIndex)
-	tabArea.innerHTML = '<span class="spin spin-sm spin-primary" style="width:22px;height:22px"></span>'
+	tabArea.innerHTML = `<img class="spin" src="Image/dual-ring-primary-${wt_fps}.gif">`
+	page.innerHTML = `<div class="browser-page-loading"><img class="spin" style="width:60px;height:60px" src="Image/dual-ring-primary-${wt_fps}.gif"><p>Loading...</p></div>`
 	xlecx.getAllTags(true, (err, result) => {
 		if (document.getElementById(pageId) == undefined) return
 		tabs[thisTabIndex].ir = false
