@@ -308,8 +308,9 @@ const update_index = async(index, id) => {
 	})
 }
 
-const fix_index = async(id) => {
+const fix_index = async(id, updateLast) => {
 	if (id == undefined) return
+	updateLast = updateLast || false
 	switch (id) {
 		case 1:
 			db.comics.find({}, (err, doc) => {
@@ -318,6 +319,10 @@ const fix_index = async(id) => {
 				if (len > 0) {
 					const neededId = doc[len - 1]._id
 					update_index(neededId, 1)
+					if (updateLast == true) lastComicId = neededId + 1
+				} else {
+					update_index(0, 1)
+					if (updateLast == true) lastComicId = 1
 				}
 			})
 			break
@@ -378,6 +383,10 @@ const fix_index = async(id) => {
 				if (len > 0) {
 					const neededId = doc[len - 1]._id
 					update_index(neededId, 11)
+					if (updateLast == true) lastHaveId = neededId + 1
+				} else {
+					update_index(0, 11)
+					if (updateLast == true) lastHaveId = 1
 				}
 			})
 			break
@@ -1821,7 +1830,7 @@ function deleteComic(id) {
 	document.getElementById('comic-action-panel').style.display='none'
 	closeComicPanel()
 
-	loading.reset(7)
+	loading.reset(8)
 	loading.show('Removing Comic From Database...')
 
 	db.comics.findOne({_id:id}, (err, doc) => {
@@ -1837,13 +1846,20 @@ function deleteComic(id) {
 
 		if (repair != null && repair.length > 0) repairImagesURLs = doc.r
 
+		const fix_removed_index = () => {
+			fix_index(1, true)
+			fix_index(11, true)
+			loading.forward()
+			loading.hide()
+			PopAlert('Comic Deleted.', 'warning')
+			reloadLoadingComics()
+		}
+
 		const remove_have = () => {
 			db.have.remove({s:site, i:post_id}, {}, err => {
 				if (err) { loading.hide(); error(err); return }
-				loading.forward()
-				loading.hide()
-				PopAlert('Comic Deleted.', 'warning')
-				reloadLoadingComics()
+				loading.forward('Fix Indexs...')
+				fix_removed_index()
 			})
 		}
 
@@ -2111,7 +2127,8 @@ function closeSetting() {
 }
 
 function test() {
-	console.log(lastGroupId, lastArtistId, lastParodyId, lastTagId)
+	// console.log(lastGroupId, lastArtistId, lastParodyId, lastTagId)
+	fix_index(1)
 }
 
 document.addEventListener("DOMContentLoaded", () => {
