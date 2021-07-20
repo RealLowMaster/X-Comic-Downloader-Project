@@ -1507,6 +1507,8 @@ function UpdateGroupList(comicId, newList) {
 			})
 		} else CreatGroupList(comicId, newList)
 		openComicGroups(comicId)
+		loading.forward()
+		loading.hide()
 		PopAlert('Comic Groups Has Been Repaired!')
 	})
 }
@@ -1563,6 +1565,8 @@ function UpdateArtistList(comicId, newList) {
 			})
 		} else CreatArtistList(comicId, newList)
 		openComicArtists(comicId)
+		loading.forward()
+		loading.hide()
 		PopAlert('Comic Artists Has Been Repaired!')
 	})
 }
@@ -1619,6 +1623,8 @@ function UpdateParodyList(comicId, newList) {
 			})
 		} else CreatParodyList(comicId, newList)
 		openComicParodies(comicId)
+		loading.forward()
+		loading.hide()
 		PopAlert('Comic Parodies Has Been Repaired!')
 	})
 }
@@ -1675,6 +1681,8 @@ function UpdateTagList(comicId, newList) {
 			})
 		} else CreatTagList(comicId, newList)
 		openComicTags(comicId)
+		loading.forward()
+		loading.hide()
 		PopAlert('Comic Tags Has Been Repaired!')
 	})
 }
@@ -2107,7 +2115,7 @@ function test() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-	loading.reset(13)
+	loading.reset(14)
 	loading.show('Geting Setting...', '#fff', '#222')
 
 	GetSettingFile()
@@ -2138,57 +2146,56 @@ document.addEventListener("DOMContentLoaded", () => {
 			remote.app.quit()
 		}
 	})
+	loading.forward('Indexing...')
+	makeDatabaseIndexs()
 	loading.forward('Comic Indexing...')
+	db.index.findOne({_id:1}, (err, doc) => {
+		if (err) { error('ComicIndexing: '+err); return }
+		if (doc == undefined) lastComicId = 1
+		else lastComicId = doc.i || null
+		if (lastComicId == null) { error('Comic Indexing Problem.'); return }
+		loading.forward('Have Indexing...')
 
-	makeDatabaseIndexs().then(() => {
-		db.index.findOne({_id:1}, (err, doc) => {
-			if (err) { error('ComicIndexing: '+err); return }
-			if (doc == undefined) lastComicId = 1
-			else lastComicId = doc.i || null
-			if (lastComicId == null) { error('Comic Indexing Problem.'); return }
-			loading.forward('Have Indexing...')
+		db.index.findOne({_id:11}, (err, haveDoc) => {
+			if (err) { error('HaveIndexing: '+err); return }
+			if (haveDoc == undefined) lastHaveId = 1
+			else lastHaveId = haveDoc.i || null
+			if (lastHaveId == null) { error('Have Indexing Problem.'); return }
+			loading.forward('Groups Indexing...')
 
-			db.index.findOne({_id:11}, (err, haveDoc) => {
-				if (err) { error('HaveIndexing: '+err); return }
-				if (haveDoc == undefined) lastHaveId = 1
-				else lastHaveId = haveDoc.i || null
-				if (lastHaveId == null) { error('Have Indexing Problem.'); return }
-				loading.forward('Groups Indexing...')
+			db.index.findOne({_id:6}, (err, groupDoc) => {
+				if (err) { error('GroupIndexing: '+err); return }
+				if (groupDoc == undefined) lastGroupId = 1
+				else lastGroupId = groupDoc.i || null
+				if (lastGroupId == null) { error('Group Indexing Problem.'); return }
+				loading.forward('Artists Indexing...')
 
-				db.index.findOne({_id:6}, (err, groupDoc) => {
-					if (err) { error('GroupIndexing: '+err); return }
-					if (groupDoc == undefined) lastGroupId = 1
-					else lastGroupId = groupDoc.i || null
-					if (lastGroupId == null) { error('Group Indexing Problem.'); return }
-					loading.forward('Artists Indexing...')
+				db.index.findOne({_id:2}, (err, artistDoc) => {
+					if (err) { error('ArtistIndexing: '+err); return }
+					if (artistDoc == undefined) lastArtistId = 1
+					else lastArtistId = artistDoc.i || null
+					if (lastArtistId == null) { error('Artist Indexing Problem.'); return }
+					loading.forward('Parodies Indexing...')
 
-					db.index.findOne({_id:2}, (err, artistDoc) => {
-						if (err) { error('ArtistIndexing: '+err); return }
-						if (artistDoc == undefined) lastArtistId = 1
-						else lastArtistId = artistDoc.i || null
-						if (lastArtistId == null) { error('Artist Indexing Problem.'); return }
-						loading.forward('Parodies Indexing...')
+					db.index.findOne({_id:8}, (err, parodyDoc) => {
+						if (err) { error('ParodyIndexing: '+err); return }
+						if (parodyDoc == undefined) lastParodyId = 1
+						else lastParodyId = parodyDoc.i || null
+						if (lastParodyId == null) { error('Parody Indexing Problem.'); return }
+						loading.forward('Tags Indexing...')
 
-						db.index.findOne({_id:8}, (err, parodyDoc) => {
-							if (err) { error('ParodyIndexing: '+err); return }
-							if (parodyDoc == undefined) lastParodyId = 1
-							else lastParodyId = parodyDoc.i || null
-							if (lastParodyId == null) { error('Parody Indexing Problem.'); return }
-							loading.forward('Tags Indexing...')
+						db.index.findOne({_id:4}, (err, tagDoc) => {
+							if (err) { error('TagIndexing: '+err); return }
+							if (tagDoc == undefined) lastTagId = 1
+							else lastTagId = tagDoc.i || null
+							if (lastTagId == null) { error('Tag Indexing Problem.'); return }
+							loading.forward('Set Settings...')
 
-							db.index.findOne({_id:4}, (err, tagDoc) => {
-								if (err) { error('TagIndexing: '+err); return }
-								if (tagDoc == undefined) lastTagId = 1
-								else lastTagId = tagDoc.i || null
-								if (lastTagId == null) { error('Tag Indexing Problem.'); return }
-								loading.forward('Set Settings...')
-
-								setLuanchTimeSettings(false)
-								loading.forward('Load Comics...')
-								loadComics()
-								loading.forward()
-								loading.hide()
-							})
+							setLuanchTimeSettings(false)
+							loading.forward('Load Comics...')
+							loadComics()
+							loading.forward()
+							loading.hide()
 						})
 					})
 				})

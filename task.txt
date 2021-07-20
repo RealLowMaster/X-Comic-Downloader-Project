@@ -72,9 +72,7 @@ Did {
 }
 
 Tasks => {
-	Fix Stoping At Indexing
 	Make Playlist Basics
-	Use Loading In Repairing
 	Add Find Artist and ... To Offline Part
 	Make Multi-Downloading Work Better
 	Add Ability That Check Post Updated Image

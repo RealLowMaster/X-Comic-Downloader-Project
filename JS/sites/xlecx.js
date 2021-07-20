@@ -1218,67 +1218,87 @@ function xlecxDownloader(id) {
 
 async function xlecxRepairComicInfoGetInfo(id, whitch) {
 	var comic_id = Number(comicPanel.getAttribute('cid'))
+	var reset = 4
+	if (whitch == 0) reset = 2
+	loading.reset(reset)
+	loading.show('Connecting To Web...')
 	await xlecx.getComic(id, {related:false}, (err, result) => {
 		if (err) { error(err); return }
 		switch (whitch) {
 			case 0:
 				db.comics.update({_id:comic_id}, { $set: {n:result.title.toLowerCase()} }, {}, (err) => {
-					if (err) { error(err); return }
+					if (err) { loading.hide();error(err); return }
+					loading.forward('Repairing Title...')
 					document.getElementById('c-p-t').textContent = result.title
+					loading.forward()
+					loading.hide()
 					PopAlert('Comic Name has been Repaired!')
 				})
 				break
 			case 1:
 				var neededResult = result.groups || null
 				if (neededResult == null) {
+					loading.hide()
 					PopAlert('This Comic has no Group.', 'danger')
 					return
 				}
+				loading.forward('Listing Groups...')
 				var groupsList = []
 				for (var i in neededResult) {
 					groupsList.push(neededResult[i].name)
 				}
+				loading.forward('Add Groups To Database...')
 				CreateGroup(groupsList, comic_id, 0, true)
 				break
 			case 2:
 				var neededResult = result.artists || null
 				if (neededResult == null) {
+					loading.hide()
 					PopAlert('This Comic has no Artist.', 'danger')
 					return
 				}
+				loading.forward('Listing Artists...')
 				var artistsList = []
 				for (var i in neededResult) {
 					artistsList.push(neededResult[i].name)
 				}
+				loading.forward('Add Artists To Database...')
 				CreateArtist(artistsList, comic_id, 0, true)
 				break
 			case 3:
 				var neededResult = result.parody || null
 				if (neededResult == null) {
+					loading.hide()
 					PopAlert('This Comic has no Parody.', 'danger')
 					return
 				}
+				loading.forward('Listing Parodies...')
 				var parodyList = []
 				for (var i in neededResult) {
 					parodyList.push(neededResult[i].name)
 				}
+				loading.forward('Add Parodies To Database...')
 				CreateParody(parodyList, comic_id, 0, true)
 				break
 			case 4:
 				var neededResult = result.tags || null
 				if (neededResult == null) {
+					loading.hide()
 					PopAlert('This Comic has no Tag.', 'danger')
 					return
 				}
+				loading.forward('Listing Tags...')
 				var tagsList = []
 				for (var i in neededResult) {
 					tagsList.push(neededResult[i].name)
 				}
+				loading.forward('Add Tags To Database...')
 				CreateTag(tagsList, comic_id, 0, true)
 				break
 			case 5:
 				var neededResult = result.images || null
 				if (neededResult == null) {
+					loading.hide()
 					PopAlert('This Comic has no Image.', 'danger')
 					return
 				}
@@ -1287,8 +1307,7 @@ async function xlecxRepairComicInfoGetInfo(id, whitch) {
 					if (doc.i == undefined) return
 					var newImageList = []
 					for (var i in doc.i) {
-						if (typeof(doc.i[i]) == 'object')
-							newImageList.push([doc.i[i][0], i])
+						if (typeof(doc.i[i]) == 'object') newImageList.push([doc.i[i][0], i])
 					}
 					if (newImageList.length == 0) {
 						PopAlert('All Images are Good, no Need To Repair.', 'danger')
