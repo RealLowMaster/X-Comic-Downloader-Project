@@ -51,6 +51,8 @@ div { display: block; }
 	grid-template-rows: 40px 11fr;
 }
 
+#main { display: none }
+
 .main > div:first-child {
 	display: block;
 	overflow: hidden;

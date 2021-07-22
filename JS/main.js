@@ -36,7 +36,7 @@ const sites = [
 		'xlecxJumpPage({index}, {page})'
 	]
 ]
-const loading = new Loading(13)
+const loading = new Loading(14)
 const comicGroupsContainer = document.getElementById('c-p-g')
 const comicArtistsContainer = document.getElementById('c-p-a')
 const comicParodyContainer = document.getElementById('c-p-p')
@@ -2127,12 +2127,10 @@ function closeSetting() {
 }
 
 function test() {
-	// console.log(lastGroupId, lastArtistId, lastParodyId, lastTagId)
-	fix_index(1)
+	console.log(lastGroupId, lastArtistId, lastParodyId, lastTagId)
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-	loading.reset(14)
 	loading.show('Geting Setting...', '#fff', '#222')
 
 	GetSettingFile()
@@ -2212,6 +2210,7 @@ document.addEventListener("DOMContentLoaded", () => {
 							loading.forward('Load Comics...')
 							loadComics()
 							loading.forward()
+							document.getElementById('main').style.display = 'grid'
 							loading.hide()
 						})
 					})

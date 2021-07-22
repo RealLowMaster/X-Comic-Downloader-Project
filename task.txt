@@ -67,11 +67,16 @@ Add Comic {
 	milftoon
 }
 
+New Version {
+	Fix Bug: Show Main Panel Before Loading Start
+}
+
 Did {
 	Make Repairing Systems Part 6++ = Next = Complete All Image Repairing
 }
 
 Tasks => {
+	Fix Bug: Line 1113 Getting Undefined
 	Make Playlist Basics
 	Add Find Artist and ... To Offline Part
 	Make Multi-Downloading Work Better
