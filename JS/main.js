@@ -1110,15 +1110,16 @@ function SetDownloaderList(index, id) {
 }
 
 function RemoveDownloaderList(index) {
-	const dl_element = document.getElementById(downloadingList[index][2])
-	downloadingList[index] = null
-	downloadCounter--
-	SetDownloadListNumbers()
-	if (dl_element != undefined) dl_element.remove()
+	if (downloadingList[index][2] != undefined) {
+		const dl_element = document.getElementById(downloadingList[index][2])
+		downloadingList[index] = null
+		if (downloadCounter != 0) downloadCounter--
+		if (dl_element != undefined) dl_element.remove()
+	}
 	if (downloadCounter == 0) {
 		downloadingList = []
 		document.getElementById('downloader').style.display = 'none'
-	}
+	} else SetDownloadListNumbers()
 }
 
 function SetDownloadListNumbers() {

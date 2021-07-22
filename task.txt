@@ -67,8 +67,9 @@ Add Comic {
 	milftoon
 }
 
-New Version {
+New Version 1.0.8 {
 	Fix Bug: Show Main Panel Before Loading Start
+	Fix Bug: DownloadingList Send Undefined Value (Downloader Not Be Able To Close)
 }
 
 Did {
@@ -76,7 +77,6 @@ Did {
 }
 
 Tasks => {
-	Fix Bug: Line 1113 Getting Undefined
 	Make Playlist Basics
 	Add Find Artist and ... To Offline Part
 	Make Multi-Downloading Work Better
