@@ -1,6 +1,5 @@
-const { remote } = require('electron')
+const { remote, shell } = require('electron')
 const fs = require('fs')
-path = require('path')
 const nedb = require('nedb')
 const ImageDownloader = require('image-downloader')
 const xlecx = new XlecxAPI()
@@ -44,6 +43,7 @@ const comicTagsContainer = document.getElementById('c-p-ts')
 const bjp = document.getElementById('browser-jump-page-container')
 const bjp_i = document.getElementById('bjp-i')
 const bjp_m_p = document.getElementById('bjp-m-p')
+const version = [1, 1, 3]
 var setting, dirDB, dirUL, tabs = [], db = {}, downloadingList = [], downloadCounter = 0, thisSite, lastComicId, lastHaveId, lastGroupId, lastArtistId, lastParodyId, lastTagId, searchTimer, needReload = true, activeTabComicId = null, activeTabIndex = null, wt_fps
 
 // Needable Functions
@@ -181,9 +181,42 @@ function GetFileLocationForInput(who) {
 	})
 }
 
+function OpenLinkInBrowser(url) { shell.openExternal(url) }
+
+function CheckUpdate() {
+	if (window.navigator.onLine) {
+		fetch('https://raw.githubusercontent.com/RealLowMaster/X-Comic-Downloader/main/version-release.html').then(response => {
+			if (!response.ok) {
+				PopAlert('HTTP error '+response.status)
+				return
+			}
+			return response.json()
+		}).then(json => {
+			let newRelease = false
+			for (let i = 0; i < version.length; i++) {
+				if (json.latest[0][i] > version[i]) {
+					newRelease = true
+					break
+				}
+			}
+
+			if (newRelease) {
+				const releaser = document.getElementById('new-release')
+				releaser.getElementsByTagName('p')[0].textContent = `New Release: v${json.latest[0][0]}.${json.latest[0][1]}.${json.latest[0][2]}`
+				releaser.getElementsByTagName('a')[0].setAttribute('onclick', `OpenLinkInBrowser('${json.latest[1]}')`)
+				releaser.getElementsByTagName('a')[1].setAttribute('onclick', `OpenLinkInBrowser('${json.latest[2]}')`)
+				releaser.style.display = 'block'
+			} else PopAlert('Your App is Up To Date.')
+
+		}).catch(err => {
+			if (err == 'TypeError: Failed to fetch') err = 'Connection Timeout, Check Internet Connection.'
+			PopAlert(err, 'danger')
+		})
+	} else PopAlert('You are Offline.', 'danger')
+}
+
 // Main Loading Stuff
-const dirRoot = path.join(__dirname).replace('\\app.asar', '')
-delete path
+const dirRoot = __dirname.replace('\\app.asar', '')
 
 function GetSettingFile() {
 	if (!fs.existsSync(dirRoot+'/setting.json')) {
@@ -2213,6 +2246,7 @@ document.addEventListener("DOMContentLoaded", () => {
 							loading.forward()
 							document.getElementById('main').style.display = 'grid'
 							loading.hide()
+							CheckUpdate()
 						})
 					})
 				})

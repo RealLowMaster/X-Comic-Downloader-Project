@@ -3,7 +3,6 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>X Comic Downloader v1.0.6</title>
 	<!-- Links -->
 	<link rel="stylesheet" type="text/css" href="CSS/action.css">
 	<link rel="stylesheet" type="text/css" href="CSS/main.css">
@@ -304,11 +303,20 @@
 			<div class="col-6 pr-5 pl-5">
 				<button onclick="saveSetting(false)" class="btn btn-primary">Save</button>
 				<button onclick="closeSetting()" class="btn btn-danger">Cancel</button>
+				<button onclick="CheckUpdate()" class="btn btn-primary">Check Update</button>
 			</div>
 			<div class="col-6 pr-5 pl-5"></div>
 		</div>
 
 		
+	</div>
+
+	<!-- New Release -->
+	<div id="new-release">
+		<button type="button" onclick="this.parentElement.style.display='none'">X</button>
+		<p>Title</p>
+		<a>Download</a>
+		<a>What's New?</a>
 	</div>
 </body>
 </html>

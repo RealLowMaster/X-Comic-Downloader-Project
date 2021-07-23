@@ -4,12 +4,10 @@ function createWindow () {
 	const win = new BrowserWindow({
 		show: false,
 		icon: __dirname+'/Image/favicon.ico',
-		width: 800,
-		height: 600,
 		minWidth: 800,
 		minHeight: 600,
 		center: true,
-		title: 'X Comic Downloader',
+		title: 'X Comic Downloader v1.1.3',
 		webPreferences: {
 			enableRemoteModule: true,
 			nodeIntegration: true,

@@ -960,27 +960,22 @@ div { display: block; }
 /* Downloader */
 .downloader {
 	display: none;
-	width: 200px;
+	width: 220px;
 	max-height: 150px;
-	padding: 10px 0;
-	background-color: #1119;
-	border: 1px solid #111a;
-	border-radius: 7px;
+	background-color: #111d;
+	border: 0 solid #1D8348;
+	border-width: 3px 0 0 3px;
 	overflow-y: auto;
 	position: fixed;
-	right: -175px;
-	bottom: 50px;
+	right: -210px;
+	bottom: 0px;
+	box-shadow: 0 0 10px 3px rgba(29,131,72,.8);
 	z-index: 99999;
 	transition: .3s;
 }
 
-.downloader:hover {
-	right: 20px;
-}
-
-.downloader-fixed {
-	right: 20px !important;
-}
+.downloader:hover,
+.downloader-fixed { right: 0 !important }
 
 .downloader::-webkit-scrollbar {
 	width: 3px;
@@ -1099,6 +1094,61 @@ div { display: block; }
 
 .child-draggable > img {
 	-webkit-user-drag: auto;
+}
+
+/* New Release */
+#new-release {
+	display: none;
+	width: 300px;
+	padding: 10px;
+	margin: 0 auto;
+	background-color: #111c;
+	color: #fff;
+	border: 1px solid #222;
+	border-radius: 3px;
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 15px;
+}
+
+#new-release > button {
+	display: flex;
+	width: 17px;
+	height: 20px;
+	background-color: #2E86C1dd;
+	color: #fff;
+	justify-content: center;
+	align-items: center;
+	position: absolute;
+	top: 3px;
+	right: 3px;
+	cursor: pointer;
+}
+
+#new-release > button:hover {
+	background-color: #E74C3C;
+}
+
+#new-release > p {
+	display: block;
+	width: 100%;
+	padding: 8px 10px;
+	color: #fff;
+	border-bottom: 1px solid #eee;
+}
+
+#new-release > a {
+	display: inline-block;
+	padding: 10px;
+	margin: 10px 0;
+	background-color: #2E86C1;
+	color: #fff;
+	font-size: 14px;
+}
+
+#new-release > a:hover {
+	background-color: #2874A6;
 }
 
 /* Xlecx */
