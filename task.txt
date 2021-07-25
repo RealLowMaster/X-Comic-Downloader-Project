@@ -72,7 +72,8 @@ Add Comic {
 	Kono Soba
 }
 
-New Version 1.1.8 {
+New Version 1.2.2 {
+	Add Copy and Duplicate and Paste Ability To Tabs
 	Make Alerts Work Better in Multi-Alerting
 	Make Tabs Work More Like Chrome
 }
@@ -86,7 +87,6 @@ Tasks => {
 	Make PopAlert Work Better
 	Make Playlist Basics
 	Add Find Artist and ... To Offline Part
-	Make Multi-Downloading Work Better
 	Add Ability That Check Post Updated Image
 	Ctrl + k | Ctrl + 0
 	Make Close Window Event Work Better For Deleting Images
@@ -95,7 +95,6 @@ Tasks => {
 	Add ReDownload Comic or A Pictur
 	Add Faver
 	Make Repair Part Work Better
-	Add Dipuclish Tab Ability
 	Add Repair All Crashed Image Button
 	Make Tabs Work Better
 	Fix net::ERR_CONNECTION_REFUSED in xlecx-api without VPN

@@ -40,11 +40,13 @@ const comicGroupsContainer = document.getElementById('c-p-g')
 const comicArtistsContainer = document.getElementById('c-p-a')
 const comicParodyContainer = document.getElementById('c-p-p')
 const comicTagsContainer = document.getElementById('c-p-ts')
+const browserTabMenu = document.getElementById('browser-tab-menu')
+const browserPasteMenu = document.getElementById('browser-paste-menu')
 const bjp = document.getElementById('browser-jump-page-container')
 const bjp_i = document.getElementById('bjp-i')
 const bjp_m_p = document.getElementById('bjp-m-p')
 const version = [1, 1, 8]
-var setting, dirDB, dirUL, tabs = [], db = {}, downloadingList = [], downloadCounter = 0, thisSite, lastComicId, lastHaveId, lastGroupId, lastArtistId, lastParodyId, lastTagId, searchTimer, needReload = true, activeTabComicId = null, activeTabIndex = null, tabsPos = [], wt_fps
+var setting, dirDB, dirUL, tabs = [], db = {}, downloadingList = [], downloadCounter = 0, thisSite, lastComicId, lastHaveId, lastGroupId, lastArtistId, lastParodyId, lastTagId, searchTimer, needReload = true, activeTabComicId = null, activeTabIndex = null, tabsPos = [], wt_fps, openedMenuTabIndex, copiedTab = null
 
 // Needable Functions
 function fileExt(str) {
@@ -1062,6 +1064,16 @@ function createNewTab(history, addFront) {
 	element.innerHTML = `<span><img class="spin" src="Image/dual-ring-primary-${wt_fps}.gif"></span> <button onclick="removeTab('${newTabId}')">X</button>`
 	element.addEventListener('dragstart',() => { element.classList.add('dragging') })
 	element.addEventListener('dragend', () => { element.classList.remove('dragging') })
+	element.addEventListener('contextmenu', e => {
+		e.preventDefault()
+		const target = e.target
+		if (target.getAttribute('draggable') == null) openedMenuTabIndex = Number(target.parentElement.getAttribute('ti'))
+		else openedMenuTabIndex = Number(target.getAttribute('ti'))
+		browserPasteMenu.style.display = 'none'
+		browserTabMenu.style.top = e.clientY+'px'
+		browserTabMenu.style.left = e.clientX+'px'
+		browserTabMenu.style.display = 'block'
+	})
 
 	tabs[tabIndex] = new Tab(newTabId, 0, '', 0, 1, 0, true)
 	tabs[tabIndex].history.push(history)
@@ -1097,6 +1109,54 @@ function createNewTab(history, addFront) {
 
 	updateTabSize()
 	return newTabId
+}
+
+function pasteTab(newTab) {
+	if (IsTabsAtLimit()) {
+		PopAlert('You Can\'t Make Any More Tab.', 'danger')
+		return
+	}
+	
+	const tabIndex = tabs.length
+	const newTabId = `${new Date().getTime()}${Math.floor(Math.random() * 9)}`
+	const page = document.createElement('div')
+	const element = document.createElement('div')
+	element.classList.add('browser-tab')
+	element.setAttribute('onclick', 'activateTab(this)')
+	element.setAttribute('pi', newTabId)
+	element.setAttribute('ti', tabIndex)
+	element.setAttribute('draggable', true)
+	element.innerHTML = `<span><img class="spin" src="Image/dual-ring-primary-${wt_fps}.gif"></span> <button onclick="removeTab('${newTabId}')">X</button>`
+	element.addEventListener('dragstart',() => { element.classList.add('dragging') })
+	element.addEventListener('dragend', () => { element.classList.remove('dragging') })
+	element.addEventListener('contextmenu', e => {
+		e.preventDefault()
+		const target = e.target
+		if (target.getAttribute('draggable') == null) openedMenuTabIndex = Number(target.parentElement.getAttribute('ti'))
+		else openedMenuTabIndex = Number(target.getAttribute('ti'))
+		browserPasteMenu.style.display = 'none'
+		browserTabMenu.style.top = e.clientY+'px'
+		browserTabMenu.style.left = e.clientX+'px'
+		browserTabMenu.style.display = 'block'
+	})
+	tabs[tabIndex] = new Tab(newTabId, 0, newTabId.s, 0, 1, 0, true)
+	tabs[tabIndex].history = newTab.history
+	tabs[tabIndex].activeHistory = newTab.activeHistory
+	page.setAttribute('class', 'browser-page')
+	page.setAttribute('id', newTabId)
+	tabsContainer.appendChild(element)
+	tabsPos.push(newTabId)
+	pageContainer.appendChild(page)
+
+	document.getElementById('browser-home-btn').style.display = 'inline-block'
+	document.getElementById('browser-prev-btn').style.display = 'inline-block'
+	document.getElementById('browser-next-btn').style.display = 'inline-block'
+	document.getElementById('browser-reload-btn').style.display = 'inline-block'
+	document.getElementById('browser-tool-search-form').style.display = 'flex'
+
+	activateTab(element)
+	tabs[activeTabIndex].reload()
+	updateTabSize()
 }
 
 function removeTab(id) {
@@ -2218,6 +2278,19 @@ document.addEventListener("DOMContentLoaded", () => {
 	loading.forward('Checking Settings...')
 	CheckSettings()
 	loading.forward('Set Window Event...')
+
+	tabsContainer.addEventListener('contextmenu', e => {
+		e.preventDefault()
+		if (copiedTab != null && browserTabMenu.style.display == 'none') {
+			browserPasteMenu.style.top = e.clientY+'px'
+			browserPasteMenu.style.right = -(e.clientX - window.innerWidth)+'px'
+			browserPasteMenu.style.display = 'block'
+		}
+	})
+	window.addEventListener('click', () => {
+		browserTabMenu.style.display = 'none'
+		browserPasteMenu.style.display = 'none'
+	})
 
 	remote.getCurrentWindow().addListener('close', e => {
 		e.preventDefault()

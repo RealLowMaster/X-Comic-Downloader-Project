@@ -515,6 +515,36 @@ div { display: block; }
 	background-color: transparent;
 }
 
+.browser-menu {
+	display: none;
+	width: 150px;
+	background-color: #333;
+	border: 0 solid #111;
+	border-width: 0 1px 0 1px;
+	position: fixed;
+	top: 0;
+	left: auto;
+	box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.6);
+}
+
+.browser-menu > button {
+	display: block;
+	width: 100%;
+	padding: 10px;
+	background-color: #333;
+	color: #fff;
+	border: 0 solid #111;
+	border-width: 1px 0 1px 0;
+	cursor: pointer;
+	transition: .2s;
+}
+
+.browser-menu > button:hover {
+	background-color: #444;
+	color: #0af;
+	border-color: #222;
+}
+
 /* Spin */
 .spin {
 	display: inline-block;
