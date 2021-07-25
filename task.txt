@@ -72,9 +72,9 @@ Add Comic {
 	Kono Soba
 }
 
-New Version 1.1.3 {
-	Fix Bug: Checking Update
-	Update Downloader UI
+New Version 1.1.8 {
+	Make Alerts Work Better in Multi-Alerting
+	Make Tabs Work More Like Chrome
 }
 
 Did {
@@ -82,6 +82,7 @@ Did {
 }
 
 Tasks => {
+	Add Updating tabsPos To removeTab()
 	Make PopAlert Work Better
 	Make Playlist Basics
 	Add Find Artist and ... To Offline Part

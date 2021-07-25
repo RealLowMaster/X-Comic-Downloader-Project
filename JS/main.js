@@ -43,8 +43,8 @@ const comicTagsContainer = document.getElementById('c-p-ts')
 const bjp = document.getElementById('browser-jump-page-container')
 const bjp_i = document.getElementById('bjp-i')
 const bjp_m_p = document.getElementById('bjp-m-p')
-const version = [1, 1, 3]
-var setting, dirDB, dirUL, tabs = [], db = {}, downloadingList = [], downloadCounter = 0, thisSite, lastComicId, lastHaveId, lastGroupId, lastArtistId, lastParodyId, lastTagId, searchTimer, needReload = true, activeTabComicId = null, activeTabIndex = null, wt_fps
+const version = [1, 1, 8]
+var setting, dirDB, dirUL, tabs = [], db = {}, downloadingList = [], downloadCounter = 0, thisSite, lastComicId, lastHaveId, lastGroupId, lastArtistId, lastParodyId, lastTagId, searchTimer, needReload = true, activeTabComicId = null, activeTabIndex = null, tabsPos = [], wt_fps
 
 // Needable Functions
 function fileExt(str) {
@@ -107,23 +107,29 @@ function getJSON(src) {
 	return obj
 }
 
+function PopAlertFrame(who) {
+	setTimeout(() => {
+		const bottom = Number(who.style.bottom.replace('px', ''))
+		who.style.bottom = (bottom+45)+'px'
+	}, 10)
+}
+
 function PopAlert(txt, style) {
 	txt = txt || null
 	if (txt == null) return
 	style = style || 'success'
-	var id = new Date().getTime()
-	var alertElement = document.createElement('div')
+	const alertElement = document.createElement('div')
 	alertElement.classList.add('pop-alert')
 	alertElement.classList.add(`pop-alert-${style}`)
 	alertElement.textContent = txt
+	alertElement.style.bottom = 0
 	document.getElementsByTagName('body')[0].appendChild(alertElement)
-	setTimeout(() => {
-		var bottom, alerts = document.getElementsByClassName('pop-alert')
-		for (var i = 0; i < alerts.length; i++) {
-			bottom = Number(alerts[i].style.bottom.replace('px', '')) || 0
-			alerts[i].style.bottom = (bottom+45)+'px'
-		}
-	}, 300)
+
+	const alerts = document.getElementsByClassName('pop-alert')
+	for (let i = 0; i < alerts.length; i++) {
+		PopAlertFrame(alerts[i])
+	}
+
 	setTimeout(() => {
 		alertElement.remove()
 	}, 4000)
@@ -310,10 +316,22 @@ tabsContainer.addEventListener('dragover', e => {
 	e.preventDefault()
 	const afterElement = getDragAfterElement(tabsContainer, e.clientX)
 	const draggable = document.querySelector('.dragging')
+	const tabPosId = draggable.getAttribute('pi')
 	if (afterElement == null) {
 		tabsContainer.append(draggable)
+		if (tabsPos[tabsPos.length - 1] != tabPosId) {
+			const tabPosIndex = tabsPos.indexOf(tabPosId)
+			tabsPos.splice(tabPosIndex, 1)
+			tabsPos.push(tabPosId)
+		}
 	} else {
 		tabsContainer.insertBefore(draggable, afterElement)
+		const afterTabIndex = tabsPos.indexOf(afterElement.getAttribute('pi'))
+		if (tabsPos[afterTabIndex - 1] != tabPosId) {
+			const tabPosIndex = tabsPos.indexOf(tabPosId)
+			tabsPos.splice(tabPosIndex, 1)
+			tabsPos.splice(afterTabIndex, 0, tabPosId)
+		}
 	}
 })
 
@@ -939,6 +957,7 @@ function closeBrowser() {
 	thisSite = null
 	activeTabIndex = null
 	activeTabComicId = null
+	tabsPos = []
 	tabs = []
 	const browser_pages = pageContainer.children
 	for (let i = 0; i < browser_pages.length; i++) {
@@ -1026,10 +1045,11 @@ function IsTabsAtLimit() {
 		return false
 }
 
-function createNewTab(history) {
+function createNewTab(history, addFront) {
 	if (IsTabsAtLimit()) return null
-
+	
 	history = history || null
+	if (addFront == undefined) addFront = true
 	const tabIndex = tabs.length
 	const newTabId = `${new Date().getTime()}${Math.floor(Math.random() * 9)}`
 	const page = document.createElement('div')
@@ -1047,7 +1067,24 @@ function createNewTab(history) {
 	tabs[tabIndex].history.push(history)
 	page.setAttribute('class', 'browser-page')
 	page.setAttribute('id', newTabId)
-	tabsContainer.appendChild(element)
+	const tabPosIndex = tabsPos.indexOf(activeTabComicId)
+	if (addFront == true && tabPosIndex < (tabsPos.length - 2)) {
+		tabsContainer.insertBefore(element, tabsContainer.querySelector(`[pi="${tabsPos[tabPosIndex + 1]}"]`))
+		let isNewTabPosAdded = false
+		const newTabsPos = []
+		for (let i = 0; i < tabsPos.length; i++) {
+			if (i < tabPosIndex + 1) newTabsPos[i] = tabsPos[i]
+			else if (isNewTabPosAdded == false) {
+				newTabsPos[i] = newTabId
+				newTabsPos[i + 1] = tabsPos[i]
+				isNewTabPosAdded = true
+			} else newTabsPos[i + 1] = tabsPos[i]
+		}
+		tabsPos = newTabsPos
+	} else {
+		tabsContainer.appendChild(element)
+		tabsPos.push(newTabId)
+	}
 	pageContainer.appendChild(page)
 
 	document.getElementById('browser-home-btn').style.display = 'inline-block'
@@ -1067,6 +1104,8 @@ function removeTab(id) {
 	tabs[Number(removingTab.getAttribute('ti'))] = null
 	const btabs = tabsContainer.children
 	const index = Array.prototype.slice.call(btabs).indexOf(removingTab)
+	const tabPosIndex = tabsPos.indexOf(id)
+	tabsPos.splice(tabPosIndex, 1)
 
 	const passImageCon = document.getElementById(id).querySelector('[img-con="true"]')
 	if (passImageCon != undefined) {
@@ -2161,7 +2200,11 @@ function closeSetting() {
 }
 
 function test() {
-	console.log(lastGroupId, lastArtistId, lastParodyId, lastTagId)
+	let counter = 1
+	for (let i = 0; i < 12; i++) {
+		PopAlert('Number: '+counter)
+		counter++
+	}
 }
 
 document.addEventListener("DOMContentLoaded", () => {

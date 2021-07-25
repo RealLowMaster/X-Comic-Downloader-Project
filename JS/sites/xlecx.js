@@ -4,7 +4,7 @@ function openXlecxBrowser() {
 	imageLoadingObserver = new IntersectionObserver(ObserverFunction, imageLazyLoadingOptions)
 	thisSite = 0
 	needReload = false
-	document.getElementById('add-new-tab').setAttribute('onclick', "createNewXlecxTab(createNewTab('xlecxChangePage(1, 0, false)'))")
+	document.getElementById('add-new-tab').setAttribute('onclick', "createNewXlecxTab(createNewTab('xlecxChangePage(1, 0, false)', false))")
 	const id = createNewTab('xlecxChangePage(1, 0, false)')
 	if (id == null) { PopAlert('You Can\'t Make Any More Tab.', 'danger'); return }
 	createNewXlecxTab(id)

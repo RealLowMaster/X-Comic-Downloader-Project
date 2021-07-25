@@ -7,7 +7,7 @@ function createWindow () {
 		minWidth: 800,
 		minHeight: 600,
 		center: true,
-		title: 'X Comic Downloader v1.1.3',
+		title: 'X Comic Downloader v1.1.8',
 		webPreferences: {
 			enableRemoteModule: true,
 			nodeIntegration: true,
