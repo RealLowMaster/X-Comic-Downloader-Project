@@ -47,7 +47,7 @@ DB => {
 		parodies = t = []
 		_id => Comic Id
 	}
-	playlist 10 => {
+	collections 10 => {
 		name = n
 		comics = c = [
 		comic_id = 0
@@ -73,7 +73,7 @@ Add Comic {
 }
 
 Added To Version 1.2.2 {
-	12
+	13
 	Fix Bug: Paste Tab do not paste search
 	Fix Bug: Changing Browser Search Value
 	Fix Bug: Closing Tab
@@ -88,7 +88,6 @@ Did {
 }
 
 Tasks => {
-	Change playlist To Collection
 	Make Collection Basics
 	Add Find Artist and ... To Offline Part
 	Add Ability That Check Post Updated Image

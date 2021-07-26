@@ -262,7 +262,7 @@ function CreateDatabase() {
 	db.comic_groups = new nedb({ filename: dirDB+'/comic_groups', autoload: true })
 	db.parodies = new nedb({ filename: dirDB+'/parodies', autoload: true })
 	db.comic_parodies = new nedb({ filename: dirDB+'/comic_parodies', autoload: true })
-	db.playlist = new nedb({ filename: dirDB+'/playlist', autoload: true })
+	db.collections = new nedb({ filename: dirDB+'/collections', autoload: true })
 	db.have = new nedb({ filename: dirDB+'/have', autoload: true })
 }
 
@@ -423,7 +423,7 @@ const fix_index = async(id, updateLast) => {
 			})
 			break
 		case 10:
-			db.playlist.find({}, (err, doc) => {
+			db.collections.find({}, (err, doc) => {
 				if (err) { error(err); return }
 				const len = doc.length
 				if (len > 0) {
@@ -476,7 +476,7 @@ async function makeDatabaseIndexs() {
 	await count_index(6)
 	// parodies
 	await count_index(8)
-	// playlist
+	// collections
 	await count_index(10)
 	// have
 	await count_index(11)
