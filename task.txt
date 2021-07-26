@@ -72,10 +72,14 @@ Add Comic {
 	Kono Soba
 }
 
-New Version 1.2.2 {
-	Add Copy and Duplicate and Paste Ability To Tabs
-	Make Alerts Work Better in Multi-Alerting
-	Make Tabs Work More Like Chrome
+Added To Version 1.2.2 {
+	10
+	Fix Bug: Paste Tab do not paste search
+	Fix Bug: Changing Browser Search Value
+	Imporve Saving Browser Searching Value
+	Make PopAlert Animation Work Better and a Little Optimize
+	Optimize Copy and Paste Tabs
+	Make Tabs System Work More Like Chrome
 }
 
 Did {
@@ -83,7 +87,8 @@ Did {
 }
 
 Tasks => {
-	Add Updating tabsPos To removeTab()
+	Make Tabs Work Better More Like Chrome
+	Optimize pasteTab() Input Values
 	Make PopAlert Work Better
 	Make Playlist Basics
 	Add Find Artist and ... To Offline Part

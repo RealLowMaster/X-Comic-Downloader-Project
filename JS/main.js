@@ -45,8 +45,8 @@ const browserPasteMenu = document.getElementById('browser-paste-menu')
 const bjp = document.getElementById('browser-jump-page-container')
 const bjp_i = document.getElementById('bjp-i')
 const bjp_m_p = document.getElementById('bjp-m-p')
-const version = [1, 1, 8]
-var setting, dirDB, dirUL, tabs = [], db = {}, downloadingList = [], downloadCounter = 0, thisSite, lastComicId, lastHaveId, lastGroupId, lastArtistId, lastParodyId, lastTagId, searchTimer, needReload = true, activeTabComicId = null, activeTabIndex = null, tabsPos = [], wt_fps, openedMenuTabIndex, copiedTab = null
+const version = [1, 2, 2]
+var setting, dirDB, dirUL, tabs = [], db = {}, downloadingList = [], downloadCounter = 0, thisSite, lastComicId, lastHaveId, lastGroupId, lastArtistId, lastParodyId, lastTagId, searchTimer, needReload = true, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = [], wt_fps, openedMenuTabIndex, copiedTab = null
 
 // Needable Functions
 function fileExt(str) {
@@ -124,7 +124,6 @@ function PopAlert(txt, style) {
 	alertElement.classList.add('pop-alert')
 	alertElement.classList.add(`pop-alert-${style}`)
 	alertElement.textContent = txt
-	alertElement.style.bottom = 0
 	document.getElementsByTagName('body')[0].appendChild(alertElement)
 
 	const alerts = document.getElementsByClassName('pop-alert')
@@ -325,6 +324,8 @@ tabsContainer.addEventListener('dragover', e => {
 			const tabPosIndex = tabsPos.indexOf(tabPosId)
 			tabsPos.splice(tabPosIndex, 1)
 			tabsPos.push(tabPosId)
+			tabsPosParent.splice(tabPosIndex, 1)
+			tabsPosParent.push(null)
 		}
 	} else {
 		tabsContainer.insertBefore(draggable, afterElement)
@@ -333,6 +334,8 @@ tabsContainer.addEventListener('dragover', e => {
 			const tabPosIndex = tabsPos.indexOf(tabPosId)
 			tabsPos.splice(tabPosIndex, 1)
 			tabsPos.splice(afterTabIndex, 0, tabPosId)
+			tabsPosParent.splice(tabPosIndex, 1)
+			tabsPosParent.splice(afterTabIndex, 0, null)
 		}
 	}
 })
@@ -960,6 +963,7 @@ function closeBrowser() {
 	activeTabIndex = null
 	activeTabComicId = null
 	tabsPos = []
+	tabsPosParent = []
 	tabs = []
 	const browser_pages = pageContainer.children
 	for (let i = 0; i < browser_pages.length; i++) {
@@ -1030,7 +1034,7 @@ function activateTab(who) {
 	document.getElementById(activeTabComicId).style.display = 'block'
 	pageContainer.scrollTop = tabs[activeTabIndex].sc
 
-	document.getElementById('browser-tool-search-input').value = who.getAttribute('s')
+	document.getElementById('browser-tool-search-input').value = tabs[activeTabIndex].s
 	if (tabs[activeTabIndex].mp != 0) {
 		bjp.style.display = 'inline-block'
 		bjp_i.value = Number(tabs[activeTabIndex].tp)
@@ -1080,22 +1084,50 @@ function createNewTab(history, addFront) {
 	page.setAttribute('class', 'browser-page')
 	page.setAttribute('id', newTabId)
 	const tabPosIndex = tabsPos.indexOf(activeTabComicId)
-	if (addFront == true && tabPosIndex < (tabsPos.length - 2)) {
-		tabsContainer.insertBefore(element, tabsContainer.querySelector(`[pi="${tabsPos[tabPosIndex + 1]}"]`))
-		let isNewTabPosAdded = false
-		const newTabsPos = []
-		for (let i = 0; i < tabsPos.length; i++) {
-			if (i < tabPosIndex + 1) newTabsPos[i] = tabsPos[i]
-			else if (isNewTabPosAdded == false) {
-				newTabsPos[i] = newTabId
-				newTabsPos[i + 1] = tabsPos[i]
-				isNewTabPosAdded = true
-			} else newTabsPos[i + 1] = tabsPos[i]
+	if (addFront) {
+		if (tabPosIndex < (tabsPos.length - 1)) {
+			let newPosIndex = tabPosIndex + 1
+			let index_counter = 1
+			while (tabsPosParent[newPosIndex] == activeTabComicId) {
+				index_counter++
+				newPosIndex = tabPosIndex + index_counter
+			}
+			tabsContainer.insertBefore(element, tabsContainer.querySelector(`[pi="${tabsPos[newPosIndex]}"]`))
+
+			if (newPosIndex != tabsPos.length) {
+				let isNewTabPosAdded = false
+				const newTabsPos = []
+				const newTabsPosParents = []
+				for (let i = 0; i < tabsPos.length; i++) {
+					if (i < newPosIndex) {
+						newTabsPos[i] = tabsPos[i]
+						newTabsPosParents[i] = tabsPosParent[i]
+					} else if (isNewTabPosAdded == false) {
+						newTabsPos[i] = newTabId
+						newTabsPosParents[i] = activeTabComicId
+						newTabsPos[i + 1] = tabsPos[i]
+						newTabsPosParents[i + 1] = tabsPosParent[i]
+						isNewTabPosAdded = true
+					} else {
+						newTabsPos[i + 1] = tabsPos[i]
+						newTabsPosParents[i + 1] = tabsPosParent[i]
+					}
+				}
+				tabsPos = newTabsPos
+				tabsPosParent = newTabsPosParents
+			} else {
+				tabsPos.push(newTabId)
+				tabsPosParent.push(activeTabComicId)
+			}
+		} else {
+			tabsContainer.appendChild(element)
+			tabsPos.push(newTabId)
+			tabsPosParent.push(activeTabComicId)
 		}
-		tabsPos = newTabsPos
 	} else {
 		tabsContainer.appendChild(element)
 		tabsPos.push(newTabId)
+		tabsPosParent.push(null)
 	}
 	pageContainer.appendChild(page)
 
@@ -1139,13 +1171,14 @@ function pasteTab(newTab) {
 		browserTabMenu.style.left = e.clientX+'px'
 		browserTabMenu.style.display = 'block'
 	})
-	tabs[tabIndex] = new Tab(newTabId, 0, newTabId.s, 0, 1, 0, true)
-	tabs[tabIndex].history = newTab.history
-	tabs[tabIndex].activeHistory = newTab.activeHistory
+	tabs[tabIndex] = new Tab(newTabId, 0, newTab[0], 0, 1, 0, true)
+	tabs[tabIndex].history = newTab[1]
+	tabs[tabIndex].activeHistory = newTab[2]
 	page.setAttribute('class', 'browser-page')
 	page.setAttribute('id', newTabId)
 	tabsContainer.appendChild(element)
 	tabsPos.push(newTabId)
+	tabsPosParent.push(null)
 	pageContainer.appendChild(page)
 
 	document.getElementById('browser-home-btn').style.display = 'inline-block'
@@ -1163,9 +1196,7 @@ function removeTab(id) {
 	const removingTab = tabsContainer.querySelector(`[pi="${id}"]`)
 	tabs[Number(removingTab.getAttribute('ti'))] = null
 	const btabs = tabsContainer.children
-	const index = Array.prototype.slice.call(btabs).indexOf(removingTab)
 	const tabPosIndex = tabsPos.indexOf(id)
-	tabsPos.splice(tabPosIndex, 1)
 
 	const passImageCon = document.getElementById(id).querySelector('[img-con="true"]')
 	if (passImageCon != undefined) {
@@ -1177,12 +1208,19 @@ function removeTab(id) {
 	}
 
 	if (activeTabComicId == id && btabs.length != 1) {
-		activeTabIndex = null
-		if (index == 0) {
-			if (1 <= btabs.length - 1) activateTab(btabs[1])
-		} else if (btabs[index + 1] != undefined) activateTab(btabs[index + 1])
-		else activateTab(btabs[index - 1])
+		if (tabPosIndex > 0) {
+			if (tabPosIndex < btabs.length - 1) {
+				if (tabsPosParent[tabPosIndex] == null) activateTab(btabs[tabPosIndex + 1])
+				else if (tabsPos[tabPosIndex - 1] == tabsPosParent[tabPosIndex]) activateTab(btabs[tabPosIndex - 1])
+				else activateTab(btabs[tabPosIndex + 1])
+			} else activateTab(btabs[tabPosIndex - 1])
+		} else {
+			if (btabs.length > 1) activateTab(btabs[tabPosIndex + 1])
+		}
 	}
+
+	tabsPos.splice(tabPosIndex, 1)
+	tabsPosParent.splice(tabPosIndex, 1)
 
 	if (btabs.length == 1) {
 		tabs = []
@@ -2260,11 +2298,8 @@ function closeSetting() {
 }
 
 function test() {
-	let counter = 1
-	for (let i = 0; i < 12; i++) {
-		PopAlert('Number: '+counter)
-		counter++
-	}
+	console.log(tabsPos)
+	console.log(tabsPosParent)
 }
 
 document.addEventListener("DOMContentLoaded", () => {
