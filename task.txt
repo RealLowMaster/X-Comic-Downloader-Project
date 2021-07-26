@@ -73,9 +73,10 @@ Add Comic {
 }
 
 Added To Version 1.2.2 {
-	10
+	12
 	Fix Bug: Paste Tab do not paste search
 	Fix Bug: Changing Browser Search Value
+	Fix Bug: Closing Tab
 	Imporve Saving Browser Searching Value
 	Make PopAlert Animation Work Better and a Little Optimize
 	Optimize Copy and Paste Tabs
