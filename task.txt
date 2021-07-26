@@ -87,10 +87,8 @@ Did {
 }
 
 Tasks => {
-	Make Tabs Work Better More Like Chrome
-	Optimize pasteTab() Input Values
-	Make PopAlert Work Better
-	Make Playlist Basics
+	Change playlist To Collection
+	Make Collection Basics
 	Add Find Artist and ... To Offline Part
 	Add Ability That Check Post Updated Image
 	Ctrl + k | Ctrl + 0

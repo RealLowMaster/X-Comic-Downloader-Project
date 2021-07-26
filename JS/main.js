@@ -1208,6 +1208,8 @@ function removeTab(id) {
 	}
 
 	if (activeTabComicId == id && btabs.length != 1) {
+		activeTabIndex = null
+		activeTabComicId = null
 		if (tabPosIndex > 0) {
 			if (tabPosIndex < btabs.length - 1) {
 				if (tabsPosParent[tabPosIndex] == null) activateTab(btabs[tabPosIndex + 1])
