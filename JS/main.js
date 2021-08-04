@@ -45,7 +45,7 @@ const browserPasteMenu = document.getElementById('browser-paste-menu')
 const bjp = document.getElementById('browser-jump-page-container')
 const bjp_i = document.getElementById('bjp-i')
 const bjp_m_p = document.getElementById('bjp-m-p')
-const version = [1, 2, 2]
+const version = [1, 3, 7]
 var setting, dirDB, dirUL, tabs = [], db = {}, downloadingList = [], downloadCounter = 0, thisSite, lastComicId, lastHaveId, lastGroupId, lastArtistId, lastParodyId, lastTagId, searchTimer, needReload = true, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = [], wt_fps, openedMenuTabIndex, copiedTab = null
 
 // Needable Functions
@@ -100,13 +100,10 @@ function inputLimit(who, max) {
 }
 
 function getJSON(src) {
-	var xmlHttp = null
-
-	xmlHttp = new XMLHttpRequest()
+	const xmlHttp = new XMLHttpRequest()
 	xmlHttp.open("GET", src, false)
 	xmlHttp.send(null)
-	var obj = JSON.parse(xmlHttp.responseText)
-	return obj
+	return JSON.parse(xmlHttp.responseText)
 }
 
 function PopAlertFrame(who) {
@@ -2300,8 +2297,15 @@ function closeSetting() {
 }
 
 function test() {
-	console.log(tabsPos)
-	console.log(tabsPosParent)
+	loading.reset(20)
+	loading.show()
+	let counter = 300
+	for (let i = 0; i < 20; i++) {
+		counter += 300
+		setTimeout(() => {
+			loading.forward()
+		}, counter)
+	}
 }
 
 document.addEventListener("DOMContentLoaded", () => {

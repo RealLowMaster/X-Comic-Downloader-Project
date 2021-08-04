@@ -64,23 +64,15 @@ DB => {
 
 Add Comic {
 	League Of Legends
-	Stranded Desires
-	Childhood Destruction - Big Red Riding Hood And The Little Wolf
-	Family Secret Comic
-	Romulo Mancin
+	Sahara Wataru
+	Butcha
 	Re:zero
 	Kono Soba
 }
 
-Added To Version 1.2.2 {
-	13
-	Fix Bug: Paste Tab do not paste search
-	Fix Bug: Changing Browser Search Value
-	Fix Bug: Closing Tab
-	Imporve Saving Browser Searching Value
-	Make PopAlert Animation Work Better and a Little Optimize
-	Optimize Copy and Paste Tabs
-	Make Tabs System Work More Like Chrome
+Added To Version {
+	3
+	Optimize Widget Transitions
 }
 
 Did {
@@ -88,8 +80,9 @@ Did {
 }
 
 Tasks => {
-	Make Collection Basics
+	Fix Bug: Comic -> 22589-sinesian-collection-of-kobayashi-san-chi-no-maid-dragon.html
 	Add Find Artist and ... To Offline Part
+	Make Collection Basics
 	Add Ability That Check Post Updated Image
 	Ctrl + k | Ctrl + 0
 	Make Close Window Event Work Better For Deleting Images
@@ -99,7 +92,6 @@ Tasks => {
 	Add Faver
 	Make Repair Part Work Better
 	Add Repair All Crashed Image Button
-	Make Tabs Work Better
 	Fix net::ERR_CONNECTION_REFUSED in xlecx-api without VPN
 	Create NHentai API
 }

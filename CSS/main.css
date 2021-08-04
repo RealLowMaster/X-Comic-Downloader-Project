@@ -104,7 +104,7 @@ div { display: block; }
 	width: 0;
 	height: 100%;
 	background-color: #3498DB;
-	transition: .2s;
+	transition: width .2s;
 }
 
 .top-menu {
@@ -134,7 +134,7 @@ div { display: block; }
 	background-color: #fff;
 	border: 1px solid #eee;
 	cursor: pointer;
-	transition: .2s;
+	transition: background-color .2s, border-color .2s;
 }
 
 .top-menu > div > button:hover {
@@ -181,7 +181,7 @@ div { display: block; }
 	top: 0;
 	left: -430px;
 	overflow-y: auto;
-	transition: 0.6s;
+	transition: left 0.6s;
 }
 
 .action-menu-darkmode > div:last-child {
@@ -213,8 +213,8 @@ div { display: block; }
 	border-width: 0 0 1px 0;
 	direction: ltr;
 	font-size: 1.1rem;
-	transition: 0.2s;
 	cursor: pointer;
+	transition: background-color .2s, border-width .2s, transform .2s;
 }
 
 .action-menu > div:last-child > button:hover {
@@ -260,7 +260,7 @@ div { display: block; }
 	top: 2px;
 	right: 10px;
 	cursor: pointer;
-	transition: .2s;
+	transition: transform .2s, background-color .2s, box-shadow .2s;
 }
 
 .borwser-add-tab-btn > svg {
@@ -296,7 +296,6 @@ div { display: block; }
 	border-radius: 10px 10px 0 0;
 	font-size: 0.9rem;
 	cursor: pointer;
-	transition: 0.2s;
 }
 
 .browser-tab:hover,
@@ -337,7 +336,6 @@ div { display: block; }
 	top: 4px;
 	right: 6px;
 	z-index: +1;
-	transition: color 0.2s;
 }
 
 .browser-tab:hover > button {
@@ -381,7 +379,7 @@ div { display: block; }
 	border: 1px solid #ddd;
 	border-radius: 50%;
 	cursor: pointer;
-	transition: .2s;
+	transition: background-color .2s, border-color .2s, transform .2s;
 }
 
 .browser-tools-container > div:first-child > button > svg {
@@ -413,7 +411,7 @@ div { display: block; }
 	top: 0;
 	right: 0;
 	cursor: pointer;
-	transition: .2s;
+	transition: transform .2s, width .2s, background-color .2s, color .2s, border-radius .2s, right .2s;
 }
 
 .browser-tool-close-browser > svg {
@@ -463,7 +461,7 @@ div { display: block; }
 	color: #222;
 	border: 1px solid #eee;
 	border-radius: 10px 0 0 10px;
-	transition: .2s;
+	transition: border-color .2s;
 }
 
 .browser-tool-search-form > button {
@@ -475,7 +473,7 @@ div { display: block; }
 	border: 1px solid #ddd;
 	border-radius: 0 10px 10px 0;
 	cursor: pointer;
-	transition: .2s;
+	transition: background-color .2s, color .2s;
 }
 
 .browser-tool-search-form > button > svg {
@@ -536,7 +534,7 @@ div { display: block; }
 	border: 0 solid #111;
 	border-width: 1px 0 1px 0;
 	cursor: pointer;
-	transition: .2s;
+	transition: background-color .2s, color .2s, border-color .2s;
 }
 
 .browser-menu > button:hover {
@@ -609,7 +607,7 @@ div { display: block; }
 	background-color: #111;
 	position: relative;
 	cursor: pointer;
-	transition: .2s;
+	transition: background-color .2s;
 }
 
 .main-body-darkmode > #comic-container > .comic { background-color: #333 }
@@ -692,7 +690,7 @@ div { display: block; }
 	top: 10px;
 	right: 15px;
 	cursor: pointer;
-	transition: .2s;
+	transition: background-color .2s, color .2s, border-color .2s;
 }
 
 .comic-panel-repair-info-btn > svg {
@@ -885,7 +883,7 @@ div { display: block; }
 	border-bottom: 1px solid #eee;
 	cursor: pointer;
 	box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1);
-	transition: .2s;
+	transition: background-color .2s, color .2s;
 }
 
 .comic-action-panel > div:last-child > button:hover {
@@ -930,7 +928,10 @@ div { display: block; }
 	font-size: 15px;
 	text-align: center;
 	cursor: pointer;
-	transition: .2s;
+}
+
+.pagination-rounded > div > button:not(:disabled) {
+	transition: transform .2s, background-color .2s, color .2s, border-color .2s;
 }
 
 .pagination-rounded > div > button:not(:disabled):hover {
@@ -1001,7 +1002,7 @@ div { display: block; }
 	bottom: 0px;
 	box-shadow: 0 0 10px 3px rgba(29,131,72,.8);
 	z-index: 99999;
-	transition: .3s;
+	transition: right .3s;
 }
 
 .downloader:hover,
@@ -1055,7 +1056,7 @@ div { display: block; }
 	max-width: 100%;
 	height: 100%;
 	background-color: #025bd7;
-	transition: .2s;
+	transition: width .2s;
 }
 
 .downloader > div > button {
@@ -1069,7 +1070,7 @@ div { display: block; }
 	bottom: 8px;
 	right: 4px;
 	cursor: pointer;
-	transition: .2s;
+	transition: background-color .2s;
 }
 
 .downloader > div > button:hover {
@@ -1090,7 +1091,7 @@ div { display: block; }
 	bottom: -42px;
 	left: 10px;
 	box-shadow: 0 5px 10px rgba(0,0,0,0.3);
-	transition: .3s;
+	transition: bottom .3s;
 }
 
 .pop-alert-primary {
@@ -1304,7 +1305,7 @@ div { display: block; }
 
 .xlecx-container-one-row > div > .browser-comic-have > .remove-from-have {
 	cursor: pointer;
-	transition: .2s;
+	transition: background-color .2s;
 }
 
 .xlecx-container-one-row > div > .browser-comic-have > .remove-from-have:hover {
@@ -1314,7 +1315,7 @@ div { display: block; }
 .xlecx-container-one-row > div > .browser-comic-have > button:not(.remove-from-have):first-child {
 	background-color: #222a;
 	cursor: pointer;
-	transition: .2s;
+	transition: background-color .2s, color .2s, box-shadow .2s;
 }
 
 .xlecx-container-one-row > div > .browser-comic-have > button:not(.remove-from-have):first-child:hover {
@@ -1329,7 +1330,7 @@ div { display: block; }
 	color: #222;
 	border-radius: 0 7px 7px 0 !important;
 	cursor: pointer;
-	transition: .2s;
+	transition: background-color .2s, color .2s, box-shadow .2s;
 }
 
 .xlecx-container-one-row > div > .browser-comic-have > .add-to-have:hover {
@@ -1397,7 +1398,7 @@ div { display: block; }
 	overflow: hidden;
 	position: relative;
 	cursor: pointer;
-	transition: .2s;
+	transition: background-color .2s;
 }
 
 .xlecx-post-container > div > img {
@@ -1449,7 +1450,7 @@ div { display: block; }
 	left: -60px;
 	cursor: pointer;
 	z-index: +100;
-	transition: .2s;
+	transition: left .2s, background-color .2s, color .2s;
 }
 
 .xlecx-post-container > div > button:hover {
@@ -1561,11 +1562,11 @@ div { display: block; }
 	padding: 10px;
 	margin: 15px 4px 4px 2px;
 	background-color: #d22;
+	color: #fff;
 	border: 1px solid #b22;
 	border-radius: 3px;
-	transition: 0.2s;
-	color: #fff;
 	cursor: pointer;
+	transition: background-color .2s, border-color .2s;
 }
 
 .error > div:last-child > button:hover {
@@ -1579,10 +1580,10 @@ div { display: block; }
 	padding: 10px;
 	margin: 2px 4px;
 	background-color: transparent;
-	border: 1px solid transparent;
-	transition: 0.2s;
 	color: #222;
+	border: 1px solid transparent;
 	cursor: pointer;
+	transition: background-color .2s, border-color .2s, color .2s;
 }
 
 .btn-primary {
@@ -1660,7 +1661,7 @@ div { display: block; }
 	border: 1px solid #eee;
 	border-radius: 3px;
 	font-size: 14px;
-	transition: .2s;
+	transition: border-color .2s;
 }
 
 .input-row-selector {
@@ -1696,7 +1697,7 @@ div { display: block; }
 	border-width: 0;
 	border-radius: 0;
 	cursor: pointer;
-	transition: .2s;
+	transition: background-color .2s;
 }
 
 .input-row-selector-overflow > p:not([active]):hover {
@@ -1722,7 +1723,7 @@ div { display: block; }
 	right: 0;
 	pointer-events: none;
 	z-index: 5;
-	transition: .2s;
+	transition: background-color .2s;
 }
 
 .input-row-selector > span::before,
@@ -1733,7 +1734,7 @@ div { display: block; }
 	position: absolute;
 	left: 50%;
 	transform: translate(-50%, -50%);
-	transition: .2s;
+	transition: border-bottom .2s, border-top .2s;
 
 	--color: #222;
 	--size: 6px;
@@ -1807,7 +1808,7 @@ div { display: block; }
 				inset 2px 2px 5px rgba(80,80,80,.5);
 	appearance: none;
 	cursor: pointer;
-	transition: .5s;
+	transition: background-color .5s;
 }
 
 .input-row-checkbox > div > input[type="checkbox"]:checked {
@@ -1825,7 +1826,7 @@ div { display: block; }
 	left: 0;
 	box-shadow: 0 0 0 1px #232323;
 	transform: scale(.9, .87);
-	transition: .5s;
+	transition: left .5s;
 }
 
 .input-row-checkbox > div > input[type="checkbox"]:checked::before {
@@ -1841,7 +1842,7 @@ div { display: block; }
 	position: absolute;
 	top: calc(50% - 6.5px);
 	left: 5px;
-	transition: .5s;
+	transition: left .5s, background-color .5s, box-shadow .5s;
 }
 
 .input-row-checkbox > div > input[type="checkbox"]:checked::after {
@@ -1861,9 +1862,9 @@ div { display: block; }
 	padding: 4px;
 	color: #fff;
 	background-color: #3498DB;
-	border-radius: 15px;
+	border-radius: 14px;
 	cursor: pointer;
-	transition: .2s;
+	transition: background-color .2s;
 }
 
 .input-row-file > div > button:hover {
@@ -1894,7 +1895,10 @@ div { display: block; }
 	border-radius: 7px;
 	box-shadow: 0 0 10px 0 rgba(150,150,150,.2);
 	cursor: pointer;
-	transition: .2s;
+}
+
+.column-selector > div:first-child > button:not([active]) {
+	transition: background-color .2s, box-shadow .2s;
 }
 
 .column-selector > div:first-child > button:not([active]):hover {
