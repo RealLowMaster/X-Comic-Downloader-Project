@@ -71,7 +71,7 @@ Add Comic {
 }
 
 Added To Version {
-	3
+	4
 	Optimize Widget Transitions
 }
 
@@ -80,6 +80,7 @@ Did {
 }
 
 Tasks => {
+	Add Slider
 	Fix Bug: Comic -> 22589-sinesian-collection-of-kobayashi-san-chi-no-maid-dragon.html
 	Add Find Artist and ... To Offline Part
 	Make Collection Basics

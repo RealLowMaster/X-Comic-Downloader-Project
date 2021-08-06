@@ -36,6 +36,8 @@ const sites = [
 	]
 ]
 const loading = new Loading(14)
+const db = {}
+const version = [1, 3, 7]
 const comicGroupsContainer = document.getElementById('c-p-g')
 const comicArtistsContainer = document.getElementById('c-p-a')
 const comicParodyContainer = document.getElementById('c-p-p')
@@ -45,13 +47,11 @@ const browserPasteMenu = document.getElementById('browser-paste-menu')
 const bjp = document.getElementById('browser-jump-page-container')
 const bjp_i = document.getElementById('bjp-i')
 const bjp_m_p = document.getElementById('bjp-m-p')
-const version = [1, 3, 7]
-var setting, dirDB, dirUL, tabs = [], db = {}, downloadingList = [], downloadCounter = 0, thisSite, lastComicId, lastHaveId, lastGroupId, lastArtistId, lastParodyId, lastTagId, searchTimer, needReload = true, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = [], wt_fps, openedMenuTabIndex, copiedTab = null
+var setting, dirDB, dirUL, tabs = [], downloadingList = [], downloadCounter = 0, thisSite, lastComicId, lastHaveId, lastGroupId, lastArtistId, lastParodyId, lastTagId, searchTimer, needReload = true, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = [], wt_fps, openedMenuTabIndex, copiedTab = null
 
 // Needable Functions
 function fileExt(str) {
-	var base = new String(str).substring(str.lastIndexOf('.') + 1)
-	return base
+	return new String(str).substring(str.lastIndexOf('.') + 1)
 }
 
 function lastSlash(str, backSlasg) {
@@ -106,6 +106,10 @@ function getJSON(src) {
 	return JSON.parse(xmlHttp.responseText)
 }
 
+function MakeJsonString(json) {
+	return JSON.stringify(json).replace(/,/g, ',\n\t').replace(/{/g, '{\n\t').replace(/}/g, '\n}').replace(/":/g, '": ')
+}
+
 function PopAlertFrame(who) {
 	setTimeout(() => {
 		const bottom = Number(who.style.bottom.replace('px', ''))
@@ -131,10 +135,6 @@ function PopAlert(txt, style) {
 	setTimeout(() => {
 		alertElement.remove()
 	}, 4000)
-}
-
-function MakeJsonString(json) {
-	return JSON.stringify(json).replace(/,/g, ',\n\t').replace(/{/g, '{\n\t').replace(/}/g, '\n}').replace(/":/g, '": ')
 }
 
 function ChooseDirectory(title, callback) {
@@ -226,9 +226,7 @@ function GetSettingFile() {
 	if (!fs.existsSync(dirRoot+'/setting.json')) {
 		setting = defaultSetting
 		fs.writeFileSync(dirRoot+'/setting.json', MakeJsonString(setting), {encoding:"utf8"})
-	} else {
-		setting = getJSON(dirRoot+'/setting.json')
-	}	
+	} else setting = getJSON(dirRoot+'/setting.json')
 }
 
 function GetDirection() {
@@ -947,6 +945,15 @@ async function repairComicInfo(whitch) {
 		if (doc.s == undefined) return
 		eval(sites[doc.s][1].replace('{id}', `'${doc.p}'`).replace('{whitch}', whitch))
 	})
+}
+
+// Comic Slider
+function openComicSlider(index) {
+	document.getElementById('comic-slider').style.display = 'block'
+}
+
+function closeComicSlider() {
+	document.getElementById('comic-slider').style.display = 'none'
 }
 
 // Browser
@@ -2296,16 +2303,8 @@ function closeSetting() {
 	setLuanchTimeSettings(true)
 }
 
-function test() {
-	loading.reset(20)
-	loading.show()
-	let counter = 300
-	for (let i = 0; i < 20; i++) {
-		counter += 300
-		setTimeout(() => {
-			loading.forward()
-		}, counter)
-	}
+function test(err) {
+	console.log('testing....')
 }
 
 document.addEventListener("DOMContentLoaded", () => {

@@ -3,7 +3,7 @@ function error(txt, onclick, t1) {
 	if (t1 != null) err = err.replace(/{var1}/gi, t1)
 	err = err.replace(/\n/gi, '<br>')
 	var element = document.createElement('div')
-	element.classList.add('error')
+	element.classList.add('action-error')
 
 	var html = `<div></div><div><p>${err}</p>`
 	if (onclick == null) {
@@ -21,7 +21,7 @@ function errorSelector(txt, t1, bgClose, buttons) {
 	if (t1 != null && err != null) err = err.replace(/{var1}/gi, t1)
 	if (err != null) err = err.replace(/\n/gi, '<br>')
 	const element = document.createElement('div')
-	element.classList.add('error')
+	element.classList.add('action-error')
 
 	bgClose = bgClose || false
 	var bgCloseValue = ''

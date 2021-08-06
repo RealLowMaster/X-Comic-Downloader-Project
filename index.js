@@ -2,7 +2,6 @@ const { app, BrowserWindow } = require('electron')
 
 function createWindow () {
 	const win = new BrowserWindow({
-		show: false,
 		icon: __dirname+'/Image/favicon.ico',
 		minWidth: 800,
 		minHeight: 600,
@@ -23,10 +22,6 @@ function createWindow () {
 	})
 
 	win.loadFile('index.html')
-
-	win.once('ready-to-show', () => {
-		win.show()
-	})
 }
 
 app.setAppUserModelId("X Comic Downloader")
