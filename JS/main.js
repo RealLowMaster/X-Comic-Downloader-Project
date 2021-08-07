@@ -948,6 +948,28 @@ async function repairComicInfo(whitch) {
 }
 
 // Comic Slider
+function toggleComicSliderOverview() {
+	const comic_slider = document.getElementById('comic-slider')
+	if (comic_slider.style.gridTemplateRows == '210px 11fr') comic_slider.style.gridTemplateRows = '0 12fr'
+	else comic_slider.style.gridTemplateRows = '210px 11fr'
+}
+
+function toggleComicSliderSize() {
+
+}
+
+function toggleComicSliderScreen() {
+
+}
+
+function comicSliderPrev() {
+
+}
+
+function comicSliderNext() {
+
+}
+
 function openComicSlider(index) {
 	document.getElementById('comic-slider').style.display = 'block'
 }

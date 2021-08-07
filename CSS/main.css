@@ -919,18 +919,99 @@ div { display: block; }
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	transition: height .2s;
 }
 
 .slider > div:first-child {
 	background-color: #000;
+	overflow-y: visible;
+	position: relative;
+}
+
+.slider > div:first-child > div {
+	display: block;
+	width: 100%;
 	overflow-y: hidden;
 	overflow-x: auto;
+	cursor: grab;
+}
+
+.slider-overview > div > div {
+	display: inline-block;
+	padding: 7px 7px 0 7px;
+	margin: 0 4px;
+	width: 130px;
+	height: 190px;
+	background-color: #333;
+	cursor: pointer;
+}
+
+.slider-overview > div > div > img {
+	width: 100%;
+	height: 150px;
+	object-fit: cover;
+	object-position: center;
+}
+
+.slider-overview > div > div > p {
+	display: block;
+	width: 100%;
+	margin-top: 5px;
+	background-color: #444;
+	color: #fff;
+	text-align: center;
+}
+
+.slider > div:first-child > button {
+	padding: 5px 10px;
+	margin: 0 auto;
+	background-color: #fff;
+	border-radius: 0 0 10px 10px;
+	position: absolute;
+	bottom: -25px;
+	z-index: +1;
+	cursor: pointer;
+	transition: background-color .2s;
+}
+
+.slider > div:first-child > button::before,
+.slider > div:first-child > button::after {
+	--color: #fff;
+
+    content: "";
+    position: absolute;
+    height: 7px;
+    width: 20px;
+    bottom: 0;
+	transition: box-shadow .2s;
+}
+
+.slider > div:first-child > button::after {
+	top: 0;
+    right: -20px;
+    border-radius: 7px 0 0 0;
+    box-shadow: -7px 0 0 0 var(--color);
+}
+
+.slider > div:first-child > button::before {
+	top: 0;
+    left: -20px;
+    border-radius: 0 7px 0 0;
+    box-shadow: 7px 0 0 0 var(--color);
+}
+
+.slider > div:first-child > button:hover {
+	background-color: #eee;
+}
+
+.slider > div:first-child > button:hover::before,
+.slider > div:first-child > button:hover::after {
+	--color: #eee;
 }
 
 .slider > div:last-child {
 	background-color: #000000e0;
 	overflow: auto;
+	position: relative;
 }
 
 .slider > div:last-child > .slider-bg {
@@ -939,13 +1020,25 @@ div { display: block; }
 	position: absolute;
 	top: 0;
 	left: 0;
+	z-index: 0;
 }
 
-.slider > div:last-child > button { position: absolute }
+.slider > div:last-child > img {
+	display: block;
+	max-width: calc(100% - 110px);
+	max-height: calc(100% - 80px);
+	object-position: center;
+}
 
-.slider > div:last-child > .slider-gallery {
-	top: 10px;
-	left: 10px;
+.slider > div:last-child > button {
+	display: flex;
+	padding: 6px;
+	width: 30px;
+	height: 30px;
+	border-radius: 50%;
+	justify-content: center;
+	align-items: center;
+	position: absolute;
 }
 
 .slider > div:last-child > .slider-prev {
