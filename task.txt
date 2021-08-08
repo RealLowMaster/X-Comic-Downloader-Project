@@ -80,7 +80,10 @@ Did {
 }
 
 Tasks => {
-	Add Slider
+	Add Grapping Ability To Slider Overview
+	Add FullScreen Mode To Slider
+	Add Orginal Size To Slider
+	Add Ability To Zoom in Image in Sldier
 	Fix Bug: Comic -> 22589-sinesian-collection-of-kobayashi-san-chi-no-maid-dragon.html
 	Add Find Artist and ... To Offline Part
 	Make Collection Basics

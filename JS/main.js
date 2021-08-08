@@ -38,6 +38,7 @@ const sites = [
 const loading = new Loading(14)
 const db = {}
 const version = [1, 3, 7]
+const comicSlider = document.getElementById('comic-slider')
 const comicGroupsContainer = document.getElementById('c-p-g')
 const comicArtistsContainer = document.getElementById('c-p-a')
 const comicParodyContainer = document.getElementById('c-p-p')
@@ -217,6 +218,12 @@ function CheckUpdate() {
 			PopAlert(err, 'danger')
 		})
 	} else PopAlert('You are Offline.', 'danger')
+}
+
+function ChangeSizes() {
+	const size = window.innerWidth
+	comicSlider.style.width = size+'px'
+	document.getElementById('c-s-o').style.width = size+'px'
 }
 
 // Main Loading Stuff
@@ -759,9 +766,9 @@ function openComicTags(comicId) {
 function openComic(id) {
 	id = id || null
 	if (id == null) { error('Id Can\'t be Null.'); return }
-	var title_container = document.getElementById('c-p-t')
-	
-	var image_container = document.getElementById('c-p-i')
+	const title_container = document.getElementById('c-p-t')
+	const overview_parent = document.getElementById('c-s-o')
+	const image_container = document.getElementById('c-p-i')
 	var name, image, ImagesCount, formats, formatIndex = 0, html = ''
 
 	comicGroupsContainer.innerHTML = ''
@@ -771,6 +778,7 @@ function openComic(id) {
 
 	title_container.textContent = ''
 	image_container.innerHTML = ''
+	overview_parent.setAttribute('aindex', '')
 
 	const findComic = async() => {
 		await db.comics.findOne({_id:Number(id)}, (err, doc) => {
@@ -785,37 +793,50 @@ function openComic(id) {
 
 			title_container.textContent = name
 
-			var lastIndex = formats[0][1]
-			var thisForamat = formats[0][2]
-			var repair = doc.m || null
+			let lastIndex = formats[0][1]
+			let thisForamat = formats[0][2]
+			let repair = doc.m || null
+			let src = ''
+			let slider_overview_html = ''
 			if (repair == null || repair.length == 0) {
-				for (var i = 0; i < ImagesCount; i++) {
-					if (i <= lastIndex)
-						html += `<img data-src="${dirUL}/${image}-${i}.${thisForamat}">`
-					else {
+				for (let i = 0; i < ImagesCount; i++) {
+					if (i <= lastIndex) {
+						src = `${dirUL}/${image}-${i}.${thisForamat}`
+						html += `<img data-src="${src}" onclick="openComicSlider(${i})">`
+						slider_overview_html += `<div i="${i}" onclick="changeSliderIndex(${i})"><img src="${src}" loading="lazy"><p>${i+1}</p></div>`
+					} else {
 						formatIndex++
 						lastIndex = formats[formatIndex][1]
 						thisForamat = formats[formatIndex][2]
-						html += `<img data-src="${dirUL}/${image}-${i}.${thisForamat}">`
+						src = `${dirUL}/${image}-${i}.${thisForamat}`
+						html += `<img data-src="${src}" onclick="openComicSlider(${i})">`
+						slider_overview_html += `<div i="${i}" onclick="changeSliderIndex(${i})"><img src="${src}" loading="lazy"><p>${i+1}</p></div>`
 					}
 				}
 			} else {
-				for (var i = 0; i < ImagesCount; i++) {
+				for (let i = 0; i < ImagesCount; i++) {
 					if (repair.indexOf(i) > -1) {
 						html += `<div class="repair-image" id="${i}"><p>Image hasn't Been Download Currectly.</p><button onclick="repairImage(${i}, ${repair.indexOf(i)}, ${image})">Repair</button></div>`
+						slider_overview_html += `<div i="${i}" onclick="changeSliderIndex(${i})"><img src="Image/no-img-300x300.png" loading="lazy"><p>${i+1}</p></div>`
 					} else {
-						if (i <= lastIndex)
-							html += `<img data-src="${dirUL}/${image}-${i}.${thisForamat}">`
-						else {
+						if (i <= lastIndex) {
+							src = `${dirUL}/${image}-${i}.${thisForamat}`
+							html += `<img data-src="${src}" onclick="openComicSlider(${i})">`
+							slider_overview_html += `<div i="${i}" onclick="changeSliderIndex(${i})"><img src="${src}" loading="lazy"><p>${i+1}</p></div>`
+						} else {
 							formatIndex++
 							lastIndex = formats[formatIndex][1]
 							thisForamat = formats[formatIndex][2]
-							html += `<img data-src="${dirUL}/${image}-${i}.${thisForamat}">`
+							src = `${dirUL}/${image}-${i}.${thisForamat}`
+							html += `<img data-src="${src}" onclick="openComicSlider(${i})">`
+							slider_overview_html += `<div i="${i}" onclick="changeSliderIndex(${i})"><img src="${src}" loading="lazy"><p>${i+1}</p></div>`
 						}
 					}
 				}
 			}
 			image_container.innerHTML = html
+			overview_parent.innerHTML = slider_overview_html
+			overview_parent.setAttribute('count', ImagesCount - 1)
 
 			const LoadingImages = image_container.getElementsByTagName('img')
 
@@ -837,9 +858,6 @@ function openComic(id) {
 }
 
 function closeComicPanel() {
-	var title_container = document.getElementById('c-p-t')
-	var image_container = document.getElementById('c-p-i')
-
 	comicPanel.style.display = 'none'
 
 	comicGroupsContainer.innerHTML = ''
@@ -847,8 +865,9 @@ function closeComicPanel() {
 	comicParodyContainer.innerHTML = ''
 	comicTagsContainer.innerHTML = ''
 
-	title_container.textContent = ''
-	image_container.innerHTML = ''
+	document.getElementById('c-p-t').textContent = ''
+	document.getElementById('c-p-i').innerHTML = ''
+	document.getElementById('c-s-o').innerHTML = ''
 
 	comicPanel.setAttribute('cid', null)
 	comicPanel.setAttribute('sid', null)
@@ -949,33 +968,55 @@ async function repairComicInfo(whitch) {
 
 // Comic Slider
 function toggleComicSliderOverview() {
-	const comic_slider = document.getElementById('comic-slider')
-	if (comic_slider.style.gridTemplateRows == '210px 11fr') comic_slider.style.gridTemplateRows = '0 12fr'
-	else comic_slider.style.gridTemplateRows = '210px 11fr'
+	if (comicSlider.hasAttribute('opened-overview')) comicSlider.removeAttribute('opened-overview')
+	else comicSlider.setAttribute('opened-overview', true)
 }
 
 function toggleComicSliderSize() {
-
+	
 }
 
 function toggleComicSliderScreen() {
 
 }
 
-function comicSliderPrev() {
+function changeSliderIndex(index) {
+	const overview_parent = document.getElementById('c-s-o')
+	const prev = document.getElementById('c-s-p')
+	const next = document.getElementById('c-s-n')
+	const count = Number(overview_parent.getAttribute('count'))
+	const passIndex = overview_parent.getAttribute('aindex') || null
+	if (passIndex != null) {
+		overview_parent.querySelector(`[i="${passIndex}"]`).removeAttribute('active')
+	}
+	overview_parent.setAttribute('aindex', index)
+	const overview = overview_parent.querySelector(`[i="${index}"]`)
+	overview.setAttribute('active', true)
+	const img = overview.getElementsByTagName('img')[0].getAttribute('src')
+	document.getElementById('c-s-i').setAttribute('src', img)
 
-}
+	if (index == 0) prev.setAttribute('disabled', true)
+	else {
+		prev.removeAttribute('disabled')
+		prev.setAttribute('onclick', `changeSliderIndex(${index-1})`)
+	}
 
-function comicSliderNext() {
-
+	if (index == count) next.setAttribute('disabled', true)
+	else {
+		next.removeAttribute('disabled')
+		next.setAttribute('onclick', `changeSliderIndex(${index+1})`)
+	}
 }
 
 function openComicSlider(index) {
-	document.getElementById('comic-slider').style.display = 'block'
+	changeSliderIndex(index)
+	comicSlider.style.display = 'grid'
 }
 
 function closeComicSlider() {
-	document.getElementById('comic-slider').style.display = 'none'
+	comicSlider.style.display = 'none'
+	document.getElementById('c-s-i').setAttribute('src', '')
+	comicSlider.removeAttribute('opened-overview')
 }
 
 // Browser
@@ -1024,7 +1065,7 @@ function updateTabSize() {
 	}
 }
 
-window.onresize = () => { updateTabSize() }
+window.onresize = () => { updateTabSize(); ChangeSizes() }
 
 function checkBrowserTools(tabIndex) {
 	if (activeTabIndex == tabIndex) {
@@ -2331,6 +2372,8 @@ function test(err) {
 
 document.addEventListener("DOMContentLoaded", () => {
 	loading.show('Geting Setting...', '#fff', '#222')
+
+	ChangeSizes()
 
 	GetSettingFile()
 	loading.forward('Getting Directories...')

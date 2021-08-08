@@ -5,6 +5,7 @@
 
 ::-webkit-scrollbar {
 	width: 8px;
+	height: 8px;
 }
 
 ::-webkit-scrollbar-button {
@@ -764,6 +765,7 @@ div { display: block; }
 	margin: 15px auto;
 	object-fit: cover;
 	object-position: center;
+	cursor: zoom-in;
 }
 
 .repair-image {
@@ -905,44 +907,53 @@ div { display: block; }
 
 /* Comic Slider */
 .slider {
-	display: grid;
+	display: none;
 	grid-template-rows: 0 12fr;
-	grid-template-columns: 12fr;
-	width: 100%;
 	height: 100%;
 	position: fixed;
 	top: 0;
 	left: 0;
 }
 
-.slider > div {
-	display: flex;
-	justify-content: center;
-	align-items: center;
+.slider[opened-overview] {
+	grid-template-rows: 210px 11fr;
 }
 
-.slider > div:first-child {
+.slider-overview {
+	display: block;
+	width: 100%;
 	background-color: #000;
-	overflow-y: visible;
 	position: relative;
 }
 
-.slider > div:first-child > div {
-	display: block;
+.slider-overview > div {
+	display: none;
 	width: 100%;
-	overflow-y: hidden;
-	overflow-x: auto;
-	cursor: grab;
+	height: 100%;
+	overflow: auto;
+	white-space: nowrap;
+	cursor: default;
+}
+
+.slider[opened-overview] > .slider-overview > div {
+	display: block;
 }
 
 .slider-overview > div > div {
 	display: inline-block;
-	padding: 7px 7px 0 7px;
+	padding: 5px 5px 0 5px;
 	margin: 0 4px;
 	width: 130px;
 	height: 190px;
 	background-color: #333;
+	overflow: hidden;
 	cursor: pointer;
+	transition: background-color .2s;
+}
+
+.slider-overview > div > div:hover,
+.slider-overview > div > div[active] {
+	background-color: #025ba7;
 }
 
 .slider-overview > div > div > img {
@@ -955,26 +966,29 @@ div { display: block; }
 .slider-overview > div > div > p {
 	display: block;
 	width: 100%;
-	margin-top: 5px;
+	padding: 2px 0;
+	margin-top: 4px;
 	background-color: #444;
 	color: #fff;
 	text-align: center;
 }
 
-.slider > div:first-child > button {
+.slider-overview > button {
 	padding: 5px 10px;
 	margin: 0 auto;
 	background-color: #fff;
 	border-radius: 0 0 10px 10px;
 	position: absolute;
+	left: 0;
+	right: 0;
 	bottom: -25px;
 	z-index: +1;
 	cursor: pointer;
 	transition: background-color .2s;
 }
 
-.slider > div:first-child > button::before,
-.slider > div:first-child > button::after {
+.slider-overview > button::before,
+.slider-overview > button::after {
 	--color: #fff;
 
     content: "";
@@ -985,31 +999,34 @@ div { display: block; }
 	transition: box-shadow .2s;
 }
 
-.slider > div:first-child > button::after {
+.slider-overview > button::after {
 	top: 0;
     right: -20px;
     border-radius: 7px 0 0 0;
     box-shadow: -7px 0 0 0 var(--color);
 }
 
-.slider > div:first-child > button::before {
+.slider-overview > button::before {
 	top: 0;
     left: -20px;
     border-radius: 0 7px 0 0;
     box-shadow: 7px 0 0 0 var(--color);
 }
 
-.slider > div:first-child > button:hover {
+.slider-overview > button:hover {
 	background-color: #eee;
 }
 
-.slider > div:first-child > button:hover::before,
-.slider > div:first-child > button:hover::after {
+.slider-overview > button:hover::before,
+.slider-overview > button:hover::after {
 	--color: #eee;
 }
 
 .slider > div:last-child {
-	background-color: #000000e0;
+	display: flex;
+	background-color: #000000f3;
+	justify-content: center;
+	align-items: center;
 	overflow: auto;
 	position: relative;
 }
@@ -1028,6 +1045,7 @@ div { display: block; }
 	max-width: calc(100% - 110px);
 	max-height: calc(100% - 80px);
 	object-position: center;
+	z-index: +1;
 }
 
 .slider > div:last-child > button {
@@ -1047,6 +1065,14 @@ div { display: block; }
 
 .slider > div:last-child > .slider-next {
 	right: 10px;
+}
+
+.slider > div:last-child > .slider-prev:disabled,
+.slider > div:last-child > .slider-next:disabled {
+	background-color: transparent !important;
+	color: #555 !important;
+	border-color: #555 !important;
+	cursor: no-drop;
 }
 
 .slider > div:last-child > .slider-size {
