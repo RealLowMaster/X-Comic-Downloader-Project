@@ -71,11 +71,13 @@ Add Comic {
 }
 
 Added To Version {
-	4
+	11
 	Optimize Widget Transitions
 }
 
 Did {
+	Make Slider Size System Part 1++
+
 	Make Repairing Systems Part 6++ = Next = Complete All Image Repairing
 }
 

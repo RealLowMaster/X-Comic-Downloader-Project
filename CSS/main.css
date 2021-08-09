@@ -1029,23 +1029,60 @@ div { display: block; }
 	align-items: center;
 	overflow: auto;
 	position: relative;
+	pointer-events: fill;
 }
 
-.slider > div:last-child > .slider-bg {
+.slider > div:last-child > .slider-bg,
+.slider-canvas > div {
 	width: 100%;
 	height: 100%;
 	position: absolute;
 	top: 0;
 	left: 0;
+}
+
+.slider-canvas {
+	display: flex;
+	width: calc(100% - 110px);
+	height: calc(100% - 80px);
+	justify-content: center;
+	align-items: center;
+	overflow: hidden;
+	position: relative;
 	z-index: 0;
 }
 
-.slider > div:last-child > img {
+.slider-canvas::-webkit-scrollbar {
 	display: block;
-	max-width: calc(100% - 110px);
-	max-height: calc(100% - 80px);
+}
+
+.slider-canvas > img {
+	display: block;
+	max-width: 100%;
+	max-height: 100%;
 	object-position: center;
-	z-index: +1;
+	z-index: +2;
+	cursor: zoom-in;
+	transition: .2s;
+}
+
+.slider-canvas[o-size] {
+	display: block;
+	overflow: auto;
+}
+
+.slider-canvas[o-size] > div {
+	z-index: -1;
+}
+
+.slider-canvas[o-size] > img {
+	width: auto !important;
+	height: auto !important;
+	margin: 0 auto;
+	max-width: none;
+	max-height: none;
+	cursor: grab;
+	z-index: +3;
 }
 
 .slider > div:last-child > button {

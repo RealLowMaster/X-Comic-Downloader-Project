@@ -35,6 +35,7 @@ const sites = [
 		'xlecxJumpPage({index}, {page})'
 	]
 ]
+const ThisWindow = remote.getCurrentWindow()
 const loading = new Loading(14)
 const db = {}
 const version = [1, 3, 7]
@@ -295,10 +296,8 @@ function CheckSettings() {
 	if (typeof(setting.developer_mode) != 'boolean') setting.developer_mode = false
 	if (setting.developer_mode == true) {
 		window.addEventListener('keydown', e => {
-			if (e.ctrlKey && e.shiftKey && e.which == 73)
-				remote.getCurrentWebContents().toggleDevTools()
-			else if (e.ctrlKey && e.which == 82)
-				remote.getCurrentWebContents().reload()
+			if (e.ctrlKey && e.shiftKey && e.which == 73) remote.getCurrentWebContents().toggleDevTools()
+			else if (e.ctrlKey && e.which == 82) remote.getCurrentWebContents().reload()
 		})
 	}
 }
@@ -973,11 +972,29 @@ function toggleComicSliderOverview() {
 }
 
 function toggleComicSliderSize() {
-	
+	const img = document.getElementById('c-s-i')
+	const img_parent = img.parentElement
+	const toggle = img_parent.getAttribute('o-size') || null
+	if (toggle == null) {
+		document.getElementById('c-s-s').setAttribute('title', 'Cover Size')
+		img_parent.setAttribute('o-size', true)
+		img.removeAttribute('onclick')
+	} else {
+		document.getElementById('c-s-s').setAttribute('title', 'Orginal Size')
+		img_parent.removeAttribute('o-size')
+		img.setAttribute('onclick', 'toggleComicSliderSize()')
+	}
 }
 
 function toggleComicSliderScreen() {
-
+	const parent = document.getElementById('comic-slider').children[1]
+	if (ThisWindow.isFullScreen()) {
+		ThisWindow.setFullScreen(false)
+		parent.style.backgroundColor = '#000000f3'
+	} else {
+		ThisWindow.setFullScreen(true)
+		parent.style.backgroundColor = '#000'
+	}
 }
 
 function changeSliderIndex(index) {
@@ -1015,6 +1032,8 @@ function openComicSlider(index) {
 
 function closeComicSlider() {
 	comicSlider.style.display = 'none'
+	ThisWindow.setFullScreen(false)
+	document.getElementById('comic-slider').children[1].style.backgroundColor = '#000000f3'
 	document.getElementById('c-s-i').setAttribute('src', '')
 	comicSlider.removeAttribute('opened-overview')
 }
@@ -1486,7 +1505,7 @@ function cancelAllDownloads(closeApp) {
 	}
 
 	if (closeApp == true) {
-		remote.getCurrentWindow().removeAllListeners()
+		ThisWindow.removeAllListeners()
 		remote.app.quit()
 	}
 }
@@ -2355,10 +2374,8 @@ function saveSetting(justSave) {
 	}
 
 	fs.writeFileSync(dirRoot+'/setting.json', MakeJsonString(setting), {encoding:"utf8"})
-	if (reload == true)
-		remote.getCurrentWindow().reload()
-	else
-		document.getElementById('setting-panel').style.display = 'none'
+	if (reload == true) ThisWindow.reload()
+	else document.getElementById('setting-panel').style.display = 'none'
 }
 
 function closeSetting() {
@@ -2397,7 +2414,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		browserPasteMenu.style.display = 'none'
 	})
 
-	remote.getCurrentWindow().addListener('close', e => {
+	ThisWindow.addListener('close', e => {
 		e.preventDefault()
 		if (downloadingList.length > 0) {
 			errorSelector('You are Downloading Comics, Are you sure you want To Close Software?', null, false, [
@@ -2412,7 +2429,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				]
 			])
 		} else {
-			remote.getCurrentWindow().removeAllListeners()
+			ThisWindow.removeAllListeners()
 			remote.app.quit()
 		}
 	})
