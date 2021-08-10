@@ -1068,11 +1068,17 @@ div { display: block; }
 
 .slider-canvas[o-size] {
 	display: block;
+	width: auto !important;
+	height: auto !important;
+	max-width: calc(100% - 110px) !important;
+	max-height: calc(100% - 80px) !important;
 	overflow: auto;
+	cursor: grab;
+	z-index: +1;
 }
 
 .slider-canvas[o-size] > div {
-	z-index: -1;
+	display: none;
 }
 
 .slider-canvas[o-size] > img {
@@ -1081,8 +1087,7 @@ div { display: block; }
 	margin: 0 auto;
 	max-width: none;
 	max-height: none;
-	cursor: grab;
-	z-index: +3;
+	pointer-events: none !important;
 }
 
 .slider > div:last-child > button {

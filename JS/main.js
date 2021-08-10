@@ -40,6 +40,8 @@ const loading = new Loading(14)
 const db = {}
 const version = [1, 3, 7]
 const comicSlider = document.getElementById('comic-slider')
+const comicSliderImg = document.getElementById('c-s-i')
+const comicSliderCanvas = comicSliderImg.parentElement
 const comicGroupsContainer = document.getElementById('c-p-g')
 const comicArtistsContainer = document.getElementById('c-p-a')
 const comicParodyContainer = document.getElementById('c-p-p')
@@ -49,6 +51,7 @@ const browserPasteMenu = document.getElementById('browser-paste-menu')
 const bjp = document.getElementById('browser-jump-page-container')
 const bjp_i = document.getElementById('bjp-i')
 const bjp_m_p = document.getElementById('bjp-m-p')
+let comicSliderCanvasPos = { top: 0, left: 0, x: 0, y: 0 }
 var setting, dirDB, dirUL, tabs = [], downloadingList = [], downloadCounter = 0, thisSite, lastComicId, lastHaveId, lastGroupId, lastArtistId, lastParodyId, lastTagId, searchTimer, needReload = true, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = [], wt_fps, openedMenuTabIndex, copiedTab = null
 
 // Needable Functions
@@ -486,6 +489,7 @@ async function makeDatabaseIndexs() {
 // Image Loading
 function preloadImage(img) {
 	const src = img.getAttribute('data-src')
+	img.removeAttribute('data-src')
 	if (!src) return
 	img.src = src
 }
@@ -543,7 +547,7 @@ function loadComics(page, search) {
 					image = `${dirUL}/${image}-0.${doc[i].f[0][2]}`
 			}
 				
-			html += `<div class="comic" onclick="openComic(${id})"><img src="${image}" loading="lazy"><span>${doc[i].c}</span><p>${name}</p></div>`
+			html += `<div class="comic" onclick="openComic(${id})"><img src="${image}"><span>${doc[i].c}</span><p>${name}</p></div>`
 		}
 		comic_container.innerHTML = html
 		
@@ -972,18 +976,51 @@ function toggleComicSliderOverview() {
 }
 
 function toggleComicSliderSize() {
-	const img = document.getElementById('c-s-i')
-	const img_parent = img.parentElement
-	const toggle = img_parent.getAttribute('o-size') || null
+	const toggle = comicSliderCanvas.getAttribute('o-size') || null
 	if (toggle == null) {
+		comicSliderCanvas.scrollTop = 100
+		comicSliderCanvas.scrollLeft = 150
 		document.getElementById('c-s-s').setAttribute('title', 'Cover Size')
-		img_parent.setAttribute('o-size', true)
-		img.removeAttribute('onclick')
+		comicSliderCanvas.setAttribute('o-size', true)
+		comicSliderImg.removeAttribute('onclick')
+		comicSliderCanvas.addEventListener('mousedown', mouseDownHandler)
 	} else {
+		comicSliderCanvas.scrollTop = 0
+		comicSliderCanvas.scrollLeft = 0
 		document.getElementById('c-s-s').setAttribute('title', 'Orginal Size')
-		img_parent.removeAttribute('o-size')
-		img.setAttribute('onclick', 'toggleComicSliderSize()')
+		comicSliderCanvas.removeAttribute('o-size')
+		comicSliderImg.setAttribute('onclick', 'toggleComicSliderSize()')
+		comicSliderCanvas.removeEventListener('mousedown', mouseDownHandler)
 	}
+}
+
+function mouseDownHandler(e) {
+	comicSliderCanvas.style.cursor = 'grabbing'
+	comicSliderCanvasPos = {
+		left: comicSliderCanvas.scrollLeft,
+		top: comicSliderCanvas.scrollTop,
+		x: e.clientX,
+		y: e.clientY,
+	}
+
+	comicSliderCanvas.removeEventListener('mousemove', mouseSliderMoveHandler)
+	comicSliderCanvas.removeEventListener('mouseup', mouseSliderUpHandler)
+	document.addEventListener('mousemove', mouseSliderMoveHandler)
+	document.addEventListener('mouseup', mouseSliderUpHandler)
+}
+
+function mouseSliderMoveHandler(e) {
+	const dx = e.clientX - comicSliderCanvasPos.x
+	const dy = e.clientY - comicSliderCanvasPos.y
+
+	comicSliderCanvas.scrollTop = comicSliderCanvasPos.top - dy
+	comicSliderCanvas.scrollLeft = comicSliderCanvasPos.left - dx
+}
+
+function mouseSliderUpHandler(e) {
+	comicSliderCanvas.style.cursor = 'grab'
+	comicSliderCanvas.removeEventListener('mousemove', mouseSliderMoveHandler)
+	comicSliderCanvas.removeEventListener('mouseup', mouseSliderUpHandler)
 }
 
 function toggleComicSliderScreen() {
@@ -1009,8 +1046,7 @@ function changeSliderIndex(index) {
 	overview_parent.setAttribute('aindex', index)
 	const overview = overview_parent.querySelector(`[i="${index}"]`)
 	overview.setAttribute('active', true)
-	const img = overview.getElementsByTagName('img')[0].getAttribute('src')
-	document.getElementById('c-s-i').setAttribute('src', img)
+	comicSliderImg.setAttribute('src', overview.getElementsByTagName('img')[0].getAttribute('src'))
 
 	if (index == 0) prev.setAttribute('disabled', true)
 	else {
@@ -1034,7 +1070,7 @@ function closeComicSlider() {
 	comicSlider.style.display = 'none'
 	ThisWindow.setFullScreen(false)
 	document.getElementById('comic-slider').children[1].style.backgroundColor = '#000000f3'
-	document.getElementById('c-s-i').setAttribute('src', '')
+	comicSlider.setAttribute('src', '')
 	comicSlider.removeAttribute('opened-overview')
 }
 

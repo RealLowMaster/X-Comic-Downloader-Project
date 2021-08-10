@@ -65,14 +65,14 @@ DB => {
 Add Comic {
 	League Of Legends
 	Sahara Wataru
-	Butcha
 	Re:zero
 	Kono Soba
 }
 
 Added To Version {
-	11
+	15
 	Optimize Widget Transitions
+	Optimize Image Loading
 }
 
 Did {
@@ -82,6 +82,7 @@ Did {
 }
 
 Tasks => {
+	When Site Not Responding TypeError: Cannot read property 'getElementsByTagName' of undefined
 	Add Grapping Ability To Slider Overview
 	Add FullScreen Mode To Slider
 	Add Orginal Size To Slider
