@@ -230,6 +230,15 @@ function ChangeSizes() {
 	document.getElementById('c-s-o').style.width = size+'px'
 }
 
+function reCreateNode(element, withChildren) {
+	if (withChildren) element.parentNode.replaceChild(element.cloneNode(true), element)
+	else {
+		const newEl = element.cloneNode(false)
+		while (element.hasChildNodes()) newEl.appendChild(element.firstChild)
+		element.parentNode.replaceChild(newEl, element)
+	}
+}
+
 // Main Loading Stuff
 const dirRoot = __dirname.replace('\\app.asar', '')
 
@@ -512,14 +521,12 @@ function loadComics(page, search) {
 	search = search || null
 	if (search == 'null') search = null
 	var RegSearch
-	if (search != null) {
-		search = search.toLowerCase()
-		RegSearch = new RegExp(search)
-	}
+	if (search != null) RegSearch = new RegExp(search.toLowerCase())
 	const comic_container = document.getElementById('comic-container')
 	comic_container.innerHTML = ''
 	comic_container.setAttribute('page', page)
-	var min = 0, max, allPages, id, name, image, repair, html = ''
+	let min = 0, max = 0, allPages = 0
+	var id, name, image, repair, html = ''
 	const max_per_page = setting.max_per_page
 
 	const working = (doc) => {
@@ -559,17 +566,17 @@ function loadComics(page, search) {
 			jp_i.setAttribute('oninput', `inputLimit(this, ${allPages});searchComics(document.getElementById('offline-search-form-input').value, Number(this.value))`)
 			jp_i.value = page
 			document.getElementById('jp-m-p').textContent = allPages
-			var thisPagination = pagination(allPages, page)
-				html = '<div>'
-				for (var i in thisPagination) {
-					if (thisPagination[i][1] == null)
-						html += `<button disabled>${thisPagination[i][0]}</button>`
-					else
-						html += `<button onclick="loadComics(${thisPagination[i][1]}, '${search}')">${thisPagination[i][0]}</button>`
-				}
-				html += '</div>'
-				document.getElementById('pagination').innerHTML = html
-				document.getElementById('pagination').style.display = 'block'
+			const thisPagination = pagination(allPages, page)
+			html = '<div>'
+			for (let i in thisPagination) {
+				if (thisPagination[i][1] == null)
+					html += `<button disabled>${thisPagination[i][0]}</button>`
+				else
+					html += `<button onclick="loadComics(${thisPagination[i][1]}, '${search}')">${thisPagination[i][0]}</button>`
+			}
+			html += '</div>'
+			document.getElementById('pagination').innerHTML = html
+			document.getElementById('pagination').style.display = 'block'
 		} else {
 			if (search == null) document.getElementById('offline-search-form').style.display = 'none'
 			document.getElementById('pagination').style.display = 'none'
@@ -598,10 +605,8 @@ function loadComics(page, search) {
 		})
 	}
 
-	if (search == null)
-		findComics()
-	else
-		findComicsBySearch()
+	if (search == null) findComics()
+	else findComicsBySearch()
 }
 
 function pagination(total_pages, page) {
@@ -692,8 +697,8 @@ function searchComics(value, page) {
 }
 
 function reloadLoadingComics() {
-	var page = Number(document.getElementById('comic-container').getAttribute('page')) || null
-	var search = document.getElementById('offline-search-form-input').value || null
+	const page = Number(document.getElementById('comic-container').getAttribute('page')) || null
+	let search = document.getElementById('offline-search-form-input').value || null
 	if (search == null || search.length == 0) search = null
 	loadComics(page, search)
 }
@@ -975,26 +980,33 @@ function toggleComicSliderOverview() {
 	else comicSlider.setAttribute('opened-overview', true)
 }
 
-function toggleComicSliderSize() {
-	const toggle = comicSliderCanvas.getAttribute('o-size') || null
-	if (toggle == null) {
+function toggleComicSliderSize(open) {
+	if (typeof(open) != 'boolean') {
+		const toggle = comicSliderCanvas.getAttribute('o-size') || null
+		if (toggle == null) open = true
+		else open = false
+	}
+	
+	if (open) {
 		comicSliderCanvas.scrollTop = 100
 		comicSliderCanvas.scrollLeft = 150
 		document.getElementById('c-s-s').setAttribute('title', 'Cover Size')
 		comicSliderCanvas.setAttribute('o-size', true)
 		comicSliderImg.removeAttribute('onclick')
-		comicSliderCanvas.addEventListener('mousedown', mouseDownHandler)
+		comicSliderCanvas.addEventListener('mousedown', mouseSliderDownHandler)
 	} else {
 		comicSliderCanvas.scrollTop = 0
 		comicSliderCanvas.scrollLeft = 0
 		document.getElementById('c-s-s').setAttribute('title', 'Orginal Size')
 		comicSliderCanvas.removeAttribute('o-size')
 		comicSliderImg.setAttribute('onclick', 'toggleComicSliderSize()')
-		comicSliderCanvas.removeEventListener('mousedown', mouseDownHandler)
+		comicSliderCanvas.removeEventListener('mousedown', mouseSliderDownHandler)
+		sliderHandelRemover()
+		comicSliderCanvas.style.cursor = 'default'
 	}
 }
 
-function mouseDownHandler(e) {
+function mouseSliderDownHandler(e) {
 	comicSliderCanvas.style.cursor = 'grabbing'
 	comicSliderCanvasPos = {
 		left: comicSliderCanvas.scrollLeft,
@@ -1003,10 +1015,9 @@ function mouseDownHandler(e) {
 		y: e.clientY,
 	}
 
-	comicSliderCanvas.removeEventListener('mousemove', mouseSliderMoveHandler)
-	comicSliderCanvas.removeEventListener('mouseup', mouseSliderUpHandler)
-	document.addEventListener('mousemove', mouseSliderMoveHandler)
-	document.addEventListener('mouseup', mouseSliderUpHandler)
+	comicSliderCanvas.addEventListener('mousemove', mouseSliderMoveHandler)
+	comicSliderCanvas.addEventListener('mouseup', sliderHandelRemover)
+	comicSliderCanvas.addEventListener('mouseout', sliderHandelRemover)
 }
 
 function mouseSliderMoveHandler(e) {
@@ -1017,10 +1028,11 @@ function mouseSliderMoveHandler(e) {
 	comicSliderCanvas.scrollLeft = comicSliderCanvasPos.left - dx
 }
 
-function mouseSliderUpHandler(e) {
+function sliderHandelRemover() {
 	comicSliderCanvas.style.cursor = 'grab'
 	comicSliderCanvas.removeEventListener('mousemove', mouseSliderMoveHandler)
-	comicSliderCanvas.removeEventListener('mouseup', mouseSliderUpHandler)
+	comicSliderCanvas.removeEventListener('mouseup', sliderHandelRemover)
+	comicSliderCanvas.removeEventListener('mouseout', sliderHandelRemover)
 }
 
 function toggleComicSliderScreen() {
@@ -1072,6 +1084,7 @@ function closeComicSlider() {
 	document.getElementById('comic-slider').children[1].style.backgroundColor = '#000000f3'
 	comicSlider.setAttribute('src', '')
 	comicSlider.removeAttribute('opened-overview')
+	toggleComicSliderSize(false)
 }
 
 // Browser

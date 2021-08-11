@@ -1043,8 +1043,11 @@ div { display: block; }
 
 .slider-canvas {
 	display: flex;
-	width: calc(100% - 110px);
-	height: calc(100% - 80px);
+	width: calc(100% - 110px + 1px);
+	height: calc(100% - 110px + 1px);
+	max-width: calc(100% - 110px + 1px);
+	max-height: calc(100% - 80px + 1px);
+	border: 1px solid transparent;
 	justify-content: center;
 	align-items: center;
 	overflow: hidden;
@@ -1053,7 +1056,7 @@ div { display: block; }
 }
 
 .slider-canvas::-webkit-scrollbar {
-	display: block;
+	display: none;
 }
 
 .slider-canvas > img {
@@ -1070,8 +1073,7 @@ div { display: block; }
 	display: block;
 	width: auto !important;
 	height: auto !important;
-	max-width: calc(100% - 110px) !important;
-	max-height: calc(100% - 80px) !important;
+	border-color: #000;
 	overflow: auto;
 	cursor: grab;
 	z-index: +1;

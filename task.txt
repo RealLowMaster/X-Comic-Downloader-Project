@@ -84,8 +84,8 @@ Did {
 Tasks => {
 	When Site Not Responding TypeError: Cannot read property 'getElementsByTagName' of undefined
 	Add Grapping Ability To Slider Overview
-	Add FullScreen Mode To Slider
-	Add Orginal Size To Slider
+	Add Size Checker for changing border color in Slider Orginal Size
+	Add Random Jump Page
 	Add Ability To Zoom in Image in Sldier
 	Fix Bug: Comic -> 22589-sinesian-collection-of-kobayashi-san-chi-no-maid-dragon.html
 	Add Find Artist and ... To Offline Part
