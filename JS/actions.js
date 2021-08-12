@@ -1,11 +1,11 @@
 function error(txt, onclick, t1) {
-	var err = txt.toString()
+	let err = txt.toString()
 	if (t1 != null) err = err.replace(/{var1}/gi, t1)
 	err = err.replace(/\n/gi, '<br>')
 	const element = document.createElement('div')
 	element.classList.add('action-error')
 
-	var html = `<div></div><div><p>${err}</p>`
+	let html = `<div></div><div><p>${err}</p>`
 	if (onclick == null) html += `<button class="btn btn-danger" onclick="this.parentElement.parentElement.remove()">OK</button></div></div>`
 	else html += `<button onclick="${onclick}">OK</button></div>`
 	element.innerHTML = html
@@ -14,16 +14,16 @@ function error(txt, onclick, t1) {
 }
 
 function errorSelector(txt, t1, bgClose, buttons) {
-	var err = txt || null
+	let err = txt || null
 	if (t1 != null && err != null) err = err.replace(/{var1}/gi, t1)
 	if (err != null) err = err.replace(/\n/gi, '<br>')
 	const element = document.createElement('div')
 	element.classList.add('action-error')
 
 	bgClose = bgClose || false
-	var bgCloseValue = ''
+	let bgCloseValue = ''
 	if (bgClose == true) bgCloseValue = `this.parentElement.remove()`
-	var html = `<div onclick="${bgCloseValue}"></div><div style="text-align:center">`
+	let html = `<div onclick="${bgCloseValue}"></div><div style="text-align:center">`
 	if (err != null) html += `<p>${err}</p>`
 	
 	buttons = buttons || null

@@ -9,7 +9,8 @@ function loadComics(page, search) {
 	comic_container.innerHTML = ''
 	comic_container.setAttribute('page', page)
 	let min = 0, max = 0, allPages = 0
-	var id, name, image, repair, html = ''
+	let html = ''
+	var id, name, image, repair
 	const max_per_page = setting.max_per_page
 
 	const working = (doc) => {
@@ -93,7 +94,7 @@ function loadComics(page, search) {
 }
 
 function pagination(total_pages, page) {
-	var arr = [], min = 1, max = 1, bdot = false, fdot = false, bfirst = false, ffirst = false, pagination_width = 5
+	let min = 1, max = 1, bdot = false, fdot = false, bfirst = false, ffirst = false, pagination_width = 5
 	if (total_pages > pagination_width - 1) {
 		if (page == 1) {
 			min = 1
@@ -127,14 +128,13 @@ function pagination(total_pages, page) {
 	if (page < (total_pages - pagination_width) + 2 && total_pages > pagination_width) ffirst = true
 	if (page < (total_pages - pagination_width) + 1 && total_pages > pagination_width + 1) fdot = true
 	
+	const arr = []
 	if (page > 1) arr.push(['Prev', page - 1])
 	if (bfirst) arr.push(['1', 1])
 	if (bdot) arr.push(['...', null])
-	for (var i=min; i <= max;i++) {
-		if (i == page)
-			arr.push([`${i}`, null])
-		else 
-			arr.push([`${i}`, i])
+	for (let i=min; i <= max;i++) {
+		if (i == page) arr.push([`${i}`, null])
+		else arr.push([`${i}`, i])
 	}
 	if (fdot) arr.push(['...', null])
 	if (ffirst) arr.push([`${total_pages}`, total_pages])
@@ -193,7 +193,7 @@ function openComicGroups(comicId) {
 			const groups = doc.t || null
 			if (groups == null) return
 			comicGroupsContainer.innerHTML = 'Groups: '
-			for (var i in groups) {
+			for (let i in groups) {
 				db.groups.findOne({_id:groups[i]}, (err, doc) => {
 					if (err) { error(err); return }
 					comicGroupsContainer.innerHTML += `<button>${doc.n}</button>`
@@ -210,7 +210,7 @@ function openComicArtists(comicId) {
 			const artists = doc.t || null
 			if (artists == null) return
 			comicArtistsContainer.innerHTML = 'Artists: '
-			for (var i in artists) {
+			for (let i in artists) {
 				db.artists.findOne({_id:artists[i]}, (err, doc) => {
 					if (err) { error(err); return }
 					comicArtistsContainer.innerHTML += `<button>${doc.n}</button>`
@@ -227,7 +227,7 @@ function openComicParodies(comicId) {
 			const parodies = doc.t || null
 			if (parodies == null) return
 			comicParodyContainer.innerHTML = 'Parody: '
-			for (var i in parodies) {
+			for (let i in parodies) {
 				db.parodies.findOne({_id:parodies[i]}, (err, doc) => {
 					if (err) { error(err); return }
 					comicParodyContainer.innerHTML += `<button>${doc.n}</button>`
@@ -244,7 +244,7 @@ function openComicTags(comicId) {
 			const tags = doc.t || null
 			if (tags == null) return
 			comicTagsContainer.innerHTML = 'Tags: '
-			for (var i in tags) {
+			for (let i in tags) {
 				db.tags.findOne({_id:tags[i]}, (err, doc) => {
 					if (err) { error(err); return }
 					comicTagsContainer.innerHTML += `<button>${doc.n}</button>`
@@ -260,7 +260,8 @@ function openComic(id) {
 	const title_container = document.getElementById('c-p-t')
 	const overview_parent = document.getElementById('c-s-o')
 	const image_container = document.getElementById('c-p-i')
-	var name, image, ImagesCount, formats, formatIndex = 0, html = ''
+	let html = '', formatIndex = 0
+	var name, image, ImagesCount, formats
 
 	comicGroupsContainer.innerHTML = ''
 	comicArtistsContainer.innerHTML = ''
@@ -365,43 +366,36 @@ function closeComicPanel() {
 }
 
 async function repairImageUpdateDatabase(comic_id, imageIndex, imageBaseName, imageFormat, repairIndex, passRepair, passRepairURLs) {
-	var newRepair = [], newRepairURLs = [], rawRepair = 0, rawRepairURLs = 0
+	var newRepair = [], newRepairURLs = []
+	let rawRepair = 0, rawRepairURLs = 0
 
-	for (var j in passRepair) {
+	for (let j in passRepair) {
 		if (passRepair != null && j != repairIndex) rawRepair++
 	}
-	for (var j in passRepairURLs) {
+	for (let j in passRepairURLs) {
 		if (passRepairURLs != null && j != repairIndex) rawRepairURLs++
 	}
 
-	for (var i in passRepair) {
-		if (i != repairIndex)
-			newRepair.push(passRepair[i])
+	for (let i in passRepair) {
+		if (i != repairIndex) newRepair.push(passRepair[i])
 		else {
-			if (rawRepair == 0)
-				newRepair = null
-			else {
-				if (i != passRepair.length - 1) newRepair.push(null)
-			}
+			if (rawRepair == 0) newRepair = null
+			else if (i != passRepair.length - 1) newRepair.push(null)
 		}
 	}
-	for (var i in passRepairURLs) {
-		if (i != repairIndex)
-			newRepairURLs.push(passRepairURLs[i])
+	for (let i in passRepairURLs) {
+		if (i != repairIndex) newRepairURLs.push(passRepairURLs[i])
 		else {
-			if (rawRepairURLs == 0)
-				newRepairURLs = null
-			else {
-				if (i != passRepairURLs.length - 1) newRepairURLs.push(null)
-			}
+			if (rawRepairURLs == 0) newRepairURLs = null
+			else if (i != passRepairURLs.length - 1) newRepairURLs.push(null)
 		}
 	}
 
 	await db.comics.update({_id:comic_id}, { $set: {m:newRepair, r:newRepairURLs} }, {}, err => {
 		if (err) { error(err); return }
-		var repairElement = document.getElementById(imageIndex) || null
+		const repairElement = document.getElementById(imageIndex) || null
 		if (repairElement != null) {
-			var newImage = document.createElement('img')
+			const newImage = document.createElement('img')
 			newImage.setAttribute('src', `${dirUL}/${imageBaseName}-${imageIndex}.${imageFormat}`)
 			document.getElementById('c-p-i').insertBefore(newImage, repairElement)
 			repairElement.remove()
@@ -417,11 +411,10 @@ async function repairImageFindDatabase(comic_id, repairIndex, imageFormat, image
 }
 
 async function repairImageDownloadImage(comic_id, imageIndex, imageUrl, repairIndex, imageId) {
-	var imageFormat = fileExt(imageUrl)
-	var saveName = `${imageId}-${imageIndex}.${imageFormat}`
-	var option = {
+	const imageFormat = fileExt(imageUrl)
+	const option = {
 		url: imageUrl,
-		dest: dirUL+`/${saveName}`
+		dest: dirUL+`/${imageId}-${imageIndex}.${imageFormat}`
 	}
 
 	await ImageDownloader.image(option).then(({ filename }) => {
@@ -434,8 +427,7 @@ async function repairImageDownloadImage(comic_id, imageIndex, imageUrl, repairIn
 
 async function repairImage(imageIndex, repairIndex, imageId) {
 	const comic_id = Number(comicPanel.getAttribute('cid'))
-	var repairElement = document.getElementById(imageIndex)
-	repairElement.innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
+	document.getElementById(imageIndex).innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
 	await db.comics.findOne({_id:comic_id}, (err, doc) => {
 		if (err) { error(err); return }
 		var imageUrl = doc.r || null
@@ -448,7 +440,7 @@ async function repairImage(imageIndex, repairIndex, imageId) {
 
 async function repairComicInfo(whitch) {
 	whitch = whitch || 0
-	var id = Number(comicPanel.getAttribute('cid'))
+	const id = Number(comicPanel.getAttribute('cid'))
 	await db.comics.findOne({_id:id}, (err, doc) => {
 		if (err) { error(err); return }
 		if (doc.s == undefined) return

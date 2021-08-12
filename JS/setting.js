@@ -69,7 +69,7 @@ function setLuanchTimeSettings(reloadSettingPanel) {
 
 function saveSetting(justSave) {
 	justSave = justSave || false
-	var reload = false
+	let reload = false
 	if (justSave == false) {
 		const waiting_quality = Number(document.getElementById('s_waiting_quality').getAttribute('value'))
 		const lazy_loading = document.getElementById('s_lazy_loading').checked

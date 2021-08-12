@@ -329,7 +329,7 @@ async function CreateComic(comicIndex, haveIndex, gottenResult, quality, image, 
 		// Groups
 		if (groups != null) {
 			const groupsList = []
-			for (var i in groups) {
+			for (let i in groups) {
 				groupsList.push(groups[i].name)
 			}
 			CreateGroup(groupsList, id)
@@ -338,7 +338,7 @@ async function CreateComic(comicIndex, haveIndex, gottenResult, quality, image, 
 		// Artists
 		if (artists != null) {
 			const artistsList = []
-			for (var i in artists) {
+			for (let i in artists) {
 				artistsList.push(artists[i].name)
 			}
 			CreateArtist(artistsList, id)
@@ -347,7 +347,7 @@ async function CreateComic(comicIndex, haveIndex, gottenResult, quality, image, 
 		// Parody
 		if (parody != null) {
 			const parodyList = []
-			for (var i in parody) {
+			for (let i in parody) {
 				parodyList.push(parody[i].name)
 			}
 			CreateParody(parodyList, id)
@@ -356,7 +356,7 @@ async function CreateComic(comicIndex, haveIndex, gottenResult, quality, image, 
 		// Tags
 		if (tags != null) {
 			const tagsList = []
-			for (var i in tags) {
+			for (let i in tags) {
 				tagsList.push(tags[i].name)
 			}
 			CreateTag(tagsList, id)

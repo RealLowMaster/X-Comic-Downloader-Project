@@ -12,9 +12,9 @@ function closeBrowser() {
 	tabs = []
 	const browser_pages = pageContainer.children
 	for (let i = 0; i < browser_pages.length; i++) {
-		var passImageCon = browser_pages[i].querySelector('[img-con="true"]')
+		const passImageCon = browser_pages[i].querySelector('[img-con="true"]')
 		if (passImageCon != undefined) {
-			var passImages = passImageCon.children
+			const passImages = passImageCon.children
 			for (let j = 0; j < passImages.length; j++) {
 				passImages[j].removeAttribute('data-src')
 				passImages[j].removeAttribute('src')
@@ -32,11 +32,11 @@ function updateTabSize() {
 		const tabs = tabsContainer.getElementsByTagName('div')
 		if (((windowWidth - 60) / 200) <= tabs.length) {
 			const tabWidth = (windowWidth - 60) / tabs.length
-			for (var i = 0; i < tabs.length; i++) {
+			for (let i = 0; i < tabs.length; i++) {
 				tabs[i].style.width = tabWidth+'px'
 			}
 		} else {
-			for (var i = 0; i < tabs.length; i++) {
+			for (let i = 0; i < tabs.length; i++) {
 				tabs[i].style.width = '200px'
 			}
 		}
@@ -338,7 +338,7 @@ function RemoveDownloaderList(index) {
 }
 
 function SetDownloadListNumbers() {
-	var counter = 1
+	let counter = 1
 	for (let i in downloadingList) {
 		if (downloadingList[i] != null) {
 			downloadingList[i][8] = counter
@@ -352,9 +352,9 @@ function MakeDownloadList(index, name, id, list) {
 	name = name || null
 	list = list || null
 	if (name == null || id == null || list == null) return
-	var downloader = document.getElementById('downloader')
+	const downloader = document.getElementById('downloader')
 	downloader.style.display = 'block'
-	var element = document.createElement('div')
+	const element = document.createElement('div')
 	if (name.length > 19) name = name.substr(0, 16)+'...'
 
 	SetDownloaderList(index, id)
@@ -377,15 +377,15 @@ function comicDownloader(index, result, quality, siteIndex) {
 	}
 	const url = downloadingList[index][1][downloadingList[index][0]]
 	const saveName = `${downloadingList[index][2]}-${downloadingList[index][0]}.${fileExt(url)}`
-	var option = {
+	const option = {
 		url: url,
 		dest: dirUL+`/${saveName}`
 	}
 	
 	downloadingList[index][0] += 1
-	var max = downloadingList[index][1].length
-	var percentage = (100 / max) * downloadingList[index][0]
-	var downloaderRow = document.getElementById(`${downloadingList[index][2]}`)
+	const max = downloadingList[index][1].length
+	const percentage = (100 / max) * downloadingList[index][0]
+	const downloaderRow = document.getElementById(`${downloadingList[index][2]}`)
 
 	ImageDownloader.image(option).then(({ filename }) => {
 		if (downloadingList[index] == undefined) {
@@ -398,7 +398,7 @@ function comicDownloader(index, result, quality, siteIndex) {
 		if (downloadingList[index][0] == max) {
 			var formatList = [], firstIndex = 0, lastIndex = 0
 			var thisFormat = fileExt(downloadingList[index][1][0])
-			for (var j = 1; j < downloadingList[index][1].length; j++) {
+			for (let j = 1; j < downloadingList[index][1].length; j++) {
 				lastIndex++
 				if (fileExt(downloadingList[index][1][j]) == thisFormat) {
 					if (j == downloadingList[index][1].length - 1) formatList.push([firstIndex, lastIndex, thisFormat])
@@ -412,8 +412,7 @@ function comicDownloader(index, result, quality, siteIndex) {
 				}
 			}
 			CreateComic(downloadingList[index][7][0], downloadingList[index][7][1], result, quality, downloadingList[index][2], siteIndex, downloadingList[index][3], downloadingList[index][1].length, formatList, downloadingList[index][4], downloadingList[index][5], index, true)
-		} else
-			comicDownloader(index, result, quality, siteIndex)
+		} else comicDownloader(index, result, quality, siteIndex)
 	}).catch(err => {
 		if (downloadingList[index] == undefined) return
 		downloaderRow.getElementsByTagName('div')[0].getElementsByTagName('div')[0].style.width = percentage+'%'
@@ -423,7 +422,7 @@ function comicDownloader(index, result, quality, siteIndex) {
 		if (downloadingList[index][0] == max) {
 			var formatList = [], firstIndex = 0, lastIndex = 0
 			var thisFormat = fileExt(downloadingList[index][1][0])
-			for (var j = 1; j < downloadingList[index][1].length; j++) {
+			for (let j = 1; j < downloadingList[index][1].length; j++) {
 				lastIndex++
 				if (fileExt(downloadingList[index][1][j]) == thisFormat) {
 					if (j == downloadingList[index][1].length - 1) formatList.push([firstIndex, lastIndex, thisFormat])
@@ -437,8 +436,7 @@ function comicDownloader(index, result, quality, siteIndex) {
 				}
 			}
 			CreateComic(downloadingList[index][7][0], downloadingList[index][7][1], result, quality, downloadingList[index][2], siteIndex, downloadingList[index][3], downloadingList[index][1].length, formatList, downloadingList[index][4], downloadingList[index][5], index, true)
-		} else
-			comicDownloader(index, result, quality, siteIndex)
+		} else comicDownloader(index, result, quality, siteIndex)
 	})
 }
 
@@ -468,15 +466,13 @@ function cancelAllDownloads(closeApp) {
 }
 
 function IsDownloading(id) {
-	var arr = []
-	for (var i in downloadingList) {
+	const arr = []
+	for (let i in downloadingList) {
 		if (downloadingList[i] != null) arr.push(downloadingList[i][3])
 	}
 
-	if (arr.indexOf(id) > -1)
-		return true
-	else
-		return false
+	if (arr.indexOf(id) > -1) return true
+	else return false
 }
 
 function browserError(err, id) {
@@ -489,20 +485,17 @@ function browserError(err, id) {
 
 function searchFilter(txt, database, alert) {
 	txt = txt.toLowerCase()
-	var counter = 0
+	let counter = 0
 	const datas = database.children
 	if (txt.length > 0) {
 		for (let i = 0; i < datas.length; i++) {
 			if (datas[i].textContent.toLowerCase().indexOf(txt) > -1) {
 				datas[i].style.display = 'inline-block'
 				counter++
-			} else
-				datas[i].style.display = 'none'
+			} else datas[i].style.display = 'none'
 		}
-		if (counter > 0)
-			alert.style.display = 'none'
-		else
-			alert.style.display = 'block'
+		if (counter > 0) alert.style.display = 'none'
+		else alert.style.display = 'block'
 	} else {
 		for (let i = 0; i < datas.length; i++) {
 			datas[i].style.display = 'inline-block'
@@ -514,10 +507,8 @@ function searchFilter(txt, database, alert) {
 function removeDownloadedComicsDownloadButton(site, id, parent, btn, haveCallback, downloadedCallback) {
 	IsHavingComic(site, id, (have, downloaded) => {
 		if (have == true) {
-			if (downloaded == true)
-				downloadedCallback(parent, btn)
-			else
-				haveCallback(parent, btn, id)
+			if (downloaded == true) downloadedCallback(parent, btn)
+			else haveCallback(parent, btn, id)
 		}
 	})
 }
@@ -527,21 +518,21 @@ function clearDownloadedComics(content, site) {
 		case 0:
 			const postContainers = content.getElementsByClassName('xlecx-post-container')
 			for (let i = 0; i < postContainers.length; i++) {
-				var mainComics = postContainers[i].children
+				const mainComics = postContainers[i].children
 				for (let j = 0; j < mainComics.length; j++) {
 					var id = mainComics[j].getElementsByTagName('button')[0]
 					if (id != undefined) {
 						id = id.getAttribute('cid')
 						removeDownloadedComicsDownloadButton(0, id, mainComics[j], mainComics[j].getElementsByTagName('button')[0], (parent, btn, lastId) => {
 							btn.remove()
-							var element = document.createElement('button')
+							const element = document.createElement('button')
 							element.setAttribute('cid', lastId)
 							element.classList.add('comic-had')
 							element.textContent = 'Had'
 							parent.appendChild(element)
 						}, (parent, btn) => {
 							btn.remove()
-							var element = document.createElement('button')
+							const element = document.createElement('button')
 							element.classList.add('comic-downloaded')
 							element.textContent = 'Downloaded'
 							parent.appendChild(element)
@@ -650,6 +641,5 @@ document.getElementById('browser-tool-search-form').addEventListener('submit', e
 	if (checkText.length > 0) {
 		tabs[activeTabIndex].s = input.value
 		eval(sites[thisSite][2].replace('{text}', `'${input.value.replace("'", "\\'")}'`))
-	} else
-		tabs[activeTabIndex].s = ''
+	} else tabs[activeTabIndex].s = ''
 })

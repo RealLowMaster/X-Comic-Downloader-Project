@@ -64,22 +64,21 @@ function lastSlash(str, backSlasg) {
 }
 
 function select(who, value) {
-	var parent = who.parentElement.parentElement
-	var overflow = parent.getElementsByTagName('div')[1]
-	var text = who.textContent
+	const parent = who.parentElement.parentElement
+	const overflow = parent.getElementsByTagName('div')[1]
 
-	parent.getElementsByTagName('div')[0].textContent = text
+	parent.getElementsByTagName('div')[0].textContent = who.textContent
 	overflow.style.display = 'none'
 	overflow.querySelector(`[onclick="select(this, ${parent.getAttribute('value')})"]`).removeAttribute('active')
 	parent.setAttribute('value', value)
 }
 
 function openSelect(who) {
-	var overflows = document.getElementsByClassName('input-row-selector-overflow')
-	for (var i = 0; i < overflows.length; i++) {
+	const overflows = document.getElementsByClassName('input-row-selector-overflow')
+	for (let i = 0; i < overflows.length; i++) {
 		overflows[i].style.display = 'none'
 	}
-	var overflow = who.getElementsByTagName('div')[1]
+	const overflow = who.getElementsByTagName('div')[1]
 	overflow.style.display = 'block'
 	overflow.querySelector(`[onclick="select(this, ${who.getAttribute('value')})"]`).setAttribute('active', '')
 }
@@ -94,7 +93,7 @@ function columnSelector(who, value) {
 
 function inputLimit(who, max) {
 	if (who == null || max == null) return
-	var value = who.value
+	const value = who.value
 
 	if (value > max)
 		who.value = max

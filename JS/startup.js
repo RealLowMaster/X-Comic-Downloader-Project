@@ -1,7 +1,8 @@
 function test() {
-	for (let i = 0; i < 10; i++) {
-		PopAlert(i)
-	}
+	let formatList = []
+	console.log(formatList)
+	formatList.push(['Hello', 'adasd', 'adasd'])
+	console.log(formatList)
 }
 
 document.addEventListener("DOMContentLoaded", () => {
