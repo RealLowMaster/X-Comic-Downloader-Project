@@ -932,12 +932,16 @@ div { display: block; }
 	height: 100%;
 	overflow: auto;
 	white-space: nowrap;
-	cursor: default;
+	cursor: grab;
 }
+
+.slider-overview > div::-webkit-scrollbar { display: none }
 
 .slider[opened-overview] > .slider-overview > div {
 	display: block;
 }
+
+.slider-overview > div[grabbing] > div { pointer-events: none !important }
 
 .slider-overview > div > div {
 	display: inline-block;

@@ -70,7 +70,7 @@ Add Comic {
 }
 
 Added To Version {
-	22
+	23
 	Fix Bug: You could sometime open more than 1 Comic Deleting Confirm Form in a moment
 	Optimize Widget Transitions
 	Optimize Image Loading
@@ -87,7 +87,6 @@ Did {
 Tasks => {
 	Ctrl + k | Ctrl + 0
 	When Site Not Responding TypeError: Cannot read property 'getElementsByTagName' of undefined
-	Add Grapping Ability To Slider Overview
 	Add Size Checker for changing border color in Slider Orginal Size
 	Add Random Jump Page
 	Add Ability To Zoom in Image in Sldier

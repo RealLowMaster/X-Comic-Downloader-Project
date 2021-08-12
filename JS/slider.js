@@ -1,13 +1,48 @@
+const comicSlider = document.getElementById('comic-slider')
+const comicSliderImg = document.getElementById('c-s-i')
+const comicSliderCanvas = comicSliderImg.parentElement
+const comicSliderOverview = document.getElementById('c-s-o')
+let comicSliderCanvasPos = { top: 0, left: 0, x: 0, y: 0 }
+let comicSliderOverviewPos = { left: 0, x: 0 }
+
 function toggleComicSliderOverview() {
-	if (comicSlider.hasAttribute('opened-overview')) comicSlider.removeAttribute('opened-overview')
-	else comicSlider.setAttribute('opened-overview', true)
+	if (comicSlider.hasAttribute('opened-overview')) {
+		comicSlider.removeAttribute('opened-overview')
+		comicSliderOverview.removeEventListener('mousedown', mouseSliderOverviewDownHandler)
+		sliderOverviewHandelRemover()
+	} else {
+		comicSlider.setAttribute('opened-overview', true)
+		comicSliderOverview.addEventListener('mousedown', mouseSliderOverviewDownHandler)
+	}
+}
+
+function mouseSliderOverviewDownHandler(e) {
+	comicSliderOverview.setAttribute('grabbing', true)
+	comicSliderOverviewPos = {
+		left: comicSliderOverview.scrollLeft,
+		x: e.clientX,
+	}
+
+	comicSliderOverview.addEventListener('mousemove', mouseSliderOverviewMoveHandler)
+	comicSliderOverview.addEventListener('mouseup', sliderOverviewHandelRemover)
+	comicSliderOverview.addEventListener('mouseout', sliderOverviewHandelRemover)
+}
+
+function mouseSliderOverviewMoveHandler(e) {
+	comicSliderOverview.scrollLeft = comicSliderOverviewPos.left - (e.clientX - comicSliderOverviewPos.x)
+}
+
+function sliderOverviewHandelRemover() {
+	comicSliderOverview.removeAttribute('grabbing')
+	comicSliderOverview.removeEventListener('mousemove', mouseSliderOverviewMoveHandler)
+	comicSliderOverview.removeEventListener('mouseup', sliderOverviewHandelRemover)
+	comicSliderOverview.removeEventListener('mouseout', sliderOverviewHandelRemover)
 }
 
 function toggleComicSliderSize(open) {
 	if (typeof(open) != 'boolean') {
-		const toggle = comicSliderCanvas.getAttribute('o-size') || null
-		if (toggle == null) open = true
-		else open = false
+		if (comicSliderCanvas.hasAttribute('o-size')) open = false
+		else open = true
 	}
 	
 	if (open) {
@@ -25,12 +60,10 @@ function toggleComicSliderSize(open) {
 		comicSliderImg.setAttribute('onclick', 'toggleComicSliderSize()')
 		comicSliderCanvas.removeEventListener('mousedown', mouseSliderDownHandler)
 		sliderHandelRemover()
-		comicSliderCanvas.style.cursor = 'default'
 	}
 }
 
 function mouseSliderDownHandler(e) {
-	comicSliderCanvas.style.cursor = 'grabbing'
 	comicSliderCanvasPos = {
 		left: comicSliderCanvas.scrollLeft,
 		top: comicSliderCanvas.scrollTop,
@@ -52,7 +85,6 @@ function mouseSliderMoveHandler(e) {
 }
 
 function sliderHandelRemover() {
-	comicSliderCanvas.style.cursor = 'grab'
 	comicSliderCanvas.removeEventListener('mousemove', mouseSliderMoveHandler)
 	comicSliderCanvas.removeEventListener('mouseup', sliderHandelRemover)
 	comicSliderCanvas.removeEventListener('mouseout', sliderHandelRemover)

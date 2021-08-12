@@ -36,9 +36,6 @@ const sites = [
 	]
 ]
 const ThisWindow = remote.getCurrentWindow(), loading = new Loading(14), db = {}, version = [1, 3, 7]
-const comicSlider = document.getElementById('comic-slider')
-const comicSliderImg = document.getElementById('c-s-i')
-const comicSliderCanvas = comicSliderImg.parentElement
 const comicGroupsContainer = document.getElementById('c-p-g')
 const comicArtistsContainer = document.getElementById('c-p-a')
 const comicParodyContainer = document.getElementById('c-p-p')
@@ -48,8 +45,7 @@ const browserPasteMenu = document.getElementById('browser-paste-menu')
 const bjp = document.getElementById('browser-jump-page-container')
 const bjp_i = document.getElementById('bjp-i')
 const bjp_m_p = document.getElementById('bjp-m-p')
-let comicSliderCanvasPos = { top: 0, left: 0, x: 0, y: 0 }, comicDeleting = false, downloadCounter = 0, needReload = true, wt_fps = 20
-
+let comicDeleting = false, downloadCounter = 0, needReload = true, wt_fps = 20
 var setting, dirDB, dirUL, tabs = [], downloadingList = [], thisSite, lastComicId, lastHaveId, lastGroupId, lastArtistId, lastParodyId, lastTagId, searchTimer, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = [], openedMenuTabIndex, copiedTab = null
 
 // Needable Functions
