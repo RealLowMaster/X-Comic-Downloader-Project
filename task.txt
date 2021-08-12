@@ -70,7 +70,7 @@ Add Comic {
 }
 
 Added To Version {
-	20
+	21
 	Fix Bug: You could sometime open more than 1 Comic Deleting Confirm Form in a moment
 	Optimize Widget Transitions
 	Optimize Image Loading
@@ -92,6 +92,7 @@ Tasks => {
 	Add Ability To Zoom in Image in Sldier
 	Add Image Thumb
 	How to Load Image Smoother
+	Save Setting in Documents
 
 	Mybe in v2  {
 		Fix Bug: Comic -> 22589-sinesian-collection-of-kobayashi-san-chi-no-maid-dragon.html
@@ -102,6 +103,7 @@ Tasks => {
 	}
 	
 	New Abilities For v2 {
+		Add Custom Theme Maker
 		Make Collection Basics
 		Add ReDownload Comic or A Picture
 		Make Repair Part Work Better
