@@ -988,10 +988,10 @@ function toggleComicSliderSize(open) {
 	}
 	
 	if (open) {
-		comicSliderCanvas.scrollTop = 100
-		comicSliderCanvas.scrollLeft = 150
-		document.getElementById('c-s-s').setAttribute('title', 'Cover Size')
 		comicSliderCanvas.setAttribute('o-size', true)
+		comicSliderCanvas.scrollTop = 0
+		comicSliderCanvas.scrollLeft = (comicSliderImg.clientWidth / 2) / 2
+		document.getElementById('c-s-s').setAttribute('title', 'Cover Size')
 		comicSliderImg.removeAttribute('onclick')
 		comicSliderCanvas.addEventListener('mousedown', mouseSliderDownHandler)
 	} else {
@@ -1048,17 +1048,21 @@ function toggleComicSliderScreen() {
 
 function changeSliderIndex(index) {
 	const overview_parent = document.getElementById('c-s-o')
+	const toggle = comicSliderCanvas.getAttribute('o-size') || null
 	const prev = document.getElementById('c-s-p')
 	const next = document.getElementById('c-s-n')
 	const count = Number(overview_parent.getAttribute('count'))
 	const passIndex = overview_parent.getAttribute('aindex') || null
-	if (passIndex != null) {
-		overview_parent.querySelector(`[i="${passIndex}"]`).removeAttribute('active')
-	}
+	if (passIndex != null) overview_parent.querySelector(`[i="${passIndex}"]`).removeAttribute('active')
 	overview_parent.setAttribute('aindex', index)
 	const overview = overview_parent.querySelector(`[i="${index}"]`)
 	overview.setAttribute('active', true)
 	comicSliderImg.setAttribute('src', overview.getElementsByTagName('img')[0].getAttribute('src'))
+
+	if (toggle != null) {
+		comicSliderCanvas.scrollTop = 0
+		comicSliderCanvas.scrollLeft = (comicSliderImg.clientWidth / 2) / 2
+	}
 
 	if (index == 0) prev.setAttribute('disabled', true)
 	else {
@@ -1074,8 +1078,8 @@ function changeSliderIndex(index) {
 }
 
 function openComicSlider(index) {
-	changeSliderIndex(index)
 	comicSlider.style.display = 'grid'
+	changeSliderIndex(index)
 }
 
 function closeComicSlider() {
@@ -2430,10 +2434,6 @@ function saveSetting(justSave) {
 function closeSetting() {
 	document.getElementById('setting-panel').style.display = 'none'
 	setLuanchTimeSettings(true)
-}
-
-function test(err) {
-	console.log('testing....')
 }
 
 document.addEventListener("DOMContentLoaded", () => {

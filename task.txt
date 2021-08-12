@@ -70,9 +70,10 @@ Add Comic {
 }
 
 Added To Version {
-	15
+	17
 	Optimize Widget Transitions
 	Optimize Image Loading
+	Add Slider
 }
 
 Did {
@@ -87,6 +88,8 @@ Tasks => {
 	Add Size Checker for changing border color in Slider Orginal Size
 	Add Random Jump Page
 	Add Ability To Zoom in Image in Sldier
+	Add Image Thumb
+	How to Load Image Smoother
 	Fix Bug: Comic -> 22589-sinesian-collection-of-kobayashi-san-chi-no-maid-dragon.html
 	Add Find Artist and ... To Offline Part
 	Make Collection Basics
