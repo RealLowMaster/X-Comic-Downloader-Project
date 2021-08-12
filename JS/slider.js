@@ -5,7 +5,7 @@ const comicSliderOverview = document.getElementById('c-s-o')
 let comicSliderCanvasPos = { top: 0, left: 0, x: 0, y: 0 }
 let comicSliderOverviewPos = { left: 0, x: 0 }
 
-function toggleComicSliderOverview() {
+function toggleComicSliderOverview(firstTime, who) {
 	if (comicSlider.hasAttribute('opened-overview')) {
 		comicSlider.removeAttribute('opened-overview')
 		comicSliderOverview.removeEventListener('mousedown', mouseSliderOverviewDownHandler)
@@ -13,6 +13,11 @@ function toggleComicSliderOverview() {
 	} else {
 		comicSlider.setAttribute('opened-overview', true)
 		comicSliderOverview.addEventListener('mousedown', mouseSliderOverviewDownHandler)
+	}
+
+	if (firstTime) {
+		comicSliderOverview.parentElement.children[1].setAttribute('onclick', 'toggleComicSliderOverview()')
+		comicSliderOverview.scrollLeft = (Number(comicSliderOverview.getAttribute('aindex')) * 138) - 3
 	}
 }
 
@@ -102,15 +107,14 @@ function toggleComicSliderScreen() {
 }
 
 function changeSliderIndex(index) {
-	const overview_parent = document.getElementById('c-s-o')
 	const toggle = comicSliderCanvas.getAttribute('o-size') || null
 	const prev = document.getElementById('c-s-p')
 	const next = document.getElementById('c-s-n')
-	const count = Number(overview_parent.getAttribute('count'))
-	const passIndex = overview_parent.getAttribute('aindex') || null
-	if (passIndex != null) overview_parent.querySelector(`[i="${passIndex}"]`).removeAttribute('active')
-	overview_parent.setAttribute('aindex', index)
-	const overview = overview_parent.querySelector(`[i="${index}"]`)
+	const count = Number(comicSliderOverview.getAttribute('count'))
+	const passIndex = comicSliderOverview.getAttribute('aindex') || null
+	if (passIndex != null) comicSliderOverview.querySelector(`[i="${passIndex}"]`).removeAttribute('active')
+	comicSliderOverview.setAttribute('aindex', index)
+	const overview = comicSliderOverview.querySelector(`[i="${index}"]`)
 	overview.setAttribute('active', true)
 	comicSliderImg.setAttribute('src', overview.getElementsByTagName('img')[0].getAttribute('src'))
 
@@ -134,6 +138,7 @@ function changeSliderIndex(index) {
 
 function openComicSlider(index) {
 	comicSlider.style.display = 'grid'
+	comicSliderOverview.parentElement.children[1].setAttribute('onclick', 'toggleComicSliderOverview(true, this)')
 	changeSliderIndex(index)
 }
 
