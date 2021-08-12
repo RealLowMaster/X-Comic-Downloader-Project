@@ -51,7 +51,8 @@ const browserPasteMenu = document.getElementById('browser-paste-menu')
 const bjp = document.getElementById('browser-jump-page-container')
 const bjp_i = document.getElementById('bjp-i')
 const bjp_m_p = document.getElementById('bjp-m-p')
-let comicSliderCanvasPos = { top: 0, left: 0, x: 0, y: 0 }
+let comicSliderCanvasPos = { top: 0, left: 0, x: 0, y: 0 }, comicDeleting = false
+
 var setting, dirDB, dirUL, tabs = [], downloadingList = [], downloadCounter = 0, thisSite, lastComicId, lastHaveId, lastGroupId, lastArtistId, lastParodyId, lastTagId, searchTimer, needReload = true, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = [], wt_fps, openedMenuTabIndex, copiedTab = null
 
 // Needable Functions
@@ -2135,6 +2136,7 @@ async function CreateComic(comicIndex, haveIndex, gottenResult, quality, image, 
 
 // Delete a Comic
 function deleteComic(id) {
+	comicDeleting = true
 	const errors = document.getElementsByClassName('error')
 	for (let i = 0; i < errors.length; i++) {
 		errors[i].remove()
@@ -2163,6 +2165,7 @@ function deleteComic(id) {
 			fix_index(11, true)
 			loading.forward()
 			loading.hide()
+			comicDeleting = false
 			PopAlert('Comic Deleted.', 'warning')
 			reloadLoadingComics()
 		}
@@ -2208,11 +2211,11 @@ function deleteComic(id) {
 		}
 
 		const delete_images = () => {
-			var formatIndex = 0, thisUrl
-			var lastIndex = ImagesFormats[0][1]
-			var thisForamat = ImagesFormats[0][2]
+			let formatIndex = 0, thisUrl
+			let lastIndex = ImagesFormats[0][1]
+			let thisForamat = ImagesFormats[0][2]
 			if (repair == null || repair.length == 0) {
-				for (var i = 0; i < ImagesCount; i++) {
+				for (let i = 0; i < ImagesCount; i++) {
 					if (i <= lastIndex)
 						thisUrl = `${dirUL}/${ImagesId}-${i}.${thisForamat}`
 					else {
@@ -2225,7 +2228,7 @@ function deleteComic(id) {
 					fs.unlinkSync(thisUrl)
 				}
 			} else {
-				for (var i = 0; i < ImagesCount; i++) {
+				for (let i = 0; i < ImagesCount; i++) {
 					if (repair.indexOf(i) == -1) {
 						if (i <= lastIndex)
 							thisUrl = `${dirUL}/${ImagesId}-${i}.${thisForamat}`
@@ -2257,6 +2260,7 @@ function deleteComic(id) {
 }
 
 function askForDeletingComic(id) {
+	if (comicDeleting) return
 	errorSelector('Are you sure you want To Delete This Comic ?', null, false, [
 		[
 			"Yes",
@@ -2465,6 +2469,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	ThisWindow.addListener('close', e => {
 		e.preventDefault()
+		if (comicDeleting) return
 		if (downloadingList.length > 0) {
 			errorSelector('You are Downloading Comics, Are you sure you want To Close Software?', null, false, [
 				[

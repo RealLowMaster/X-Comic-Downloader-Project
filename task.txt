@@ -70,19 +70,19 @@ Add Comic {
 }
 
 Added To Version {
-	17
+	18
 	Optimize Widget Transitions
 	Optimize Image Loading
 	Add Slider
+	Make Close Window Event Work Better For Deleting Comic
 }
 
 Did {
-	Make Slider Size System Part 1++
-
 	Make Repairing Systems Part 6++ = Next = Complete All Image Repairing
 }
 
 Tasks => {
+	Ctrl + k | Ctrl + 0
 	When Site Not Responding TypeError: Cannot read property 'getElementsByTagName' of undefined
 	Add Grapping Ability To Slider Overview
 	Add Size Checker for changing border color in Slider Orginal Size
@@ -90,18 +90,24 @@ Tasks => {
 	Add Ability To Zoom in Image in Sldier
 	Add Image Thumb
 	How to Load Image Smoother
-	Fix Bug: Comic -> 22589-sinesian-collection-of-kobayashi-san-chi-no-maid-dragon.html
-	Add Find Artist and ... To Offline Part
-	Make Collection Basics
-	Add Ability That Check Post Updated Image
-	Ctrl + k | Ctrl + 0
-	Make Close Window Event Work Better For Deleting Images
-	Remove Electron Window Frame And Make a Custome One
-	Add Report Bug Button
-	Add ReDownload Comic or A Pictur
-	Add Faver
-	Make Repair Part Work Better
-	Add Repair All Crashed Image Button
-	Fix net::ERR_CONNECTION_REFUSED in xlecx-api without VPN
-	Create NHentai API
+
+	Mybe in v2  {
+		Fix Bug: Comic -> 22589-sinesian-collection-of-kobayashi-san-chi-no-maid-dragon.html
+		Add Bookmark || Favoriet Posts
+		Add Ability That Check Post Updated Image
+		Add Find Artist and ... To Offline Part
+		Add Report Bug Button
+	}
+	
+	New Abilities For v2 {
+		Make Collection Basics
+		Add ReDownload Comic or A Picture
+		Make Repair Part Work Better
+		Add Repair All Crashed Image Button
+	}
+
+	Mybe Later {
+		Remove Electron Window Frame And Make a Custome One
+		Create NHentai API
+	}
 }
