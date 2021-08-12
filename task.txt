@@ -70,11 +70,13 @@ Add Comic {
 }
 
 Added To Version {
-	18
+	20
+	Fix Bug: You could sometime open more than 1 Comic Deleting Confirm Form in a moment
 	Optimize Widget Transitions
 	Optimize Image Loading
 	Add Slider
 	Make Close Window Event Work Better For Deleting Comic
+	Make Deleting Comic Waiting With More Detail
 }
 
 Did {

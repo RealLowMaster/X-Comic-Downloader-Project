@@ -2,15 +2,12 @@ function error(txt, onclick, t1) {
 	var err = txt.toString()
 	if (t1 != null) err = err.replace(/{var1}/gi, t1)
 	err = err.replace(/\n/gi, '<br>')
-	var element = document.createElement('div')
+	const element = document.createElement('div')
 	element.classList.add('action-error')
 
 	var html = `<div></div><div><p>${err}</p>`
-	if (onclick == null) {
-		html += `<button class="btn btn-danger" onclick="this.parentElement.parentElement.remove()">OK</button></div></div>`
-	} else {
-		html += `<button onclick="${onclick}">OK</button></div>`
-	}
+	if (onclick == null) html += `<button class="btn btn-danger" onclick="this.parentElement.parentElement.remove()">OK</button></div></div>`
+	else html += `<button onclick="${onclick}">OK</button></div>`
 	element.innerHTML = html
 
 	document.getElementsByTagName('body')[0].appendChild(element)

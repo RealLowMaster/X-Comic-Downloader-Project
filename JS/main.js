@@ -35,10 +35,7 @@ const sites = [
 		'xlecxJumpPage({index}, {page})'
 	]
 ]
-const ThisWindow = remote.getCurrentWindow()
-const loading = new Loading(14)
-const db = {}
-const version = [1, 3, 7]
+const ThisWindow = remote.getCurrentWindow(), loading = new Loading(14), db = {}, version = [1, 3, 7]
 const comicSlider = document.getElementById('comic-slider')
 const comicSliderImg = document.getElementById('c-s-i')
 const comicSliderCanvas = comicSliderImg.parentElement
@@ -51,9 +48,9 @@ const browserPasteMenu = document.getElementById('browser-paste-menu')
 const bjp = document.getElementById('browser-jump-page-container')
 const bjp_i = document.getElementById('bjp-i')
 const bjp_m_p = document.getElementById('bjp-m-p')
-let comicSliderCanvasPos = { top: 0, left: 0, x: 0, y: 0 }, comicDeleting = false
+let comicSliderCanvasPos = { top: 0, left: 0, x: 0, y: 0 }, comicDeleting = false, downloadCounter = 0, needReload = true, wt_fps = 20
 
-var setting, dirDB, dirUL, tabs = [], downloadingList = [], downloadCounter = 0, thisSite, lastComicId, lastHaveId, lastGroupId, lastArtistId, lastParodyId, lastTagId, searchTimer, needReload = true, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = [], wt_fps, openedMenuTabIndex, copiedTab = null
+var setting, dirDB, dirUL, tabs = [], downloadingList = [], thisSite, lastComicId, lastHaveId, lastGroupId, lastArtistId, lastParodyId, lastTagId, searchTimer, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = [], openedMenuTabIndex, copiedTab = null
 
 // Needable Functions
 function fileExt(str) {
@@ -2144,8 +2141,8 @@ function deleteComic(id) {
 	document.getElementById('comic-action-panel').style.display='none'
 	closeComicPanel()
 
-	loading.reset(8)
-	loading.show('Removing Comic From Database...')
+	loading.reset(0)
+	loading.show('Calculating...')
 
 	db.comics.findOne({_id:id}, (err, doc) => {
 		if (err) { loading.hide(); error(err); return }
@@ -2157,6 +2154,9 @@ function deleteComic(id) {
 		var repairImagesURLs = null
 		const site = doc.s
 		const post_id = doc.p
+		
+		loading.reset(8 + ImagesCount)
+		loading.show('Removing Comic From Database...')
 
 		if (repair != null && repair.length > 0) repairImagesURLs = doc.r
 
@@ -2226,6 +2226,7 @@ function deleteComic(id) {
 					}
 
 					fs.unlinkSync(thisUrl)
+					loading.forward(`Deleting Comic Images (${i+1}/${ImagesCount})...`)
 				}
 			} else {
 				for (let i = 0; i < ImagesCount; i++) {
@@ -2240,6 +2241,7 @@ function deleteComic(id) {
 						}
 
 						fs.unlinkSync(thisUrl)
+						loading.forward(`Deleting Comic Images (${i+1}/${ImagesCount})...`)
 					}
 				}
 			}
@@ -2261,6 +2263,7 @@ function deleteComic(id) {
 
 function askForDeletingComic(id) {
 	if (comicDeleting) return
+	comicDeleting = true
 	errorSelector('Are you sure you want To Delete This Comic ?', null, false, [
 		[
 			"Yes",
@@ -2269,7 +2272,8 @@ function askForDeletingComic(id) {
 		],
 		[
 			"No",
-			"btn btn-primary m-2"
+			"btn btn-primary m-2",
+			'comicDeleting = false;this.parentElement.parentElement.remove()'
 		]
 	])
 }
@@ -2438,6 +2442,12 @@ function saveSetting(justSave) {
 function closeSetting() {
 	document.getElementById('setting-panel').style.display = 'none'
 	setLuanchTimeSettings(true)
+}
+
+function test() {
+	for (let i = 0; i < 10; i++) {
+		PopAlert(i)
+	}
 }
 
 document.addEventListener("DOMContentLoaded", () => {
