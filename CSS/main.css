@@ -941,7 +941,6 @@ div { display: block; }
 	display: block;
 }
 
-.slider-overview > div[grabbing] > div { pointer-events: none !important }
 
 .slider-overview > div > div {
 	display: inline-block;
@@ -951,6 +950,7 @@ div { display: block; }
 	height: 190px;
 	background-color: #333;
 	overflow: hidden;
+	z-index: +1;
 	cursor: pointer;
 	transition: background-color .2s;
 }
@@ -959,6 +959,8 @@ div { display: block; }
 .slider-overview > div > div[active] {
 	background-color: #025ba7;
 }
+
+.slider-overview > div[grabbing] > div { pointer-events: none !important }
 
 .slider-overview > div > div > img {
 	width: 100%;

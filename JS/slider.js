@@ -22,6 +22,7 @@ function toggleComicSliderOverview(firstTime, who) {
 }
 
 function mouseSliderOverviewDownHandler(e) {
+	if (e.target.hasAttribute('id') == false) return
 	comicSliderOverview.setAttribute('grabbing', true)
 	comicSliderOverviewPos = {
 		left: comicSliderOverview.scrollLeft,
