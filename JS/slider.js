@@ -143,6 +143,12 @@ function openComicSlider(index) {
 	changeSliderIndex(index)
 }
 
+function reOpenLastSlider() {
+	comicSlider.style.display = 'grid'
+	if (comicSliderOverview.hasAttribute('aindex')) changeSliderIndex(Number(comicSliderOverview.getAttribute('aindex')))
+	else changeSliderIndex(0)
+}
+
 function closeComicSlider() {
 	comicSlider.style.display = 'none'
 	ThisWindow.setFullScreen(false)

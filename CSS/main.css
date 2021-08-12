@@ -676,7 +676,8 @@ div { display: block; }
 }
 
 .comic-panel-close-btn,
-.comic-panel-repair-info-btn {
+.comic-panel-repair-info-btn,
+.comic-panel-slider-btn {
 	display: flex;
 	width: 30px;
 	height: 30px;
@@ -689,26 +690,32 @@ div { display: block; }
 	justify-content: center;
 	position: fixed;
 	top: 10px;
-	right: 15px;
+	left: 15px;
 	cursor: pointer;
 	transition: background-color .2s, color .2s, border-color .2s;
 }
 
-.comic-panel-repair-info-btn > svg {
+.comic-panel-close-btn {
+	left: auto;
+	right: 15px;
+}
+
+.comic-panel-slider-btn {
+	left: 50px;
+}
+
+.comic-panel-repair-info-btn > svg,
+.comic-panel-slider-btn > svg {
 	width: 20px;
 	height: 20px;
 }
 
 .comic-panel-close-btn:hover,
-.comic-panel-repair-info-btn:hover {
+.comic-panel-repair-info-btn:hover,
+.comic-panel-slider-btn:hover {
 	background-color: #111;
 	color: #fff;
 	border-color: #222;
-}
-
-.comic-panel-repair-info-btn {
-	right: auto;
-	left: 15px;
 }
 
 .comic-panel-title {
@@ -805,13 +812,15 @@ div { display: block; }
 }
 
 .comic-panel-darkmode .comic-panel-close-btn,
-.comic-panel-darkmode .comic-panel-repair-info-btn {
+.comic-panel-darkmode .comic-panel-repair-info-btn,
+.comic-panel-darkmode .comic-panel-slider-btn {
 	color: #eee6;
 	border-color: #eee6;
 }
 
 .comic-panel-darkmode .comic-panel-close-btn:hover,
-.comic-panel-darkmode .comic-panel-repair-info-btn:hover {
+.comic-panel-darkmode .comic-panel-repair-info-btn:hover,
+.comic-panel-darkmode .comic-panel-slider-btn:hover {
 	background-color: #fff;
 	color: #222;
 }
