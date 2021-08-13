@@ -70,7 +70,7 @@ Add Comic {
 }
 
 Added To Version {
-	25
+	26
 	Fix Bug: You could sometime open more than 1 Comic Deleting Confirm Form in a moment
 	Optimize Widget Transitions
 	Optimize Image Loading
@@ -108,6 +108,7 @@ Tasks => {
 		Add ReDownload Comic or A Picture
 		Make Repair Part Work Better
 		Add Repair All Crashed Image Button
+		Add Jump to Picture to Comic Panel
 	}
 
 	Mybe Later {

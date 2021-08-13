@@ -217,12 +217,6 @@ function CheckUpdate() {
 	} else PopAlert('You are Offline.', 'danger')
 }
 
-function ChangeSizes() {
-	const size = window.innerWidth
-	comicSlider.style.width = size+'px'
-	document.getElementById('c-s-o').style.width = size+'px'
-}
-
 function reCreateNode(element, withChildren) {
 	if (withChildren) element.parentNode.replaceChild(element.cloneNode(true), element)
 	else {

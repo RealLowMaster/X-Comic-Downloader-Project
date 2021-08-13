@@ -1058,11 +1058,11 @@ div { display: block; }
 
 .slider-canvas {
 	display: flex;
-	width: calc(100% - 110px + 1px);
-	height: calc(100% - 110px + 1px);
-	max-width: calc(100% - 110px + 1px);
-	max-height: calc(100% - 80px + 1px);
-	border: 1px solid transparent;
+	width: calc(100% - 115px + 2px);
+	height: calc(100% - 115px + 2px);
+	max-width: calc(100% - 115px + 2px);
+	max-height: calc(100% - 85px + 2px);
+	border: 2px solid transparent;
 	justify-content: center;
 	align-items: center;
 	overflow: hidden;
@@ -1088,7 +1088,6 @@ div { display: block; }
 	display: block;
 	width: auto !important;
 	height: auto !important;
-	border-color: #000;
 	overflow: auto;
 	cursor: grab;
 	z-index: +1;
@@ -1105,6 +1104,25 @@ div { display: block; }
 	max-width: none;
 	max-height: none;
 	pointer-events: none !important;
+	z-index: -2;
+}
+
+.slider > div:last-child > .slider-scroll-panel {
+	display: none;
+	margin: auto;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: +2;
+}
+
+.slider > div:last-child > .slider-scroll-panel[sliding] {
+	width: 100% !important;
+	height: 100% !important;
+	position: fixed !important;
+	z-index: +1 !important;
 }
 
 .slider > div:last-child > button {

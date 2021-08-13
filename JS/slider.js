@@ -1,6 +1,7 @@
 const comicSlider = document.getElementById('comic-slider')
 const comicSliderImg = document.getElementById('c-s-i')
 const comicSliderCanvas = comicSliderImg.parentElement
+const comicSliderCanvasScrollPanel = document.getElementById('c-s-s-p')
 const comicSliderOverview = document.getElementById('c-s-o')
 let comicSliderCanvasPos = { top: 0, left: 0, x: 0, y: 0 }
 let comicSliderOverviewPos = { left: 0, x: 0 }
@@ -57,14 +58,21 @@ function toggleComicSliderSize(open) {
 		comicSliderCanvas.scrollLeft = (comicSliderImg.clientWidth / 2) / 2
 		document.getElementById('c-s-s').setAttribute('title', 'Cover Size')
 		comicSliderImg.removeAttribute('onclick')
-		comicSliderCanvas.addEventListener('mousedown', mouseSliderDownHandler)
+		comicSliderCanvas.style.borderColor = '#000'
+		comicSliderCanvasScrollPanel.style.display = 'block'
+		comicSliderCanvasScrollPanel.style.width = comicSliderCanvas.clientWidth+'px'
+		comicSliderCanvasScrollPanel.style.height = comicSliderCanvas.clientHeight+'px'
+		comicSliderCanvasScrollPanel.addEventListener('mousedown', mouseSliderDownHandler)
+		sliderImageBorderHighlighter()
 	} else {
 		comicSliderCanvas.scrollTop = 0
 		comicSliderCanvas.scrollLeft = 0
 		document.getElementById('c-s-s').setAttribute('title', 'Orginal Size')
 		comicSliderCanvas.removeAttribute('o-size')
+		comicSliderCanvas.style.borderColor = 'transparent'
 		comicSliderImg.setAttribute('onclick', 'toggleComicSliderSize()')
-		comicSliderCanvas.removeEventListener('mousedown', mouseSliderDownHandler)
+		comicSliderCanvasScrollPanel.style.display = 'none'
+		comicSliderCanvasScrollPanel.removeEventListener('mousedown', mouseSliderDownHandler)
 		sliderHandelRemover()
 	}
 }
@@ -77,23 +85,37 @@ function mouseSliderDownHandler(e) {
 		y: e.clientY,
 	}
 
-	comicSliderCanvas.addEventListener('mousemove', mouseSliderMoveHandler)
-	comicSliderCanvas.addEventListener('mouseup', sliderHandelRemover)
-	comicSliderCanvas.addEventListener('mouseout', sliderHandelRemover)
+	comicSliderCanvasScrollPanel.setAttribute('sliding', true)
+	comicSliderCanvasScrollPanel.addEventListener('mousemove', mouseSliderMoveHandler)
+	comicSliderCanvasScrollPanel.addEventListener('mouseup', sliderHandelRemover)
+	comicSliderCanvasScrollPanel.addEventListener('mouseout', sliderHandelRemover)
 }
 
 function mouseSliderMoveHandler(e) {
-	const dx = e.clientX - comicSliderCanvasPos.x
-	const dy = e.clientY - comicSliderCanvasPos.y
-
-	comicSliderCanvas.scrollTop = comicSliderCanvasPos.top - dy
-	comicSliderCanvas.scrollLeft = comicSliderCanvasPos.left - dx
+	comicSliderCanvas.scrollTop = comicSliderCanvasPos.top - (e.clientY - comicSliderCanvasPos.y)
+	comicSliderCanvas.scrollLeft = comicSliderCanvasPos.left - (e.clientX - comicSliderCanvasPos.x)
+	sliderImageBorderHighlighter()
 }
 
 function sliderHandelRemover() {
-	comicSliderCanvas.removeEventListener('mousemove', mouseSliderMoveHandler)
-	comicSliderCanvas.removeEventListener('mouseup', sliderHandelRemover)
-	comicSliderCanvas.removeEventListener('mouseout', sliderHandelRemover)
+	comicSliderCanvasScrollPanel.removeEventListener('mousemove', mouseSliderMoveHandler)
+	comicSliderCanvasScrollPanel.removeEventListener('mouseup', sliderHandelRemover)
+	comicSliderCanvasScrollPanel.removeEventListener('mouseout', sliderHandelRemover)
+	comicSliderCanvasScrollPanel.removeAttribute('sliding')
+}
+
+function sliderImageBorderHighlighter() {
+	if (comicSliderCanvas.scrollTop == 0) comicSliderCanvas.style.borderTopColor = '#5dade2'
+	else comicSliderCanvas.style.borderTopColor = '#000'
+
+	if (comicSliderCanvas.scrollLeft == 0) comicSliderCanvas.style.borderLeftColor = '#5dade2'
+	else comicSliderCanvas.style.borderLeftColor = '#000'
+
+	if (comicSliderCanvas.scrollLeft == comicSliderImg.clientWidth - comicSliderCanvas.clientWidth) comicSliderCanvas.style.borderRightColor = '#5dade2'
+	else comicSliderCanvas.style.borderRightColor = '#000'
+
+	if (comicSliderCanvas.scrollTop == comicSliderImg.clientHeight - comicSliderCanvas.clientHeight) comicSliderCanvas.style.borderBottomColor = '#5dade2'
+	else comicSliderCanvas.style.borderBottomColor = '#000'
 }
 
 function toggleComicSliderScreen() {
