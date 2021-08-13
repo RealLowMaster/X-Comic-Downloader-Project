@@ -70,7 +70,7 @@ Add Comic {
 }
 
 Added To Version {
-	28
+	30
 	Fix Bug: You could sometime open more than 1 Comic Deleting Confirm Form in a moment
 	Optimize Widget Transitions
 	Optimize Image Loading
@@ -87,13 +87,12 @@ Did {
 Tasks => {
 	Ctrl + k | Ctrl + 0
 	When Site Not Responding TypeError: Cannot read property 'getElementsByTagName' of undefined
-	Add Size Checker for changing border color in Slider Orginal Size
 	Add Random Jump Page
-	Add Ability To Zoom in Image in Sldier
 	Add Image Thumb
 	How to Load Image Smoother
 	Save Setting in Documents
 	Add Perfect Drag to Scroll To Slider Overview
+	Add Auto Scroll Down for Comic Panel
 
 	Mybe in v2  {
 		Fix Bug: Comic -> 22589-sinesian-collection-of-kobayashi-san-chi-no-maid-dragon.html
@@ -104,6 +103,7 @@ Tasks => {
 	}
 	
 	New Abilities For v2 {
+		Add Ability To Zoom in Image in Sldier
 		Add Custom Theme Maker
 		Make Collection Basics
 		Add ReDownload Comic or A Picture

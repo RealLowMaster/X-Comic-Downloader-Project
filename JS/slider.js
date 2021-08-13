@@ -1,8 +1,10 @@
 const comicSlider = document.getElementById('comic-slider')
+const comicSliderContent = document.getElementById('c-s-ct')
+const comicSliderCanvas = document.getElementById('c-s-c')
 const comicSliderImg = document.getElementById('c-s-i')
-const comicSliderCanvas = comicSliderImg.parentElement
 const comicSliderCanvasScrollPanel = document.getElementById('c-s-s-p')
 const comicSliderOverview = document.getElementById('c-s-o')
+const comicSliderBackground = document.getElementById('c-s-bg')
 let comicSliderCanvasPos = { top: 0, left: 0, x: 0, y: 0 }
 let comicSliderOverviewPos = { left: 0, x: 0 }
 
@@ -11,9 +13,11 @@ function toggleComicSliderOverview(firstTime, who) {
 		comicSlider.removeAttribute('opened-overview')
 		comicSliderOverview.removeEventListener('mousedown', mouseSliderOverviewDownHandler)
 		sliderOverviewHandelRemover()
+		comicSliderOverview.removeEventListener('wheel', sliderOverviewScrollHandler)
 	} else {
 		comicSlider.setAttribute('opened-overview', true)
 		comicSliderOverview.addEventListener('mousedown', mouseSliderOverviewDownHandler)
+		comicSliderOverview.addEventListener('wheel', sliderOverviewScrollHandler)
 	}
 
 	if (firstTime) {
@@ -23,6 +27,11 @@ function toggleComicSliderOverview(firstTime, who) {
 
 	comicSliderCanvasScrollPanel.style.width = comicSliderCanvas.clientWidth+'px'
 	comicSliderCanvasScrollPanel.style.height = comicSliderCanvas.clientHeight+'px'
+}
+
+function sliderOverviewScrollHandler(e) {
+	e.preventDefault()
+	comicSliderOverview.scrollLeft += e.deltaY
 }
 
 function mouseSliderOverviewDownHandler(e) {
@@ -65,8 +74,11 @@ function toggleComicSliderSize(open) {
 		comicSliderCanvasScrollPanel.style.display = 'block'
 		comicSliderCanvasScrollPanel.style.width = comicSliderCanvas.clientWidth+'px'
 		comicSliderCanvasScrollPanel.style.height = comicSliderCanvas.clientHeight+'px'
+		comicSliderCanvasScrollPanel.addEventListener('wheel', sliderImgScrollHandler)
 		comicSliderCanvasScrollPanel.addEventListener('mousedown', mouseSliderDownHandler)
 		sliderImageBorderHighlighter()
+		comicSliderContent.removeEventListener('wheel', sliderScrollHandler)
+		comicSliderBackground.addEventListener('wheel', sliderScrollHandler)
 	} else {
 		comicSliderCanvas.scrollTop = 0
 		comicSliderCanvas.scrollLeft = 0
@@ -77,7 +89,15 @@ function toggleComicSliderSize(open) {
 		comicSliderCanvasScrollPanel.style.display = 'none'
 		comicSliderCanvasScrollPanel.removeEventListener('mousedown', mouseSliderDownHandler)
 		sliderHandelRemover()
+		comicSliderCanvasScrollPanel.removeEventListener('wheel', sliderImgScrollHandler)
+		comicSliderContent.addEventListener('wheel', sliderScrollHandler)
+		comicSliderBackground.removeEventListener('wheel', sliderScrollHandler)
 	}
+}
+
+function sliderImgScrollHandler(e) {
+	e.preventDefault()
+	comicSliderCanvas.scrollTop += e.deltaY
 }
 
 function mouseSliderDownHandler(e) {
@@ -89,6 +109,7 @@ function mouseSliderDownHandler(e) {
 	}
 
 	comicSliderCanvasScrollPanel.setAttribute('sliding', true)
+	comicSliderCanvasScrollPanel.removeEventListener('wheel', sliderImgScrollHandler)
 	comicSliderCanvasScrollPanel.addEventListener('mousemove', mouseSliderMoveHandler)
 	comicSliderCanvasScrollPanel.addEventListener('mouseup', sliderHandelRemover)
 	comicSliderCanvasScrollPanel.addEventListener('mouseout', sliderHandelRemover)
@@ -101,6 +122,7 @@ function mouseSliderMoveHandler(e) {
 }
 
 function sliderHandelRemover() {
+	comicSliderCanvasScrollPanel.addEventListener('wheel', sliderImgScrollHandler)
 	comicSliderCanvasScrollPanel.removeEventListener('mousemove', mouseSliderMoveHandler)
 	comicSliderCanvasScrollPanel.removeEventListener('mouseup', sliderHandelRemover)
 	comicSliderCanvasScrollPanel.removeEventListener('mouseout', sliderHandelRemover)
@@ -166,12 +188,14 @@ function openComicSlider(index) {
 	comicSlider.style.display = 'grid'
 	comicSliderOverview.parentElement.children[1].setAttribute('onclick', 'toggleComicSliderOverview(true, this)')
 	changeSliderIndex(index)
+	comicSliderContent.addEventListener('wheel', sliderScrollHandler)
 }
 
 function reOpenLastSlider() {
 	comicSlider.style.display = 'grid'
 	if (comicSliderOverview.hasAttribute('aindex')) changeSliderIndex(Number(comicSliderOverview.getAttribute('aindex')))
 	else changeSliderIndex(0)
+	comicSliderContent.addEventListener('wheel', sliderScrollHandler)
 }
 
 function closeComicSlider() {
@@ -181,4 +205,17 @@ function closeComicSlider() {
 	comicSlider.setAttribute('src', '')
 	comicSlider.removeAttribute('opened-overview')
 	toggleComicSliderSize(false)
+	comicSliderContent.removeEventListener('wheel', sliderScrollHandler)
+	comicSliderBackground.removeEventListener('wheel', sliderScrollHandler)
+}
+
+function sliderScrollHandler(e) {
+	e.preventDefault()
+	const index = Number(comicSliderOverview.getAttribute('aindex'))
+	if (e.deltaY < 0) {
+		if (index != 0) changeSliderIndex(index - 1)
+	} else {
+		const count = Number(comicSliderOverview.getAttribute('count'))
+		if (index != count) changeSliderIndex(index + 1)
+	}
 }
