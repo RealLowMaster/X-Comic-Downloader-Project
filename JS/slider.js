@@ -130,7 +130,6 @@ function toggleComicSliderScreen() {
 }
 
 function changeSliderIndex(index) {
-	const toggle = comicSliderCanvas.getAttribute('o-size') || null
 	const prev = document.getElementById('c-s-p')
 	const next = document.getElementById('c-s-n')
 	const count = Number(comicSliderOverview.getAttribute('count'))
@@ -141,9 +140,10 @@ function changeSliderIndex(index) {
 	overview.setAttribute('active', true)
 	comicSliderImg.setAttribute('src', overview.getElementsByTagName('img')[0].getAttribute('src'))
 
-	if (toggle != null) {
+	if (comicSliderCanvas.hasAttribute('o-size')) {
 		comicSliderCanvas.scrollTop = 0
 		comicSliderCanvas.scrollLeft = (comicSliderImg.clientWidth / 2) / 2
+		sliderImageBorderHighlighter()
 	}
 
 	if (index == 0) prev.setAttribute('disabled', true)

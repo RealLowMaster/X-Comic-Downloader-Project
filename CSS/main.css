@@ -1089,7 +1089,6 @@ div { display: block; }
 	width: auto !important;
 	height: auto !important;
 	overflow: auto;
-	cursor: grab;
 	z-index: +1;
 }
 
@@ -1116,6 +1115,7 @@ div { display: block; }
 	right: 0;
 	bottom: 0;
 	z-index: +2;
+	cursor: grab;
 }
 
 .slider > div:last-child > .slider-scroll-panel[sliding] {

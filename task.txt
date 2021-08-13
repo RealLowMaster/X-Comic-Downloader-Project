@@ -70,7 +70,7 @@ Add Comic {
 }
 
 Added To Version {
-	26
+	28
 	Fix Bug: You could sometime open more than 1 Comic Deleting Confirm Form in a moment
 	Optimize Widget Transitions
 	Optimize Image Loading
@@ -93,6 +93,7 @@ Tasks => {
 	Add Image Thumb
 	How to Load Image Smoother
 	Save Setting in Documents
+	Add Perfect Drag to Scroll To Slider Overview
 
 	Mybe in v2  {
 		Fix Bug: Comic -> 22589-sinesian-collection-of-kobayashi-san-chi-no-maid-dragon.html
@@ -109,6 +110,7 @@ Tasks => {
 		Make Repair Part Work Better
 		Add Repair All Crashed Image Button
 		Add Jump to Picture to Comic Panel
+		Add Transform Slider Mouse Move To Display on Another Side To Contniue drag to scroll
 	}
 
 	Mybe Later {
