@@ -17,9 +17,12 @@ function toggleComicSliderOverview(firstTime, who) {
 	}
 
 	if (firstTime) {
-		comicSliderOverview.parentElement.children[1].setAttribute('onclick', 'toggleComicSliderOverview()')
+		who.setAttribute('onclick', 'toggleComicSliderOverview()')
 		comicSliderOverview.scrollLeft = (Number(comicSliderOverview.getAttribute('aindex')) * 138) - 3
 	}
+
+	comicSliderCanvasScrollPanel.style.width = comicSliderCanvas.clientWidth+'px'
+	comicSliderCanvasScrollPanel.style.height = comicSliderCanvas.clientHeight+'px'
 }
 
 function mouseSliderOverviewDownHandler(e) {
