@@ -258,7 +258,6 @@ function openComic(id) {
 	id = id || null
 	if (id == null) { error('Id Can\'t be Null.'); return }
 	const title_container = document.getElementById('c-p-t')
-	const overview_parent = document.getElementById('c-s-o')
 	const image_container = document.getElementById('c-p-i')
 	let html = '', formatIndex = 0
 	var name, image, ImagesCount, formats
@@ -270,7 +269,7 @@ function openComic(id) {
 
 	title_container.textContent = ''
 	image_container.innerHTML = ''
-	overview_parent.setAttribute('aindex', '')
+	comicSliderOverview.setAttribute('aindex', '')
 
 	const findComic = async() => {
 		await db.comics.findOne({_id:Number(id)}, (err, doc) => {
@@ -327,8 +326,9 @@ function openComic(id) {
 				}
 			}
 			image_container.innerHTML = html
-			overview_parent.innerHTML = slider_overview_html
-			overview_parent.setAttribute('count', ImagesCount - 1)
+			comicSliderOverview.innerHTML = slider_overview_html
+			comicSliderOverview.setAttribute('count', ImagesCount - 1)
+			comicSliderMaxPages.textContent = ImagesCount
 
 			const LoadingImages = image_container.getElementsByTagName('img')
 

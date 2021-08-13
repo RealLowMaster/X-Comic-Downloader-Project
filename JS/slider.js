@@ -5,6 +5,8 @@ const comicSliderImg = document.getElementById('c-s-i')
 const comicSliderCanvasScrollPanel = document.getElementById('c-s-s-p')
 const comicSliderOverview = document.getElementById('c-s-o')
 const comicSliderBackground = document.getElementById('c-s-bg')
+const comicSliderActivePage = document.getElementById('c-s-a-pg')
+const comicSliderMaxPages = document.getElementById('c-s-m-pg')
 let comicSliderCanvasPos = { top: 0, left: 0, x: 0, y: 0 }
 let comicSliderOverviewPos = { left: 0, x: 0 }
 
@@ -174,13 +176,15 @@ function changeSliderIndex(index) {
 	if (index == 0) prev.setAttribute('disabled', true)
 	else {
 		prev.removeAttribute('disabled')
-		prev.setAttribute('onclick', `changeSliderIndex(${index-1})`)
+		prev.setAttribute('onclick', `changeSliderIndex(${index - 1})`)
+		comicSliderActivePage.textContent = index + 1
 	}
 
 	if (index == count) next.setAttribute('disabled', true)
 	else {
 		next.removeAttribute('disabled')
-		next.setAttribute('onclick', `changeSliderIndex(${index+1})`)
+		next.setAttribute('onclick', `changeSliderIndex(${index + 1})`)
+		comicSliderActivePage.textContent = index + 1
 	}
 }
 
