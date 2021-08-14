@@ -153,7 +153,7 @@ function saveSetting(justSave) {
 		PopAlert('Setting Saved.')
 	}
 
-	fs.writeFileSync(dirRoot+'/setting.json', MakeJsonString(setting), {encoding:"utf8"})
+	fs.writeFileSync(dirDocument+'/setting.json', MakeJsonString(setting), {encoding:"utf8"})
 	if (reload == true) ThisWindow.reload()
 	else document.getElementById('setting-panel').style.display = 'none'
 }

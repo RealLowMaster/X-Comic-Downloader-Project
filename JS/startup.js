@@ -10,10 +10,7 @@ function ChangeSizes() {
 }
 
 function test() {
-	let formatList = []
-	console.log(formatList)
-	formatList.push(['Hello', 'adasd', 'adasd'])
-	console.log(formatList)
+	console.log(remote.app.getPath('documents'))
 }
 
 document.addEventListener("DOMContentLoaded", () => {

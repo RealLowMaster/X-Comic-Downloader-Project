@@ -70,7 +70,7 @@ Add Comic {
 }
 
 Added To Version {
-	42
+	43
 	Fix Bug: You could sometime open more than 1 Comic Deleting Confirm Form in a moment
 	Fix Bug: Offline Jump Page not Working Well With Search Value
 	Optimize Widget Transitions
@@ -81,6 +81,7 @@ Added To Version {
 	Add Image Thumb Maker In Setting, It Make Comic Load Mush Faster in Overview, Mush Faster!
 	Make Close Window Event Work Better For Deleting Comic
 	Make Deleting Comic Waiting With More Detail
+	Change Saveing Setting File From App Directory To Document Directory
 }
 
 Did {
@@ -90,8 +91,6 @@ Did {
 Tasks => {
 	Ctrl + k | Ctrl + 0
 	When Site Not Responding TypeError: Cannot read property 'getElementsByTagName' of undefined
-	How to Load Image Smoother
-	Save Setting in Documents
 	Add Perfect Drag to Scroll To Slider Overview
 	Add Auto Scroll Down for Comic Panel
 	Add Arrow Keys For Changing Offline Pages

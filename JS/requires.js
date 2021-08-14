@@ -20,6 +20,7 @@ const defaultSetting = {
 	"file_location": null,
 	"developer_mode": false
 }
+
 const comicPanel = document.getElementById('comic-panel')
 const pageContainer = document.getElementById('browser-pages')
 const imageLazyLoadingOptions = {
@@ -228,13 +229,19 @@ function reCreateNode(element, withChildren) {
 }
 
 // Main Loading Stuff
-const dirRoot = __dirname.replace('\\app.asar', '')
+const dirDocument = remote.app.getPath('documents')+'\\X Comic Downloader'
 
 function GetSettingFile() {
-	if (!fs.existsSync(dirRoot+'/setting.json')) {
+	if (!fs.existsSync(dirDocument)) {
+		fs.mkdirSync(dirDocument)
 		setting = defaultSetting
-		fs.writeFileSync(dirRoot+'/setting.json', MakeJsonString(setting), {encoding:"utf8"})
-	} else setting = getJSON(dirRoot+'/setting.json')
+		fs.writeFileSync(dirDocument+'/setting.json', MakeJsonString(setting), {encoding:"utf8"})
+	} else {
+		if (!fs.existsSync(dirDocument+'/setting.json')) {
+			setting = defaultSetting
+			fs.writeFileSync(dirDocument+'/setting.json', MakeJsonString(setting), {encoding:"utf8"})
+		} else setting = getJSON(dirDocument+'/setting.json')
+	}
 }
 
 function GetDirection() {
