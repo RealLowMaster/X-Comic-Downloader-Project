@@ -193,6 +193,7 @@ function openComicSlider(index) {
 	comicSliderOverview.parentElement.children[1].setAttribute('onclick', 'toggleComicSliderOverview(true, this)')
 	changeSliderIndex(index)
 	comicSliderContent.addEventListener('wheel', sliderScrollHandler)
+	window.addEventListener('keydown', sliderKeyHandler)
 }
 
 function reOpenLastSlider() {
@@ -200,6 +201,7 @@ function reOpenLastSlider() {
 	if (comicSliderOverview.hasAttribute('aindex')) changeSliderIndex(Number(comicSliderOverview.getAttribute('aindex')))
 	else changeSliderIndex(0)
 	comicSliderContent.addEventListener('wheel', sliderScrollHandler)
+	window.addEventListener('keydown', sliderKeyHandler)
 }
 
 function closeComicSlider() {
@@ -211,6 +213,7 @@ function closeComicSlider() {
 	toggleComicSliderSize(false)
 	comicSliderContent.removeEventListener('wheel', sliderScrollHandler)
 	comicSliderBackground.removeEventListener('wheel', sliderScrollHandler)
+	window.removeEventListener('keydown', sliderKeyHandler)
 }
 
 function sliderScrollHandler(e) {
@@ -219,6 +222,18 @@ function sliderScrollHandler(e) {
 	if (e.deltaY < 0) {
 		if (index != 0) changeSliderIndex(index - 1)
 	} else {
+		const count = Number(comicSliderOverview.getAttribute('count'))
+		if (index != count) changeSliderIndex(index + 1)
+	}
+}
+
+function sliderKeyHandler(e) {
+	const code = e.which
+	if (code == 37 || code == 38) {
+		const index = Number(comicSliderOverview.getAttribute('aindex'))
+		if (index != 0) changeSliderIndex(index - 1)
+	} else if (code == 39 || code == 40) {
+		const index = Number(comicSliderOverview.getAttribute('aindex'))
 		const count = Number(comicSliderOverview.getAttribute('count'))
 		if (index != count) changeSliderIndex(index + 1)
 	}
