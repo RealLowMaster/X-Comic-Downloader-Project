@@ -171,6 +171,8 @@ function changeSliderIndex(index) {
 		comicSliderCanvas.scrollTop = 0
 		comicSliderCanvas.scrollLeft = (comicSliderImg.clientWidth / 2) / 2
 		sliderImageBorderHighlighter()
+		comicSliderCanvasScrollPanel.style.width = comicSliderCanvas.clientWidth+'px'
+		comicSliderCanvasScrollPanel.style.height = comicSliderCanvas.clientHeight+'px'
 	}
 
 	if (index == 0) prev.setAttribute('disabled', true)
