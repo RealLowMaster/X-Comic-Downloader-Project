@@ -144,7 +144,7 @@ function pagination(total_pages, page) {
 }
 
 function searchComics(value, page) {
-	var search_speed
+	let search_speed
 	if (page == undefined) {
 		switch (setting.search_speed) {
 			case 0:
@@ -164,19 +164,23 @@ function searchComics(value, page) {
 
 	clearTimeout(searchTimer)
 	if (value.length > 0) {
+		if (typeof(page) != 'number') page = 1
 		if (search_speed == 0) {
-			loadComics(1, value)
+			loadComics(page, value)
 		} else {
 			searchTimer = setTimeout(() => {
-				loadComics(1, value)
+				loadComics(page, value)
 			}, search_speed)
 		}
-	} else if (page != undefined) {
-		page = page || 1
+	} else if (typeof(page) == 'number') {
 		searchTimer = setTimeout(() => {
 			loadComics(page, value)
 		}, 330)
 	} else loadComics(1, null)
+}
+
+function randomJumpPage(limit) {
+	searchComics(document.getElementById('offline-search-form-input').value, Math.floor(Math.random() * limit))
 }
 
 function reloadLoadingComics() {

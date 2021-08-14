@@ -70,12 +70,14 @@ Add Comic {
 }
 
 Added To Version {
-	33
+	35
 	Fix Bug: You could sometime open more than 1 Comic Deleting Confirm Form in a moment
+	Fix Bug: Offline Jump Page not Working Well With Search Value
 	Optimize Widget Transitions
 	Optimize Image Loading
 	Optimize Variables
 	Add Slider
+	Add Random Jump Page Button
 	Make Close Window Event Work Better For Deleting Comic
 	Make Deleting Comic Waiting With More Detail
 }
@@ -87,7 +89,6 @@ Did {
 Tasks => {
 	Ctrl + k | Ctrl + 0
 	When Site Not Responding TypeError: Cannot read property 'getElementsByTagName' of undefined
-	Add Random Jump Page
 	Add Image Thumb
 	How to Load Image Smoother
 	Save Setting in Documents
