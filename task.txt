@@ -94,6 +94,7 @@ Tasks => {
 	Save Setting in Documents
 	Add Perfect Drag to Scroll To Slider Overview
 	Add Auto Scroll Down for Comic Panel
+	Add Arrow Keys For Changing Offline Pages
 
 	Mybe in v2  {
 		Fix Bug: Comic -> 22589-sinesian-collection-of-kobayashi-san-chi-no-maid-dragon.html

@@ -383,12 +383,11 @@ async function CreateComic(comicIndex, haveIndex, gottenResult, quality, image, 
 
 // Delete a Comic
 function deleteComic(id) {
-	comicDeleting = true
-	const errors = document.getElementsByClassName('error')
+	document.getElementById('comic-action-panel').style.display = 'none'
+	const errors = document.getElementsByClassName('action-error')
 	for (let i = 0; i < errors.length; i++) {
 		errors[i].remove()
 	}
-	document.getElementById('comic-action-panel').style.display='none'
 	closeComicPanel()
 
 	loading.reset(0)
@@ -415,8 +414,8 @@ function deleteComic(id) {
 			fix_index(11, true)
 			loading.forward()
 			loading.hide()
-			comicDeleting = false
 			PopAlert('Comic Deleted.', 'warning')
+			comicDeleting = false
 			reloadLoadingComics()
 		}
 
@@ -512,7 +511,7 @@ function deleteComic(id) {
 }
 
 function askForDeletingComic(id) {
-	if (comicDeleting) return
+	if (comicDeleting == true) return
 	comicDeleting = true
 	errorSelector('Are you sure you want To Delete This Comic ?', null, false, [
 		[
