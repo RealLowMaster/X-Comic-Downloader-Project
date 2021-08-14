@@ -70,7 +70,7 @@ Add Comic {
 }
 
 Added To Version {
-	44
+	45
 	Fix Bug: You could sometime open more than 1 Comic Deleting Confirm Form in a moment
 	Fix Bug: Offline Jump Page not Working Well With Search Value
 	Fix Bug: Sometimes App Close Button Doesn't Work
@@ -80,6 +80,7 @@ Added To Version {
 	Add Slider
 	Add Random Jump Page Button
 	Add Image Thumb Maker In Setting, It Make Comic Load Mush Faster in Overview, Mush Faster!
+	Add Server Response Status Checker
 	Make Close Window Event Work Better For Deleting Comic
 	Make Deleting Comic Waiting With More Detail
 	Change Saveing Setting File From App Directory To Document Directory
@@ -91,13 +92,11 @@ Did {
 
 Tasks => {
 	Ctrl + k | Ctrl + 0
-	When Site Not Responding TypeError: Cannot read property 'getElementsByTagName' of undefined
 	Add Perfect Drag to Scroll To Slider Overview
 	Add Auto Scroll Down for Comic Panel
 	Add Arrow Keys For Changing Offline Pages
 
 	Mybe in v2  {
-		Fix Bug: Comic -> 22589-sinesian-collection-of-kobayashi-san-chi-no-maid-dragon.html
 		Add Bookmark || Favoriet Posts
 		Add Ability That Check Post Updated Image
 		Add Find Artist and ... To Offline Part

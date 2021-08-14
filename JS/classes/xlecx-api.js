@@ -1,4 +1,12 @@
 class XlecxAPI {
+	#status = [403, 404, 500, 503]
+	#statusMessage = [
+		"You don't have the permission to View this Page.",
+		"Page Not Found.",
+		"Internal Server Error.",
+		"Server is unavailable at this Time."
+	]
+
 	constructor() {
 		this.baseURL = 'https://xlecx.org'
 		this.groupURL = '/xfsearch/group/'
@@ -25,6 +33,11 @@ class XlecxAPI {
 		if (typeof callback != 'function') throw "The Type of Callback Should Be a Function."
 
 		fetch(url).then(response => {
+			if (response.status != 200) {
+				const index = this.#status.indexOf(response.status)
+				if (index > -1) throw this.#statusMessage[index]
+				else throw "Error::Code::"+response.status
+			}
 			return response.text()
 		}).then(html => {
 			const parser = new DOMParser()
@@ -129,6 +142,11 @@ class XlecxAPI {
 		if (typeof callback != 'function') throw "The Type of Callback Should Be a Function."
 
 		fetch(url).then(response => {
+			if (response.status != 200) {
+				const index = this.#status.indexOf(response.status)
+				if (index > -1) throw this.#statusMessage[index]
+				else throw "Error::Code::"+response.status
+			}
 			return response.text()
 		}).then(html => {
 			const parser = new DOMParser()
@@ -162,6 +180,11 @@ class XlecxAPI {
 		if (typeof callback != 'function') throw "The Type of Callback Should Be a Function."
 
 		fetch(url).then(response => {
+			if (response.status != 200) {
+				const index = this.#status.indexOf(response.status)
+				if (index > -1) throw this.#statusMessage[index]
+				else throw "Error::Code::"+response.status
+			}
 			return response.text()
 		}).then(html => {
 			const parser = new DOMParser()
@@ -267,6 +290,11 @@ class XlecxAPI {
 		if (typeof callback != 'function') throw "The Type of Callback Should Be a Function."
 
 		fetch(url).then(response => {
+			if (response.status != 200) {
+				const index = this.#status.indexOf(response.status)
+				if (index > -1) throw this.#statusMessage[index]
+				else throw "Error::Code::"+response.status
+			}
 			return response.text()
 		}).then(html => {
 			const parser = new DOMParser()
@@ -394,6 +422,11 @@ class XlecxAPI {
 		if (typeof callback != 'function') throw "The Type of Callback Should Be a Function."
 
 		fetch(url).then(response => {
+			if (response.status != 200) {
+				const index = this.#status.indexOf(response.status)
+				if (index > -1) throw this.#statusMessage[index]
+				else throw "Error::Code::"+response.status
+			}
 			return response.text()
 		}).then(html => {
 			const parser = new DOMParser()
@@ -445,6 +478,11 @@ class XlecxAPI {
 		if (typeof callback != 'function') throw "The Type of Callback Should Be a Function."
 
 		fetch(url).then(response => {
+			if (response.status != 200) {
+				const index = this.#status.indexOf(response.status)
+				if (index > -1) throw this.#statusMessage[index]
+				else throw "Error::Code::"+response.status
+			}
 			return response.text()
 		}).then(html => {
 			const parser = new DOMParser()
@@ -492,6 +530,11 @@ class XlecxAPI {
 		if (typeof callback != 'function') throw "The Type of Callback Should Be a Function."
 
 		fetch(url).then(response => {
+			if (response.status != 200) {
+				const index = this.#status.indexOf(response.status)
+				if (index > -1) throw this.#statusMessage[index]
+				else throw "Error::Code::"+response.status
+			}
 			return response.text()
 		}).then(html => {
 			const parser = new DOMParser()
@@ -585,6 +628,11 @@ class XlecxAPI {
 		if (typeof callback != 'function') throw "The Type of Callback Should Be a Function."
 
 		fetch(url).then(response => {
+			if (response.status != 200) {
+				const index = this.#status.indexOf(response.status)
+				if (index > -1) throw this.#statusMessage[index]
+				else throw "Error::Code::"+response.status
+			}
 			return response.text()
 		}).then(html => {
 			const parser = new DOMParser()
@@ -678,6 +726,11 @@ class XlecxAPI {
 		if (typeof callback != 'function') throw "The Type of Callback Should Be a Function."
 
 		fetch(url).then(response => {
+			if (response.status != 200) {
+				const index = this.#status.indexOf(response.status)
+				if (index > -1) throw this.#statusMessage[index]
+				else throw "Error::Code::"+response.status
+			}
 			return response.text()
 		}).then(html => {
 			const parser = new DOMParser()
@@ -771,6 +824,11 @@ class XlecxAPI {
 		if (typeof callback != 'function') throw "The Type of Callback Should Be a Function."
 
 		fetch(url).then(response => {
+			if (response.status != 200) {
+				const index = this.#status.indexOf(response.status)
+				if (index > -1) throw this.#statusMessage[index]
+				else throw "Error::Code::"+response.status
+			}
 			return response.text()
 		}).then(html => {
 			const parser = new DOMParser()
@@ -870,6 +928,11 @@ class XlecxAPI {
 			},
 			body: `do=search&subaction=search&search_start=${page}&full_search=0&result_from=${(page - 1) * 15 + 1}&story=${text}`
 		}).then(response => {
+			if (response.status != 200) {
+				const index = this.#status.indexOf(response.status)
+				if (index > -1) throw this.#statusMessage[index]
+				else throw "Error::Code::"+response.status
+			}
 			return response.text()
 		}).then(html => {
 			const parser = new DOMParser()
