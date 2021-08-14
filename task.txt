@@ -70,7 +70,7 @@ Add Comic {
 }
 
 Added To Version {
-	41
+	42
 	Fix Bug: You could sometime open more than 1 Comic Deleting Confirm Form in a moment
 	Fix Bug: Offline Jump Page not Working Well With Search Value
 	Optimize Widget Transitions

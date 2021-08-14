@@ -110,3 +110,26 @@ function makeThumbForAComic(id) {
 		}, 100)
 	})
 }
+
+function makeThumbForDownloadingComic(repair, image, format, callback) {
+	setTimeout(() => {
+		let url = ''
+		if (repair == undefined || repair.length == 0) url = `${dirUL}/${image}-0.${format}`
+		else if (repair.indexOf(0) > -1) {
+			callback()
+			return
+		} else url = `${dirUL}/${image}-0.${format}`
+		
+		if (!fs.existsSync(`${dirUL}/thumbs/${image}.jpg`)) {
+			if (fs.existsSync(url)) {
+				setTimeout(() => {
+					sharp(url).resize(225, 315).jpeg().toFile(`${dirUL}/thumbs/${image}.jpg`).then(() => {
+						callback()
+					}).catch(err => {
+						callback()
+					})
+				}, 100)
+			}
+		}
+	}, 100)
+}

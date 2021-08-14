@@ -362,22 +362,24 @@ async function CreateComic(comicIndex, haveIndex, gottenResult, quality, image, 
 			CreateTag(tagsList, id)
 		}
 
-		if (isDownloading == true && index != null) {
-			var shortName = gottenResult.title
-			if (shortName.length > 26) shortName = shortName.substr(0, 23)+'...'
-			PopAlert(`Comic (${shortName}) Downloaded.`)
-			if (setting.notification_download_finish == true && remote.Notification.isSupported()) new remote.Notification({title: 'Comic Download Finished.', body: gottenResult.title}).show()
-			document.getElementById(downloadingList[index][2]).remove()
-			downloadingList[index] = null
-			changeButtonsToDownloaded(doc.p, false, false)
-			downloadCounter--
-			SetDownloadListNumbers()
-			if (downloadCounter == 0) {
-				downloadingList = []
-				document.getElementById('downloader').style.display = 'none'
+		makeThumbForDownloadingComic(doc.m, doc.i, doc.f[0][2], () => {
+			if (isDownloading == true && index != null) {
+				var shortName = gottenResult.title
+				if (shortName.length > 26) shortName = shortName.substr(0, 23)+'...'
+				PopAlert(`Comic (${shortName}) Downloaded.`)
+				if (setting.notification_download_finish == true && remote.Notification.isSupported()) new remote.Notification({title: 'Comic Download Finished.', body: gottenResult.title}).show()
+				document.getElementById(downloadingList[index][2]).remove()
+				downloadingList[index] = null
+				changeButtonsToDownloaded(doc.p, false, false)
+				downloadCounter--
+				SetDownloadListNumbers()
+				if (downloadCounter == 0) {
+					downloadingList = []
+					document.getElementById('downloader').style.display = 'none'
+				}
 			}
-		}
-		if (needReload == true) reloadLoadingComics()
+			if (needReload == true) reloadLoadingComics()
+		})
 	})
 }
 
