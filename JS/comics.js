@@ -175,7 +175,9 @@ function searchComics(value, page) {
 }
 
 function randomJumpPage(limit) {
-	searchComics(document.getElementById('offline-search-form-input').value, Math.floor(Math.random() * limit))
+	const value = document.getElementById('offline-search-form-input').value || null
+	if (value == null || value.replace(/ /g, '').length == 0) loadComics(Math.floor(Math.random() * limit), null)
+	else loadComics(Math.floor(Math.random() * limit), value)
 }
 
 function reloadLoadingComics() {

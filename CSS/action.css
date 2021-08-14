@@ -67,4 +67,5 @@
 	background-color: #E74C3C;
 	color: #fff;
 	border: 1px solid #CB4335;
+	user-select: text !important;
 }

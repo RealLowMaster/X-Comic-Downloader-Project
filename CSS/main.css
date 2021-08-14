@@ -917,13 +917,11 @@ div { display: block; }
 .comic-action-panel > div:last-child > .success-action {
 	background-color: #28B463;
 	border-color: #229954;
-	color: #fff;
 }
 
 .comic-action-panel > div:last-child > .success-action:hover {
 	background-color: #1E8449;
 	border-color: #196F3D;
-	color: #fff;
 }
 
 /* Comic Slider */
