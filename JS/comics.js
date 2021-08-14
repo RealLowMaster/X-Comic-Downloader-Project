@@ -158,7 +158,7 @@ function searchComics(value, page) {
 	}
 
 	clearTimeout(searchTimer)
-	if (value.length > 0) {
+	if (value.replace(/ /g, '').length > 0) {
 		if (typeof(page) != 'number') page = 1
 		if (search_speed == 0) {
 			loadComics(page, value)
