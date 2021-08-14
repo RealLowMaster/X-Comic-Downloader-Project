@@ -50,6 +50,28 @@ const bjp_m_p = document.getElementById('bjp-m-p')
 let comicDeleting = false, downloadCounter = 0, needReload = true, wt_fps = 20
 var setting, dirDB, dirUL, tabs = [], downloadingList = [], thisSite, lastComicId, lastHaveId, lastGroupId, lastArtistId, lastParodyId, lastTagId, searchTimer, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = [], openedMenuTabIndex, copiedTab = null
 
+// Set Windows Closing Event
+ThisWindow.addListener('close', e => {
+	e.preventDefault()
+	if (comicDeleting) return
+	if (downloadingList.length > 0) {
+		errorSelector('You are Downloading Comics, Are you sure you want To Close Software?', null, false, [
+			[
+				"Yes",
+				"btn btn-primary m-2",
+				"cancelAllDownloads(true)"
+			],
+			[
+				"No",
+				"btn btn-danger m-2"
+			]
+		])
+	} else {
+		ThisWindow.removeAllListeners()
+		remote.app.quit()
+	}
+})
+
 // Needable Functions
 function fileExt(str) {
 	return new String(str).substring(str.lastIndexOf('.') + 1)

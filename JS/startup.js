@@ -41,26 +41,6 @@ document.addEventListener("DOMContentLoaded", () => {
 		browserPasteMenu.style.display = 'none'
 	})
 
-	ThisWindow.addListener('close', e => {
-		e.preventDefault()
-		if (comicDeleting) return
-		if (downloadingList.length > 0) {
-			errorSelector('You are Downloading Comics, Are you sure you want To Close Software?', null, false, [
-				[
-					"Yes",
-					"btn btn-primary m-2",
-					"cancelAllDownloads(true)"
-				],
-				[
-					"No",
-					"btn btn-danger m-2"
-				]
-			])
-		} else {
-			ThisWindow.removeAllListeners()
-			remote.app.quit()
-		}
-	})
 	loading.forward('Indexing...')
 	makeDatabaseIndexs()
 	loading.forward('Comic Indexing...')
