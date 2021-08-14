@@ -1,4 +1,5 @@
-.action-error {
+.action-error,
+.action-error-list {
 	display: flex;
 	width: 100%;
 	height: 100%;
@@ -9,7 +10,8 @@
 	left: 0;
 }
 
-.action-error > div:first-child {
+.action-error > div:first-child,
+.action-error-list > div:first-child {
 	display: block;
 	width: 100%;
 	height: 100%;
@@ -45,4 +47,24 @@
 .action-error > div:last-child > button:hover {
 	background-color: #b22;
 	border-color: #b11;
+}
+
+.action-error-list > div:last-child {
+	display: block;
+	width: 650px;
+	padding: 6px 0;
+	height: 550px;
+	background-color: #fff;
+	overflow-y: auto;
+	box-shadow: 0 0 10px 0 rgba(255,255,255,0.3);
+	z-index: +1;
+}
+
+.action-error-list > div:last-child > div {
+	display: block;
+	width: 100%;
+	padding: 10px;
+	background-color: #E74C3C;
+	color: #fff;
+	border: 1px solid #CB4335;
 }

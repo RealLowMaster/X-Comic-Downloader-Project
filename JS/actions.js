@@ -39,3 +39,17 @@ function errorSelector(txt, t1, bgClose, buttons) {
 
 	document.getElementsByTagName('body')[0].appendChild(element)
 }
+
+function errorList(list) {
+	const element = document.createElement('div')
+	element.classList.add('action-error-list')
+
+	let html = `<div onclick="this.parentElement.remove()"></div><div>`
+	for (let i = 0; i < list.length; i++) {
+		html += `<div>${list[i]}</div>`
+	}
+	html += '</div>'
+	element.innerHTML = html
+
+	document.getElementsByTagName('body')[0].appendChild(element)
+}

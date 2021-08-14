@@ -1,6 +1,7 @@
 const { remote, shell } = require('electron')
 const fs = require('fs')
 const nedb = require('nedb')
+const sharp = require('sharp')
 const ImageDownloader = require('image-downloader')
 const xlecx = new XlecxAPI()
 const defaultSetting = {
@@ -237,20 +238,18 @@ function GetSettingFile() {
 }
 
 function GetDirection() {
-	if (setting.file_location == null)
-		ChooseDirectory('Choose Directory For Saving Downloaded Comics', GetFileLocationCallback)
+	if (setting.file_location == null) ChooseDirectory('Choose Directory For Saving Downloaded Comics', GetFileLocationCallback)
 	else {
-		if (!fs.existsSync(setting.file_location))
-			ChooseDirectory('Choose Directory For Saving Downloaded Comics', GetFileLocationCallback)
+		if (!fs.existsSync(setting.file_location)) ChooseDirectory('Choose Directory For Saving Downloaded Comics', GetFileLocationCallback)
 		else {
 			dirDB = setting.file_location+'\\ComicsDB'
 			dirUL = setting.file_location+'\\DownloadedComics'
 		}
-		
 	}
 
 	if (!fs.existsSync(dirDB)) fs.mkdirSync(dirDB)
 	if (!fs.existsSync(dirUL)) fs.mkdirSync(dirUL)
+	if (!fs.existsSync(dirUL+'/thumbs')) fs.mkdirSync(dirUL+'/thumbs')
 }
 
 function CreateDatabase() {

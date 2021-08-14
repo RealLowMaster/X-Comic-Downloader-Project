@@ -29,14 +29,9 @@ function loadComics(page, search) {
 			if (name == null) return
 			repair = doc[i].m || null
 			image = doc[i].i || null
-			if (repair == null || repair.length == 0)
-				image = `${dirUL}/${image}-0.${doc[i].f[0][2]}`
-			else {
-				if (repair.indexOf(0) > -1)
-					image = 'Image/no-img-300x300.png'
-				else
-					image = `${dirUL}/${image}-0.${doc[i].f[0][2]}`
-			}
+			if (repair == null || repair.length == 0) image = `${dirUL}/thumbs/${image}.jpg`
+			else if (repair.indexOf(0) > -1) image = 'Image/no-img-300x300.png'
+			else image = `${dirUL}/thumbs/${image}.jpg`
 				
 			html += `<div class="comic" onclick="openComic(${id})"><img src="${image}"><span>${doc[i].c}</span><p>${name}</p></div>`
 		}

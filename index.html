@@ -8,7 +8,7 @@
 	<link rel="stylesheet" type="text/css" href="CSS/main.css">
 	<!-- Scripts -->
 	<script type="text/javascript">
-		if (typeof module === 'object') {window.module = module;module = undefined;}
+		if (typeof module === 'object') { window.module = module; module = undefined; }
 	</script>
 	<script type="text/javascript" src="JS/actions.js"></script>
 	<script type="text/javascript" src="JS/classes/xlecx-api.js"></script>
@@ -19,6 +19,7 @@
 	<script type="text/javascript" src="JS/slider.js" defer></script>
 	<script type="text/javascript" src="JS/browser.js" defer></script>
 	<script type="text/javascript" src="JS/database.js" defer></script>
+	<script type="text/javascript" src="JS/make-thumb.js" defer></script>
 	<script type="text/javascript" src="JS/setting.js" defer></script>
 	<script type="text/javascript" src="JS/startup.js" defer></script>
 	<!-- Sites -->
@@ -77,13 +78,14 @@
 	<div class="comic-action-panel" id="comic-action-panel">
 		<div onclick="document.getElementById('comic-action-panel').style.display='none'"></div>
 		<div>
+			<button onclick="makeThumbForAComic(Number(comicPanel.getAttribute('cid')))" class="success-action" title="Make Thumb for faster loading in Overview">Make Thumb</button>
 			<button onclick="repairComicInfo(0)">Repair Comic Name</button>
 			<button onclick="repairComicInfo(1)">Repair Comic Groups</button>
 			<button onclick="repairComicInfo(2)">Repair Comic Artists</button>
 			<button onclick="repairComicInfo(3)">Repair Comic Parodies</button>
 			<button onclick="repairComicInfo(4)">Repair Comic Tags</button>
 			<button onclick="repairComicInfo(5)" style="display:none">Repair Comic Images</button>
-			<button onclick="askForDeletingComic(Number(document.getElementById('comic-panel').getAttribute('cid')))" class="danger-action">Delete Image</button>
+			<button onclick="askForDeletingComic(Number(comicPanel.getAttribute('cid')))" class="danger-action">Delete Image</button>
 		</div>
 	</div>
 
@@ -343,11 +345,10 @@
 				<button onclick="saveSetting(false)" class="btn btn-primary">Save</button>
 				<button onclick="closeSetting()" class="btn btn-danger">Cancel</button>
 				<button onclick="CheckUpdate()" class="btn btn-primary">Check Update</button>
+				<button onclick="makeThumb()" class="btn btn-success" title="Create Thumb For All Comic That Missied They Thumb">Make Thumb</button>
 			</div>
 			<div class="col-6 pr-5 pl-5"></div>
 		</div>
-
-		
 	</div>
 
 	<!-- New Release -->
