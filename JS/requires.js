@@ -5,14 +5,14 @@ const sharp = require('sharp')
 const ImageDownloader = require('image-downloader')
 const xlecx = new XlecxAPI()
 const defaultSetting = {
-	"comic_panel_theme": 0,
+	"comic_panel_theme": 1,
 	"pagination_theme": 0,
-	"offline_theme": 0,
+	"offline_theme": 1,
 	"waiting_quality": 1,
 	"hover_downloader": false,
 	"max_per_page": 18,
 	"img_graphic": 1,
-	"notification_download_finish": true,
+	"notification_download_finish": false,
 	"lazy_loading": true,
 	"tabs_limit": 32,
 	"search_speed": 1,

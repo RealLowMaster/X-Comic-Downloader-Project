@@ -81,9 +81,10 @@ Added To Version {
 	Add Random Jump Page Button
 	Add Image Thumb Maker In Setting, It Make Comic Load Mush Faster in Overview, Mush Faster!
 	Add Server Response Status Checker
+	Change Saveing Setting File From App Directory To Document Directory
 	Make Close Window Event Work Better For Deleting Comic
 	Make Deleting Comic Waiting With More Detail
-	Change Saveing Setting File From App Directory To Document Directory
+	Make Dark Theme The Default
 }
 
 Did {
