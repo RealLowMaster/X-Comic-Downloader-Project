@@ -37,7 +37,7 @@ const sites = [
 		'xlecxJumpPage({index}, {page})'
 	]
 ]
-const ThisWindow = remote.getCurrentWindow(), loading = new Loading(14), db = {}, version = [1, 3, 7]
+const ThisWindow = remote.getCurrentWindow(), loading = new Loading(14), db = {}, version = [1, 8, 2]
 const comicGroupsContainer = document.getElementById('c-p-g')
 const comicArtistsContainer = document.getElementById('c-p-a')
 const comicParodyContainer = document.getElementById('c-p-p')
@@ -47,8 +47,8 @@ const browserPasteMenu = document.getElementById('browser-paste-menu')
 const bjp = document.getElementById('browser-jump-page-container')
 const bjp_i = document.getElementById('bjp-i')
 const bjp_m_p = document.getElementById('bjp-m-p')
-let comicDeleting = false, downloadCounter = 0, needReload = true, wt_fps = 20
-var setting, dirDB, dirUL, tabs = [], downloadingList = [], thisSite, lastComicId, lastHaveId, lastGroupId, lastArtistId, lastParodyId, lastTagId, searchTimer, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = [], openedMenuTabIndex, copiedTab = null
+let comicDeleting = false, downloadCounter = 0, needReload = true, wt_fps = 20, dirDB, dirUL, dirTmp
+var setting, tabs = [], downloadingList = [], thisSite, lastComicId, lastHaveId, lastGroupId, lastArtistId, lastParodyId, lastTagId, searchTimer, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = [], openedMenuTabIndex, copiedTab = null
 
 // Set Windows Closing Event
 ThisWindow.addListener('close', e => {
@@ -185,6 +185,7 @@ function GetFileLocationCallback(err, result) {
 	}
 	dirDB = result+'\\ComicsDB'
 	dirUL = result+'\\DownloadedComics'
+	dirTmp = result+'\\Temp'
 	setting.file_location = result
 	saveSetting(true)
 }
@@ -241,15 +242,6 @@ function CheckUpdate() {
 	} else PopAlert('You are Offline.', 'danger')
 }
 
-function reCreateNode(element, withChildren) {
-	if (withChildren) element.parentNode.replaceChild(element.cloneNode(true), element)
-	else {
-		const newEl = element.cloneNode(false)
-		while (element.hasChildNodes()) newEl.appendChild(element.firstChild)
-		element.parentNode.replaceChild(newEl, element)
-	}
-}
-
 // Main Loading Stuff
 const dirDocument = remote.app.getPath('documents')+'\\X Comic Downloader'
 
@@ -273,11 +265,13 @@ function GetDirection() {
 		else {
 			dirDB = setting.file_location+'\\ComicsDB'
 			dirUL = setting.file_location+'\\DownloadedComics'
+			dirTmp = setting.file_location+'\\Temp'
 		}
 	}
 
 	if (!fs.existsSync(dirDB)) fs.mkdirSync(dirDB)
 	if (!fs.existsSync(dirUL)) fs.mkdirSync(dirUL)
+	if (!fs.existsSync(dirTmp)) fs.mkdirSync(dirTmp)
 	if (!fs.existsSync(dirUL+'/thumbs')) fs.mkdirSync(dirUL+'/thumbs')
 }
 

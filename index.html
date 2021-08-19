@@ -20,6 +20,7 @@
 	<script type="text/javascript" src="JS/browser.js" defer></script>
 	<script type="text/javascript" src="JS/database.js" defer></script>
 	<script type="text/javascript" src="JS/make-thumb.js" defer></script>
+	<script type="text/javascript" src="JS/image-optimizer.js" defer></script>
 	<script type="text/javascript" src="JS/setting.js" defer></script>
 	<script type="text/javascript" src="JS/startup.js" defer></script>
 	<!-- Sites -->
@@ -79,13 +80,14 @@
 		<div onclick="document.getElementById('comic-action-panel').style.display='none'"></div>
 		<div>
 			<button onclick="makeThumbForAComic(Number(comicPanel.getAttribute('cid')))" class="success-action" title="Make Thumb for faster loading in Overview">Make Thumb</button>
-			<button onclick="repairComicInfo(0)">Repair Comic Name</button>
-			<button onclick="repairComicInfo(1)">Repair Comic Groups</button>
-			<button onclick="repairComicInfo(2)">Repair Comic Artists</button>
-			<button onclick="repairComicInfo(3)">Repair Comic Parodies</button>
-			<button onclick="repairComicInfo(4)">Repair Comic Tags</button>
+			<button onclick="OptimizeComicImages(Number(comicPanel.getAttribute('cid')))" class="success-action" id="c-a-p-o-b" title="Optimize Image For faster loading and Lower Space taken (May Take Time)">Optimize Images</button>
+			<button onclick="repairComicInfo(0)" title="Repair Comic Title">Repair Comic Name</button>
+			<button onclick="repairComicInfo(1)" title="Repair Comic Groups if Have">Repair Comic Groups</button>
+			<button onclick="repairComicInfo(2)" title="Repair Comic Artists if Have">Repair Comic Artists</button>
+			<button onclick="repairComicInfo(3)" title="Repair Comic Parodies if Have">Repair Comic Parodies</button>
+			<button onclick="repairComicInfo(4)" title="Repair Comic Tags if Have">Repair Comic Tags</button>
 			<button onclick="repairComicInfo(5)" style="display:none">Repair Comic Images</button>
-			<button onclick="askForDeletingComic(Number(comicPanel.getAttribute('cid')))" class="danger-action">Delete Image</button>
+			<button onclick="askForDeletingComic(Number(comicPanel.getAttribute('cid')))" class="danger-action" title="Fully Delete Comic">Delete Image</button>
 		</div>
 	</div>
 

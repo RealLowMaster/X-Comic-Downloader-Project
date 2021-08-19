@@ -284,6 +284,8 @@ function openComic(id) {
 			image = doc.i
 
 			title_container.textContent = name
+			if (typeof(doc.o) == 'number') document.getElementById('c-a-p-o-b').style.display = 'none'
+			else document.getElementById('c-a-p-o-b').style.display = 'block'
 
 			let lastIndex = formats[0][1]
 			let thisForamat = formats[0][2]

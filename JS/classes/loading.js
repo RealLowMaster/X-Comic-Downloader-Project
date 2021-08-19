@@ -26,6 +26,10 @@ class Loading {
 		this.#procress.style.width = this.#saveProcress+'%'
 	}
 
+	changePercent(times) {
+		this.times = (100/times)
+	}
+
 	reset(times) {
 		this.hide()
 		if (times != undefined) this.times = (100/times)

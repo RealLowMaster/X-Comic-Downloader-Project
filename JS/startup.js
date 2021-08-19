@@ -10,7 +10,11 @@ function ChangeSizes() {
 }
 
 function test() {
-	console.log(remote.app.getPath('documents'))
+	sharp('img.webp').jpeg({ mozjpeg: true }).toFile('h.jpg').then(() => {
+		console.log('Finish')
+	}).catch(err => {
+		console.log('Failed:: '+err)
+	})
 }
 
 document.addEventListener("DOMContentLoaded", () => {
