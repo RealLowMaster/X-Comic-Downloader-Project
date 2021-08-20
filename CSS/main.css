@@ -611,7 +611,7 @@ div { display: block; }
 	transition: background-color .2s;
 }
 
-.comic[unoptimize] { border:1px solid #fff; box-shadow: 0 0 15px rgba(255,0,0.5) }
+.comic[unoptimize] { border:1px solid #f00; box-shadow: 0 0 6px 0 rgba(222,50,50.4) }
 
 .main-body-darkmode > #comic-container > .comic { background-color: #333 }
 

@@ -1,6 +1,8 @@
 let optimizeErrLog = [], optimizeLog = [], optimizeFullSize = 0, optimizeConvertSize = 0
 
 function OptimizeComicImages(comic_id) {
+	if (downloadCounter > 0) { error("You Can't Optimze Image When you are Downloading Something!"); return }
+	window.stop()
 	optimizeErrLog = []
 	optimizeLog = []
 	optimizeFullSize = 0
@@ -15,6 +17,7 @@ function OptimizeComicImages(comic_id) {
 
 	document.getElementById('c-p-t').textContent = ''
 	document.getElementById('c-s-o').innerHTML = ''
+	window.stop()
 	const image_container = document.getElementById('c-p-i')
 	image_container.innerHTML = ''
 	window.stop()
@@ -38,7 +41,8 @@ function OptimizeComicImages(comic_id) {
 			}
 		} else {
 			for (let i = 0; i < ImagesCount; i++) {
-				if (repair.indexOf(i) == -1) {
+				if (repair.indexOf(i) > -1) optimizeErrLog.push(`Image ${i+1}: Undownloaded Image.`)
+				else {
 					if (i <= lastIndex) {
 						if (thisForamat != 'gif') urls.push([`${image}-${i}.${thisForamat}`, thisForamat])
 					} else {
