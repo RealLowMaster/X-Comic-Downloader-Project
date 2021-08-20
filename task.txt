@@ -70,7 +70,7 @@ Add Comic {
 }
 
 Added To Version {
-	11
+	12
 	Fix Bug: Stock in Repairing When There is no Internet Connection
 	Add Optimizing All Comic Images Button
 }
