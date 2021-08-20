@@ -4,7 +4,6 @@ function changeWaitingPreview(fps) {
 }
 
 function setLuanchTimeSettings(reloadSettingPanel) {
-	reloadSettingPanel = reloadSettingPanel || false
 	const s_comic_panel_theme = document.getElementById('s_comic_panel_theme')
 	const s_offline_theme = document.getElementById('s_offline_theme')
 	const s_waiting_quality = document.getElementById('s_waiting_quality')
@@ -35,12 +34,10 @@ function setLuanchTimeSettings(reloadSettingPanel) {
 
 	document.getElementById('s_max_per_page').value = setting.max_per_page
 	document.getElementById('s_download_limit').value = setting.download_limit
-
-	if (setting.hover_downloader == true) document.getElementById('s_hover_downloader').checked = true
-	
-	if (setting.notification_download_finish == true) document.getElementById('s_notification_download_finish').checked = true
-
-	if (setting.lazy_loading == true) document.getElementById('s_lazy_loading').checked = true
+	document.getElementById('s_hover_downloader').checked = setting.hover_downloader
+	document.getElementById('s_notification_download_finish').checked = setting.notification_download_finish
+	document.getElementById('s_lazy_loading').checked = setting.lazy_loading
+	document.getElementById('s_show_unoptimize').checked = setting.show_unoptimize
 
 	s_file_location.setAttribute('location', setting.file_location)
 	const s_file_location_label = s_file_location.parentElement.parentElement.children[0]
@@ -51,7 +48,7 @@ function setLuanchTimeSettings(reloadSettingPanel) {
 		s_file_location_label.textContent = setting.file_location
 	s_file_location_label.setAttribute('title', setting.file_location)
 
-	if (reloadSettingPanel == false) {
+	if (reloadSettingPanel != true) {
 		if (setting.hover_downloader == false) document.getElementById('downloader').classList.add('downloader-fixed')
 
 		if (setting.offline_theme == 1) {
@@ -68,11 +65,11 @@ function setLuanchTimeSettings(reloadSettingPanel) {
 }
 
 function saveSetting(justSave) {
-	justSave = justSave || false
 	let reload = false
-	if (justSave == false) {
+	if (justSave != true) {
 		const waiting_quality = Number(document.getElementById('s_waiting_quality').getAttribute('value'))
 		const lazy_loading = document.getElementById('s_lazy_loading').checked
+		const show_unoptimize = document.getElementById('s_show_unoptimize').checked
 		const max_per_page = Number(document.getElementById('s_max_per_page').value)
 		const file_location = document.getElementById('s_file_location').getAttribute('location')
 
@@ -98,6 +95,11 @@ function saveSetting(justSave) {
 		setting.hover_downloader = document.getElementById('s_hover_downloader').checked
 		setting.notification_download_finish = document.getElementById('s_notification_download_finish').checked
 		setting.download_limit = Number(document.getElementById('s_download_limit').value)
+		
+		if (show_unoptimize != setting.show_unoptimize) {
+			reloadLoadingComics()
+			setting.show_unoptimize = show_unoptimize
+		}
 
 		if (lazy_loading != setting.lazy_loading) {
 			setting.lazy_loading = lazy_loading

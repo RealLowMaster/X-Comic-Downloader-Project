@@ -70,9 +70,10 @@ Add Comic {
 }
 
 Added To Version {
-	12
+	14
 	Fix Bug: Stock in Repairing When There is no Internet Connection
 	Add Optimizing All Comic Images Button
+	Add Show UnOptimize Comics To Setting for find which comic you didn't optimize
 }
 
 Did {

@@ -98,7 +98,7 @@ function convertImagesToOptimize(list, index, comic_id) {
 			} else errorList(optimizeErrLog)
 
 			openComic(comic_id)
-
+			if (setting.show_unoptimize) reloadLoadingComics()
 		})
 
 		return

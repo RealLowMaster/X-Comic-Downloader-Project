@@ -17,6 +17,7 @@ const defaultSetting = {
 	"tabs_limit": 32,
 	"search_speed": 1,
 	"download_limit": 5,
+	"show_unoptimize": false,
 	"file_location": null,
 	"developer_mode": false
 }
@@ -302,30 +303,31 @@ function CreateDatabase() {
 }
 
 function CheckSettings() {
-	if (typeof(setting.comic_panel_theme) != 'number' || setting.comic_panel_theme < 0) setting.comic_panel_theme = 0
+	if (typeof(setting.comic_panel_theme) != 'number' || setting.comic_panel_theme < 0) setting.comic_panel_theme = defaultSetting.comic_panel_theme
 	if (setting.comic_panel_theme > 1) setting.comic_panel_theme = 1
-	if (typeof(setting.pagination_theme) != 'number' || setting.pagination_theme < 0) setting.pagination_theme = 0
+	if (typeof(setting.pagination_theme) != 'number' || setting.pagination_theme < 0) setting.pagination_theme = defaultSetting.pagination_theme
 	if (setting.pagination_theme > 1) setting.pagination_theme = 1
-	if (typeof(setting.offline_theme) != 'number') setting.offline_theme = 0
-	if (typeof(setting.waiting_quality) != 'number') setting.waiting_quality = 1
+	if (typeof(setting.offline_theme) != 'number') setting.offline_theme = defaultSetting.offline_theme
+	if (typeof(setting.waiting_quality) != 'number') setting.waiting_quality = defaultSetting.waiting_quality
 	if (setting.waiting_quality > 2) setting.waiting_quality = 2
 	else if (setting.waiting_quality < 0) setting.waiting_quality = 0
-	if (typeof(setting.max_per_page) != 'number') setting.max_per_page = 18
+	if (typeof(setting.max_per_page) != 'number') setting.max_per_page = defaultSetting.max_per_page
 	if (setting.max_per_page < 1) setting.max_per_page = 1
-	if (typeof(setting.img_graphic) != 'number' || setting.img_graphic < 0) setting.img_graphic = 0
+	if (typeof(setting.img_graphic) != 'number' || setting.img_graphic < 0) setting.img_graphic = defaultSetting.img_graphic
 	if (setting.img_graphic > 1) setting.img_graphic = 1
-	if (typeof(setting.notification_download_finish) != 'boolean') setting.notification_download_finish = true
-	if (typeof(setting.hover_downloader) != 'boolean') setting.hover_downloader = true
-	if (typeof(setting.lazy_loading) != 'boolean') setting.lazy_loading = true
+	if (typeof(setting.notification_download_finish) != 'boolean') setting.notification_download_finish = defaultSetting.notification_download_finish
+	if (typeof(setting.hover_downloader) != 'boolean') setting.hover_downloader = defaultSetting.hover_downloader
+	if (typeof(setting.lazy_loading) != 'boolean') setting.lazy_loading = defaultSetting.lazy_loading
 	if (setting.lazy_loading == false) imageLazyLoadingOptions.rootMargin = "0px 0px 1200px 0px"
-	if (typeof(setting.tabs_limit) != 'number') setting.tabs_limit = 32
+	if (typeof(setting.tabs_limit) != 'number') setting.tabs_limit = defaultSetting.tabs_limit
 	if (setting.tabs_limit < 1) setting.tabs_limit = 1
-	if (typeof(setting.search_speed) != 'number') setting.search_speed = 2
+	if (typeof(setting.search_speed) != 'number') setting.search_speed = defaultSetting.search_speed
 	if (setting.search_speed > 3) setting.search_speed = 3
 	else if (setting.search_speed < 0) setting.search_speed = 0
-	if (typeof(setting.download_limit) != 'number') setting.download_limit = 5
+	if (typeof(setting.download_limit) != 'number') setting.download_limit = defaultSetting.download_limit
 	if (setting.download_limit < 1) setting.download_limit = 1
-	if (typeof(setting.developer_mode) != 'boolean') setting.developer_mode = false
+	if (typeof(setting.show_unoptimize) != 'boolean') setting.show_unoptimize = defaultSetting.show_unoptimize
+	if (typeof(setting.developer_mode) != 'boolean') setting.developer_mode = defaultSetting.developer_mode
 	if (setting.developer_mode == true) {
 		window.addEventListener('keydown', e => {
 			if (e.ctrlKey && e.shiftKey && e.which == 73) remote.getCurrentWebContents().toggleDevTools()

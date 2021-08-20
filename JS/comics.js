@@ -8,8 +8,7 @@ function loadComics(page, search) {
 	const comic_container = document.getElementById('comic-container')
 	comic_container.innerHTML = ''
 	comic_container.setAttribute('page', page)
-	let min = 0, max = 0, allPages = 0
-	let html = ''
+	let min = 0, max = 0, allPages = 0, html = ''
 	var id, name, image, repair
 	const max_per_page = setting.max_per_page
 
@@ -22,18 +21,34 @@ function loadComics(page, search) {
 			if (max > doc.length) max = doc.length
 		}
 
-		for (let i=min; i < max; i++) {
-			id = doc[i]._id || null
-			if (id == null) return
-			name = doc[i].n || null
-			if (name == null) return
-			repair = doc[i].m || null
-			image = doc[i].i || null
-			if (repair == null || repair.length == 0) image = `${dirUL}/thumbs/${image}.jpg`
-			else if (repair.indexOf(0) > -1) image = 'Image/no-img-300x300.png'
-			else image = `${dirUL}/thumbs/${image}.jpg`
+		if (setting.show_unoptimize) {
+			let unoptimize = ''
+			for (let i=min; i < max; i++) {
+				id = doc[i]._id
+				name = doc[i].n
+				repair = doc[i].m || null
+				image = doc[i].i
+				if (repair == null || repair.length == 0) image = `${dirUL}/thumbs/${image}.jpg`
+				else if (repair.indexOf(0) > -1) image = 'Image/no-img-300x300.png'
+				else image = `${dirUL}/thumbs/${image}.jpg`
+
+				if (typeof(doc[i].o) == 'number') unoptimize = ''
+				else unoptimize = ' unoptimize'
 				
-			html += `<div class="comic" onclick="openComic(${id})"><img src="${image}"><span>${doc[i].c}</span><p>${name}</p></div>`
+				html += `<div class="comic" onclick="openComic(${id})"${unoptimize}><img src="${image}"><span>${doc[i].c}</span><p>${name}</p></div>`
+			}
+		} else {
+			for (let i=min; i < max; i++) {
+				id = doc[i]._id
+				name = doc[i].n
+				repair = doc[i].m || null
+				image = doc[i].i
+				if (repair == null || repair.length == 0) image = `${dirUL}/thumbs/${image}.jpg`
+				else if (repair.indexOf(0) > -1) image = 'Image/no-img-300x300.png'
+				else image = `${dirUL}/thumbs/${image}.jpg`
+					
+				html += `<div class="comic" onclick="openComic(${id})"><img src="${image}"><span>${doc[i].c}</span><p>${name}</p></div>`
+			}
 		}
 		comic_container.innerHTML = html
 		

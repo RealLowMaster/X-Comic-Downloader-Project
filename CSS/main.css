@@ -611,7 +611,11 @@ div { display: block; }
 	transition: background-color .2s;
 }
 
+.comic[unoptimize] { box-shadow: 0 0 15px rgba(255,0,0.5) }
+
 .main-body-darkmode > #comic-container > .comic { background-color: #333 }
+
+.main-body-darkmode > #comic-container > .comic[unoptimize] { box-shadow: 0 0 12px 0 rgb(0,150,87,.5) }
 
 .comic > img {
 	display: block;
