@@ -924,6 +924,17 @@ div { display: block; }
 	border-color: #196F3D;
 }
 
+.comic-action-panel > div:last-child > .warning-action {
+	background-color: #ff7b00;
+	border-color: #E67E22;
+	color: #fff;
+}
+
+.comic-action-panel > div:last-child > .warning-action:hover {
+	background-color: #D68910;
+	border-color: #CA6F1E;
+}
+
 /* Comic Slider */
 #comic-slider {
 	display: none;

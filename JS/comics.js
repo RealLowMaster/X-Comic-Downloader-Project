@@ -284,8 +284,15 @@ function openComic(id) {
 			image = doc.i
 
 			title_container.textContent = name
-			if (typeof(doc.o) == 'number') document.getElementById('c-a-p-o-b').style.display = 'none'
-			else document.getElementById('c-a-p-o-b').style.display = 'block'
+
+			const comic_optimize_btn = document.getElementById('c-a-p-o-b')
+			if (typeof(doc.o) == 'number') {
+				comic_optimize_btn.setAttribute('class', 'warning-action')
+				comic_optimize_btn.textContent = 'ReOptimize Images'
+			} else {
+				comic_optimize_btn.setAttribute('class', 'success-action')
+				comic_optimize_btn.textContent = 'Optimize Images'
+			}
 
 			let lastIndex = formats[0][1]
 			let thisForamat = formats[0][2]

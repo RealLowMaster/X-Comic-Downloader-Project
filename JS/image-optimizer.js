@@ -1,7 +1,8 @@
-let optimizeErrLog = []
+let optimizeErrLog = [], optimizeLog = []
 
 function OptimizeComicImages(comic_id) {
 	optimizeErrLog = []
+	optimizeLog = []
 	loading.reset(0)
 	loading.show('Calculating...')
 	
@@ -16,11 +17,9 @@ function OptimizeComicImages(comic_id) {
 
 	db.comics.findOne({_id:comic_id}, (err, doc) => {
 		if (err) { loading.hide(); error(err); openComic(comic_id); return }
-		if (typeof(doc.o) == 'number') { loading.hide(); openComic(comic_id); PopAlert("Comic Already Has been Optimize."); return }
 
 		let ImagesCount = doc.c, formats = doc.f, image = doc.i, src = '', lastIndex = formats[0][1], thisForamat = formats[0][2], repair = doc.m || null, urls = [], formatIndex = 0
 
-		let slider_overview_html = ''
 		if (repair == null || repair.length == 0) {
 			for (let i = 0; i < ImagesCount; i++) {
 				if (i <= lastIndex) {
