@@ -15,7 +15,8 @@ function OptimizeComicImages(comic_id) {
 
 	document.getElementById('c-p-t').textContent = ''
 	document.getElementById('c-s-o').innerHTML = ''
-	document.getElementById('c-p-i').innerHTML = ''
+	const image_container = document.getElementById('c-p-i')
+	image_container.innerHTML = ''
 	window.stop()
 
 	db.comics.findOne({_id:comic_id}, (err, doc) => {
@@ -61,12 +62,19 @@ function OptimizeComicImages(comic_id) {
 					optimizeLog.push([size, null])
 					fs.renameSync(`${dirUL}/${urls[i][0]}`, `${dirTmp}/${urls[i][0]}`)
 				} catch(err) {
-					for (let j = 0; j < i; j++) {
-						fs.renameSync(`${dirTmp}/${urls[j][0]}`, `${dirUL}/${urls[j][0]}`)
+					image_container.innerHTML = ''
+					window.stop()
+
+					try {
+						fs.renameSync(`${dirUL}/${urls[i][0]}`, `${dirTmp}/${urls[i][0]}`)
+					} catch(err2) {
+						for (let j = 0; j < i; j++) {
+							fs.renameSync(`${dirTmp}/${urls[j][0]}`, `${dirUL}/${urls[j][0]}`)
+						}
+						loading.hide()
+						error("MovingTemp: "+err2)
+						return
 					}
-					loading.hide()
-					error("MovingTemp: "+err)
-					return
 				}
 			}
 			loading.forward(`Optimized Image (0/${urls.length})...`)
