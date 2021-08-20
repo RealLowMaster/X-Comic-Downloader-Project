@@ -1,16 +1,20 @@
 // Comics
-function loadComics(page, search) {
+function loadComics(page, search, safeScroll) {
 	page = page || 1
 	search = search || null
 	if (search == 'null') search = null
 	var RegSearch
 	if (search != null) RegSearch = new RegExp(search.toLowerCase())
 	const comic_container = document.getElementById('comic-container')
-	comic_container.innerHTML = ''
-	comic_container.setAttribute('page', page)
-	let min = 0, max = 0, allPages = 0, html = ''
+	let min = 0, max = 0, allPages = 0, html = '', main_body, scrollTop
 	var id, name, image, repair
 	const max_per_page = setting.max_per_page
+	if (safeScroll == true) {
+		main_body = document.getElementById('main-body')
+		scrollTop = main_body.scrollTop
+	}
+	comic_container.innerHTML = ''
+	comic_container.setAttribute('page', page)
 
 	const working = (doc) => {
 		max = doc.length
@@ -81,6 +85,8 @@ function loadComics(page, search) {
 			comic_container.innerHTML = '<br><div class="alert alert-danger">No Comic has been Found.</div>'
 		else if (doc.length == 0 && search == null)
 			comic_container.innerHTML = '<br><div class="alert alert-danger">There is no Comic Downloaded.</div>'
+
+		if (safeScroll == true) main_body.scrollTop = scrollTop
 	}
 
 	const findComicsBySearch = async() => {
@@ -199,7 +205,7 @@ function reloadLoadingComics() {
 	const page = Number(document.getElementById('comic-container').getAttribute('page')) || null
 	let search = document.getElementById('offline-search-form-input').value || null
 	if (search == null || search.length == 0) search = null
-	loadComics(page, search)
+	loadComics(page, search, true)
 }
 
 function openComicGroups(comicId) {
