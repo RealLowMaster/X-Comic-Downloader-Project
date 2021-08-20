@@ -22,27 +22,15 @@ function OptimizeComicImages(comic_id) {
 	image_container.innerHTML = ''
 	window.stop()
 
-	db.comics.findOne({_id:comic_id}, (err, doc) => {
-		if (err) { loading.hide(); error(err); openComic(comic_id); return }
-
-		document.getElementById('comic-action-panel').style.display='none'
-		let ImagesCount = doc.c, formats = doc.f, image = doc.i, lastIndex = formats[0][1], thisForamat = formats[0][2], repair = doc.m || null, urls = [], formatIndex = 0
-
-		if (repair == null || repair.length == 0) {
-			for (let i = 0; i < ImagesCount; i++) {
-				if (i <= lastIndex) {
-					if (thisForamat != 'gif') urls.push([`${image}-${i}.${thisForamat}`, thisForamat])
-				} else {
-					formatIndex++
-					lastIndex = formats[formatIndex][1]
-					thisForamat = formats[formatIndex][2]
-					if (thisForamat != 'gif') urls.push([`${image}-${i}.${thisForamat}`, thisForamat])
-				}
-			}
-		} else {
-			for (let i = 0; i < ImagesCount; i++) {
-				if (repair.indexOf(i) > -1) optimizeErrLog.push(`Image ${i+1}: Undownloaded Image.`)
-				else {
+	setTimeout(() => {
+		db.comics.findOne({ _id:comic_id }, (err, doc) => {
+			if (err) { loading.hide(); error(err); openComic(comic_id); return }
+	
+			document.getElementById('comic-action-panel').style.display='none'
+			let ImagesCount = doc.c, formats = doc.f, image = doc.i, lastIndex = formats[0][1], thisForamat = formats[0][2], repair = doc.m || null, urls = [], formatIndex = 0
+	
+			if (repair == null || repair.length == 0) {
+				for (let i = 0; i < ImagesCount; i++) {
 					if (i <= lastIndex) {
 						if (thisForamat != 'gif') urls.push([`${image}-${i}.${thisForamat}`, thisForamat])
 					} else {
@@ -52,39 +40,47 @@ function OptimizeComicImages(comic_id) {
 						if (thisForamat != 'gif') urls.push([`${image}-${i}.${thisForamat}`, thisForamat])
 					}
 				}
+			} else {
+				for (let i = 0; i < ImagesCount; i++) {
+					if (repair.indexOf(i) > -1) optimizeErrLog.push(`Image ${i+1}: Undownloaded Image.`)
+					else {
+						if (i <= lastIndex) {
+							if (thisForamat != 'gif') urls.push([`${image}-${i}.${thisForamat}`, thisForamat])
+						} else {
+							formatIndex++
+							lastIndex = formats[formatIndex][1]
+							thisForamat = formats[formatIndex][2]
+							if (thisForamat != 'gif') urls.push([`${image}-${i}.${thisForamat}`, thisForamat])
+						}
+					}
+				}
 			}
-		}
-
-		loading.changePercent(urls.length + 2)
-		loading.forward('Making Temp...')
-		setTimeout(() => {
-			let size = 0
-			for (let i = 0; i < urls.length; i++) {
-				try {
-					size = fs.statSync(`${dirUL}/${urls[i][0]}`).size
-					optimizeFullSize += size
-					optimizeLog.push([size, null])
-					fs.renameSync(`${dirUL}/${urls[i][0]}`, `${dirTmp}/${urls[i][0]}`)
-				} catch(err) {
-					image_container.innerHTML = ''
-					window.stop()
-
+	
+			loading.changePercent(urls.length + 2)
+			loading.forward('Making Temp...')
+			setTimeout(() => {
+				let size = 0
+				for (let i = 0; i < urls.length; i++) {
 					try {
+						size = fs.statSync(`${dirUL}/${urls[i][0]}`).size
+						optimizeFullSize += size
+						optimizeLog.push([size, null])
 						fs.renameSync(`${dirUL}/${urls[i][0]}`, `${dirTmp}/${urls[i][0]}`)
-					} catch(err2) {
+					} catch(err) {
 						for (let j = 0; j < i; j++) {
 							fs.renameSync(`${dirTmp}/${urls[j][0]}`, `${dirUL}/${urls[j][0]}`)
 						}
 						loading.hide()
 						error("MovingTemp: "+err2)
+						openComic(comic_id)
 						return
 					}
 				}
-			}
-			loading.forward(`Optimized Image (0/${urls.length})...`)
-			convertImagesToOptimize(urls, 0, comic_id)
-		}, 100)
-	})
+				loading.forward(`Optimizing Image (0/${urls.length})...`)
+				convertImagesToOptimize(urls, 0, comic_id)
+			}, 100)
+		})
+	}, 200)
 }
 
 function convertImagesToOptimize(list, index, comic_id) {
@@ -114,21 +110,19 @@ function convertImagesToOptimize(list, index, comic_id) {
 		})
 
 		return
-	} else if (list[index][1] == 'jpg' || list[index][1] == 'webp' || list[index][1] == 'jpeg') {
+	} else if (list[index][1] == 'jpg' || list[index][1] == 'jpeg') {
 		sharp(`${dirTmp}/${list[index][0]}`).jpeg({ mozjpeg: true }).toFile(`${dirUL}/${list[index][0]}`).then(() => {
-
-			if (list[index][1] == 'jpg' || list[index][1] == 'jpeg') {
-				try {
-					fs.unlinkSync(`${dirTmp}/${list[index][0]}`)
-				} catch(err) {
-					optimizeErrLog.push("DeletingTemp: "+err)
-				}
-			}
-
 			try {
 				const size = fs.statSync(`${dirUL}/${list[index][0]}`).size
-				optimizeConvertSize += size
-				optimizeLog[index][1] = size
+				if (size <= optimizeLog[index][0]) {
+					optimizeConvertSize += size
+					optimizeLog[index][1] = size
+					fs.unlinkSync(`${dirTmp}/${list[index][0]}`)
+				} else {
+					optimizeConvertSize += optimizeLog[index][0]
+					optimizeLog[index][1] = optimizeLog[index][0]
+					fs.renameSync(`${dirTmp}/${list[index][0]}`, `${dirUL}/${list[index][0]}`)
+				}
 			} catch(err) {
 				optimizeErrLog.push('SavingFileSize: '+err)
 			}
@@ -144,11 +138,29 @@ function convertImagesToOptimize(list, index, comic_id) {
 		sharp(`${dirTmp}/${list[index][0]}`).png({ quality: 100 }).toFile(`${dirUL}/${list[index][0]}`).then(() => {
 
 			try {
-				fs.unlinkSync(`${dirTmp}/${list[index][0]}`)
+				const size = fs.statSync(`${dirUL}/${list[index][0]}`).size
+				if (size <= optimizeLog[index][0]) {
+					optimizeConvertSize += size
+					optimizeLog[index][1] = size
+					fs.unlinkSync(`${dirTmp}/${list[index][0]}`)
+				} else {
+					optimizeConvertSize += optimizeLog[index][0]
+					optimizeLog[index][1] = optimizeLog[index][0]
+					fs.renameSync(`${dirTmp}/${list[index][0]}`, `${dirUL}/${list[index][0]}`)
+				}
 			} catch(err) {
-				optimizeErrLog.push("DeletingTemp: "+err)
+				optimizeErrLog.push('SavingFileSize: '+err)
 			}
 
+			loading.forward(`Optimizing Image (${index+1}/${list.length})...`)
+			setTimeout(() => {
+				convertImagesToOptimize(list, index + 1, comic_id) 
+			}, 100)
+		}).catch(err => {
+			optimizeErrLog.push("Optimizing: "+err)
+		})
+	} else if (list[index][1] == 'webp') {
+		sharp(`${dirTmp}/${list[index][0]}`).webp().toFile(`${dirUL}/${list[index][0]}`).then(() => {
 			try {
 				const size = fs.statSync(`${dirUL}/${list[index][0]}`).size
 				optimizeConvertSize += size

@@ -70,7 +70,7 @@ Add Comic {
 }
 
 Added To Version {
-	14
+	16
 	Fix Bug: Stock in Repairing When There is no Internet Connection
 	Add Optimizing All Comic Images Button
 	Add Show UnOptimize Comics To Setting for find which comic you didn't optimize
@@ -81,7 +81,8 @@ Did {
 }
 
 Tasks => {
-	Make reloadComics() Save ScrollTop
+	Add Optimze Comic Event To Window Close
+	Add setTimeout() To Optimize Image
 	Make Optimzing Rename Error Work Better With window.stop()
 	Check Lara Croft And The Guardian Of Pleasure
 	Fix Optimizter Stoping Bug
