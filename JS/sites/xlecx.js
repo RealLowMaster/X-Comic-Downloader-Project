@@ -1223,11 +1223,11 @@ async function xlecxRepairComicInfoGetInfo(id, whitch) {
 	loading.reset(reset)
 	loading.show('Connecting To Web...')
 	await xlecx.getComic(id, {related:false}, (err, result) => {
-		if (err) { error(err); return }
+		if (err) { loading.hide(); error(err); return }
 		switch (whitch) {
 			case 0:
 				db.comics.update({_id:comic_id}, { $set: {n:result.title.toLowerCase()} }, {}, (err) => {
-					if (err) { loading.hide();error(err); return }
+					if (err) { loading.hide(); error(err); return }
 					loading.forward('Repairing Title...')
 					document.getElementById('c-p-t').textContent = result.title
 					loading.forward()

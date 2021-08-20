@@ -70,7 +70,8 @@ Add Comic {
 }
 
 Added To Version {
-	4
+	5
+	Fix Bug: Stock in Repairing When There is no Internet Connection
 	Add Optimizing All Comic Images Button
 }
 
@@ -79,6 +80,9 @@ Did {
 }
 
 Tasks => {
+	Add loading.hide() To Repairing
+	Give Optimizator a Result like from xKB To xKB
+	Fix Optimizter Stoping Bug
 	Fix Overview Number = NaN In Sahara Wataru Group
 	Add Optimizing Image Option
 	Ctrl + k | Ctrl + 0

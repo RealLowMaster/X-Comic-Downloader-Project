@@ -50,7 +50,6 @@ function OptimizeComicImages(comic_id) {
 		loading.changePercent(urls.length + 2)
 		loading.forward('Making Temp...')
 		setTimeout(() => {
-			const fs = require('fs')
 			for (let i = 0; i < urls.length; i++) {
 				try {
 					fs.renameSync(`${dirUL}/${urls[i][0]}`, `${dirTmp}/${urls[i][0]}`)
