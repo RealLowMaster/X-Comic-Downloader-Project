@@ -5,6 +5,7 @@ function OptimizeComicImages(comic_id) {
 	optimizeLog = []
 	optimizeFullSize = 0
 	optimizeConvertSize = 0
+	window.stop()
 	loading.reset(0)
 	loading.show('Calculating...')
 	
@@ -14,8 +15,8 @@ function OptimizeComicImages(comic_id) {
 	comicTagsContainer.innerHTML = ''
 
 	document.getElementById('c-p-t').textContent = ''
-	document.getElementById('c-p-i').innerHTML = ''
 	document.getElementById('c-s-o').innerHTML = ''
+	document.getElementById('c-p-i').innerHTML = ''
 
 	db.comics.findOne({_id:comic_id}, (err, doc) => {
 		if (err) { loading.hide(); error(err); openComic(comic_id); return }
@@ -60,6 +61,7 @@ function OptimizeComicImages(comic_id) {
 					optimizeLog.push([size, null])
 					fs.renameSync(`${dirUL}/${urls[i][0]}`, `${dirTmp}/${urls[i][0]}`)
 				} catch(err) {
+					console.log("MovingTemp: "+err)
 					optimizeErrLog.push("MovingTemp: "+err)
 				}
 			}
