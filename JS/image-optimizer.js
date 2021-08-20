@@ -1,8 +1,10 @@
-let optimizeErrLog = [], optimizeLog = []
+let optimizeErrLog = [], optimizeLog = [], optimizeFullSize = 0, optimizeConvertSize = 0
 
 function OptimizeComicImages(comic_id) {
 	optimizeErrLog = []
 	optimizeLog = []
+	optimizeFullSize = 0
+	optimizeConvertSize = 0
 	loading.reset(0)
 	loading.show('Calculating...')
 	
@@ -18,7 +20,8 @@ function OptimizeComicImages(comic_id) {
 	db.comics.findOne({_id:comic_id}, (err, doc) => {
 		if (err) { loading.hide(); error(err); openComic(comic_id); return }
 
-		let ImagesCount = doc.c, formats = doc.f, image = doc.i, src = '', lastIndex = formats[0][1], thisForamat = formats[0][2], repair = doc.m || null, urls = [], formatIndex = 0
+		document.getElementById('comic-action-panel').style.display='none'
+		let ImagesCount = doc.c, formats = doc.f, image = doc.i, lastIndex = formats[0][1], thisForamat = formats[0][2], repair = doc.m || null, urls = [], formatIndex = 0
 
 		if (repair == null || repair.length == 0) {
 			for (let i = 0; i < ImagesCount; i++) {
@@ -49,8 +52,12 @@ function OptimizeComicImages(comic_id) {
 		loading.changePercent(urls.length + 2)
 		loading.forward('Making Temp...')
 		setTimeout(() => {
+			let size = 0
 			for (let i = 0; i < urls.length; i++) {
 				try {
+					size = fs.statSync(`${dirUL}/${urls[i][0]}`).size
+					optimizeFullSize += size
+					optimizeLog.push([size, null])
 					fs.renameSync(`${dirUL}/${urls[i][0]}`, `${dirTmp}/${urls[i][0]}`)
 				} catch(err) {
 					optimizeErrLog.push("MovingTemp: "+err)
@@ -67,6 +74,18 @@ function convertImagesToOptimize(list, index, comic_id) {
 		db.comics.update({_id:comic_id}, { $set: {o:0} }, {}, (err) => {
 			if (err) optimizeErrLog.push(err)
 			loading.hide()
+
+			errorSelector(`Size From: ${formatBytes(optimizeFullSize)} To: ${formatBytes(optimizeConvertSize)}`, null, false, [
+				[
+					"More Info",
+					"btn btn-primary m-2",
+					"this.parentElement.parentElement.remove();openOptimizeLog()"
+				],
+				[
+					"Ok",
+					"btn btn-success m-2"
+				]
+			])
 
 			if (optimizeErrLog.length == 0) {
 				PopAlert('Comic Images Has Been Optimize')
@@ -88,6 +107,14 @@ function convertImagesToOptimize(list, index, comic_id) {
 				}
 			}
 
+			try {
+				const size = fs.statSync(`${dirUL}/${list[index][0]}`).size
+				optimizeConvertSize += size
+				optimizeLog[index][1] = size
+			} catch(err) {
+				optimizeErrLog.push('SavingFileSize: '+err)
+			}
+
 			loading.forward()
 			setTimeout(() => {
 				convertImagesToOptimize(list, index + 1, comic_id) 
@@ -104,6 +131,14 @@ function convertImagesToOptimize(list, index, comic_id) {
 				optimizeErrLog.push("DeletingTemp: "+err)
 			}
 
+			try {
+				const size = fs.statSync(`${dirUL}/${list[index][0]}`).size
+				optimizeConvertSize += size
+				optimizeLog[index][1] = size
+			} catch(err) {
+				optimizeErrLog.push('SavingFileSize: '+err)
+			}
+
 			loading.forward()
 			setTimeout(() => {
 				convertImagesToOptimize(list, index + 1, comic_id) 
@@ -114,6 +149,11 @@ function convertImagesToOptimize(list, index, comic_id) {
 	} else {
 		try {
 			fs.renameSync(`${dirTmp}/${list[index][0]}`, `${dirUL}/${list[index][0]}`)
+
+			const size = fs.statSync(`${dirUL}/${list[index][0]}`).size
+			optimizeConvertSize += size
+			optimizeLog[index][1] = size
+
 			loading.forward()
 			setTimeout(() => {
 				convertImagesToOptimize(list, index + 1, comic_id) 
@@ -122,4 +162,15 @@ function convertImagesToOptimize(list, index, comic_id) {
 			optimizeErrLog.push("Optimize: "+err)
 		}
 	}
+}
+
+function openOptimizeLog() {
+	if (optimizeLog.length == 0) { PopAlert('There is no Log!', 'danger'); return }
+
+	const newList = []
+	for (let i = 0; i < optimizeLog.length; i++) {
+		newList.push(`Image ${i+1} - From: ${formatBytes(optimizeLog[i][0])} To: ${formatBytes(optimizeLog[i][1])}`)
+	}
+
+	errorList(newList, 'action-error-success')
 }

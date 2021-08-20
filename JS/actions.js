@@ -40,9 +40,10 @@ function errorSelector(txt, t1, bgClose, buttons) {
 	document.getElementsByTagName('body')[0].appendChild(element)
 }
 
-function errorList(list) {
+function errorList(list, style) {
 	const element = document.createElement('div')
 	element.classList.add('action-error-list')
+	if (style) element.classList.add(style)
 
 	let html = `<div onclick="this.parentElement.remove()"></div><div>`
 	for (let i = 0; i < list.length; i++) {

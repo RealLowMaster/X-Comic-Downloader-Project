@@ -77,7 +77,7 @@
 
 	<!-- Comic Action Panel -->
 	<div class="comic-action-panel" id="comic-action-panel">
-		<div onclick="document.getElementById('comic-action-panel').style.display='none'"></div>
+		<div onclick="this.parentElement.style.display='none'"></div>
 		<div>
 			<button onclick="makeThumbForAComic(Number(comicPanel.getAttribute('cid')))" class="success-action" title="Make Thumb for faster loading in Overview">Make Thumb</button>
 			<button onclick="OptimizeComicImages(Number(comicPanel.getAttribute('cid')))" class="success-action" id="c-a-p-o-b" title="Optimize Image For faster loading and Lower Space taken (May Take Time)">Optimize Images</button>

@@ -69,3 +69,9 @@
 	border: 1px solid #CB4335;
 	user-select: text !important;
 }
+
+.action-error-success > div:last-child > div {
+	background-color: #229954;
+	color: #222;
+	border-color: #1E8449;
+}
