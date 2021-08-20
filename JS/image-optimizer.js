@@ -63,7 +63,7 @@ function OptimizeComicImages(comic_id) {
 					optimizeErrLog.push("MovingTemp: "+err)
 				}
 			}
-			loading.forward('Optimizing...')
+			loading.forward(`Optimized Image (0/${urls.length})...`)
 			convertImagesToOptimize(urls, 0, comic_id)
 		}, 100)
 	})
@@ -115,7 +115,7 @@ function convertImagesToOptimize(list, index, comic_id) {
 				optimizeErrLog.push('SavingFileSize: '+err)
 			}
 
-			loading.forward()
+			loading.forward(`Optimizing Image (${index+1}/${list.length})...`)
 			setTimeout(() => {
 				convertImagesToOptimize(list, index + 1, comic_id) 
 			}, 100)
@@ -139,7 +139,7 @@ function convertImagesToOptimize(list, index, comic_id) {
 				optimizeErrLog.push('SavingFileSize: '+err)
 			}
 
-			loading.forward()
+			loading.forward(`Optimizing Image (${index+1}/${list.length})...`)
 			setTimeout(() => {
 				convertImagesToOptimize(list, index + 1, comic_id) 
 			}, 100)
@@ -154,7 +154,7 @@ function convertImagesToOptimize(list, index, comic_id) {
 			optimizeConvertSize += size
 			optimizeLog[index][1] = size
 
-			loading.forward()
+			loading.forward(`Optimizing Image (${index+1}/${list.length})...`)
 			setTimeout(() => {
 				convertImagesToOptimize(list, index + 1, comic_id) 
 			}, 100)
