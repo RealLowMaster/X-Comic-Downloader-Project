@@ -2,6 +2,7 @@ let optimizeErrLog = [], optimizeLog = [], optimizeFullSize = 0, optimizeConvert
 
 function OptimizeComicImages(comic_id) {
 	if (downloadCounter > 0) { error("You Can't Optimze Image When you are Downloading Something!"); return }
+	isOptimizing = true
 	window.stop()
 	optimizeErrLog = []
 	optimizeLog = []
@@ -105,6 +106,7 @@ function convertImagesToOptimize(list, index, comic_id) {
 				PopAlert('Comic Images Has Been Optimize')
 			} else errorList(optimizeErrLog)
 
+			isOptimizing = false
 			openComic(comic_id)
 			if (setting.show_unoptimize) reloadLoadingComics()
 		})
@@ -203,4 +205,8 @@ function openOptimizeLog() {
 	}
 
 	errorList(newList, 'action-error-success')
+}
+
+function showOptimatizationList() {
+	
 }

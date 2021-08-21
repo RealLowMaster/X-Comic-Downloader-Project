@@ -82,10 +82,6 @@ Did {
 
 Tasks => {
 	Add Optimze Comic Event To Window Close
-	Add setTimeout() To Optimize Image
-	Make Optimzing Rename Error Work Better With window.stop()
-	Check Lara Croft And The Guardian Of Pleasure
-	Fix Optimizter Stoping Bug
 	Fix Overview Number = NaN In Sahara Wataru Group
 	Add Optimizing Image Option
 	Ctrl + k | Ctrl + 0

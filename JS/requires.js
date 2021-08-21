@@ -48,15 +48,16 @@ const browserPasteMenu = document.getElementById('browser-paste-menu')
 const bjp = document.getElementById('browser-jump-page-container')
 const bjp_i = document.getElementById('bjp-i')
 const bjp_m_p = document.getElementById('bjp-m-p')
-let comicDeleting = false, downloadCounter = 0, needReload = true, wt_fps = 20, dirDB, dirUL, dirTmp
+let comicDeleting = false, downloadCounter = 0, needReload = true, wt_fps = 20, dirDB, dirUL, dirTmp, isOptimizing = false
 var setting, tabs = [], downloadingList = [], thisSite, lastComicId, lastHaveId, lastGroupId, lastArtistId, lastParodyId, lastTagId, searchTimer, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = [], openedMenuTabIndex, copiedTab = null
 
 // Set Windows Closing Event
 ThisWindow.addListener('close', e => {
 	e.preventDefault()
-	if (comicDeleting) return
+	if (comicDeleting) { PopAlert("You can't Close App When you are Deleting a Comic.", "danger"); return }
+	if (isOptimizing) { PopAlert("You can't Close App When you are Optimzating.", "danger"); return }
 	if (downloadingList.length > 0) {
-		errorSelector('You are Downloading Comics, Are you sure you want To Close Software?', null, false, [
+		errorSelector('You are Downloading Comics, Are you sure you want To Close Software ?', null, false, [
 			[
 				"Yes",
 				"btn btn-primary m-2",

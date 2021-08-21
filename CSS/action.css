@@ -8,6 +8,7 @@
 	position: fixed;
 	top: 0;
 	left: 0;
+	z-index: 9999999999;
 }
 
 .action-error > div:first-child,
@@ -25,10 +26,18 @@
 	display: block;
 	width: 500px;
 	background-color: #fff;
-	border-radius: 5px;
 	padding: 10px;
-	box-shadow: 0 0 10px 0 rgba(255,255,255,0.3);
+	box-shadow: 0 0 10px 3px rgba(29,131,72,.8);
 	z-index: +1;
+}
+
+.action-error > div:last-child > p {
+	display: block;
+	width: 100%;
+	margin: 5px auto;
+	padding: 10px;
+	background-color: #eee;
+	border-radius: 3px;
 }
 
 .action-error > div:last-child > button {

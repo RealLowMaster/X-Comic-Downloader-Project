@@ -1417,6 +1417,7 @@ div { display: block; }
 	left: 10px;
 	box-shadow: 0 5px 10px rgba(0,0,0,0.3);
 	transition: bottom .3s;
+	z-index: 999999999;
 }
 
 .pop-alert-primary {
@@ -1450,6 +1451,24 @@ div { display: block; }
 
 .child-draggable > img {
 	-webkit-user-drag: auto;
+}
+
+/* Progress Panel */
+#progress-panel {
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	top: 0;
+	left: 0;
+}
+
+#progress-panel > div:first-child {
+	width: 100%;
+	height: 100%;
+	background-color: #000e;
+	position: absolute;
+	top: 0;
+	left: 0;
 }
 
 /* New Release */
