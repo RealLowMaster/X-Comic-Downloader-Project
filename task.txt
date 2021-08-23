@@ -70,10 +70,11 @@ Add Comic {
 }
 
 Added To Version {
-	16
+	17
 	Fix Bug: Stock in Repairing When There is no Internet Connection
 	Add Optimizing All Comic Images Button
 	Add Show UnOptimize Comics To Setting for find which comic you didn't optimize
+	Error UI Update
 }
 
 Did {
@@ -81,6 +82,7 @@ Did {
 }
 
 Tasks => {
+	Add tyr and catch to Deleting Image
 	Add Optimze Comic Event To Window Close
 	Fix Overview Number = NaN In Sahara Wataru Group
 	Add Optimizing Image Option

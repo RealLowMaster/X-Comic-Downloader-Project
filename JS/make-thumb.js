@@ -42,7 +42,7 @@ function checkThumbs(doc) {
 }
 
 function createThumb(list, index) {
-	sharp(list[index][0]).resize(225, 315).jpeg().toFile(`${dirUL}/thumbs/${list[index][1]}.jpg`).then(() => {
+	sharp(list[index][0]).resize(225, 315).jpeg({ mozjpeg: true }).toFile(`${dirUL}/thumbs/${list[index][1]}.jpg`).then(() => {
 		loading.forward()
 		if (index != list.length - 1) {
 			setTimeout(() => {
