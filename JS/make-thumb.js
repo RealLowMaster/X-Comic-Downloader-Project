@@ -4,7 +4,7 @@ function makeThumb(reCreate) {
 	thumbErrLog = []
 	db.comics.find({}, (err, doc) => {
 		if (err) { error(err); return }
-		loading.reset(doc.length + 2)
+		loading.reset(0)
 		loading.show(`Checking Thumbs...`)
 
 		const scrollTop = document.getElementById('main-body').scrollTop
@@ -47,7 +47,8 @@ function checkThumbs(doc, reCreate, scrollTop) {
 	}
 	
 	if (list.length > 0) {
-		loading.forward('Making Thumbs...')
+		loading.changePercent(list.length)
+		loading.forward(`Making Thumbs (0/${list.length})...`)
 		createThumb(list, 0)
 	} else if (thumbErrLog.length == 0) {
 		loading.hide()
@@ -62,7 +63,7 @@ function checkThumbs(doc, reCreate, scrollTop) {
 
 function createThumb(list, index, scrollTop) {
 	sharp(list[index][0]).resize(225, 315).jpeg({ mozjpeg: true }).toFile(`${dirUL}/thumbs/${list[index][1]}.jpg`).then(() => {
-		loading.forward()
+		loading.forward(`Making Thumbs (${index+1}/${list.length})...`)
 		if (index != list.length - 1) {
 			setTimeout(() => {
 				createThumb(list, index + 1, scrollTop)
@@ -74,7 +75,7 @@ function createThumb(list, index, scrollTop) {
 			else errorList(thumbErrLog)
 		}
 	}).catch(err => {
-		loading.forward()
+		loading.forward(`Making Thumbs (${index+1}/${list.length})...`)
 		thumbErrLog.push(err)
 		if (index != list.length - 1) {
 			setTimeout(() => {
@@ -148,16 +149,14 @@ function makeThumbForDownloadingComic(repair, image, format, callback) {
 			return
 		} else url = `${dirUL}/${image}-0.${format}`
 		
-		if (!fs.existsSync(`${dirUL}/thumbs/${image}.jpg`)) {
-			if (fs.existsSync(url)) {
-				setTimeout(() => {
-					sharp(url).resize(225, 315).jpeg().toFile(`${dirUL}/thumbs/${image}.jpg`).then(() => {
-						callback()
-					}).catch(err => {
-						callback()
-					})
-				}, 100)
-			}
-		}
+		if (fs.existsSync(url)) {
+			setTimeout(() => {
+				sharp(url).resize(225, 315).jpeg().toFile(`${dirUL}/thumbs/${image}.jpg`).then(() => {
+					callback()
+				}).catch(err => {
+					callback()
+				})
+			}, 100)
+		} else callback()
 	}, 100)
 }
