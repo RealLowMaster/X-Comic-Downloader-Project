@@ -1,31 +1,48 @@
 let thumbErrLog = []
 
-function makeThumb() {
+function makeThumb(reCreate) {
 	thumbErrLog = []
 	db.comics.find({}, (err, doc) => {
 		if (err) { error(err); return }
 		loading.reset(doc.length + 2)
 		loading.show(`Checking Thumbs...`)
 
+		const scrollTop = document.getElementById('main-body').scrollTop
+		document.getElementById('comic-container').innerHTML = ''
 		setTimeout(() => {
-			checkThumbs(doc)
+			checkThumbs(doc, reCreate, scrollTop)
 		}, 100)
 	})
 }
 
-function checkThumbs(doc) {
+function checkThumbs(doc, reCreate, scrollTop) {
 	const list = [], len = doc.length
 	let url = ''
 	for (let i = 0; i < len; i++) {
 		if (doc[i].m == undefined || doc[i].m.length == 0) url = `${dirUL}/${doc[i].i}-0.${doc[i].f[0][2]}`
 		else if (doc[i].m.indexOf(0) > -1) {
-			thumbErrLog.push('Undownloaded Image, Comic: '+doc[i].n)
+			thumbErrLog.push(`Undownloaded Image, Comic: ${doc[i].n}`)
 			continue
 		} else url = `${dirUL}/${doc[i].i}-0.${doc[i].f[0][2]}`
 		
-		if (!fs.existsSync(`${dirUL}/thumbs/${doc[i].i}.jpg`)) {
-			if (fs.existsSync(url)) list.push([url, doc[i].i])
-			else thumbErrLog.push("Image Not Found, Comic: "+doc[i].n)
+		if (reCreate) {
+			if (fs.existsSync(`${dirUL}/thumbs/${doc[i].i}.jpg`)) {
+				try {
+					fs.unlinkSync(`${dirUL}/thumbs/${doc[i].i}.jpg`)
+				} catch(err) {
+					thumbErrLog.push(`Failed To Delete Thumb, Comic: ${doc[i].n}`)
+				}
+				if (fs.existsSync(url)) list.push([url, doc[i].i])
+				else thumbErrLog.push(`Image Not Found, Comic: ${doc[i].n}`)
+			} else {
+				if (fs.existsSync(url)) list.push([url, doc[i].i])
+				else thumbErrLog.push(`Image Not Found, Comic: ${doc[i].n}`)
+			}
+		} else {
+			if (!fs.existsSync(`${dirUL}/thumbs/${doc[i].i}.jpg`)) {
+				if (fs.existsSync(url)) list.push([url, doc[i].i])
+				else thumbErrLog.push(`Image Not Found, Comic: ${doc[i].n}`)
+			}
 		}
 	}
 	
@@ -35,22 +52,24 @@ function checkThumbs(doc) {
 	} else if (thumbErrLog.length == 0) {
 		loading.hide()
 		PopAlert('All Thumbs Made Successfuly.')
+		reloadLoadingComics(scrollTop)
 	} else {
 		loading.hide()
 		errorList(thumbErrLog)
+		reloadLoadingComics(scrollTop)
 	}
 }
 
-function createThumb(list, index) {
+function createThumb(list, index, scrollTop) {
 	sharp(list[index][0]).resize(225, 315).jpeg({ mozjpeg: true }).toFile(`${dirUL}/thumbs/${list[index][1]}.jpg`).then(() => {
 		loading.forward()
 		if (index != list.length - 1) {
 			setTimeout(() => {
-				createThumb(list, index + 1)
+				createThumb(list, index + 1, scrollTop)
 			}, 100)
 		} else {
 			loading.hide()
-			reloadLoadingComics()
+			reloadLoadingComics(scrollTop)
 			if (thumbErrLog.length == 0) PopAlert('All Thumbs Made Successfuly.')
 			else errorList(thumbErrLog)
 		}
@@ -59,11 +78,11 @@ function createThumb(list, index) {
 		thumbErrLog.push(err)
 		if (index != list.length - 1) {
 			setTimeout(() => {
-				createThumb(list, index + 1)
+				createThumb(list, index + 1, scrollTop)
 			}, 100)
 		} else {
 			loading.hide()
-			reloadLoadingComics()
+			reloadLoadingComics(scrollTop)
 			if (thumbErrLog.length == 0) PopAlert('All Thumbs Made Successfuly.')
 			else errorList(thumbErrLog)
 		}
@@ -74,6 +93,8 @@ function makeThumbForAComic(id) {
 	db.comics.findOne({_id:id}, (err, doc) => {
 		if (err) { error(err); return }
 		if (doc == undefined) { error('Comic Not Found'); return }
+		const scrollTop = document.getElementById('main-body').scrollTop
+		document.getElementById('comic-container').innerHTML = ''
 		loading.reset(3)
 		loading.show(`Checking Thumbs...`)
 
@@ -82,30 +103,37 @@ function makeThumbForAComic(id) {
 			else if (doc.m.indexOf(0) > -1) {
 				loading.hide()
 				error('Undownloaded Image, Comic: '+doc.n)
+				reloadLoadingComics(scrollTop)
 				return
 			} else url = `${dirUL}/${doc.i}-0.${doc.f[0][2]}`
 			
-			if (!fs.existsSync(`${dirUL}/thumbs/${doc.i}.jpg`)) {
-				if (fs.existsSync(url)) {
-					loading.forward('Making Thumbs...')
-					setTimeout(() => {
-						sharp(url).resize(225, 315).jpeg().toFile(`${dirUL}/thumbs/${doc.i}.jpg`).then(() => {
-							loading.forward()
-							loading.hide()
-							PopAlert('Thumbs Made Successfuly.')
-						}).catch(err => {
-							loading.forward()
-							loading.hide()
-							error(err)
-						})
-					}, 100)
-				} else {
-					loading.hide()
-					error("Image Not Found, Comic: "+doc.n)
+			if (fs.existsSync(`${dirUL}/thumbs/${doc.i}.jpg`)) {
+				try {
+					fs.unlinkSync(`${dirUL}/thumbs/${doc.i}.jpg`)
+				} catch(err) {
+					console.error(err)
 				}
+			}
+
+			if (fs.existsSync(url)) {
+				loading.forward('Making Thumbs...')
+				setTimeout(() => {
+					sharp(url).resize(225, 315).jpeg().toFile(`${dirUL}/thumbs/${doc.i}.jpg`).then(() => {
+						loading.forward()
+						loading.hide()
+						PopAlert('Thumbs Made Successfuly.')
+						reloadLoadingComics(scrollTop)
+					}).catch(err => {
+						loading.forward()
+						loading.hide()
+						error(err)
+						reloadLoadingComics(scrollTop)
+					})
+				}, 100)
 			} else {
 				loading.hide()
-				PopAlert('Comic Already Have Thumb.', 'danger')
+				error("Image Not Found, Comic: "+doc.n)
+				reloadLoadingComics(scrollTop)
 			}
 		}, 100)
 	})

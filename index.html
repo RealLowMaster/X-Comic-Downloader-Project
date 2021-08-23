@@ -33,7 +33,13 @@
 			<div class="top-menu" id="top-menu">
 				<div>
 					<button onclick="document.getElementById('site-menu').setAttribute('active', true)">Sites</button>
-					<button onclick="showOptimatizationList()">Optimzation</button>
+					<div class="menu-dropdown">
+						<button>Optimzation</button>
+						<div>
+							<button onclick="makeThumb(false)" title="Create Thumbs For All Comics That Missied They Thumb">Make Thumb</button>
+							<button onclick="makeThumb(true)" title="ReCreate Comic Thumbs if They had, if don't Create New One">ReMake Thumb</button>
+						</div>
+					</div>
 					<button onclick="document.getElementById('setting-panel').style.display='block';document.getElementById('setting-panel').scrollTop=0">Setting</button>
 				</div>
 				<div>
@@ -80,7 +86,7 @@
 	<div class="comic-action-panel" id="comic-action-panel">
 		<div onclick="this.parentElement.style.display='none'"></div>
 		<div>
-			<button onclick="makeThumbForAComic(Number(comicPanel.getAttribute('cid')))" class="success-action" title="Make Thumb for faster loading in Overview">Make Thumb</button>
+			<button onclick="makeThumbForAComic(Number(comicPanel.getAttribute('cid')))" class="success-action" id="c-a-p-o-t" title="Make Thumb for faster loading in Overview">Make Thumb</button>
 			<button onclick="OptimizeComicImages(Number(comicPanel.getAttribute('cid')))" class="success-action" id="c-a-p-o-b" title="Optimize Image For faster loading and Lower Space taken (May Take Time)">Optimize Images</button>
 			<button onclick="repairComicInfo(0)" title="Repair Comic Title">Repair Comic Name</button>
 			<button onclick="repairComicInfo(1)" title="Repair Comic Groups if Have">Repair Comic Groups</button>
@@ -360,14 +366,13 @@
 				<button onclick="saveSetting(false)" class="btn btn-primary">Save</button>
 				<button onclick="closeSetting()" class="btn btn-danger">Cancel</button>
 				<button onclick="CheckUpdate()" class="btn btn-primary">Check Update</button>
-				<button onclick="makeThumb()" class="btn btn-success" title="Create Thumb For All Comic That Missied They Thumb">Make Thumb</button>
 			</div>
 			<div class="col-6 pr-5 pl-5"></div>
 		</div>
 	</div>
 
 	<!-- Progress Panel -->
-	<div id="progress-panel">
+	<div id="progress-panel" style="display: none;">
 		<div></div>
 		<div></div>
 	</div>

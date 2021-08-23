@@ -126,7 +126,9 @@ div { display: block; }
 	padding-left: 2px;
 }
 
-.top-menu > div > button {
+.top-menu > div > button,
+.menu-dropdown > button,
+.menu-dropdown > div > button {
 	display: flex;
 	height: 100%;
 	justify-content: center;
@@ -138,13 +140,68 @@ div { display: block; }
 	transition: background-color .2s, border-color .2s;
 }
 
-.top-menu > div > button:hover {
+.top-menu > div > button:hover,
+.menu-dropdown > button:hover,
+.menu-dropdown > div > button:hover {
 	background-color: #eee;
 	border-color: #0af;
 }
 
-.top-menu-darkmode > div > button { background-color: #444; color: #fff; border-color: #111 }
-.top-menu-darkmode > div > button:hover { background-color: #1e1e1e; border-color: #0af }
+.menu-dropdown {
+	display: inline-block;
+	width: auto;
+	height: 100%;
+}
+
+.menu-dropdown > button {
+	padding-right: 25px;
+	position: relative;
+}
+
+.menu-dropdown > button::after {
+	content: '';
+	width: 0;
+	height: 0;
+	margin: auto;
+	border-left: 5px solid transparent;
+	border-right: 5px solid transparent;
+	border-top: 8px solid #000;
+	position: absolute;
+	top: 0;
+	right: 8px;
+	bottom: 0;
+	transition: transform .1s;
+}
+
+.menu-dropdown:hover > button::after {
+	transform: rotate(180deg);
+}
+
+
+.menu-dropdown > div {
+	display: none;
+	flex-flow: column;
+	min-width: 110px;
+	height: auto;
+	position: absolute;
+	z-index: 100;
+}
+
+.menu-dropdown > div > button {
+	padding: 10px;
+}
+
+.menu-dropdown:hover > div {
+	display: flex;
+}
+
+.top-menu-darkmode > div > button,
+.top-menu-darkmode .menu-dropdown > button,
+.top-menu-darkmode .menu-dropdown > div > button { background-color: #444; color: #fff; border-color: #111 }
+.top-menu-darkmode .menu-dropdown > button::after { border-top-color: #fff }
+.top-menu-darkmode > div > button:hover,
+.top-menu-darkmode .menu-dropdown > button:hover,
+.top-menu-darkmode .menu-dropdown > div > button:hover { background-color: #1e1e1e; border-color: #0af }
 
 .action-menu {
 	display: block;

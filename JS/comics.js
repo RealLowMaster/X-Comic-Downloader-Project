@@ -8,10 +8,13 @@ function loadComics(page, search, safeScroll) {
 	const comic_container = document.getElementById('comic-container')
 	let min = 0, max = 0, allPages = 0, html = '', main_body, scrollTop
 	var id, name, image, repair
-	const max_per_page = setting.max_per_page
-	if (safeScroll == true) {
+	const max_per_page = setting.max_per_page, safeScrollType = typeof(safeScroll)
+	if (safeScrollType == 'boolean' && safeScroll == true) {
 		main_body = document.getElementById('main-body')
 		scrollTop = main_body.scrollTop
+	} else if (safeScrollType == 'number') {
+		main_body = document.getElementById('main-body')
+		scrollTop = safeScroll
 	}
 	comic_container.innerHTML = ''
 	comic_container.setAttribute('page', page)
@@ -86,7 +89,7 @@ function loadComics(page, search, safeScroll) {
 		else if (doc.length == 0 && search == null)
 			comic_container.innerHTML = '<br><div class="alert alert-danger">There is no Comic Downloaded.</div>'
 
-		if (safeScroll == true) main_body.scrollTop = scrollTop
+		if (safeScrollType == 'boolean' || safeScrollType == 'number') main_body.scrollTop = scrollTop
 	}
 
 	const findComicsBySearch = async() => {
@@ -201,11 +204,12 @@ function randomJumpPage(limit) {
 	else loadComics(Math.floor(Math.random() * limit), value)
 }
 
-function reloadLoadingComics() {
+function reloadLoadingComics(scroll) {
+	scroll = scroll || true
 	const page = Number(document.getElementById('comic-container').getAttribute('page')) || null
 	let search = document.getElementById('offline-search-form-input').value || null
 	if (search == null || search.length == 0) search = null
-	loadComics(page, search, true)
+	loadComics(page, search, scroll)
 }
 
 function openComicGroups(comicId) {
@@ -305,6 +309,15 @@ function openComic(id) {
 			image = doc.i
 
 			title_container.textContent = name
+			
+			const comic_thumb_optimize_btn = document.getElementById('c-a-p-o-t')
+			if (fs.existsSync(`${dirUL}/thumbs/${image}.jpg`)) {
+				comic_thumb_optimize_btn.setAttribute('class', 'warning-action')
+				comic_thumb_optimize_btn.innerText = 'ReMake Thumb'
+			} else {
+				comic_thumb_optimize_btn.setAttribute('class', 'success-action')
+				comic_thumb_optimize_btn.innerText = 'Make Thumb'
+			}
 
 			const comic_optimize_btn = document.getElementById('c-a-p-o-b')
 			if (typeof(doc.o) == 'number') {

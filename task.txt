@@ -70,10 +70,13 @@ Add Comic {
 }
 
 Added To Version {
-	17
+	19
 	Fix Bug: Stock in Repairing When There is no Internet Connection
 	Add Optimizing All Comic Images Button
+	Add More Optimization to Comic Thumbs
 	Add Show UnOptimize Comics To Setting for find which comic you didn't optimize
+	Make Thumbing Work Better
+	Add ReMake Thumb Button
 	Error UI Update
 }
 
@@ -82,8 +85,8 @@ Did {
 }
 
 Tasks => {
-	Add tyr and catch to Deleting Image
-	Add Optimze Comic Event To Window Close
+	Make Tab Doplicator inset after tab
+	Add try and catch to Deleting Image
 	Fix Overview Number = NaN In Sahara Wataru Group
 	Add Optimizing Image Option
 	Ctrl + k | Ctrl + 0
