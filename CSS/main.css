@@ -1510,8 +1510,11 @@ div { display: block; }
 	-webkit-user-drag: auto;
 }
 
-/* Progress Panel */
-#progress-panel {
+/* Procress Panel */
+.procress-panel {
+	display: none;
+	justify-content: center;
+	align-items: center;
 	width: 100%;
 	height: 100%;
 	position: fixed;
@@ -1519,13 +1522,142 @@ div { display: block; }
 	left: 0;
 }
 
-#progress-panel > div:first-child {
+.procress-panel > div:first-child {
+	display: block;
 	width: 100%;
 	height: 100%;
 	background-color: #000e;
 	position: absolute;
 	top: 0;
 	left: 0;
+}
+
+.procress-panel > button {
+	display: none;
+	justify-content: center;
+	align-items: center;
+	width: 23px;
+	height: 23px;
+	background-color: transparent;
+	color: #fff;
+	border-radius: 5px;
+	font-size: 15px;
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	cursor: pointer;
+	transition: background-color .2s;
+}
+
+.procress-panel > button:hover {
+	background-color: #fffa;
+}
+
+.procress-panel > div:last-child {
+	display: flex;
+	flex-flow: row;
+	width: calc(100% - 80px);
+	height: calc(100% - 80px);
+	background-color: #fff;
+	border: 1px solid #ddd;
+	box-shadow: 0 0 10px rgba(255,255,255,.5);
+	z-index: +1;
+}
+
+.procress-panel > div:last-child > div:first-child {
+	display: flex;
+	flex-flow: column;
+	flex: 0 0 0;
+	padding: 7px;
+	max-width: 0;
+	height: 100%;
+	overflow-y: auto;
+}
+
+.procress-panel[mini] > div:last-child > div:first-child {
+	flex: 0 0 30%;
+	max-width: 30%;
+	border-right: 1px solid #ddd;
+}
+
+.procress-panel > div:last-child > div:last-child {
+	display: grid;
+	grid-template-rows: 11fr 70px;
+	flex: 0 0 100%;
+	max-width: 100%;
+	height: 100%;
+}
+
+.procress-panel[mini] > div:last-child > div:last-child {
+	flex: 0 0 70%;
+	max-width: 70%;
+}
+
+.procress-panel > div:last-child > div:last-child > div:first-child {
+	display: block;
+	padding: 10px;
+	width: 100%;
+	border-bottom: 1px solid #ddd;
+	overflow-y: auto;
+}
+
+.procress-panel > div:last-child > div:last-child > div:last-child {
+	display: block;
+	width: 100%;
+}
+
+.procress-panel > div:last-child > div:last-child > div:last-child > p {
+	display: block;
+	width: 100%;
+	padding: 10px;
+	color: #222;
+	font-size: 15px;
+	text-align: center;
+}
+
+.procress-panel > div:last-child > div:last-child > div:last-child > div {
+	display: block;
+	margin: 5px auto;
+	width: 90%;
+	height: 4px;
+	background-color: #eee;
+}
+
+.procress-panel > div:last-child > div:last-child > div:last-child > div > div {
+	display: block;
+	width: 50%;
+	height: 100%;
+	background-color: #3498DB;
+	transition: width .2s;
+}
+
+.pp-log {
+	display: block;
+	width: 100%;
+	height: auto;
+	padding: 10px;
+	margin: 0;
+	background-color: transparent;
+	color: #222;
+	border: 1px solid transparent;
+}
+
+.pp-success {
+	background-color: #1D8348;
+	color: #fff;
+	border-color: #196F3D;
+}
+
+.pp-danger {
+	background-color: #C0392B;
+	color: #fff;
+	border-color: #A93226;
+}
+
+.pp-warning {
+	background-color: #E67E22;
+	color: #fff;
+	border-color: #CA6F1E;
 }
 
 /* New Release */

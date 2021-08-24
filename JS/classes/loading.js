@@ -17,7 +17,7 @@ class Loading {
 		const miniElement = document.createElement('div')
 		miniElement.appendChild(this.#procress)
 		this.#loading.appendChild(miniElement)
-		document.getElementsByTagName('body')[0].appendChild(this.#loading)
+		document.body.appendChild(this.#loading)
 	}
 
 	forward(text) {

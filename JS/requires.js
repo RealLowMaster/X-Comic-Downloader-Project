@@ -38,7 +38,7 @@ const sites = [
 		'xlecxJumpPage({index}, {page})'
 	]
 ]
-const ThisWindow = remote.getCurrentWindow(), loading = new Loading(14), db = {}, version = [1, 8, 2]
+const ThisWindow = remote.getCurrentWindow(), loading = new Loading(14), db = {}, procressPanel = new ProcressPanel(0), version = [1, 8, 2]
 const comicGroupsContainer = document.getElementById('c-p-g')
 const comicArtistsContainer = document.getElementById('c-p-a')
 const comicParodyContainer = document.getElementById('c-p-p')

@@ -10,11 +10,14 @@ function ChangeSizes() {
 }
 
 function test() {
-	sharp('img.webp').jpeg({ mozjpeg: true }).toFile('h.jpg').then(() => {
-		console.log('Finish')
-	}).catch(err => {
-		console.log('Failed:: '+err)
-	})
+	procressPanel.config({ miniLog:true })
+	procressPanel.show()
+}
+
+function test1() {
+	for (let i = 0; i < 25; i++) {
+		procressPanel.add('test text', 'warning')
+	}
 }
 
 document.addEventListener("DOMContentLoaded", () => {
