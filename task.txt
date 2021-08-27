@@ -89,14 +89,12 @@ Tasks => {
 	Use jsonbin.io
 	Make Tab Doplicator inset after tab
 	Add try and catch to Deleting Image
-	Fix Overview Number = NaN In Sahara Wataru Group
 	Add Optimizing Image Option
 	Ctrl + k | Ctrl + 0
 	Add Perfect Drag to Scroll To Slider Overview
 	Add Auto Scroll Down for Comic Panel
 	Add Arrow Keys For Changing Offline Pages
 	Fix Update Checker
-	Fix Have or Comic Indexing | when downloading can't add something to have || Fix Parody Indexing
 	Fix Elf No Sato To Ogre Gun
 
 	Mybe in v2  {
