@@ -411,10 +411,10 @@ const fix_index = async(id, updateLast) => {
 				if (len > 0) {
 					const neededId = doc[len - 1]._id
 					update_index(neededId, 1)
-					if (updateLast == true) lastComicId = neededId + 1
+					if (updateLast == true && downloadCounter == 0) lastComicId = neededId + 1
 				} else {
 					update_index(0, 1)
-					if (updateLast == true) lastComicId = 1
+					if (updateLast == true && downloadCounter == 0) lastComicId = 1
 				}
 			})
 			break
@@ -475,10 +475,10 @@ const fix_index = async(id, updateLast) => {
 				if (len > 0) {
 					const neededId = doc[len - 1]._id
 					update_index(neededId, 11)
-					if (updateLast == true) lastHaveId = neededId + 1
+					if (updateLast == true && downloadCounter == 0) lastHaveId = neededId + 1
 				} else {
 					update_index(0, 11)
-					if (updateLast == true) lastHaveId = 1
+					if (updateLast == true && downloadCounter == 0) lastHaveId = 1
 				}
 			})
 			break

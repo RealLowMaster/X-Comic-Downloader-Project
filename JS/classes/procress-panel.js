@@ -62,15 +62,22 @@ class ProcressPanel {
 	}
 
 	addMini(text, color) {
+		color = color || 'success'
+		const element = document.createElement('div')
 
+		element.textContent = text
+		element.classList.add('pp-log')
+		element.classList.add(`pp-${color}`)
+
+		this.#miniLogContainer.appendChild(element)
 	}
 
 	clear() {
-
+		this.#logContainer.innerHTML = ''
 	}
 
 	clearMini() {
-
+		this.#miniLogContainer.innerHTML = ''
 	}
 
 	reset(times = 0) {
@@ -91,8 +98,6 @@ class ProcressPanel {
 	}
 
 	config(config = { miniLog:false, bgClose:false, closeBtn:false }) {
-		const closeBtn = config.closeBtn || false
-
 		if (config.miniLog != undefined) {
 			if (config.miniLog) this.#constainer.setAttribute('mini', true)
 			else this.#constainer.removeAttribute('mini')

@@ -67,6 +67,8 @@ Add Comic {
 	League Of Legends
 	Kono Soba
 	Tufos
+	nodame
+	redlight
 }
 
 Added To Version {
@@ -84,7 +86,7 @@ Did {
 }
 
 Tasks => {
-	Add Deleting Thumb To DeletingComic
+	Use jsonbin.io
 	Make Tab Doplicator inset after tab
 	Add try and catch to Deleting Image
 	Fix Overview Number = NaN In Sahara Wataru Group
