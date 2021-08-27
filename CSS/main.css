@@ -1565,18 +1565,17 @@ div { display: block; }
 }
 
 .procress-panel > div:last-child > div:first-child {
-	display: flex;
+	display: none;
 	flex-flow: column;
-	flex: 0 0 0;
+	flex: 0 0 30%;
 	padding: 7px;
-	max-width: 0;
+	max-width: 30%;
 	height: 100%;
 	overflow-y: auto;
 }
 
 .procress-panel[mini] > div:last-child > div:first-child {
-	flex: 0 0 30%;
-	max-width: 30%;
+	display: flex;
 	border-right: 1px solid #ddd;
 }
 
@@ -1675,7 +1674,7 @@ div { display: block; }
 	bottom: 15px;
 }
 
-#new-release > button {
+#new-release > #release-close {
 	display: flex;
 	width: 17px;
 	height: 20px;
@@ -1689,7 +1688,7 @@ div { display: block; }
 	cursor: pointer;
 }
 
-#new-release > button:hover {
+#new-release > #release-close:hover {
 	background-color: #E74C3C;
 }
 
@@ -1697,11 +1696,12 @@ div { display: block; }
 	display: block;
 	width: 100%;
 	padding: 8px 10px;
+	background-color: #bbb5;
 	color: #fff;
-	border-bottom: 1px solid #eee;
+	border-radius: 3px;
 }
 
-#new-release > a {
+#new-release > button {
 	display: inline-block;
 	padding: 10px;
 	margin: 10px 0;
@@ -1710,7 +1710,7 @@ div { display: block; }
 	font-size: 14px;
 }
 
-#new-release > a:hover {
+#new-release > button:hover {
 	background-color: #2874A6;
 }
 

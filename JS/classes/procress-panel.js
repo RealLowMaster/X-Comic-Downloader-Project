@@ -97,6 +97,10 @@ class ProcressPanel {
 		this.#constainer.style.display = 'flex'
 	}
 
+	text(text) {
+		this.#txt.textContent = text
+	}
+
 	config(config = { miniLog:false, bgClose:false, closeBtn:false }) {
 		if (config.miniLog != undefined) {
 			if (config.miniLog) this.#constainer.setAttribute('mini', true)

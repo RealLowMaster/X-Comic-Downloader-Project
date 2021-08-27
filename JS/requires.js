@@ -221,11 +221,8 @@ function GetFileLocationForInput(who) {
 	})
 }
 
-function OpenLinkInBrowser(url) { shell.openExternal(url) }
-
 function CheckUpdate() {
 	if (window.navigator.onLine) {
-
 		fetch('https://api.jsonbin.io/b/612915922aa800361270d567/latest', { method: "GET" }).then(response => {
 			if (!response.ok) {
 				PopAlert('UPDATE::CHECKING::ERR::HTTP::'+response.status, 'danger')
@@ -246,6 +243,68 @@ function CheckUpdate() {
 			PopAlert(err, 'danger')
 		})
 	} else PopAlert('You are Offline.', 'danger')
+}
+
+function UpdateApp() {
+	procressPanel.config({ miniLog: false, bgClose: false, closeBtn: false })
+	procressPanel.reset(2)
+	procressPanel.show('Checking Connection...')
+
+	fetch('https://api.jsonbin.io/b/612915922aa800361270d567/latest', { method: "GET" }).then(response => {
+		if (!response.ok) {
+			procressPanel.hide()
+			error('UPDATE::CHECKING::ERR::HTTP::'+response.status)
+			return
+		}
+		return response.json()
+	}).then(json => {
+		procressPanel.forward('Downloading Update...')
+		const request = require('request')
+		const file = fs.createWriteStream(`${dirTmp}/update.zip`)
+
+		setTimeout(async () => {
+			await new Promise((resolve, reject) => {
+				let total_bytes = 0, total_size = '', received_bytes = 0
+
+				const stream = request({
+					method: 'GET',
+					followAllRedirects: true,
+					url: json.zip
+				})
+
+				stream.on('error', err => {
+					file.close()
+					fs.unlinkSync('update.zip')
+					reject(err)
+				})
+
+				stream.on('response', response => {
+					total_bytes = parseInt(response.headers['content-length'])
+					total_size = formatBytes(total_bytes)
+				})
+
+				stream.on('data', chunk => {
+					received_bytes += chunk.length
+					procressPanel.text(`Downloading Update (${formatBytes(received_bytes)}/${total_size}) (${((received_bytes * 100) / total_bytes).toFixed()}%/100%)`)
+				})
+
+				stream.pipe(file).on('finish', () => {
+					file.close()
+					resolve()
+				})
+			}).catch(err => {
+				error('UPDATE::DOWNLOAD::ERR::'+err)
+			})
+		}, 100)
+	}).catch(err => {
+		if (err == 'TypeError: Failed to fetch') err = 'Connection Timeout, Check Internet Connection.'
+		procressPanel.hide()
+		error(err)
+	})
+}
+
+function UpdateNotes() {
+
 }
 
 // Main Loading Stuff

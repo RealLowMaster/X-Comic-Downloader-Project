@@ -376,10 +376,10 @@
 
 	<!-- New Release -->
 	<div id="new-release">
-		<button type="button" onclick="this.parentElement.style.display='none'">X</button>
+		<button type="button" onclick="this.parentElement.style.display='none'" id="release-close">X</button>
 		<p>Title</p>
-		<a>Download</a>
-		<a>What's New?</a>
+		<button type="button" onclick="UpdateApp()">Update</button>
+		<button type="button" onclick="UpdateNotes()">What's New?</button>
 	</div>
 </body>
 </html>

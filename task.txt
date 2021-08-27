@@ -82,11 +82,13 @@ Added To Version {
 }
 
 Did {
+	Make Update System Part 2++
 	Make Repairing Systems Part 6++ = Next = Complete All Image Repairing
 }
 
 Tasks => {
 	Use jsonbin.io
+	Add README.md
 	Make Tab Doplicator inset after tab
 	Add try and catch to Deleting Image
 	Add Optimizing Image Option

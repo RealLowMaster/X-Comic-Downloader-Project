@@ -31,7 +31,7 @@
 			"publisherName": "Mehdi Enayatzadeh",
 			"icon": "Image/favicon.ico"
 		},
-		"asar": true,
+		"asar": false,
 		"nsis": {
 			"allowToChangeInstallationDirectory": true,
 			"oneClick": false
@@ -49,6 +49,7 @@
 	"dependencies": {
 		"image-downloader": "^4.0.2",
 		"nedb": "^1.8.0",
+		"request": "^2.88.2",
 		"sharp": "^0.28.3"
 	},
 	"repository": {
