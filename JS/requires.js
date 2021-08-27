@@ -38,7 +38,7 @@ const sites = [
 		'xlecxJumpPage({index}, {page})'
 	]
 ]
-const ThisWindow = remote.getCurrentWindow(), loading = new Loading(14), db = {}, procressPanel = new ProcressPanel(0), version = [1, 8, 2]
+const ThisWindow = remote.getCurrentWindow(), loading = new Loading(14), db = {}, procressPanel = new ProcressPanel(0), update_number = 0
 const comicGroupsContainer = document.getElementById('c-p-g')
 const comicArtistsContainer = document.getElementById('c-p-a')
 const comicParodyContainer = document.getElementById('c-p-p')
@@ -225,29 +225,22 @@ function OpenLinkInBrowser(url) { shell.openExternal(url) }
 
 function CheckUpdate() {
 	if (window.navigator.onLine) {
-		fetch('https://raw.githubusercontent.com/RealLowMaster/X-Comic-Downloader/main/version-release.html').then(response => {
+
+		fetch('https://api.jsonbin.io/b/612915922aa800361270d567/latest', { method: "GET" }).then(response => {
 			if (!response.ok) {
-				PopAlert('HTTP error '+response.status)
+				PopAlert('UPDATE::CHECKING::ERR::HTTP::'+response.status, 'danger')
 				return
 			}
 			return response.json()
 		}).then(json => {
-			let newRelease = false
-			for (let i = 0; i < version.length; i++) {
-				if (json.latest[0][i] > version[i]) {
-					newRelease = true
-					break
-				}
-			}
 
-			if (newRelease) {
+			if (update_number < json.update_number) {
+
 				const releaser = document.getElementById('new-release')
-				releaser.getElementsByTagName('p')[0].textContent = `New Release: v${json.latest[0][0]}.${json.latest[0][1]}.${json.latest[0][2]}`
-				releaser.getElementsByTagName('a')[0].setAttribute('onclick', `OpenLinkInBrowser('${json.latest[1]}')`)
-				releaser.getElementsByTagName('a')[1].setAttribute('onclick', `OpenLinkInBrowser('${json.latest[2]}')`)
+				releaser.getElementsByTagName('p')[0].textContent = `New Release: v${json.version}`
 				releaser.style.display = 'block'
-			} else PopAlert('Your App is Up To Date.')
 
+			} else PopAlert("Your App is Up To Date.")
 		}).catch(err => {
 			if (err == 'TypeError: Failed to fetch') err = 'Connection Timeout, Check Internet Connection.'
 			PopAlert(err, 'danger')
