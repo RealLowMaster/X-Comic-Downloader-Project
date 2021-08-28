@@ -573,9 +573,9 @@ function deleteComic(id) {
 
 		const delete_images = () => {
 
-			if (fs.existsSync(`${dirUL}/thumbs/${image}.jpg`)) {
+			if (fs.existsSync(`${dirUL}/thumbs/${ImagesId}.jpg`)) {
 				try {
-					fs.unlinkSync(`${dirUL}/thumbs/${image}.jpg`)
+					fs.unlinkSync(`${dirUL}/thumbs/${ImagesId}.jpg`)
 				} catch(err) {
 					console.error("DELETE::COMIC::THUMB:: "+err)
 				}

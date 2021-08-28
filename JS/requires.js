@@ -246,8 +246,11 @@ function CheckUpdate() {
 }
 
 function UpdateApp() {
+	if (comicDeleting) { PopAlert("You can't Update App When you are Deleting a Comic.", "danger"); return }
+	if (isOptimizing) { PopAlert("You can't Update App When you are Optimzating.", "danger"); return }
+	if (downloadingList.length > 0) { PopAlert("You can't Update App When you are Downloading Comic.", "danger"); return }
 	procressPanel.config({ miniLog: false, bgClose: false, closeBtn: false })
-	procressPanel.reset(2)
+	procressPanel.reset(3)
 	procressPanel.show('Checking Connection...')
 
 	fetch('https://api.jsonbin.io/b/612915922aa800361270d567/latest', { method: "GET" }).then(response => {
@@ -258,6 +261,7 @@ function UpdateApp() {
 		}
 		return response.json()
 	}).then(json => {
+		procressPanel.add('Connected To Update Data.')
 		procressPanel.forward('Downloading Update...')
 		const request = require('request')
 		const file = fs.createWriteStream(`${dirTmp}/update.zip`)
@@ -288,8 +292,55 @@ function UpdateApp() {
 					procressPanel.text(`Downloading Update (${formatBytes(received_bytes)}/${total_size}) (${((received_bytes * 100) / total_bytes).toFixed()}%/100%)`)
 				})
 
-				stream.pipe(file).on('finish', () => {
+				stream.pipe(file).on('finish', async () => {
 					file.close()
+					procressPanel.add('Complete Downloading Update.')
+					procressPanel.forward('Updating...')
+
+					try {
+						if (!fs.existsSync(`${dirTmp}/update`)) fs.mkdirSync(`${dirTmp}/update`)
+					} catch(err) {
+						error("UPDATE::MAKINGFOLDER::ERR::"+err)
+					}
+
+					const StreamZip = require('node-stream-zip')
+					const path = require('path')
+
+					let counter = 0
+					const zip = new StreamZip.async({ file: `${dirTmp}/update.zip` })
+
+					zip.on('error', err => {
+						error('UPDATE::UNZIPING::ERR::'+err)
+					})
+
+					await zip.entries().then(async entries => {
+						for (const entry of Object.values(entries)) {
+							if (entry.isDirectory) continue
+							const pathname = path.resolve(`${dirTmp}/update`, entry.name)
+
+							try {
+								fs.mkdirSync(
+									path.dirname(pathname),
+									{ recursive: true }
+								)
+								await zip.extract(entry.name, pathname)
+							} catch(err) {
+								procressPanel.add('UnZip-ExtractFile-ERR:: '+err, 'danger')
+							}
+						}
+
+						zip.close()
+						fs.unlinkSync(`${dirTmp}/update.zip`)
+						procressPanel.add('Update Complete.')
+						procressPanel.forward('Closing App...')
+						setTimeout(() => {
+							ThisWindow.removeAllListeners()
+							remote.app.quit()
+						}, 250)
+					}).catch(err => {
+						procressPanel.add('UnZip-GettingEntries-ERR:: '+err, 'danger')
+					})
+
 					resolve()
 				})
 			}).catch(err => {

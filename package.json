@@ -49,14 +49,15 @@
 	"dependencies": {
 		"image-downloader": "^4.0.2",
 		"nedb": "^1.8.0",
+		"node-stream-zip": "^1.14.0",
 		"request": "^2.88.2",
 		"sharp": "^0.28.3"
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://gitlab.com/LowMaster/x-comic-downloader.git"
+		"url": "https://github.com/RealLowMaster/X-Comic-Downloader-Project.git"
 	},
 	"bugs": {
-		"url": "https://github.com/RealLowMaster/X-Comic-Downloader/issues"
+		"url": "https://github.com/RealLowMaster/X-Comic-Downloader-Project/issues"
 	}
 }
