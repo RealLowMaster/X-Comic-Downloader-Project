@@ -9,7 +9,18 @@ function closeBrowser() {
 	activeTabComicId = null
 	tabsPos = []
 	tabsPosParent = []
+	browserLastTabs = []
+
+	const tabsElement = tabsContainer.children
+	if (tabsElement.length > 0) {
+		for (let i = 0; i < tabsElement.length; i++) {
+			const thisTabIndex = Number(tabsElement[i].getAttribute('ti'))
+			browserLastTabs.push([tabs[thisTabIndex].s, tabs[thisTabIndex].history, tabs[thisTabIndex].activeHistory])
+		}
+	}
+
 	tabs = []
+
 	const browser_pages = pageContainer.children
 	for (let i = 0; i < browser_pages.length; i++) {
 		const passImageCon = browser_pages[i].querySelector('[img-con="true"]')
@@ -24,6 +35,12 @@ function closeBrowser() {
 	pageContainer.innerHTML = ''
 	tabsContainer.innerHTML = ''
 	document.getElementById('add-new-tab').setAttribute('onclick', '')
+}
+
+function openBrowserLastTabs() {
+	for (let i = 0; i < browserLastTabs.length; i++) {
+		pasteTab(browserLastTabs[i])
+	}
 }
 
 function updateTabSize() {

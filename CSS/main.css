@@ -451,57 +451,6 @@ div { display: block; }
 	border-color: #0af;
 }
 
-.browser-tool-close-browser {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	width: 30px;
-	height: 100%;
-	padding: 5px;
-	background-color: #eee;
-	color: #d55;
-	border: 0 solid #ddd;
-	border-width: 1px 0 1px 1px;
-	border-radius: 50px 0 0 50px;
-	box-shadow: 0 1px 10px 0 rgba(0,0,0,0.2);
-	font-size: 14px;
-	position: absolute;
-	top: 0;
-	right: 0;
-	cursor: pointer;
-	transition: transform .2s, width .2s, background-color .2s, color .2s, border-radius .2s, right .2s;
-}
-
-.browser-tool-close-browser > svg {
-	width: 100%;
-	height: 100%;
-}
-
-.browser-tool-close-browser > svg > g > path:first-child {
-	fill: #e22;
-}
-
-.browser-tool-close-browser > svg > g > path:last-child {
-	fill: #d66;
-}
-
-.browser-tool-close-browser:hover {
-	transform: rotate(360deg);
-	width: 33px;
-	background-color: #d33;
-	color: #fff;
-	border-radius: 50px;
-	right: 2px;
-}
-
-.browser-tool-close-browser:hover > svg > g > path:first-child {
-	fill: #fff;
-}
-
-.browser-tool-close-browser:hover > svg > g > path:last-child {
-	fill: #ddd;
-}
-
 .browser-tool-search-form {
 	display: flex;
 	justify-content: center;
@@ -599,6 +548,57 @@ div { display: block; }
 	background-color: #444;
 	color: #0af;
 	border-color: #222;
+}
+
+#browser-tool-close-browser {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 30px;
+	height: 100%;
+	padding: 5px;
+	background-color: #eee;
+	color: #d55;
+	border: 0 solid #ddd;
+	border-width: 1px 0 1px 1px;
+	border-radius: 50px 0 0 50px;
+	box-shadow: 0 1px 10px 0 rgba(0,0,0,0.2);
+	font-size: 14px;
+	position: absolute;
+	top: 0;
+	right: 0;
+	cursor: pointer;
+	transition: transform .2s, width .2s, background-color .2s, color .2s, border-radius .2s, right .2s;
+}
+
+#browser-tool-close-browser > svg {
+	width: 100%;
+	height: 100%;
+}
+
+#browser-tool-close-browser > svg > g > path:first-child {
+	fill: #e22;
+}
+
+#browser-tool-close-browser > svg > g > path:last-child {
+	fill: #d66;
+}
+
+#browser-tool-close-browser:hover {
+	transform: rotate(360deg);
+	width: 33px;
+	background-color: #d33;
+	color: #fff;
+	border-radius: 50px;
+	right: 2px;
+}
+
+#browser-tool-close-browser:hover > svg > g > path:first-child {
+	fill: #fff;
+}
+
+#browser-tool-close-browser:hover > svg > g > path:last-child {
+	fill: #ddd;
 }
 
 /* Spin */
