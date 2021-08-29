@@ -88,7 +88,7 @@ Did {
 }
 
 Tasks => {
-	Add First Time Runtime
+	Add First Time Runtime showing new release whats happend
 	Add History To Browser
 	Fix Bug: Deleting Comic error Resuorce is busy
 	Add README.md
