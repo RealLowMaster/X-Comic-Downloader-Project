@@ -13,6 +13,7 @@ const defaultSetting = {
 	"max_per_page": 18,
 	"img_graphic": 1,
 	"notification_download_finish": false,
+	"notification_optimization_finish": true,
 	"lazy_loading": true,
 	"tabs_limit": 32,
 	"search_speed": 1,
@@ -420,6 +421,7 @@ function CheckSettings() {
 	if (typeof(setting.img_graphic) != 'number' || setting.img_graphic < 0) setting.img_graphic = defaultSetting.img_graphic
 	if (setting.img_graphic > 1) setting.img_graphic = 1
 	if (typeof(setting.notification_download_finish) != 'boolean') setting.notification_download_finish = defaultSetting.notification_download_finish
+	if (typeof(setting.notification_optimization_finish) != 'boolean') setting.notification_optimization_finish = defaultSetting.notification_optimization_finish
 	if (typeof(setting.hover_downloader) != 'boolean') setting.hover_downloader = defaultSetting.hover_downloader
 	if (typeof(setting.lazy_loading) != 'boolean') setting.lazy_loading = defaultSetting.lazy_loading
 	if (setting.lazy_loading == false) imageLazyLoadingOptions.rootMargin = "0px 0px 1200px 0px"

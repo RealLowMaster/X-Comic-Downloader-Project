@@ -2,6 +2,7 @@ class ProcressPanel {
 	#saveProcress = 0
 	#constainer
 	#closeBtn
+	#secendSide
 	#miniLogContainer
 	#logContainer
 	#txt
@@ -23,9 +24,9 @@ class ProcressPanel {
 		elementContainer = document.createElement('div')
 		this.#miniLogContainer = document.createElement('div')
 		elementContainer.appendChild(this.#miniLogContainer)
-		let bigElement = document.createElement('div')
+		this.#secendSide = document.createElement('div')
 		this.#logContainer = document.createElement('div')
-		bigElement.appendChild(this.#logContainer)
+		this.#secendSide.appendChild(this.#logContainer)
 		let element = document.createElement('div')
 		this.#txt = document.createElement('p')
 		this.#txt.innerText = 'Waiting...'
@@ -34,8 +35,8 @@ class ProcressPanel {
 		this.#procress = document.createElement('div')
 		miniElement.appendChild(this.#procress)
 		element.appendChild(miniElement)
-		bigElement.appendChild(element)
-		elementContainer.appendChild(bigElement)
+		this.#secendSide.appendChild(element)
+		elementContainer.appendChild(this.#secendSide)
 		this.#constainer.appendChild(elementContainer)
 		document.body.appendChild(this.#constainer)
 	}
@@ -54,7 +55,7 @@ class ProcressPanel {
 		color = color || 'success'
 		const element = document.createElement('div')
 
-		element.textContent = text
+		element.innerHTML = text
 		element.classList.add('pp-log')
 		element.classList.add(`pp-${color}`)
 
@@ -65,7 +66,7 @@ class ProcressPanel {
 		color = color || 'success'
 		const element = document.createElement('div')
 
-		element.textContent = text
+		element.innerHTML = text
 		element.classList.add('pp-log')
 		element.classList.add(`pp-${color}`)
 
@@ -93,18 +94,36 @@ class ProcressPanel {
 	hide() { this.#constainer.style.display = 'none' }
 
 	show(text) {
-		if (text != undefined) this.#txt.textContent = text
+		if (text != undefined) this.#txt.innerHTML = text
 		this.#constainer.style.display = 'flex'
 	}
 
 	text(text) {
-		this.#txt.textContent = text
+		this.#txt.innerHTML = text
 	}
 
-	config(config = { miniLog:false, bgClose:false, closeBtn:false }) {
+	config(config = { miniLog:false, miniSize:30, bgClose:false, closeBtn:false }) {
 		if (config.miniLog != undefined) {
-			if (config.miniLog) this.#constainer.setAttribute('mini', true)
-			else this.#constainer.removeAttribute('mini')
+			if (config.miniLog) {
+				this.#constainer.setAttribute('mini', true)
+				if (config.miniSize != null && typeof(config.miniSize) == 'number') {
+					this.#miniLogContainer.style.flex = `0 0 ${config.miniSize}%`
+					this.#miniLogContainer.style.maxWidth = `${config.miniSize}%`
+					this.#secendSide.style.flex = `0 0 ${100 - config.miniSize}%`
+					this.#secendSide.style.maxWidth = `${100 - config.miniSize}%`
+				} else {
+					this.#miniLogContainer.style.flex = '0 0 30%'
+					this.#miniLogContainer.style.maxWidth = '30%'
+					this.#secendSide.style.flex = '0 0 70%'
+					this.#secendSide.style.maxWidth = '70%'
+				}
+			} else {
+				this.#constainer.removeAttribute('mini')
+				this.#miniLogContainer.style.flex = '0 0 0'
+				this.#miniLogContainer.style.maxWidth = '0'
+				this.#secendSide.style.flex = '0 0 100%'
+				this.#secendSide.style.maxWidth = '100%'
+			}
 		}
 
 		if (config.bgClose != undefined) {

@@ -36,6 +36,7 @@ function setLuanchTimeSettings(reloadSettingPanel) {
 	document.getElementById('s_download_limit').value = setting.download_limit
 	document.getElementById('s_hover_downloader').checked = setting.hover_downloader
 	document.getElementById('s_notification_download_finish').checked = setting.notification_download_finish
+	document.getElementById('s_notification_optimization_finish').checked = setting.notification_optimization_finish
 	document.getElementById('s_lazy_loading').checked = setting.lazy_loading
 	document.getElementById('s_show_unoptimize').checked = setting.show_unoptimize
 
@@ -94,6 +95,7 @@ function saveSetting(justSave) {
 		setting.search_speed = Number(document.getElementById('s_search_speed').getAttribute('value'))
 		setting.hover_downloader = document.getElementById('s_hover_downloader').checked
 		setting.notification_download_finish = document.getElementById('s_notification_download_finish').checked
+		setting.notification_optimization_finish = document.getElementById('s_notification_optimization_finish').checked
 		setting.download_limit = Number(document.getElementById('s_download_limit').value)
 		
 		if (show_unoptimize != setting.show_unoptimize) {

@@ -15,7 +15,7 @@
 > - ###### Fast Update and Bug Fixes :)
 
 ### Supporting Sites:
-> - xlecx.org
+> - ###### xlecx.org
 > - More Sites Gonna Be Added Later :)
 
 
