@@ -10,14 +10,11 @@ function ChangeSizes() {
 }
 
 function test() {
-	procressPanel.config({ miniLog:true })
-	procressPanel.show()
-}
-
-function test1() {
-	for (let i = 0; i < 25; i++) {
-		procressPanel.add('test text', 'warning')
-	}
+	sharp('img.gif').gif({ mozjpeg: true }).toFile('test.gif').then(() => {
+		console.log('finish')
+	}).catch(err => {
+		console.error(err)
+	})
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -32,6 +29,8 @@ document.addEventListener("DOMContentLoaded", () => {
 	CreateDatabase()
 	loading.forward('Checking Settings...')
 	CheckSettings()
+	//loading.forward('Set Cookies...')
+	//SetCookies()
 	loading.forward('Set Window Event...')
 
 	window.onresize = () => { updateTabSize(); ChangeSizes() }

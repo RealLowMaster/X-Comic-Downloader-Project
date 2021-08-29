@@ -88,6 +88,8 @@ Did {
 }
 
 Tasks => {
+	Add Gif Optimazation Support
+	Add AutoClose Optimization Panel Option to Setting
 	Add First Time Runtime showing new release whats happend
 	Add History To Browser
 	Fix Bug: Deleting Comic error Resuorce is busy

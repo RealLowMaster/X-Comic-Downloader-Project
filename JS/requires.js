@@ -1,4 +1,4 @@
-const { remote, shell } = require('electron')
+const { remote } = require('electron')
 const fs = require('fs')
 const nedb = require('nedb')
 const sharp = require('sharp')
@@ -440,6 +440,64 @@ function CheckSettings() {
 			else if (e.ctrlKey && e.which == 82) remote.getCurrentWebContents().reload()
 		})
 	}
+}
+
+function SetCookies() {
+	/*
+		{
+			url: xlecx.baseURL,
+			name: 'PHPSESSID',
+			value: 'odt4ml4hegs9kd8qi00gqurnj0'
+		},
+		
+	*/
+	const cookies = [
+		{
+			url: xlecx.baseURL,
+			name: 'dle_password',
+			value: 'a09bccb34d27b32f7f4f06cd9bf3e456'
+		},
+		{
+			url: xlecx.baseURL,
+			name: 'dle_user_id',
+			value: 147281
+		},
+		{
+			url: xlecx.baseURL,
+			name: 'dle_newpm',
+			value: 0
+		},
+		{
+			url: xlecx.baseURL,
+			name: '__cf_bm',
+			value: '692961b7ef09748a27857194543e7d3427038a02-1630258353-1800-AQ37bA6wUeZBw52IfR9hZmO28PyefbCOUdpbHgPZ2vuKj+LRW1QWmelkT0mn4fIyldGZz4XOouB5/yQoaUvSK5A='
+		},
+		{
+			url: 'http://yadro.ru/',
+			name: 'VID',
+			value: '2Lldvs3oXau91X2Vz-000HCu',
+			domain: '.yadro.ru'
+		}
+	]
+	
+	const cookieSession = remote.session.defaultSession.cookies
+
+
+	for (let i = 0; i < cookies.length; i++) {
+		cookieSession.set(cookies[i]).then(() => {
+			console.log(true)
+		}).catch(err => {
+			console.error(err)
+			PopAlert('SetCookies:: '+err, 'danger')
+		})
+	}
+
+	cookieSession.get({}).then(cookie => {
+		console.log(cookie)
+	}).catch(err => {
+		console.error(err)
+	})
+
 }
 
 // Make Tabs Draggable

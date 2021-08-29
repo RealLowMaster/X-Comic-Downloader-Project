@@ -109,7 +109,7 @@ function convertImagesToOptimize(list, index, comic_id) {
 					fs.unlinkSync(`${dirTmp}/${list[index][0]}`)
 				} else {
 					optimizeConvertSize += optimizeLog[index]
-					procressPanel.addMini(`Img ${index+1} - From: ${formatBytes(optimizeLog[index])} To: ${formatBytes(optimizeLog[index])}`)
+					procressPanel.addMini(`Img ${index+1} - From: <span class="tx-secendery tx-underline">${formatBytes(optimizeLog[index])}</span> To: <span class="tx-secendery tx-underline">${formatBytes(optimizeLog[index])}</span>`)
 					fs.renameSync(`${dirTmp}/${list[index][0]}`, `${dirUL}/${list[index][0]}`)
 				}
 			} catch(err) {
@@ -130,11 +130,11 @@ function convertImagesToOptimize(list, index, comic_id) {
 				const size = fs.statSync(`${dirUL}/${list[index][0]}`).size
 				if (size <= optimizeLog[index]) {
 					optimizeConvertSize += size
-					procressPanel.addMini(`Img ${index+1} - From: ${formatBytes(optimizeLog[index])} To: ${formatBytes(size)}`)
+					procressPanel.addMini(`Img ${index+1} - From: <span class="tx-secendery tx-underline">${formatBytes(optimizeLog[index])}</span> To: <span class="tx-secendery tx-underline">${formatBytes(size)}</span>`)
 					fs.unlinkSync(`${dirTmp}/${list[index][0]}`)
 				} else {
 					optimizeConvertSize += optimizeLog[index]
-					procressPanel.addMini(`Img ${index+1} - From: ${formatBytes(optimizeLog[index])} To: ${formatBytes(optimizeLog[index])}`)
+					procressPanel.addMini(`Img ${index+1} - From: <span class="tx-secendery tx-underline">${formatBytes(optimizeLog[index])}</span> To: <span class="tx-secendery tx-underline">${formatBytes(optimizeLog[index])}</span>`)
 					fs.renameSync(`${dirTmp}/${list[index][0]}`, `${dirUL}/${list[index][0]}`)
 				}
 			} catch(err) {
@@ -153,7 +153,7 @@ function convertImagesToOptimize(list, index, comic_id) {
 			try {
 				const size = fs.statSync(`${dirUL}/${list[index][0]}`).size
 				optimizeConvertSize += size
-				procressPanel.addMini(`Img ${index+1} - From: ${formatBytes(optimizeLog[index])} To: ${formatBytes(size)}`)
+				procressPanel.addMini(`Img ${index+1} - From: <span class="tx-secendery tx-underline">${formatBytes(optimizeLog[index])}</span> To: <span class="tx-secendery tx-underline">${formatBytes(size)}</span>`)
 			} catch(err) {
 				procressPanel.add('SavingFileSize: '+err, 'danger')
 			}
@@ -171,7 +171,7 @@ function convertImagesToOptimize(list, index, comic_id) {
 
 			const size = fs.statSync(`${dirUL}/${list[index][0]}`).size
 			optimizeConvertSize += size
-			procressPanel.addMini(`Img ${index+1} - From: ${formatBytes(optimizeLog[index])} To: ${formatBytes(size)}`)
+			procressPanel.addMini(`Img ${index+1} - From: <span class="tx-secendery tx-underline">${formatBytes(optimizeLog[index])}</span> To: <span class="tx-secendery tx-underline">${formatBytes(size)}</span>`)
 
 			procressPanel.forward(`Optimizing Image (${index+1}/${list.length})...`)
 			setTimeout(() => {

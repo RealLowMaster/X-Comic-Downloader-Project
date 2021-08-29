@@ -319,7 +319,7 @@
 					<div class="input-row-checkbox input-row-file">
 						<label title=""></label>
 						<div>
-							<button type="button" id="s_file_location" location="" onclick="GetFileLocationForInput(this)">Choose</button>
+							<button type="button" id="s_file_location" location="" onclick="if (downloadingList.length == 0) { GetFileLocationForInput(this) } else { PopAlert('You cannot Change Saving Location when downloading.', 'danger') }">Choose</button>
 						</div>
 					</div>
 					<p class="input-row-helper">Choose a Location For Saving Downloaded Comics.<br>If you Change The Location App will Reload.</p>

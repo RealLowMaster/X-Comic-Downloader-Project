@@ -158,7 +158,10 @@ function saveSetting(justSave) {
 	}
 
 	fs.writeFileSync(dirDocument+'/setting.json', MakeJsonString(setting), {encoding:"utf8"})
-	if (reload == true) ThisWindow.reload()
+	if (reload == true) {
+		if (downloadingList.length == 0) ThisWindow.reload()
+		else PopAlert('You cannot Change Saving Location when downloading.', 'danger')
+	}
 	else document.getElementById('setting-panel').style.display = 'none'
 }
 
