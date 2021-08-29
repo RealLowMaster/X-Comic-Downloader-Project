@@ -93,7 +93,6 @@ Tasks => {
 	Add First Time Runtime showing new release whats happend
 	Add History To Browser
 	Fix Bug: Deleting Comic error Resuorce is busy
-	Add README.md
 	Make Tab Doplicator inset after tab
 	Add try and catch to Deleting Image
 	Add Optimizing Image Option

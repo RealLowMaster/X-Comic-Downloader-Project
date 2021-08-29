@@ -19,6 +19,7 @@ const defaultSetting = {
 	"search_speed": 1,
 	"download_limit": 5,
 	"show_unoptimize": false,
+	"check_update": true,
 	"file_location": null,
 	"developer_mode": false
 }
@@ -238,12 +239,12 @@ function CheckUpdate() {
 				releaser.getElementsByTagName('p')[0].textContent = `New Release: v${json.version}`
 				releaser.style.display = 'block'
 
-			} else PopAlert("Your App is Up To Date.")
+			} else PopAlert("UpdateCheck: Your App is Up To Date.")
 		}).catch(err => {
-			if (err == 'TypeError: Failed to fetch') err = 'Connection Timeout, Check Internet Connection.'
-			PopAlert(err, 'danger')
+			if (err == 'TypeError: Failed to fetch') return
+			PopAlert('UpdateCheckErr: '+err, 'danger')
 		})
-	} else PopAlert('You are Offline.', 'danger')
+	}
 }
 
 function UpdateApp() {
@@ -513,6 +514,7 @@ function CheckSettings() {
 	if (typeof(setting.download_limit) != 'number') setting.download_limit = defaultSetting.download_limit
 	if (setting.download_limit < 1) setting.download_limit = 1
 	if (typeof(setting.show_unoptimize) != 'boolean') setting.show_unoptimize = defaultSetting.show_unoptimize
+	if (typeof(setting.check_update) != 'boolean') setting.check_update = defaultSetting.check_update
 	if (typeof(setting.developer_mode) != 'boolean') setting.developer_mode = defaultSetting.developer_mode
 	if (setting.developer_mode == true) {
 		window.addEventListener('keydown', e => {
