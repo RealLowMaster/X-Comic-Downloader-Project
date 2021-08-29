@@ -79,11 +79,11 @@ Added To Version {
 	Make Thumbing Work Better
 	Add ReMake Thumb Button
 	Add Recent Tabs To Browser
+	Add New And Much Better Update System (In-App Update)
 	Error UI Update
 }
 
 Did {
-	Make Update System Part 3++
 	Make Repairing Systems Part 6++ = Next = Complete All Image Repairing
 }
 
