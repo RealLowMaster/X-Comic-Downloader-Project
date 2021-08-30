@@ -34,7 +34,7 @@ const imageLazyLoadingOptions = {
 }
 const sites = [
 	[
-		'xlecx',
+		'xlecx.jpg',
 		'xlecxRepairComicInfoGetInfo({id}, {whitch})',
 		'xlecxSearch({text}, 1, 0)',
 		'xlecxChangePage(1, 0, true)',
@@ -51,7 +51,7 @@ const browserPasteMenu = document.getElementById('browser-paste-menu')
 const bjp = document.getElementById('browser-jump-page-container')
 const bjp_i = document.getElementById('bjp-i')
 const bjp_m_p = document.getElementById('bjp-m-p')
-let comicDeleting = false, downloadCounter = 0, needReload = true, wt_fps = 20, dirDB, dirUL, dirTmp, isOptimizing = false, browserLastTabs = []
+let comicDeleting = false, downloadCounter = 0, needReload = true, wt_fps = 20, dirDB, dirUL, dirTmp, isOptimizing = false, browserLastTabs = [], tabsHistory = [], dirHistory = ''
 var setting, tabs = [], downloadingList = [], thisSite, lastComicId, lastHaveId, lastGroupId, lastArtistId, lastParodyId, lastTagId, searchTimer, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = [], openedMenuTabIndex, copiedTab = null
 
 // Set Windows Closing Event
@@ -137,15 +137,9 @@ function formatBytes(bytes, decimals = 2) {
 	return parseFloat((bytes / Math.pow(1024, i)).toFixed(dm)) + ' ' + sizes[i];
 }
 
-function getJSON(src) {
-	const xmlHttp = new XMLHttpRequest()
-	xmlHttp.open("GET", src, false)
-	xmlHttp.send(null)
-	return JSON.parse(xmlHttp.responseText)
-}
-
-function MakeJsonString(json) {
-	return JSON.stringify(json).replace(/,/g, ',\n\t').replace(/{/g, '{\n\t').replace(/}/g, '\n}').replace(/":/g, '": ')
+function MakeJsonString(json, backward) {
+	if (backward) return JSON.parse(json.replace(/\\n/g, '').replace(/\\t/g, '').replace(/": /g, '":').replace(/\\"/g, '"').replace(/\\\\/g, '\\').replace(/"{/g, '{').replace(/}"/g, '}'))
+	else return JSON.stringify(json).replace(/,/g, ',\n\t').replace(/{/g, '{\n\t').replace(/}/g, '\n}').replace(/":/g, '": ')
 }
 
 function PopAlertFrame(who) {
@@ -448,12 +442,12 @@ function GetSettingFile() {
 	if (!fs.existsSync(dirDocument)) {
 		fs.mkdirSync(dirDocument)
 		setting = defaultSetting
-		fs.writeFileSync(dirDocument+'/setting.json', MakeJsonString(setting), {encoding:"utf8"})
+		fs.writeFileSync(dirDocument+'/setting.json', MakeJsonString(setting, false), {encoding:"utf8"})
 	} else {
 		if (!fs.existsSync(dirDocument+'/setting.json')) {
 			setting = defaultSetting
-			fs.writeFileSync(dirDocument+'/setting.json', MakeJsonString(setting), {encoding:"utf8"})
-		} else setting = getJSON(dirDocument+'/setting.json')
+			fs.writeFileSync(dirDocument+'/setting.json', MakeJsonString(setting, false), {encoding:"utf8"})
+		} else setting = MakeJsonString(fs.readFileSync(dirDocument+'/setting.json', {encoding:'utf8', flag:'r'}), true)
 	}
 }
 
@@ -465,6 +459,7 @@ function GetDirection() {
 			dirDB = setting.file_location+'\\ComicsDB'
 			dirUL = setting.file_location+'\\DownloadedComics'
 			dirTmp = setting.file_location+'\\ComicsTemp'
+			dirHistory = dirDB+'/history.array'
 		}
 	}
 
@@ -472,6 +467,8 @@ function GetDirection() {
 	if (!fs.existsSync(dirUL)) fs.mkdirSync(dirUL)
 	if (!fs.existsSync(dirTmp)) fs.mkdirSync(dirTmp)
 	if (!fs.existsSync(dirUL+'/thumbs')) fs.mkdirSync(dirUL+'/thumbs')
+	if (fs.existsSync(dirHistory)) tabsHistory = JSON.parse(fs.readFileSync(dirHistory, {encoding:'utf8', flag:'r'})).h
+	else fs.writeFileSync(dirHistory, '[]', {encoding:"utf8"})
 }
 
 function CreateDatabase() {

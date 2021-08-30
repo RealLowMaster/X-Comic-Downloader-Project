@@ -1,5 +1,5 @@
 class Tab {
-	constructor(id, scroll, search, jumpPage, thisPage, maxPage, isReloading) {
+	constructor(id, scroll, search, jumpPage, thisPage, maxPage, site, isReloading) {
 		this.pageId = id
 		this.history = []
 		this.activeHistory = 0
@@ -8,6 +8,7 @@ class Tab {
 		this.jp = jumpPage
 		this.tp = thisPage
 		this.mp = maxPage
+		this.site = site
 		this.ir = isReloading
 		this.options = null
 	}

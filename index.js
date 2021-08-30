@@ -15,7 +15,7 @@ function createWindow () {
 	})
 
 	win.maximize(true)
-	win.setMenu(null)
+	// win.setMenu(null)
 
 	win.addListener('close', e => {
 		e.preventDefault()

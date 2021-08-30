@@ -161,7 +161,7 @@ function saveSetting(justSave) {
 		PopAlert('Setting Saved.')
 	}
 
-	fs.writeFileSync(dirDocument+'/setting.json', MakeJsonString(setting), {encoding:"utf8"})
+	fs.writeFileSync(dirDocument+'/setting.json', MakeJsonString(setting, false), {encoding:"utf8"})
 	if (reload == true) {
 		if (downloadingList.length == 0) ThisWindow.reload()
 		else PopAlert('You cannot Change Saving Location when downloading.', 'danger')

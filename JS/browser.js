@@ -15,8 +15,10 @@ function closeBrowser() {
 	if (tabsElement.length > 0) {
 		for (let i = 0; i < tabsElement.length; i++) {
 			const thisTabIndex = Number(tabsElement[i].getAttribute('ti'))
-			browserLastTabs.push([tabs[thisTabIndex].s, tabs[thisTabIndex].history, tabs[thisTabIndex].activeHistory])
+			tabsHistory.push([tabsElement[i].children[0].innerText, [tabs[thisTabIndex].s, tabs[thisTabIndex].history, tabs[thisTabIndex].activeHistory, tabs[thisTabIndex].site]])
+			browserLastTabs.push([tabs[thisTabIndex].s, tabs[thisTabIndex].history, tabs[thisTabIndex].activeHistory, tabs[thisTabIndex].site])
 		}
+		saveHistory()
 	}
 
 	tabs = []
@@ -38,9 +40,26 @@ function closeBrowser() {
 }
 
 function openBrowserLastTabs() {
-	for (let i = 0; i < browserLastTabs.length; i++) {
-		pasteTab(browserLastTabs[i])
+	if (browserLastTabs.length == 0) {
+		pasteTab(tabsHistory[tabsHistory.length - 1][1])
+		tabsHistory.pop()
+		saveHistory()
+	} else {
+		for (let i = 0; i < browserLastTabs.length; i++) {
+			pasteTab(browserLastTabs[i])
+			tabsHistory.pop()
+		}
+
+		browserLastTabs = []
+		saveHistory()
 	}
+
+	checkTabHistoryButtons()
+}
+
+function checkTabHistoryButtons() {
+	if (tabsHistory.length == 0) document.getElementById('browser-recent-tabs-btn').setAttribute('disabled', true)
+	else document.getElementById('browser-recent-tabs-btn').removeAttribute('disabled')
 }
 
 function updateTabSize() {
@@ -74,6 +93,10 @@ function checkBrowserTools(tabIndex) {
 		if (tabs[tabIndex].ir == false) document.getElementById('browser-reload-btn').removeAttribute('disabled')
 		else document.getElementById('browser-reload-btn').setAttribute('disabled', true)
 	}
+}
+
+function saveHistory() {
+	fs.writeFileSync(dirHistory, JSON.stringify({h:tabsHistory}), {encoding:"utf8"})
 }
 
 function activateTab(who) {
@@ -111,7 +134,7 @@ function IsTabsAtLimit() {
 		return false
 }
 
-function createNewTab(history, addFront) {
+function createNewTab(history, addFront, site) {
 	if (IsTabsAtLimit()) return null
 	
 	history = history || null
@@ -139,7 +162,7 @@ function createNewTab(history, addFront) {
 		browserTabMenu.style.display = 'block'
 	})
 
-	tabs[tabIndex] = new Tab(newTabId, 0, '', 0, 1, 0, true)
+	tabs[tabIndex] = new Tab(newTabId, 0, '', 0, 1, 0, site, true)
 	tabs[tabIndex].history.push(history)
 	page.setAttribute('class', 'browser-page')
 	page.setAttribute('id', newTabId)
@@ -231,7 +254,7 @@ function pasteTab(newTab) {
 		browserTabMenu.style.left = e.clientX+'px'
 		browserTabMenu.style.display = 'block'
 	})
-	tabs[tabIndex] = new Tab(newTabId, 0, newTab[0], 0, 1, 0, true)
+	tabs[tabIndex] = new Tab(newTabId, 0, newTab[0], 0, 1, 0, newTab[3], true)
 	tabs[tabIndex].history = newTab[1]
 	tabs[tabIndex].activeHistory = newTab[2]
 	page.setAttribute('class', 'browser-page')
@@ -254,7 +277,10 @@ function pasteTab(newTab) {
 
 function removeTab(id) {
 	const removingTab = tabsContainer.querySelector(`[pi="${id}"]`)
-	tabs[Number(removingTab.getAttribute('ti'))] = null
+	const removingTabIndex = Number(removingTab.getAttribute('ti'))
+	tabsHistory.push([removingTab.children[0].innerText, [tabs[removingTabIndex].s, tabs[removingTabIndex].history, tabs[removingTabIndex].activeHistory, tabs[removingTabIndex].site]])
+	saveHistory()
+	tabs[removingTabIndex] = null
 	const btabs = tabsContainer.children
 	const tabPosIndex = tabsPos.indexOf(id)
 
@@ -288,10 +314,10 @@ function removeTab(id) {
 		tabs = []
 		activeTabIndex = null
 		activeTabComicId = null
-		document.getElementById('browser-home-btn').style.display = 'none'
-		document.getElementById('browser-prev-btn').style.display = 'none'
-		document.getElementById('browser-next-btn').style.display = 'none'
-		document.getElementById('browser-reload-btn').style.display = 'none'
+		document.getElementById('browser-home-btn').setAttribute('disabled', true)
+		document.getElementById('browser-prev-btn').setAttribute('disabled', true)
+		document.getElementById('browser-next-btn').setAttribute('disabled', true)
+		document.getElementById('browser-reload-btn').setAttribute('disabled', true)
 		document.getElementById('browser-tool-search-form').style.display = 'none'
 		bjp.style.display = 'none'
 	}
@@ -299,6 +325,7 @@ function removeTab(id) {
 	removingTab.remove()
 	document.getElementById(id).remove()
 
+	checkTabHistoryButtons()
 	updateTabSize()
 }
 

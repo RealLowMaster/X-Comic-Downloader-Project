@@ -4,10 +4,9 @@ function openXlecxBrowser() {
 	imageLoadingObserver = new IntersectionObserver(ObserverFunction, imageLazyLoadingOptions)
 	thisSite = 0
 	needReload = false
-	if (browserLastTabs.length == 0) document.getElementById('browser-recent-tabs-btn').setAttribute('disabled', true)
-	else document.getElementById('browser-recent-tabs-btn').removeAttribute('disabled')
-	document.getElementById('add-new-tab').setAttribute('onclick', "createNewXlecxTab(createNewTab('xlecxChangePage(1, 0, false)', false))")
-	const id = createNewTab('xlecxChangePage(1, 0, false)', false)
+	checkTabHistoryButtons()
+	document.getElementById('add-new-tab').setAttribute('onclick', "createNewXlecxTab(createNewTab('xlecxChangePage(1, 0, false)', false, 0))")
+	const id = createNewTab('xlecxChangePage(1, 0, false)', false, 0)
 	if (id == null) { PopAlert('You Can\'t Make Any More Tab.', 'danger'); return }
 	createNewXlecxTab(id)
 	document.getElementById('browser').style.display = 'grid'
@@ -184,7 +183,7 @@ function xlecxOpenPost(whitchbutton, id, updateTabIndex) {
 	
 	var page, pageId
 	if (makeNewPage) {
-		pageId = createNewTab(`xlecxOpenPost(0, '${id}', false)`)
+		pageId = createNewTab(`xlecxOpenPost(0, '${id}', false)`, true, 0)
 		if (pageId == null) { PopAlert('You Can\'t Make Any More Tab.', 'danger'); return }
 		page = document.getElementById(pageId)
 	} else {
@@ -442,7 +441,7 @@ function xlecxChangePage(page, whitchbutton, updateTabIndex) {
 	if (updateTabIndex == null) updateTabIndex = true
 	var id
 	if (makeNewPage) {
-		id = createNewTab(`xlecxChangePage(${page}, 0, false)`)
+		id = createNewTab(`xlecxChangePage(${page}, 0, false)`, true, 0)
 		if (id == null) { PopAlert('You Can\'t Make Any More Tab.', 'danger'); return }
 	} else {
 		id = activeTabComicId
@@ -481,7 +480,7 @@ function xlecxOpenCategory(name, page, shortName, whitchbutton, updateTabIndex) 
 	
 	var pageContent
 	if (makeNewPage) {
-		pageId = createNewTab(`xlecxOpenCategory('${name}', ${page}, '${shortName}', 0, false)`)
+		pageId = createNewTab(`xlecxOpenCategory('${name}', ${page}, '${shortName}', 0, false)`, true, 0)
 		if (pageId == null) { PopAlert('You Can\'t Make Any More Tab.', 'danger'); return }
 		pageContent = document.getElementById(pageId)
 	} else {
@@ -743,7 +742,7 @@ function xlecxOpenTag(name, page, whitch, whitchbutton, updateTabIndex) {
 	if (updateTabIndex == null) updateTabIndex = true
 	var pageContent, pageId
 	if (makeNewPage) {
-		pageId = createNewTab(`xlecxOpenTag('${name}', ${page}, ${whitch}, 0, false)`)
+		pageId = createNewTab(`xlecxOpenTag('${name}', ${page}, ${whitch}, 0, false)`, true, 0)
 		if (pageId == null) { PopAlert('You Can\'t Make Any More Tab.', 'danger'); return }
 		pageContent = document.getElementById(pageId)
 	} else {
@@ -915,7 +914,7 @@ function xlecxSearch(text, page, whitchbutton, updateTabIndex) {
 
 	var pageContent, pageId
 	if (makeNewPage) {
-		pageId = createNewTab(`xlecxSearch('${text}', ${page}, 0, false)`)
+		pageId = createNewTab(`xlecxSearch('${text}', ${page}, 0, false)`, true, 0)
 		if (pageId == null) { PopAlert('You Can\'t Make Any More Tab.', 'danger'); return }
 		pageContent = document.getElementById(pageId)
 	} else {
@@ -1072,7 +1071,7 @@ function xlecxOpenAllTags(whitchbutton, updateTabIndex) {
 	if (updateTabIndex == null) updateTabIndex = true
 	var page, pageId
 	if (makeNewPage) {
-		pageId = createNewTab('xlecxOpenAllTags(0, false)')
+		pageId = createNewTab('xlecxOpenAllTags(0, false)', true, 0)
 		if (pageId == null) { PopAlert('You Can\'t Make Any More Tab.', 'danger'); return }
 		page = document.getElementById(pageId)
 	} else {

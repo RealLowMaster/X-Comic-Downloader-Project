@@ -75,6 +75,7 @@ Added To Version {
 	Fix Bug: When Deleting The Only Comic in Page, The App Stock At That Page
 	Fix Bug: Stock in Repairing When There is no Internet Connection
 	Fix Bug: Stock in Deleting Comic When Images Are Busy
+	Add History To Browser
 	Add Optimizing All Comic Images Button
 	Add More Optimization to Comic Thumbs
 	Add Show UnOptimize Comics Option To Setting for find which comic you didn't optimize
@@ -91,8 +92,9 @@ Did {
 
 Tasks => {
 	Add First Time Runtime showing new release whats happend
-	Add History To Browser
 	Make Tab Doplicator inset after tab
+	Add History Panel
+	Add Shortcut for browser tools
 	Add Optimizing Image Option
 	Ctrl + k | Ctrl + 0
 	Add Perfect Drag to Scroll To Slider Overview
