@@ -20,6 +20,7 @@ const defaultSetting = {
 	"download_limit": 5,
 	"show_unoptimize": false,
 	"check_update": true,
+	"auto_close_optimize_panel": false,
 	"file_location": null,
 	"developer_mode": false
 }
@@ -515,6 +516,7 @@ function CheckSettings() {
 	if (setting.download_limit < 1) setting.download_limit = 1
 	if (typeof(setting.show_unoptimize) != 'boolean') setting.show_unoptimize = defaultSetting.show_unoptimize
 	if (typeof(setting.check_update) != 'boolean') setting.check_update = defaultSetting.check_update
+	if (typeof(setting.auto_close_optimize_panel) != 'boolean') setting.auto_close_optimize_panel = defaultSetting.auto_close_optimize_panel
 	if (typeof(setting.developer_mode) != 'boolean') setting.developer_mode = defaultSetting.developer_mode
 	if (setting.developer_mode == true) {
 		window.addEventListener('keydown', e => {

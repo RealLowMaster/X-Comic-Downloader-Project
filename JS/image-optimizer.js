@@ -89,8 +89,14 @@ function convertImagesToOptimize(list, index, comic_id) {
 	if (index == list.length) {
 		db.comics.update({_id:comic_id}, { $set: {o:0} }, {}, (err, doc) => {
 			if (err) procressPanel.add('ConvertImageToOptimize: '+err, 'danger')
-			procressPanel.config({ bgClose:true, closeBtn:true })
-			procressPanel.text(`___Complete___>>> <span class="tx-danger">${formatBytes(optimizeFullSize)}</span> To <span class="tx-danger">${formatBytes(optimizeConvertSize)}</span>`)
+			if (setting.auto_close_optimize_panel) {
+				procressPanel.clear()
+				procressPanel.clearMini()
+				procressPanel.hide()
+			} else {
+				procressPanel.config({ bgClose:true, closeBtn:true })
+				procressPanel.text(`___Complete___>>> <span class="tx-danger">${formatBytes(optimizeFullSize)}</span> To <span class="tx-danger">${formatBytes(optimizeConvertSize)}</span>`)
+			}
 			PopAlert('Comic Images Has Been Optimize')
 			isOptimizing = false
 			if (setting.notification_optimization_finish && remote.Notification.isSupported()) new remote.Notification({title: 'Comic Optimization Finished.', body: doc.n}).show()

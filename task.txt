@@ -80,7 +80,7 @@ Added To Version {
 	Add ReMake Thumb Button
 	Add Recent Tabs To Browser
 	Add New And Much Better Update System (In-App Update)
-	Error UI Update
+	Update Error UI
 }
 
 Did {
@@ -89,7 +89,6 @@ Did {
 
 Tasks => {
 	Add Gif Optimazation Support
-	Add AutoClose Optimization Panel Option to Setting
 	Add First Time Runtime showing new release whats happend
 	Add History To Browser
 	Fix Bug: Deleting Comic error Resuorce is busy
