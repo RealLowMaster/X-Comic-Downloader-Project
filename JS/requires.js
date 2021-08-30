@@ -201,7 +201,7 @@ function GetFileLocationCallback(err, result) {
 	}
 	dirDB = result+'\\ComicsDB'
 	dirUL = result+'\\DownloadedComics'
-	dirTmp = result+'\\Temp'
+	dirTmp = result+'\\ComicsTemp'
 	setting.file_location = result
 	saveSetting(true)
 }
@@ -464,7 +464,7 @@ function GetDirection() {
 		else {
 			dirDB = setting.file_location+'\\ComicsDB'
 			dirUL = setting.file_location+'\\DownloadedComics'
-			dirTmp = setting.file_location+'\\Temp'
+			dirTmp = setting.file_location+'\\ComicsTemp'
 		}
 	}
 

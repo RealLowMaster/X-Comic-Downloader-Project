@@ -22,6 +22,7 @@ function loadComics(page, search, safeScroll) {
 	const working = (doc) => {
 		max = doc.length
 		allPages = Math.ceil(doc.length / max_per_page)
+		if (page > 1 && page > allPages) { loadComics(page - 1, search, safeScroll) }
 		if (doc.length >= max_per_page) {
 			min = (max_per_page * page) - max_per_page
 			max = min + max_per_page

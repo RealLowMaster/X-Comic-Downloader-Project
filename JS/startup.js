@@ -10,11 +10,7 @@ function ChangeSizes() {
 }
 
 function test() {
-	sharp('img.gif').gif({ mozjpeg: true }).toFile('test.gif').then(() => {
-		console.log('finish')
-	}).catch(err => {
-		console.error(err)
-	})
+	
 }
 
 document.addEventListener("DOMContentLoaded", () => {

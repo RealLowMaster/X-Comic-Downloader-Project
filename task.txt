@@ -72,6 +72,7 @@ Add Comic {
 }
 
 Added To Version {
+	Fix Bug: When Deleting The Only Comic in Page, The App Stock At That Page
 	Fix Bug: Stock in Repairing When There is no Internet Connection
 	Fix Bug: Stock in Deleting Comic When Images Are Busy
 	Add Optimizing All Comic Images Button
@@ -89,7 +90,6 @@ Did {
 }
 
 Tasks => {
-	Add Gif Optimazation Support
 	Add First Time Runtime showing new release whats happend
 	Add History To Browser
 	Make Tab Doplicator inset after tab
