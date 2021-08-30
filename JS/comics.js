@@ -605,12 +605,14 @@ function deleteComic(id) {
 							thisUrl = `${dirUL}/${ImagesId}-${i}.${thisForamat}`
 						}
 	
-						try {
-							fs.unlinkSync(thisUrl)
-						} catch(err) {
-							loading.hide()
-							error(err)
-							return
+						if (fs.existsSync(thisUrl)) {
+							try {
+								fs.unlinkSync(thisUrl)
+							} catch(err) {
+								loading.hide()
+								error(err)
+								return
+							}
 						}
 						
 						loading.forward(`Deleting Comic Images (${i+1}/${ImagesCount})...`)
@@ -625,14 +627,17 @@ function deleteComic(id) {
 								thisForamat = ImagesFormats[formatIndex][2]
 								thisUrl = `${dirUL}/${ImagesId}-${i}.${thisForamat}`
 							}
-	
-							try {
-								fs.unlinkSync(thisUrl)
-							} catch(err) {
-								loading.hide()
-								error(err)
-								return
+							
+							if (fs.existsSync(thisUrl)) {
+								try {
+									fs.unlinkSync(thisUrl)
+								} catch(err) {
+									loading.hide()
+									error(err)
+									return
+								}
 							}
+							
 							loading.forward(`Deleting Comic Images (${i+1}/${ImagesCount})...`)
 						}
 					}
