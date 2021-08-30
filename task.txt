@@ -73,9 +73,10 @@ Add Comic {
 
 Added To Version {
 	Fix Bug: Stock in Repairing When There is no Internet Connection
+	Fix Bug: Stock in Deleting Comic When Images Are Busy
 	Add Optimizing All Comic Images Button
 	Add More Optimization to Comic Thumbs
-	Add Show UnOptimize Comics To Setting for find which comic you didn't optimize
+	Add Show UnOptimize Comics Option To Setting for find which comic you didn't optimize
 	Make Thumbing Work Better
 	Add ReMake Thumb Button
 	Add Recent Tabs To Browser
@@ -91,9 +92,7 @@ Tasks => {
 	Add Gif Optimazation Support
 	Add First Time Runtime showing new release whats happend
 	Add History To Browser
-	Fix Bug: Deleting Comic error Resuorce is busy
 	Make Tab Doplicator inset after tab
-	Add try and catch to Deleting Image
 	Add Optimizing Image Option
 	Ctrl + k | Ctrl + 0
 	Add Perfect Drag to Scroll To Slider Overview

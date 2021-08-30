@@ -496,6 +496,7 @@ async function repairComicInfo(whitch) {
 // Delete a Comic
 function deleteComic(id) {
 	document.getElementById('comic-action-panel').style.display = 'none'
+	document.getElementById('c-p-i').innerHTML = ''
 	const errors = document.getElementsByClassName('action-error')
 	for (let i = 0; i < errors.length; i++) {
 		errors[i].remove()
@@ -505,130 +506,143 @@ function deleteComic(id) {
 	loading.reset(0)
 	loading.show('Calculating...')
 
-	db.comics.findOne({_id:id}, (err, doc) => {
-		if (err) { loading.hide(); error(err); return }
-		if (doc == undefined) { loading.hide(); error('Comic Not Found.'); return }
-		const ImagesId = doc.i
-		const ImagesFormats = doc.f
-		const ImagesCount = doc.c
-		const repair = doc.m || null
-		var repairImagesURLs = null
-		const site = doc.s
-		const post_id = doc.p
-		
-		loading.reset(8 + ImagesCount)
-		loading.show('Removing Comic From Database...')
-
-		if (repair != null && repair.length > 0) repairImagesURLs = doc.r
-
-		const fix_removed_index = () => {
-			fix_index(1, true)
-			fix_index(11, true)
-			loading.forward()
-			loading.hide()
-			PopAlert('Comic Deleted.', 'warning')
-			comicDeleting = false
-			reloadLoadingComics()
-		}
-
-		const remove_have = () => {
-			db.have.remove({s:site, i:post_id}, {}, err => {
-				if (err) { loading.hide(); error(err); return }
-				loading.forward('Fix Indexs...')
-				fix_removed_index()
-			})
-		}
-
-		const remove_tags = () => {
-			db.comic_tags.remove({_id:id}, {}, err => {
-				if (err) { loading.hide(); error(err); return }
-				loading.forward('Removing Comic Have From Database...')
-				remove_have()
-			})
-		}
-
-		const remove_parodies = () => {
-			db.comic_parodies.remove({_id:id}, {}, err => {
-				if (err) { loading.hide(); error(err); return }
-				loading.forward('Removing Comic Tags From Database...')
-				remove_tags()
-			})
-		}
-
-		const remove_artists = () => {
-			db.comic_artists.remove({_id:id}, {}, err => {
-				if (err) { loading.hide(); error(err); return }
-				loading.forward('Removing Comic Parodies From Database...')
-				remove_parodies()
-			})
-		}
-
-		const remove_groups = () => {
-			db.comic_groups.remove({_id:id}, {}, err => {
-				if (err) { loading.hide(); error(err); return }
-				loading.forward('Removing Comic Artists From Database...')
-				remove_artists()
-			})
-		}
-
-		const delete_images = () => {
-
-			if (fs.existsSync(`${dirUL}/thumbs/${ImagesId}.jpg`)) {
-				try {
-					fs.unlinkSync(`${dirUL}/thumbs/${ImagesId}.jpg`)
-				} catch(err) {
-					console.error("DELETE::COMIC::THUMB:: "+err)
-				}
+	setTimeout(() => {
+		db.comics.findOne({_id:id}, (err, doc) => {
+			if (err) { loading.hide(); error(err); return }
+			if (doc == undefined) { loading.hide(); error('Comic Not Found.'); return }
+			const ImagesId = doc.i
+			const ImagesFormats = doc.f
+			const ImagesCount = doc.c
+			const repair = doc.m || null
+			var repairImagesURLs = null
+			const site = doc.s
+			const post_id = doc.p
+			
+			loading.reset(8 + ImagesCount)
+			loading.show('Removing Comic From Database...')
+	
+			if (repair != null && repair.length > 0) repairImagesURLs = doc.r
+	
+			const fix_removed_index = () => {
+				fix_index(1, true)
+				fix_index(11, true)
+				loading.forward()
+				loading.hide()
+				PopAlert('Comic Deleted.', 'warning')
+				comicDeleting = false
+				reloadLoadingComics()
 			}
-
-			let formatIndex = 0, thisUrl
-			let lastIndex = ImagesFormats[0][1]
-			let thisForamat = ImagesFormats[0][2]
-			if (repair == null || repair.length == 0) {
-				for (let i = 0; i < ImagesCount; i++) {
-					if (i <= lastIndex)
-						thisUrl = `${dirUL}/${ImagesId}-${i}.${thisForamat}`
-					else {
-						formatIndex++
-						lastIndex = ImagesFormats[formatIndex][1]
-						thisForamat = ImagesFormats[formatIndex][2]
-						thisUrl = `${dirUL}/${ImagesId}-${i}.${thisForamat}`
+	
+			const remove_tags = () => {
+				db.comic_tags.remove({_id:id}, {}, err => {
+					if (err) { loading.hide(); error(err); return }
+					loading.forward('Removing Comic Have From Database...')
+					fix_removed_index()
+				})
+			}
+	
+			const remove_parodies = () => {
+				db.comic_parodies.remove({_id:id}, {}, err => {
+					if (err) { loading.hide(); error(err); return }
+					loading.forward('Removing Comic Tags From Database...')
+					remove_tags()
+				})
+			}
+	
+			const remove_artists = () => {
+				db.comic_artists.remove({_id:id}, {}, err => {
+					if (err) { loading.hide(); error(err); return }
+					loading.forward('Removing Comic Parodies From Database...')
+					remove_parodies()
+				})
+			}
+	
+			const remove_groups = () => {
+				db.comic_groups.remove({_id:id}, {}, err => {
+					if (err) { loading.hide(); error(err); return }
+					loading.forward('Removing Comic Artists From Database...')
+					remove_artists()
+				})
+			}
+	
+			const remove_have = () => {
+				db.have.remove({s:site, i:post_id}, {}, err => {
+					if (err) { loading.hide(); error(err); return }
+					loading.forward('Fix Indexs...')
+					remove_groups()
+				})
+			}
+	
+			const remove_comic = () => {
+				db.comics.remove({_id:id}, {}, err => {
+					if (err) { loading.hide(); error(err); return }
+					loading.forward('Deleting Comic Images...')
+					remove_have()
+				})
+			}
+	
+			const delete_images = () => {
+	
+				if (fs.existsSync(`${dirUL}/thumbs/${ImagesId}.jpg`)) {
+					try {
+						fs.unlinkSync(`${dirUL}/thumbs/${ImagesId}.jpg`)
+					} catch(err) {
+						console.error("DELETE::COMIC::THUMB:: "+err)
 					}
-
-					fs.unlinkSync(thisUrl)
-					loading.forward(`Deleting Comic Images (${i+1}/${ImagesCount})...`)
 				}
-			} else {
-				for (let i = 0; i < ImagesCount; i++) {
-					if (repair.indexOf(i) == -1) {
-						if (i <= lastIndex)
-							thisUrl = `${dirUL}/${ImagesId}-${i}.${thisForamat}`
+	
+				let formatIndex = 0, thisUrl
+				let lastIndex = ImagesFormats[0][1]
+				let thisForamat = ImagesFormats[0][2]
+				if (repair == null || repair.length == 0) {
+					for (let i = 0; i < ImagesCount; i++) {
+						if (i <= lastIndex) thisUrl = `${dirUL}/${ImagesId}-${i}.${thisForamat}`
 						else {
 							formatIndex++
 							lastIndex = ImagesFormats[formatIndex][1]
 							thisForamat = ImagesFormats[formatIndex][2]
 							thisUrl = `${dirUL}/${ImagesId}-${i}.${thisForamat}`
 						}
-
-						fs.unlinkSync(thisUrl)
+	
+						try {
+							fs.unlinkSync(thisUrl)
+						} catch(err) {
+							loading.hide()
+							error(err)
+							return
+						}
+						
 						loading.forward(`Deleting Comic Images (${i+1}/${ImagesCount})...`)
 					}
+				} else {
+					for (let i = 0; i < ImagesCount; i++) {
+						if (repair.indexOf(i) == -1) {
+							if (i <= lastIndex) thisUrl = `${dirUL}/${ImagesId}-${i}.${thisForamat}`
+							else {
+								formatIndex++
+								lastIndex = ImagesFormats[formatIndex][1]
+								thisForamat = ImagesFormats[formatIndex][2]
+								thisUrl = `${dirUL}/${ImagesId}-${i}.${thisForamat}`
+							}
+	
+							try {
+								fs.unlinkSync(thisUrl)
+							} catch(err) {
+								loading.hide()
+								error(err)
+								return
+							}
+							loading.forward(`Deleting Comic Images (${i+1}/${ImagesCount})...`)
+						}
+					}
 				}
+				loading.forward('Removing Comic Groups From Database...')
+				remove_comic()
 			}
-			loading.forward('Removing Comic Groups From Database...')
-			remove_groups()
-		}
-
-		const remove_comic = () => {
-			db.comics.remove({_id:id}, {}, err => {
-				if (err) { loading.hide(); error(err); return }
-				loading.forward('Deleting Comic Images...')
-				delete_images()
-			})
-		}
-
-		remove_comic()
-	})
+	
+			delete_images()
+		})
+	}, 200)
 }
 
 function askForDeletingComic(id) {
