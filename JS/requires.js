@@ -218,7 +218,8 @@ function GetFileLocationForInput(who) {
 	})
 }
 
-function CheckUpdate() {
+function CheckUpdate(alert) {
+	alert = alert || false
 	if (window.navigator.onLine) {
 		fetch('https://api.jsonbin.io/b/612915922aa800361270d567/latest', { method: "GET" }).then(response => {
 			if (!response.ok) {
@@ -239,7 +240,7 @@ function CheckUpdate() {
 			if (err == 'TypeError: Failed to fetch') return
 			PopAlert('UpdateCheckErr: '+err, 'danger')
 		})
-	}
+	} else if (alert) PopAlert('No Internet Connection.', 'danger')
 }
 
 function UpdateApp() {
@@ -468,7 +469,7 @@ function GetDirection() {
 	if (!fs.existsSync(dirTmp)) fs.mkdirSync(dirTmp)
 	if (!fs.existsSync(dirUL+'/thumbs')) fs.mkdirSync(dirUL+'/thumbs')
 	if (fs.existsSync(dirHistory)) tabsHistory = JSON.parse(fs.readFileSync(dirHistory, {encoding:'utf8', flag:'r'})).h
-	else fs.writeFileSync(dirHistory, '[]', {encoding:"utf8"})
+	else fs.writeFileSync(dirHistory, '{"h":[]}', {encoding:"utf8"}) 
 }
 
 function CreateDatabase() {

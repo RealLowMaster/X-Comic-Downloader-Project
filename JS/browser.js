@@ -4,6 +4,7 @@ function closeBrowser() {
 	needReload = true
 	reloadLoadingComics()
 	document.getElementById('browser').style.display = 'none'
+	closeBrowserHistory()
 	thisSite = null
 	activeTabIndex = null
 	activeTabComicId = null
@@ -95,12 +96,67 @@ function checkBrowserTools(tabIndex) {
 	}
 }
 
-function openBrowserHistory() {
-	
+function toggleBrowserHistory() {
+	const panel = document.getElementById('browser-history-panel')
+	if (panel.hasAttribute('active')) closeBrowserHistory()
+	else if (tabsHistory.length != 0) {
+		panel.setAttribute('active', true)
+		let passYear, passMonth, passDay, passHistory = [], html = ''
+
+		const check_new_date = function(checkhistoey) {
+			if (checkhistoey[2] == passYear) {
+				if (checkhistoey[3] == passMonth) {
+					if (checkhistoey[4] == passDay) return false
+					else return true
+				} else return true
+			} else return true
+		}
+
+		const update_date = function(checkhistoey) {
+			passYear = checkhistoey[2]
+			passMonth = checkhistoey[3]
+			passDay = checkhistoey[4]
+		}
+
+		for (let i = tabsHistory.length - 1; i >= 0; i--) {
+
+			if (check_new_date(tabsHistory[i])) {
+				if (passHistory.length > 0) {
+					html += `<div><div>${passYear}-${passMonth}-${passDay}</div><div>`
+					for (let j = 0; j < passHistory.length; j++) {
+						html += `<div><input type="checkbox"><img src="Image/sites/${sites[passHistory[j][1][3]][0]}"><p>${passHistory[j][0]}</p><button type="button">...</button></div>`
+					}
+					html += '</div></div>'
+				}
+
+				passHistory = []
+				passHistory.push(tabsHistory[i])
+				update_date(tabsHistory[i])
+
+			} else passHistory.push(tabsHistory[i])
+		}
+
+		document.getElementById('b-h-p-h-c').innerHTML = html
+		panel.style.display = 'block'
+		panel.scrollTop = 0
+	} else {
+		panel.setAttribute('active', true)
+		document.getElementById('b-h-p-h-c').innerHTML = '<div class="alert alert-danger">There is no History.</div>'
+		panel.style.display = 'block'
+		panel.scrollTop = 0
+	}
+}
+
+function closeBrowserHistory() {
+	const panel = document.getElementById('browser-history-panel')
+	panel.style.display = 'none'
+	document.getElementById('b-h-p-h-c').innerHTML = ''
+	panel.removeAttribute('active')
 }
 
 function addHistory(historyTab, text) {
 	const d = new Date()
+	if (text == "") text = '*UnLoaded*'
 	tabsHistory.push([text, [historyTab.s, historyTab.history, historyTab.activeHistory, historyTab.site], d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes()])
 }
 
@@ -109,6 +165,7 @@ function saveHistory() {
 }
 
 function activateTab(who) {
+	closeBrowserHistory()
 	if (document.getElementById(who.getAttribute('pi')) == undefined) return
 
 	if (activeTabIndex != null) {
@@ -344,18 +401,21 @@ function WhichMouseButton(event) {
 }
 
 function browserPrev() {
+	closeBrowserHistory()
 	document.getElementById(activeTabComicId).innerHTML = ''
 	document.getElementById(activeTabComicId).innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
 	tabs[activeTabIndex].prev()
 }
 
 function browserNext() {
+	closeBrowserHistory()
 	document.getElementById(activeTabComicId).innerHTML = ''
 	document.getElementById(activeTabComicId).innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
 	tabs[activeTabIndex].next()
 }
 
 function browserJumpPage(index, page) {
+	closeBrowserHistory()
 	const exec = sites[thisSite][4].replace('{index}', index).replace('{page}', page)
 	clearTimeout(searchTimer)
 	eval(exec)
@@ -532,7 +592,7 @@ function browserError(err, id) {
 	const page = document.getElementById(id)
 	const tabArea = tabsContainer.querySelector(`[pi="${id}"]`).getElementsByTagName('span')[0]
 
-	page.innerHTML = `<br><div class="alert alert-danger">${err}</div><button class="btn btn-primary" style="display:block;margin:3px auto" onclick="tabs[activeTabIndex].reload()">Reload</button>`
+	page.innerHTML = `<br><div class="alert alert-danger">${err}</div><button class="btn btn-primary" style="display:block;margin:3px auto" onclick="closeBrowserHistory();tabs[activeTabIndex].reload()">Reload</button>`
 	tabArea.innerHTML = '*Error*'
 }
 
@@ -689,6 +749,7 @@ function changeButtonsToDownloaded(id, have, haveBackward) {
 
 document.getElementById('browser-tool-search-form').addEventListener('submit', e => {
 	e.preventDefault()
+	closeBrowserHistory()
 	const input = document.getElementById('browser-tool-search-input')
 	const checkText = input.value.replace(/ /g, '')
 	if (checkText.length > 0) {
