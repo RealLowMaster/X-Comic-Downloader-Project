@@ -87,13 +87,13 @@ Added To Version {
 }
 
 Did {
+	Add History Panel Part 1++
 	Make Repairing Systems Part 6++ = Next = Complete All Image Repairing
 }
 
 Tasks => {
 	Add First Time Runtime showing new release whats happend
 	Make Tab Doplicator inset after tab
-	Add History Panel
 	Add Shortcut for browser tools
 	Add Optimizing Image Option
 	Ctrl + k | Ctrl + 0

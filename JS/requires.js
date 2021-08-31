@@ -138,7 +138,7 @@ function formatBytes(bytes, decimals = 2) {
 }
 
 function MakeJsonString(json, backward) {
-	if (backward) return JSON.parse(json.replace(/\\n/g, '').replace(/\\t/g, '').replace(/": /g, '":').replace(/\\"/g, '"').replace(/\\\\/g, '\\').replace(/"{/g, '{').replace(/}"/g, '}'))
+	if (backward) return JSON.parse(json.replace(/\\n/g, '').replace(/\\t/g, '').replace(/": /g, '":').replace(/\\"/g, '"').replace(/\\\\\\\\/g, '\\').replace(/"{/g, '{').replace(/}"/g, '}'))
 	else return JSON.stringify(json).replace(/,/g, ',\n\t').replace(/{/g, '{\n\t').replace(/}/g, '\n}').replace(/":/g, '": ')
 }
 

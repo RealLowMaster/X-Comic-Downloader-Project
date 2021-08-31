@@ -15,7 +15,7 @@ function closeBrowser() {
 	if (tabsElement.length > 0) {
 		for (let i = 0; i < tabsElement.length; i++) {
 			const thisTabIndex = Number(tabsElement[i].getAttribute('ti'))
-			tabsHistory.push([tabsElement[i].children[0].innerText, [tabs[thisTabIndex].s, tabs[thisTabIndex].history, tabs[thisTabIndex].activeHistory, tabs[thisTabIndex].site]])
+			addHistory(tabs[thisTabIndex], tabsElement[i].children[0].innerText)
 			browserLastTabs.push([tabs[thisTabIndex].s, tabs[thisTabIndex].history, tabs[thisTabIndex].activeHistory, tabs[thisTabIndex].site])
 		}
 		saveHistory()
@@ -93,6 +93,15 @@ function checkBrowserTools(tabIndex) {
 		if (tabs[tabIndex].ir == false) document.getElementById('browser-reload-btn').removeAttribute('disabled')
 		else document.getElementById('browser-reload-btn').setAttribute('disabled', true)
 	}
+}
+
+function openBrowserHistory() {
+	
+}
+
+function addHistory(historyTab, text) {
+	const d = new Date()
+	tabsHistory.push([text, [historyTab.s, historyTab.history, historyTab.activeHistory, historyTab.site], d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes()])
 }
 
 function saveHistory() {
@@ -278,7 +287,7 @@ function pasteTab(newTab) {
 function removeTab(id) {
 	const removingTab = tabsContainer.querySelector(`[pi="${id}"]`)
 	const removingTabIndex = Number(removingTab.getAttribute('ti'))
-	tabsHistory.push([removingTab.children[0].innerText, [tabs[removingTabIndex].s, tabs[removingTabIndex].history, tabs[removingTabIndex].activeHistory, tabs[removingTabIndex].site]])
+	addHistory(tabs[removingTabIndex], removingTab.children[0].innerText)
 	saveHistory()
 	tabs[removingTabIndex] = null
 	const btabs = tabsContainer.children
