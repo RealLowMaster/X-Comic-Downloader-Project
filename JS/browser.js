@@ -99,9 +99,9 @@ function checkBrowserTools(tabIndex) {
 function toggleBrowserHistory() {
 	const panel = document.getElementById('browser-history-panel')
 	if (panel.hasAttribute('active')) closeBrowserHistory()
-	else if (tabsHistory.length != 0) {
+	else if (tabsHistory.length > 0) {
 		panel.setAttribute('active', true)
-		let passYear, passMonth, passDay, passHistory = [], html = ''
+		let passYear, passMonth, passDay, passHistory = [], saveCheck = false, html = ''
 
 		const check_new_date = function(checkhistoey) {
 			if (checkhistoey[2] == passYear) {
@@ -119,8 +119,11 @@ function toggleBrowserHistory() {
 		}
 
 		for (let i = tabsHistory.length - 1; i >= 0; i--) {
-
-			if (check_new_date(tabsHistory[i])) {
+			saveCheck = check_new_date(tabsHistory[i])
+			if (saveCheck || i == 0) {
+				
+				if (i == 0 && !saveCheck) passHistory.push(tabsHistory[i])
+				
 				if (passHistory.length > 0) {
 					html += `<div><div>${passYear}-${passMonth}-${passDay}</div><div>`
 					for (let j = 0; j < passHistory.length; j++) {
@@ -132,10 +135,17 @@ function toggleBrowserHistory() {
 				passHistory = []
 				passHistory.push(tabsHistory[i])
 				update_date(tabsHistory[i])
-
+				
+				if (i == 0 && saveCheck) {
+					html += `<div><div>${passYear}-${passMonth}-${passDay}</div><div>`
+					for (let j = 0; j < passHistory.length; j++) {
+						html += `<div><input type="checkbox"><img src="Image/sites/${sites[passHistory[j][1][3]][0]}"><p>${passHistory[j][0]}</p><button type="button">...</button></div>`
+					}
+					html += '</div></div>'
+				}
 			} else passHistory.push(tabsHistory[i])
 		}
-
+		
 		document.getElementById('b-h-p-h-c').innerHTML = html
 		panel.style.display = 'block'
 		panel.scrollTop = 0
