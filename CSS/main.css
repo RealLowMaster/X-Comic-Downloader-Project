@@ -32,17 +32,13 @@
 html, body {
 	width: 100%;
 	height: 100vh;
-	user-select: none;
+	user-select: text;
 }
 
-a {
-	text-decoration: none;
-}
-
-img {
-	-webkit-user-drag: none;
-}
-
+button { user-select: none }
+br { user-select: none }
+a { text-decoration: none }
+img { -webkit-user-drag: none; user-select: none }
 div { display: block; }
 
 .main {
@@ -554,9 +550,9 @@ div { display: block; }
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	width: 30px;
+	width: 33px;
 	height: 100%;
-	padding: 5px;
+	padding: 5px 5px 5px 6px;
 	background-color: #eee;
 	color: #d55;
 	border: 0 solid #ddd;
@@ -576,14 +572,6 @@ div { display: block; }
 	height: 100%;
 }
 
-#browser-tool-close-browser > svg > g > path:first-child {
-	fill: #e22;
-}
-
-#browser-tool-close-browser > svg > g > path:last-child {
-	fill: #d66;
-}
-
 #browser-tool-close-browser:hover {
 	transform: rotate(360deg);
 	width: 33px;
@@ -593,14 +581,6 @@ div { display: block; }
 	right: 2px;
 }
 
-#browser-tool-close-browser:hover > svg > g > path:first-child {
-	fill: #fff;
-}
-
-#browser-tool-close-browser:hover > svg > g > path:last-child {
-	fill: #ddd;
-}
-
 #browser-history-panel {
 	display: none;
 	width: 100%;
@@ -608,7 +588,7 @@ div { display: block; }
 	background-color: #eee;
 	padding: 20px 0;
 	overflow-y: auto;
-	position: fixed;
+	position: absolute;
 	bottom: 0;
 	left: 0;
 	z-index: +1;
@@ -731,6 +711,7 @@ div { display: block; }
 	position: fixed;
 	top: 0;
 	left: 0;
+	user-select: none;
 }
 
 .setting-darkmode { background-color: #333; color: #eee }
@@ -769,6 +750,7 @@ div { display: block; }
 	margin-bottom: 7px;
 	object-fit: cover;
 	object-position: center;
+	user-select: none;
 }
 
 .comic > span {
@@ -782,6 +764,7 @@ div { display: block; }
 	position: absolute;
 	top: 7px;
 	right: 10px;
+	user-select: none;
 }
 
 .comic > p {
@@ -837,7 +820,7 @@ div { display: block; }
 	text-align: center;
 	align-items: center;
 	justify-content: center;
-	position: fixed;
+	position: absolute;
 	top: 10px;
 	left: 15px;
 	cursor: pointer;
@@ -853,6 +836,7 @@ div { display: block; }
 	left: 50px;
 }
 
+.comic-panel-close-btn > svg,
 .comic-panel-repair-info-btn > svg,
 .comic-panel-slider-btn > svg {
 	width: 20px;
@@ -1825,6 +1809,7 @@ div { display: block; }
 	font-family: monospace, sans-serif;
 	font-size: 16px;
 	cursor: pointer;
+	user-select: text;
 }
 
 .xlecx-container > div:first-child > button:hover {
@@ -2035,6 +2020,7 @@ div { display: block; }
 	position: absolute;
 	top: 5px;
 	right: 8px;
+	user-select: none;
 }
 
 .xlecx-post-container > div > p {

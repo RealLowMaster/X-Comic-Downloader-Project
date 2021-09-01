@@ -84,6 +84,7 @@ Added To Version {
 	Add Recent Tabs To Browser
 	Add New And Much Better Update System (In-App Update)
 	Update Error UI
+	Update Text Selection
 }
 
 Did {
