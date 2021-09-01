@@ -688,6 +688,65 @@ div { display: block; }
 	box-shadow: 0 5px 3px 0 rgba(0,0,0,.4);
 }
 
+#b-h-p-o-btn {
+	display: flex;
+	flex-flow: column;
+	width: auto;
+	height: auto;
+	position: absolute;
+	top: 10px;
+	left: 15px;
+}
+
+#b-h-p-o-btn > button {
+	display: flex;
+	width: 30px;
+	height: 30px;
+	background-color: transparent;
+	color: #3334;
+	border: 1px solid #3334;
+	border-radius: 50%;
+	text-align: center;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	transition: background-color .2s, color .2s, border-color .2s;
+}
+
+#b-h-p-o-btn > button > svg {
+	display: block;
+	width: 20px;
+	height: 20px;
+}
+
+#b-h-p-o-btn > div {
+	display: none;
+	flex-flow: column;
+	min-width: 110px;
+	height: auto;
+	z-index: +1;
+}
+
+#b-h-p-o-btn > div > button {
+	display: flex;
+	height: 100%;
+	justify-content: center;
+	align-items: center;
+	padding: 0 10px;
+	background-color: #fff;
+	border: 1px solid #eee;
+	cursor: pointer;
+	transition: background-color .2s, border-color .2s;
+}
+#b-h-p-o-btn > div > button:hover {
+	background-color: #eee;
+	border-color: #0af;
+}
+
+#b-h-p-o-btn:hover > div {
+	display: flex;
+}
+
 /* Spin */
 .spin {
 	display: inline-block;
@@ -809,7 +868,8 @@ div { display: block; }
 
 .comic-panel-close-btn,
 .comic-panel-repair-info-btn,
-.comic-panel-slider-btn {
+.comic-panel-slider-btn,
+#b-h-p-o-btn > button {
 	display: flex;
 	width: 30px;
 	height: 30px;

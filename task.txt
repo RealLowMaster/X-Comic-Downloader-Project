@@ -76,7 +76,7 @@ Added To Version {
 	Fix Bug: Stock in Repairing When There is no Internet Connection
 	Fix Bug: Stock in Deleting Comic When Images Are Busy
 	Add History To Browser
-	Add Optimizing All Comic Images Button
+	Add Optimizing All Comic Images Button (Not .gif)
 	Add More Optimization to Comic Thumbs
 	Add Show UnOptimize Comics Option To Setting for find which comic you didn't optimize
 	Make Thumbing Work Better
@@ -88,7 +88,7 @@ Added To Version {
 }
 
 Did {
-	Add History Panel Part 2++
+	Add History Panel Part 3++
 	Make Repairing Systems Part 6++ = Next = Complete All Image Repairing
 }
 
