@@ -654,7 +654,7 @@ function deleteComic(id) {
 function askForDeletingComic(id) {
 	if (comicDeleting == true) return
 	comicDeleting = true
-	errorSelector('Are you sure you want To Delete This Comic ?', null, false, [
+	errorSelector('Are you sure you want To Delete This Comic ?', [
 		[
 			"Yes",
 			"btn btn-danger m-2",

@@ -174,6 +174,26 @@ function saveHistory() {
 	fs.writeFileSync(dirHistory, JSON.stringify({h:tabsHistory}), {encoding:"utf8"})
 }
 
+function clearBrowserHistory() {
+	tabsHistory = []
+	fs.writeFileSync(dirHistory, JSON.stringify({h:[]}), {encoding:"utf8"})
+	document.getElementById('b-h-p-h-c').innerHTML = '<div class="alert alert-danger">There is no History.</div>'
+}
+
+function askClearBrowserHistory() {
+	errorSelector('Are you sure about it ?', [
+		[
+			"Yes",
+			"btn btn-primary m-2",
+			"clearBrowserHistory();this.parentElement.parentElement.remove()"
+		],
+		[
+			"No",
+			"btn btn-danger m-2"
+		]
+	])
+}
+
 function activateTab(who) {
 	closeBrowserHistory()
 	if (document.getElementById(who.getAttribute('pi')) == undefined) return

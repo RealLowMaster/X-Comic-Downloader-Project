@@ -88,11 +88,12 @@ Added To Version {
 }
 
 Did {
-	Add History Panel Part 3++
+	Add History Panel Part 4++
 	Make Repairing Systems Part 6++ = Next = Complete All Image Repairing
 }
 
 Tasks => {
+	Add Theme To Browser
 	Add Reset Setting Button
 	Add First Time Runtime showing new release whats happend
 	Make Tab Doplicator inset after tab

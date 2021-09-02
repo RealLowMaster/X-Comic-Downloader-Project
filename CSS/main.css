@@ -689,10 +689,9 @@ div { display: block; }
 }
 
 #b-h-p-o-btn {
-	display: flex;
-	flex-flow: column;
-	width: auto;
-	height: auto;
+	display: block;
+	width: 30px;
+	height: 30px;
 	position: absolute;
 	top: 10px;
 	left: 15px;
@@ -710,7 +709,7 @@ div { display: block; }
 	align-items: center;
 	justify-content: center;
 	cursor: pointer;
-	transition: background-color .2s, color .2s, border-color .2s;
+	transition: background-color .2s, color .2s, border-color .2s, border-radius .2s, transform .2s;
 }
 
 #b-h-p-o-btn > button > svg {
@@ -719,12 +718,21 @@ div { display: block; }
 	height: 20px;
 }
 
+#b-h-p-o-btn:hover > button {
+	background-color: #111;
+    color: #fff;
+    border-color: #222;
+	border-radius: 50% 0 0 50%;
+	transform: rotate(90deg);
+}
+
 #b-h-p-o-btn > div {
 	display: none;
 	flex-flow: column;
 	min-width: 110px;
 	height: auto;
 	z-index: +1;
+	box-shadow: 0 2px 8px 0 rgba(0,0,0,.4);
 }
 
 #b-h-p-o-btn > div > button {
@@ -732,12 +740,14 @@ div { display: block; }
 	height: 100%;
 	justify-content: center;
 	align-items: center;
-	padding: 0 10px;
+	padding: 8px 10px;
 	background-color: #fff;
 	border: 1px solid #eee;
 	cursor: pointer;
+	z-index: +1;
 	transition: background-color .2s, border-color .2s;
 }
+
 #b-h-p-o-btn > div > button:hover {
 	background-color: #eee;
 	border-color: #0af;
@@ -868,8 +878,7 @@ div { display: block; }
 
 .comic-panel-close-btn,
 .comic-panel-repair-info-btn,
-.comic-panel-slider-btn,
-#b-h-p-o-btn > button {
+.comic-panel-slider-btn {
 	display: flex;
 	width: 30px;
 	height: 30px;

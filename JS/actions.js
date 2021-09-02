@@ -1,6 +1,5 @@
-function error(txt, onclick, t1) {
+function error(txt, onclick) {
 	let err = txt.toString()
-	if (t1 != null) err = err.replace(/{var1}/gi, t1)
 	err = err.replace(/\n/gi, '<br>')
 	const element = document.createElement('div')
 	element.classList.add('action-error')
@@ -13,14 +12,12 @@ function error(txt, onclick, t1) {
 	document.getElementsByTagName('body')[0].appendChild(element)
 }
 
-function errorSelector(txt, t1, bgClose, buttons) {
+function errorSelector(txt, buttons, bgClose = false) {
 	let err = txt || null
-	if (t1 != null && err != null) err = err.replace(/{var1}/gi, t1)
 	if (err != null) err = err.replace(/\n/gi, '<br>')
 	const element = document.createElement('div')
 	element.classList.add('action-error')
 
-	bgClose = bgClose || false
 	let bgCloseValue = ''
 	if (bgClose == true) bgCloseValue = `this.parentElement.remove()`
 	let html = `<div onclick="${bgCloseValue}"></div><div style="text-align:center">`

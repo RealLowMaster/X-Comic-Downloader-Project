@@ -60,7 +60,7 @@ ThisWindow.addListener('close', e => {
 	if (comicDeleting) { PopAlert("You can't Close App When you are Deleting a Comic.", "danger"); return }
 	if (isOptimizing) { PopAlert("You can't Close App When you are Optimzating.", "danger"); return }
 	if (downloadingList.length > 0) {
-		errorSelector('You are Downloading Comics, Are you sure you want To Close Software ?', null, false, [
+		errorSelector('You are Downloading Comics, Are you sure you want To Close Software ?', [
 			[
 				"Yes",
 				"btn btn-primary m-2",
