@@ -460,7 +460,7 @@ function GetDirection() {
 			dirDB = setting.file_location+'\\ComicsDB'
 			dirUL = setting.file_location+'\\DownloadedComics'
 			dirTmp = setting.file_location+'\\ComicsTemp'
-			dirHistory = dirDB+'/history.array'
+			dirHistory = dirDocument+'/history.array'
 		}
 	}
 

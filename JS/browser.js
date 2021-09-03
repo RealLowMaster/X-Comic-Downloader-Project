@@ -1,3 +1,5 @@
+let browserHistoryIndex = 0
+
 function closeBrowser() {
 	imageLazyLoadingOptions.root = comicPanel
 	imageLoadingObserver = new IntersectionObserver(ObserverFunction, imageLazyLoadingOptions)
@@ -122,28 +124,28 @@ function toggleBrowserHistory() {
 			saveCheck = check_new_date(tabsHistory[i])
 			if (saveCheck || i == 0) {
 				
-				if (i == 0 && !saveCheck) passHistory.push(tabsHistory[i])
+				if (i == 0 && !saveCheck) passHistory.push([tabsHistory[i], i])
 				
 				if (passHistory.length > 0) {
 					html += `<div><div>${passYear}-${passMonth}-${passDay}</div><div>`
 					for (let j = 0; j < passHistory.length; j++) {
-						html += `<div><input type="checkbox"><img src="Image/sites/${sites[passHistory[j][1][3]][0]}"><p>${passHistory[j][0]}</p><button type="button">...</button></div>`
+						html += `<div><input type="checkbox"><img src="Image/sites/${sites[passHistory[j][0][1][3]][0]}"><p>${passHistory[j][0][0]}</p><button type="button" onclick="openHistoryRowOption(${passHistory[j][1]})">...</button></div>`
 					}
 					html += '</div></div>'
 				}
 
 				passHistory = []
-				passHistory.push(tabsHistory[i])
+				passHistory.push([tabsHistory[i], i])
 				update_date(tabsHistory[i])
 				
 				if (i == 0 && saveCheck) {
 					html += `<div><div>${passYear}-${passMonth}-${passDay}</div><div>`
 					for (let j = 0; j < passHistory.length; j++) {
-						html += `<div><input type="checkbox"><img src="Image/sites/${sites[passHistory[j][1][3]][0]}"><p>${passHistory[j][0]}</p><button type="button">...</button></div>`
+						html += `<div><input type="checkbox"><img src="Image/sites/${sites[passHistory[j][0][1][3]][0]}"><p>${passHistory[j][0][0]}</p><button type="button" onclick="openHistoryRowOption(${passHistory[j][1]})">...</button></div>`
 					}
 					html += '</div></div>'
 				}
-			} else passHistory.push(tabsHistory[i])
+			} else passHistory.push([tabsHistory[i], i])
 		}
 		
 		document.getElementById('b-h-p-h-c').innerHTML = html
@@ -162,6 +164,23 @@ function closeBrowserHistory() {
 	panel.style.display = 'none'
 	document.getElementById('b-h-p-h-c').innerHTML = ''
 	panel.removeAttribute('active')
+}
+
+function openHistoryRowOption(index) {
+	const e = window.event, menu = document.getElementById('b-h-p-m')
+	if (e.target.tagName == 'BUTTON') {
+		browserHistoryIndex = index
+		menu.style.top = ((e.clientY - 75) + document.getElementById('browser-history-panel').scrollTop)+'px'
+		menu.style.left = (e.clientX - 168)+'px'
+		menu.style.display = 'block'
+	}
+}
+
+function removeBrowserHistoryRow() {
+	tabsHistory.splice(browserHistoryIndex, 1)
+	setTimeout(() => {
+		saveHistory()
+	}, 100)
 }
 
 function addHistory(historyTab, text) {

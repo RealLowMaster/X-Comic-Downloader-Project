@@ -757,6 +757,30 @@ div { display: block; }
 	display: flex;
 }
 
+#b-h-p-m {
+	display: none;
+	padding: 4px 0;
+	background-color: #fff;
+	border: 1px solid #eee;
+	border-radius: 4px;
+	position: absolute;
+	top: 100px;
+	left: 100px;
+	box-shadow: 0 2px 8px 0 rgb(0,0,0,.4);
+}
+
+#b-h-p-m > button {
+	display: block;
+	width: 168px;
+	padding: 8px 24px;
+	background-color: #fff;
+	cursor: pointer;
+}
+
+#b-h-p-m > button:hover {
+	background-color: #eee;
+}
+
 /* Spin */
 .spin {
 	display: inline-block;
