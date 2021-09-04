@@ -26,7 +26,7 @@ function OptimizeComicImages(comic_id) {
 
 	setTimeout(() => {
 		db.comics.findOne({ _id:comic_id }, (err, doc) => {
-			if (err) { procressPanel.hide(); error(err); openComic(comic_id); return }
+			if (err) { procressPanel.hide(); error(err); openComic(comic_id); isOptimizing = false; return }
 	
 			document.getElementById('comic-action-panel').style.display='none'
 			let ImagesCount = doc.c, formats = doc.f, image = doc.i, lastIndex = formats[0][1], thisForamat = formats[0][2], repair = doc.m || null, urls = [], formatIndex = 0
@@ -75,6 +75,7 @@ function OptimizeComicImages(comic_id) {
 						procressPanel.hide()
 						error("MovingTemp: "+err2)
 						openComic(comic_id)
+						isOptimizing = false
 						return
 					}
 				}
@@ -103,7 +104,7 @@ function convertImagesToOptimize(list, index, comic_id) {
 			openComic(comic_id)
 			if (setting.show_unoptimize) reloadLoadingComics()
 		})
-
+		isOptimizing = false
 		return
 	} else if (list[index][1] == 'jpg' || list[index][1] == 'jpeg') {
 		sharp(`${dirTmp}/${list[index][0]}`).jpeg({ mozjpeg: true }).toFile(`${dirUL}/${list[index][0]}`).then(() => {

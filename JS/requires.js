@@ -167,7 +167,8 @@ function PopAlert(txt, style) {
 	alertElement.classList.add('pop-alert')
 	alertElement.classList.add(`pop-alert-${style}`)
 	alertElement.textContent = txt
-	document.getElementsByTagName('body')[0].appendChild(alertElement)
+	alertElement.setAttribute('onclick', 'this.remove()')
+	document.body.appendChild(alertElement)
 
 	const alerts = document.getElementsByClassName('pop-alert')
 	for (let i = 0; i < alerts.length; i++) {
@@ -470,7 +471,6 @@ function GetDirection() {
 			dirDB = setting.file_location+'\\ComicsDB'
 			dirUL = setting.file_location+'\\DownloadedComics'
 			dirTmp = setting.file_location+'\\ComicsTemp'
-			dirHistory = dirDocument+'/history.array'
 		}
 	}
 
@@ -478,6 +478,8 @@ function GetDirection() {
 	if (!fs.existsSync(dirUL)) fs.mkdirSync(dirUL)
 	if (!fs.existsSync(dirTmp)) fs.mkdirSync(dirTmp)
 	if (!fs.existsSync(dirUL+'/thumbs')) fs.mkdirSync(dirUL+'/thumbs')
+
+	dirHistory = dirDocument+'/history.array'
 	if (fs.existsSync(dirHistory)) tabsHistory = JSON.parse(fs.readFileSync(dirHistory, {encoding:'utf8', flag:'r'})).h
 	else fs.writeFileSync(dirHistory, '{"h":[]}', {encoding:"utf8"}) 
 }

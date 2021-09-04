@@ -1654,6 +1654,7 @@ div { display: block; }
 	box-shadow: 0 5px 10px rgba(0,0,0,0.3);
 	transition: bottom .3s;
 	z-index: 999999999;
+	user-select: none;
 }
 
 .pop-alert-primary {

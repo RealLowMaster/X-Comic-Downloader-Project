@@ -92,7 +92,12 @@ Did {
 }
 
 Tasks => {
-	Add Save Browser History To Exit App Event
+	Add Events {
+		Browser => Next Page, Prev Page, Home Page, Pass Tab, Open Browser History
+		Offline => Next Page, Prev Page
+		Slider => Fullscreen, Toggle Full Size, Toggle Overview
+	}
+	Change Slider OrginalSize Button Position When Downloading
 	Add Theme To Browser
 	Add Reset Setting Button
 	Add First Time Runtime showing new release whats happend
@@ -103,8 +108,6 @@ Tasks => {
 	Add Perfect Drag to Scroll To Slider Overview
 	Add Auto Scroll Down for Comic Panel
 	Add Arrow Keys For Changing Offline Pages
-	Fix Update Checker
-	Fix Elf No Sato To Ogre Gun
 
 	Mybe in v2  {
 		Add Bookmark || Favoriet Posts
