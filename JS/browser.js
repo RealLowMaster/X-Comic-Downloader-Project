@@ -42,24 +42,6 @@ function closeBrowser() {
 	document.getElementById('add-new-tab').setAttribute('onclick', '')
 }
 
-function openBrowserLastTabs() {
-	if (browserLastTabs.length == 0) {
-		pasteTab(tabsHistory[tabsHistory.length - 1][1])
-		tabsHistory.pop()
-		saveHistory()
-	} else {
-		for (let i = 0; i < browserLastTabs.length; i++) {
-			pasteTab(browserLastTabs[i])
-			tabsHistory.pop()
-		}
-
-		browserLastTabs = []
-		saveHistory()
-	}
-
-	checkTabHistoryButtons()
-}
-
 function checkTabHistoryButtons() {
 	if (tabsHistory.length == 0) document.getElementById('browser-recent-tabs-btn').setAttribute('disabled', true)
 	else document.getElementById('browser-recent-tabs-btn').removeAttribute('disabled')
@@ -98,6 +80,24 @@ function checkBrowserTools(tabIndex) {
 	}
 }
 
+function openBrowserLastTabs() {
+	if (browserLastTabs.length == 0) {
+		pasteTab(tabsHistory[tabsHistory.length - 1][1])
+		tabsHistory.pop()
+		saveHistory()
+	} else {
+		for (let i = 0; i < browserLastTabs.length; i++) {
+			pasteTab(browserLastTabs[i])
+			tabsHistory.pop()
+		}
+
+		browserLastTabs = []
+		saveHistory()
+	}
+
+	checkTabHistoryButtons()
+}
+
 function toggleBrowserHistory() {
 	const panel = document.getElementById('browser-history-panel')
 	if (panel.hasAttribute('active')) closeBrowserHistory()
@@ -129,7 +129,7 @@ function toggleBrowserHistory() {
 				if (passHistory.length > 0) {
 					html += `<div><div>${passYear}-${passMonth}-${passDay}</div><div>`
 					for (let j = 0; j < passHistory.length; j++) {
-						html += `<div><input type="checkbox"><img src="Image/sites/${sites[passHistory[j][0][1][3]][0]}"><p>${passHistory[j][0][0]}</p><button type="button" onclick="openHistoryRowOption(${passHistory[j][1]})">...</button></div>`
+						html += `<div><input type="checkbox"><img src="Image/sites/${sites[passHistory[j][0][1][3]][0]}"><p onclick="openBrowserHistory(${passHistory[j][1]})">${passHistory[j][0][0]}</p><button type="button" onclick="openHistoryRowOption(${passHistory[j][1]})">...</button></div>`
 					}
 					html += '</div></div>'
 				}
@@ -141,7 +141,7 @@ function toggleBrowserHistory() {
 				if (i == 0 && saveCheck) {
 					html += `<div><div>${passYear}-${passMonth}-${passDay}</div><div>`
 					for (let j = 0; j < passHistory.length; j++) {
-						html += `<div><input type="checkbox"><img src="Image/sites/${sites[passHistory[j][0][1][3]][0]}"><p>${passHistory[j][0][0]}</p><button type="button" onclick="openHistoryRowOption(${passHistory[j][1]})">...</button></div>`
+						html += `<div><input type="checkbox"><img src="Image/sites/${sites[passHistory[j][0][1][3]][0]}"><p onclick="openBrowserHistory(${passHistory[j][1]})">${passHistory[j][0][0]}</p><button type="button" onclick="openHistoryRowOption(${passHistory[j][1]})">...</button></div>`
 					}
 					html += '</div></div>'
 				}
@@ -164,6 +164,17 @@ function closeBrowserHistory() {
 	panel.style.display = 'none'
 	document.getElementById('b-h-p-h-c').innerHTML = ''
 	panel.removeAttribute('active')
+}
+
+function openBrowserHistory(index) {
+	browserLastTabs = []
+	pasteTab(tabsHistory[index][1])
+	tabsHistory.splice(index, 1)
+	checkTabHistoryButtons()
+
+	setTimeout(() => {
+		saveHistory()
+	}, 100)
 }
 
 function openHistoryRowOption(index) {
@@ -621,10 +632,7 @@ function cancelAllDownloads(closeApp) {
 		if (downloadingList[i] != null) cancelDownload(i)
 	}
 
-	if (closeApp == true) {
-		ThisWindow.removeAllListeners()
-		remote.app.quit()
-	}
+	if (closeApp == true) closeApp()
 }
 
 function IsDownloading(id) {

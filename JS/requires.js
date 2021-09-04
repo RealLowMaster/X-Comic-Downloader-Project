@@ -55,6 +55,19 @@ let comicDeleting = false, downloadCounter = 0, needReload = true, wt_fps = 20, 
 var setting, tabs = [], downloadingList = [], thisSite, lastComicId, lastHaveId, lastGroupId, lastArtistId, lastParodyId, lastTagId, searchTimer, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = [], openedMenuTabIndex, copiedTab = null
 
 // Set Windows Closing Event
+function closeApp() {
+	const tabsElement = tabsContainer.children
+	if (tabsElement.length > 0) {
+		for (let i = 0; i < tabsElement.length; i++) {
+			const thisTabIndex = Number(tabsElement[i].getAttribute('ti'))
+			addHistory(tabs[thisTabIndex], tabsElement[i].children[0].innerText)
+		}
+		saveHistory()
+	}
+	ThisWindow.removeAllListeners()
+	remote.app.quit()
+}
+
 ThisWindow.addListener('close', e => {
 	e.preventDefault()
 	if (comicDeleting) { PopAlert("You can't Close App When you are Deleting a Comic.", "danger"); return }
@@ -71,10 +84,7 @@ ThisWindow.addListener('close', e => {
 				"btn btn-danger m-2"
 			]
 		])
-	} else {
-		ThisWindow.removeAllListeners()
-		remote.app.quit()
-	}
+	} else closeApp()
 })
 
 // Needable Functions
