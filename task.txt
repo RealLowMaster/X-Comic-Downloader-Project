@@ -88,7 +88,6 @@ Added To Version {
 }
 
 Did {
-	Add History Panel Part 6++
 	Make Repairing Systems Part 6++ = Next = Complete All Image Repairing
 }
 

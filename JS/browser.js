@@ -99,9 +99,15 @@ function openBrowserLastTabs() {
 }
 
 function toggleBrowserHistory() {
+	if (document.getElementById('browser-history-panel').hasAttribute('active')) closeBrowserHistory()
+	else openBrowserHistoryPanel()
+}
+
+function openBrowserHistoryPanel(scoll=false) {
 	const panel = document.getElementById('browser-history-panel')
-	if (panel.hasAttribute('active')) closeBrowserHistory()
-	else if (tabsHistory.length > 0) {
+	document.getElementById('b-h-p-m-c').style.display = 'none'
+
+	if (tabsHistory.length > 0) {
 		panel.setAttribute('active', true)
 		let passYear, passMonth, passDay, passHistory = [], saveCheck = false, html = ''
 
@@ -150,12 +156,12 @@ function toggleBrowserHistory() {
 		
 		document.getElementById('b-h-p-h-c').innerHTML = html
 		panel.style.display = 'block'
-		panel.scrollTop = 0
+		if (!scoll) panel.scrollTop = 0
 	} else {
 		panel.setAttribute('active', true)
 		document.getElementById('b-h-p-h-c').innerHTML = '<div class="alert alert-danger">There is no History.</div>'
 		panel.style.display = 'block'
-		panel.scrollTop = 0
+		if (!scoll) panel.scrollTop = 0
 	}
 }
 
@@ -164,6 +170,7 @@ function closeBrowserHistory() {
 	panel.style.display = 'none'
 	document.getElementById('b-h-p-h-c').innerHTML = ''
 	panel.removeAttribute('active')
+	document.getElementById('b-h-p-m-c').style.display = 'none'
 }
 
 function openBrowserHistory(index) {
@@ -178,17 +185,19 @@ function openBrowserHistory(index) {
 }
 
 function openHistoryRowOption(index) {
-	const e = window.event, menu = document.getElementById('b-h-p-m')
+	const e = window.event
 	if (e.target.tagName == 'BUTTON') {
 		browserHistoryIndex = index
-		menu.style.top = ((e.clientY - 75) + document.getElementById('browser-history-panel').scrollTop)+'px'
+		const menu = document.getElementById('b-h-p-m')
+		menu.style.top = e.clientY+'px'
 		menu.style.left = (e.clientX - 168)+'px'
-		menu.style.display = 'block'
+		document.getElementById('b-h-p-m-c').style.display = 'block'
 	}
 }
 
 function removeBrowserHistoryRow() {
 	tabsHistory.splice(browserHistoryIndex, 1)
+	openBrowserHistoryPanel(true)
 	setTimeout(() => {
 		saveHistory()
 	}, 100)
