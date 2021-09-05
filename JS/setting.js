@@ -167,9 +167,11 @@ function saveSetting(justSave) {
 		else PopAlert('You cannot Change Saving Location when downloading.', 'danger')
 	}
 	else document.getElementById('setting-panel').style.display = 'none'
+	keydownEventIndex = 0
 }
 
 function closeSetting() {
 	document.getElementById('setting-panel').style.display = 'none'
 	setLuanchTimeSettings(true)
+	keydownEventIndex = 0
 }

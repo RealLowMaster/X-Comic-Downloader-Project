@@ -4,6 +4,7 @@ function closeBrowser() {
 	imageLazyLoadingOptions.root = comicPanel
 	imageLoadingObserver = new IntersectionObserver(ObserverFunction, imageLazyLoadingOptions)
 	needReload = true
+	keydownEventIndex = 0
 	reloadLoadingComics()
 	document.getElementById('browser').style.display = 'none'
 	closeBrowserHistory()
@@ -82,9 +83,11 @@ function checkBrowserTools(tabIndex) {
 
 function openBrowserLastTabs() {
 	if (browserLastTabs.length == 0) {
-		pasteTab(tabsHistory[tabsHistory.length - 1][1])
-		tabsHistory.pop()
-		saveHistory()
+		if (tabsHistory.length != 0) {
+			pasteTab(tabsHistory[tabsHistory.length - 1][1])
+			tabsHistory.pop()
+			saveHistory()
+		}
 	} else {
 		for (let i = 0; i < browserLastTabs.length; i++) {
 			pasteTab(browserLastTabs[i])
@@ -104,6 +107,7 @@ function toggleBrowserHistory() {
 }
 
 function openBrowserHistoryPanel(scoll=false) {
+	keydownEventIndex = 4
 	const panel = document.getElementById('browser-history-panel')
 	document.getElementById('b-h-p-m-c').style.display = 'none'
 
@@ -166,6 +170,7 @@ function openBrowserHistoryPanel(scoll=false) {
 }
 
 function closeBrowserHistory() {
+	keydownEventIndex = 3
 	const panel = document.getElementById('browser-history-panel')
 	panel.style.display = 'none'
 	document.getElementById('b-h-p-h-c').innerHTML = ''
@@ -389,7 +394,7 @@ function pasteTab(newTab) {
 		browserTabMenu.style.left = e.clientX+'px'
 		browserTabMenu.style.display = 'block'
 	})
-	tabs[tabIndex] = new Tab(newTabId, 0, newTab[0], 0, 1, 0, newTab[3], true)
+	tabs[tabIndex] = new Tab(newTabId, 0, newTab[0], 0, 1, 0, newTab[3], false)
 	tabs[tabIndex].history = newTab[1]
 	tabs[tabIndex].activeHistory = newTab[2]
 	page.setAttribute('class', 'browser-page')
@@ -406,8 +411,8 @@ function pasteTab(newTab) {
 	document.getElementById('browser-tool-search-form').style.display = 'flex'
 
 	activateTab(element)
-	tabs[activeTabIndex].reload()
 	updateTabSize()
+	tabs[activeTabIndex].reload()
 }
 
 function removeTab(id) {
@@ -823,3 +828,20 @@ document.getElementById('browser-tool-search-form').addEventListener('submit', e
 		eval(sites[thisSite][2].replace('{text}', `'${input.value.replace("'", "\\'")}'`))
 	} else tabs[activeTabIndex].s = ''
 })
+
+// Key Event
+function BrowserKeyEvents(ctrl, shift, key) {
+	if (ctrl && shift && key == 84) openBrowserLastTabs()
+	else if (ctrl && !shift && key == 87) { if (activeTabComicId != null) removeTab(activeTabComicId) }
+	else if (ctrl && !shift && key == 37) browserPrev()
+	else if (ctrl && !shift && key == 39) browserNext()
+	else if (ctrl && !shift && key == 72) openBrowserHistoryPanel()
+	else if (ctrl && !shift && key == 81) {
+		if (tabs[activeTabIndex].history[tabs[activeTabIndex].history.length - 1].replace(', false)', ', true)') != sites[thisSite][3]) { closeBrowserHistory(); eval(sites[thisSite][3]) }
+	} else if (ctrl && !shift && key == 82) { closeBrowserHistory(); tabs[activeTabIndex].reload() }
+}
+
+function BrowserHistoryKeyEvents(ctrl, shift, key) {
+	if (ctrl && shift && key == 84) openBrowserLastTabs()
+	else if (ctrl && !shift && key == 72) closeBrowserHistory()
+}

@@ -42,6 +42,9 @@ document.addEventListener("DOMContentLoaded", () => {
 		browserTabMenu.style.display = 'none'
 		browserPasteMenu.style.display = 'none'
 	})
+	window.addEventListener('keydown', e => {
+		if (keydownEventIndex != 100) eval(keydownEvents[keydownEventIndex].replace('{ctrl}', e.ctrlKey).replace('{shift}', e.shiftKey).replace('{key}', e.which))
+	})
 
 	loading.forward('Indexing...')
 	makeDatabaseIndexs()

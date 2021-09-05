@@ -70,7 +70,7 @@ function toggleComicSliderSize(open) {
 		comicSliderCanvas.setAttribute('o-size', true)
 		comicSliderCanvas.scrollTop = 0
 		comicSliderCanvas.scrollLeft = (comicSliderImg.clientWidth / 2) / 2
-		document.getElementById('c-s-s').setAttribute('title', 'Cover Size')
+		document.getElementById('c-s-s').setAttribute('title', 'Cover Size | Ctrl+O')
 		comicSliderImg.removeAttribute('onclick')
 		comicSliderCanvas.style.borderColor = '#000'
 		comicSliderCanvasScrollPanel.style.display = 'block'
@@ -84,7 +84,7 @@ function toggleComicSliderSize(open) {
 	} else {
 		comicSliderCanvas.scrollTop = 0
 		comicSliderCanvas.scrollLeft = 0
-		document.getElementById('c-s-s').setAttribute('title', 'Orginal Size')
+		document.getElementById('c-s-s').setAttribute('title', 'Orginal Size | Ctrl+O')
 		comicSliderCanvas.removeAttribute('o-size')
 		comicSliderCanvas.style.borderColor = 'transparent'
 		comicSliderImg.setAttribute('onclick', 'toggleComicSliderSize()')
@@ -191,22 +191,23 @@ function changeSliderIndex(index) {
 }
 
 function openComicSlider(index) {
+	keydownEventIndex = 2
 	comicSlider.style.display = 'grid'
 	comicSliderOverview.parentElement.children[1].setAttribute('onclick', 'toggleComicSliderOverview(true, this)')
 	changeSliderIndex(index)
 	comicSliderContent.addEventListener('wheel', sliderScrollHandler)
-	window.addEventListener('keydown', sliderKeyHandler)
 }
 
 function reOpenLastSlider() {
+	keydownEventIndex = 2
 	comicSlider.style.display = 'grid'
 	if (comicSliderOverview.hasAttribute('aindex')) changeSliderIndex(Number(comicSliderOverview.getAttribute('aindex')))
 	else changeSliderIndex(0)
 	comicSliderContent.addEventListener('wheel', sliderScrollHandler)
-	window.addEventListener('keydown', sliderKeyHandler)
 }
 
 function closeComicSlider() {
+	keydownEventIndex = 1
 	comicSlider.style.display = 'none'
 	ThisWindow.setFullScreen(false)
 	document.getElementById('comic-slider').children[1].style.backgroundColor = '#000000f3'
@@ -215,7 +216,6 @@ function closeComicSlider() {
 	toggleComicSliderSize(false)
 	comicSliderContent.removeEventListener('wheel', sliderScrollHandler)
 	comicSliderBackground.removeEventListener('wheel', sliderScrollHandler)
-	window.removeEventListener('keydown', sliderKeyHandler)
 }
 
 function sliderScrollHandler(e) {
@@ -229,12 +229,15 @@ function sliderScrollHandler(e) {
 	}
 }
 
-function sliderKeyHandler(e) {
-	const code = e.which
-	if (code == 37 || code == 38) {
+// Key Event
+function SliderKeyEvents(ctrl, shift, key) {
+	if (!ctrl && !shift && key == 122) toggleComicSliderScreen()
+	else if (ctrl && !shift && key == 79) toggleComicSliderSize()
+	else if (ctrl && !shift && key == 87) closeComicSlider()
+	else if (!ctrl && !shift && key == 37) {
 		const index = Number(comicSliderOverview.getAttribute('aindex'))
 		if (index != 0) changeSliderIndex(index - 1)
-	} else if (code == 39 || code == 40) {
+	} else if (!ctrl && !shift && key == 39) {
 		const index = Number(comicSliderOverview.getAttribute('aindex'))
 		const count = Number(comicSliderOverview.getAttribute('count'))
 		if (index != count) changeSliderIndex(index + 1)

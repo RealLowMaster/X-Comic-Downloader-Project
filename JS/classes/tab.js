@@ -16,9 +16,9 @@ class Tab {
 	addHistory(text) {
 		if (this.activeHistory < this.history.length - 1) {
 			var ind = this.activeHistory
-			this.history = this.history.filter(function(value, index, arr){ 
+			this.history = this.history.filter((value, index, arr) => { 
 				return index <= ind
-			});
+			})
 		}
 
 		this.activeHistory += 1
@@ -40,7 +40,9 @@ class Tab {
 	}
 
 	reload() {
-		this.ir = true
-		eval(this.history[this.activeHistory])
+		if (this.ir == false) {
+			this.ir = true
+			eval(this.history[this.activeHistory])
+		}
 	}
 }

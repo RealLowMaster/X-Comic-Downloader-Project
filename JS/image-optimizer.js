@@ -76,6 +76,7 @@ function OptimizeComicImages(comic_id) {
 						error("MovingTemp: "+err2)
 						openComic(comic_id)
 						isOptimizing = false
+						keydownEventIndex = 1
 						return
 					}
 				}
@@ -102,9 +103,11 @@ function convertImagesToOptimize(list, index, comic_id) {
 			isOptimizing = false
 			if (setting.notification_optimization_finish && remote.Notification.isSupported()) new remote.Notification({title: 'Comic Optimization Finished.', body: doc.n}).show()
 			openComic(comic_id)
+			keydownEventIndex = 1
 			if (setting.show_unoptimize) reloadLoadingComics()
 		})
 		isOptimizing = false
+		keydownEventIndex = 1
 		return
 	} else if (list[index][1] == 'jpg' || list[index][1] == 'jpeg') {
 		sharp(`${dirTmp}/${list[index][0]}`).jpeg({ mozjpeg: true }).toFile(`${dirUL}/${list[index][0]}`).then(() => {

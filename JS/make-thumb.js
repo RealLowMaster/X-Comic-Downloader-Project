@@ -1,9 +1,10 @@
 let thumbErrLog = []
 
 function makeThumb(reCreate) {
+	keydownEventIndex = 100
 	thumbErrLog = []
 	db.comics.find({}, (err, doc) => {
-		if (err) { error(err); return }
+		if (err) { error(err); keydownEventIndex = 0; return }
 		loading.reset(0)
 		loading.show(`Checking Thumbs...`)
 
@@ -52,10 +53,12 @@ function checkThumbs(doc, reCreate, scrollTop) {
 		createThumb(list, 0)
 	} else if (thumbErrLog.length == 0) {
 		loading.hide()
+		keydownEventIndex = 0
 		PopAlert('All Thumbs Made Successfuly.')
 		reloadLoadingComics(scrollTop)
 	} else {
 		loading.hide()
+		keydownEventIndex = 0
 		errorList(thumbErrLog)
 		reloadLoadingComics(scrollTop)
 	}
@@ -70,6 +73,7 @@ function createThumb(list, index, scrollTop) {
 			}, 100)
 		} else {
 			loading.hide()
+			keydownEventIndex = 0
 			reloadLoadingComics(scrollTop)
 			if (thumbErrLog.length == 0) PopAlert('All Thumbs Made Successfuly.')
 			else errorList(thumbErrLog)
@@ -83,6 +87,7 @@ function createThumb(list, index, scrollTop) {
 			}, 100)
 		} else {
 			loading.hide()
+			keydownEventIndex = 0
 			reloadLoadingComics(scrollTop)
 			if (thumbErrLog.length == 0) PopAlert('All Thumbs Made Successfuly.')
 			else errorList(thumbErrLog)

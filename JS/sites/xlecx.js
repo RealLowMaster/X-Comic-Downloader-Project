@@ -4,6 +4,7 @@ function openXlecxBrowser() {
 	imageLoadingObserver = new IntersectionObserver(ObserverFunction, imageLazyLoadingOptions)
 	thisSite = 0
 	needReload = false
+	keydownEventIndex = 3
 	checkTabHistoryButtons()
 	document.getElementById('add-new-tab').setAttribute('onclick', "createNewXlecxTab(createNewTab('xlecxChangePage(1, 0, false)', false, 0))")
 	const id = createNewTab('xlecxChangePage(1, 0, false)', false, 0)

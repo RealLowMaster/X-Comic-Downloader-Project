@@ -41,6 +41,13 @@ const sites = [
 		'xlecxJumpPage({index}, {page})'
 	]
 ]
+const keydownEvents = [
+	'OfflineKeyEvents({ctrl},{shift},{key})',
+	'OfflineComicKeyEvents({ctrl},{shift},{key})',
+	'SliderKeyEvents({ctrl},{shift},{key})',
+	'BrowserKeyEvents({ctrl},{shift},{key})',
+	'BrowserHistoryKeyEvents({ctrl},{shift},{key})'
+]
 const ThisWindow = remote.getCurrentWindow(), loading = new Loading(14), db = {}, procressPanel = new ProcressPanel(0), update_number = 0
 const comicGroupsContainer = document.getElementById('c-p-g')
 const comicArtistsContainer = document.getElementById('c-p-a')
@@ -51,8 +58,26 @@ const browserPasteMenu = document.getElementById('browser-paste-menu')
 const bjp = document.getElementById('browser-jump-page-container')
 const bjp_i = document.getElementById('bjp-i')
 const bjp_m_p = document.getElementById('bjp-m-p')
-let comicDeleting = false, downloadCounter = 0, needReload = true, wt_fps = 20, dirDB, dirUL, dirTmp, isOptimizing = false, browserLastTabs = [], tabsHistory = [], dirHistory = ''
+let comicDeleting = false, downloadCounter = 0, needReload = true, wt_fps = 20, dirDB, dirUL, dirTmp, isOptimizing = false, browserLastTabs = [], tabsHistory = [], dirHistory = '', keydownEventIndex = 0
 var setting, tabs = [], downloadingList = [], thisSite, lastComicId, lastHaveId, lastGroupId, lastArtistId, lastParodyId, lastTagId, searchTimer, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = [], openedMenuTabIndex, copiedTab = null
+
+/*
+	37 // Left Arrow
+	39 // Right Arrow
+	38 // Up Arrow
+	40 // Down Arrow
+	84 // T = Open Recent Tab
+	78 // N = Create New Tab
+	72 // H = Open History
+	70 // F = Search Tab
+	87 // W = Close Current Tab
+	36 // Home = Go To Home Site
+	107 // + = Zoom In,
+	109 // - = Zoom Out,
+	83 // S = Open Slider
+	82 // R = Reload
+*/
+
 
 // Set Windows Closing Event
 function closeApp() {

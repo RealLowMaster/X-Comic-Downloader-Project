@@ -61,13 +61,13 @@ function loadComics(page, search, safeScroll) {
 		comic_container.innerHTML = html
 		
 		// Pagination
+		document.getElementById('jp-m-p').textContent = allPages
 		if (allPages > 1) {
 			document.getElementById('offline-search-form').style.display = 'flex'
 			document.getElementById('jump-page-container').style.display = 'inline-block'
 			const jp_i = document.getElementById('jp-i')
 			jp_i.setAttribute('oninput', `inputLimit(this, ${allPages});searchComics(document.getElementById('offline-search-form-input').value, Number(this.value))`)
 			jp_i.value = page
-			document.getElementById('jp-m-p').textContent = allPages
 			const thisPagination = pagination(allPages, page)
 			html = '<div>'
 			for (let i in thisPagination) {
@@ -161,6 +161,16 @@ function pagination(total_pages, page) {
 	if (page < total_pages) arr.push(['Next', page + 1])
 
 	return arr
+}
+
+function offlineChangePage(forward=true) {
+	const page = Number(document.getElementById('comic-container').getAttribute('page')) || null
+	let search = document.getElementById('offline-search-form-input').value || null
+	if (search == null || search.length == 0) search = null
+	console.log(page)
+	if (forward) {
+		if (Number(document.getElementById('jp-m-p').innerText) > page) loadComics(page + 1, search)
+	} else if (page > 1) loadComics(page - 1, search)
 }
 
 function searchComics(value, page) {
@@ -387,6 +397,7 @@ function openComic(id) {
 			openComicTags(Number(id))
 			comicPanel.style.display = 'block'
 			comicPanel.scrollTop = 0
+			keydownEventIndex = 1
 		})
 	}
 
@@ -396,6 +407,7 @@ function openComic(id) {
 
 function closeComicPanel() {
 	comicPanel.style.display = 'none'
+	keydownEventIndex = 0
 
 	comicGroupsContainer.innerHTML = ''
 	comicArtistsContainer.innerHTML = ''
@@ -509,8 +521,8 @@ function deleteComic(id) {
 
 	setTimeout(() => {
 		db.comics.findOne({_id:id}, (err, doc) => {
-			if (err) { loading.hide(); error(err); return }
-			if (doc == undefined) { loading.hide(); error('Comic Not Found.'); return }
+			if (err) { loading.hide(); error(err); keydownEventIndex = 0; return }
+			if (doc == undefined) { loading.hide(); error('Comic Not Found.'); keydownEventIndex = 0; return }
 			const ImagesId = doc.i
 			const ImagesFormats = doc.f
 			const ImagesCount = doc.c
@@ -532,11 +544,12 @@ function deleteComic(id) {
 				PopAlert('Comic Deleted.', 'warning')
 				comicDeleting = false
 				reloadLoadingComics()
+				keydownEventIndex = 0
 			}
 	
 			const remove_tags = () => {
 				db.comic_tags.remove({_id:id}, {}, err => {
-					if (err) { loading.hide(); error(err); return }
+					if (err) { loading.hide(); error(err); keydownEventIndex = 0; return }
 					loading.forward('Removing Comic Have From Database...')
 					fix_removed_index()
 				})
@@ -544,7 +557,7 @@ function deleteComic(id) {
 	
 			const remove_parodies = () => {
 				db.comic_parodies.remove({_id:id}, {}, err => {
-					if (err) { loading.hide(); error(err); return }
+					if (err) { loading.hide(); error(err); keydownEventIndex = 0; return }
 					loading.forward('Removing Comic Tags From Database...')
 					remove_tags()
 				})
@@ -552,7 +565,7 @@ function deleteComic(id) {
 	
 			const remove_artists = () => {
 				db.comic_artists.remove({_id:id}, {}, err => {
-					if (err) { loading.hide(); error(err); return }
+					if (err) { loading.hide(); error(err); keydownEventIndex = 0; return }
 					loading.forward('Removing Comic Parodies From Database...')
 					remove_parodies()
 				})
@@ -560,7 +573,7 @@ function deleteComic(id) {
 	
 			const remove_groups = () => {
 				db.comic_groups.remove({_id:id}, {}, err => {
-					if (err) { loading.hide(); error(err); return }
+					if (err) { loading.hide(); error(err); keydownEventIndex = 0; return }
 					loading.forward('Removing Comic Artists From Database...')
 					remove_artists()
 				})
@@ -568,7 +581,7 @@ function deleteComic(id) {
 	
 			const remove_have = () => {
 				db.have.remove({s:site, i:post_id}, {}, err => {
-					if (err) { loading.hide(); error(err); return }
+					if (err) { loading.hide(); error(err); keydownEventIndex = 0; return }
 					loading.forward('Fix Indexs...')
 					remove_groups()
 				})
@@ -576,7 +589,7 @@ function deleteComic(id) {
 	
 			const remove_comic = () => {
 				db.comics.remove({_id:id}, {}, err => {
-					if (err) { loading.hide(); error(err); return }
+					if (err) { loading.hide(); error(err); keydownEventIndex = 0; return }
 					loading.forward('Deleting Comic Images...')
 					remove_have()
 				})
@@ -611,6 +624,7 @@ function deleteComic(id) {
 							} catch(err) {
 								loading.hide()
 								error(err)
+								keydownEventIndex = 0
 								return
 							}
 						}
@@ -634,6 +648,7 @@ function deleteComic(id) {
 								} catch(err) {
 									loading.hide()
 									error(err)
+									keydownEventIndex = 0
 									return
 								}
 							}
@@ -666,4 +681,17 @@ function askForDeletingComic(id) {
 			'comicDeleting = false;this.parentElement.parentElement.remove()'
 		]
 	])
+}
+
+// Key Event
+function OfflineKeyEvents(ctrl, shift, key) {
+	if (!ctrl && !shift && key == 39) offlineChangePage()
+	else if (!ctrl && !shift && key == 37) offlineChangePage(false)
+	else if (ctrl && !shift && key == 82) reloadLoadingComics()
+}
+
+function OfflineComicKeyEvents(ctrl, shift, key) {
+	if (ctrl && !shift && key == 87) closeComicPanel()
+	else if (ctrl && !shift && key == 83) reOpenLastSlider()
+	else if (ctrl && !shift && key == 81) { document.getElementById('comic-action-panel').style.display='flex'; keydownEventIndex = 100 }
 }
