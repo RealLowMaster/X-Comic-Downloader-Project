@@ -1552,7 +1552,7 @@ input::-webkit-input-placeholder { user-select: none }
 /* Jump Page > */
 
 /* Downloader */
-.downloader {
+#downloader {
 	display: none;
 	width: 220px;
 	max-height: 150px;
@@ -1565,22 +1565,23 @@ input::-webkit-input-placeholder { user-select: none }
 	bottom: 0px;
 	box-shadow: 0 0 10px 3px rgba(29,131,72,.8);
 	z-index: 99999;
+	user-select: none;
 	transition: right .3s;
 }
 
-.downloader:hover,
-.downloader-fixed { right: 0 !important }
+#downloader:hover,
+#downloader[fixed] { right: 0 !important }
 
-.downloader::-webkit-scrollbar {
+#downloader::-webkit-scrollbar {
 	width: 3px;
 }
 
-.downloader *:not(span):not(button) {
+#downloader *:not(span):not(button) {
 	display: block;
 	width: 100%;
 }
 
-.downloader > div {
+#downloader > div {
 	height: 50px;
 	padding: 10px;
 	background-color: #2227;
@@ -1590,7 +1591,7 @@ input::-webkit-input-placeholder { user-select: none }
 	position: relative;
 }
 
-.downloader > div > img {
+#downloader > div > img {
 	width: 18px;
 	height: 18px;
 	position: absolute;
@@ -1598,7 +1599,7 @@ input::-webkit-input-placeholder { user-select: none }
 	right: 3px;
 }
 
-.downloader > div > p {
+#downloader > div > p {
 	width: 92%;
 	margin: 0 0 6px 0;
 	color: #fff;
@@ -1608,13 +1609,13 @@ input::-webkit-input-placeholder { user-select: none }
 	overflow: hidden;
 }
 
-.downloader > div > div {
+#downloader > div > div {
 	width: 90%;
 	height: 3px;
 	background-color: #eeea;
 }
 
-.downloader > div > div > div {
+#downloader > div > div > div {
 	width: 0;
 	max-width: 100%;
 	height: 100%;
@@ -1622,7 +1623,7 @@ input::-webkit-input-placeholder { user-select: none }
 	transition: width .2s;
 }
 
-.downloader > div > button {
+#downloader > div > button {
 	width: 15px;
 	height: 15px;
 	background-color: #E74C3C;
@@ -1636,7 +1637,7 @@ input::-webkit-input-placeholder { user-select: none }
 	transition: background-color .2s;
 }
 
-.downloader > div > button:hover {
+#downloader > div > button:hover {
 	background-color: #A93226;
 }
 

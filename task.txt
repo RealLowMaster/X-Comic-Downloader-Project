@@ -93,19 +93,14 @@ Did {
 }
 
 Tasks => {
-	Change Slider OrginalSize Button Position When Downloading
-	Update Make Thumb Button when Making Thumb in Comic
 	Add Slider System To Repaired Image
 	Add Theme To Browser
 	Add Reset Setting Button
 	Add First Time Runtime showing new release whats happend
 	Make Tab Doplicator inset after tab
-	Add Shortcut for browser tools
 	Add Optimizing Image Option
-	Ctrl + k | Ctrl + 0
 	Add Perfect Drag to Scroll To Slider Overview
 	Add Auto Scroll Down for Comic Panel
-	Add Arrow Keys For Changing Offline Pages
 
 	Mybe in v2  {
 		Add Bookmark || Favoriet Posts

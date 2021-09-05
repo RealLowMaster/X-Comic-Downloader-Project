@@ -52,7 +52,7 @@ function setLuanchTimeSettings(reloadSettingPanel) {
 	s_file_location_label.setAttribute('title', setting.file_location)
 
 	if (reloadSettingPanel != true) {
-		if (setting.hover_downloader == false) document.getElementById('downloader').classList.add('downloader-fixed')
+		if (setting.hover_downloader == false) document.getElementById('downloader').setAttribute('fixed', true)
 
 		if (setting.offline_theme == 1) {
 			document.getElementById('setting-panel').classList.add('setting-darkmode')
@@ -122,8 +122,8 @@ function saveSetting(justSave) {
 			setting.file_location = file_location
 		}
 
-		if (setting.hover_downloader == false) document.getElementById('downloader').classList.add('downloader-fixed')
-		else document.getElementById('downloader').classList.remove('downloader-fixed')
+		if (setting.hover_downloader == false) document.getElementById('downloader').setAttribute('fixed')
+		else document.getElementById('downloader').removeAttribute('fixed')
 
 		switch (setting.offline_theme) {
 			case 0:

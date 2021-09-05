@@ -524,6 +524,8 @@ function CreateDatabase() {
 	db.have = new nedb({ filename: dirDB+'/have', autoload: true })
 }
 
+function reload() { remote.getCurrentWebContents().reload() }
+
 function CheckSettings() {
 	if (typeof(setting.comic_panel_theme) != 'number' || setting.comic_panel_theme < 0) setting.comic_panel_theme = defaultSetting.comic_panel_theme
 	if (setting.comic_panel_theme > 1) setting.comic_panel_theme = 1
@@ -556,7 +558,6 @@ function CheckSettings() {
 	if (setting.developer_mode == true) {
 		window.addEventListener('keydown', e => {
 			if (e.ctrlKey && e.shiftKey && e.which == 73) remote.getCurrentWebContents().toggleDevTools()
-			else if (e.ctrlKey && e.which == 82) remote.getCurrentWebContents().reload()
 		})
 	}
 }

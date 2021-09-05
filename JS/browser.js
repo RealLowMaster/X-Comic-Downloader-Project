@@ -418,6 +418,7 @@ function pasteTab(newTab) {
 function removeTab(id) {
 	const removingTab = tabsContainer.querySelector(`[pi="${id}"]`)
 	const removingTabIndex = Number(removingTab.getAttribute('ti'))
+	browserLastTabs = []
 	addHistory(tabs[removingTabIndex], removingTab.children[0].innerText)
 	saveHistory()
 	tabs[removingTabIndex] = null

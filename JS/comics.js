@@ -167,7 +167,6 @@ function offlineChangePage(forward=true) {
 	const page = Number(document.getElementById('comic-container').getAttribute('page')) || null
 	let search = document.getElementById('offline-search-form-input').value || null
 	if (search == null || search.length == 0) search = null
-	console.log(page)
 	if (forward) {
 		if (Number(document.getElementById('jp-m-p').innerText) > page) loadComics(page + 1, search)
 	} else if (page > 1) loadComics(page - 1, search)

@@ -128,11 +128,14 @@ function makeThumbForAComic(id) {
 						loading.forward()
 						loading.hide()
 						PopAlert('Thumbs Made Successfuly.')
+						const comic_thumb_optimize_btn = document.getElementById('c-a-p-o-t')
+						comic_thumb_optimize_btn.setAttribute('class', 'warning-action')
+						comic_thumb_optimize_btn.innerText = 'ReMake Thumb'
 						reloadLoadingComics(scrollTop)
 					}).catch(err => {
 						loading.forward()
 						loading.hide()
-						error(err)
+						error('MakeThumb: '+err)
 						reloadLoadingComics(scrollTop)
 					})
 				}, 100)
