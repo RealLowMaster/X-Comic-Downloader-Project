@@ -65,11 +65,13 @@ function setLuanchTimeSettings(reloadSettingPanel) {
 			document.getElementById('main-body').classList.add('main-body-darkmode')
 		}
 
+		for (let i = 0; i < comic_panel_theme_var.length; i++) {
+			style.setProperty(comic_panel_theme_var[i], comic_panel_theme_themes[setting.comic_panel_theme][i])
+		}
+
 		for (let i = 0; i < browser_theme_var.length; i++) {
 			style.setProperty(browser_theme_var[i], browser_theme_themes[setting.browser_theme][i])
 		}
-
-		if (setting.comic_panel_theme == 1) comicPanel.classList.add('comic-panel-darkmode')
 
 		if (setting.pagination_theme == 1) document.getElementById('pagination').classList.add('pagination-green-mode')
 	}
@@ -150,17 +152,12 @@ function saveSetting(justSave) {
 				break
 		}
 
-		for (let i = 0; i < browser_theme_var.length; i++) {
-			style.setProperty(browser_theme_var[i], browser_theme_themes[setting.browser_theme][i])
+		for (let i = 0; i < comic_panel_theme_var.length; i++) {
+			style.setProperty(comic_panel_theme_var[i], comic_panel_theme_themes[setting.comic_panel_theme][i])
 		}
 
-		switch (setting.comic_panel_theme) {
-			case 0:
-				comicPanel.classList.remove('comic-panel-darkmode')
-				break
-			case 1:
-				comicPanel.classList.add('comic-panel-darkmode')
-				break
+		for (let i = 0; i < browser_theme_var.length; i++) {
+			style.setProperty(browser_theme_var[i], browser_theme_themes[setting.browser_theme][i])
 		}
 
 		switch (setting.pagination_theme) {
