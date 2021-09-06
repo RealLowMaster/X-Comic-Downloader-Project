@@ -6,6 +6,7 @@ function changeWaitingPreview(fps) {
 function setLuanchTimeSettings(reloadSettingPanel) {
 	const s_comic_panel_theme = document.getElementById('s_comic_panel_theme')
 	const s_offline_theme = document.getElementById('s_offline_theme')
+	const s_browser_theme = document.getElementById('s_browser_theme')
 	const s_waiting_quality = document.getElementById('s_waiting_quality')
 	const s_pagination_theme = document.getElementById('s_pagination_theme')
 	const s_img_graphic = document.getElementById('s_img_graphic')
@@ -14,12 +15,14 @@ function setLuanchTimeSettings(reloadSettingPanel) {
 
 	s_comic_panel_theme.setAttribute('value', setting.comic_panel_theme)
 	s_offline_theme.setAttribute('value', setting.offline_theme)	
+	s_browser_theme.setAttribute('value', setting.browser_theme)	
 	s_pagination_theme.setAttribute('value', setting.pagination_theme)
 	s_img_graphic.setAttribute('value', setting.img_graphic)
 	s_search_speed.setAttribute('value', setting.search_speed)
 
 	s_comic_panel_theme.getElementsByTagName('div')[0].textContent = s_comic_panel_theme.getElementsByTagName('div')[1].querySelector(`[onclick="select(this, ${setting.comic_panel_theme})"]`).textContent
 	s_offline_theme.getElementsByTagName('div')[0].textContent = s_offline_theme.getElementsByTagName('div')[1].querySelector(`[onclick="select(this, ${setting.offline_theme})"]`).textContent
+	s_browser_theme.getElementsByTagName('div')[0].textContent = s_browser_theme.getElementsByTagName('div')[1].querySelector(`[onclick="select(this, ${setting.browser_theme})"]`).textContent
 	s_pagination_theme.getElementsByTagName('div')[0].textContent = s_pagination_theme.getElementsByTagName('div')[1].querySelector(`[onclick="select(this, ${setting.pagination_theme})"]`).textContent
 	s_img_graphic.getElementsByTagName('div')[0].textContent = s_img_graphic.getElementsByTagName('div')[1].querySelector(`[onclick="select(this, ${setting.img_graphic})"]`).textContent
 	s_search_speed.getElementsByTagName('div')[0].textContent = s_search_speed.getElementsByTagName('div')[1].querySelector(`[onclick="select(this, ${setting.search_speed})"]`).textContent
@@ -52,6 +55,7 @@ function setLuanchTimeSettings(reloadSettingPanel) {
 	s_file_location_label.setAttribute('title', setting.file_location)
 
 	if (reloadSettingPanel != true) {
+		const style = document.documentElement.style
 		if (setting.hover_downloader == false) document.getElementById('downloader').setAttribute('fixed', true)
 
 		if (setting.offline_theme == 1) {
@@ -59,6 +63,10 @@ function setLuanchTimeSettings(reloadSettingPanel) {
 			document.getElementById('site-menu').classList.add('action-menu-darkmode')
 			document.getElementById('top-menu').classList.add('top-menu-darkmode')
 			document.getElementById('main-body').classList.add('main-body-darkmode')
+		}
+
+		for (let i = 0; i < browser_theme_var.length; i++) {
+			style.setProperty(browser_theme_var[i], browser_theme_themes[setting.browser_theme][i])
 		}
 
 		if (setting.comic_panel_theme == 1) comicPanel.classList.add('comic-panel-darkmode')
@@ -70,6 +78,7 @@ function setLuanchTimeSettings(reloadSettingPanel) {
 function saveSetting(justSave) {
 	let reload = false
 	if (justSave != true) {
+		const style = document.documentElement.style
 		const waiting_quality = Number(document.getElementById('s_waiting_quality').getAttribute('value'))
 		const lazy_loading = document.getElementById('s_lazy_loading').checked
 		const show_unoptimize = document.getElementById('s_show_unoptimize').checked
@@ -92,6 +101,7 @@ function saveSetting(justSave) {
 
 		setting.comic_panel_theme = Number(document.getElementById('s_comic_panel_theme').getAttribute('value'))
 		setting.offline_theme = Number(document.getElementById('s_offline_theme').getAttribute('value'))
+		setting.browser_theme = Number(document.getElementById('s_browser_theme').getAttribute('value'))
 		setting.pagination_theme = Number(document.getElementById('s_pagination_theme').getAttribute('value'))
 		setting.img_graphic = Number(document.getElementById('s_img_graphic').getAttribute('value'))
 		setting.search_speed = Number(document.getElementById('s_search_speed').getAttribute('value'))
@@ -122,7 +132,7 @@ function saveSetting(justSave) {
 			setting.file_location = file_location
 		}
 
-		if (setting.hover_downloader == false) document.getElementById('downloader').setAttribute('fixed')
+		if (setting.hover_downloader == false) document.getElementById('downloader').setAttribute('fixed', true)
 		else document.getElementById('downloader').removeAttribute('fixed')
 
 		switch (setting.offline_theme) {
@@ -138,6 +148,10 @@ function saveSetting(justSave) {
 				document.getElementById('top-menu').classList.add('top-menu-darkmode')
 				document.getElementById('main-body').classList.add('main-body-darkmode')
 				break
+		}
+
+		for (let i = 0; i < browser_theme_var.length; i++) {
+			style.setProperty(browser_theme_var[i], browser_theme_themes[setting.browser_theme][i])
 		}
 
 		switch (setting.comic_panel_theme) {

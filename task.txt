@@ -80,6 +80,7 @@ Added To Version {
 	Add More Optimization to Comic Thumbs
 	Add Show UnOptimize Comics Option To Setting for find which comic you didn't optimize
 	Make Thumbing Work Better
+	Add DarkTheme To Browser
 	Add Shortcut Keys
 	Add ReMake Thumb Button
 	Add Recent Tabs To Browser
@@ -94,7 +95,6 @@ Did {
 
 Tasks => {
 	Add Slider System To Repaired Image
-	Add Theme To Browser
 	Add Reset Setting Button
 	Add First Time Runtime showing new release whats happend
 	Make Tab Doplicator inset after tab

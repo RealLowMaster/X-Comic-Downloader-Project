@@ -245,7 +245,7 @@ function activateTab(who) {
 	if (activeTabIndex != null) {
 		const passTab = tabsContainer.querySelector(`[pi="${activeTabComicId}"]`) || null
 		if (passTab != null) {
-			passTab.setAttribute('active', '')
+			passTab.removeAttribute('active')
 			tabs[activeTabIndex].sc = pageContainer.scrollTop
 			document.getElementById(activeTabComicId).style.display = 'none'
 		}

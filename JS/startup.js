@@ -104,4 +104,8 @@ document.addEventListener("DOMContentLoaded", () => {
 			})
 		})
 	})
+
+
+	
+	openXlecxBrowser() 
 })

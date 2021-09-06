@@ -8,6 +8,7 @@ const defaultSetting = {
 	"comic_panel_theme": 1,
 	"pagination_theme": 0,
 	"offline_theme": 1,
+	"browser_theme": 1,
 	"waiting_quality": 1,
 	"hover_downloader": false,
 	"max_per_page": 18,
@@ -24,7 +25,6 @@ const defaultSetting = {
 	"file_location": null,
 	"developer_mode": false
 }
-
 const comicPanel = document.getElementById('comic-panel')
 const pageContainer = document.getElementById('browser-pages')
 const imageLazyLoadingOptions = {
@@ -77,7 +77,6 @@ var setting, tabs = [], downloadingList = [], thisSite, lastComicId, lastHaveId,
 	83 // S = Open Slider
 	82 // R = Reload
 */
-
 
 // Set Windows Closing Event
 function closeApp() {
@@ -524,14 +523,17 @@ function CreateDatabase() {
 	db.have = new nedb({ filename: dirDB+'/have', autoload: true })
 }
 
-function reload() { remote.getCurrentWebContents().reload() }
-
 function CheckSettings() {
 	if (typeof(setting.comic_panel_theme) != 'number' || setting.comic_panel_theme < 0) setting.comic_panel_theme = defaultSetting.comic_panel_theme
 	if (setting.comic_panel_theme > 1) setting.comic_panel_theme = 1
 	if (typeof(setting.pagination_theme) != 'number' || setting.pagination_theme < 0) setting.pagination_theme = defaultSetting.pagination_theme
 	if (setting.pagination_theme > 1) setting.pagination_theme = 1
 	if (typeof(setting.offline_theme) != 'number') setting.offline_theme = defaultSetting.offline_theme
+	if (setting.offline_theme < 0) setting.offline_theme = 0
+	if (setting.offline_theme > 1) setting.offline_theme = 1
+	if (typeof(setting.browser_theme) != 'number') setting.browser_theme = defaultSetting.browser_theme
+	if (setting.browser_theme < 0) setting.browser_theme = 0
+	if (setting.browser_theme > 1) setting.browser_theme = 1
 	if (typeof(setting.waiting_quality) != 'number') setting.waiting_quality = defaultSetting.waiting_quality
 	if (setting.waiting_quality > 2) setting.waiting_quality = 2
 	else if (setting.waiting_quality < 0) setting.waiting_quality = 0
