@@ -1,6 +1,14 @@
 :root {
 	font-family: Tahoma, monospace, sans-serif;
 	font-size: 16px;
+
+	--pgnt-btn-bgc: #EBF5FB;
+	--pgnt-btn-color: #222;
+	--pgnt-btn-bd-color: #D6EAF8;
+	--pgnt-btn-hover-bgc: #3498DB;
+	--pgnt-btn-hover-color: #fff;
+	--pgnt-btn-hover-bd-color: #2E86C1;
+
 	--cp-bgc: #fff;
 	--cp-btns-bgc: transparent;
 	--cp-btns-color: #3334;
@@ -23,37 +31,6 @@
 	--cp-img-repair-btn-color: #222;
 	--cp-img-repair-btn-hover-bgc: #d20068;
 	--cp-img-repair-btn-hover-color: #fff;
-
-	/*
-	#333
-	transparent
-	#eee6
-	#eee6
-	#fff
-	#222
-	#222
-	#282828
-	#fff
-	#fff
-	#222
-	#ccc
-	#222
-	#d20068
-	#282828
-	#333
-	#282828
-	#ff7b00
-	#eee
-	#222
-	#d20068
-	#fff
-	*/
-
-
-
-
-
-
 
 	--br-tab-con-bgc: #fff;
 	--br-tab-bgc: #eee;
@@ -1513,63 +1490,48 @@ input::-webkit-input-placeholder { user-select: none }
 }
 
 /* Pagination */
-.pagination-rounded {
+#pagination {
 	display: block;
 	padding: 10px;
 	text-align: center;
 }
 
-.pagination-rounded > div {
+#pagination > div {
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	padding: 10px;
 }
 
-.pagination-rounded > div > button {
+#pagination > div > button {
 	display: inline-block;
 	height: 40px;
 	padding: 0 9px;
 	margin: 0 3px;
-	background-color: #EBF5FB;
-	border: 1px solid #D6EAF8;
-	color: #222;
+	background-color: var(--pgnt-btn-bgc);
+	color: var(--pgnt-btn-color);
+	border: 1px solid var(--pgnt-btn-bd-color);
 	font-size: 15px;
 	text-align: center;
 	cursor: pointer;
 }
 
-.pagination-rounded > div > button:not(:disabled) {
+#pagination > div > button:not(:disabled) {
 	transition: transform .2s, background-color .2s, color .2s, border-color .2s;
 }
 
-.pagination-rounded > div > button:not(:disabled):hover {
+#pagination > div > button:not(:disabled):hover {
 	transform: scale(1.1);
-	background-color: #3498DB;
-	color: #fff;
-	border-color: #2E86C1;
+	background-color: var(--pgnt-btn-hover-bgc);
+	color: var(--pgnt-btn-hover-color);
+	border-color: var(--pgnt-btn-hover-bd-color);
 }
 
-.pagination-rounded > div > button:disabled {
-	background-color: #3498DB;
-	color: #fff;
-	border-color: #2E86C1;
+#pagination > div > button:disabled {
+	background-color: var(--pgnt-btn-hover-bgc);
+	color: var(--pgnt-btn-hover-color);
+	border-color: var(--pgnt-btn-hover-bd-color);
 	cursor: default;
-}
-
-.pagination-green-mode > div > button {
-	background-color: #E9F7EF;
-	border-color: #D4EFDF;
-}
-
-.pagination-green-mode > div > button:not(:disabled):hover {
-	background-color: #229954;
-	border-color: #1E8449;
-}
-
-.pagination-green-mode > div > button:disabled {
-	background-color: #229954;
-	border-color: #1E8449;
 }
 
 /* Jump Page < */

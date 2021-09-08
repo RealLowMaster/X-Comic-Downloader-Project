@@ -3,9 +3,25 @@ const offline_theme_themes = [
 	[],[]
 ]
 
-const pagination_theme_var = []
+const pagination_theme_var = ['--pgnt-btn-bgc','--pgnt-btn-color','--pgnt-btn-bd-color','--pgnt-btn-hover-bgc','--pgnt-btn-hover-color','--pgnt-btn-hover-bd-color']
 const pagination_theme_themes = [
-	[],[]
+	[
+		'#EBF5FB',
+		'#222',
+		'#D6EAF8',
+		'#3498DB',
+		'#fff',
+		'#2E86C1'
+	],
+	[
+
+		'#E9F7EF',
+		'#222',
+		'#D4EFDF',
+		'#229954',
+		'#fff',
+		'#1E8449'
+	]
 ]
 
 

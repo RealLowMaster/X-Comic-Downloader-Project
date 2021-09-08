@@ -73,7 +73,9 @@ function setLuanchTimeSettings(reloadSettingPanel) {
 			style.setProperty(browser_theme_var[i], browser_theme_themes[setting.browser_theme][i])
 		}
 
-		if (setting.pagination_theme == 1) document.getElementById('pagination').classList.add('pagination-green-mode')
+		for (let i = 0; i < pagination_theme_var.length; i++) {
+			style.setProperty(pagination_theme_var[i], pagination_theme_themes[setting.pagination_theme][i])
+		}
 	}
 }
 
@@ -160,13 +162,8 @@ function saveSetting(justSave) {
 			style.setProperty(browser_theme_var[i], browser_theme_themes[setting.browser_theme][i])
 		}
 
-		switch (setting.pagination_theme) {
-			case 0:
-				document.getElementById('pagination').classList.remove('pagination-green-mode')
-				break
-			case 1:
-				document.getElementById('pagination').classList.add('pagination-green-mode')
-				break
+		for (let i = 0; i < pagination_theme_var.length; i++) {
+			style.setProperty(pagination_theme_var[i], pagination_theme_themes[setting.pagination_theme][i])
 		}
 
 		PopAlert('Setting Saved.')
