@@ -29,12 +29,12 @@
 	<script type="text/javascript" src="JS/sites/xlecx.js" defer></script>
 </head>
 <body>
-	<div class="main" id="main">
+	<div id="main">
 		<!-- Top Menu -->
 		<div>
 			<div class="top-menu" id="top-menu">
 				<div>
-					<button onclick="document.getElementById('site-menu').setAttribute('active', true);keydownEventIndex = 100">Sites</button>
+					<button onclick="openXlecxBrowser()">Browser</button>
 					<div class="menu-dropdown">
 						<button>Optimzation</button>
 						<div>
@@ -123,14 +123,6 @@
 		</div>
 	</div>
 
-	<!-- Sites Menu -->
-	<div class="action-menu" id="site-menu">
-		<div onclick="document.getElementById('site-menu').setAttribute('active', false);keydownEventIndex = 0"></div>
-		<div>
-			<button style="color:#d0d" onclick="openXlecxBrowser()">Xlecx</button>
-		</div>
-	</div>
-
 	<!-- Downloader -->
 	<div id="downloader"></div>
 
@@ -190,7 +182,7 @@
 	</div>
 
 	<!-- Setting -->
-	<div class="setting-panel" id="setting-panel">
+	<div id="setting-panel">
 
 		<br>
 

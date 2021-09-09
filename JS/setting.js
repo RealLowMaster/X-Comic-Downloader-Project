@@ -58,11 +58,8 @@ function setLuanchTimeSettings(reloadSettingPanel) {
 		const style = document.documentElement.style
 		if (setting.hover_downloader == false) document.getElementById('downloader').setAttribute('fixed', true)
 
-		if (setting.offline_theme == 1) {
-			document.getElementById('setting-panel').classList.add('setting-darkmode')
-			document.getElementById('site-menu').classList.add('action-menu-darkmode')
-			document.getElementById('top-menu').classList.add('top-menu-darkmode')
-			document.getElementById('main-body').classList.add('main-body-darkmode')
+		for (let i = 0; i < offline_theme_var.length; i++) {
+			style.setProperty(offline_theme_var[i], offline_theme_themes[setting.offline_theme][i])
 		}
 
 		for (let i = 0; i < comic_panel_theme_var.length; i++) {
@@ -139,19 +136,8 @@ function saveSetting(justSave) {
 		if (setting.hover_downloader == false) document.getElementById('downloader').setAttribute('fixed', true)
 		else document.getElementById('downloader').removeAttribute('fixed')
 
-		switch (setting.offline_theme) {
-			case 0:
-				document.getElementById('setting-panel').classList.remove('setting-darkmode')
-				document.getElementById('site-menu').classList.remove('action-menu-darkmode')
-				document.getElementById('top-menu').classList.remove('top-menu-darkmode')
-				document.getElementById('main-body').classList.remove('main-body-darkmode')
-				break
-			case 1:
-				document.getElementById('setting-panel').classList.add('setting-darkmode')
-				document.getElementById('site-menu').classList.add('action-menu-darkmode')
-				document.getElementById('top-menu').classList.add('top-menu-darkmode')
-				document.getElementById('main-body').classList.add('main-body-darkmode')
-				break
+		for (let i = 0; i < offline_theme_var.length; i++) {
+			style.setProperty(offline_theme_var[i], offline_theme_themes[setting.offline_theme][i])
 		}
 
 		for (let i = 0; i < comic_panel_theme_var.length; i++) {

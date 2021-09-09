@@ -1,26 +1,23 @@
-const offline_theme_var = []
+
+// Offline Browsing Theme
+const offline_theme_var = ['--obr-tmenu-bgc','--obr-con-bgc','--obr-tmenu-btn-bgc','--obr-tmenu-btn-color','--obr-tmenu-btn-bd-color','--obr-tmenu-btn-hover-bgc','--obr-tmenu-btn-hover-color','--obr-tmenu-btn-hover-bd-color','--obr-tmenu-s-input-bgc','--obr-tmenu-s-input-color','--obr-tmenu-s-input-bd-color','--obr-tmenu-s-input-focus-bd-color','--obr-tmenu-jp-btn-bgc','--obr-tmenu-jp-btn-color','--obr-tmenu-jp-btn-bd-color','--obr-tmenu-jp-btn-hover-bgc','--obr-tmenu-jp-btn-hover-color','--obr-tmenu-jp-btn-hover-bd-color','--obr-comic-bgc','--obr-comic-uo-bd-color','--obr-comic-uo-shadow','--obr-comic-num-bgc','--obr-comic-num-color','--obr-comic-text-bgc','--obr-comic-text-color','--obr-comic-hover-bgc','--obr-comic-counter-color','--st-bgc','--st-color','--st-rtitle-bgc','--st-rtitle-color','--st-rselect-bgc','--st-rselect-bd-color','--st-rselect-of-bgc','--st-rselect-of-bd-color','--st-rselect-of-btn-bgc','--st-rselect-of-btn-color','--st-rselect-of-btn-hover-bgc','--st-rselect-of-btn-hover-color','--st-rselect-of-btn-sl-bgc','--st-rselect-of-btn-sl-color','--st-rselect-aw-bgc','--st-rselect-aw-color','--st-rselect-aw-hover-bgc','--st-rselect-aw-hover-color','--st-rinput-bgc','--st-rinput-color','--st-rinput-bd-color','--st-rinput-hover-bd-color','--st-rhelper-color','--st-rfile-bgc','--st-rfile-color','--st-rfile-hover-bgc','--st-rfile-hover-color','--st-cselect-bgc','--st-cselect-bd-color','--st-cselect-btn-bgc','--st-cselect-btn-color','--st-cselect-btn-shadow','--st-cselect-btn-hover-bgc','--st-cselect-btn-hover-color','--st-cselect-btn-hover-shadow','--st-cselect-btn-at-bgc','--st-cselect-btn-at-color','--st-cselect-btn-at-shadow']
 const offline_theme_themes = [
-	[],[]
+	[
+		'#ddd','#fff','#eee','#000','transparent','#eee','#000','#0af','#fff','#222','#eee','#3498DB','#5DADE2','#fff','#3498DB','#3498DB','#fff','#2488cb','#111','#f00','0 0 6px 0 rgba(222,50,50.4)','#222b','#fff','#666','#fff','#025ba7','#111','#fff','#333','#eee','#222','#fff','#eee','#fff','#eee','#fff','#111','#eee','#111','#666','#fff','#eee','#222','#0af','#fff','#fff','#111','#eee','#0af','#888','#3498DB','#fff','#2E86C1','#fff','#eeeb','#dddc','#fff','#222','0 0 10px 0 rgba(150,150,150,.2)','#eee','#222','0 4px 6px 0 rgba(120,120,120,.3)','#229954','#fff','0 0 10px 0 rgba(30,132,73,.5)',
+	],
+	[
+		'#333','#222','#444','#fff','#111','#1e1e1e','#fff','#0af','#222','#fff','#111','#3498DB','#5DADE2','#fff','#3498DB','#3498DB','#fff','#2488cb','#333','#009657','0 0 12px 0 rgb(0,150,87,.5)','#222b','#fff','#666','#fff','#025ba7','#fff','#333','#eee','#444','#eee','#444','#555','#444','#777','#333','#fff','#222','#fff','#666','#fff','#222','#eee','#0af','#fff','#444','#ee','#555','#0af','#888','#3498DB','#fff','#2E86C1','#fff','#222b','#111c','#fff','#222','0 0 10px 0 rgba(150,150,150,.2)','#eee','#222','0 4px 6px 0 rgba(120,120,120,.3)','#229954','#fff','0 0 10px 0 rgba(30,132,73,.5)',
+	]
 ]
 
+// Pagination Themes
 const pagination_theme_var = ['--pgnt-btn-bgc','--pgnt-btn-color','--pgnt-btn-bd-color','--pgnt-btn-hover-bgc','--pgnt-btn-hover-color','--pgnt-btn-hover-bd-color']
 const pagination_theme_themes = [
 	[
-		'#EBF5FB',
-		'#222',
-		'#D6EAF8',
-		'#3498DB',
-		'#fff',
-		'#2E86C1'
+		'#EBF5FB','#222','#D6EAF8','#3498DB','#fff','#2E86C1'
 	],
 	[
-
-		'#E9F7EF',
-		'#222',
-		'#D4EFDF',
-		'#229954',
-		'#fff',
-		'#1E8449'
+		'#E9F7EF','#222','#D4EFDF','#229954','#fff','#1E8449'
 	]
 ]
 
