@@ -58,7 +58,7 @@ const browserPasteMenu = document.getElementById('browser-paste-menu')
 const bjp = document.getElementById('browser-jump-page-container')
 const bjp_i = document.getElementById('bjp-i')
 const bjp_m_p = document.getElementById('bjp-m-p')
-let comicDeleting = false, downloadCounter = 0, needReload = true, wt_fps = 20, dirDB, dirUL, dirTmp, isOptimizing = false, browserLastTabs = [], tabsHistory = [], dirHistory = '', keydownEventIndex = 0
+let comicDeleting = false, downloadCounter = 0, needReload = true, wt_fps = 20, dirDB, dirUL, dirTmp, isOptimizing = false, browserLastTabs = [], tabsHistory = [], dirHistory = '', keydownEventIndex = 0, new_update
 var setting, tabs = [], downloadingList = [], thisSite, lastComicId, lastHaveId, lastGroupId, lastArtistId, lastParodyId, lastTagId, searchTimer, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = [], openedMenuTabIndex, copiedTab = null
 
 /*
@@ -263,13 +263,11 @@ function CheckUpdate(alert) {
 			}
 			return response.json()
 		}).then(json => {
-
 			if (update_number < json.update_number) {
-
+				new_update = json
 				const releaser = document.getElementById('new-release')
 				releaser.getElementsByTagName('p')[0].textContent = `New Release: v${json.version}`
 				releaser.style.display = 'block'
-
 			} else PopAlert("UpdateCheck: Your App is Up To Date.")
 		}).catch(err => {
 			if (err == 'TypeError: Failed to fetch') return
@@ -282,193 +280,193 @@ function UpdateApp() {
 	if (comicDeleting) { PopAlert("You can't Update App When you are Deleting a Comic.", "danger"); return }
 	if (isOptimizing) { PopAlert("You can't Update App When you are Optimzating.", "danger"); return }
 	if (downloadingList.length > 0) { PopAlert("You can't Update App When you are Downloading Comic.", "danger"); return }
+	if (window.navigator.onLine == false) { PopAlert('You are Offline.', 'danger'); return }
 	procressPanel.config({ miniLog: false, bgClose: false, closeBtn: false })
 	procressPanel.reset(3)
 	procressPanel.show('Checking Connection...')
 
-	fetch('https://api.jsonbin.io/b/612915922aa800361270d567/latest', { method: "GET" }).then(response => {
-		if (!response.ok) {
-			procressPanel.hide()
-			error('UPDATE::CHECKING::ERR::HTTP::'+response.status)
-			return
+	let node_update = false
+	for (let i = 0; i < new_update.node_modules_updates_number.length; i++) {
+		if (new_update.node_modules_updates_number > update_number) {
+			node_update = true
+			procressPanel.changePercent(5)
+			break
 		}
-		return response.json()
-	}).then(json => {
-		let node_update = false
-		for (let i = 0; i < json.node_modules_updates_number.length; i++) {
-			if (json.node_modules_updates_number > update_number) {
-				node_update = true
-				procressPanel.changePercent(5)
-				break
-			}
-		}
+	}
 
-		procressPanel.add('Connected To Update Data.')
-		procressPanel.forward('Downloading Update...')
-		const request = require('request')
-		const file = fs.createWriteStream(`${dirTmp}/update.zip`)
+	procressPanel.add('Connected To Update Data.')
+	procressPanel.forward('Downloading Update...')
+	const request = require('request')
+	const file = fs.createWriteStream(`${dirTmp}/update.zip`)
 
-		setTimeout(async () => {
-			await new Promise((resolve, reject) => {
-				let total_bytes = 0, total_size = '', received_bytes = 0
+	setTimeout(async () => {
+		await new Promise((resolve, reject) => {
+			let total_bytes = 0, total_size = '', received_bytes = 0
 
-				const stream = request({
-					method: 'GET',
-					followAllRedirects: true,
-					url: json.zip
+			const stream = request({
+				method: 'GET',
+				followAllRedirects: true,
+				url: new_update.zip
+			})
+
+			stream.on('error', err => {
+				file.close()
+				fs.unlinkSync(`${dirTmp}/update.zip`)
+				reject(err)
+			})
+
+			stream.on('response', response => {
+				total_bytes = parseInt(response.headers['content-length'])
+				total_size = formatBytes(total_bytes)
+			})
+
+			stream.on('data', chunk => {
+				received_bytes += chunk.length
+				procressPanel.text(`Downloading Update (${formatBytes(received_bytes)}/${total_size}) (${((received_bytes * 100) / total_bytes).toFixed()}%/100%)`)
+			})
+
+			stream.pipe(file).on('finish', async () => {
+				file.close()
+
+				const StreamZip = require('node-stream-zip')
+				const path = require('path')
+
+				if (node_update) {
+					procressPanel.add('Complete Downloading Update First Part.')
+					procressPanel.forward('Extracting First Part...')
+				} else {
+					procressPanel.add('Complete Downloading Update.')
+					procressPanel.forward('Updating...')
+				}
+
+				const zip = new StreamZip.async({ file: `${dirTmp}/update.zip` })
+
+				zip.on('error', err => {
+					error('UPDATE::UNZIPING::ERR::'+err)
 				})
 
-				stream.on('error', err => {
-					file.close()
-					fs.unlinkSync(`${dirTmp}/update.zip`)
-					reject(err)
-				})
+				await zip.entries().then(async entries => {
+					for (const entry of Object.values(entries)) {
+						if (entry.isDirectory) continue
+						const pathname = path.resolve(__dirname, entry.name)
 
-				stream.on('response', response => {
-					total_bytes = parseInt(response.headers['content-length'])
-					total_size = formatBytes(total_bytes)
-				})
-
-				stream.on('data', chunk => {
-					received_bytes += chunk.length
-					procressPanel.text(`Downloading Update (${formatBytes(received_bytes)}/${total_size}) (${((received_bytes * 100) / total_bytes).toFixed()}%/100%)`)
-				})
-
-				stream.pipe(file).on('finish', async () => {
-					file.close()
-
-					const StreamZip = require('node-stream-zip')
-					const path = require('path')
-
-					if (node_update) {
-						procressPanel.add('Complete Downloading Update First Part.')
-						procressPanel.forward('Extracting First Part...')
-					} else {
-						procressPanel.add('Complete Downloading Update.')
-						procressPanel.forward('Updating...')
+						try {
+							fs.mkdirSync(
+								path.dirname(pathname),
+								{ recursive: true }
+							)
+							await zip.extract(entry.name, pathname)
+						} catch(err) {
+							procressPanel.add('UnZip-ExtractFile-ERR:: '+err, 'danger')
+						}
 					}
 
-					const zip = new StreamZip.async({ file: `${dirTmp}/update.zip` })
+					zip.close()
+					fs.unlinkSync(`${dirTmp}/update.zip`)
 
-					zip.on('error', err => {
-						error('UPDATE::UNZIPING::ERR::'+err)
-					})
+					if (node_update) {
+						procressPanel.add('Extracte First Part Complete.')
+						procressPanel.forward('Downloading Update Secend Part...')
 
-					await zip.entries().then(async entries => {
-						for (const entry of Object.values(entries)) {
-							if (entry.isDirectory) continue
-							const pathname = path.resolve(__dirname, entry.name)
+						const secendFile = fs.createWriteStream(`${dirTmp}/node_update.zip`)
 
-							try {
-								fs.mkdirSync(
-									path.dirname(pathname),
-									{ recursive: true }
-								)
-								await zip.extract(entry.name, pathname)
-							} catch(err) {
-								procressPanel.add('UnZip-ExtractFile-ERR:: '+err, 'danger')
-							}
-						}
+						total_bytes = 0
+						total_size = ''
+						received_bytes = 0
 
-						zip.close()
-						fs.unlinkSync(`${dirTmp}/update.zip`)
+						const secendStream = request({
+							method: 'GET',
+							followAllRedirects: true,
+							url: new_update.latest_node_modules
+						})
 
-						if (node_update) {
-							procressPanel.add('Extracte First Part Complete.')
-							procressPanel.forward('Downloading Update Secend Part...')
+						secendStream.on('error', err => {
+							secendFile.close()
+							fs.unlinkSync(`${dirTmp}/node_update.zip`)
+							reject(err)
+						})
 
-							const secendFile = fs.createWriteStream(`${dirTmp}/node_update.zip`)
+						secendStream.on('response', response => {
+							total_bytes = parseInt(response.headers['content-length'])
+							total_size = formatBytes(total_bytes)
+						})
 
-							total_bytes = 0
-							total_size = ''
-							received_bytes = 0
+						secendStream.on('data', chunk => {
+							received_bytes += chunk.length
+							procressPanel.text(`Downloading Update (${formatBytes(received_bytes)}/${total_size}) (${((received_bytes * 100) / total_bytes).toFixed()}%/100%)`)
+						})
 
-							const secendStream = request({
-								method: 'GET',
-								followAllRedirects: true,
-								url: json.latest_node_modules
+						secendStream.pipe(secendFile).on('finish', async () => {
+							secendFile.close()
+
+							const secendZip = new StreamZip.async({ file: `${dirTmp}/node_update.zip` })
+
+							secendZip.on('error', err => {
+								error('UPDATE-2::UNZIPING::ERR::'+err)
 							})
 
-							secendStream.on('error', err => {
-								secendFile.close()
-								fs.unlinkSync(`${dirTmp}/node_update.zip`)
-								reject(err)
-							})
-
-							secendStream.on('response', response => {
-								total_bytes = parseInt(response.headers['content-length'])
-								total_size = formatBytes(total_bytes)
-							})
-
-							secendStream.on('data', chunk => {
-								received_bytes += chunk.length
-								procressPanel.text(`Downloading Update (${formatBytes(received_bytes)}/${total_size}) (${((received_bytes * 100) / total_bytes).toFixed()}%/100%)`)
-							})
-
-							secendStream.pipe(secendFile).on('finish', async () => {
-								secendFile.close()
-
-								const secendZip = new StreamZip.async({ file: `${dirTmp}/node_update.zip` })
-
-								secendZip.on('error', err => {
-									error('UPDATE-2::UNZIPING::ERR::'+err)
-								})
-
-								await secendZip.entries().then(async secendEntries => {
-									for (const entry of Object.values(secendEntries)) {
-										if (entry.isDirectory) continue
-										const pathname = path.resolve(__dirname, entry.name)
-			
-										try {
-											fs.mkdirSync(
-												path.dirname(pathname),
-												{ recursive: true }
-											)
-											await secendZip.extract(entry.name, pathname)
-										} catch(err) {
-											procressPanel.add('UnZip-2-ExtractFile-ERR:: '+err, 'danger')
-										}
+							await secendZip.entries().then(async secendEntries => {
+								for (const entry of Object.values(secendEntries)) {
+									if (entry.isDirectory) continue
+									const pathname = path.resolve(__dirname, entry.name)
+		
+									try {
+										fs.mkdirSync(
+											path.dirname(pathname),
+											{ recursive: true }
+										)
+										await secendZip.extract(entry.name, pathname)
+									} catch(err) {
+										procressPanel.add('UnZip-2-ExtractFile-ERR:: '+err, 'danger')
 									}
-			
-									secendZip.close()
-									fs.unlinkSync(`${dirTmp}/node_update.zip`)
+								}
+		
+								secendZip.close()
+								fs.unlinkSync(`${dirTmp}/node_update.zip`)
 
-									procressPanel.add('Update Complete.')
-									procressPanel.forward('Closing App...')
-									resolve()
-									setTimeout(() => {
-										ThisWindow.removeAllListeners()
-										remote.app.quit()
-									}, 250)
-								})
+								procressPanel.add('Update Complete.')
+								procressPanel.forward('Closing App...')
+								resolve()
+								setTimeout(() => {
+									ThisWindow.removeAllListeners()
+									remote.app.quit()
+								}, 250)
 							})
+						})
 
-						} else {
-							procressPanel.add('Update Complete.')
-							procressPanel.forward('Closing App...')
-							resolve()
-							setTimeout(() => {
-								ThisWindow.removeAllListeners()
-								remote.app.quit()
-							}, 250)
-						}
-					}).catch(err => {
-						procressPanel.add('UnZip-GettingEntries-ERR:: '+err, 'danger')
-					})
+					} else {
+						procressPanel.add('Update Complete.')
+						procressPanel.forward('Closing App...')
+						resolve()
+						setTimeout(() => {
+							ThisWindow.removeAllListeners()
+							remote.app.quit()
+						}, 250)
+					}
+				}).catch(err => {
+					procressPanel.add('UnZip-GettingEntries-ERR:: '+err, 'danger')
 				})
-			}).catch(err => {
-				error('UPDATE::DOWNLOAD::ERR::'+err)
 			})
-		}, 100)
-	}).catch(err => {
-		if (err == 'TypeError: Failed to fetch') err = 'Connection Timeout, Check Internet Connection.'
-		procressPanel.hide()
-		error(err)
-	})
+		}).catch(err => {
+			error('UPDATE::DOWNLOAD::ERR::'+err)
+		})
+	}, 100)
 }
 
 function UpdateNotes() {
+	document.getElementById('r-n-n-v').innerHTML = 'v'+new_update.version
+	let html = '<h2>Important Changes</h2>'
+	for (let i = 0; i < new_update.important_changes.length; i++) {
+		html += `<p>${new_update.important_changes[i]}</p>`
+	}
+	document.getElementById('r-n-n-n').innerHTML = html
+	document.getElementById('release-note').style.display = 'flex'
+}
 
+function closeReleaseNote() {
+	document.getElementById('release-note').style.display = 'none'
+	document.getElementById('r-n-n-v').innerHTML = ''
+	document.getElementById('r-n-n-n').innerHTML = ''
 }
 
 // Main Loading Stuff
@@ -564,62 +562,22 @@ function CheckSettings() {
 	}
 }
 
-function SetCookies() {
-	/*
-		{
-			url: xlecx.baseURL,
-			name: 'PHPSESSID',
-			value: 'odt4ml4hegs9kd8qi00gqurnj0'
-		},
-		
-	*/
-	const cookies = [
-		{
-			url: xlecx.baseURL,
-			name: 'dle_password',
-			value: 'a09bccb34d27b32f7f4f06cd9bf3e456'
-		},
-		{
-			url: xlecx.baseURL,
-			name: 'dle_user_id',
-			value: 147281
-		},
-		{
-			url: xlecx.baseURL,
-			name: 'dle_newpm',
-			value: 0
-		},
-		{
-			url: xlecx.baseURL,
-			name: '__cf_bm',
-			value: '692961b7ef09748a27857194543e7d3427038a02-1630258353-1800-AQ37bA6wUeZBw52IfR9hZmO28PyefbCOUdpbHgPZ2vuKj+LRW1QWmelkT0mn4fIyldGZz4XOouB5/yQoaUvSK5A='
-		},
-		{
-			url: 'http://yadro.ru/',
-			name: 'VID',
-			value: '2Lldvs3oXau91X2Vz-000HCu',
-			domain: '.yadro.ru'
+function CheckReleaseNote() {
+	if (fs.existsSync(__dirname+'/release-note.json')) {
+		new_update = MakeJsonString(fs.readFileSync(__dirname+'/release-note.json', {encoding:'utf8', flag:'r'}), true)
+		fs.unlinkSync(__dirname+'/release-note.json')
+
+
+		document.getElementById('r-n-n-v').innerHTML = 'v'+new_update.v
+		let html = '<h2>Important Changes</h2>'
+		for (let i = 0; i < new_update.s.length; i++) {
+			html += `<p>${new_update.s[i]}</p>`
 		}
-	]
-	
-	const cookieSession = remote.session.defaultSession.cookies
+		document.getElementById('r-n-n-n').innerHTML = html
+		document.getElementById('release-note').style.display = 'flex'
 
-
-	for (let i = 0; i < cookies.length; i++) {
-		cookieSession.set(cookies[i]).then(() => {
-			console.log(true)
-		}).catch(err => {
-			console.error(err)
-			PopAlert('SetCookies:: '+err, 'danger')
-		})
+		new_update = null
 	}
-
-	cookieSession.get({}).then(cookie => {
-		console.log(cookie)
-	}).catch(err => {
-		console.error(err)
-	})
-
 }
 
 // Make Tabs Draggable

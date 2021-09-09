@@ -97,6 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
 							loading.forward()
 							document.getElementById('main').style.display = 'grid'
 							loading.hide()
+							CheckReleaseNote()
 							if (setting.check_update) CheckUpdate()
 						})
 					})
