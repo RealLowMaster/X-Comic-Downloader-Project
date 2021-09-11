@@ -72,8 +72,8 @@ var setting, tabs = [], downloadingList = [], thisSite, lastComicId, lastHaveId,
 	70 // F = Search Tab
 	87 // W = Close Current Tab
 	36 // Home = Go To Home Site
-	107 // + = Zoom In,
-	109 // - = Zoom Out,
+	107 // + = Zoom In
+	109 // - = Zoom Out
 	83 // S = Open Slider
 	82 // R = Reload
 */

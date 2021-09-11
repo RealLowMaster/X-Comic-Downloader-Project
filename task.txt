@@ -65,10 +65,7 @@ DB => {
 
 Add Comic {
 	League Of Legends
-	Kono Soba
-	Tufos
-	nodame
-	redlight
+	Aroma Sensei
 }
 
 Added To Version {
@@ -94,6 +91,8 @@ Did {
 }
 
 Tasks => {
+	Add Save Shortcut To Setting
+	Make Other Panel display = 'none' When Opening Another one
 	Add Slider System To Repaired Image
 	Add Reset Setting Button
 	Add First Time Runtime showing new release whats happend
@@ -101,6 +100,9 @@ Tasks => {
 	Add Optimizing Image Option
 	Add Perfect Drag to Scroll To Slider Overview
 	Add Auto Scroll Down for Comic Panel
+
+	Add fs.existSync To Optimizing Images Insted of Repair
+	Change Repair System and Make it Work With fs
 
 	Mybe in v2  {
 		Add Bookmark || Favoriet Posts
@@ -110,6 +112,7 @@ Tasks => {
 	}
 	
 	New Abilities For v2 {
+		Add Repair Check To Comic
 		Add Ability To Zoom in Image in Sldier
 		Add Custom Theme Maker
 		Make Collection Basics

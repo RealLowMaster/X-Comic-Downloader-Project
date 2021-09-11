@@ -763,6 +763,7 @@ input::-webkit-input-placeholder { user-select: none }
 	position: fixed;
 	top: 85px;
 	left: 15px;
+	z-index: +1;
 }
 
 #b-h-p-o-btn > button {
