@@ -1,5 +1,11 @@
 let browserHistoryIndex = 0
 
+function openBrowser() {
+	keydownEventIndex = 3
+	document.getElementById('main').style.display = 'none'
+	openXlecxBrowser()
+}
+
 function closeBrowser() {
 	imageLazyLoadingOptions.root = comicPanel
 	imageLoadingObserver = new IntersectionObserver(ObserverFunction, imageLazyLoadingOptions)
@@ -7,6 +13,7 @@ function closeBrowser() {
 	keydownEventIndex = 0
 	reloadLoadingComics()
 	document.getElementById('browser').style.display = 'none'
+	document.getElementById('main').style.display = 'grid'
 	closeBrowserHistory()
 	thisSite = null
 	activeTabIndex = null

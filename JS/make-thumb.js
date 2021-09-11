@@ -7,6 +7,7 @@ function makeThumb(reCreate) {
 		if (err) { error(err); keydownEventIndex = 0; return }
 		loading.reset(0)
 		loading.show(`Checking Thumbs...`)
+		document.getElementById('main').style.display = 'none'
 
 		const scrollTop = document.getElementById('main-body').scrollTop
 		document.getElementById('comic-container').innerHTML = ''
@@ -53,11 +54,13 @@ function checkThumbs(doc, reCreate, scrollTop) {
 		createThumb(list, 0)
 	} else if (thumbErrLog.length == 0) {
 		loading.hide()
+		document.getElementById('main').style.display = 'grid'
 		keydownEventIndex = 0
 		PopAlert('All Thumbs Made Successfuly.')
 		reloadLoadingComics(scrollTop)
 	} else {
 		loading.hide()
+		document.getElementById('main').style.display = 'grid'
 		keydownEventIndex = 0
 		errorList(thumbErrLog)
 		reloadLoadingComics(scrollTop)
@@ -73,6 +76,7 @@ function createThumb(list, index, scrollTop) {
 			}, 100)
 		} else {
 			loading.hide()
+			document.getElementById('main').style.display = 'grid'
 			keydownEventIndex = 0
 			reloadLoadingComics(scrollTop)
 			if (thumbErrLog.length == 0) PopAlert('All Thumbs Made Successfuly.')
@@ -87,6 +91,7 @@ function createThumb(list, index, scrollTop) {
 			}, 100)
 		} else {
 			loading.hide()
+			document.getElementById('main').style.display = 'grid'
 			keydownEventIndex = 0
 			reloadLoadingComics(scrollTop)
 			if (thumbErrLog.length == 0) PopAlert('All Thumbs Made Successfuly.')

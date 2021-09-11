@@ -397,6 +397,7 @@ function openComic(id) {
 			comicPanel.style.display = 'block'
 			comicPanel.scrollTop = 0
 			keydownEventIndex = 1
+			document.getElementById('main').style.display = 'none'
 		})
 	}
 
@@ -407,6 +408,7 @@ function openComic(id) {
 function closeComicPanel() {
 	comicPanel.style.display = 'none'
 	keydownEventIndex = 0
+	document.getElementById('main').style.display = 'grid'
 
 	comicGroupsContainer.innerHTML = ''
 	comicArtistsContainer.innerHTML = ''

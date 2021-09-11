@@ -164,8 +164,17 @@ function saveSetting(justSave) {
 	keydownEventIndex = 0
 }
 
+function openSetting() {
+	keydownEventIndex = 100
+	const panel = document.getElementById('setting-panel')
+	panel.style.display = 'block'
+	panel.scrollTop = 0
+	document.getElementById('main').style.display = 'none'
+}
+
 function closeSetting() {
 	document.getElementById('setting-panel').style.display = 'none'
 	setLuanchTimeSettings(true)
 	keydownEventIndex = 0
+	document.getElementById('main').style.display = 'grid'
 }
