@@ -78,7 +78,8 @@ function setLuanchTimeSettings(reloadSettingPanel) {
 
 function saveSetting(justSave) {
 	let reload = false
-	if (justSave != true) {
+	if (justSave == false) {
+		keydownEventIndex = 100
 		const style = document.documentElement.style
 		const waiting_quality = Number(document.getElementById('s_waiting_quality').getAttribute('value'))
 		const lazy_loading = document.getElementById('s_lazy_loading').checked
@@ -159,13 +160,15 @@ function saveSetting(justSave) {
 	if (reload == true) {
 		if (downloadingList.length == 0) ThisWindow.reload()
 		else PopAlert('You cannot Change Saving Location when downloading.', 'danger')
+	} else {
+		keydownEventIndex = 0
+		document.getElementById('setting-panel').style.display = 'none'
+		document.getElementById('main').style.display = 'grid'
 	}
-	else document.getElementById('setting-panel').style.display = 'none'
-	keydownEventIndex = 0
 }
 
 function openSetting() {
-	keydownEventIndex = 100
+	keydownEventIndex = 5
 	const panel = document.getElementById('setting-panel')
 	panel.style.display = 'block'
 	panel.scrollTop = 0
@@ -177,4 +180,9 @@ function closeSetting() {
 	setLuanchTimeSettings(true)
 	keydownEventIndex = 0
 	document.getElementById('main').style.display = 'grid'
+}
+
+function SettingKeyEvents(ctrl,shift,key) {
+	if (ctrl && !shift && key == 83) saveSetting(false)
+	else if (ctrl && !shift && key == 87) closeSetting()
 }

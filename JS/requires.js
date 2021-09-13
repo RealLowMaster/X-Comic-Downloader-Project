@@ -46,7 +46,8 @@ const keydownEvents = [
 	'OfflineComicKeyEvents({ctrl},{shift},{key})',
 	'SliderKeyEvents({ctrl},{shift},{key})',
 	'BrowserKeyEvents({ctrl},{shift},{key})',
-	'BrowserHistoryKeyEvents({ctrl},{shift},{key})'
+	'BrowserHistoryKeyEvents({ctrl},{shift},{key})',
+	'SettingKeyEvents({ctrl},{shift},{key})'
 ]
 const ThisWindow = remote.getCurrentWindow(), loading = new Loading(14), db = {}, procressPanel = new ProcressPanel(0), update_number = 0
 const comicGroupsContainer = document.getElementById('c-p-g')
