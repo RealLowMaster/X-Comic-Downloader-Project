@@ -144,6 +144,15 @@
 	--br-h-con-menu-btn-hover-bgc: #eee;
 	--br-h-con-menu-btn-color: #111;
 	--br-h-con-color: #222;
+
+	--br-h-bm-bgc: #fff;
+	--br-h-bm-bd-color: #eee;
+	--br-h-bm-btn-bgc: transparent;
+	--br-h-bm-btn-color: #2488cb;
+	--br-h-bm-btn-bd-color: #ddd;
+	--br-h-bm-btn-hover-bgc: #2488cb10;
+	--br-h-bm-btn-hover-color: #2488cb;
+	--br-h-bm-btn-hover-bd-color: #ddd;
 }
 
 ::-webkit-scrollbar {
@@ -654,7 +663,7 @@ input::-webkit-input-placeholder { user-select: none }
 	padding: 20px 0;
 	overflow-y: auto;
 	position: absolute;
-	bottom: 0;
+	top: var(--br-h-panel-top);
 	left: 0;
 	z-index: +1;
 }
@@ -841,9 +850,9 @@ input::-webkit-input-placeholder { user-select: none }
 #b-h-p-m-c {
 	display: none;
 	width: 100%;
-	height: calc(100% - 75px);
+	height: calc(100% - var(--br-h-panel-top));
 	position: fixed;
-	top: 75px;
+	top: var(--br-h-panel-top);
 	left: 0;
 }
 
@@ -877,6 +886,48 @@ input::-webkit-input-placeholder { user-select: none }
 
 #b-h-p-m > button:hover {
 	background-color: var(--br-h-con-menu-btn-hover-bgc);
+}
+
+#browser-history-panel[selection] {
+	height: calc(100% - var(--br-h-panel-top) - 50px);
+}
+
+#b-h-p-s-m {
+	display: none;
+	align-items: center;
+	width: 100%;
+	height: 50px;
+	padding-left: 25px;
+	background-color: var(--br-h-bm-bgc);
+	border-top: 1px solid var(--br-h-bm-bd-color);
+	position: fixed;
+	bottom: 0;
+	left: 0;
+}
+
+#b-h-p-s-m > button {
+	display: inline-block;
+	margin: 0 5px;
+	padding: 10px;
+	background-color: var(--br-h-bm-btn-bgc);
+	color: var(--br-h-bm-btn-color);
+	border: 1px solid var(--br-h-bm-btn-bd-color);
+	border-radius: 3px;
+	font-size: 14px;
+	font-weight: 600;
+	box-shadow: 0 0 1px 0 rgba(0,0,0,.6);
+	cursor: pointer;
+	transition: background-color .1s, color .1s, border-color .1s;
+}
+
+#b-h-p-s-m > button:hover {
+	background-color: var(--br-h-bm-btn-hover-bgc);
+	color: var(--br-h-bm-btn-hover-color);
+	border-color: var(--br-h-bm-btn-hover-bd-color);
+}
+
+#browser-history-panel[selection] > #b-h-p-s-m {
+	display: flex;
 }
 
 /* Spin */

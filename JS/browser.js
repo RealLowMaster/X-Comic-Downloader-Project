@@ -1,4 +1,4 @@
-let browserHistoryIndex = 0
+let browserHistoryIndex = 0, br_history_selected_inputs = [], br_history_selected_indexs = []
 
 function openBrowser() {
 	keydownEventIndex = 3
@@ -146,7 +146,7 @@ function openBrowserHistoryPanel(scoll=false) {
 				if (passHistory.length > 0) {
 					html += `<div><div>${passYear}-${passMonth}-${passDay}</div><div>`
 					for (let j = 0; j < passHistory.length; j++) {
-						html += `<div><input type="checkbox"><img src="Image/sites/${sites[passHistory[j][0][1][3]][0]}"><p onclick="openBrowserHistory(${passHistory[j][1]})">${passHistory[j][0][0]}</p><button type="button" onclick="openHistoryRowOption(${passHistory[j][1]})">...</button></div>`
+						html += `<div><input type="checkbox" h="${passHistory[j][1]}" onclick="browserHistorySelect(this)"><img src="Image/sites/${sites[passHistory[j][0][1][3]][0]}"><p onclick="openBrowserHistory(${passHistory[j][1]})">${passHistory[j][0][0]}</p><button type="button" onclick="openHistoryRowOption(${passHistory[j][1]})">...</button></div>`
 					}
 					html += '</div></div>'
 				}
@@ -158,7 +158,7 @@ function openBrowserHistoryPanel(scoll=false) {
 				if (i == 0 && saveCheck) {
 					html += `<div><div>${passYear}-${passMonth}-${passDay}</div><div>`
 					for (let j = 0; j < passHistory.length; j++) {
-						html += `<div><input type="checkbox"><img src="Image/sites/${sites[passHistory[j][0][1][3]][0]}"><p onclick="openBrowserHistory(${passHistory[j][1]})">${passHistory[j][0][0]}</p><button type="button" onclick="openHistoryRowOption(${passHistory[j][1]})">...</button></div>`
+						html += `<div><input type="checkbox" h="${passHistory[j][1]}" onclick="browserHistorySelect(this)"><img src="Image/sites/${sites[passHistory[j][0][1][3]][0]}"><p onclick="openBrowserHistory(${passHistory[j][1]})">${passHistory[j][0][0]}</p><button type="button" onclick="openHistoryRowOption(${passHistory[j][1]})">...</button></div>`
 					}
 					html += '</div></div>'
 				}
@@ -178,11 +178,64 @@ function openBrowserHistoryPanel(scoll=false) {
 
 function closeBrowserHistory() {
 	keydownEventIndex = 3
+	br_history_selected_inputs = []
+	br_history_selected_indexs = []
 	const panel = document.getElementById('browser-history-panel')
 	panel.style.display = 'none'
 	document.getElementById('b-h-p-h-c').innerHTML = ''
 	panel.removeAttribute('active')
 	document.getElementById('b-h-p-m-c').style.display = 'none'
+	document.getElementById('browser-history-panel').removeAttribute('selection')
+}
+
+function browserHistorySelect(who) {
+	const index = Number(who.getAttribute('h'))
+	if (who.checked) {
+		if (br_history_selected_indexs.length == 0) document.getElementById('browser-history-panel').setAttribute('selection', true)
+		br_history_selected_inputs.push(who)
+		br_history_selected_indexs.push(index)
+	} else {
+		const rowIndex = br_history_selected_indexs.indexOf(index)
+		br_history_selected_inputs.splice(rowIndex, 1)
+		br_history_selected_indexs.splice(rowIndex, 1)
+		if (br_history_selected_indexs.length == 0) document.getElementById('browser-history-panel').removeAttribute('selection')
+	}
+}
+
+function unSelectAllBrowserHistory() {
+	for (let i = 0; i < br_history_selected_inputs.length; i++) {
+		br_history_selected_inputs[i].checked = false
+	}
+	br_history_selected_inputs = []
+	br_history_selected_indexs = []
+	document.getElementById('browser-history-panel').removeAttribute('selection')
+}
+
+function removeSelectedBrowserHistories() {
+	for (let i = 0; i < br_history_selected_indexs.length; i++) {
+		tabsHistory.splice(br_history_selected_indexs[i], 1)
+	}
+	br_history_selected_inputs = []
+	br_history_selected_indexs = []
+	document.getElementById('browser-history-panel').removeAttribute('selection')
+	openBrowserHistoryPanel(true)
+	setTimeout(() => {
+		saveHistory()
+	}, 100)
+}
+
+function askForRemovingSelectedBrHistories() {
+	errorSelector('Are you sure about it ?', [
+		[
+			"Yes",
+			"btn btn-primary m-2",
+			"removeSelectedBrowserHistories();this.parentElement.parentElement.remove()"
+		],
+		[
+			"No",
+			"btn btn-danger m-2"
+		]
+	])
 }
 
 function openBrowserHistory(index) {
@@ -210,6 +263,11 @@ function openHistoryRowOption(index) {
 function removeBrowserHistoryRow() {
 	tabsHistory.splice(browserHistoryIndex, 1)
 	openBrowserHistoryPanel(true)
+	if (br_history_selected_indexs.length > 0) {
+		document.getElementById('browser-history-panel').removeAttribute('selection')
+		br_history_selected_inputs = []
+		br_history_selected_indexs = []
+	}
 	setTimeout(() => {
 		saveHistory()
 	}, 100)

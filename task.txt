@@ -91,7 +91,6 @@ Did {
 }
 
 Tasks => {
-	Complete Browser
 	Add Slider System To Repaired Image
 	Add Reset Setting Button
 	Add First Time Runtime showing new release whats happend
