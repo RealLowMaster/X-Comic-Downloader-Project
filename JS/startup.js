@@ -13,6 +13,55 @@ function test() {
 	
 }
 
+function AfterDatabaseDoneOnStartup() {
+	loading.forward('Set Settings...')
+	setLuanchTimeSettings(false)
+	loading.forward('Load Comics...')
+	loadComics()
+	loading.forward()
+	document.getElementById('main').style.display = 'grid'
+	loading.hide()
+	CheckReleaseNote()
+	if (setting.check_update) CheckUpdate()
+}
+
+function makeSubFolder(sfComicsDoc, sfLength, index) {
+	const image = sfComicsDoc[index].i, imageCount = sfComicsDoc[index].c, formats = sfComicsDoc[index].f
+	const subFolder = `${dirUL}/${sfComicsDoc[index]._id}${image}`
+	if (!fs.existsSync(subFolder)) fs.mkdirSync(subFolder)
+
+	let lastIndex = formats[0][1], thisForamat = formats[0][2], src = '', formatIndex = 0
+	for (let i = 0; i < imageCount; i++) {
+		if (i <= lastIndex) {
+			src = `/${image}-${i}.${thisForamat}`
+			if (fs.existsSync(dirUL+src)) {
+				fs.renameSync(dirUL+src, subFolder+src)
+			}
+		} else {
+			formatIndex++
+			lastIndex = formats[formatIndex][1]
+			thisForamat = formats[formatIndex][2]
+			src = `/${image}-${i}.${thisForamat}`
+			if (fs.existsSync(dirUL+src)) {
+				fs.renameSync(dirUL+src, subFolder+src)
+			}
+		}
+	}
+
+	loading.forward(`Making SubFolders (${index + 1}/${sfLength})`)
+
+	if (index + 1 == sfLength) {
+		db.index.insert({_id:100}, err => {
+			if (err) { error('SaveSubFolderInDatabase->ERR: '+err); return }
+			AfterDatabaseDoneOnStartup()
+		})
+	} else {
+		setTimeout(() => {
+			makeSubFolder(sfComicsDoc, sfLength, index + 1)
+		}, 1)
+	}
+}
+
 document.addEventListener("DOMContentLoaded", () => {
 	loading.show('Getting Setting...', '#fff', '#222')
 
@@ -91,16 +140,22 @@ document.addEventListener("DOMContentLoaded", () => {
 								if (tagDoc == undefined) lastTagId = 1
 								else lastTagId = tagDoc.i || null
 								if (lastTagId == null) { error('Tag Indexing Problem.'); return }
-								loading.forward('Set Settings...')
-	
-								setLuanchTimeSettings(false)
-								loading.forward('Load Comics...')
-								loadComics()
-								loading.forward()
-								document.getElementById('main').style.display = 'grid'
-								loading.hide()
-								CheckReleaseNote()
-								if (setting.check_update) CheckUpdate()
+								loading.forward('Check subFolders...')
+
+								db.index.findOne({_id:100}, (err, subFolderDoc) => {
+									if (err) { error('SubFolderCheckingERR: '+err); return }
+									if (subFolderDoc == null) {
+										db.comics.find({}, (err, sfComicsDoc) => {
+											if (err) { error('SubFolder->ComicLoading->ERR: '+err); return }
+											if (sfComicsDoc != null && sfComicsDoc.length != 0) {
+												const sfLength = sfComicsDoc.length
+												loading.reset(sfLength)
+												loading.show(`Making SubFolders (0/${sfLength})`)
+												setTimeout(() => { makeSubFolder(sfComicsDoc, sfLength, 0) }, 100)
+											} else AfterDatabaseDoneOnStartup()
+										})
+									} else AfterDatabaseDoneOnStartup()
+								})
 							})
 						})
 					})

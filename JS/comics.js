@@ -1,6 +1,5 @@
 let need_repair = []
 
-
 function loadComics(page, search, safeScroll) {
 	page = page || 1
 	search = search || null

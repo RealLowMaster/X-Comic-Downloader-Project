@@ -8,8 +8,6 @@ DB => {
 		images = i
 		ImagesCount = c
 		formats = f = []
-		repairImagesIndexs = m = []
-		repairImagesURLs = r = []
 		quality = q
 		site = s
 		post_id = p
@@ -73,6 +71,7 @@ Added To Version {
 }
 
 Did {
+	Make SubFolder System Part 1++
 	Chane Repair System Part 3++
 	Make Repairing Systems Part 6++ = Next = Complete All Image Repairing
 }
@@ -83,7 +82,6 @@ Tasks => {
 	Bundle Scripts
 	Add Slider System To Repaired Image
 	Add Reset Setting Button
-	Add First Time Runtime showing new release whats happend
 	Make Tab Doplicator inset after tab
 	Add Optimizing Image Option
 	Add Perfect Drag to Scroll To Slider Overview
