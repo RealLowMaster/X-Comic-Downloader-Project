@@ -897,6 +897,26 @@ function changeButtonsToDownloaded(id, have, haveBackward) {
 	}
 }
 
+function ImageListDownloader(list, index, saveList, error, callback) {
+	if (index == list.length) callback(error)
+	else {
+		console.log(saveList[index])
+		console.log(list[index])
+		ImageDownloader.image({ url: list[index], dest: saveList[index] }).then(({ filename }) => {
+			procressPanel.addMini(`Img ${index + 1} Downloaded.`)
+			procressPanel.forward(`Downloading Images (${index + 1}/${list.length})`)
+
+			ImageListDownloader(list, index + 1, saveList, error, callback)
+		}).catch(err => {
+			error = true
+			procressPanel.add('DL->ERR: '+err, 'danger')
+			procressPanel.forward(`Downloading Images (${index + 1}/${list.length})`)
+
+			ImageListDownloader(list, index + 1, saveList, error, callback)
+		})
+	}
+}
+
 document.getElementById('browser-tool-search-form').addEventListener('submit', e => {
 	e.preventDefault()
 	closeBrowserHistory()

@@ -1,4 +1,4 @@
-let need_repair = []
+let off_site = null, off_id = null, off_comic_id = null, off_quality = null, need_repair = [], in_comic = false
 
 function loadComics(page, search, safeScroll) {
 	page = page || 1
@@ -285,6 +285,7 @@ function openComicTags(comicId) {
 
 function openComic(id) {
 	need_repair = []
+	in_comic = true
 	id = id || null
 	if (id == null) { error('Id Can\'t be Null.'); return }
 	const title_container = document.getElementById('c-p-t')
@@ -311,6 +312,11 @@ function openComic(id) {
 			formats = doc.f || null
 			if (formats == null) return
 			image = doc.i
+
+			off_site = doc.s
+			off_comic_id = doc._id
+			off_id = doc.p
+			off_quality = doc.q
 
 			title_container.textContent = name
 			
@@ -393,6 +399,11 @@ function closeComicPanel() {
 	comicPanel.style.display = 'none'
 	keydownEventIndex = 0
 	need_repair = []
+	in_comic = false
+	off_site = null
+	off_comic_id = null
+	off_id = null
+	off_quality = null
 	document.getElementById('main').style.display = 'grid'
 
 	comicGroupsContainer.innerHTML = ''
@@ -492,9 +503,11 @@ async function repairComicInfo(whitch) {
 	})
 }
 
-function repairComicImages(comic_id, repair_list) {
-	console.log(comic_id)
-	repair_list = repair_list || []
+function repairComicImages(repair_list) {
+	if (window.navigator.onLine == false) { PopAlert('You are not Connected To Internet.', 'danger') }
+	if (typeof(repair_list) == 'object' && repair_list.length != 0) need_repair = repair_list
+	console.log(need_repair)
+	eval(sites[off_site][2].replace('{id}', `'${off_id}'`).replace('{whitch}', 5))
 }
 
 // Delete a Comic

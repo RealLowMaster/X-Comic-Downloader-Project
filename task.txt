@@ -68,15 +68,17 @@ Add Comic {
 
 Added To Version {
 	Fix Bug: Optimizing Comic Error Callback do Not Reload Comic
+	Optimize Comic Start Download Back-end Process
 	Add SubFolder For Better Performance At Windows Explorer (Requested By Markus DarkOrb)
+	Make New Undownloaded Images Repair System Which Work Much Better
 }
 
 Did {
-	Chane Repair System Part 3++
 	Make Repairing Systems Part 6++ = Next = Complete All Image Repairing
 }
 
 Tasks => {
+	Add Comic To Zip Converter
 	Fix Bug: Removing Some History Together
 	Make New History System
 	Bundle Scripts

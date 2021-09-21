@@ -1191,17 +1191,19 @@ function xlecxDownloader(id) {
 			if (err) { RemoveDownloaderList(downloaderIndex); PopAlert(err, 'danger'); changeButtonsToDownloading(id, true); return }
 			
 			var name = result.title, quality = 0, downloadImageList = []
-			if (result.images[0].src == result.images[0].thumb)
-				quality = 1
-			else
-				quality = setting.img_graphic
+			if (result.images[0].src == result.images[0].thumb) quality = 1
+			else quality = setting.img_graphic
 	
-			for (var i = 0; i < result.images.length; i++) {
-				if (quality == 0)
+			if (quality == 0) {
+				for (var i = 0; i < result.images.length; i++) {
 					downloadImageList.push(xlecx.baseURL+result.images[i].thumb)
-				else
+				}
+			} else {
+				for (var i = 0; i < result.images.length; i++) {
 					downloadImageList.push(xlecx.baseURL+result.images[i].src)
+				}
 			}
+			
 	
 			MakeDownloadList(downloaderIndex, name, id, downloadImageList)
 	
@@ -1298,24 +1300,40 @@ async function xlecxRepairComicInfoGetInfo(id, whitch) {
 				CreateTag(tagsList, comic_id, 0, true)
 				break
 			case 5:
+				loading.hide()
 				var neededResult = result.images || null
 				if (neededResult == null) {
-					loading.hide()
 					PopAlert('This Comic has no Image.', 'danger')
+					openComic(comic_id)
 					return
 				}
-				db.comics.findOne({_id:comic_id}, (err, doc) => {
-					if (err) { error(err); return }
-					if (doc.i == undefined) return
-					var newImageList = []
-					for (var i in doc.i) {
-						if (typeof(doc.i[i]) == 'object') newImageList.push([doc.i[i][0], i])
+				console.log(neededResult)
+
+				procressPanel.reset(need_repair.length)
+				procressPanel.config({ bgClose:false, closeBtn:false, miniLog:true })
+				procressPanel.show(`Downloading Images (0/${need_repair.length})`)
+
+				const newList = [], saveList = []
+				if (off_quality == 0) {
+					for (let i = 0; i < need_repair.length; i++) {
+						newList.push(xlecx.baseURL+neededResult[need_repair[i][1]].thumb)
+						saveList.push(need_repair[i][0])
 					}
-					if (newImageList.length == 0) {
-						PopAlert('All Images are Good, no Need To Repair.', 'danger')
-						return
+				} else {
+					for (let i = 0; i < need_repair.length; i++) {
+						newList.push(xlecx.baseURL+neededResult[need_repair[i][1]].src)
+						saveList.push(need_repair[i][0])
 					}
-					console.log(newImageList)
+				}
+
+				ImageListDownloader(newList, 0, saveList, false, err => {
+					if (err) {
+						procressPanel.config({ bgClose:true, closeBtn:true })
+					} else {
+						procressPanel.reset(1)
+					}
+					PopAlert('Comic Undownloaded Images Has Beed Downloaded.')
+					openComic(comic_id)
 				})
 				break
 		}
