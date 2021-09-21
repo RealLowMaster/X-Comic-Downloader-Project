@@ -33,14 +33,13 @@ function OptimizeComicImages(comic_id) {
 
 			for (let i = 0; i < ImagesCount; i++) {
 				if (i <= lastIndex) {
-					console.log(fs.existsSync(`${dirUL}/${image}-${i}.${thisForamat}`))
-					if (!fs.existsSync(`${dirUL}/${image}-${i}.${thisForamat}`)) procressPanel.add(`Image ${i+1}: Undownloaded Image.`, 'danger')
+					if (!fs.existsSync(`${dirUL}/${comic_id}${image}/${image}-${i}.${thisForamat}`)) procressPanel.add(`Image ${i+1}: Undownloaded Image.`, 'danger')
 					else if (thisForamat != 'gif') urls.push([`${image}-${i}.${thisForamat}`, thisForamat])
 				} else {
 					formatIndex++
 					lastIndex = formats[formatIndex][1]
 					thisForamat = formats[formatIndex][2]
-					if (!fs.existsSync(`${dirUL}/${image}-${i}.${thisForamat}`)) procressPanel.add(`Image ${i+1}: Undownloaded Image.`, 'danger')
+					if (!fs.existsSync(`${dirUL}/${comic_id}${image}/${image}-${i}.${thisForamat}`)) procressPanel.add(`Image ${i+1}: Undownloaded Image.`, 'danger')
 					else if (thisForamat != 'gif') urls.push([`${image}-${i}.${thisForamat}`, thisForamat])
 				}
 			}
@@ -51,13 +50,13 @@ function OptimizeComicImages(comic_id) {
 				let size = 0
 				for (let i = 0; i < urls.length; i++) {
 					try {
-						size = fs.statSync(`${dirUL}/${urls[i][0]}`).size
+						size = fs.statSync(`${dirUL}/${comic_id}${image}/${urls[i][0]}`).size
 						optimizeFullSize += size
 						optimizeLog.push(size)
-						fs.renameSync(`${dirUL}/${urls[i][0]}`, `${dirTmp}/${urls[i][0]}`)
+						fs.renameSync(`${dirUL}/${comic_id}${image}/${urls[i][0]}`, `${dirTmp}/${urls[i][0]}`)
 					} catch(err) {
 						for (let j = 0; j < i; j++) {
-							fs.renameSync(`${dirTmp}/${urls[j][0]}`, `${dirUL}/${urls[j][0]}`)
+							fs.renameSync(`${dirTmp}/${urls[j][0]}`, `${dirUL}/${comic_id}${image}/${urls[j][0]}`)
 						}
 						procressPanel.hide()
 						error("MovingTemp: "+err)
@@ -68,13 +67,13 @@ function OptimizeComicImages(comic_id) {
 					}
 				}
 				procressPanel.forward(`Optimizing Image (0/${urls.length})...`)
-				convertImagesToOptimize(urls, 0, comic_id)
+				convertImagesToOptimize(urls, 0, comic_id, image)
 			}, 100)
 		})
 	}, 200)
 }
 
-function convertImagesToOptimize(list, index, comic_id) {
+function convertImagesToOptimize(list, index, comic_id, image) {
 	if (index == list.length) {
 		db.comics.update({_id:comic_id}, { $set: {o:0} }, {}, (err, doc) => {
 			if (err) procressPanel.add('ConvertImageToOptimize: '+err, 'danger')
@@ -97,9 +96,9 @@ function convertImagesToOptimize(list, index, comic_id) {
 		keydownEventIndex = 1
 		return
 	} else if (list[index][1] == 'jpg' || list[index][1] == 'jpeg') {
-		sharp(`${dirTmp}/${list[index][0]}`).jpeg({ mozjpeg: true }).toFile(`${dirUL}/${list[index][0]}`).then(() => {
+		sharp(`${dirTmp}/${list[index][0]}`).jpeg({ mozjpeg: true }).toFile(`${dirUL}/${comic_id}${image}/${list[index][0]}`).then(() => {
 			try {
-				const size = fs.statSync(`${dirUL}/${list[index][0]}`).size
+				const size = fs.statSync(`${dirUL}/${comic_id}${image}/${list[index][0]}`).size
 				if (size <= optimizeLog[index]) {
 					optimizeConvertSize += size
 					procressPanel.addMini(`Img ${index+1} - From: <span class="tx-secendery tx-underline">${formatBytes(optimizeLog[index])}</span> To: <span class="tx-secendery tx-underline">${formatBytes(size)}</span>`)
@@ -107,7 +106,7 @@ function convertImagesToOptimize(list, index, comic_id) {
 				} else {
 					optimizeConvertSize += optimizeLog[index]
 					procressPanel.addMini(`Img ${index+1} - From: <span class="tx-secendery tx-underline">${formatBytes(optimizeLog[index])}</span> To: <span class="tx-secendery tx-underline">${formatBytes(optimizeLog[index])}</span>`)
-					fs.renameSync(`${dirTmp}/${list[index][0]}`, `${dirUL}/${list[index][0]}`)
+					fs.renameSync(`${dirTmp}/${list[index][0]}`, `${dirUL}/${comic_id}${image}/${list[index][0]}`)
 				}
 			} catch(err) {
 				procressPanel.add('SavingFileSize: '+err, 'danger')
@@ -115,16 +114,16 @@ function convertImagesToOptimize(list, index, comic_id) {
 
 			procressPanel.forward(`Optimizing Image (${index+1}/${list.length})...`)
 			setTimeout(() => {
-				convertImagesToOptimize(list, index + 1, comic_id) 
+				convertImagesToOptimize(list, index + 1, comic_id, image) 
 			}, 100)
 		}).catch(err => {
 			procressPanel.add('Optimizing: '+err, 'danger')
 		})
 	} else if (list[index][1] == 'png') {
-		sharp(`${dirTmp}/${list[index][0]}`).png({ quality: 100 }).toFile(`${dirUL}/${list[index][0]}`).then(() => {
+		sharp(`${dirTmp}/${list[index][0]}`).png({ quality: 100 }).toFile(`${dirUL}/${comic_id}${image}/${list[index][0]}`).then(() => {
 
 			try {
-				const size = fs.statSync(`${dirUL}/${list[index][0]}`).size
+				const size = fs.statSync(`${dirUL}/${comic_id}${image}/${list[index][0]}`).size
 				if (size <= optimizeLog[index]) {
 					optimizeConvertSize += size
 					procressPanel.addMini(`Img ${index+1} - From: <span class="tx-secendery tx-underline">${formatBytes(optimizeLog[index])}</span> To: <span class="tx-secendery tx-underline">${formatBytes(size)}</span>`)
@@ -132,7 +131,7 @@ function convertImagesToOptimize(list, index, comic_id) {
 				} else {
 					optimizeConvertSize += optimizeLog[index]
 					procressPanel.addMini(`Img ${index+1} - From: <span class="tx-secendery tx-underline">${formatBytes(optimizeLog[index])}</span> To: <span class="tx-secendery tx-underline">${formatBytes(optimizeLog[index])}</span>`)
-					fs.renameSync(`${dirTmp}/${list[index][0]}`, `${dirUL}/${list[index][0]}`)
+					fs.renameSync(`${dirTmp}/${list[index][0]}`, `${dirUL}/${comic_id}${image}/${list[index][0]}`)
 				}
 			} catch(err) {
 				procressPanel.add('SavingFileSize: '+err, 'danger')
@@ -140,15 +139,15 @@ function convertImagesToOptimize(list, index, comic_id) {
 
 			procressPanel.forward(`Optimizing Image (${index+1}/${list.length})...`)
 			setTimeout(() => {
-				convertImagesToOptimize(list, index + 1, comic_id) 
+				convertImagesToOptimize(list, index + 1, comic_id, image) 
 			}, 100)
 		}).catch(err => {
 			procressPanel.add('Optimizing: '+err, 'danger')
 		})
 	} else if (list[index][1] == 'webp') {
-		sharp(`${dirTmp}/${list[index][0]}`).webp().toFile(`${dirUL}/${list[index][0]}`).then(() => {
+		sharp(`${dirTmp}/${list[index][0]}`).webp().toFile(`${dirUL}/${comic_id}${image}/${list[index][0]}`).then(() => {
 			try {
-				const size = fs.statSync(`${dirUL}/${list[index][0]}`).size
+				const size = fs.statSync(`${dirUL}/${comic_id}${image}/${list[index][0]}`).size
 				optimizeConvertSize += size
 				procressPanel.addMini(`Img ${index+1} - From: <span class="tx-secendery tx-underline">${formatBytes(optimizeLog[index])}</span> To: <span class="tx-secendery tx-underline">${formatBytes(size)}</span>`)
 			} catch(err) {
@@ -157,22 +156,22 @@ function convertImagesToOptimize(list, index, comic_id) {
 
 			procressPanel.forward(`Optimizing Image (${index+1}/${list.length})...`)
 			setTimeout(() => {
-				convertImagesToOptimize(list, index + 1, comic_id) 
+				convertImagesToOptimize(list, index + 1, comic_id, image) 
 			}, 100)
 		}).catch(err => {
 			procressPanel.add('Optimizing: '+err, 'danger')
 		})
 	} else {
 		try {
-			fs.renameSync(`${dirTmp}/${list[index][0]}`, `${dirUL}/${list[index][0]}`)
+			fs.renameSync(`${dirTmp}/${list[index][0]}`, `${dirUL}/${comic_id}${image}/${list[index][0]}`)
 
-			const size = fs.statSync(`${dirUL}/${list[index][0]}`).size
+			const size = fs.statSync(`${dirUL}/${comic_id}${image}/${list[index][0]}`).size
 			optimizeConvertSize += size
 			procressPanel.addMini(`Img ${index+1} - From: <span class="tx-secendery tx-underline">${formatBytes(optimizeLog[index])}</span> To: <span class="tx-secendery tx-underline">${formatBytes(size)}</span>`)
 
 			procressPanel.forward(`Optimizing Image (${index+1}/${list.length})...`)
 			setTimeout(() => {
-				convertImagesToOptimize(list, index + 1, comic_id) 
+				convertImagesToOptimize(list, index + 1, comic_id, image) 
 			}, 100)
 		} catch(err) {
 			procressPanel.add('Optimize: '+err, 'danger')

@@ -68,10 +68,10 @@ Add Comic {
 
 Added To Version {
 	Fix Bug: Optimizing Comic Error Callback do Not Reload Comic
+	Add SubFolder For Better Performance At Windows Explorer (Requested By Markus DarkOrb)
 }
 
 Did {
-	Make SubFolder System Part 1++
 	Chane Repair System Part 3++
 	Make Repairing Systems Part 6++ = Next = Complete All Image Repairing
 }

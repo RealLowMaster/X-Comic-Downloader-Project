@@ -628,11 +628,13 @@ function comicDownloader(index, result, quality, siteIndex) {
 		}, 1000)
 		return
 	}
+	const subFolder = `${dirUL}/${downloadingList[index][7][0]}${downloadingList[index][2]}`
+	if (!fs.existsSync(subFolder)) fs.mkdirSync(subFolder)
 	const url = downloadingList[index][1][downloadingList[index][0]]
 	const saveName = `${downloadingList[index][2]}-${downloadingList[index][0]}.${fileExt(url)}`
 	const option = {
 		url: url,
-		dest: dirUL+`/${saveName}`
+		dest: subFolder+'/'+saveName
 	}
 	
 	downloadingList[index][0] += 1
@@ -642,7 +644,10 @@ function comicDownloader(index, result, quality, siteIndex) {
 
 	ImageDownloader.image(option).then(({ filename }) => {
 		if (downloadingList[index] == undefined) {
-			fs.unlinkSync(filename)
+			try {
+				fs.unlinkSync(filename)
+				fs.rmdirSync(subFolder)
+			} catch(err) {}
 			return
 		}
 		downloadingList[index][6].push(filename)
@@ -667,7 +672,12 @@ function comicDownloader(index, result, quality, siteIndex) {
 			CreateComic(downloadingList[index][7][0], downloadingList[index][7][1], result, quality, downloadingList[index][2], siteIndex, downloadingList[index][3], downloadingList[index][1].length, formatList, index, true)
 		} else comicDownloader(index, result, quality, siteIndex)
 	}).catch(err => {
-		if (downloadingList[index] == undefined) return
+		if (downloadingList[index] == undefined) {
+			try {
+				fs.rmdirSync(subFolder)
+			} catch(err) {}
+			return
+		}
 		downloaderRow.getElementsByTagName('div')[0].getElementsByTagName('div')[0].style.width = percentage+'%'
 		downloaderRow.getElementsByTagName('p')[0].getElementsByTagName('span')[0].textContent = `(${downloadingList[index][0]}/${max})`
 		downloadingList[index][4].push(downloadingList[index][0] - 1)
@@ -698,6 +708,9 @@ function cancelDownload(index) {
 	for (let i = 0; i < downloadingList[index][6].length; i++) {
 		fs.unlinkSync(downloadingList[index][6][i])
 	}
+	try {
+		fs.rmdirSync(`${dirUL}/${downloadingList[index][7][0]}${downloadingList[index][2]}`)
+	} catch(err) {}
 	changeButtonsToDownloading(downloadingList[index][3], true)
 	RemoveDownloaderList(index)
 	PopAlert('Download Canceled.', 'warning')

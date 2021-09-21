@@ -339,7 +339,7 @@ function openComic(id) {
 
 			for (let i = 0; i < ImagesCount; i++) {
 				if (i <= lastIndex) {
-					src = `${dirUL}/${image}-${i}.${thisForamat}`
+					src = `${dirUL}/${id}${image}/${image}-${i}.${thisForamat}`
 					if (!fs.existsSync(src)) {
 						need_repair.push([src, i])
 						src = 'Image/no-img-300x300.png'
@@ -350,7 +350,7 @@ function openComic(id) {
 					formatIndex++
 					lastIndex = formats[formatIndex][1]
 					thisForamat = formats[formatIndex][2]
-					src = `${dirUL}/${image}-${i}.${thisForamat}`
+					src = `${dirUL}/${id}${image}/${image}-${i}.${thisForamat}`
 					if (!fs.existsSync(src)) {
 						need_repair.push([src, i])
 						src = 'Image/no-img-300x300.png'
@@ -439,7 +439,7 @@ async function repairImageUpdateDatabase(comic_id, imageIndex, imageBaseName, im
 		const repairElement = document.getElementById(imageIndex) || null
 		if (repairElement != null) {
 			const newImage = document.createElement('img')
-			newImage.setAttribute('src', `${dirUL}/${imageBaseName}-${imageIndex}.${imageFormat}`)
+			newImage.setAttribute('src', `${dirUL}/${comic_id}${imageBaseName}/${imageBaseName}-${imageIndex}.${imageFormat}`)
 			document.getElementById('c-p-i').insertBefore(newImage, repairElement)
 			repairElement.remove()
 		}
@@ -457,7 +457,7 @@ async function repairImageDownloadImage(comic_id, imageIndex, imageUrl, repairIn
 	const imageFormat = fileExt(imageUrl)
 	const option = {
 		url: imageUrl,
-		dest: dirUL+`/${imageId}-${imageIndex}.${imageFormat}`
+		dest: `${dirUL}/${comic_id}${imageId}/${imageId}-${imageIndex}.${imageFormat}`
 	}
 
 	await ImageDownloader.image(option).then(({ filename }) => {
@@ -596,12 +596,12 @@ function deleteComic(id) {
 				let lastIndex = ImagesFormats[0][1]
 				let thisForamat = ImagesFormats[0][2]
 				for (let i = 0; i < ImagesCount; i++) {
-					if (i <= lastIndex) thisUrl = `${dirUL}/${ImagesId}-${i}.${thisForamat}`
+					if (i <= lastIndex) thisUrl = `${dirUL}/${id}${ImagesId}/${ImagesId}-${i}.${thisForamat}`
 					else {
 						formatIndex++
 						lastIndex = ImagesFormats[formatIndex][1]
 						thisForamat = ImagesFormats[formatIndex][2]
-						thisUrl = `${dirUL}/${ImagesId}-${i}.${thisForamat}`
+						thisUrl = `${dirUL}/${id}${ImagesId}/${ImagesId}-${i}.${thisForamat}`
 					}
 
 					if (fs.existsSync(thisUrl)) {
@@ -616,6 +616,12 @@ function deleteComic(id) {
 					}
 					
 					loading.forward(`Deleting Comic Images (${i+1}/${ImagesCount})...`)
+				}
+
+				try {
+					fs.rmdirSync(`${dirUL}/${id}${ImagesId}`)
+				} catch(err) {
+					console.error(`Couldn't Delete Folder: ${dirUL}/${id}${ImagesId}`)
 				}
 
 				loading.forward('Removing Comic Groups From Database...')

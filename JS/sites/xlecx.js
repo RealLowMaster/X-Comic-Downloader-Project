@@ -337,12 +337,12 @@ function xlecxOpenPost(whitchbutton, id, updateTabIndex) {
 					if (repair == null || repair.length == 0) {
 						for (var i = 0; i < ImagesCount; i++) {
 							if (i <= lastIndex)
-								html += `<img src="${dirUL}/${image}-${i}.${thisForamat}">`
+								html += `<img src="${dirUL}/${id}${image}/${image}-${i}.${thisForamat}">`
 							else {
 								formatIndex++
 								lastIndex = formats[formatIndex][1]
 								thisForamat = formats[formatIndex][2]
-								html += `<img src="${dirUL}/${image}-${i}.${thisForamat}">`
+								html += `<img src="${dirUL}/${id}${image}/${image}-${i}.${thisForamat}">`
 							}
 						}
 					} else {
@@ -351,12 +351,12 @@ function xlecxOpenPost(whitchbutton, id, updateTabIndex) {
 								html += `<div class="repair-image" id="${i}"><p>Image hasn't Been Download Currectly.</p><button onclick="repairImage(${i}, ${repair.indexOf(i)}, ${image})">Repair</button></div>`
 							} else {
 								if (i <= lastIndex)
-									html += `<img src="${dirUL}/${image}-${i}.${thisForamat}">`
+									html += `<img src="${dirUL}/${id}${image}/${image}-${i}.${thisForamat}">`
 								else {
 									formatIndex++
 									lastIndex = formats[formatIndex][1]
 									thisForamat = formats[formatIndex][2]
-									html += `<img src="${dirUL}/${image}-${i}.${thisForamat}">`
+									html += `<img src="${dirUL}/${id}${image}/${image}-${i}.${thisForamat}">`
 								}
 							}
 						}

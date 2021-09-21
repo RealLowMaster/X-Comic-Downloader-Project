@@ -19,9 +19,10 @@ function makeThumb(reCreate) {
 
 function checkThumbs(doc, reCreate, scrollTop) {
 	const list = [], len = doc.length
-	let url = '' 
+	let url, image
 	for (let i = 0; i < len; i++) {
-		url = `${dirUL}/${doc[i].i}-0.${doc[i].f[0][2]}`
+		image = doc[i].i
+		url = `${dirUL}/${doc[i]._id}${image}/${image}-0.${doc[i].f[0][2]}`
 
 		if (!fs.existsSync(url)) {
 			thumbErrLog.push(`Undownloaded Image, Comic: ${doc[i].n}`)
@@ -29,21 +30,21 @@ function checkThumbs(doc, reCreate, scrollTop) {
 		}
 		
 		if (reCreate) {
-			if (fs.existsSync(`${dirUL}/thumbs/${doc[i].i}.jpg`)) {
+			if (fs.existsSync(`${dirUL}/thumbs/${image}.jpg`)) {
 				try {
-					fs.unlinkSync(`${dirUL}/thumbs/${doc[i].i}.jpg`)
+					fs.unlinkSync(`${dirUL}/thumbs/${image}.jpg`)
 				} catch(err) {
 					thumbErrLog.push(`Failed To Delete Thumb, Comic: ${doc[i].n}`)
 				}
-				if (fs.existsSync(url)) list.push([url, doc[i].i])
+				if (fs.existsSync(url)) list.push([url, image])
 				else thumbErrLog.push(`Image Not Found, Comic: ${doc[i].n}`)
 			} else {
-				if (fs.existsSync(url)) list.push([url, doc[i].i])
+				if (fs.existsSync(url)) list.push([url, image])
 				else thumbErrLog.push(`Image Not Found, Comic: ${doc[i].n}`)
 			}
 		} else {
-			if (!fs.existsSync(`${dirUL}/thumbs/${doc[i].i}.jpg`)) {
-				if (fs.existsSync(url)) list.push([url, doc[i].i])
+			if (!fs.existsSync(`${dirUL}/thumbs/${image}.jpg`)) {
+				if (fs.existsSync(url)) list.push([url, image])
 				else thumbErrLog.push(`Image Not Found, Comic: ${doc[i].n}`)
 			}
 		}
@@ -111,13 +112,14 @@ function makeThumbForAComic(id) {
 		loading.show(`Checking Thumbs...`)
 
 		setTimeout(() => {
-			const url = `${dirUL}/${doc.i}-0.${doc.f[0][2]}`
+			const image = doc.i
+			const url = `${dirUL}/${doc._id}${image}/${image}-0.${doc.f[0][2]}`
 
-			if (!fs.existsSync(url)) { error('This Comic First Image Is not Downloaded, we cannot make Thumb From It.'); return }
+			if (!fs.existsSync(url)) { error('This Comic First Image Is not Downloaded, we cannot make Thumb From It.'); loading.hide(); reloadLoadingComics(scrollTop); return }
 			
-			if (fs.existsSync(`${dirUL}/thumbs/${doc.i}.jpg`)) {
+			if (fs.existsSync(`${dirUL}/thumbs/${image}.jpg`)) {
 				try {
-					fs.unlinkSync(`${dirUL}/thumbs/${doc.i}.jpg`)
+					fs.unlinkSync(`${dirUL}/thumbs/${image}.jpg`)
 				} catch(err) {
 					console.error(err)
 				}
@@ -126,7 +128,7 @@ function makeThumbForAComic(id) {
 			if (fs.existsSync(url)) {
 				loading.forward('Making Thumbs...')
 				setTimeout(() => {
-					sharp(url).resize(225, 315).jpeg().toFile(`${dirUL}/thumbs/${doc.i}.jpg`).then(() => {
+					sharp(url).resize(225, 315).jpeg().toFile(`${dirUL}/thumbs/${image}.jpg`).then(() => {
 						loading.forward()
 						loading.hide()
 						PopAlert('Thumbs Made Successfuly.')
@@ -150,9 +152,9 @@ function makeThumbForAComic(id) {
 	})
 }
 
-function makeThumbForDownloadingComic(image, format, callback) {
+function makeThumbForDownloadingComic(image, format, id, callback) {
 	setTimeout(() => {
-		let url = `${dirUL}/${image}-0.${format}`
+		let url = `${dirUL}/${id}${image}/${image}-0.${format}`
 		if (!fs.existsSync(url)) { callback(); return }
 		
 		if (fs.existsSync(url)) {
