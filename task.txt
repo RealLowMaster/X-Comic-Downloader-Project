@@ -73,7 +73,7 @@ Added To Version {
 }
 
 Did {
-	Chane Repair System Part 1++
+	Chane Repair System Part 2++
 	Make Repairing Systems Part 6++ = Next = Complete All Image Repairing
 }
 

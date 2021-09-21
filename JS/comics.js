@@ -1,4 +1,6 @@
-// Comics
+let need_repair = []
+
+
 function loadComics(page, search, safeScroll) {
 	page = page || 1
 	search = search || null
@@ -283,6 +285,7 @@ function openComicTags(comicId) {
 }
 
 function openComic(id) {
+	need_repair = []
 	id = id || null
 	if (id == null) { error('Id Can\'t be Null.'); return }
 	const title_container = document.getElementById('c-p-t')
@@ -338,7 +341,10 @@ function openComic(id) {
 			for (let i = 0; i < ImagesCount; i++) {
 				if (i <= lastIndex) {
 					src = `${dirUL}/${image}-${i}.${thisForamat}`
-					if (!fs.existsSync(src)) { src = 'Image/no-img-300x300.png' }
+					if (!fs.existsSync(src)) {
+						need_repair.push([src, i])
+						src = 'Image/no-img-300x300.png'
+					}
 					html += `<img data-src="${src}" onclick="openComicSlider(${i})">`
 					slider_overview_html += `<div i="${i}" onclick="changeSliderIndex(${i})"><img src="${src}" loading="lazy"><p>${i+1}</p></div>`
 				} else {
@@ -346,11 +352,17 @@ function openComic(id) {
 					lastIndex = formats[formatIndex][1]
 					thisForamat = formats[formatIndex][2]
 					src = `${dirUL}/${image}-${i}.${thisForamat}`
-					if (!fs.existsSync(src)) { src = 'Image/no-img-300x300.png' }
+					if (!fs.existsSync(src)) {
+						need_repair.push([src, i])
+						src = 'Image/no-img-300x300.png'
+					}
 					html += `<img data-src="${src}" onclick="openComicSlider(${i})">`
 					slider_overview_html += `<div i="${i}" onclick="changeSliderIndex(${i})"><img src="${src}" loading="lazy"><p>${i+1}</p></div>`
 				}
 			}
+
+			if (need_repair.length == 0) document.getElementById('c-p-r-btn').style.display = 'none'
+			else document.getElementById('c-p-r-btn').style.display = 'flex'
 
 			image_container.innerHTML = html
 			comicSliderOverview.innerHTML = slider_overview_html
@@ -381,6 +393,7 @@ function openComic(id) {
 function closeComicPanel() {
 	comicPanel.style.display = 'none'
 	keydownEventIndex = 0
+	need_repair = []
 	document.getElementById('main').style.display = 'grid'
 
 	comicGroupsContainer.innerHTML = ''
@@ -478,6 +491,11 @@ async function repairComicInfo(whitch) {
 		if (doc.s == undefined) return
 		eval(sites[doc.s][2].replace('{id}', `'${doc.p}'`).replace('{whitch}', whitch))
 	})
+}
+
+function repairComicImages(comic_id, repair_list) {
+	console.log(comic_id)
+	repair_list = repair_list || []
 }
 
 // Delete a Comic

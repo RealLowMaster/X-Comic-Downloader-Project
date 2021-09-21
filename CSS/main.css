@@ -1046,7 +1046,8 @@ input::-webkit-input-placeholder { user-select: none }
 
 .comic-panel-close-btn,
 .comic-panel-repair-info-btn,
-.comic-panel-slider-btn {
+.comic-panel-slider-btn,
+#c-p-r-btn {
 	display: flex;
 	width: 30px;
 	height: 30px;
@@ -1087,6 +1088,18 @@ input::-webkit-input-placeholder { user-select: none }
 	color: var(--cp-btns-hover-color);
 	border-color: var(--cp-btns-hover-bd-color);
 }
+
+#c-p-r-btn {
+	background-color: transparent;
+	color: #ff0;
+	border: none;
+	left: 89px;
+	opacity: .5;
+	cursor: pointer;
+}
+
+#c-p-r-btn > svg { filter: drop-shadow(0 0 10px #ff0) }
+#c-p-r-btn:hover { opacity: 1 }
 
 .comic-panel-title {
 	display: block;
