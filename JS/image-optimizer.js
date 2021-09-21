@@ -29,32 +29,19 @@ function OptimizeComicImages(comic_id) {
 			if (err) { procressPanel.hide(); error(err); openComic(comic_id); isOptimizing = false; return }
 	
 			document.getElementById('comic-action-panel').style.display='none'
-			let ImagesCount = doc.c, formats = doc.f, image = doc.i, lastIndex = formats[0][1], thisForamat = formats[0][2], repair = doc.m || null, urls = [], formatIndex = 0
-	
-			if (repair == null || repair.length == 0) {
-				for (let i = 0; i < ImagesCount; i++) {
-					if (i <= lastIndex) {
-						if (thisForamat != 'gif') urls.push([`${image}-${i}.${thisForamat}`, thisForamat])
-					} else {
-						formatIndex++
-						lastIndex = formats[formatIndex][1]
-						thisForamat = formats[formatIndex][2]
-						if (thisForamat != 'gif') urls.push([`${image}-${i}.${thisForamat}`, thisForamat])
-					}
-				}
-			} else {
-				for (let i = 0; i < ImagesCount; i++) {
-					if (repair.indexOf(i) > -1) procressPanel.add(`Image ${i+1}: Undownloaded Image.`, 'danger')
-					else {
-						if (i <= lastIndex) {
-							if (thisForamat != 'gif') urls.push([`${image}-${i}.${thisForamat}`, thisForamat])
-						} else {
-							formatIndex++
-							lastIndex = formats[formatIndex][1]
-							thisForamat = formats[formatIndex][2]
-							if (thisForamat != 'gif') urls.push([`${image}-${i}.${thisForamat}`, thisForamat])
-						}
-					}
+			let ImagesCount = doc.c, formats = doc.f, image = doc.i, lastIndex = formats[0][1], thisForamat = formats[0][2], urls = [], formatIndex = 0
+
+			for (let i = 0; i < ImagesCount; i++) {
+				if (i <= lastIndex) {
+					console.log(fs.existsSync(`${dirUL}/${image}-${i}.${thisForamat}`))
+					if (!fs.existsSync(`${dirUL}/${image}-${i}.${thisForamat}`)) procressPanel.add(`Image ${i+1}: Undownloaded Image.`, 'danger')
+					else if (thisForamat != 'gif') urls.push([`${image}-${i}.${thisForamat}`, thisForamat])
+				} else {
+					formatIndex++
+					lastIndex = formats[formatIndex][1]
+					thisForamat = formats[formatIndex][2]
+					if (!fs.existsSync(`${dirUL}/${image}-${i}.${thisForamat}`)) procressPanel.add(`Image ${i+1}: Undownloaded Image.`, 'danger')
+					else if (thisForamat != 'gif') urls.push([`${image}-${i}.${thisForamat}`, thisForamat])
 				}
 			}
 	
@@ -73,7 +60,7 @@ function OptimizeComicImages(comic_id) {
 							fs.renameSync(`${dirTmp}/${urls[j][0]}`, `${dirUL}/${urls[j][0]}`)
 						}
 						procressPanel.hide()
-						error("MovingTemp: "+err2)
+						error("MovingTemp: "+err)
 						openComic(comic_id)
 						isOptimizing = false
 						keydownEventIndex = 1

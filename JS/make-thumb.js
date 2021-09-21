@@ -19,13 +19,14 @@ function makeThumb(reCreate) {
 
 function checkThumbs(doc, reCreate, scrollTop) {
 	const list = [], len = doc.length
-	let url = ''
+	let url = '' 
 	for (let i = 0; i < len; i++) {
-		if (doc[i].m == undefined || doc[i].m.length == 0) url = `${dirUL}/${doc[i].i}-0.${doc[i].f[0][2]}`
-		else if (doc[i].m.indexOf(0) > -1) {
+		url = `${dirUL}/${doc[i].i}-0.${doc[i].f[0][2]}`
+
+		if (!fs.existsSync(url)) {
 			thumbErrLog.push(`Undownloaded Image, Comic: ${doc[i].n}`)
 			continue
-		} else url = `${dirUL}/${doc[i].i}-0.${doc[i].f[0][2]}`
+		}
 		
 		if (reCreate) {
 			if (fs.existsSync(`${dirUL}/thumbs/${doc[i].i}.jpg`)) {
@@ -110,13 +111,9 @@ function makeThumbForAComic(id) {
 		loading.show(`Checking Thumbs...`)
 
 		setTimeout(() => {
-			if (doc.m == undefined || doc.m.length == 0) url = `${dirUL}/${doc.i}-0.${doc.f[0][2]}`
-			else if (doc.m.indexOf(0) > -1) {
-				loading.hide()
-				error('Undownloaded Image, Comic: '+doc.n)
-				reloadLoadingComics(scrollTop)
-				return
-			} else url = `${dirUL}/${doc.i}-0.${doc.f[0][2]}`
+			const url = `${dirUL}/${doc.i}-0.${doc.f[0][2]}`
+
+			if (!fs.existsSync(url)) { error('This Comic First Image Is not Downloaded, we cannot make Thumb From It.'); return }
 			
 			if (fs.existsSync(`${dirUL}/thumbs/${doc.i}.jpg`)) {
 				try {
@@ -153,14 +150,10 @@ function makeThumbForAComic(id) {
 	})
 }
 
-function makeThumbForDownloadingComic(repair, image, format, callback) {
+function makeThumbForDownloadingComic(image, format, callback) {
 	setTimeout(() => {
-		let url = ''
-		if (repair == undefined || repair.length == 0) url = `${dirUL}/${image}-0.${format}`
-		else if (repair.indexOf(0) > -1) {
-			callback()
-			return
-		} else url = `${dirUL}/${image}-0.${format}`
+		let url = `${dirUL}/${image}-0.${format}`
+		if (!fs.existsSync(url)) { callback(); return }
 		
 		if (fs.existsSync(url)) {
 			setTimeout(() => {

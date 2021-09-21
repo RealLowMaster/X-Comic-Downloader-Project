@@ -69,18 +69,17 @@ Add Comic {
 }
 
 Added To Version {
-	
+	Fix Bug: Optimizing Comic Error Callback do Not Reload Comic
 }
 
 Did {
-	Chane Repair System Part 2++
+	Chane Repair System Part 3++
 	Make Repairing Systems Part 6++ = Next = Complete All Image Repairing
 }
 
 Tasks => {
 	Fix Bug: Removing Some History Together
 	Make New History System
-	Fix Bug: Optimizing Comic Error Callback = reload Comic
 	Bundle Scripts
 	Add Slider System To Repaired Image
 	Add Reset Setting Button
@@ -90,9 +89,6 @@ Tasks => {
 	Add Perfect Drag to Scroll To Slider Overview
 	Add Auto Scroll Down for Comic Panel
 	Add How Many Percent Comic Has been Optimize
-
-	Add fs.existSync To Optimizing Images Insted of Repair
-	Change Repair System and Make it Work With fs
 
 	Mybe in v2  {
 		Add Bookmark || Favoriet Posts

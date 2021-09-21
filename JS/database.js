@@ -360,7 +360,7 @@ async function CreateComic(comicIndex, haveIndex, gottenResult, quality, image, 
 			CreateTag(tagsList, id)
 		}
 
-		makeThumbForDownloadingComic(doc.m, doc.i, doc.f[0][2], () => {
+		makeThumbForDownloadingComic(doc.i, doc.f[0][2], () => {
 			if (isDownloading == true && index != null) {
 				var shortName = gottenResult.title
 				if (shortName.length > 26) shortName = shortName.substr(0, 23)+'...'
