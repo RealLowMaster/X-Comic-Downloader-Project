@@ -3,6 +3,7 @@ let thumbErrLog = []
 function makeThumb(reCreate) {
 	keydownEventIndex = 100
 	thumbErrLog = []
+	if (!fs.existsSync(dirUL+'/thumbs')) fs.mkdirSync(dirUL+'/thumbs')
 	db.comics.find({}, (err, doc) => {
 		if (err) { error(err); keydownEventIndex = 0; return }
 		loading.reset(0)
@@ -13,7 +14,7 @@ function makeThumb(reCreate) {
 		document.getElementById('comic-container').innerHTML = ''
 		setTimeout(() => {
 			checkThumbs(doc, reCreate, scrollTop)
-		}, 100)
+		}, 1)
 	})
 }
 
@@ -75,7 +76,7 @@ function createThumb(list, index, scrollTop) {
 		if (index != list.length - 1) {
 			setTimeout(() => {
 				createThumb(list, index + 1, scrollTop)
-			}, 100)
+			}, 1)
 		} else {
 			loading.hide()
 			document.getElementById('main').style.display = 'grid'
@@ -90,7 +91,7 @@ function createThumb(list, index, scrollTop) {
 		if (index != list.length - 1) {
 			setTimeout(() => {
 				createThumb(list, index + 1, scrollTop)
-			}, 100)
+			}, 1)
 		} else {
 			loading.hide()
 			document.getElementById('main').style.display = 'grid'
@@ -103,6 +104,7 @@ function createThumb(list, index, scrollTop) {
 }
 
 function makeThumbForAComic(id) {
+	if (!fs.existsSync(dirUL+'/thumbs')) fs.mkdirSync(dirUL+'/thumbs')
 	db.comics.findOne({_id:id}, (err, doc) => {
 		if (err) { error(err); return }
 		if (doc == undefined) { error('Comic Not Found'); return }
@@ -142,13 +144,13 @@ function makeThumbForAComic(id) {
 						error('MakeThumb: '+err)
 						reloadLoadingComics(scrollTop)
 					})
-				}, 100)
+				}, 10)
 			} else {
 				loading.hide()
 				error("Image Not Found, Comic: "+doc.n)
 				reloadLoadingComics(scrollTop)
 			}
-		}, 100)
+		}, 10)
 	})
 }
 
@@ -156,7 +158,8 @@ function makeThumbForDownloadingComic(image, format, id, callback) {
 	setTimeout(() => {
 		let url = `${dirUL}/${id}${image}/${image}-0.${format}`
 		if (!fs.existsSync(url)) { callback(); return }
-		
+		if (!fs.existsSync(dirUL+'/thumbs')) fs.mkdirSync(dirUL+'/thumbs')
+
 		if (fs.existsSync(url)) {
 			setTimeout(() => {
 				sharp(url).resize(225, 315).jpeg().toFile(`${dirUL}/thumbs/${image}.jpg`).then(() => {
@@ -164,7 +167,7 @@ function makeThumbForDownloadingComic(image, format, id, callback) {
 				}).catch(err => {
 					callback()
 				})
-			}, 100)
+			}, 10)
 		} else callback()
-	}, 100)
+	}, 10)
 }

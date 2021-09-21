@@ -68,9 +68,9 @@ function OptimizeComicImages(comic_id) {
 				}
 				procressPanel.forward(`Optimizing Image (0/${urls.length})...`)
 				convertImagesToOptimize(urls, 0, comic_id, image)
-			}, 100)
+			}, 10)
 		})
-	}, 200)
+	}, 250)
 }
 
 function convertImagesToOptimize(list, index, comic_id, image) {
@@ -115,7 +115,7 @@ function convertImagesToOptimize(list, index, comic_id, image) {
 			procressPanel.forward(`Optimizing Image (${index+1}/${list.length})...`)
 			setTimeout(() => {
 				convertImagesToOptimize(list, index + 1, comic_id, image) 
-			}, 100)
+			}, 1)
 		}).catch(err => {
 			procressPanel.add('Optimizing: '+err, 'danger')
 		})
@@ -140,7 +140,7 @@ function convertImagesToOptimize(list, index, comic_id, image) {
 			procressPanel.forward(`Optimizing Image (${index+1}/${list.length})...`)
 			setTimeout(() => {
 				convertImagesToOptimize(list, index + 1, comic_id, image) 
-			}, 100)
+			}, 1)
 		}).catch(err => {
 			procressPanel.add('Optimizing: '+err, 'danger')
 		})
@@ -157,7 +157,7 @@ function convertImagesToOptimize(list, index, comic_id, image) {
 			procressPanel.forward(`Optimizing Image (${index+1}/${list.length})...`)
 			setTimeout(() => {
 				convertImagesToOptimize(list, index + 1, comic_id, image) 
-			}, 100)
+			}, 1)
 		}).catch(err => {
 			procressPanel.add('Optimizing: '+err, 'danger')
 		})
@@ -172,7 +172,7 @@ function convertImagesToOptimize(list, index, comic_id, image) {
 			procressPanel.forward(`Optimizing Image (${index+1}/${list.length})...`)
 			setTimeout(() => {
 				convertImagesToOptimize(list, index + 1, comic_id, image) 
-			}, 100)
+			}, 1)
 		} catch(err) {
 			procressPanel.add('Optimize: '+err, 'danger')
 		}
