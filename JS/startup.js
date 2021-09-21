@@ -14,7 +14,7 @@ function test() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-	loading.show('Geting Setting...', '#fff', '#222')
+	loading.show('Getting Setting...', '#fff', '#222')
 
 	ChangeSizes()
 	

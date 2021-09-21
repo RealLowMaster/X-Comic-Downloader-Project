@@ -1218,6 +1218,7 @@ function xlecxDownloader(id) {
 }
 
 async function xlecxRepairComicInfoGetInfo(id, whitch) {
+	if (window.navigator.onLine == false) { error('Your are Offline.'); return }
 	var comic_id = Number(comicPanel.getAttribute('cid'))
 	var reset = 4
 	if (whitch == 0) reset = 2

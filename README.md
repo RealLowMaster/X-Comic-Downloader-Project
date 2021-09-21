@@ -1,8 +1,9 @@
-##### Site: https://reallowmaster.github.io/X-Comic-Downloader/
-#### A Adult or Hentai Comic Downloader Made By LowMaster (Mehdi Enayatzadeh).
-#### You can download or view any comic that the supported sites have, easily.
+##### Site: https://lowmaster.itch.io/x-comic-downloader
+#### an Adult and Hentai Comic Downloader Made By LowMaster (Mehdi Enayatzadeh).
+#### You can download or view any comic that the supported sites have, easily!
 
-#### This Software is For Downloading Hentai and Adult Comics or Mangas From Populer WebSite, you can check WebSite Lists.
+#### This is a Open-Source Software For Downloading Hentai and Adult Comics or Mangas From Populer WebSite, you can check WebSite Lists.
+#### I use Nodejs and Electron as main framework, then I use nedb for database, and then I use sharp for Image Optimization
 
 ### You Can:
 > - ###### View (Hentai/Adult) (Comics/Mangas).
@@ -18,5 +19,5 @@
 > - ###### xlecx.org
 > - More Sites Gonna Be Added Later :)
 
-
+If you found any bug Please Write it In Issues Tab, Thank you ;)
 If you have any question about Project Like Whats going on, Tell Me! (mehdi.enayatzadeh83@gmail.com)

@@ -6,8 +6,7 @@ function loadComics(page, search, safeScroll) {
 	var RegSearch
 	if (search != null) RegSearch = new RegExp(search.toLowerCase())
 	const comic_container = document.getElementById('comic-container')
-	let min = 0, max = 0, allPages = 0, html = '', main_body, scrollTop
-	var id, name, image, repair
+	let min = 0, max = 0, allPages = 0, html = '', main_body, scrollTop, id, name, image
 	const max_per_page = setting.max_per_page, safeScrollType = typeof(safeScroll)
 	if (safeScrollType == 'boolean' && safeScroll == true) {
 		main_body = document.getElementById('main-body')
@@ -34,12 +33,9 @@ function loadComics(page, search, safeScroll) {
 			for (let i=min; i < max; i++) {
 				id = doc[i]._id
 				name = doc[i].n
-				repair = doc[i].m || null
-				image = doc[i].i
-				if (repair == null || repair.length == 0) image = `${dirUL}/thumbs/${image}.jpg`
-				else if (repair.indexOf(0) > -1) image = 'Image/no-img-300x300.png'
-				else image = `${dirUL}/thumbs/${image}.jpg`
-
+				image = `${dirUL}/thumbs/${doc[i].i}.jpg`
+				
+				if (!fs.existsSync(image)) image = 'Image/no-img-300x300.png'
 				if (typeof(doc[i].o) == 'number') unoptimize = ''
 				else unoptimize = ' unoptimize'
 				
@@ -49,12 +45,8 @@ function loadComics(page, search, safeScroll) {
 			for (let i=min; i < max; i++) {
 				id = doc[i]._id
 				name = doc[i].n
-				repair = doc[i].m || null
-				image = doc[i].i
-				if (repair == null || repair.length == 0) image = `${dirUL}/thumbs/${image}.jpg`
-				else if (repair.indexOf(0) > -1) image = 'Image/no-img-300x300.png'
-				else image = `${dirUL}/thumbs/${image}.jpg`
-					
+				image = `${dirUL}/thumbs/${doc[i].i}.jpg`
+				if (!fs.existsSync(image)) image = 'Image/no-img-300x300.png'
 				html += `<div class="comic" onclick="openComic(${id})"><img src="${image}"><span>${doc[i].c}</span><p>${name}</p></div>`
 			}
 		}
@@ -340,45 +332,26 @@ function openComic(id) {
 
 			let lastIndex = formats[0][1]
 			let thisForamat = formats[0][2]
-			let repair = doc.m || null
 			let src = ''
 			let slider_overview_html = ''
-			if (repair == null || repair.length == 0) {
-				for (let i = 0; i < ImagesCount; i++) {
-					if (i <= lastIndex) {
-						src = `${dirUL}/${image}-${i}.${thisForamat}`
-						html += `<img data-src="${src}" onclick="openComicSlider(${i})">`
-						slider_overview_html += `<div i="${i}" onclick="changeSliderIndex(${i})"><img src="${src}" loading="lazy"><p>${i+1}</p></div>`
-					} else {
-						formatIndex++
-						lastIndex = formats[formatIndex][1]
-						thisForamat = formats[formatIndex][2]
-						src = `${dirUL}/${image}-${i}.${thisForamat}`
-						html += `<img data-src="${src}" onclick="openComicSlider(${i})">`
-						slider_overview_html += `<div i="${i}" onclick="changeSliderIndex(${i})"><img src="${src}" loading="lazy"><p>${i+1}</p></div>`
-					}
-				}
-			} else {
-				for (let i = 0; i < ImagesCount; i++) {
-					if (repair.indexOf(i) > -1) {
-						html += `<div class="repair-image" id="${i}"><p>Image hasn't Been Download Currectly.</p><button onclick="repairImage(${i}, ${repair.indexOf(i)}, ${image})">Repair</button></div>`
-						slider_overview_html += `<div i="${i}" onclick="changeSliderIndex(${i})"><img src="Image/no-img-300x300.png" loading="lazy"><p>${i+1}</p></div>`
-					} else {
-						if (i <= lastIndex) {
-							src = `${dirUL}/${image}-${i}.${thisForamat}`
-							html += `<img data-src="${src}" onclick="openComicSlider(${i})">`
-							slider_overview_html += `<div i="${i}" onclick="changeSliderIndex(${i})"><img src="${src}" loading="lazy"><p>${i+1}</p></div>`
-						} else {
-							formatIndex++
-							lastIndex = formats[formatIndex][1]
-							thisForamat = formats[formatIndex][2]
-							src = `${dirUL}/${image}-${i}.${thisForamat}`
-							html += `<img data-src="${src}" onclick="openComicSlider(${i})">`
-							slider_overview_html += `<div i="${i}" onclick="changeSliderIndex(${i})"><img src="${src}" loading="lazy"><p>${i+1}</p></div>`
-						}
-					}
+
+			for (let i = 0; i < ImagesCount; i++) {
+				if (i <= lastIndex) {
+					src = `${dirUL}/${image}-${i}.${thisForamat}`
+					if (!fs.existsSync(src)) { src = 'Image/no-img-300x300.png' }
+					html += `<img data-src="${src}" onclick="openComicSlider(${i})">`
+					slider_overview_html += `<div i="${i}" onclick="changeSliderIndex(${i})"><img src="${src}" loading="lazy"><p>${i+1}</p></div>`
+				} else {
+					formatIndex++
+					lastIndex = formats[formatIndex][1]
+					thisForamat = formats[formatIndex][2]
+					src = `${dirUL}/${image}-${i}.${thisForamat}`
+					if (!fs.existsSync(src)) { src = 'Image/no-img-300x300.png' }
+					html += `<img data-src="${src}" onclick="openComicSlider(${i})">`
+					slider_overview_html += `<div i="${i}" onclick="changeSliderIndex(${i})"><img src="${src}" loading="lazy"><p>${i+1}</p></div>`
 				}
 			}
+
 			image_container.innerHTML = html
 			comicSliderOverview.innerHTML = slider_overview_html
 			comicSliderOverview.setAttribute('count', ImagesCount - 1)
@@ -503,7 +476,7 @@ async function repairComicInfo(whitch) {
 		if (err) { error(err); return }
 		if (doc.s == undefined) return
 		if (doc.s == undefined) return
-		eval(sites[doc.s][1].replace('{id}', `'${doc.p}'`).replace('{whitch}', whitch))
+		eval(sites[doc.s][2].replace('{id}', `'${doc.p}'`).replace('{whitch}', whitch))
 	})
 }
 
@@ -527,15 +500,11 @@ function deleteComic(id) {
 			const ImagesId = doc.i
 			const ImagesFormats = doc.f
 			const ImagesCount = doc.c
-			const repair = doc.m || null
-			var repairImagesURLs = null
 			const site = doc.s
 			const post_id = doc.p
 			
 			loading.reset(8 + ImagesCount)
 			loading.show('Removing Comic From Database...')
-	
-			if (repair != null && repair.length > 0) repairImagesURLs = doc.r
 	
 			const fix_removed_index = () => {
 				fix_index(1, true)
@@ -609,55 +578,29 @@ function deleteComic(id) {
 				let formatIndex = 0, thisUrl
 				let lastIndex = ImagesFormats[0][1]
 				let thisForamat = ImagesFormats[0][2]
-				if (repair == null || repair.length == 0) {
-					for (let i = 0; i < ImagesCount; i++) {
-						if (i <= lastIndex) thisUrl = `${dirUL}/${ImagesId}-${i}.${thisForamat}`
-						else {
-							formatIndex++
-							lastIndex = ImagesFormats[formatIndex][1]
-							thisForamat = ImagesFormats[formatIndex][2]
-							thisUrl = `${dirUL}/${ImagesId}-${i}.${thisForamat}`
-						}
-	
-						if (fs.existsSync(thisUrl)) {
-							try {
-								fs.unlinkSync(thisUrl)
-							} catch(err) {
-								loading.hide()
-								error(err)
-								keydownEventIndex = 0
-								return
-							}
-						}
-						
-						loading.forward(`Deleting Comic Images (${i+1}/${ImagesCount})...`)
+				for (let i = 0; i < ImagesCount; i++) {
+					if (i <= lastIndex) thisUrl = `${dirUL}/${ImagesId}-${i}.${thisForamat}`
+					else {
+						formatIndex++
+						lastIndex = ImagesFormats[formatIndex][1]
+						thisForamat = ImagesFormats[formatIndex][2]
+						thisUrl = `${dirUL}/${ImagesId}-${i}.${thisForamat}`
 					}
-				} else {
-					for (let i = 0; i < ImagesCount; i++) {
-						if (repair.indexOf(i) == -1) {
-							if (i <= lastIndex) thisUrl = `${dirUL}/${ImagesId}-${i}.${thisForamat}`
-							else {
-								formatIndex++
-								lastIndex = ImagesFormats[formatIndex][1]
-								thisForamat = ImagesFormats[formatIndex][2]
-								thisUrl = `${dirUL}/${ImagesId}-${i}.${thisForamat}`
-							}
-							
-							if (fs.existsSync(thisUrl)) {
-								try {
-									fs.unlinkSync(thisUrl)
-								} catch(err) {
-									loading.hide()
-									error(err)
-									keydownEventIndex = 0
-									return
-								}
-							}
-							
-							loading.forward(`Deleting Comic Images (${i+1}/${ImagesCount})...`)
+
+					if (fs.existsSync(thisUrl)) {
+						try {
+							fs.unlinkSync(thisUrl)
+						} catch(err) {
+							loading.hide()
+							error(err)
+							keydownEventIndex = 0
+							return
 						}
 					}
+					
+					loading.forward(`Deleting Comic Images (${i+1}/${ImagesCount})...`)
 				}
+
 				loading.forward('Removing Comic Groups From Database...')
 				remove_comic()
 			}

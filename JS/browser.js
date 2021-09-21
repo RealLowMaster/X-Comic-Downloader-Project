@@ -74,7 +74,7 @@ function updateTabSize() {
 
 function checkBrowserTools(tabIndex) {
 	if (activeTabIndex == tabIndex) {
-		if (tabs[tabIndex].history[tabs[tabIndex].history.length - 1].replace(', false)', ', true)') == sites[thisSite][3]) document.getElementById('browser-home-btn').setAttribute('disabled', true)
+		if (tabs[tabIndex].history[tabs[tabIndex].history.length - 1].replace(', false)', ', true)') == sites[thisSite][4]) document.getElementById('browser-home-btn').setAttribute('disabled', true)
 		else document.getElementById('browser-home-btn').removeAttribute('disabled')
 
 		if (tabs[tabIndex].activeHistory != tabs[tabIndex].history.length - 1) document.getElementById('browser-next-btn').removeAttribute('disabled')
@@ -146,7 +146,7 @@ function openBrowserHistoryPanel(scoll=false) {
 				if (passHistory.length > 0) {
 					html += `<div><div>${passYear}-${passMonth}-${passDay}</div><div>`
 					for (let j = 0; j < passHistory.length; j++) {
-						html += `<div><input type="checkbox" h="${passHistory[j][1]}" onclick="browserHistorySelect(this)"><img src="Image/sites/${sites[passHistory[j][0][1][3]][0]}"><p onclick="openBrowserHistory(${passHistory[j][1]})">${passHistory[j][0][0]}</p><button type="button" onclick="openHistoryRowOption(${passHistory[j][1]})">...</button></div>`
+						html += `<div><input type="checkbox" h="${passHistory[j][1]}" onclick="browserHistorySelect(this)"><img src="Image/sites/${sites[passHistory[j][0][1][3]][1]}"><p onclick="openBrowserHistory(${passHistory[j][1]})">${passHistory[j][0][0]}</p><button type="button" onclick="openHistoryRowOption(${passHistory[j][1]})">...</button></div>`
 					}
 					html += '</div></div>'
 				}
@@ -158,7 +158,7 @@ function openBrowserHistoryPanel(scoll=false) {
 				if (i == 0 && saveCheck) {
 					html += `<div><div>${passYear}-${passMonth}-${passDay}</div><div>`
 					for (let j = 0; j < passHistory.length; j++) {
-						html += `<div><input type="checkbox" h="${passHistory[j][1]}" onclick="browserHistorySelect(this)"><img src="Image/sites/${sites[passHistory[j][0][1][3]][0]}"><p onclick="openBrowserHistory(${passHistory[j][1]})">${passHistory[j][0][0]}</p><button type="button" onclick="openHistoryRowOption(${passHistory[j][1]})">...</button></div>`
+						html += `<div><input type="checkbox" h="${passHistory[j][1]}" onclick="browserHistorySelect(this)"><img src="Image/sites/${sites[passHistory[j][0][1][3]][1]}"><p onclick="openBrowserHistory(${passHistory[j][1]})">${passHistory[j][0][0]}</p><button type="button" onclick="openHistoryRowOption(${passHistory[j][1]})">...</button></div>`
 					}
 					html += '</div></div>'
 				}
@@ -556,7 +556,7 @@ function browserNext() {
 
 function browserJumpPage(index, page) {
 	closeBrowserHistory()
-	const exec = sites[thisSite][4].replace('{index}', index).replace('{page}', page)
+	const exec = sites[thisSite][5].replace('{index}', index).replace('{page}', page)
 	clearTimeout(searchTimer)
 	eval(exec)
 }
@@ -664,7 +664,7 @@ function comicDownloader(index, result, quality, siteIndex) {
 					if (j == downloadingList[index][1].length - 1) formatList.push([firstIndex, lastIndex, thisFormat])
 				}
 			}
-			CreateComic(downloadingList[index][7][0], downloadingList[index][7][1], result, quality, downloadingList[index][2], siteIndex, downloadingList[index][3], downloadingList[index][1].length, formatList, downloadingList[index][4], downloadingList[index][5], index, true)
+			CreateComic(downloadingList[index][7][0], downloadingList[index][7][1], result, quality, downloadingList[index][2], siteIndex, downloadingList[index][3], downloadingList[index][1].length, formatList, index, true)
 		} else comicDownloader(index, result, quality, siteIndex)
 	}).catch(err => {
 		if (downloadingList[index] == undefined) return
@@ -688,7 +688,7 @@ function comicDownloader(index, result, quality, siteIndex) {
 					if (j == downloadingList[index][1].length - 1) formatList.push([firstIndex, lastIndex, thisFormat])
 				}
 			}
-			CreateComic(downloadingList[index][7][0], downloadingList[index][7][1], result, quality, downloadingList[index][2], siteIndex, downloadingList[index][3], downloadingList[index][1].length, formatList, downloadingList[index][4], downloadingList[index][5], index, true)
+			CreateComic(downloadingList[index][7][0], downloadingList[index][7][1], result, quality, downloadingList[index][2], siteIndex, downloadingList[index][3], downloadingList[index][1].length, formatList, index, true)
 		} else comicDownloader(index, result, quality, siteIndex)
 	})
 }
@@ -891,7 +891,7 @@ document.getElementById('browser-tool-search-form').addEventListener('submit', e
 	const checkText = input.value.replace(/ /g, '')
 	if (checkText.length > 0) {
 		tabs[activeTabIndex].s = input.value
-		eval(sites[thisSite][2].replace('{text}', `'${input.value.replace("'", "\\'")}'`))
+		eval(sites[thisSite][3].replace('{text}', `'${input.value.replace("'", "\\'")}'`))
 	} else tabs[activeTabIndex].s = ''
 })
 
@@ -903,7 +903,7 @@ function BrowserKeyEvents(ctrl, shift, key) {
 	else if (ctrl && !shift && key == 39) browserNext()
 	else if (ctrl && !shift && key == 72) openBrowserHistoryPanel()
 	else if (ctrl && !shift && key == 81) {
-		if (tabs[activeTabIndex].history[tabs[activeTabIndex].history.length - 1].replace(', false)', ', true)') != sites[thisSite][3]) { closeBrowserHistory(); eval(sites[thisSite][3]) }
+		if (tabs[activeTabIndex].history[tabs[activeTabIndex].history.length - 1].replace(', false)', ', true)') != sites[thisSite][4]) { closeBrowserHistory(); eval(sites[thisSite][4]) }
 	} else if (ctrl && !shift && key == 82) { closeBrowserHistory(); tabs[activeTabIndex].reload() }
 }
 

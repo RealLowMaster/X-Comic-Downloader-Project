@@ -69,28 +69,19 @@ Add Comic {
 }
 
 Added To Version {
-	Fix Bug: When Deleting The Only Comic in Page, The App Stock At That Page
-	Fix Bug: Stock in Repairing When There is no Internet Connection
-	Fix Bug: Stock in Deleting Comic When Images Are Busy
-	Add History To Browser
-	Add Optimizing All Comic Images Button (Not .gif)
-	Add More Optimization to Comic Thumbs
-	Add Show UnOptimize Comics Option To Setting for find which comic you didn't optimize
-	Make Thumbing Work Better
-	Add DarkTheme To Browser
-	Add Shortcut Keys
-	Add ReMake Thumb Button
-	Add Recent Tabs To Browser
-	Add New And Much Better Update System (In-App Update)
-	Update Error UI
-	Update Text Selection
+	
 }
 
 Did {
+	Chane Repair System Part 1++
 	Make Repairing Systems Part 6++ = Next = Complete All Image Repairing
 }
 
 Tasks => {
+	Fix Bug: Removing Some History Together
+	Make New History System
+	Fix Bug: Optimizing Comic Error Callback = reload Comic
+	Bundle Scripts
 	Add Slider System To Repaired Image
 	Add Reset Setting Button
 	Add First Time Runtime showing new release whats happend
@@ -98,6 +89,7 @@ Tasks => {
 	Add Optimizing Image Option
 	Add Perfect Drag to Scroll To Slider Overview
 	Add Auto Scroll Down for Comic Panel
+	Add How Many Percent Comic Has been Optimize
 
 	Add fs.existSync To Optimizing Images Insted of Repair
 	Change Repair System and Make it Work With fs

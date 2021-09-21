@@ -34,6 +34,7 @@ const imageLazyLoadingOptions = {
 }
 const sites = [
 	[
+		0,
 		'xlecx.jpg',
 		'xlecxRepairComicInfoGetInfo({id}, {whitch})',
 		'xlecxSearch({text}, 1, 0)',
@@ -49,7 +50,7 @@ const keydownEvents = [
 	'BrowserHistoryKeyEvents({ctrl},{shift},{key})',
 	'SettingKeyEvents({ctrl},{shift},{key})'
 ]
-const ThisWindow = remote.getCurrentWindow(), loading = new Loading(14), db = {}, procressPanel = new ProcressPanel(0), update_number = 0
+const ThisWindow = remote.getCurrentWindow(), loading = new Loading(14), db = {}, procressPanel = new ProcressPanel(0), update_number = 1
 const comicGroupsContainer = document.getElementById('c-p-g')
 const comicArtistsContainer = document.getElementById('c-p-a')
 const comicParodyContainer = document.getElementById('c-p-p')
@@ -569,7 +570,7 @@ function CheckReleaseNote() {
 		fs.unlinkSync(__dirname+'/release-note.json')
 
 
-		document.getElementById('r-n-n-v').innerHTML = 'v'+new_update.v
+		document.getElementById('r-n-n-v').innerHTML = "What's new in v"+new_update.v
 		let html = '<h2>Important Changes</h2>'
 		for (let i = 0; i < new_update.s.length; i++) {
 			html += `<p>${new_update.s[i]}</p>`
