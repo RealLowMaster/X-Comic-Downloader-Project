@@ -71,7 +71,7 @@ Added To Version {
 }
 
 Did {
-	Make Offline Comic Right Click Menu Part 2++
+	Make Offline Comic Right Click Menu Part 3++
 	Make Repairing Systems Part 6++ = Next = Complete All Image Repairing
 }
 

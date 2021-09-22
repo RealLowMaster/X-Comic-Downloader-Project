@@ -195,7 +195,7 @@ function onComicClicked(id, thumb, optimize) {
 
 		let x = e.clientX, y = e.clientY
 		menu.style.display = 'block'
-		if (window.innerWidth <= x+150) x = window.innerWidth - 150
+		if (window.innerWidth <= x+170) x = window.innerWidth - 170
 		if (window.innerHeight <= y+menu.clientHeight) y = window.innerHeight - menu.clientHeight
 		menu.style.top = y+'px'
 		menu.style.left = x+'px'
