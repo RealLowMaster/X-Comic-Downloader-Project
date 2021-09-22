@@ -993,13 +993,37 @@ input::-webkit-input-placeholder { user-select: none }
 	border-color: #0af;
 }
 
-#c-c-r-c-p > button[delete-btn] {
+#c-c-r-c-p > button[success-btn] {
+	background-color: #208f4e;
+	color: #fff;
+	border-color: #229954;
+}
+
+#c-c-r-c-p > button[success-btn]:hover {
+	background-color: #1E8449;
+	color: #fff;
+	border-color: #196F3D;
+}
+
+#c-c-r-c-p > button[warning-btn] {
+	background-color: #ff7b00;
+	color: #fff;
+	border-color: #E67E22;
+}
+
+#c-c-r-c-p > button[warning-btn]:hover {
+	background-color: #D68910;
+	color: #fff;
+	border-color: #CA6F1E;
+}
+
+#c-c-r-c-p > button[danger-btn] {
 	background-color: #C0392B;
 	color: #fff;
 	border-color: #A93226;
 }
 
-#c-c-r-c-p > button[delete-btn]:hover {
+#c-c-r-c-p > button[danger-btn]:hover {
 	background-color: #A93226;
 	color: #fff;
 	border-color: #C0392B;

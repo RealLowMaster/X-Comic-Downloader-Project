@@ -1,4 +1,4 @@
-let off_site = null, off_id = null, off_comic_id = null, off_quality = null, need_repair = [], in_comic = false
+let off_site = null, off_id = null, off_comic_id = null, off_quality = null, need_repair = [], in_comic = false, comic_menu_id = null
 
 function loadComics(page, search, safeScroll) {
 	page = page || 1
@@ -7,7 +7,7 @@ function loadComics(page, search, safeScroll) {
 	var RegSearch
 	if (search != null) RegSearch = new RegExp(search.toLowerCase())
 	const comic_container = document.getElementById('comic-container')
-	let min = 0, max = 0, allPages = 0, html = '', main_body, scrollTop, id, name, image
+	let min = 0, max = 0, allPages = 0, html = '', main_body, scrollTop, id, name, image, thumb, optimize
 	const max_per_page = setting.max_per_page, safeScrollType = typeof(safeScroll)
 	if (safeScrollType == 'boolean' && safeScroll == true) {
 		main_body = document.getElementById('main-body')
@@ -35,20 +35,26 @@ function loadComics(page, search, safeScroll) {
 				id = doc[i]._id
 				name = doc[i].n
 				image = `${dirUL}/thumbs/${doc[i].i}.jpg`
+				thumb = true
 				
-				if (!fs.existsSync(image)) image = 'Image/no-img-300x300.png'
-				if (typeof(doc[i].o) == 'number') unoptimize = ''
-				else unoptimize = ' unoptimize'
+				if (!fs.existsSync(image)) { image = 'Image/no-img-300x300.png'; thumb = false }
+				if (typeof(doc[i].o) == 'number') { unoptimize = ''; optimize = true }
+				else { unoptimize = ' unoptimize'; optimize = false }
 				
-				html += `<div class="comic" onmousedown="onComicClicked(${id})"${unoptimize}><img src="${image}"><span>${doc[i].c}</span><p>${name}</p></div>`
+				html += `<div class="comic" onmousedown="onComicClicked(${id}, ${thumb}, ${optimize})"${unoptimize}><img src="${image}"><span>${doc[i].c}</span><p>${name}</p></div>`
 			}
 		} else {
 			for (let i=min; i < max; i++) {
 				id = doc[i]._id
 				name = doc[i].n
 				image = `${dirUL}/thumbs/${doc[i].i}.jpg`
-				if (!fs.existsSync(image)) image = 'Image/no-img-300x300.png'
-				html += `<div class="comic" onmousedown="onComicClicked(${id})"><img src="${image}"><span>${doc[i].c}</span><p>${name}</p></div>`
+				thumb = true
+
+				if (!fs.existsSync(image)) { image = 'Image/no-img-300x300.png'; thumb = false }
+				if (typeof(doc[i].o) == 'number') optimize = true
+				else optimize = false
+
+				html += `<div class="comic" onmousedown="onComicClicked(${id}, ${thumb}, ${optimize})"><img src="${image}"><span>${doc[i].c}</span><p>${name}</p></div>`
 			}
 		}
 		comic_container.innerHTML = html
@@ -154,12 +160,39 @@ function pagination(total_pages, page) {
 	return arr
 }
 
-function onComicClicked(id) {
+function onComicClicked(id, thumb, optimize) {
 	const e = window.event, key = e.which
 	if (key == 2) e.preventDefault()
 	else if (key == 1) openComic(id)
 	else if (key == 3) {
+		comic_menu_id = id
 		const menu = document.getElementById('c-c-r-c-p')
+		const childs = menu.children
+		
+		if (thumb) {
+			childs[0].removeAttribute('success-btn')
+			childs[0].setAttribute('warning-btn', true)
+			childs[0].innerText = 'ReMake Thumb'
+			childs[0].setAttribute('title', 'ReMake Thumb')
+		} else {
+			childs[0].removeAttribute('warning-btn')
+			childs[0].setAttribute('success-btn', true)
+			childs[0].innerText = 'Make Thumb'
+			childs[0].setAttribute('title', 'Make Thumb')
+		}
+
+		if (optimize) {
+			childs[1].removeAttribute('success-btn')
+			childs[1].setAttribute('warning-btn', true)
+			childs[1].innerText = 'ReOptimize'
+			childs[1].setAttribute('title', 'ReOptimize Comic Images')
+		} else {
+			childs[1].removeAttribute('warning-btn')
+			childs[1].setAttribute('success-btn', true)
+			childs[1].innerText = 'Optimize'
+			childs[1].setAttribute('title', 'Optimize Comic Images')
+		}
+
 		let x = e.clientX, y = e.clientY
 		menu.style.display = 'block'
 		if (window.innerWidth <= x+150) x = window.innerWidth - 150

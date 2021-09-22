@@ -103,10 +103,11 @@ function createThumb(list, index, scrollTop) {
 	})
 }
 
-function makeThumbForAComic(id) {
+function makeThumbForAComic(id, keyEvents) {
+	keydownEventIndex = 100
 	if (!fs.existsSync(dirUL+'/thumbs')) fs.mkdirSync(dirUL+'/thumbs')
 	db.comics.findOne({_id:id}, (err, doc) => {
-		if (err) { error(err); return }
+		if (err) { error(err); keydownEventIndex = keyEvents; return }
 		if (doc == undefined) { error('Comic Not Found'); return }
 		const scrollTop = document.getElementById('main-body').scrollTop
 		document.getElementById('comic-container').innerHTML = ''
@@ -117,7 +118,7 @@ function makeThumbForAComic(id) {
 			const image = doc.i
 			const url = `${dirUL}/${doc._id}${image}/${image}-0.${doc.f[0][2]}`
 
-			if (!fs.existsSync(url)) { error('This Comic First Image Is not Downloaded, we cannot make Thumb From It.'); loading.hide(); reloadLoadingComics(scrollTop); return }
+			if (!fs.existsSync(url)) { error('This Comic First Image Is not Downloaded, we cannot make Thumb From It.'); loading.hide(); reloadLoadingComics(scrollTop); keydownEventIndex = keyEvents; return }
 			
 			if (fs.existsSync(`${dirUL}/thumbs/${image}.jpg`)) {
 				try {
@@ -138,17 +139,20 @@ function makeThumbForAComic(id) {
 						comic_thumb_optimize_btn.setAttribute('class', 'warning-action')
 						comic_thumb_optimize_btn.innerText = 'ReMake Thumb'
 						reloadLoadingComics(scrollTop)
+						keydownEventIndex = keyEvents
 					}).catch(err => {
 						loading.forward()
 						loading.hide()
 						error('MakeThumb: '+err)
 						reloadLoadingComics(scrollTop)
+						keydownEventIndex = keyEvents
 					})
 				}, 10)
 			} else {
 				loading.hide()
 				error("Image Not Found, Comic: "+doc.n)
 				reloadLoadingComics(scrollTop)
+				keydownEventIndex = keyEvents
 			}
 		}, 10)
 	})

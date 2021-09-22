@@ -67,10 +67,10 @@
 			<p id="comics-counter"></p>
 
 			<div id="c-c-r-c-p">
-				<button type="button" onclick="" title="Make Thumb">Thumb</button>
+				<button type="button" thumb-btn onclick="makeThumbForAComic(comic_menu_id, 0)" thumb-btn title="Make Thumb">Make Thumb</button>
 				<button type="button" onclick="" title="Optimize Comic Images">Optimize</button>
 				<button type="button" onclick="" title="Export Comic">Export</button>
-				<button type="button" onclick="" delete-btn title="Delete Comic">Delete</button>
+				<button type="button" onclick="" danger-btn title="Delete Comic">Delete</button>
 			</div>
 		</div>
 	</div>
@@ -99,7 +99,7 @@
 	<div class="comic-action-panel" id="comic-action-panel">
 		<div onclick="this.parentElement.style.display='none';keydownEventIndex = 1"></div>
 		<div>
-			<button onclick="makeThumbForAComic(Number(comicPanel.getAttribute('cid')))" class="success-action" id="c-a-p-o-t" title="Make Thumb for faster loading in Overview">Make Thumb</button>
+			<button onclick="makeThumbForAComic(Number(comicPanel.getAttribute('cid')), 100)" class="success-action" id="c-a-p-o-t" title="Make Thumb for faster loading in Overview">Make Thumb</button>
 			<button onclick="OptimizeComicImages(Number(comicPanel.getAttribute('cid')))" class="success-action" id="c-a-p-o-b" title="Optimize Image For faster loading and Lower Space taken (May Take Time)">Optimize Images</button>
 			<button onclick="repairComicInfo(0)" title="Repair Comic Title">Repair Comic Name</button>
 			<button onclick="repairComicInfo(1)" title="Repair Comic Groups if Have">Repair Comic Groups</button>
