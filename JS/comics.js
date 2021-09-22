@@ -1,4 +1,4 @@
-let off_site = null, off_id = null, off_comic_id = null, off_quality = null, need_repair = [], in_comic = false, comic_menu_id = null
+let off_site = null, off_id = null, off_comic_id = null, off_quality = null, need_repair = [], in_comic = false, comic_menu_id = null, passKeyEvent = null, export_comic_id = null
 
 function loadComics(page, search, safeScroll) {
 	page = page || 1
@@ -573,6 +573,75 @@ function repairComicImages(repair_list) {
 	eval(sites[off_site][2].replace('{id}', `'${off_id}'`).replace('{whitch}', 5))
 }
 
+// Export Comic
+function openComicExportPanel(id) {
+	passKeyEvent = keydownEventIndex
+	keydownEventIndex = 100
+	document.getElementById('export-panel').style.display = 'flex'
+	db.comics.findOne({_id:id}, (err, doc) => {
+		if (err) { error('LoadingComicInfo->ERR: '+err); closeComicExportPanel(); return }
+		export_comic_id = id
+		document.getElementById('ex-p-l-fname').value = toFileName(toCapitalize(doc.n))
+	})
+}
+
+function closeComicExportPanel() {
+	document.getElementById('export-panel').style.display = 'none'
+	keydownEventIndex = passKeyEvent
+	export_comic_id = null
+}
+
+function exportComicBrowseLocation() {
+	ChooseDirectory('Choose Location For Export', (err, result) => {
+		if (err) { return }
+		if (!fs.existsSync(result)) { error(`No Such Directory Called '${lastSlash(result, '\\')}'.`); return }
+
+		document.getElementById('ex-p-l-input').value = result
+	})
+}
+
+function exportComic(filepath, doc) {
+	console.log(filepath)
+	console.log(doc)
+}
+
+function checkExportComicInfo() {
+	save_value = null
+	const export_path = document.getElementById('ex-p-l-input').value || ''
+	if (export_path.replace(/ /g, '').length == 0) { error('Please Insert Export Location.'); return }
+
+	if (fs.existsSync(export_path)) {
+		let export_filename = toFileName(document.getElementById('ex-p-l-fname').value)
+		if (export_filename.replace(/ /g, '').length == 0) { error('Please Insert Export File Name.'); return }
+		export_filename = export_path+'/'+export_filename+'.'+document.getElementById('ex-p-f').getAttribute('f')
+
+		db.comics.findOne({_id:export_comic_id}, (err, doc) => {
+			if (err) { error('LoadingComicInfo->ERR: '+err); return }
+			if (doc == undefined) { error("LoadingComicInfo->ERR: Coundn't Find Comic."); return }
+
+			if (fs.existsSync(export_filename)) {
+				save_value = doc
+				errorSelector('The File is Exist, Do you want to override it ?', [
+					[
+						"Yes",
+						"btn btn-danger m-2",
+						`exportComic('${export_filename.replace(/'/g, "\\'").replace(/\\/g, '/')}',save_value);this.parentElement.parentElement.remove()`
+					],
+					[
+						"No",
+						"btn btn-primary m-2",
+						"this.parentElement.parentElement.remove();save_value=null"
+					]
+				])
+
+			} else exportComic(export_filename, doc)
+		})
+	} else {
+		error('Export Location Not Found.')
+		return
+	}
+}
+
 // Delete a Comic
 function deleteComic(id) {
 	document.getElementById('comic-action-panel').style.display = 'none'
@@ -736,6 +805,7 @@ function OfflineKeyEvents(ctrl, shift, key) {
 function OfflineComicKeyEvents(ctrl, shift, key) {
 	if (ctrl && !shift && key == 87) closeComicPanel()
 	else if (ctrl && !shift && key == 83) reOpenLastSlider()
+	else if (ctrl && !shift && key == 69) openComicExportPanel(Number(comicPanel.getAttribute('cid')), 1)
 	else if (ctrl && !shift && key == 81) {
 		keydownEventIndex = 100
 		document.getElementById('comic-action-panel').style.display='flex'

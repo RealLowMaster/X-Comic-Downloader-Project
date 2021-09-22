@@ -60,7 +60,7 @@ const browserPasteMenu = document.getElementById('browser-paste-menu')
 const bjp = document.getElementById('browser-jump-page-container')
 const bjp_i = document.getElementById('bjp-i')
 const bjp_m_p = document.getElementById('bjp-m-p')
-let comicDeleting = false, downloadCounter = 0, needReload = true, wt_fps = 20, dirDB, dirUL, dirTmp, isOptimizing = false, browserLastTabs = [], tabsHistory = [], dirHistory = '', keydownEventIndex = 0, new_update
+let comicDeleting = false, downloadCounter = 0, needReload = true, wt_fps = 20, dirDB, dirUL, dirTmp, isOptimizing = false, browserLastTabs = [], tabsHistory = [], dirHistory = '', keydownEventIndex = 0, new_update, save_value = null
 var setting, tabs = [], downloadingList = [], thisSite, lastComicId, lastHaveId, lastGroupId, lastArtistId, lastParodyId, lastTagId, searchTimer, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = [], openedMenuTabIndex, copiedTab = null
 
 /*
@@ -210,15 +210,13 @@ function ChooseDirectory(title, callback) {
 	title = title || 'Choose Directory'
 	callback = callback || null
 
-	if (callback == null) throw 'Callback function Can\'t Be Null.'
+	if (callback == null) throw "Callback function Can't Be Null."
 	if (typeof(callback) != 'function') throw 'Callback Should Be Function.'
 
 	const choosedDirectory = remote.dialog.showOpenDialogSync({title:title, properties:['openDirectory']})
 
-	if (choosedDirectory == undefined)
-		callback('Canceled', null)
-	else
-		callback(null, choosedDirectory[0])
+	if (choosedDirectory == undefined) callback('Canceled', null)
+	else callback(null, choosedDirectory[0])
 }
 
 function GetFileLocationCallback(err, result) {
@@ -474,6 +472,18 @@ function closeReleaseNote() {
 function WhichMouseButton(event) {
 	event = event || window.event
 	return event.which
+}
+
+function toCapitalize(text) {
+	const words = text.split(" ")
+	for (let i = 0; i < words.length; i++) {
+		words[i] = words[i][0].toUpperCase() + words[i].substr(1);
+	}
+	return words.join(" ")
+}
+
+function toFileName(text) {
+	return text.replace(/</g, ' ').replace(/>/g, ' ').replace(/:/g, ' ').replace(/"/g, ' ').replace(/\//g, '').replace(/\\/g, '').replace(/\|/g, '').replace(/\?/g, '').replace(/\*/g, ' ')
 }
 
 // Main Loading Stuff

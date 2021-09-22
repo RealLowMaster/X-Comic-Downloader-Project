@@ -69,7 +69,7 @@
 			<div id="c-c-r-c-p">
 				<button type="button" thumb-btn onclick="makeThumbForAComic(comic_menu_id, 0)" thumb-btn title="Make Thumb">Make Thumb</button>
 				<button type="button" onclick="OptimizeComicImages(comic_menu_id, false, 0)" title="Optimize Comic Images">Optimize</button>
-				<button type="button" onclick="" title="Export Comic">Export</button>
+				<button type="button" onclick="openComicExportPanel(comic_menu_id)" title="Export Comic">Export</button>
 				<button type="button" onclick="askForDeletingComic(comic_menu_id)" danger-btn title="Delete Comic">Delete</button>
 			</div>
 		</div>
@@ -101,6 +101,7 @@
 		<div>
 			<button onclick="makeThumbForAComic(Number(comicPanel.getAttribute('cid')), 100)" class="success-action" id="c-a-p-o-t" title="Make Thumb for faster loading in Overview">Make Thumb</button>
 			<button onclick="OptimizeComicImages(Number(comicPanel.getAttribute('cid')), true, 1)" class="success-action" id="c-a-p-o-b" title="Optimize Image For faster loading and Lower Space taken (May Take Time)">Optimize Images</button>
+			<button onclick="openComicExportPanel(Number(comicPanel.getAttribute('cid')))" title="Export Comic | Ctrl+E">Export</button>
 			<button onclick="repairComicInfo(0)" title="Repair Comic Title">Repair Comic Name</button>
 			<button onclick="repairComicInfo(1)" title="Repair Comic Groups if Have">Repair Comic Groups</button>
 			<button onclick="repairComicInfo(2)" title="Repair Comic Artists if Have">Repair Comic Artists</button>
@@ -461,6 +462,49 @@
 			<div id="r-n-n-v"></div>
 			<div id="r-n-n-n"></div>
 			<div></div>
+		</div>
+	</div>
+
+	<!-- Export Panel -->
+	<div id="export-panel">
+		<div onclick="closeComicExportPanel()"></div>
+		<button type="button" onclick="closeComicExportPanel()">X</button>
+		<div>
+			<h1>Export Comic</h1>
+
+			<br>
+
+			<p>Export Location:</p>
+			<div class="ex-p-loc">
+				<input type="text" id="ex-p-l-input" placeholder="Export Location...">
+				<button type="button" onclick="exportComicBrowseLocation()">Browse</button>
+			</div>
+
+			<br>
+
+			<p>Export FileName:</p>
+			<input type="text" id="ex-p-l-fname" placeholder="FileName...">
+
+			<br>
+
+			<p style="text-align:center">Export Format:</p>
+			<div id="ex-p-f" f='zip'>
+				<div>
+					<input type="radio" name="ex-f" value="zip" onclick="this.parentElement.parentElement.setAttribute('f', 'zip')" checked>
+					<span>Zip</span>
+				</div>
+				<div>
+					<input type="radio" name="ex-f" value="cbr" onclick="this.parentElement.parentElement.setAttribute('f', 'cbr')">
+					<span>Cbr</span>
+				</div>
+			</div>
+
+			<br><br><br>
+
+			<div style="display:flex;justify-content:center;align-items:center;width:100%">
+				<button class="btn btn-primary" type="button" onclick="checkExportComicInfo()" title="Export">Export</button>
+			</div>
+
 		</div>
 	</div>
 </body>

@@ -68,6 +68,35 @@
 	--st-cselect-btn-at-color: #fff;
 	--st-cselect-btn-at-shadow: 0 0 10px 0 rgba(30,132,73,.5);
 
+	--ccp-box-shadow: 0 1px 10px 3px rgb(0,0,0,.6);
+	--ccp-btn-bgc: #eee;
+	--ccp-btn-color: #000;
+	--ccp-btn-bd-color: transparent;
+	--ccp-btn-hover-bgc: #eee;
+	--ccp-btn-hover-color: #000;
+	--ccp-btn-hover-bd-color: #0af;
+	--ccp-btn-sc-bgc: #208f4e;
+	--ccp-btn-sc-color: #fff;
+	--ccp-btn-sc-bd-color: #229954;
+	--ccp-btn-sc-hover-bgc: #1E8449;
+	--ccp-btn-sc-hover-color: #fff;
+	--ccp-btn-sc-hover-bd-color: #196F3D;
+	--ccp-btn-wn-bgc: #ff7b00;
+	--ccp-btn-wn-color: #fff;
+	--ccp-btn-wn-bd-color: #E67E22;
+	--ccp-btn-wn-hover-bgc: #D68910;
+	--ccp-btn-wn-hover-color: #fff;
+	--ccp-btn-wn-hover-bd-color: #CA6F1E;
+	--ccp-btn-dg-bgc: #C0392B;
+	--ccp-btn-dg-color: #fff;
+	--ccp-btn-dg-bd-color: #A93226;
+	--ccp-btn-dg-hover-bgc: #A93226;
+	--ccp-btn-dg-hover-color: #fff;
+	--ccp-btn-dg-hover-bd-color: #C0392B;
+
+
+
+
 	--pgnt-btn-bgc: #EBF5FB;
 	--pgnt-btn-color: #222;
 	--pgnt-btn-bd-color: #D6EAF8;
@@ -963,7 +992,6 @@ input::-webkit-input-placeholder { user-select: none }
 	text-align: center;
 }
 
-
 #c-c-r-c-p {
 	display: none;
 	width: 170px;
@@ -972,61 +1000,61 @@ input::-webkit-input-placeholder { user-select: none }
 	top: 0;
 	left: 0;
 	z-index: +100;
-	box-shadow: 0 1px 10px 3px rgb(0,0,0,.6);
+	box-shadow: var(--ccp-box-shadow);
 }
 
 #c-c-r-c-p > button {
 	display: block;
 	width: 100%;
 	padding: 10px;
-	background-color: #eee;
-	color: #000;
-	border: 1px solid transparent;
+	background-color: var(--ccp-btn-bgc);
+	color: var(--ccp-btn-color);
+	border: 1px solid var(--ccp-btn-bd-color);
 	font-size: 15px;
 	cursor: pointer;
 	transition: background-color .2s, color .2s, border-color .2s;
 }
 
 #c-c-r-c-p > button:hover {
-	background-color: #eee;
-	color: #000;
-	border-color: #0af;
+	background-color: var(--ccp-btn-hover-bgc);
+	color: var(--ccp-btn-hover-color);
+	border-color: var(--ccp-btn-hover-bd-color);
 }
 
 #c-c-r-c-p > button[success-btn] {
-	background-color: #208f4e;
-	color: #fff;
-	border-color: #229954;
+	background-color: var(--ccp-btn-sc-bgc);
+	color: var(--ccp-btn-sc-color);
+	border-color: var(--ccp-btn-sc-bd-color);
 }
 
 #c-c-r-c-p > button[success-btn]:hover {
-	background-color: #1E8449;
-	color: #fff;
-	border-color: #196F3D;
+	background-color: var(--ccp-btn-sc-hover-bgc);
+	color: var(--ccp-btn-sc-hover-color);
+	border-color: var(--ccp-btn-sc-hover-bd-color);
 }
 
 #c-c-r-c-p > button[warning-btn] {
-	background-color: #ff7b00;
-	color: #fff;
-	border-color: #E67E22;
+	background-color: var(--ccp-btn-wn-bgc);
+	color: var(--ccp-btn-wn-color);
+	border-color: var(--ccp-btn-wn-bd-color);
 }
 
 #c-c-r-c-p > button[warning-btn]:hover {
-	background-color: #D68910;
-	color: #fff;
-	border-color: #CA6F1E;
+	background-color: var(--ccp-btn-wn-hover-bgc);
+	color: var(--ccp-btn-wn-hover-color);
+	border-color: var(--ccp-btn-wn-hover-bd-color);
 }
 
 #c-c-r-c-p > button[danger-btn] {
-	background-color: #C0392B;
-	color: #fff;
-	border-color: #A93226;
+	background-color: var(--ccp-btn-dg-bgc);
+	color: var(--ccp-btn-dg-color);
+	border-color: var(--ccp-btn-dg-bd-color);
 }
 
 #c-c-r-c-p > button[danger-btn]:hover {
-	background-color: #A93226;
-	color: #fff;
-	border-color: #C0392B;
+	background-color: var(--ccp-btn-dg-hover-bgc);
+	color: var(--ccp-btn-dg-hover-color);
+	border-color: var(--ccp-btn-dg-hover-bd-color);
 }
 
 .comic {
@@ -1983,6 +2011,167 @@ input::-webkit-input-placeholder { user-select: none }
 	background-color: #E67E22;
 	color: #fff;
 	border-color: #CA6F1E;
+}
+
+/* Export Panel */
+#export-panel {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	top: 0;
+	left: 0;
+}
+
+#export-panel > div:first-child {
+	display: block;
+	width: 100%;
+	height: 100%;
+	background-color: #000e;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+#export-panel > button {
+	display: block;
+	justify-content: center;
+	align-items: center;
+	width: 23px;
+	height: 23px;
+	background-color: transparent;
+	color: #fff;
+	border-radius: 5px;
+	font-size: 15px;
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	cursor: pointer;
+	transition: background-color .2s;
+}
+
+#export-panel > button:hover {
+	background-color: #fffa;
+}
+
+#export-panel > div:last-child {
+	width: 650px;
+	height: 500px;
+	background-color: #fff;
+	border: 1px solid #ddd;
+	box-shadow: 0 0 10px rgba(255,255,255,.5);
+	z-index: +1;
+}
+
+#export-panel > div:last-child > h1 {
+	display: block;
+	width: 100%;
+	padding: 10px;
+	margin: 5px 0 20px 0;
+	color: #222;
+	font-size: 22px;
+	font-weight: 600;
+	text-align: center;
+}
+
+#export-panel > div:last-child > p {
+	display: block;
+	width: 100%;
+	padding: 5px 10px 0 15px;
+	color: #222;
+	font-size: 15px;
+}
+
+.ex-p-loc {
+	display: grid;
+	grid-template-columns: 10fr 2fr;
+	width: 100%;
+	padding: 10px;
+}
+
+.ex-p-loc > input,
+#ex-p-l-fname {
+	padding: 5px 10px;
+	background-color: #fff;
+	color: #222;
+	border: 0 solid #eee;
+	border-width: 1px 0 1px 1px;
+	font-size: 15px;
+}
+
+.ex-p-loc > button {
+	background-color: #eee;
+	color: #000;
+	transition: background-color .2s;
+	cursor: pointer;
+}
+
+.ex-p-loc > button:hover {
+	background-color: #ddd;
+}
+
+#ex-p-l-fname {
+	display: block;
+	width: 96%;
+	margin: 10px auto;
+	border-width: 1px;
+}
+
+#ex-p-f {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 200px;
+	padding: 10px;
+	margin: 10px auto;
+	background-color: transparent;
+	border: 1px solid #eee;
+	border-radius: 7px;
+}
+
+#ex-p-f > div {
+	display: inline-block;
+	/* justify-content: center;
+	align-content: center; */
+	width: 50px;
+	height: 25px;
+	margin: 0 5px;
+	position: relative;
+	cursor: pointer;
+	user-select: none;
+}
+
+
+#ex-p-f > div > span {
+	display: block;
+	width: 100%;
+	height: 100%;
+	padding: 1px 3px;
+	text-align: center;
+	background-color: #eee;
+	border: 1px solid #ddd;
+	border-radius: 6px;
+	transition: background-color .2s, color .2s, border-color .2s;
+}
+
+#ex-p-f > div > input {
+	display: block;
+	width: 100%;
+	height: 100%;
+	background-color: #f00;
+	position: absolute;
+	top: 0;
+	left: 0;
+	opacity: 0;
+	cursor: pointer;
+}
+
+#ex-p-f > div > input:checked ~ span {
+	background-color: #3498DB;
+	color: #fff;
+	border-color: #2488cb;
 }
 
 /* New Release */

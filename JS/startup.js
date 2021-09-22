@@ -22,6 +22,7 @@ function AfterDatabaseDoneOnStartup() {
 	document.getElementById('main').style.display = 'grid'
 	loading.hide()
 	CheckReleaseNote()
+	document.getElementById('ex-p-l-input').value = remote.app.getPath('downloads')
 	if (setting.check_update) CheckUpdate()
 }
 

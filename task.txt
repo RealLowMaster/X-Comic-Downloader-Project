@@ -71,6 +71,7 @@ Added To Version {
 }
 
 Did {
+	Make Export Comic System Part 1++
 	Make Offline Comic Right Click Menu Part 4++
 	Make Repairing Systems Part 6++ = Next = Complete All Image Repairing
 }
