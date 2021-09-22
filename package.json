@@ -48,6 +48,7 @@
 	},
 	"dependencies": {
 		"image-downloader": "^4.0.2",
+		"jszip": "^3.7.1",
 		"nedb": "^1.8.0",
 		"node-stream-zip": "^1.14.0",
 		"request": "^2.88.2",

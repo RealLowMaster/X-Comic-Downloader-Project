@@ -600,9 +600,46 @@ function exportComicBrowseLocation() {
 	})
 }
 
-function exportComic(filepath, doc) {
-	console.log(filepath)
-	console.log(doc)
+function exportComic(filepath, filelist) {
+	const JSZip = require('jszip')
+	const flen = filelist.length
+	loading.reset(flen + 1)
+	loading.show(`Compressing (0/${flen})`)
+	setTimeout(() => {
+		const procress = async () => {
+			const zip = new JSZip()
+			for (let i = 0; i < filelist.length; i++) {
+				zip.file(i+'.'+fileExt(filelist[i]), fs.readFileSync(filelist[i]), { base64: true })
+				loading.forward(`Compressing (${i+1}/${flen})`)
+			}
+	
+			loading.forward(`Making File...`)
+			const content = await zip.generateAsync({ type: "nodebuffer" })
+			fs.writeFileSync(filepath, content)
+			loading.forward()
+			loading.hide()
+			PopAlert('Exporting Finished')
+		}
+		procress()
+	}, 1)
+}
+
+function exportComicCheckExist(filepath, filelist) {
+	if (fs.existsSync(filepath)) {
+		save_value = filelist
+		errorSelector('The File is Exist, Do you want to override it ?', [
+			[
+				"Yes",
+				"btn btn-danger m-2",
+				`exportComic('${filepath.replace(/'/g, "\\'").replace(/\\/g, '/')}',save_value);this.parentElement.parentElement.remove()`
+			],
+			[
+				"No",
+				"btn btn-primary m-2",
+				"this.parentElement.parentElement.remove();save_value=null"
+			]
+		])
+	} else exportComic(filepath, filelist)
 }
 
 function checkExportComicInfo() {
@@ -618,14 +655,36 @@ function checkExportComicInfo() {
 		db.comics.findOne({_id:export_comic_id}, (err, doc) => {
 			if (err) { error('LoadingComicInfo->ERR: '+err); return }
 			if (doc == undefined) { error("LoadingComicInfo->ERR: Coundn't Find Comic."); return }
+			const zipFiles = [], image = doc.i, id = doc._id, formats = doc.f
+			let src = '', formatIndex = 0, lastIndex = formats[0][1], thisForamat = formats[0][2], undl = false
+			for (let i = 0; i < doc.c; i++) {
+				if (i <= lastIndex) {
+					src = `${dirUL}/${id}${image}/${image}-${i}.${thisForamat}`
+					if (!fs.existsSync(src)) {
+						src = 'Image/no-img-300x300.png'
+						undl = true
+					}
+					zipFiles.push(src)
+				} else {
+					formatIndex++
+					lastIndex = formats[formatIndex][1]
+					thisForamat = formats[formatIndex][2]
+					src = `${dirUL}/${id}${image}/${image}-${i}.${thisForamat}`
+					if (!fs.existsSync(src)) {
+						src = 'Image/no-img-300x300.png'
+						undl = true
+					}
+					zipFiles.push(src)
+				}
+			}
 
-			if (fs.existsSync(export_filename)) {
-				save_value = doc
-				errorSelector('The File is Exist, Do you want to override it ?', [
+			if (undl) {
+				save_value = [export_filename, zipFiles]
+				errorSelector('Some Comic Images Are not Downloaded, Do you want To Continue ?', [
 					[
 						"Yes",
 						"btn btn-danger m-2",
-						`exportComic('${export_filename.replace(/'/g, "\\'").replace(/\\/g, '/')}',save_value);this.parentElement.parentElement.remove()`
+						`exportComicCheckExist(save_value[0],save_value[1]);this.parentElement.parentElement.remove()`
 					],
 					[
 						"No",
@@ -633,8 +692,7 @@ function checkExportComicInfo() {
 						"this.parentElement.parentElement.remove();save_value=null"
 					]
 				])
-
-			} else exportComic(export_filename, doc)
+			} else exportComicCheckExist(export_filename, zipFiles)
 		})
 	} else {
 		error('Export Location Not Found.')

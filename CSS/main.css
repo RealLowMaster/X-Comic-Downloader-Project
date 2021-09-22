@@ -2015,7 +2015,7 @@ input::-webkit-input-placeholder { user-select: none }
 
 /* Export Panel */
 #export-panel {
-	display: flex;
+	display: none;
 	justify-content: center;
 	align-items: center;
 	width: 100%;
