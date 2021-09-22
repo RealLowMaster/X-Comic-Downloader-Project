@@ -67,7 +67,9 @@ Add Comic {
 }
 
 Added To Version {
-	
+	Add Right Click Menu To Downloaded Comics For Fast Actions
+	Add Export Comic Ability (Requested By )
+	Make Comic Optimizing Calculate .gif File Sizes
 }
 
 Did {

@@ -50,7 +50,7 @@ const keydownEvents = [
 	'BrowserHistoryKeyEvents({ctrl},{shift},{key})',
 	'SettingKeyEvents({ctrl},{shift},{key})'
 ]
-const ThisWindow = remote.getCurrentWindow(), loading = new Loading(15), db = {}, procressPanel = new ProcressPanel(0), update_number = 2
+const ThisWindow = remote.getCurrentWindow(), loading = new Loading(15), db = {}, procressPanel = new ProcressPanel(0), update_number = 3
 const comicGroupsContainer = document.getElementById('c-p-g')
 const comicArtistsContainer = document.getElementById('c-p-a')
 const comicParodyContainer = document.getElementById('c-p-p')

@@ -603,24 +603,22 @@ function exportComicBrowseLocation() {
 function exportComic(filepath, filelist) {
 	const JSZip = require('jszip')
 	const flen = filelist.length
-	loading.reset(flen + 1)
-	loading.show(`Compressing (0/${flen})`)
+	loading.reset(2)
+	loading.show(`Compressing...`)
 	setTimeout(() => {
-		const procress = async () => {
-			const zip = new JSZip()
-			for (let i = 0; i < filelist.length; i++) {
-				zip.file(i+'.'+fileExt(filelist[i]), fs.readFileSync(filelist[i]), { base64: true })
-				loading.forward(`Compressing (${i+1}/${flen})`)
-			}
-	
-			loading.forward(`Making File...`)
+		const zip = new JSZip()
+		for (let i = 0; i < filelist.length; i++) {
+			zip.file(i+'.'+fileExt(filelist[i]), fs.readFileSync(filelist[i]), { base64: true })
+		}
+
+		loading.forward(`Making File...`)
+		setTimeout(async() => {
 			const content = await zip.generateAsync({ type: "nodebuffer" })
 			fs.writeFileSync(filepath, content)
 			loading.forward()
 			loading.hide()
 			PopAlert('Exporting Finished')
-		}
-		procress()
+		}, 1)
 	}, 1)
 }
 

@@ -31,25 +31,37 @@ function OptimizeComicImages(comic_id, opened_comic, keyEvent) {
 			if (err) { procressPanel.hide(); error(err); openComic(comic_id); isOptimizing = false; keydownEventIndex = keyEvent; return }
 	
 			if (opened_comic) document.getElementById('comic-action-panel').style.display='none'
-			let ImagesCount = doc.c, formats = doc.f, image = doc.i, lastIndex = formats[0][1], thisForamat = formats[0][2], urls = [], formatIndex = 0
+			let ImagesCount = doc.c, formats = doc.f, image = doc.i, lastIndex = formats[0][1], thisForamat = formats[0][2], urls = [], formatIndex = 0, size
 
 			for (let i = 0; i < ImagesCount; i++) {
 				if (i <= lastIndex) {
 					if (!fs.existsSync(`${dirUL}/${comic_id}${image}/${image}-${i}.${thisForamat}`)) procressPanel.add(`Image ${i+1}: Undownloaded Image.`, 'danger')
 					else if (thisForamat != 'gif') urls.push([`${image}-${i}.${thisForamat}`, thisForamat])
+					else {
+						size = fs.statSync(`${dirUL}/${comic_id}${image}/${image}-${i}.${thisForamat}`).size
+						optimizeFullSize += size
+						optimizeConvertSize += size
+						procressPanel.add("Warning: we can't optimize .gif!", 'warning')
+					}
 				} else {
 					formatIndex++
 					lastIndex = formats[formatIndex][1]
 					thisForamat = formats[formatIndex][2]
 					if (!fs.existsSync(`${dirUL}/${comic_id}${image}/${image}-${i}.${thisForamat}`)) procressPanel.add(`Image ${i+1}: Undownloaded Image.`, 'danger')
 					else if (thisForamat != 'gif') urls.push([`${image}-${i}.${thisForamat}`, thisForamat])
+					else {
+						size = fs.statSync(`${dirUL}/${comic_id}${image}/${image}-${i}.${thisForamat}`).size
+						optimizeFullSize += size
+						optimizeConvertSize += size
+						procressPanel.add("Warning: we can't optimize .gif!", 'warning')
+					}
 				}
 			}
 	
 			procressPanel.changePercent(urls.length + 2)
 			procressPanel.forward('Making Temp...')
 			setTimeout(() => {
-				let size = 0
+				size = 0
 				for (let i = 0; i < urls.length; i++) {
 					try {
 						size = fs.statSync(`${dirUL}/${comic_id}${image}/${urls[i][0]}`).size
@@ -179,8 +191,4 @@ function convertImagesToOptimize(list, index, comic_id, image, callback) {
 			procressPanel.add('Optimize: '+err, 'danger')
 		}
 	}
-}
-
-function showOptimatizationList() {
-	
 }
