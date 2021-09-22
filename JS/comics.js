@@ -736,5 +736,14 @@ function OfflineKeyEvents(ctrl, shift, key) {
 function OfflineComicKeyEvents(ctrl, shift, key) {
 	if (ctrl && !shift && key == 87) closeComicPanel()
 	else if (ctrl && !shift && key == 83) reOpenLastSlider()
-	else if (ctrl && !shift && key == 81) { document.getElementById('comic-action-panel').style.display='flex'; keydownEventIndex = 100 }
+	else if (ctrl && !shift && key == 81) {
+		keydownEventIndex = 100
+		document.getElementById('comic-action-panel').style.display='flex'
+	}
+	else if (ctrl && !shift && key == 82) {
+		if (need_repair.length > 0) {
+			keydownEventIndex = 100
+			repairComicImages()
+		}
+	}
 }
