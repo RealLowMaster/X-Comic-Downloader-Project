@@ -535,11 +535,6 @@ function removeTab(id) {
 	updateTabSize()
 }
 
-function WhichMouseButton(event) {
-	event = event || window.event
-	return event.which
-}
-
 function browserPrev() {
 	closeBrowserHistory()
 	document.getElementById(activeTabComicId).innerHTML = ''

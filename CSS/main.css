@@ -963,6 +963,48 @@ input::-webkit-input-placeholder { user-select: none }
 	text-align: center;
 }
 
+
+#c-c-r-c-p {
+	display: none;
+	width: 150px;
+	background-color: transparent;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: +100;
+	box-shadow: 0 1px 10px 3px rgb(0,0,0,.6);
+}
+
+#c-c-r-c-p > button {
+	display: block;
+	width: 100%;
+	padding: 10px;
+	background-color: #eee;
+	color: #000;
+	border: 1px solid transparent;
+	font-size: 15px;
+	cursor: pointer;
+	transition: background-color .2s, color .2s, border-color .2s;
+}
+
+#c-c-r-c-p > button:hover {
+	background-color: #eee;
+	color: #000;
+	border-color: #0af;
+}
+
+#c-c-r-c-p > button[delete-btn] {
+	background-color: #C0392B;
+	color: #fff;
+	border-color: #A93226;
+}
+
+#c-c-r-c-p > button[delete-btn]:hover {
+	background-color: #A93226;
+	color: #fff;
+	border-color: #C0392B;
+}
+
 .comic {
 	display: inline-block;
 	width: 235px;

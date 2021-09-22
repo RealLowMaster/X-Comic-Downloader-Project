@@ -1307,7 +1307,6 @@ async function xlecxRepairComicInfoGetInfo(id, whitch) {
 					openComic(comic_id)
 					return
 				}
-				console.log(neededResult)
 
 				procressPanel.reset(need_repair.length)
 				procressPanel.config({ bgClose:false, closeBtn:false, miniLog:true })

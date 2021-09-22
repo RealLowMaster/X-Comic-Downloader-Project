@@ -28,7 +28,7 @@ function loadComics(page, search, safeScroll) {
 			max = min + max_per_page
 			if (max > doc.length) max = doc.length
 		}
-
+		
 		if (setting.show_unoptimize) {
 			let unoptimize = ''
 			for (let i=min; i < max; i++) {
@@ -40,7 +40,7 @@ function loadComics(page, search, safeScroll) {
 				if (typeof(doc[i].o) == 'number') unoptimize = ''
 				else unoptimize = ' unoptimize'
 				
-				html += `<div class="comic" onclick="openComic(${id})"${unoptimize}><img src="${image}"><span>${doc[i].c}</span><p>${name}</p></div>`
+				html += `<div class="comic" onmousedown="onComicClicked(${id})"${unoptimize}><img src="${image}"><span>${doc[i].c}</span><p>${name}</p></div>`
 			}
 		} else {
 			for (let i=min; i < max; i++) {
@@ -48,7 +48,7 @@ function loadComics(page, search, safeScroll) {
 				name = doc[i].n
 				image = `${dirUL}/thumbs/${doc[i].i}.jpg`
 				if (!fs.existsSync(image)) image = 'Image/no-img-300x300.png'
-				html += `<div class="comic" onclick="openComic(${id})"><img src="${image}"><span>${doc[i].c}</span><p>${name}</p></div>`
+				html += `<div class="comic" onmousedown="onComicClicked(${id})"><img src="${image}"><span>${doc[i].c}</span><p>${name}</p></div>`
 			}
 		}
 		comic_container.innerHTML = html
@@ -78,10 +78,8 @@ function loadComics(page, search, safeScroll) {
 			document.getElementById('jump-page-container').style.display = 'none'
 		}
 		
-		if (doc.length == 0 && search != null)
-			comic_container.innerHTML = '<br><div class="alert alert-danger">No Comic has been Found.</div>'
-		else if (doc.length == 0 && search == null)
-			comic_container.innerHTML = '<br><div class="alert alert-danger">There is no Comic Downloaded.</div>'
+		if (doc.length == 0 && search != null) comic_container.innerHTML = '<br><div class="alert alert-danger">No Comic has been Found.</div>'
+		else if (doc.length == 0 && search == null) comic_container.innerHTML = '<br><div class="alert alert-danger">There is no Comic Downloaded.</div>'
 
 		if (safeScrollType == 'boolean' || safeScrollType == 'number') main_body.scrollTop = scrollTop
 	}
@@ -154,6 +152,39 @@ function pagination(total_pages, page) {
 	if (page < total_pages) arr.push(['Next', page + 1])
 
 	return arr
+}
+
+function onComicClicked(id) {
+	const e = window.event, key = e.which
+	if (key == 2) e.preventDefault()
+	else if (key == 1) openComic(id)
+	else if (key == 3) {
+		const menu = document.getElementById('c-c-r-c-p')
+		let x = e.clientX, y = e.clientY
+		menu.style.display = 'block'
+		if (window.innerWidth <= x+150) x = window.innerWidth - 150
+		if (window.innerHeight <= y+menu.clientHeight) y = window.innerHeight - menu.clientHeight
+		menu.style.top = y+'px'
+		menu.style.left = x+'px'
+		setComicMenuEvents()
+	}
+}
+
+function setComicMenuEvents() {
+	window.addEventListener('click', closeComicMenu)
+	document.getElementById('main-body').addEventListener('scroll', closeComicMenu)
+	window.addEventListener('resize', closeComicMenu)
+}
+
+function removeComicMenuEvents() {
+	window.removeEventListener('click', closeComicMenu)
+	document.getElementById('main-body').removeEventListener('scroll', closeComicMenu)
+	window.removeEventListener('resize', closeComicMenu)
+}
+
+function closeComicMenu() {
+	document.getElementById('c-c-r-c-p').style.display = 'none'
+	removeComicMenuEvents()
 }
 
 function offlineChangePage(forward=true) {
@@ -506,7 +537,6 @@ async function repairComicInfo(whitch) {
 function repairComicImages(repair_list) {
 	if (window.navigator.onLine == false) { PopAlert('You are not Connected To Internet.', 'danger') }
 	if (typeof(repair_list) == 'object' && repair_list.length != 0) need_repair = repair_list
-	console.log(need_repair)
 	eval(sites[off_site][2].replace('{id}', `'${off_id}'`).replace('{whitch}', 5))
 }
 

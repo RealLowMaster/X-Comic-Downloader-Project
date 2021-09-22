@@ -50,7 +50,7 @@ const keydownEvents = [
 	'BrowserHistoryKeyEvents({ctrl},{shift},{key})',
 	'SettingKeyEvents({ctrl},{shift},{key})'
 ]
-const ThisWindow = remote.getCurrentWindow(), loading = new Loading(15), db = {}, procressPanel = new ProcressPanel(0), update_number = 1
+const ThisWindow = remote.getCurrentWindow(), loading = new Loading(15), db = {}, procressPanel = new ProcressPanel(0), update_number = 2
 const comicGroupsContainer = document.getElementById('c-p-g')
 const comicArtistsContainer = document.getElementById('c-p-a')
 const comicParodyContainer = document.getElementById('c-p-p')
@@ -469,6 +469,11 @@ function closeReleaseNote() {
 	document.getElementById('release-note').style.display = 'none'
 	document.getElementById('r-n-n-v').innerHTML = ''
 	document.getElementById('r-n-n-n').innerHTML = ''
+}
+
+function WhichMouseButton(event) {
+	event = event || window.event
+	return event.which
 }
 
 // Main Loading Stuff
