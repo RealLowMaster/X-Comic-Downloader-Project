@@ -258,7 +258,7 @@ function CheckUpdate(alert) {
 	if (window.navigator.onLine) {
 		fetch('https://api.jsonbin.io/b/612915922aa800361270d567/latest', { method: "GET" }).then(response => {
 			if (!response.ok) {
-				PopAlert('UPDATE::CHECKING::ERR::HTTP::'+response.status, 'danger')
+				PopAlert('UPDATE->CHECKING->ERR->HTTP: '+response.status, 'danger')
 				return
 			}
 			return response.json()
@@ -268,10 +268,10 @@ function CheckUpdate(alert) {
 				const releaser = document.getElementById('new-release')
 				releaser.getElementsByTagName('p')[0].textContent = `New Release: v${json.version}`
 				releaser.style.display = 'block'
-			} else PopAlert("UpdateCheck: Your App is Up To Date.")
+			} else PopAlert("UpdateChecker: Your App is Up To Date.")
 		}).catch(err => {
 			if (err == 'TypeError: Failed to fetch') return
-			PopAlert('UpdateCheckErr: '+err, 'danger')
+			PopAlert('UPDATE->CHECKING->ERR: '+err, 'danger')
 		})
 	} else if (alert) PopAlert('No Internet Connection.', 'danger')
 }

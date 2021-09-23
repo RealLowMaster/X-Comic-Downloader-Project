@@ -88,221 +88,6 @@ function checkBrowserTools(tabIndex) {
 	}
 }
 
-function openBrowserLastTabs() {
-	if (browserLastTabs.length == 0) {
-		if (tabsHistory.length != 0) {
-			pasteTab(tabsHistory[tabsHistory.length - 1][1])
-			tabsHistory.pop()
-			saveHistory()
-		}
-	} else {
-		for (let i = 0; i < browserLastTabs.length; i++) {
-			pasteTab(browserLastTabs[i])
-			tabsHistory.pop()
-		}
-
-		browserLastTabs = []
-		saveHistory()
-	}
-
-	checkTabHistoryButtons()
-}
-
-function toggleBrowserHistory() {
-	if (document.getElementById('browser-history-panel').hasAttribute('active')) closeBrowserHistory()
-	else openBrowserHistoryPanel()
-}
-
-function openBrowserHistoryPanel(scoll=false) {
-	keydownEventIndex = 4
-	const panel = document.getElementById('browser-history-panel')
-	document.getElementById('b-h-p-m-c').style.display = 'none'
-
-	if (tabsHistory.length > 0) {
-		panel.setAttribute('active', true)
-		let passYear, passMonth, passDay, passHistory = [], saveCheck = false, html = ''
-
-		const check_new_date = function(checkhistoey) {
-			if (checkhistoey[2] == passYear) {
-				if (checkhistoey[3] == passMonth) {
-					if (checkhistoey[4] == passDay) return false
-					else return true
-				} else return true
-			} else return true
-		}
-
-		const update_date = function(checkhistoey) {
-			passYear = checkhistoey[2]
-			passMonth = checkhistoey[3]
-			passDay = checkhistoey[4]
-		}
-
-		for (let i = tabsHistory.length - 1; i >= 0; i--) {
-			saveCheck = check_new_date(tabsHistory[i])
-			if (saveCheck || i == 0) {
-				
-				if (i == 0 && !saveCheck) passHistory.push([tabsHistory[i], i])
-				
-				if (passHistory.length > 0) {
-					html += `<div><div>${passYear}-${passMonth}-${passDay}</div><div>`
-					for (let j = 0; j < passHistory.length; j++) {
-						html += `<div><input type="checkbox" h="${passHistory[j][1]}" onclick="browserHistorySelect(this)"><img src="Image/sites/${sites[passHistory[j][0][1][3]][1]}"><p onclick="openBrowserHistory(${passHistory[j][1]})">${passHistory[j][0][0]}</p><button type="button" onclick="openHistoryRowOption(${passHistory[j][1]})">...</button></div>`
-					}
-					html += '</div></div>'
-				}
-
-				passHistory = []
-				passHistory.push([tabsHistory[i], i])
-				update_date(tabsHistory[i])
-				
-				if (i == 0 && saveCheck) {
-					html += `<div><div>${passYear}-${passMonth}-${passDay}</div><div>`
-					for (let j = 0; j < passHistory.length; j++) {
-						html += `<div><input type="checkbox" h="${passHistory[j][1]}" onclick="browserHistorySelect(this)"><img src="Image/sites/${sites[passHistory[j][0][1][3]][1]}"><p onclick="openBrowserHistory(${passHistory[j][1]})">${passHistory[j][0][0]}</p><button type="button" onclick="openHistoryRowOption(${passHistory[j][1]})">...</button></div>`
-					}
-					html += '</div></div>'
-				}
-			} else passHistory.push([tabsHistory[i], i])
-		}
-		
-		document.getElementById('b-h-p-h-c').innerHTML = html
-		panel.style.display = 'block'
-		if (!scoll) panel.scrollTop = 0
-	} else {
-		panel.setAttribute('active', true)
-		document.getElementById('b-h-p-h-c').innerHTML = '<div class="alert alert-danger">There is no History.</div>'
-		panel.style.display = 'block'
-		if (!scoll) panel.scrollTop = 0
-	}
-}
-
-function closeBrowserHistory() {
-	keydownEventIndex = 3
-	br_history_selected_inputs = []
-	br_history_selected_indexs = []
-	const panel = document.getElementById('browser-history-panel')
-	panel.style.display = 'none'
-	document.getElementById('b-h-p-h-c').innerHTML = ''
-	panel.removeAttribute('active')
-	document.getElementById('b-h-p-m-c').style.display = 'none'
-	document.getElementById('browser-history-panel').removeAttribute('selection')
-}
-
-function browserHistorySelect(who) {
-	const index = Number(who.getAttribute('h'))
-	if (who.checked) {
-		if (br_history_selected_indexs.length == 0) document.getElementById('browser-history-panel').setAttribute('selection', true)
-		br_history_selected_inputs.push(who)
-		br_history_selected_indexs.push(index)
-	} else {
-		const rowIndex = br_history_selected_indexs.indexOf(index)
-		br_history_selected_inputs.splice(rowIndex, 1)
-		br_history_selected_indexs.splice(rowIndex, 1)
-		if (br_history_selected_indexs.length == 0) document.getElementById('browser-history-panel').removeAttribute('selection')
-	}
-}
-
-function unSelectAllBrowserHistory() {
-	for (let i = 0; i < br_history_selected_inputs.length; i++) {
-		br_history_selected_inputs[i].checked = false
-	}
-	br_history_selected_inputs = []
-	br_history_selected_indexs = []
-	document.getElementById('browser-history-panel').removeAttribute('selection')
-}
-
-function removeSelectedBrowserHistories() {
-	for (let i = 0; i < br_history_selected_indexs.length; i++) {
-		tabsHistory.splice(br_history_selected_indexs[i], 1)
-	}
-	br_history_selected_inputs = []
-	br_history_selected_indexs = []
-	document.getElementById('browser-history-panel').removeAttribute('selection')
-	openBrowserHistoryPanel(true)
-	setTimeout(() => {
-		saveHistory()
-	}, 100)
-}
-
-function askForRemovingSelectedBrHistories() {
-	errorSelector('Are you sure about it ?', [
-		[
-			"Yes",
-			"btn btn-primary m-2",
-			"removeSelectedBrowserHistories();this.parentElement.parentElement.remove()"
-		],
-		[
-			"No",
-			"btn btn-danger m-2"
-		]
-	])
-}
-
-function openBrowserHistory(index) {
-	browserLastTabs = []
-	pasteTab(tabsHistory[index][1])
-	tabsHistory.splice(index, 1)
-	checkTabHistoryButtons()
-
-	setTimeout(() => {
-		saveHistory()
-	}, 100)
-}
-
-function openHistoryRowOption(index) {
-	const e = window.event
-	if (e.target.tagName == 'BUTTON') {
-		browserHistoryIndex = index
-		const menu = document.getElementById('b-h-p-m')
-		menu.style.top = e.clientY+'px'
-		menu.style.left = (e.clientX - 168)+'px'
-		document.getElementById('b-h-p-m-c').style.display = 'block'
-	}
-}
-
-function removeBrowserHistoryRow() {
-	tabsHistory.splice(browserHistoryIndex, 1)
-	openBrowserHistoryPanel(true)
-	if (br_history_selected_indexs.length > 0) {
-		document.getElementById('browser-history-panel').removeAttribute('selection')
-		br_history_selected_inputs = []
-		br_history_selected_indexs = []
-	}
-	setTimeout(() => {
-		saveHistory()
-	}, 100)
-}
-
-function addHistory(historyTab, text) {
-	const d = new Date()
-	if (text == "") text = '*UnLoaded*'
-	tabsHistory.push([text, [historyTab.s, historyTab.history, historyTab.activeHistory, historyTab.site], d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes()])
-}
-
-function saveHistory() {
-	fs.writeFileSync(dirHistory, JSON.stringify({h:tabsHistory}), {encoding:"utf8"})
-}
-
-function clearBrowserHistory() {
-	tabsHistory = []
-	fs.writeFileSync(dirHistory, JSON.stringify({h:[]}), {encoding:"utf8"})
-	document.getElementById('b-h-p-h-c').innerHTML = '<div class="alert alert-danger">There is no History.</div>'
-}
-
-function askClearBrowserHistory() {
-	errorSelector('Are you sure about it ?', [
-		[
-			"Yes",
-			"btn btn-primary m-2",
-			"clearBrowserHistory();this.parentElement.parentElement.remove()"
-		],
-		[
-			"No",
-			"btn btn-danger m-2"
-		]
-	])
-}
-
 function activateTab(who) {
 	closeBrowserHistory()
 	if (document.getElementById(who.getAttribute('pi')) == undefined) return
@@ -920,6 +705,223 @@ document.getElementById('browser-tool-search-form').addEventListener('submit', e
 		eval(sites[thisSite][3].replace('{text}', `'${input.value.replace("'", "\\'")}'`))
 	} else tabs[activeTabIndex].s = ''
 })
+
+// Browser History
+function openBrowserLastTabs() {
+	if (browserLastTabs.length == 0) {
+		if (tabsHistory.length != 0) {
+			pasteTab(tabsHistory[tabsHistory.length - 1][1])
+			tabsHistory.pop()
+			saveHistory()
+		}
+	} else {
+		for (let i = 0; i < browserLastTabs.length; i++) {
+			pasteTab(browserLastTabs[i])
+			tabsHistory.pop()
+		}
+
+		browserLastTabs = []
+		saveHistory()
+	}
+
+	checkTabHistoryButtons()
+}
+
+function toggleBrowserHistory() {
+	if (document.getElementById('browser-history-panel').hasAttribute('active')) closeBrowserHistory()
+	else openBrowserHistoryPanel()
+}
+
+function openBrowserHistoryPanel(scoll=false) {
+	keydownEventIndex = 4
+	const panel = document.getElementById('browser-history-panel')
+	document.getElementById('b-h-p-m-c').style.display = 'none'
+
+	if (tabsHistory.length > 0) {
+		panel.setAttribute('active', true)
+		let passYear, passMonth, passDay, passHistory = [], saveCheck = false, html = ''
+
+		const check_new_date = function(checkhistoey) {
+			if (checkhistoey[2] == passYear) {
+				if (checkhistoey[3] == passMonth) {
+					if (checkhistoey[4] == passDay) return false
+					else return true
+				} else return true
+			} else return true
+		}
+
+		const update_date = function(checkhistoey) {
+			passYear = checkhistoey[2]
+			passMonth = checkhistoey[3]
+			passDay = checkhistoey[4]
+		}
+
+		for (let i = tabsHistory.length - 1; i >= 0; i--) {
+			saveCheck = check_new_date(tabsHistory[i])
+			if (saveCheck || i == 0) {
+				
+				if (i == 0 && !saveCheck) passHistory.push([tabsHistory[i], i])
+				
+				if (passHistory.length > 0) {
+					html += `<div><div>${passYear}-${passMonth}-${passDay}</div><div>`
+					for (let j = 0; j < passHistory.length; j++) {
+						html += `<div><input type="checkbox" h="${passHistory[j][1]}" onclick="browserHistorySelect(this)"><img src="Image/sites/${sites[passHistory[j][0][1][3]][1]}"><p onclick="openBrowserHistory(${passHistory[j][1]})">${passHistory[j][0][0]}</p><button type="button" onclick="openHistoryRowOption(${passHistory[j][1]})">...</button></div>`
+					}
+					html += '</div></div>'
+				}
+
+				passHistory = []
+				passHistory.push([tabsHistory[i], i])
+				update_date(tabsHistory[i])
+				
+				if (i == 0 && saveCheck) {
+					html += `<div><div>${passYear}-${passMonth}-${passDay}</div><div>`
+					for (let j = 0; j < passHistory.length; j++) {
+						html += `<div><input type="checkbox" h="${passHistory[j][1]}" onclick="browserHistorySelect(this)"><img src="Image/sites/${sites[passHistory[j][0][1][3]][1]}"><p onclick="openBrowserHistory(${passHistory[j][1]})">${passHistory[j][0][0]}</p><button type="button" onclick="openHistoryRowOption(${passHistory[j][1]})">...</button></div>`
+					}
+					html += '</div></div>'
+				}
+			} else passHistory.push([tabsHistory[i], i])
+		}
+		
+		document.getElementById('b-h-p-h-c').innerHTML = html
+		panel.style.display = 'block'
+		if (!scoll) panel.scrollTop = 0
+	} else {
+		panel.setAttribute('active', true)
+		document.getElementById('b-h-p-h-c').innerHTML = '<div class="alert alert-danger">There is no History.</div>'
+		panel.style.display = 'block'
+		if (!scoll) panel.scrollTop = 0
+	}
+}
+
+function closeBrowserHistory() {
+	keydownEventIndex = 3
+	br_history_selected_inputs = []
+	br_history_selected_indexs = []
+	const panel = document.getElementById('browser-history-panel')
+	panel.style.display = 'none'
+	document.getElementById('b-h-p-h-c').innerHTML = ''
+	panel.removeAttribute('active')
+	document.getElementById('b-h-p-m-c').style.display = 'none'
+	document.getElementById('browser-history-panel').removeAttribute('selection')
+}
+
+function browserHistorySelect(who) {
+	const index = Number(who.getAttribute('h'))
+	if (who.checked) {
+		if (br_history_selected_indexs.length == 0) document.getElementById('browser-history-panel').setAttribute('selection', true)
+		br_history_selected_inputs.push(who)
+		br_history_selected_indexs.push(index)
+	} else {
+		const rowIndex = br_history_selected_indexs.indexOf(index)
+		br_history_selected_inputs.splice(rowIndex, 1)
+		br_history_selected_indexs.splice(rowIndex, 1)
+		if (br_history_selected_indexs.length == 0) document.getElementById('browser-history-panel').removeAttribute('selection')
+	}
+}
+
+function unSelectAllBrowserHistory() {
+	for (let i = 0; i < br_history_selected_inputs.length; i++) {
+		br_history_selected_inputs[i].checked = false
+	}
+	br_history_selected_inputs = []
+	br_history_selected_indexs = []
+	document.getElementById('browser-history-panel').removeAttribute('selection')
+}
+
+function removeSelectedBrowserHistories() {
+	br_history_selected_indexs.sort(function(a, b){return b - a})
+	for (let i = 0; i < br_history_selected_indexs.length; i++) {
+		tabsHistory.splice(br_history_selected_indexs[i], 1)
+	}
+	br_history_selected_inputs = []
+	br_history_selected_indexs = []
+	document.getElementById('browser-history-panel').removeAttribute('selection')
+	openBrowserHistoryPanel(true)
+	setTimeout(() => {
+		saveHistory()
+	}, 100)
+}
+
+function askForRemovingSelectedBrHistories() {
+	errorSelector('Are you sure about it ?', [
+		[
+			"Yes",
+			"btn btn-primary m-2",
+			"removeSelectedBrowserHistories();this.parentElement.parentElement.remove()"
+		],
+		[
+			"No",
+			"btn btn-danger m-2"
+		]
+	])
+}
+
+function openBrowserHistory(index) {
+	browserLastTabs = []
+	pasteTab(tabsHistory[index][1])
+	tabsHistory.splice(index, 1)
+	checkTabHistoryButtons()
+
+	setTimeout(() => {
+		saveHistory()
+	}, 100)
+}
+
+function openHistoryRowOption(index) {
+	const e = window.event
+	if (e.target.tagName == 'BUTTON') {
+		browserHistoryIndex = index
+		const menu = document.getElementById('b-h-p-m')
+		menu.style.top = e.clientY+'px'
+		menu.style.left = (e.clientX - 168)+'px'
+		document.getElementById('b-h-p-m-c').style.display = 'block'
+	}
+}
+
+function removeBrowserHistoryRow() {
+	tabsHistory.splice(browserHistoryIndex, 1)
+	openBrowserHistoryPanel(true)
+	if (br_history_selected_indexs.length > 0) {
+		document.getElementById('browser-history-panel').removeAttribute('selection')
+		br_history_selected_inputs = []
+		br_history_selected_indexs = []
+	}
+	setTimeout(() => {
+		saveHistory()
+	}, 100)
+}
+
+function addHistory(historyTab, text) {
+	const d = new Date()
+	if (text == "") text = '*UnLoaded*'
+	tabsHistory.push([text, [historyTab.s, historyTab.history, historyTab.activeHistory, historyTab.site], d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes()])
+}
+
+function saveHistory() {
+	fs.writeFileSync(dirHistory, JSON.stringify({h:tabsHistory}), {encoding:"utf8"})
+}
+
+function clearBrowserHistory() {
+	tabsHistory = []
+	fs.writeFileSync(dirHistory, JSON.stringify({h:[]}), {encoding:"utf8"})
+	document.getElementById('b-h-p-h-c').innerHTML = '<div class="alert alert-danger">There is no History.</div>'
+}
+
+function askClearBrowserHistory() {
+	errorSelector('Are you sure about it ?', [
+		[
+			"Yes",
+			"btn btn-primary m-2",
+			"clearBrowserHistory();this.parentElement.parentElement.remove()"
+		],
+		[
+			"No",
+			"btn btn-danger m-2"
+		]
+	])
+}
 
 // Key Event
 function BrowserKeyEvents(ctrl, shift, key) {

@@ -68,11 +68,11 @@ Add Comic {
 
 Added To Version {
 	Fix Bug: After Closing Browser, Offline Browsing Key Events Do not work anymore
+	Fix Bug: Browser Removing Selected Histories do not Remove the right History
 	Change Offline Max Comic in Page Limit To 100
 }
 
 Tasks => {
-	Fix Bug: Removing Some History Together
 	Make New History System
 	Bundle Scripts
 	Add Slider System To Repaired Image
