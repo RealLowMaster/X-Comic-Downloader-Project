@@ -70,28 +70,35 @@ Added To Version {
 	Fix Bug: After Closing Browser, Offline Browsing Key Events Do not work anymore
 	Fix Bug: Browser Removing Selected Histories do not Remove the right History
 	Change Offline Max Comic in Page Limit To 100
+	Make Browser Tab Removing Procress Kind Of Like Chrome (Tabs Will Resize After you finish Removing)
 }
 
 Tasks => {
 	Make New History System
-	Bundle Scripts
 	Add Slider System To Repaired Image
 	Add Reset Setting Button
 	Make Tab Doplicator inset after tab
-	Add Optimizing Image Option
 	Add Perfect Drag to Scroll To Slider Overview
 	Add Auto Scroll Down for Comic Panel
-	Add How Many Percent Comic Has been Optimize
+	Add Fix Update Button
+	Make Browser Selecting History Easier
+	Add Support For hitomi.la (Requested By Markus DarkOrb)
 
 	Mybe in v2  {
+		Add More Comic Viewing Theme { 2x2, 3x3, 4x4, free-spect }
 		Add Bookmark || Favoriet Posts
+		Make Browser Tabs Style Better {
+			Add curve to selected Tab
+			Add Icon To Tab
+			Add Title Attrbiute To Tabs
+			Make Tab Resizing Work Better
+		}
 		Add Ability That Check Post Updated Image
 		Add Find Artist and ... To Offline Part
 		Add Report Bug Button
 	}
 	
 	New Abilities For v2 {
-		Add Repair Check To Comic
 		Add Ability To Zoom in Image in Sldier
 		Add Custom Theme Maker
 		Make Collection Basics

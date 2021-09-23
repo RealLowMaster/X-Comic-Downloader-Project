@@ -1,4 +1,4 @@
-let browserHistoryIndex = 0, br_history_selected_inputs = [], br_history_selected_indexs = []
+let browserHistoryIndex = 0, br_history_selected_inputs = [], br_history_selected_indexs = [], resizeTabTimer
 
 function openBrowser() {
 	keydownEventIndex = 3
@@ -266,6 +266,7 @@ function pasteTab(newTab) {
 }
 
 function removeTab(id) {
+	clearTimeout(resizeTabTimer)
 	const removingTab = tabsContainer.querySelector(`[pi="${id}"]`)
 	const removingTabIndex = Number(removingTab.getAttribute('ti'))
 	browserLastTabs = []
@@ -317,7 +318,9 @@ function removeTab(id) {
 	document.getElementById(id).remove()
 
 	checkTabHistoryButtons()
-	updateTabSize()
+	resizeTabTimer = setTimeout(() => {
+		updateTabSize()
+	}, 390)
 }
 
 function browserPrev() {

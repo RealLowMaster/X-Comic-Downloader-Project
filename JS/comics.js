@@ -230,6 +230,7 @@ function offlineChangePage(forward=true) {
 }
 
 function searchComics(value, page) {
+	clearTimeout(searchTimer)
 	let search_speed
 	if (page == undefined) {
 		switch (setting.search_speed) {
@@ -248,7 +249,6 @@ function searchComics(value, page) {
 		}
 	}
 
-	clearTimeout(searchTimer)
 	if (value.replace(/ /g, '').length > 0) {
 		if (typeof(page) != 'number') page = 1
 		if (search_speed == 0) {
