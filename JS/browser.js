@@ -10,11 +10,11 @@ function closeBrowser() {
 	imageLazyLoadingOptions.root = comicPanel
 	imageLoadingObserver = new IntersectionObserver(ObserverFunction, imageLazyLoadingOptions)
 	needReload = true
-	keydownEventIndex = 0
 	reloadLoadingComics()
 	document.getElementById('browser').style.display = 'none'
 	document.getElementById('main').style.display = 'grid'
 	closeBrowserHistory()
+	keydownEventIndex = 0
 	thisSite = null
 	activeTabIndex = null
 	activeTabComicId = null

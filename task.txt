@@ -67,13 +67,8 @@ Add Comic {
 }
 
 Added To Version {
-	Add Right Click Menu To Downloaded Comics For Fast Actions
-	Add Export Comic Ability (Requested By )
-	Make Comic Optimizing Calculate .gif File Sizes
-}
-
-Did {
-	Make Repairing Systems Part 6++ = Next = Complete All Image Repairing
+	Fix Bug: After Closing Browser, Offline Browsing Key Events Do not work anymore
+	Change Offline Max Comic in Page Limit To 100
 }
 
 Tasks => {
