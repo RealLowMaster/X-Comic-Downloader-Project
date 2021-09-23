@@ -94,9 +94,6 @@
 	--ccp-btn-dg-hover-color: #fff;
 	--ccp-btn-dg-hover-bd-color: #C0392B;
 
-
-
-
 	--pgnt-btn-bgc: #EBF5FB;
 	--pgnt-btn-color: #222;
 	--pgnt-btn-bd-color: #D6EAF8;
@@ -173,7 +170,6 @@
 	--br-h-con-menu-btn-hover-bgc: #eee;
 	--br-h-con-menu-btn-color: #111;
 	--br-h-con-color: #222;
-
 	--br-h-bm-bgc: #fff;
 	--br-h-bm-bd-color: #eee;
 	--br-h-bm-btn-bgc: transparent;
@@ -182,6 +178,25 @@
 	--br-h-bm-btn-hover-bgc: #2488cb10;
 	--br-h-bm-btn-hover-color: #2488cb;
 	--br-h-bm-btn-hover-bd-color: #ddd;
+	--br-h-row-img-bgc: #fff;
+	--br-s-bgc: #eee;
+	--br-s-input-bgc: #fff;
+	--br-s-input-bd-color: #eee;
+	--br-s-input-box-shadow: 0 3px 3px 0 rgba(0,0,0,.4);
+	--br-s-input-ph-color: #999;
+	--br-s-input-hover-bd-color: #0af;
+	--br-s-input-focus-bd-color: #b700ff;
+	--br-s-input-focus-box-shadow: 0 10px 10px 0 rgba(0,0,0,.3);
+	--br-s-input-color: #222;
+	--br-s-s-bgc: transparent;
+	--br-s-s-color: #222;
+	--br-s-s-bd-color: #ddd;
+	--br-s-s-hover-bgc: #fff;
+	--br-s-s-hover-color: #222;
+	--br-s-s-hover-bd-color: #ddd;
+	--br-s-s-box-shadow: 0 1px 3px 0 rgba(0,0,0,.1);
+	--br-s-s-img-bgc: #fff;
+	--br-s-s-img-box-shadow: 0 1px 5px 0 rgba(0,0,0,.3);
 }
 
 ::-webkit-scrollbar {
@@ -684,7 +699,9 @@ input::-webkit-input-placeholder { user-select: none }
 	right: 2px;
 }
 
-#browser-history-panel {
+/* Browser Histroy */
+#browser-history-panel,
+#browser-sites-panel {
 	display: none;
 	width: 100%;
 	height: calc(100% - var(--br-h-panel-top));
@@ -754,7 +771,7 @@ input::-webkit-input-placeholder { user-select: none }
 #b-h-p-h-c > div > div:last-child > div > img {
 	width: 30px;
 	height: 30px;
-	background-color: transparent;
+	background-color: var(--br-h-row-img-bgc);
 	border-radius: 50%;
 	object-fit: cover;
 	object-position: center;
@@ -957,6 +974,83 @@ input::-webkit-input-placeholder { user-select: none }
 
 #browser-history-panel[selection] > #b-h-p-s-m {
 	display: flex;
+}
+
+/* Browser Sites */
+#browser-sites-panel {
+	background-color: var(--br-s-bgc) !important;
+}
+
+#b-s-p-s {
+	display: block;
+	width: 90%;
+	padding: 10px;
+	margin: 10px auto;
+	background-color: var(--br-s-input-bgc);
+	color: var(--br-s-input-color);
+	border: 1px solid var(--br-s-input-bd-color);
+	box-shadow: var(--br-s-input-box-shadow);
+	transition: transform .2s, border-color .2s, box-shadow .2s;
+}
+
+#b-s-p-s::-webkit-input-placeholder {
+	color: var(--br-s-input-ph-color);
+}
+
+#b-s-p-s:hover { border-color: var(--br-s-input-hover-bd-color) }
+
+#b-s-p-s:focus {
+	transform: translateY(-5px);
+	border-color: var(--br-s-input-focus-bd-color);
+	box-shadow: var(--br-s-input-focus-box-shadow);
+}
+
+#b-s-p-c {
+	display: flex;
+	justify-content: center;
+	align-content: center;
+	width: 100%;
+	padding: 10px;
+}
+
+#b-s-p-c > div {
+	display: inline-block;
+	width: 120px;
+	height: auto;
+	padding: 10px;
+	margin: 10px;
+	background-color: var(--br-s-s-bgc);
+	border: 1px solid var(--br-s-s-bd-color);
+	border-radius: 10px;
+	box-shadow: var(--br-s-s-box-shadow);
+	transition: background-color .2s, border-color .2s;
+	cursor: pointer;
+}
+
+#b-s-p-c > div > img {
+	display: block;
+	width: 60px;
+	height: 60px;
+	margin: 10px auto;
+	background-color: var(--br-s-s-img-bgc);
+	border-radius: 50%;
+	box-shadow: var(--br-s-s-img-box-shadow);
+}
+
+#b-s-p-c > div > p {
+	display: block;
+	width: 100%;
+	color: var(--br-s-s-color);
+	text-transform: capitalize;
+	font-size: 16px;
+	text-align: center;
+	cursor: pointer;
+}
+
+#b-s-p-c > div:hover {
+	background-color: var(--br-s-s-hover-bgc);
+	color: var(--br-s-s-hover-color);
+	border-color: var(--br-s-s-hover-bd-color);
 }
 
 /* Spin */

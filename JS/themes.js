@@ -4,59 +4,11 @@ const offline_theme_var = ['--obr-tmenu-bgc','--obr-con-bgc','--obr-tmenu-btn-bg
 const offline_theme_themes = [
 	[
 		'#ddd','#fff','#eee','#000','transparent','#eee','#000','#0af','#fff','#222','#eee','#3498DB','#5DADE2','#fff','#3498DB','#3498DB','#fff','#2488cb','#111','#f00','0 0 6px 0 rgba(222,50,50.4)','#222b','#fff','#666','#fff','#025ba7','#111','#fff','#333','#eee','#222','#fff','#eee','#fff','#eee','#fff','#111','#eee','#111','#666','#fff','#eee','#222','#0af','#fff','#fff','#111','#eee','#0af','#888','#3498DB','#fff','#2E86C1','#fff','#eeeb','#dddc','#fff','#222','0 0 10px 0 rgba(150,150,150,.2)','#eee','#222','0 4px 6px 0 rgba(120,120,120,.3)','#229954','#fff','0 0 10px 0 rgba(30,132,73,.5)',
-		'0 1px 10px 3px rgb(0,0,0,.6)',
-		'#eee',
-		'#000',
-		'transparent',
-		'#eee',
-		'#000',
-		'#0af',
-		'#208f4e',
-		'#fff',
-		'#229954',
-		'#1E8449',
-		'#fff',
-		'#196F3D',
-		'#ff7b00',
-		'#fff',
-		'#E67E22',
-		'#D68910',
-		'#fff',
-		'#CA6F1E',
-		'#C0392B',
-		'#fff',
-		'#A93226',
-		'#A93226',
-		'#fff',
-		'#C0392B'
+		'0 1px 10px 3px rgb(0,0,0,.6)','#eee','#000','transparent','#eee','#000','#0af','#208f4e','#fff','#229954','#1E8449','#fff','#196F3D','#ff7b00','#fff','#E67E22','#D68910','#fff','#CA6F1E','#C0392B','#fff','#A93226','#A93226','#fff','#C0392B'
 	],
 	[
 		'#333','#222','#444','#fff','#111','#1e1e1e','#fff','#0af','#222','#fff','#111','#3498DB','#5DADE2','#fff','#3498DB','#3498DB','#fff','#2488cb','#333','#009657','0 0 12px 0 rgb(0,150,87,.5)','#222b','#fff','#666','#fff','#025ba7','#fff','#333','#eee','#444','#eee','#444','#555','#444','#777','#333','#fff','#222','#fff','#666','#fff','#222','#eee','#0af','#fff','#444','#ee','#555','#0af','#888','#3498DB','#fff','#2E86C1','#fff','#222b','#111c','#fff','#222','0 0 10px 0 rgba(150,150,150,.2)','#eee','#222','0 4px 6px 0 rgba(120,120,120,.3)','#229954','#fff','0 0 10px 0 rgba(30,132,73,.5)',
-		'0 1px 10px 3px rgb(0,0,0,.6)',
-		'#eee',
-		'#000',
-		'transparent',
-		'#eee',
-		'#000',
-		'#0af',
-		'#208f4e',
-		'#fff',
-		'#229954',
-		'#1E8449',
-		'#fff',
-		'#196F3D',
-		'#ff7b00',
-		'#fff',
-		'#E67E22',
-		'#D68910',
-		'#fff',
-		'#CA6F1E',
-		'#C0392B',
-		'#fff',
-		'#A93226',
-		'#A93226',
-		'#fff',
-		'#C0392B'
+		'0 1px 10px 3px rgb(0,0,0,.6)','#eee','#000','transparent','#eee','#000','#0af','#208f4e','#fff','#229954','#1E8449','#fff','#196F3D','#ff7b00','#fff','#E67E22','#D68910','#fff','#CA6F1E','#C0392B','#fff','#A93226','#A93226','#fff','#C0392B'
 	]
 ]
 
@@ -85,12 +37,12 @@ const comic_panel_theme_themes = [
 ]
 
 // Browser Theme
-const browser_theme_var = ['--br-tab-con-bgc','--br-tab-bgc','--br-tab-color', '--br-tab-bd-color','--br-tab-btn-color', '--br-tab-btn-hover-bgc','--br-tab-active-bgc', '--br-tab-active-color','--br-tab-active-bd-color','--br-tool-con-bgc','--br-tool-btn-bgc','--br-tool-btn-bd-color','--br-tool-btn-hover-bgc','--br-tool-btn-hover-bd-color','--br-tool-btn-color','--br-tool-btn-hover-color','--br-tool-s-input-bgc','--br-tool-s-input-color','--br-tool-s-input-bd-color','--br-tool-s-btn-bgc','--br-tool-s-btn-color','--br-tool-s-btn-bd-color','--br-tool-s-btn-hover-bgc','--br-tool-s-btn-hover-color','--br-tool-s-btn-hover-bd-color','--br-tool-s-input-focus-bd-color','--br-page-con-bgc','--br-h-panel-bgc','--br-h-con-bgc','--br-h-con-title-bd-color','--br-h-con-history-hover-bgc','--br-h-con-option-btn-color','--br-h-con-option-hover-btn-bgc','--br-h-con-option-hover-btn-color','--br-h-con-option-menu-btn-bgc','--br-h-con-option-menu-btn-color','--br-h-con-option-menu-btn-bd-color','--br-h-con-option-menu-hover-btn-bgc','--br-h-con-option-menu-hover-btn-bd-color','--br-h-con-menu-bgc','--br-h-con-menu-bd-color','--br-h-con-menu-btn-bgc','--br-h-con-menu-btn-hover-bgc','--br-h-con-menu-btn-color','--br-h-con-color','--br-h-bm-bgc','--br-h-bm-bd-color','--br-h-bm-btn-bgc','--br-h-bm-btn-color','--br-h-bm-btn-bd-color','--br-h-bm-btn-hover-bgc','--br-h-bm-btn-hover-color','--br-h-bm-btn-hover-bd-color']
+const browser_theme_var = ['--br-tab-con-bgc','--br-tab-bgc','--br-tab-color', '--br-tab-bd-color','--br-tab-btn-color', '--br-tab-btn-hover-bgc','--br-tab-active-bgc', '--br-tab-active-color','--br-tab-active-bd-color','--br-tool-con-bgc','--br-tool-btn-bgc','--br-tool-btn-bd-color','--br-tool-btn-hover-bgc','--br-tool-btn-hover-bd-color','--br-tool-btn-color','--br-tool-btn-hover-color','--br-tool-s-input-bgc','--br-tool-s-input-color','--br-tool-s-input-bd-color','--br-tool-s-btn-bgc','--br-tool-s-btn-color','--br-tool-s-btn-bd-color','--br-tool-s-btn-hover-bgc','--br-tool-s-btn-hover-color','--br-tool-s-btn-hover-bd-color','--br-tool-s-input-focus-bd-color','--br-page-con-bgc','--br-h-panel-bgc','--br-h-con-bgc','--br-h-con-title-bd-color','--br-h-con-history-hover-bgc','--br-h-con-option-btn-color','--br-h-con-option-hover-btn-bgc','--br-h-con-option-hover-btn-color','--br-h-con-option-menu-btn-bgc','--br-h-con-option-menu-btn-color','--br-h-con-option-menu-btn-bd-color','--br-h-con-option-menu-hover-btn-bgc','--br-h-con-option-menu-hover-btn-bd-color','--br-h-con-menu-bgc','--br-h-con-menu-bd-color','--br-h-con-menu-btn-bgc','--br-h-con-menu-btn-hover-bgc','--br-h-con-menu-btn-color','--br-h-con-color','--br-h-bm-bgc','--br-h-bm-bd-color','--br-h-bm-btn-bgc','--br-h-bm-btn-color','--br-h-bm-btn-bd-color','--br-h-bm-btn-hover-bgc','--br-h-bm-btn-hover-color','--br-h-bm-btn-hover-bd-color','--br-h-row-img-bgc','--br-s-bgc','--br-s-input-bgc','--br-s-input-bd-color','--br-s-input-box-shadow','--br-s-input-ph-color','--br-s-input-hover-bd-color','--br-s-input-focus-bd-color','--br-s-input-focus-box-shadow','--br-s-input-color','--br-s-s-bgc','--br-s-s-color','--br-s-s-bd-color','--br-s-s-hover-bgc','--br-s-s-hover-color','--br-s-s-hover-bd-color','--br-s-s-box-shadow','--br-s-s-img-bgc','--br-s-s-img-box-shadow']
 const browser_theme_themes = [
 	[
-		'#fff','#eee','#000','#ddd','#fff','#fff2','#111','#fff','#000','#fff','#fff','#ddd','#eee','#0af','#000','#000','#fff','#222','#eee','#eee','#222','#ddd','#ddd','#3498DB','#ddd','#3498DB','#fff','#eee','#fff','#ddd','#eee','#3334','#111','#fff','#fff','#111','#eee','#eee','#0af','#fff','#eee','transparent','#eee','#111','#222','#fff','#eee','transparent','#2488cb','#ddd','#2488cb10','#2488cb','#ddd'
+		'#fff','#eee','#000','#ddd','#fff','#fff2','#111','#fff','#000','#fff','#fff','#ddd','#eee','#0af','#000','#000','#fff','#222','#eee','#eee','#222','#ddd','#ddd','#3498DB','#ddd','#3498DB','#fff','#eee','#fff','#ddd','#eee','#3334','#111','#fff','#fff','#111','#eee','#eee','#0af','#fff','#eee','transparent','#eee','#111','#222','#fff','#eee','transparent','#2488cb','#ddd','#2488cb10','#2488cb','#ddd','#fff', '#eee','#fff','#eee','0 3px 3px 0 rgba(0,0,0,.4)','#999','#0af','#b700ff','0 10px 10px 0 rgba(0,0,0,.3)','#222','transparent','#222','#ddd','#fff','#222','#ddd','0 1px 3px 0 rgba(0,0,0,.1)','#fff','0 1px 5px 0 rgba(0,0,0,.3)'
 	],
 	[
-		'#000','#000','#fff','#000','#fff','#fff2','#333','#fff','#444','#333','transparent','transparent','transparent','transparent','#fff','#fff','#555','#fff','#444','#444','#fff','#333','#333','#3498DB','#222','#3498DB','#000','#222','#444','#333','#333','#eee6','#fff','#111','#333','#fff','#222','#444','#0af','#333','#222','transparent','#444','#fff','#fff','#222','#111','#333','#fff','#444','#2488cb10','#2488cb','#444'
+		'#000','#000','#fff','#000','#fff','#fff2','#333','#fff','#444','#333','transparent','transparent','transparent','transparent','#fff','#fff','#555','#fff','#444','#444','#fff','#333','#333','#3498DB','#222','#3498DB','#000','#222','#444','#333','#333','#eee6','#fff','#111','#333','#fff','#222','#444','#0af','#333','#222','transparent','#444','#fff','#fff','#222','#111','#333','#fff','#444','#2488cb10','#2488cb','#444','#fff', '#222','#111','#000','0 1px 7px 0 rgba(50,100,150,.4)','#999','#0af','#b700ff','0 10px 10px 0 rgba(0,0,0,.3)','#fff','transparent','#fff','#333','#444','#fff','#333','0 1px 4px 0 rgba(0,0,0,.1)','#fff','0 1px 6px 0 rgba(0,0,0,.3)'
 	]
 ]

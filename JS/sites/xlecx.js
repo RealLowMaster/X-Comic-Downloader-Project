@@ -9,7 +9,6 @@ function openXlecxBrowser() {
 	const id = createNewTab('xlecxChangePage(1, 0, false)', false, 0)
 	if (id == null) { PopAlert('You Can\'t Make Any More Tab.', 'danger'); return }
 	createNewXlecxTab(id)
-	document.getElementById('browser').style.display = 'grid'
 }
 
 function createNewXlecxTab(id, pageNumber) {

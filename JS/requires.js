@@ -35,11 +35,15 @@ const imageLazyLoadingOptions = {
 const sites = [
 	[
 		0,
-		'xlecx.jpg',
+		['xlecx', 'xlecx.org'],
 		'xlecxRepairComicInfoGetInfo({id}, {whitch})',
 		'xlecxSearch({text}, 1, 0)',
 		'xlecxChangePage(1, 0, true)',
 		'xlecxJumpPage({index}, {page})'
+	],
+	[
+		1,
+		['hitomi', 'hitomi.la']
 	]
 ]
 const keydownEvents = [
@@ -50,16 +54,11 @@ const keydownEvents = [
 	'BrowserHistoryKeyEvents({ctrl},{shift},{key})',
 	'SettingKeyEvents({ctrl},{shift},{key})'
 ]
-const ThisWindow = remote.getCurrentWindow(), loading = new Loading(15), db = {}, procressPanel = new ProcressPanel(0), update_number = 3
+const ThisWindow = remote.getCurrentWindow(), loading = new Loading(16), db = {}, procressPanel = new ProcressPanel(0), update_number = 3
 const comicGroupsContainer = document.getElementById('c-p-g')
 const comicArtistsContainer = document.getElementById('c-p-a')
 const comicParodyContainer = document.getElementById('c-p-p')
 const comicTagsContainer = document.getElementById('c-p-ts')
-const browserTabMenu = document.getElementById('browser-tab-menu')
-const browserPasteMenu = document.getElementById('browser-paste-menu')
-const bjp = document.getElementById('browser-jump-page-container')
-const bjp_i = document.getElementById('bjp-i')
-const bjp_m_p = document.getElementById('bjp-m-p')
 let comicDeleting = false, downloadCounter = 0, needReload = true, wt_fps = 20, dirDB, dirUL, dirTmp, isOptimizing = false, browserLastTabs = [], tabsHistory = [], dirHistory = '', keydownEventIndex = 0, new_update, save_value = null
 var setting, tabs = [], downloadingList = [], thisSite, lastComicId, lastHaveId, lastGroupId, lastArtistId, lastParodyId, lastTagId, searchTimer, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = [], openedMenuTabIndex, copiedTab = null
 
@@ -595,6 +594,14 @@ function CheckReleaseNote() {
 
 		new_update = null
 	}
+}
+
+function SetSite() {
+	html = ''
+	for (let i = 0; i < sites.length; i++) {
+		html += `<div title="${sites[i][1][1]}"><img src="Image/sites/${sites[i][1][0]}-60x60.png"><p>${sites[i][1][0]}</p></div>`
+	}
+	document.getElementById('b-s-p-c').innerHTML = html
 }
 
 // Make Tabs Draggable

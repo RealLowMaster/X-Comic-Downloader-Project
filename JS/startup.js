@@ -10,12 +10,14 @@ function ChangeSizes() {
 }
 
 function test() {
-	
+	//sharp('Image/sites/hitomi.png').png({ quality: 100 }).resize(60,60).toFile('Image/sites/hitomi-60x60.png')
 }
 
 function AfterDatabaseDoneOnStartup() {
 	loading.forward('Set Settings...')
 	setLuanchTimeSettings(false)
+	loading.forward('Set Sites...')
+	SetSite()
 	loading.forward('Load Comics...')
 	loadComics()
 	loading.forward()
@@ -24,6 +26,7 @@ function AfterDatabaseDoneOnStartup() {
 	CheckReleaseNote()
 	document.getElementById('ex-p-l-input').value = remote.app.getPath('downloads')
 	if (setting.check_update) CheckUpdate()
+	openBrowser()
 }
 
 function makeSubFolder(sfComicsDoc, sfLength, index) {
@@ -75,8 +78,6 @@ document.addEventListener("DOMContentLoaded", () => {
 	CreateDatabase()
 	loading.forward('Checking Settings...')
 	CheckSettings()
-	//loading.forward('Set Cookies...')
-	//SetCookies()
 	loading.forward('Set Window Event...')
 
 	window.onresize = () => { updateTabSize(); ChangeSizes() }

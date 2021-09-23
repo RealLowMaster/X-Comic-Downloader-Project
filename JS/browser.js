@@ -1,9 +1,18 @@
+const browserTabMenu = document.getElementById('browser-tab-menu')
+const browserPasteMenu = document.getElementById('browser-paste-menu')
+const bjp = document.getElementById('browser-jump-page-container')
+const bjp_i = document.getElementById('bjp-i')
+const bjp_m_p = document.getElementById('bjp-m-p')
 let browserHistoryIndex = 0, br_history_selected_inputs = [], br_history_selected_indexs = [], resizeTabTimer
 
 function openBrowser() {
 	keydownEventIndex = 3
 	document.getElementById('main').style.display = 'none'
-	openXlecxBrowser()
+	// openXlecxBrowser()
+	document.getElementById('browser-sites-panel').style.display = 'block'
+	document.getElementById('browser-tool-search-form').style.display = 'none'
+	bjp.style.display = 'none'
+	document.getElementById('browser').style.display = 'grid'
 }
 
 function closeBrowser() {
@@ -768,7 +777,7 @@ function openBrowserHistoryPanel(scoll=false) {
 				if (passHistory.length > 0) {
 					html += `<div><div>${passYear}-${passMonth}-${passDay}</div><div>`
 					for (let j = 0; j < passHistory.length; j++) {
-						html += `<div><input type="checkbox" h="${passHistory[j][1]}" onclick="browserHistorySelect(this)"><img src="Image/sites/${sites[passHistory[j][0][1][3]][1]}"><p onclick="openBrowserHistory(${passHistory[j][1]})">${passHistory[j][0][0]}</p><button type="button" onclick="openHistoryRowOption(${passHistory[j][1]})">...</button></div>`
+						html += `<div><input type="checkbox" h="${passHistory[j][1]}" onclick="browserHistorySelect(this)"><img src="Image/sites/${sites[passHistory[j][0][1][3]][1][0]}-30x30.png"><p onclick="openBrowserHistory(${passHistory[j][1]})">${passHistory[j][0][0]}</p><button type="button" onclick="openHistoryRowOption(${passHistory[j][1]})">...</button></div>`
 					}
 					html += '</div></div>'
 				}
@@ -780,7 +789,7 @@ function openBrowserHistoryPanel(scoll=false) {
 				if (i == 0 && saveCheck) {
 					html += `<div><div>${passYear}-${passMonth}-${passDay}</div><div>`
 					for (let j = 0; j < passHistory.length; j++) {
-						html += `<div><input type="checkbox" h="${passHistory[j][1]}" onclick="browserHistorySelect(this)"><img src="Image/sites/${sites[passHistory[j][0][1][3]][1]}"><p onclick="openBrowserHistory(${passHistory[j][1]})">${passHistory[j][0][0]}</p><button type="button" onclick="openHistoryRowOption(${passHistory[j][1]})">...</button></div>`
+						html += `<div><input type="checkbox" h="${passHistory[j][1]}" onclick="browserHistorySelect(this)"><img src="Image/sites/${sites[passHistory[j][0][1][3]][1][0]}-30x30.png"><p onclick="openBrowserHistory(${passHistory[j][1]})">${passHistory[j][0][0]}</p><button type="button" onclick="openHistoryRowOption(${passHistory[j][1]})">...</button></div>`
 					}
 					html += '</div></div>'
 				}
