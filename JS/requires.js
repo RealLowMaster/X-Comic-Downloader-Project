@@ -44,8 +44,8 @@ const sites = [
 		jump: 'xlecxJumpPage({index}, {page})'
 	},
 	{
-		name: 'hitomi',
-		url: 'hitomi.la',
+		name: 'nhentai',
+		url: 'nhentai.net',
 		home: '',
 		repair: '',
 		search: '',

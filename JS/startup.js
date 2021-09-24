@@ -10,7 +10,13 @@ function ChangeSizes() {
 }
 
 function test() {
-	//sharp('Image/sites/hitomi.png').png({ quality: 100 }).resize(60,60).toFile('Image/sites/hitomi-60x60.png')
+	//sharp('Image/sites/nhentai.png').png({ quality: 100 }).resize(30,30).toFile('Image/sites/nhentai-30x30.png')
+	
+	nhentai.getPage(1, (err, doc) => {
+		if (err) { console.error(err); return }
+		console.log(doc)
+	})
+
 }
 
 function AfterDatabaseDoneOnStartup() {

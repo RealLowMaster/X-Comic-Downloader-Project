@@ -1593,6 +1593,11 @@ node-addon-api@^4.0.0:
   resolved "https://registry.yarnpkg.com/node-addon-api/-/node-addon-api-4.1.0.tgz#f1722f1f60793584632ffffb79e12ca042c48bd0"
   integrity sha512-Zz1o1BDX2VtduiAt6kgiUl8jX1Vm3NMboljFYKQJ6ee8AGfiTvM2mlZFI3xPbqjs80rCQgiVJI/DjQ/1QJ0HwA==
 
+node-hitomi@^4.2.2:
+  version "4.2.2"
+  resolved "https://registry.yarnpkg.com/node-hitomi/-/node-hitomi-4.2.2.tgz#10806d7567529cbe96431b37e61dfaf264d0cd75"
+  integrity sha512-zMJ0NmaZzyF37q0TwIRL5DzdvNyAxYRaYNzTDbStvakRRR7A8uSJteOwFoHhXUTIZxUybQXX36z59P0VzhEbEw==
+
 node-stream-zip@^1.14.0:
   version "1.14.0"
   resolved "https://registry.yarnpkg.com/node-stream-zip/-/node-stream-zip-1.14.0.tgz#fdf9b86d10d55c1e50aa1be4fea88bae256c4eba"

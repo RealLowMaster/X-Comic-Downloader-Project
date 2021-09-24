@@ -106,18 +106,12 @@ class XlecxAPI {
 					li = htmlDoc.getElementById('bottom-nav').querySelector('.navigation').children
 					for (var i = 0; i < li.length; i++) {
 						if (li[i].textContent == "")
-							if (i == li.length - 1)
-								value = ">"
-							else
-								value = "<"
-						else
-							value = li[i].textContent
+							if (i == li.length - 1) value = ">"
+							else value = "<"
+						else value = li[i].textContent
 						
-						if (li[i].getAttribute('href') == null)
-							pPage = null
-						else
-							pPage = Number(li[i].getAttribute('href').replace(this.baseURL+'/page/', '').replace(slashReg, ''))
-						
+						if (li[i].getAttribute('href') == null) pPage = null
+						else pPage = Number(li[i].getAttribute('href').replace(this.baseURL+'/page/', '').replace(slashReg, ''))
 						
 						arr.pagination.push([value, pPage])
 					}

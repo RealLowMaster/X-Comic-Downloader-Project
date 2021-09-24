@@ -76,7 +76,7 @@ Added To Version {
 }
 
 Doing {
-	
+	Make nhentai.net API Part 1++
 }
 
 Tasks => {
@@ -88,7 +88,7 @@ Tasks => {
 	Add Auto Scroll Down for Comic Panel
 	Add Fix Update Button
 	Make Browser Selecting History Easier
-	Add Support For hitomi.la (Requested By Markus DarkOrb)
+	Add Support For nhentai.net (Requested By Markus DarkOrb)
 
 	Mybe in v2  {
 		Add More Comic Viewing Theme { 2x2, 3x3, 4x4, free-spect }
