@@ -202,6 +202,7 @@ function openComicSlider(index) {
 function reOpenLastSlider() {
 	keydownEventIndex = 2
 	comicSlider.style.display = 'grid'
+	if (comicSliderOverview.parentElement.children[1].getAttribute('onclick').indexOf('toggleComicSliderOverview') == -1) comicSliderOverview.parentElement.children[1].setAttribute('onclick', 'toggleComicSliderOverview(true, this)')
 	if (comicSliderOverview.hasAttribute('aindex')) changeSliderIndex(Number(comicSliderOverview.getAttribute('aindex')))
 	else changeSliderIndex(0)
 	comicSliderContent.addEventListener('wheel', sliderScrollHandler)
@@ -234,15 +235,25 @@ function sliderScrollHandler(e) {
 
 // Key Event
 function SliderKeyEvents(ctrl, shift, key) {
-	if (!ctrl && !shift && key == 122) toggleComicSliderScreen()
-	else if (ctrl && !shift && key == 79) toggleComicSliderSize()
-	else if (ctrl && !shift && key == 87) closeComicSlider()
-	else if (!ctrl && !shift && key == 37) {
-		const index = Number(comicSliderOverview.getAttribute('aindex'))
-		if (index != 0) changeSliderIndex(index - 1)
-	} else if (!ctrl && !shift && key == 39) {
-		const index = Number(comicSliderOverview.getAttribute('aindex'))
-		const count = Number(comicSliderOverview.getAttribute('count'))
-		if (index != count) changeSliderIndex(index + 1)
-	}
+	if (ctrl) {
+		if (!shift) {
+			switch (key) {
+				case 37:
+					const index1 = Number(comicSliderOverview.getAttribute('aindex'))
+					if (index1 != 0) changeSliderIndex(index1 - 1)
+					break
+				case 39:
+					const index2 = Number(comicSliderOverview.getAttribute('aindex'))
+					const count = Number(comicSliderOverview.getAttribute('count'))
+					if (index2 != count) changeSliderIndex(index2 + 1)
+					break
+				case 79:
+					toggleComicSliderSize()
+					break
+				case 87:
+					closeComicSlider()
+					break
+			}
+		}
+	} else if (!shift && key == 122) toggleComicSliderScreen()
 }

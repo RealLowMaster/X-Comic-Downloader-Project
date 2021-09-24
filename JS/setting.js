@@ -183,6 +183,16 @@ function closeSetting() {
 }
 
 function SettingKeyEvents(ctrl,shift,key) {
-	if (ctrl && !shift && key == 83) saveSetting(false)
-	else if (ctrl && !shift && key == 87) closeSetting()
+	if (ctrl) {
+		if (!shift) {
+			switch (key) {
+				case 83:
+					saveSetting(false)
+					break
+				case 87:
+					closeSetting()
+					break
+			}
+		}
+	}
 }

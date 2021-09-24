@@ -53,17 +53,6 @@ const sites = [
 		jump: ''
 	}
 ]
-
-/*
-	0,
-	1,['xlecx', 'xlecx.org'],
-	2,'xlecxRepairComicInfoGetInfo({id}, {whitch})',
-	3,'xlecxSearch({text}, 1, 0)',
-	4,'xlecxChangePage(1, 0, true)',
-	5,'xlecxJumpPage({index}, {page})',
-	6,'xlecxChangePage(1,1,true)',
-*/
-
 const keydownEvents = [
 	'OfflineKeyEvents({ctrl},{shift},{key})',
 	'OfflineComicKeyEvents({ctrl},{shift},{key})',

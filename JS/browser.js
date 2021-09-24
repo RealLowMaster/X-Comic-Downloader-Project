@@ -1027,12 +1027,33 @@ function askClearBrowserHistory() {
 
 // Key Event
 function BrowserKeyEvents(ctrl, shift, key) {
-	if (ctrl && shift && key == 84) openBrowserLastTabs()
-	else if (ctrl && !shift && key == 87) { if (activeTabComicId != null) removeTab(activeTabComicId) }
-	else if (ctrl && !shift && key == 37) browserPrev()
-	else if (ctrl && !shift && key == 39) browserNext()
-	else if (ctrl && !shift && key == 72) toggleBrowserHistory()
-	else if (ctrl && !shift && key == 81) browserTabHome()
-	else if (ctrl && !shift && key == 82) browserTabReload()
-	else if (ctrl && !shift && key == 83) toggleSitePanel()
+	if (ctrl) {
+		if (!shift) {
+			switch (key) {
+				case 37:
+					browserPrev()
+					break
+				case 39:
+					browserNext()
+					break
+				case 72:
+					toggleBrowserHistory()
+					break
+				case 81:
+					browserTabHome()
+					break
+				case 82:
+					browserTabReload()
+					break
+				case 83:
+					toggleSitePanel()
+					break
+				case 87:
+					if (activeTabComicId != null) removeTab(activeTabComicId)
+					break
+			}
+			
+		} else if (key == 84) openBrowserLastTabs()
+	}
+	
 }

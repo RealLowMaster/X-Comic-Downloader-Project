@@ -853,23 +853,47 @@ function askForDeletingComic(id) {
 
 // Key Event
 function OfflineKeyEvents(ctrl, shift, key) {
-	if (!ctrl && !shift && key == 39) offlineChangePage()
-	else if (!ctrl && !shift && key == 37) offlineChangePage(false)
-	else if (ctrl && !shift && key == 82) reloadLoadingComics()
+	if (ctrl) {
+		if (!shift) {
+			switch (key) {
+				case 39:
+					offlineChangePage()
+					break
+				case 37:
+					offlineChangePage(false)
+					break
+				case 82:
+					reloadLoadingComics()
+					break
+			}
+		}
+	}
 }
 
 function OfflineComicKeyEvents(ctrl, shift, key) {
-	if (ctrl && !shift && key == 87) closeComicPanel()
-	else if (ctrl && !shift && key == 83) reOpenLastSlider()
-	else if (ctrl && !shift && key == 69) openComicExportPanel(Number(comicPanel.getAttribute('cid')), 1)
-	else if (ctrl && !shift && key == 81) {
-		keydownEventIndex = null
-		document.getElementById('comic-action-panel').style.display='flex'
-	}
-	else if (ctrl && !shift && key == 82) {
-		if (need_repair.length > 0) {
-			keydownEventIndex = null
-			repairComicImages()
+	if (ctrl) {
+		if (!shift) {
+			switch (key) {
+				case 69:
+					openComicExportPanel(Number(comicPanel.getAttribute('cid')), 1)
+					break
+				case 81:
+					keydownEventIndex = null
+					document.getElementById('comic-action-panel').style.display='flex'
+					break
+				case 82:
+					if (need_repair.length > 0) {
+						keydownEventIndex = null
+						repairComicImages()
+					}
+					break
+				case 83:
+					reOpenLastSlider()
+					break
+				case 87:
+					closeComicPanel()
+					break
+			}
 		}
 	}
 }
