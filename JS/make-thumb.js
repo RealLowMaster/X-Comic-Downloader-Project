@@ -161,7 +161,7 @@ function makeThumbForAComic(id, keyEvents) {
 function makeThumbForDownloadingComic(image, format, id, callback) {
 	setTimeout(() => {
 		let url = `${dirUL}/${id}${image}/${image}-0.${format}`
-		if (!fs.existsSync(url)) { callback(); return }
+		if (!fs.existsSync(url)) { callback(null); return }
 		if (!fs.existsSync(dirUL+'/thumbs')) fs.mkdirSync(dirUL+'/thumbs')
 
 		if (fs.existsSync(url)) {

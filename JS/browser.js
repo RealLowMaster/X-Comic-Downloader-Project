@@ -7,6 +7,7 @@ let browserHistoryIndex = 0, br_history_selected_inputs = [], br_history_selecte
 
 function openBrowser() {
 	keydownEventIndex = 3
+	afterDLReload = false
 	imageLazyLoadingOptions.root = pageContainer
 	imageLoadingObserver = new IntersectionObserver(ObserverFunction, imageLazyLoadingOptions)
 	document.getElementById('main').style.display = 'none'
@@ -37,6 +38,7 @@ function closeBrowser() {
 	tabsPos = []
 	tabsPosParent = []
 	browserLastTabs = []
+	afterDLReload = true
 
 	const tabsElement = tabsContainer.children
 	if (tabsElement.length > 0) {
@@ -486,7 +488,7 @@ function comicDownloader(index, result, quality, siteIndex) {
 					if (j == downloadingList[index][1].length - 1) formatList.push([firstIndex, lastIndex, thisFormat])
 				}
 			}
-			CreateComic(downloadingList[index][7][0], downloadingList[index][7][1], result, quality, downloadingList[index][2], siteIndex, downloadingList[index][3], downloadingList[index][1].length, formatList, index, true)
+			CreateComic(downloadingList[index][7][0], downloadingList[index][7][1], result, downloadingList[index][2], siteIndex, downloadingList[index][3], downloadingList[index][1].length, formatList, index, true)
 		} else comicDownloader(index, result, quality, siteIndex)
 	}).catch(err => {
 		if (downloadingList[index] == undefined) {
@@ -515,7 +517,7 @@ function comicDownloader(index, result, quality, siteIndex) {
 					if (j == downloadingList[index][1].length - 1) formatList.push([firstIndex, lastIndex, thisFormat])
 				}
 			}
-			CreateComic(downloadingList[index][7][0], downloadingList[index][7][1], result, quality, downloadingList[index][2], siteIndex, downloadingList[index][3], downloadingList[index][1].length, formatList, index, true)
+			CreateComic(downloadingList[index][7][0], downloadingList[index][7][1], result, downloadingList[index][2], siteIndex, downloadingList[index][3], downloadingList[index][1].length, formatList, index, true)
 		} else comicDownloader(index, result, quality, siteIndex)
 	})
 }

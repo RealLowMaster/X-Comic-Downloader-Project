@@ -1,0 +1,343 @@
+
+/* Xlecx */
+.xlecx-container {
+	display: grid;
+	grid-template-columns: 3fr 9fr;
+	width: 100%;
+	min-height: 95vh;
+}
+
+.xlecx-container > div:first-child {
+	padding: 20px 0;
+	background-color: #111;
+	overflow: hidden;
+	text-align: center;
+}
+
+.xlecx-container > div:first-child > button {
+	display: block;
+	width: 95%;
+	padding: 11px;
+	margin: 8px auto;
+	background-color: #333;
+	border: 1px solid #222;
+	color: #fff;
+	font-family: monospace, sans-serif;
+	font-size: 16px;
+	cursor: pointer;
+	user-select: text;
+}
+
+.xlecx-container > div:first-child > button:hover {
+	color: #d20068;
+}
+
+.xlecx-container > div:last-child {
+	padding: 15px;
+	background-color: #222;
+	text-align: center;
+}
+
+.xlecx-tags-search {
+	display: flex;
+	width: 100%;
+	justify-content: center;
+	align-items: center;
+	padding: 10px;
+	margin-bottom: 20px;
+}
+
+.xlecx-tags-search > input {
+	display: block;
+	width: 400px;
+	padding: 8px 10px;
+	background-color: #fff;
+	color: #222;
+	border: 1px solid #222;
+	border-radius: 3px;
+	font-size: 1rem;
+	text-align: left;
+	box-shadow: 0 6px 6px #222a;
+}
+
+.xlecx-container-one-row {
+	display: block;
+	width: 100%;
+	min-height: 95vh;
+	padding: 15px;
+	background-color: #222;
+	position: relative;
+}
+
+.xlecx-container-one-row > div {
+	display: block;
+	width: 95%;
+	padding-bottom: 10px;
+	margin: 0 auto;
+	background-color: #333;
+	color: #fff;
+	box-shadow: 0 1px 2px 0 rgb(0 0 0 / 40%);
+}
+
+.xlecx-post-title {
+	display: block;
+	width: 100%;
+	padding: 10px;
+	margin-bottom: 10px;
+	background-color: #282828;
+	font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+	font-size: 24px;
+	text-transform: capitalize;
+	user-select: text;
+}
+
+.xlecx-container-one-row > div > .browser-comic-have {
+	display: block;
+	text-align: right;
+}
+
+.xlecx-container-one-row > div > .browser-comic-have > span,
+.xlecx-container-one-row > div > .browser-comic-have > button:not(.remove-from-have),
+.xlecx-container-one-row > div > .browser-comic-have > .remove-from-have {
+	display: inline-block;
+	padding: 10px;
+	background-color: #229954;
+	color: #fff;
+	border-radius: 7px 0 0 7px;
+	font-size: 12px;
+}
+
+.xlecx-container-one-row > div > .browser-comic-have > p {
+	display: inline-flex;
+	align-items: center;
+	font-size: 14px;
+	text-align: right;
+}
+
+.xlecx-container-one-row > div > .browser-comic-have > p > .spin {
+	width: 27px;
+	height: 27px;
+	margin: 0 15px 0 10px;
+	border-width: 4px;
+}
+
+.xlecx-container-one-row > div > .browser-comic-have > .remove-from-have {
+	cursor: pointer;
+	transition: background-color .2s;
+}
+
+.xlecx-container-one-row > div > .browser-comic-have > .remove-from-have:hover {
+	background-color: #196F3D;
+}
+
+.xlecx-container-one-row > div > .browser-comic-have > button:not(.remove-from-have):first-child {
+	background-color: #222a;
+	cursor: pointer;
+	transition: background-color .2s, color .2s, box-shadow .2s;
+}
+
+.xlecx-container-one-row > div > .browser-comic-have > button:not(.remove-from-have):first-child:hover {
+	background-color: #00b1e7aa;
+	color: #fff;
+	box-shadow: 0 1px 6px 0 rgba(0,0,0,0.3);
+}
+
+.xlecx-container-one-row > div > .browser-comic-have > .add-to-have {
+	margin-right: 10px;
+	background-color: #fff;
+	color: #222;
+	border-radius: 0 7px 7px 0 !important;
+	cursor: pointer;
+	transition: background-color .2s, color .2s, box-shadow .2s;
+}
+
+.xlecx-container-one-row > div > .browser-comic-have > .add-to-have:hover {
+	background-color: #00b1e7aa;
+	color: #fff;
+	box-shadow: 0 1px 6px 0 rgba(0,0,0,0.3);
+}
+
+.xlecx-post-tags {
+	display: block;
+	line-height: 30px;
+	padding: 0 10px;
+	font: 13px 'Open Sans', Arial, Helvetica, sans-serif;
+}
+
+.xlecx-post-tags > button {
+	display: inline-block;
+	padding: 0 10px;
+	margin: 0 0 10px 5px;
+	background-color: #222;
+	color: #ccc;
+	line-height: 30px;
+	text-transform: capitalize;
+	user-select: text;
+	cursor: pointer;
+}
+
+.xlecx-image-container-1x1 {
+	display: block;
+	padding: 10px;
+	margin: 0 10px 10px 10px;
+	background-color: #282828;
+	text-align: center;
+}
+
+.xlecx-image-container-1x1 > img {
+	display: block;
+	height: auto;
+	min-width: 50px;
+	min-height: 200px;
+	max-width: 100%;
+	margin: 10px auto;
+	object-fit: cover;
+	object-position: center;
+}
+
+.xlecx-post-tags > button:hover {
+	color: #d20068;
+}
+
+.xlecx-post-container {
+	display: block;
+	width: 100%;
+	padding: 15px;
+	background-color: #222;
+	text-align: center;
+}
+
+.xlecx-post-container > div {
+	display: inline-block;
+	width: 235px;
+	padding: 5px;
+	margin: 10px 5px;
+	background-color: #111;
+	overflow: hidden;
+	position: relative;
+	cursor: pointer;
+	transition: background-color .2s;
+}
+
+.xlecx-post-container > div > img {
+	display: block;
+	width: 225px;
+	height: 315px;
+	object-fit: cover;
+	object-position: center;
+}
+
+.xlecx-post-container > div > span {
+	padding: 8px;
+	background-color: #111b;
+	color: #fff;
+	border-radius: 50px;
+	font-size: 14px;
+	position: absolute;
+	top: 5px;
+	right: 8px;
+	user-select: none;
+}
+
+.xlecx-post-container > div > p {
+	display: block;
+	width: 100%;
+	padding: 8px;
+	margin: 5px auto 0 auto;
+	background-color: #333;
+	color: #fff;
+	font-size: 16px;
+	line-height: 1.4;
+}
+
+.xlecx-post-container > div > div {
+	width: 100%;
+	height: 100%;
+	background-color: transparent;
+	position: absolute;
+	top: 0;
+	left: 0;	
+}
+
+.xlecx-post-container > div > button {
+	padding: 8px;
+	background-color: #222a;
+	color: #fff;
+	border-radius: 0 7px 7px 0;
+	position: absolute;
+	top: 15px;
+	left: -60px;
+	cursor: pointer;
+	z-index: +100;
+	transition: left .2s, background-color .2s, color .2s;
+}
+
+.xlecx-post-container > div > button:hover {
+	left: 0;
+	background-color: #fff;
+	color: #222;
+}
+
+.xlecx-post-container > div > .comic-downloaded,
+.xlecx-post-container > div > .comic-had {
+	padding: 6px !important;
+	background-color: #207000 !important;
+	color: #fff !important;
+	font-size: 14px !important;
+	top: 19px;
+	left: -75px;
+	cursor: default !important;
+}
+
+.xlecx-post-container > div > .comic-had {
+	background-color: #D68910 !important;
+	left: -22px;
+}
+
+.xlecx-post-container > div:hover {
+	background-color: #a7025b;
+}
+
+.xlecx-post-container > div > cid {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 4px;
+	background-color: #222a;
+	border-radius: 0 7px 7px 0;
+	position: absolute;
+	top: 15px;
+	left: 0;
+}
+
+.xlecx-post-container > div > cid > .spin {
+	width: 27px;
+	height: 27px;
+	margin: 0;
+	border-width: 4px;
+}
+
+.xlecx-pagination {
+	display: block;
+	width: 100%;
+	padding: 20px;
+	background-color: transparent;
+	text-align: center;
+}
+
+.xlecx-pagination > * {
+	display: inline-block;
+	min-width: 36px;
+	height: 36px;
+	margin: 0 3px;
+	background-color: #222;
+	color: #fff;
+}
+
+.xlecx-pagination > button[disable="true"] {
+	background-color: #d20068;
+}
+
+.xlecx-pagination > button:hover {
+	background-color: #d20068;
+}

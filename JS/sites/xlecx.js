@@ -1,3 +1,5 @@
+const xlecx = new XlecxAPI()
+
 function createNewXlecxTab(id, pageNumber) {
 	if (id == null) { PopAlert(defaultSettingLang.tab_at_limit, 'danger'); return }
 	const pageContent = document.getElementById(id)

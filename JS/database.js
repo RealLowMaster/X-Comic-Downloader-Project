@@ -299,7 +299,7 @@ function CreateTag(tagList, comicId, tagListIndex, repairing, newList) {
 }
 
 // Add New Comic
-async function CreateComic(comicIndex, haveIndex, gottenResult, quality, image, siteIndex, comic_id, imagesCount, formats, index, isDownloading) {
+async function CreateComic(comicIndex, haveIndex, gottenResult, image, siteIndex, comic_id, imagesCount, formats, index, isDownloading) {
 	if (typeof(index) != 'number') index = null
 	isDownloading = isDownloading || false
 	const insertInfo = {}
@@ -308,7 +308,6 @@ async function CreateComic(comicIndex, haveIndex, gottenResult, quality, image, 
 	insertInfo.i = image
 	insertInfo.c = imagesCount
 	insertInfo.f = formats
-	insertInfo.q = quality
 	insertInfo.s = siteIndex
 	insertInfo.p = comic_id
 	insertInfo._id = comicIndex
@@ -376,7 +375,7 @@ async function CreateComic(comicIndex, haveIndex, gottenResult, quality, image, 
 					document.getElementById('downloader').style.display = 'none'
 				}
 			}
-			if (needReload == true) reloadLoadingComics()
+			if (afterDLReload == true) reloadLoadingComics()
 		})
 	})
 }
