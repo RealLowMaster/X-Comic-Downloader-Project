@@ -3,28 +3,36 @@ const browserPasteMenu = document.getElementById('browser-paste-menu')
 const bjp = document.getElementById('browser-jump-page-container')
 const bjp_i = document.getElementById('bjp-i')
 const bjp_m_p = document.getElementById('bjp-m-p')
-let browserHistoryIndex = 0, br_history_selected_inputs = [], br_history_selected_indexs = [], resizeTabTimer
+let browserHistoryIndex = 0, br_history_selected_inputs = [], br_history_selected_indexs = [], resizeTabTimer, active_site = null
 
 function openBrowser() {
 	keydownEventIndex = 3
+	imageLazyLoadingOptions.root = pageContainer
+	imageLoadingObserver = new IntersectionObserver(ObserverFunction, imageLazyLoadingOptions)
 	document.getElementById('main').style.display = 'none'
 	// openXlecxBrowser()
-	document.getElementById('browser-sites-panel').style.display = 'block'
-	document.getElementById('browser-tool-search-form').style.display = 'none'
-	bjp.style.display = 'none'
+	if (active_site == null) {
+		document.getElementById('browser-home-btn').setAttribute('disabled', true)
+		document.getElementById('browser-prev-btn').setAttribute('disabled', true)
+		document.getElementById('browser-next-btn').setAttribute('disabled', true)
+		document.getElementById('browser-reload-btn').setAttribute('disabled', true)
+		document.getElementById('browser-tool-search-form').style.display = 'none'
+		bjp.style.display = 'none'
+		openSitePanel()
+	} else openSite(active_site)
+	checkTabHistoryButtons()
 	document.getElementById('browser').style.display = 'grid'
 }
 
 function closeBrowser() {
 	imageLazyLoadingOptions.root = comicPanel
 	imageLoadingObserver = new IntersectionObserver(ObserverFunction, imageLazyLoadingOptions)
-	needReload = true
 	reloadLoadingComics()
 	document.getElementById('browser').style.display = 'none'
 	document.getElementById('main').style.display = 'grid'
+	closeSitePanel()
 	closeBrowserHistory()
 	keydownEventIndex = 0
-	thisSite = null
 	activeTabIndex = null
 	activeTabComicId = null
 	tabsPos = []
@@ -83,7 +91,7 @@ function updateTabSize() {
 
 function checkBrowserTools(tabIndex) {
 	if (activeTabIndex == tabIndex) {
-		if (tabs[tabIndex].history[tabs[tabIndex].history.length - 1].replace(', false)', ', true)') == sites[thisSite][4]) document.getElementById('browser-home-btn').setAttribute('disabled', true)
+		if (tabs[tabIndex].history[tabs[tabIndex].history.length - 1].replace(', false)', ', true)') == sites[tabs[tabIndex].site].home) document.getElementById('browser-home-btn').setAttribute('disabled', true)
 		else document.getElementById('browser-home-btn').removeAttribute('disabled')
 
 		if (tabs[tabIndex].activeHistory != tabs[tabIndex].history.length - 1) document.getElementById('browser-next-btn').removeAttribute('disabled')
@@ -98,6 +106,7 @@ function checkBrowserTools(tabIndex) {
 }
 
 function activateTab(who) {
+	closeSitePanel()
 	closeBrowserHistory()
 	if (document.getElementById(who.getAttribute('pi')) == undefined) return
 
@@ -227,7 +236,7 @@ function createNewTab(history, addFront, site) {
 
 function pasteTab(newTab) {
 	if (IsTabsAtLimit()) {
-		PopAlert('You Can\'t Make Any More Tab.', 'danger')
+		PopAlert("You Can't Make Any More Tab.", 'danger')
 		return
 	}
 	
@@ -253,6 +262,7 @@ function pasteTab(newTab) {
 		browserTabMenu.style.left = e.clientX+'px'
 		browserTabMenu.style.display = 'block'
 	})
+
 	tabs[tabIndex] = new Tab(newTabId, 0, newTab[0], 0, 1, 0, newTab[3], false)
 	tabs[tabIndex].history = newTab[1]
 	tabs[tabIndex].activeHistory = newTab[2]
@@ -321,6 +331,9 @@ function removeTab(id) {
 		document.getElementById('browser-reload-btn').setAttribute('disabled', true)
 		document.getElementById('browser-tool-search-form').style.display = 'none'
 		bjp.style.display = 'none'
+		setTimeout(() => {
+			openSitePanel()
+		}, 40)
 	}
 
 	removingTab.remove()
@@ -332,23 +345,43 @@ function removeTab(id) {
 	}, 390)
 }
 
-function browserPrev() {
+function browserTabHome() {
+	if (activeTabIndex == null) return
+	closeSitePanel()
 	closeBrowserHistory()
+	eval(sites[tabs[activeTabIndex].site].home)
+}
+
+function browserPrev() {
+	if (activeTabIndex == null) return
+	closeSitePanel()
+	closeBrowserHistory()
+	keydownEventIndex = 3
 	document.getElementById(activeTabComicId).innerHTML = ''
 	document.getElementById(activeTabComicId).innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
 	tabs[activeTabIndex].prev()
 }
 
 function browserNext() {
+	if (activeTabIndex == null) return
+	closeSitePanel()
 	closeBrowserHistory()
+	keydownEventIndex = 3
 	document.getElementById(activeTabComicId).innerHTML = ''
 	document.getElementById(activeTabComicId).innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
 	tabs[activeTabIndex].next()
 }
 
+function browserTabReload() {
+	if (activeTabIndex == null) return
+	closeSitePanel()
+	closeBrowserHistory()
+	tabs[activeTabIndex].reload()
+}
+
 function browserJumpPage(index, page) {
 	closeBrowserHistory()
-	const exec = sites[thisSite][5].replace('{index}', index).replace('{page}', page)
+	const exec = sites[tabs[activeTabIndex].site].jump.replace('{index}', index).replace('{page}', page)
 	clearTimeout(searchTimer)
 	eval(exec)
 }
@@ -534,7 +567,7 @@ function browserError(err, id) {
 	const page = document.getElementById(id)
 	const tabArea = tabsContainer.querySelector(`[pi="${id}"]`).getElementsByTagName('span')[0]
 
-	page.innerHTML = `<br><div class="alert alert-danger">${err}</div><button class="btn btn-primary" style="display:block;margin:3px auto" onclick="closeBrowserHistory();tabs[activeTabIndex].reload()">Reload</button>`
+	page.innerHTML = `<br><div class="alert alert-danger">${err}</div><button class="btn btn-primary" style="display:block;margin:3px auto" onclick="browserTabReload()">Reload</button>`
 	tabArea.innerHTML = '*Error*'
 }
 
@@ -709,20 +742,65 @@ function ImageListDownloader(list, index, saveList, error, callback) {
 
 document.getElementById('browser-tool-search-form').addEventListener('submit', e => {
 	e.preventDefault()
+	closeSitePanel()
 	closeBrowserHistory()
+	keydownEventIndex = 3
 	const input = document.getElementById('browser-tool-search-input')
 	const checkText = input.value.replace(/ /g, '')
 	if (checkText.length > 0) {
 		tabs[activeTabIndex].s = input.value
-		eval(sites[thisSite][3].replace('{text}', `'${input.value.replace("'", "\\'")}'`))
+		eval(sites[tabs[activeTabIndex].site].search.replace('{text}', `'${input.value.replace("'", "\\'")}'`))
 	} else tabs[activeTabIndex].s = ''
 })
+
+// Sites
+function SetSite() {
+	let html = ''
+	for (let i = 0; i < sites.length; i++) html += `<div onclick="openSite(${i})" title="${sites[i].url}"><img src="Image/sites/${sites[i].name}-60x60.png"><p>${sites[i].name}</p></div>`
+	document.getElementById('b-s-p-c').innerHTML = html
+}
+
+function openSite(index) {
+	if (index == null) openSitePanel()
+	else {
+		active_site = index
+		closeSitePanel()
+		closeBrowserHistory()
+		keydownEventIndex = 3
+	}
+}
+
+function openSitePanel() {
+	document.getElementById('browser-sites-panel').style.display = 'block'
+}
+
+function closeSitePanel() {
+	document.getElementById('browser-sites-panel').style.display = 'none'
+	document.getElementById('b-s-p-s').value = ''
+	const child = document.getElementById('b-s-p-c').children
+	for (let i = 0; i < child.length; i++) child[i].style.display = 'inline-block'
+}
+
+function BrowserSearchSite(txt) {
+	const child = document.getElementById('b-s-p-c').children
+	txt = txt.replace(/https:\/\//g, '').replace(/http:\/\//g, '')
+	if (txt.replace(/ /g, '').length == 0) {
+		for (let i = 0; i < child.length; i++) child[i].style.display = 'inline-block'
+	} else {
+		for (let i = 0; i < child.length; i++) {
+			if (child[i].getAttribute('title').indexOf(txt.toLowerCase()) == -1) child[i].style.display = 'none'
+			else child[i].style.display = 'inline-block'
+		}
+	}
+}
 
 // Browser History
 function openBrowserLastTabs() {
 	if (browserLastTabs.length == 0) {
 		if (tabsHistory.length != 0) {
-			pasteTab(tabsHistory[tabsHistory.length - 1][1])
+			const thisHistory = tabsHistory[tabsHistory.length - 1][1]
+			pasteTab(thisHistory)
+			if (active_site == null) active_site = thisHistory[3]
 			tabsHistory.pop()
 			saveHistory()
 		}
@@ -731,7 +809,8 @@ function openBrowserLastTabs() {
 			pasteTab(browserLastTabs[i])
 			tabsHistory.pop()
 		}
-
+		
+		if (active_site == null) active_site = browserLastTabs[browserLastTabs.length - 1][3]
 		browserLastTabs = []
 		saveHistory()
 	}
@@ -777,7 +856,7 @@ function openBrowserHistoryPanel(scoll=false) {
 				if (passHistory.length > 0) {
 					html += `<div><div>${passYear}-${passMonth}-${passDay}</div><div>`
 					for (let j = 0; j < passHistory.length; j++) {
-						html += `<div><input type="checkbox" h="${passHistory[j][1]}" onclick="browserHistorySelect(this)"><img src="Image/sites/${sites[passHistory[j][0][1][3]][1][0]}-30x30.png"><p onclick="openBrowserHistory(${passHistory[j][1]})">${passHistory[j][0][0]}</p><button type="button" onclick="openHistoryRowOption(${passHistory[j][1]})">...</button></div>`
+						html += `<div><input type="checkbox" h="${passHistory[j][1]}" onclick="browserHistorySelect(this)"><img src="Image/sites/${sites[passHistory[j][0][1][3]].name}-30x30.png"><p onclick="openBrowserHistory(${passHistory[j][1]})">${passHistory[j][0][0]}</p><button type="button" onclick="openHistoryRowOption(${passHistory[j][1]})">...</button></div>`
 					}
 					html += '</div></div>'
 				}
@@ -789,7 +868,7 @@ function openBrowserHistoryPanel(scoll=false) {
 				if (i == 0 && saveCheck) {
 					html += `<div><div>${passYear}-${passMonth}-${passDay}</div><div>`
 					for (let j = 0; j < passHistory.length; j++) {
-						html += `<div><input type="checkbox" h="${passHistory[j][1]}" onclick="browserHistorySelect(this)"><img src="Image/sites/${sites[passHistory[j][0][1][3]][1][0]}-30x30.png"><p onclick="openBrowserHistory(${passHistory[j][1]})">${passHistory[j][0][0]}</p><button type="button" onclick="openHistoryRowOption(${passHistory[j][1]})">...</button></div>`
+						html += `<div><input type="checkbox" h="${passHistory[j][1]}" onclick="browserHistorySelect(this)"><img src="Image/sites/${sites[passHistory[j][0][1][3]].name}-30x30.png"><p onclick="openBrowserHistory(${passHistory[j][1]})">${passHistory[j][0][0]}</p><button type="button" onclick="openHistoryRowOption(${passHistory[j][1]})">...</button></div>`
 					}
 					html += '</div></div>'
 				}
@@ -872,7 +951,9 @@ function askForRemovingSelectedBrHistories() {
 
 function openBrowserHistory(index) {
 	browserLastTabs = []
-	pasteTab(tabsHistory[index][1])
+	const thisHistory = tabsHistory[index][1]
+	pasteTab(thisHistory)
+	if (active_site == null) active_site = thisHistory[3]
 	tabsHistory.splice(index, 1)
 	checkTabHistoryButtons()
 
@@ -942,9 +1023,8 @@ function BrowserKeyEvents(ctrl, shift, key) {
 	else if (ctrl && !shift && key == 37) browserPrev()
 	else if (ctrl && !shift && key == 39) browserNext()
 	else if (ctrl && !shift && key == 72) openBrowserHistoryPanel()
-	else if (ctrl && !shift && key == 81) {
-		if (tabs[activeTabIndex].history[tabs[activeTabIndex].history.length - 1].replace(', false)', ', true)') != sites[thisSite][4]) { closeBrowserHistory(); eval(sites[thisSite][4]) }
-	} else if (ctrl && !shift && key == 82) { closeBrowserHistory(); tabs[activeTabIndex].reload() }
+	else if (ctrl && !shift && key == 81) browserTabHome()
+	else if (ctrl && !shift && key == 82) browserTabReload()
 }
 
 function BrowserHistoryKeyEvents(ctrl, shift, key) {

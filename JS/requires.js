@@ -33,19 +33,34 @@ const imageLazyLoadingOptions = {
 	rootMargin: "0px 0px 300px 0px"
 }
 const sites = [
-	[
-		0,
-		['xlecx', 'xlecx.org'],
-		'xlecxRepairComicInfoGetInfo({id}, {whitch})',
-		'xlecxSearch({text}, 1, 0)',
-		'xlecxChangePage(1, 0, true)',
-		'xlecxJumpPage({index}, {page})'
-	],
-	[
-		1,
-		['hitomi', 'hitomi.la']
-	]
+	{
+		name: 'xlecx',
+		url: 'xlecx.org',
+		home: 'xlecxChangePage(1, 0, true)',
+		repair: 'xlecxRepairComicInfoGetInfo({id}, {whitch})',
+		search: 'xlecxSearch({text}, 1, 0)',
+		jump: 'xlecxJumpPage({index}, {page})'
+	},
+	{
+		name: 'hitomi',
+		url: 'hitomi.la',
+		home: '',
+		repair: '',
+		search: '',
+		jump: ''
+	}
 ]
+
+/*
+	0,
+	1,['xlecx', 'xlecx.org'],
+	2,'xlecxRepairComicInfoGetInfo({id}, {whitch})',
+	3,'xlecxSearch({text}, 1, 0)',
+	4,'xlecxChangePage(1, 0, true)',
+	5,'xlecxJumpPage({index}, {page})',
+	6,'xlecxChangePage(1,1,true)',
+*/
+
 const keydownEvents = [
 	'OfflineKeyEvents({ctrl},{shift},{key})',
 	'OfflineComicKeyEvents({ctrl},{shift},{key})',
@@ -59,8 +74,8 @@ const comicGroupsContainer = document.getElementById('c-p-g')
 const comicArtistsContainer = document.getElementById('c-p-a')
 const comicParodyContainer = document.getElementById('c-p-p')
 const comicTagsContainer = document.getElementById('c-p-ts')
-let comicDeleting = false, downloadCounter = 0, needReload = true, wt_fps = 20, dirDB, dirUL, dirTmp, isOptimizing = false, browserLastTabs = [], tabsHistory = [], dirHistory = '', keydownEventIndex = 0, new_update, save_value = null
-var setting, tabs = [], downloadingList = [], thisSite, lastComicId, lastHaveId, lastGroupId, lastArtistId, lastParodyId, lastTagId, searchTimer, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = [], openedMenuTabIndex, copiedTab = null
+let comicDeleting = false, downloadCounter = 0, wt_fps = 20, dirDB, dirUL, dirTmp, isOptimizing = false, browserLastTabs = [], tabsHistory = [], dirHistory = '', keydownEventIndex = 0, new_update, save_value = null
+var setting, tabs = [], downloadingList = [], lastComicId, lastHaveId, lastGroupId, lastArtistId, lastParodyId, lastTagId, searchTimer, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = [], openedMenuTabIndex, copiedTab = null
 
 /*
 	37 // Left Arrow
@@ -594,14 +609,6 @@ function CheckReleaseNote() {
 
 		new_update = null
 	}
-}
-
-function SetSite() {
-	html = ''
-	for (let i = 0; i < sites.length; i++) {
-		html += `<div title="${sites[i][1][1]}"><img src="Image/sites/${sites[i][1][0]}-60x60.png"><p>${sites[i][1][0]}</p></div>`
-	}
-	document.getElementById('b-s-p-c').innerHTML = html
 }
 
 // Make Tabs Draggable

@@ -1,13 +1,9 @@
 // Xlecx
 function openXlecxBrowser() {
-	imageLazyLoadingOptions.root = pageContainer
-	imageLoadingObserver = new IntersectionObserver(ObserverFunction, imageLazyLoadingOptions)
-	thisSite = 0
-	needReload = false
 	checkTabHistoryButtons()
 	document.getElementById('add-new-tab').setAttribute('onclick', "createNewXlecxTab(createNewTab('xlecxChangePage(1, 0, false)', false, 0))")
 	const id = createNewTab('xlecxChangePage(1, 0, false)', false, 0)
-	if (id == null) { PopAlert('You Can\'t Make Any More Tab.', 'danger'); return }
+	if (id == null) { PopAlert("You Can't Make Any More Tab.", 'danger'); return }
 	createNewXlecxTab(id)
 }
 
