@@ -10,7 +10,6 @@ function openBrowser() {
 	imageLazyLoadingOptions.root = pageContainer
 	imageLoadingObserver = new IntersectionObserver(ObserverFunction, imageLazyLoadingOptions)
 	document.getElementById('main').style.display = 'none'
-	// openXlecxBrowser()
 	if (active_site == null) {
 		document.getElementById('browser-home-btn').setAttribute('disabled', true)
 		document.getElementById('browser-prev-btn').setAttribute('disabled', true)
@@ -64,7 +63,6 @@ function closeBrowser() {
 	}
 	pageContainer.innerHTML = ''
 	tabsContainer.innerHTML = ''
-	document.getElementById('add-new-tab').setAttribute('onclick', '')
 }
 
 function checkTabHistoryButtons() {
@@ -333,7 +331,7 @@ function removeTab(id) {
 		bjp.style.display = 'none'
 		setTimeout(() => {
 			openSitePanel()
-		}, 40)
+		}, 30)
 	}
 
 	removingTab.remove()
@@ -767,6 +765,11 @@ function openSite(index) {
 		closeSitePanel()
 		closeBrowserHistory()
 		keydownEventIndex = 3
+		checkTabHistoryButtons()
+		const newTab = createNewTab(sites[active_site].home, false, 0)
+		if (newTab == null) { PopAlert("You Can't Make Any More Tab.", 'danger'); return }
+		activateTab(tabsContainer.querySelector(`[pi="${newTab}"]`))
+		eval(sites[active_site].home)
 	}
 }
 

@@ -1,14 +1,5 @@
-// Xlecx
-function openXlecxBrowser() {
-	checkTabHistoryButtons()
-	document.getElementById('add-new-tab').setAttribute('onclick', "createNewXlecxTab(createNewTab('xlecxChangePage(1, 0, false)', false, 0))")
-	const id = createNewTab('xlecxChangePage(1, 0, false)', false, 0)
-	if (id == null) { PopAlert("You Can't Make Any More Tab.", 'danger'); return }
-	createNewXlecxTab(id)
-}
-
 function createNewXlecxTab(id, pageNumber) {
-	if (id == null) { PopAlert('You Can\'t Make Any More Tab.', 'danger'); return }
+	if (id == null) { PopAlert("You Can't Make Any More Tab.", 'danger'); return }
 	const pageContent = document.getElementById(id)
 	pageNumber = pageNumber || 1
 
