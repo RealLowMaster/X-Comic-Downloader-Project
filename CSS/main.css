@@ -514,7 +514,8 @@ input::-webkit-input-placeholder { user-select: none }
 	padding-left: 2px;
 }
 
-.browser-tools-container > div:first-child > button {
+.browser-tools-container > div:first-child > button,
+#browser-sites-btn {
 	display: flex;
 	width: 30px;
 	height: 30px;
@@ -530,12 +531,14 @@ input::-webkit-input-placeholder { user-select: none }
 	transition: background-color .2s, border-color .2s, transform .2s;
 }
 
-.browser-tools-container > div:first-child > button > svg {
+.browser-tools-container > div:first-child > button > svg,
+#browser-sites-btn > svg {
 	width: 100%;
 	height: 100%;
 }
 
-.browser-tools-container > div:first-child > button:hover {
+.browser-tools-container > div:first-child > button:hover,
+#browser-sites-btn:hover {
 	transform: rotate(360deg);
 	background-color: var(--br-tool-btn-hover-bgc);
 	color: var(--br-tool-btn-hover-color);
@@ -543,6 +546,15 @@ input::-webkit-input-placeholder { user-select: none }
 }
 
 .browser-tools-container > div:first-child > button:disabled { opacity: .5 }
+
+#browser-sites-btn {
+	position: absolute;
+	margin: auto 0;
+	top: 0;
+	left: auto;
+	right: 45px;
+	bottom: 0;
+}
 
 .browser-tool-search-form {
 	display: flex;

@@ -134,10 +134,8 @@ function activateTab(who) {
 
 function IsTabsAtLimit() {
 	const tabsCount = tabsContainer.getElementsByTagName('div').length
-	if (tabsCount >= setting.tabs_limit)
-		return true
-	else
-		return false
+	if (tabsCount >= setting.tabs_limit) return true
+	else return false
 }
 
 function createNewTab(history, addFront, site) {
@@ -345,18 +343,17 @@ function removeTab(id) {
 
 function browserTabHome() {
 	if (activeTabIndex == null) return
-	closeSitePanel()
-	closeBrowserHistory()
-	eval(sites[tabs[activeTabIndex].site].home)
+	if (!document.getElementById('browser-home-btn').hasAttribute('disabled')) {
+		closeSitePanel()
+		closeBrowserHistory()
+		eval(sites[tabs[activeTabIndex].site].home)
+	}
 }
 
 function browserPrev() {
 	if (activeTabIndex == null) return
 	closeSitePanel()
 	closeBrowserHistory()
-	keydownEventIndex = 3
-	document.getElementById(activeTabComicId).innerHTML = ''
-	document.getElementById(activeTabComicId).innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
 	tabs[activeTabIndex].prev()
 }
 
@@ -364,9 +361,6 @@ function browserNext() {
 	if (activeTabIndex == null) return
 	closeSitePanel()
 	closeBrowserHistory()
-	keydownEventIndex = 3
-	document.getElementById(activeTabComicId).innerHTML = ''
-	document.getElementById(activeTabComicId).innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
 	tabs[activeTabIndex].next()
 }
 
@@ -764,13 +758,25 @@ function openSite(index) {
 		active_site = index
 		closeSitePanel()
 		closeBrowserHistory()
-		keydownEventIndex = 3
 		checkTabHistoryButtons()
-		const newTab = createNewTab(sites[active_site].home, false, 0)
-		if (newTab == null) { PopAlert("You Can't Make Any More Tab.", 'danger'); return }
-		activateTab(tabsContainer.querySelector(`[pi="${newTab}"]`))
-		eval(sites[active_site].home)
+		const new_tab = createNewTab(sites[active_site].home.replace(', true)', ', false)'), false, 0)
+		if (new_tab == null) { PopAlert("You Can't Make Any More Tab.", 'danger'); return }
+		const tab_element = tabsContainer.querySelector(`[pi="${new_tab}"]`)
+		activateTab(tab_element)
+		tabs[activeTabIndex].ir = false
+		tabs[activeTabIndex].reload()
 	}
+}
+
+function toggleSitePanel() {
+	closeBrowserHistory()
+	if (tabsContainer.children.length == 0) {
+		openSitePanel()
+		return
+	}
+	
+	if (document.getElementById('browser-sites-panel').style.display == 'block') closeSitePanel()
+	else openSitePanel()
 }
 
 function openSitePanel() {
@@ -827,7 +833,7 @@ function toggleBrowserHistory() {
 }
 
 function openBrowserHistoryPanel(scoll=false) {
-	keydownEventIndex = 4
+	closeSitePanel()
 	const panel = document.getElementById('browser-history-panel')
 	document.getElementById('b-h-p-m-c').style.display = 'none'
 
@@ -890,7 +896,6 @@ function openBrowserHistoryPanel(scoll=false) {
 }
 
 function closeBrowserHistory() {
-	keydownEventIndex = 3
 	br_history_selected_inputs = []
 	br_history_selected_indexs = []
 	const panel = document.getElementById('browser-history-panel')
@@ -899,6 +904,7 @@ function closeBrowserHistory() {
 	panel.removeAttribute('active')
 	document.getElementById('b-h-p-m-c').style.display = 'none'
 	document.getElementById('browser-history-panel').removeAttribute('selection')
+	if (tabsContainer.children.length == 0) openSitePanel()
 }
 
 function browserHistorySelect(who) {
@@ -1025,12 +1031,8 @@ function BrowserKeyEvents(ctrl, shift, key) {
 	else if (ctrl && !shift && key == 87) { if (activeTabComicId != null) removeTab(activeTabComicId) }
 	else if (ctrl && !shift && key == 37) browserPrev()
 	else if (ctrl && !shift && key == 39) browserNext()
-	else if (ctrl && !shift && key == 72) openBrowserHistoryPanel()
+	else if (ctrl && !shift && key == 72) toggleBrowserHistory()
 	else if (ctrl && !shift && key == 81) browserTabHome()
 	else if (ctrl && !shift && key == 82) browserTabReload()
-}
-
-function BrowserHistoryKeyEvents(ctrl, shift, key) {
-	if (ctrl && shift && key == 84) openBrowserLastTabs()
-	else if (ctrl && !shift && key == 72) closeBrowserHistory()
+	else if (ctrl && !shift && key == 83) toggleSitePanel()
 }

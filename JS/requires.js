@@ -4,6 +4,9 @@ const nedb = require('nedb')
 const sharp = require('sharp')
 const ImageDownloader = require('image-downloader')
 const xlecx = new XlecxAPI()
+const defaultSettingLang = {
+	tab_at_limit: "You Can't Make Any More Tab."
+}
 const defaultSetting = {
 	"comic_panel_theme": 1,
 	"pagination_theme": 0,
@@ -66,7 +69,6 @@ const keydownEvents = [
 	'OfflineComicKeyEvents({ctrl},{shift},{key})',
 	'SliderKeyEvents({ctrl},{shift},{key})',
 	'BrowserKeyEvents({ctrl},{shift},{key})',
-	'BrowserHistoryKeyEvents({ctrl},{shift},{key})',
 	'SettingKeyEvents({ctrl},{shift},{key})'
 ]
 const ThisWindow = remote.getCurrentWindow(), loading = new Loading(16), db = {}, procressPanel = new ProcressPanel(0), update_number = 3

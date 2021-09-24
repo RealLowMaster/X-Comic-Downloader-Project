@@ -79,7 +79,7 @@ function setLuanchTimeSettings(reloadSettingPanel) {
 function saveSetting(justSave) {
 	let reload = false
 	if (justSave == false) {
-		keydownEventIndex = 100
+		keydownEventIndex = null
 		const style = document.documentElement.style
 		const waiting_quality = Number(document.getElementById('s_waiting_quality').getAttribute('value'))
 		const lazy_loading = document.getElementById('s_lazy_loading').checked
@@ -168,7 +168,7 @@ function saveSetting(justSave) {
 }
 
 function openSetting() {
-	keydownEventIndex = 5
+	keydownEventIndex = 4
 	const panel = document.getElementById('setting-panel')
 	panel.style.display = 'block'
 	panel.scrollTop = 0

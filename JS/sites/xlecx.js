@@ -1,5 +1,5 @@
 function createNewXlecxTab(id, pageNumber) {
-	if (id == null) { PopAlert("You Can't Make Any More Tab.", 'danger'); return }
+	if (id == null) { PopAlert(defaultSettingLang.tab_at_limit, 'danger'); return }
 	const pageContent = document.getElementById(id)
 	pageNumber = pageNumber || 1
 
@@ -170,7 +170,7 @@ function xlecxOpenPost(whitchbutton, id, updateTabIndex) {
 	var page, pageId
 	if (makeNewPage) {
 		pageId = createNewTab(`xlecxOpenPost(0, '${id}', false)`, true, 0)
-		if (pageId == null) { PopAlert('You Can\'t Make Any More Tab.', 'danger'); return }
+		if (pageId == null) { PopAlert(defaultSettingLang.tab_at_limit, 'danger'); return }
 		page = document.getElementById(pageId)
 	} else {
 		pageId = activeTabComicId
@@ -428,7 +428,7 @@ function xlecxChangePage(page, whitchbutton, updateTabIndex) {
 	var id
 	if (makeNewPage) {
 		id = createNewTab(`xlecxChangePage(${page}, 0, false)`, true, 0)
-		if (id == null) { PopAlert('You Can\'t Make Any More Tab.', 'danger'); return }
+		if (id == null) { PopAlert(defaultSettingLang.tab_at_limit, 'danger'); return }
 	} else {
 		id = activeTabComicId
 		const passImageCon = document.getElementById(id).querySelector('[img-con="true"]')
@@ -467,7 +467,7 @@ function xlecxOpenCategory(name, page, shortName, whitchbutton, updateTabIndex) 
 	var pageContent
 	if (makeNewPage) {
 		pageId = createNewTab(`xlecxOpenCategory('${name}', ${page}, '${shortName}', 0, false)`, true, 0)
-		if (pageId == null) { PopAlert('You Can\'t Make Any More Tab.', 'danger'); return }
+		if (pageId == null) { PopAlert(defaultSettingLang.tab_at_limit, 'danger'); return }
 		pageContent = document.getElementById(pageId)
 	} else {
 		pageContent = document.getElementById(pageId)
@@ -729,7 +729,7 @@ function xlecxOpenTag(name, page, whitch, whitchbutton, updateTabIndex) {
 	var pageContent, pageId
 	if (makeNewPage) {
 		pageId = createNewTab(`xlecxOpenTag('${name}', ${page}, ${whitch}, 0, false)`, true, 0)
-		if (pageId == null) { PopAlert('You Can\'t Make Any More Tab.', 'danger'); return }
+		if (pageId == null) { PopAlert(defaultSettingLang.tab_at_limit, 'danger'); return }
 		pageContent = document.getElementById(pageId)
 	} else {
 		pageId = activeTabComicId
@@ -901,7 +901,7 @@ function xlecxSearch(text, page, whitchbutton, updateTabIndex) {
 	var pageContent, pageId
 	if (makeNewPage) {
 		pageId = createNewTab(`xlecxSearch('${text}', ${page}, 0, false)`, true, 0)
-		if (pageId == null) { PopAlert('You Can\'t Make Any More Tab.', 'danger'); return }
+		if (pageId == null) { PopAlert(defaultSettingLang.tab_at_limit, 'danger'); return }
 		pageContent = document.getElementById(pageId)
 	} else {
 		pageId = activeTabComicId
@@ -1058,7 +1058,7 @@ function xlecxOpenAllTags(whitchbutton, updateTabIndex) {
 	var page, pageId
 	if (makeNewPage) {
 		pageId = createNewTab('xlecxOpenAllTags(0, false)', true, 0)
-		if (pageId == null) { PopAlert('You Can\'t Make Any More Tab.', 'danger'); return }
+		if (pageId == null) { PopAlert(defaultSettingLang.tab_at_limit, 'danger'); return }
 		page = document.getElementById(pageId)
 	} else {
 		pageId = activeTabComicId

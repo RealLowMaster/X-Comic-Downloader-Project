@@ -2,7 +2,7 @@ let optimizeLog = [], optimizeFullSize = 0, optimizeConvertSize = 0
 
 function OptimizeComicImages(comic_id, opened_comic, keyEvent) {
 	if (opened_comic && downloadCounter > 0) { error("You Can't Optimze Image When you are Downloading Something!"); return }
-	keydownEventIndex = 100
+	keydownEventIndex = null
 	isOptimizing = true
 	optimizeLog = []
 	optimizeFullSize = 0

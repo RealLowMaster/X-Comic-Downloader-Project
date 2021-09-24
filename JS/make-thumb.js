@@ -1,7 +1,7 @@
 let thumbErrLog = []
 
 function makeThumb(reCreate) {
-	keydownEventIndex = 100
+	keydownEventIndex = null
 	thumbErrLog = []
 	if (!fs.existsSync(dirUL+'/thumbs')) fs.mkdirSync(dirUL+'/thumbs')
 	db.comics.find({}, (err, doc) => {
@@ -104,7 +104,7 @@ function createThumb(list, index, scrollTop) {
 }
 
 function makeThumbForAComic(id, keyEvents) {
-	keydownEventIndex = 100
+	keydownEventIndex = null
 	if (!fs.existsSync(dirUL+'/thumbs')) fs.mkdirSync(dirUL+'/thumbs')
 	db.comics.findOne({_id:id}, (err, doc) => {
 		if (err) { error(err); keydownEventIndex = keyEvents; return }

@@ -576,7 +576,7 @@ function repairComicImages(repair_list) {
 // Export Comic
 function openComicExportPanel(id) {
 	passKeyEvent = keydownEventIndex
-	keydownEventIndex = 100
+	keydownEventIndex = null
 	document.getElementById('export-panel').style.display = 'flex'
 	db.comics.findOne({_id:id}, (err, doc) => {
 		if (err) { error('LoadingComicInfo->ERR: '+err); closeComicExportPanel(); return }
@@ -863,12 +863,12 @@ function OfflineComicKeyEvents(ctrl, shift, key) {
 	else if (ctrl && !shift && key == 83) reOpenLastSlider()
 	else if (ctrl && !shift && key == 69) openComicExportPanel(Number(comicPanel.getAttribute('cid')), 1)
 	else if (ctrl && !shift && key == 81) {
-		keydownEventIndex = 100
+		keydownEventIndex = null
 		document.getElementById('comic-action-panel').style.display='flex'
 	}
 	else if (ctrl && !shift && key == 82) {
 		if (need_repair.length > 0) {
-			keydownEventIndex = 100
+			keydownEventIndex = null
 			repairComicImages()
 		}
 	}
