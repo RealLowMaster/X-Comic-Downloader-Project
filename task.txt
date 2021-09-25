@@ -80,7 +80,7 @@ Doing {
 }
 
 Tasks => {
-	Fix Key Event 0 Next and Prev Page
+	Optimize offlineChangePage()
 	Make New History System
 	Add Slider System To Repaired Image
 	Add Reset Setting Button

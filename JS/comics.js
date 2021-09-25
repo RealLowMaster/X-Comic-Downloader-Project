@@ -860,14 +860,19 @@ function OfflineKeyEvents(ctrl, shift, key) {
 	if (ctrl) {
 		if (!shift) {
 			switch (key) {
+				case 82:
+					reloadLoadingComics()
+					break
+			}
+		}
+	} else {
+		if (!shift) {
+			switch (key) {
 				case 39:
 					offlineChangePage()
 					break
 				case 37:
 					offlineChangePage(false)
-					break
-				case 82:
-					reloadLoadingComics()
 					break
 			}
 		}
