@@ -76,10 +76,11 @@ Added To Version {
 }
 
 Doing {
-	Make nhentai.net API Part 1++
+	Make nhentai.net API Part 2++
 }
 
 Tasks => {
+	Fix Key Event 0 Next and Prev Page
 	Make New History System
 	Add Slider System To Repaired Image
 	Add Reset Setting Button

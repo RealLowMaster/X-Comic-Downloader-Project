@@ -1,3 +1,7 @@
+const comicGroupsContainer = document.getElementById('c-p-g')
+const comicArtistsContainer = document.getElementById('c-p-a')
+const comicParodyContainer = document.getElementById('c-p-p')
+const comicTagsContainer = document.getElementById('c-p-ts')
 let off_site = null, off_id = null, off_comic_id = null, off_quality = null, need_repair = [], in_comic = false, comic_menu_id = null, passKeyEvent = null, export_comic_id = null
 
 function loadComics(page, search, safeScroll) {

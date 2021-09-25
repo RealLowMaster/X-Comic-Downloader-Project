@@ -12,9 +12,9 @@ function ChangeSizes() {
 function test() {
 	//sharp('Image/sites/nhentai.png').png({ quality: 100 }).resize(30,30).toFile('Image/sites/nhentai-30x30.png')
 	
-	nhentai.getPage(1, (err, doc) => {
+	nhentai.getComic(102948, related = true, (err, doc) => {
 		if (err) { console.error(err); return }
-		console.log(doc)
+		console.log(doc) 
 	})
 
 }
