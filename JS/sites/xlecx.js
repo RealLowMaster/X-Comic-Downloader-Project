@@ -896,7 +896,6 @@ function xlecxSearch(text, page, whitchbutton, updateTabIndex) {
 	if (whitchbutton == 2) makeNewPage = true
 	text = text || null
 	if (text == null) return
-	text = text.replace("\\'", "'")
 	page = page || 1
 	if (updateTabIndex == null) updateTabIndex = true
 
@@ -944,7 +943,7 @@ function xlecxSearch(text, page, whitchbutton, updateTabIndex) {
 			page.innerHTML = `<br><div class="alert alert-danger">${err}</div><button class="btn btn-primary" style="display:block;margin:3px auto" onclick="reloadTab()">Reload</button>`
 			return
 		}
-		tabArea.textContent = `S: ${text} - ${page}`
+		tabArea.textContent = `S: ${convertToURL(text, true)} - ${page}`
 		var container = document.createElement('div')
 		container.classList.add("xlecx-container")
 		var elementContainerContainer = document.createElement('div')

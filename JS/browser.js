@@ -743,7 +743,7 @@ document.getElementById('browser-tool-search-form').addEventListener('submit', e
 	const checkText = input.value.replace(/ /g, '')
 	if (checkText.length > 0) {
 		tabs[activeTabIndex].s = input.value
-		eval(sites[tabs[activeTabIndex].site].search.replace('{text}', `'${input.value.replace("'", "\\'")}'`))
+		eval(sites[tabs[activeTabIndex].site].search.replace('{text}', `'${convertToURL(input.value)}'`))
 	} else tabs[activeTabIndex].s = ''
 })
 

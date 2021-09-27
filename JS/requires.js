@@ -486,6 +486,66 @@ function toFileName(text) {
 	return text.replace(/</g, ' ').replace(/>/g, ' ').replace(/:/g, ' ').replace(/"/g, ' ').replace(/\//g, '').replace(/\\/g, '').replace(/\|/g, '').replace(/\?/g, '').replace(/\*/g, ' ')
 }
 
+function convertToURL(text, backward) {
+	backward = backward || false
+	if (backward) {
+		console.log(true)
+		return text.replace(/%25/g, '%')
+			.replace(/%26/g, '&')
+			.replace(/%21/g, '!')
+			.replace(/%22/g, '"')
+			.replace(/%23/g, '#')
+			.replace(/%24/g, '$')
+			.replace(/%26/g, '&')
+			.replace(/%27/g, "'")
+			.replace(/%28/g, '(')
+			.replace(/%29/g, ')')
+			.replace(/%2A/g, '*')
+			.replace(/%2B/g, '+')
+			.replace(/%2C/g, ',')
+			.replace(/%2D/g, '-')
+			.replace(/%2E/g, '.')
+			.replace(/%2F/g, '/')
+			.replace(/%5C/g, '\\')
+			.replace(/%3A/g, ':')
+			.replace(/%3B/g, ';')
+			.replace(/%3C/g, '<')
+			.replace(/%3D/g, '=')
+			.replace(/%3E/g, '>')
+			.replace(/%3F/g, '?')
+			.replace(/%40/g, '@')
+			.replace(/%7E/g, '~')
+			.replace(/%80/g, '`')
+	} else {
+		return text.replace(/%/g, '%25')
+			.replace(/&/g, '%26')
+			.replace(/!/g, '%21')
+			.replace(/"/g, '%22')
+			.replace(/#/g, '%23')
+			.replace(/\$/g, '%24')
+			.replace(/&/g, '%26')
+			.replace(/'/g, '%27')
+			.replace(/\(/g, '%28')
+			.replace(/\)/g, '%29')
+			.replace(/\*/g, '%2A')
+			.replace(/\+/g, '%2B')
+			.replace(/,/g, '%2C')
+			.replace(/-/g, '%2D')
+			.replace(/\./g, '%2E')
+			.replace(/\//g, '%2F')
+			.replace(/\\/g, '%5C')
+			.replace(/:/g, '%3A')
+			.replace(/;/g, '%3B')
+			.replace(/</g, '%3C')
+			.replace(/=/g, '%3D')
+			.replace(/>/g, '%3E')
+			.replace(/\?/g, '%3F')
+			.replace(/@/g, '%40')
+			.replace(/~/g, '%7E')
+			.replace(/`/g, '%80')
+	}
+}
+
 // Main Loading Stuff
 const dirDocument = remote.app.getPath('documents')+'\\X Comic Downloader'
 

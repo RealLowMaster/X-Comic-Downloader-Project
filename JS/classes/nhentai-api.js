@@ -404,7 +404,7 @@ class nHentaiAPI {
 		})
 	}
 
-	getPages(from = 1, to = 1, page = 1, callback = () => {}) {
+	searchPages(from = 1, to = 1, page = 1, callback = () => {}) {
 		from = from || 1
 		to = to || 1
 		page = page || 1
@@ -428,8 +428,8 @@ class nHentaiAPI {
 			let child, save, save2, save3
 
 			// Name
-			arr.title = 'Comics Pages From: '+from+' To: '+to
-			arr.resultText = htmlDoc.getElementById('content').children[1].innerText
+			arr.title = 'Comics With '+from+' To '+to+' Pages'
+			arr.result = Number(htmlDoc.getElementById('content').children[1].innerText.replace(/ /g, '').replace('results', '').replace(/,/g, ''))
 
 			// Content
 			arr.content = []
@@ -487,9 +487,10 @@ class nHentaiAPI {
 	search(text = 'name', page = 1, callback = () => {}) {
 		text = text || null
 		if (text == null) throw "No Name."
+		text = text.replace(/ /g, '+')
 		page = page || 1
 		callback = callback || null
-		const url = this.baseURL+this.yeah+text+'/?page='+page
+		const url = this.baseURL+this.searchURL+'?q='+text+'&page='+page
 
 		if (callback == null) throw "You can't Set Callback as Null."
 		if (typeof callback != 'function') throw "The Type of Callback Should Be a Function."
@@ -506,12 +507,13 @@ class nHentaiAPI {
 			const arr = {}
 			let child, save, save2, save3
 
-			// Name
-			arr.name = htmlDoc.getElementById('content').children[1].children[1].children[0].innerText
+			// Result Text
+			arr.result = Number(htmlDoc.getElementById('content').children[1].innerText.replace(/ /g, '').replace('results', '').replace(/,/g, ''))
 
 			// Content
 			arr.content = []
 			child = htmlDoc.getElementsByClassName('index-container')[0].children
+			if (child[0].tagName == 'H2') throw child[0].innerText
 			for (let i = 0; i < child.length; i++) {
 				save = child[i].dataset.tags
 				if (save.indexOf('12227') != -1) save = 'English'
@@ -549,7 +551,8 @@ class nHentaiAPI {
 						else continue
 					}
 
-					save2 = Number(child[i].getAttribute('href').replace(this.yeah, '').replace(text, '').replace('/?page=', ''))
+					// this.baseURL+this.searchURL+'?q='+text+'&page='+page
+					save2 = Number(child[i].getAttribute('href').replace(this.searchURL, '').replace('?q=', '').replace(text, '').replace('&page=', ''))
 					arr.pagination.push([save, save2])
 				}
 			}
