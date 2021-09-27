@@ -76,7 +76,7 @@ Added To Version {
 }
 
 Doing {
-	Make nhentai.net API Part 2++
+	Make nhentai.net API Part 3++
 }
 
 Tasks => {

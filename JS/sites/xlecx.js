@@ -165,7 +165,7 @@ function createNewXlecxTab(id, pageNumber) {
 
 function xlecxOpenPost(whitchbutton, id, updateTabIndex) {
 	if (whitchbutton == 3) return
-	var makeNewPage = false
+	let makeNewPage = false
 	if (whitchbutton == 2) makeNewPage = true
 	if (updateTabIndex == null) updateTabIndex = true
 	
