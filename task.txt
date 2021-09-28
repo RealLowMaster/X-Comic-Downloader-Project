@@ -91,6 +91,8 @@ Tasks => {
 	Add Fix Update Button
 	Make Browser Selecting History Easier
 	Add Support For nhentai.net (Requested By Markus DarkOrb)
+	Make New Browser Change Page System
+	Add Search To History
 
 	Mybe in v2  {
 		Add More Comic Viewing Theme { 2x2, 3x3, 4x4, free-spect }

@@ -490,8 +490,7 @@ function convertToURL(text, backward) {
 	backward = backward || false
 	if (backward) {
 		console.log(true)
-		return text.replace(/%25/g, '%')
-			.replace(/%26/g, '&')
+		return text.replace(/%26/g, '&')
 			.replace(/%21/g, '!')
 			.replace(/%22/g, '"')
 			.replace(/%23/g, '#')
@@ -516,6 +515,7 @@ function convertToURL(text, backward) {
 			.replace(/%40/g, '@')
 			.replace(/%7E/g, '~')
 			.replace(/%80/g, '`')
+			.replace(/%25/g, '%')
 	} else {
 		return text.replace(/%/g, '%25')
 			.replace(/&/g, '%26')
