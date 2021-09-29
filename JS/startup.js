@@ -11,17 +11,6 @@ function ChangeSizes() {
 
 function test() {
 	//sharp('Image/sites/nhentai.png').png({ quality: 100 }).resize(30,30).toFile('Image/sites/nhentai-30x30.png')
-	
-	// nhentai.search('hello', 5, (err, doc) => {
-	// 	if (err) { console.error(err); return }
-	// 	console.log(doc) 
-	// })
-
-	nhentai.search(convertToURL('ad?'), 1, (err, doc) => {
-		if (err) { console.error(err); return }
-		console.log(doc) 
-	})
-
 }
 
 function AfterDatabaseDoneOnStartup() {
@@ -37,6 +26,7 @@ function AfterDatabaseDoneOnStartup() {
 	CheckReleaseNote()
 	document.getElementById('ex-p-l-input').value = remote.app.getPath('downloads')
 	if (setting.check_update) CheckUpdate()
+	active_site = 1
 	openBrowser()
 }
 

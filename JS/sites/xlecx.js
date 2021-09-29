@@ -1,5 +1,31 @@
 const xlecx = new XlecxAPI()
 
+function xlecxChangePage(page, whitchbutton, updateTabIndex) {
+	if (whitchbutton == 3) return
+	let makeNewPage = false
+	if (whitchbutton == 2) makeNewPage = true
+	page = page || 1
+	if (updateTabIndex == null) updateTabIndex = true
+	let id
+	if (makeNewPage) {
+		id = createNewTab(`xlecxChangePage(${page}, 0, false)`, true, 0)
+		if (id == null) { PopAlert(defaultSettingLang.tab_at_limit, 'danger'); return }
+	} else {
+		id = activeTabComicId
+		const passImageCon = document.getElementById(id).querySelector('[img-con="true"]')
+		if (passImageCon != undefined) {
+			const passImages = passImageCon.children
+			for (let i = 0; i < passImages.length; i++) {
+				passImages[i].removeAttribute('data-src')
+				passImages[i].removeAttribute('src')
+			}
+		}
+
+		if (updateTabIndex == true) tabs[Number(tabsContainer.querySelector(`[pi="${id}"]`).getAttribute('ti'))].addHistory(`xlecxChangePage(${page}, 0, false)`)
+	}
+	createNewXlecxTab(id, page)
+}
+
 function createNewXlecxTab(id, pageNumber) {
 	if (id == null) { PopAlert(defaultSettingLang.tab_at_limit, 'danger'); return }
 	const pageContent = document.getElementById(id)
@@ -419,32 +445,6 @@ function xlecxOpenPost(whitchbutton, id, updateTabIndex) {
 			clearDownloadedComics(page, 0)
 		})
 	})
-}
-
-function xlecxChangePage(page, whitchbutton, updateTabIndex) {
-	if (whitchbutton == 3) return
-	var makeNewPage = false
-	if (whitchbutton == 2) makeNewPage = true
-	page = page || 1
-	if (updateTabIndex == null) updateTabIndex = true
-	var id
-	if (makeNewPage) {
-		id = createNewTab(`xlecxChangePage(${page}, 0, false)`, true, 0)
-		if (id == null) { PopAlert(defaultSettingLang.tab_at_limit, 'danger'); return }
-	} else {
-		id = activeTabComicId
-		const passImageCon = document.getElementById(id).querySelector('[img-con="true"]')
-		if (passImageCon != undefined) {
-			const passImages = passImageCon.children
-			for (let i = 0; i < passImages.length; i++) {
-				passImages[i].removeAttribute('data-src')
-				passImages[i].removeAttribute('src')
-			}
-		}
-
-		if (updateTabIndex == true) tabs[Number(tabsContainer.querySelector(`[pi="${id}"]`).getAttribute('ti'))].addHistory(`xlecxChangePage(${page}, 0, false)`)
-	}
-	createNewXlecxTab(id, page)
 }
 
 function xlecxOpenCategory(name, page, shortName, whitchbutton, updateTabIndex) {

@@ -77,7 +77,7 @@ Added To Version {
 }
 
 Doing {
-	Fix Bug: Reopening Search History That Contains ' Will Error = Browser Viewing < and > Problem
+	Make nhentai Browser System Part 1++
 }
 
 Tasks => {

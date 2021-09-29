@@ -623,6 +623,8 @@ function clearDownloadedComics(content, site) {
 				}
 			}
 			break
+		case 1:
+			break
 	}
 }
 
@@ -761,7 +763,7 @@ function openSite(index) {
 		closeSitePanel()
 		closeBrowserHistory()
 		checkTabHistoryButtons()
-		const new_tab = createNewTab(sites[active_site].home.replace(', true)', ', false)'), false, 0)
+		const new_tab = createNewTab(sites[active_site].home.replace(', true)', ', false)'), false, active_site)
 		if (new_tab == null) { PopAlert("You Can't Make Any More Tab.", 'danger'); return }
 		const tab_element = tabsContainer.querySelector(`[pi="${new_tab}"]`)
 		activateTab(tab_element)

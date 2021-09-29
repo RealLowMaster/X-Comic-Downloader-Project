@@ -46,7 +46,7 @@ const sites = [
 	{
 		name: 'nhentai',
 		url: 'nhentai.net',
-		home: '',
+		home: 'nhentaiChangePage(1, 0, true)',
 		repair: '',
 		search: '',
 		jump: ''
@@ -60,7 +60,7 @@ const keydownEvents = [
 	'SettingKeyEvents({ctrl},{shift},{key})'
 ]
 const ThisWindow = remote.getCurrentWindow(), loading = new Loading(16), db = {}, procressPanel = new ProcressPanel(0), update_number = 3
-let comicDeleting = false, downloadCounter = 0, wt_fps = 20, dirDB, dirUL, dirTmp, isOptimizing = false, browserLastTabs = [], tabsHistory = [], dirHistory = '', keydownEventIndex = 0, new_update, save_value = null, afterDLReload = true
+let comicDeleting = false, downloadCounter = 0, wt_fps = 20, dirDB, dirUL, dirTmp, isOptimizing = false, browserLastTabs = [], tabsHistory = [], dirHistory = '', keydownEventIndex = 0, new_update, save_value = null, save_value2 = null, afterDLReload = true
 var setting, tabs = [], downloadingList = [], lastComicId, lastHaveId, lastGroupId, lastArtistId, lastParodyId, lastTagId, searchTimer, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = [], openedMenuTabIndex, copiedTab = null
 
 /*
