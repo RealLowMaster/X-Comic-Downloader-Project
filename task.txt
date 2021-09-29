@@ -77,7 +77,7 @@ Added To Version {
 }
 
 Doing {
-	Make nhentai Browser System Part 1++
+	Make nhentai Browser System Part 2++
 }
 
 Tasks => {

@@ -721,18 +721,16 @@ function xlecxOpenTagContentMaker(result, pageContent, name, whitch) {
 
 function xlecxOpenTag(name, page, whitch, whitchbutton, updateTabIndex) {
 	if (whitchbutton == 3) return
-	var makeNewPage = false
+	let makeNewPage = false, pageId
 	if (whitchbutton == 2) makeNewPage = true
 	name = name || null
 	page = page || 1
 	whitch = whitch || 1
 	if (name == null) return
 	if (updateTabIndex == null) updateTabIndex = true
-	var pageContent, pageId
 	if (makeNewPage) {
 		pageId = createNewTab(`xlecxOpenTag('${name}', ${page}, ${whitch}, 0, false)`, true, 0)
 		if (pageId == null) { PopAlert(defaultSettingLang.tab_at_limit, 'danger'); return }
-		pageContent = document.getElementById(pageId)
 	} else {
 		pageId = activeTabComicId
 		const passImageCon = document.getElementById(pageId).querySelector('[img-con="true"]')
@@ -743,9 +741,10 @@ function xlecxOpenTag(name, page, whitch, whitchbutton, updateTabIndex) {
 				passImages[i].removeAttribute('src')
 			}
 		}
-		pageContent = document.getElementById(pageId)
 		if (updateTabIndex == true) tabs[Number(tabsContainer.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))].addHistory(`xlecxOpenTag('${name}', ${page}, ${whitch}, 0, false)`)
 	}
+
+	const pageContent = document.getElementById(pageId)
 
 	tabs[Number(tabsContainer.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))].options = [name, whitch]
 
