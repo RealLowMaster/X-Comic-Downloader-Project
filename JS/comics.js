@@ -487,79 +487,6 @@ function closeComicPanel() {
 	comicPanel.setAttribute('sid', null)
 }
 
-async function repairImageUpdateDatabase(comic_id, imageIndex, imageBaseName, imageFormat, repairIndex, passRepair, passRepairURLs) {
-	var newRepair = [], newRepairURLs = []
-	let rawRepair = 0, rawRepairURLs = 0
-
-	for (let j in passRepair) {
-		if (passRepair != null && j != repairIndex) rawRepair++
-	}
-	for (let j in passRepairURLs) {
-		if (passRepairURLs != null && j != repairIndex) rawRepairURLs++
-	}
-
-	for (let i in passRepair) {
-		if (i != repairIndex) newRepair.push(passRepair[i])
-		else {
-			if (rawRepair == 0) newRepair = null
-			else if (i != passRepair.length - 1) newRepair.push(null)
-		}
-	}
-	for (let i in passRepairURLs) {
-		if (i != repairIndex) newRepairURLs.push(passRepairURLs[i])
-		else {
-			if (rawRepairURLs == 0) newRepairURLs = null
-			else if (i != passRepairURLs.length - 1) newRepairURLs.push(null)
-		}
-	}
-
-	await db.comics.update({_id:comic_id}, { $set: {m:newRepair, r:newRepairURLs} }, {}, err => {
-		if (err) { error(err); return }
-		const repairElement = document.getElementById(imageIndex) || null
-		if (repairElement != null) {
-			const newImage = document.createElement('img')
-			newImage.setAttribute('src', `${dirUL}/${comic_id}${imageBaseName}/${imageBaseName}-${imageIndex}.${imageFormat}`)
-			document.getElementById('c-p-i').insertBefore(newImage, repairElement)
-			repairElement.remove()
-		}
-	})
-}
-
-async function repairImageFindDatabase(comic_id, repairIndex, imageFormat, imageIndex) {
-	await db.comics.findOne({_id:comic_id}, (err, doc) => {
-		if (err) { error(err); return }
-		repairImageUpdateDatabase(comic_id, imageIndex, doc.i, imageFormat, repairIndex, doc.m, doc.r)
-	})
-}
-
-async function repairImageDownloadImage(comic_id, imageIndex, imageUrl, repairIndex, imageId) {
-	const imageFormat = fileExt(imageUrl)
-	const option = {
-		url: imageUrl,
-		dest: `${dirUL}/${comic_id}${imageId}/${imageId}-${imageIndex}.${imageFormat}`
-	}
-
-	await ImageDownloader.image(option).then(({ filename }) => {
-		repairImageFindDatabase(comic_id, repairIndex, imageFormat, imageIndex)
-	}).catch((err) => {
-		PopAlert('Sorry There is a Problem in Repairing Image, Please check Internet Connection.<br>'+err, 'danger')
-		document.getElementById(imageIndex).innerHTML = `<p>Image hasn't Been Download Currectly.</p><button onclick="repairImage(${imageIndex}, ${repairIndex}, ${imageId})">Repair</button>`
-	})
-}
-
-async function repairImage(imageIndex, repairIndex, imageId) {
-	const comic_id = Number(comicPanel.getAttribute('cid'))
-	document.getElementById(imageIndex).innerHTML = '<div class="browser-page-loading"><span class="spin spin-primary"></span><p>Loading...</p></div>'
-	await db.comics.findOne({_id:comic_id}, (err, doc) => {
-		if (err) { error(err); return }
-		var imageUrl = doc.r || null
-		if (imageUrl == null) { error('Image Url Is Missed!'); return }
-		imageUrl = imageUrl[repairIndex]
-		if (imageUrl == null) { error('Image Url Is Missed!'); return }
-		repairImageDownloadImage(comic_id, imageIndex, imageUrl, repairIndex, imageId)
-	})
-}
-
 async function repairComicInfo(whitch) {
 	whitch = whitch || 0
 	const id = Number(comicPanel.getAttribute('cid'))
@@ -567,14 +494,14 @@ async function repairComicInfo(whitch) {
 		if (err) { error(err); return }
 		if (doc.s == undefined) return
 		if (doc.s == undefined) return
-		eval(sites[doc.s][2].replace('{id}', `'${doc.p}'`).replace('{whitch}', whitch))
+		eval(sites[doc.s].repair.replace('{id}', `'${doc.p}'`).replace('{whitch}', whitch))
 	})
 }
 
 function repairComicImages(repair_list) {
 	if (window.navigator.onLine == false) { PopAlert('You are not Connected To Internet.', 'danger') }
 	if (typeof(repair_list) == 'object' && repair_list.length != 0) need_repair = repair_list
-	eval(sites[off_site][2].replace('{id}', `'${off_id}'`).replace('{whitch}', 5))
+	eval(sites[off_site].repair.replace('{id}', `'${off_id}'`).replace('{whitch}', 5))
 }
 
 // Export Comic
