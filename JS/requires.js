@@ -46,7 +46,7 @@ const sites = [
 	{
 		name: 'nhentai',
 		url: 'nhentai.net',
-		home: 'nhentaiChangePage(1, 0, true)',
+		home: 'nhentaiChangePage(1, false, true)',
 		repair: '',
 		search: '',
 		jump: ''

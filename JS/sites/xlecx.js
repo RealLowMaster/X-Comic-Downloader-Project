@@ -230,8 +230,7 @@ function xlecxOpenPost(whitchbutton, id, updateTabIndex) {
 	db.have.findOne({s:0, i:id}, (err, haveDoc) => {
 		if (err) { error(err); return }
 		var have_in_have, have_comic = false
-		if (haveDoc == undefined)
-			have_in_have = false
+		if (haveDoc == undefined) have_in_have = false
 		else {
 			have_in_have = true
 			if (haveDoc.d != undefined) have_comic = true
@@ -261,7 +260,7 @@ function xlecxOpenPost(whitchbutton, id, updateTabIndex) {
 			else if (IsDownloading(id))
 				container.innerHTML += `<div class="browser-comic-have" ccid="${id}"><p>Downloading... <img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"><p></div>`
 			else
-				container.innerHTML += `<div class="browser-comic-have" ccid="${id}"><button onclick="xlecxDownloader('${id}')">Download</button><button class="add-to-have" onclick="AddToHave(0, '${id}')">Add To Have</button><div>`
+				container.innerHTML += `<div class="browser-comic-have" ccid="${id}"><button onclick="xlecxDownloader('${id}')">Download</button><button class="add-to-have" onclick="AddToHave(0, '${id}')">Add To Have</button></div>`
 
 			// Groups
 			if (result.groups != undefined) {

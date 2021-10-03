@@ -77,7 +77,7 @@ Added To Version {
 }
 
 Doing {
-	Make nhentai Browser System Part 2++
+	Make nhentai Browser System Part 3++
 }
 
 Tasks => {
@@ -121,6 +121,5 @@ Tasks => {
 
 	Mybe Later {
 		Remove Electron Window Frame And Make a Custome One
-		Create NHentai API
 	}
 }
