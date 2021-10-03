@@ -259,10 +259,17 @@ class nHentaiAPI {
 
 			// Date
 			if (!save[8].classList.contains('hidden')) {
-				save2 = save[8].children[0].children[0]
+				save2 = save[8].children[0].children[0].getAttribute('datetime')
+				save3 = new Date(save2)
+				
 				arr.date = {
-					dataTime: save2.getAttribute('datetime'),
-					ago: save2.innerText
+					dataTime: save2,
+					year: save3.getFullYear(),
+					month: save3.getMonth(),
+					day: save3.getDay(),
+					hours: save3.getHours(),
+					minutes: save3.getMinutes(),
+					secends: save3.getSeconds()
 				}
 			}
 

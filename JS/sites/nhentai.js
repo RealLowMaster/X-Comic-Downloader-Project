@@ -1,4 +1,4 @@
-const { futimesSync } = require("original-fs")
+const { futimesSync, readSync } = require("original-fs")
 
 const nhentai = new nHentaiAPI()
 const nhentaiError = '<div class="alert alert-danger">{err}</div>'
@@ -178,6 +178,79 @@ function nhentaiOpenPost(id, makeNewTab, updateTabIndex) {
 
 			// Info
 			html += `<div class="nhentai-comic-info"><div><img src="${result.cover}" loading="lazy"></div><div><div class="nhentai-comic-title">${result.name}</div><div class="nhentai-comic-subtitle">${result.title}</div>`
+		
+			// Parodies 0
+			if (result.parodies != undefined && result.parodies.length != 0) {
+				html += '<div class="nhentai-info-row">Parodies: '
+				for (let i = 0; i < result.parodies.length; i++) {
+					html += `<button type="button" onmousedown="nhentaiLinkClick('nhentaiOpenInfo(\'${result.parodies[i].url}\', 1, 0, {tab}, true)')"><span>${result.parodies[i].name}</span><span>${result.parodies[i].count}</span></button>`
+				}
+				html += '</div>'
+			}
+
+			// Characters 1
+			if (result.characters != undefined && result.characters.length != 0) {
+				html += '<div class="nhentai-info-row">Characters: '
+				for (let i = 0; i < result.characters.length; i++) {
+					html += `<button type="button" onmousedown="nhentaiLinkClick('nhentaiOpenInfo(\'${result.characters[i].url}\', 1, 1, {tab}, true)')"><span>${result.characters[i].name}</span><span>${result.characters[i].count}</span></button>`
+				}
+				html += '</div>'
+			}
+
+			// Tags 2
+			if (result.tags != undefined && result.tags.length != 0) {
+				html += '<div class="nhentai-info-row">Tags: '
+				for (let i = 0; i < result.tags.length; i++) {
+					html += `<button type="button" onmousedown="nhentaiLinkClick('nhentaiOpenInfo(\'${result.tags[i].url}\', 1, 2, {tab}, true)')"><span>${result.tags[i].name}</span><span>${result.tags[i].count}</span></button>`
+				}
+				html += '</div>'
+			}
+
+			// Artists 3
+			if (result.artists != undefined && result.artists.length != 0) {
+				html += '<div class="nhentai-info-row">Artists: '
+				for (let i = 0; i < result.artists.length; i++) {
+					html += `<button type="button" onmousedown="nhentaiLinkClick('nhentaiOpenInfo(\'${result.artists[i].url}\', 1, 3, {tab}, true)')"><span>${result.artists[i].name}</span><span>${result.artists[i].count}</span></button>`
+				}
+				html += '</div>'
+			}
+
+			// Groups 4
+			if (result.groups != undefined && result.groups.length != 0) {
+				html += '<div class="nhentai-info-row">Groups: '
+				for (let i = 0; i < result.groups.length; i++) {
+					html += `<button type="button" onmousedown="nhentaiLinkClick('nhentaiOpenInfo(\'${result.groups[i].url}\', 1, 4, {tab}, true)')"><span>${result.groups[i].name}</span><span>${result.groups[i].count}</span></button>`
+				}
+				html += '</div>'
+			}
+
+			// Languages 5
+			if (result.languages != undefined && result.languages.length != 0) {
+				html += '<div class="nhentai-info-row">Languages: '
+				for (let i = 0; i < result.languages.length; i++) {
+					html += `<button type="button" onmousedown="nhentaiLinkClick('nhentaiOpenInfo(\'${result.languages[i].url}\', 1, 5, {tab}, true)')"><span>${result.languages[i].name}</span><span>${result.languages[i].count}</span></button>`
+				}
+				html += '</div>'
+			}
+
+			// Categories 6
+			if (result.categories != undefined && result.categories.length != 0) {
+				html += '<div class="nhentai-info-row">Categories: '
+				for (let i = 0; i < result.categories.length; i++) {
+					html += `<button type="button" onmousedown="nhentaiLinkClick('nhentaiOpenInfo(\'${result.categories[i].url}\', 1, 6, {tab}, true)')"><span>${result.categories[i].name}</span><span>${result.categories[i].count}</span></button>`
+				}
+				html += '</div>'
+			}
+
+			// Pages
+			if (result.pages != undefined) {
+				html += `<div class="nhentai-info-row">Pages: <button type="button" onmousedown="nhentaiLinkClick('nhentaiOpenPages(${result.pages.from}, ${result.pages.to}, {tab}, true)')"><span>${result.pages.count}</span></button></div>`
+			}
+
+			// Upload Date
+			if (result.date != undefined) {
+				html += `<div class="nhentai-info-row">Uploaded: <time class="nobold" datetime="${result.date.dataTime}">${result.date.year}-${result.date.month}-${result.date.day} ${result.date.hours}:${result.date.minutes}:${result.date.secends}</time></div>`
+			}
 
 			html += '</div></div>'
 
@@ -186,6 +259,10 @@ function nhentaiOpenPost(id, makeNewTab, updateTabIndex) {
 		})
 	})
 }
+
+function nhentaiOpenInfo(name, page, whitch, makeNewTab, updateTabIndex) {}
+
+function nhentaiOpenPages(from, to, makeNewTab, updateTabIndex) {}
 
 function nhentaiLinkClick(job) {
 	const e = window.event, which = e.which

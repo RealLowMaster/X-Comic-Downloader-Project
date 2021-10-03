@@ -2826,6 +2826,8 @@ input::-webkit-input-placeholder { user-select: none }
 	box-shadow: var(--st-cselect-btn-at-shadow);
 }
 
+.nobold { font-weight: 300 !important }
+
 .d-block { display: block !important }
 .pl-5 { padding-left: 15px !important }
 .pr-5 { padding-right: 15px !important }
