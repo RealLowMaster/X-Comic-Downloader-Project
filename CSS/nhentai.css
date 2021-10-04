@@ -5,8 +5,6 @@
 	background-color: #0d0d0d;
 }
 
-.nhentai-container > div { width: 100% }
-
 .nhentai-top-menu {
 	display: flex;
 	height: 50px;
@@ -37,7 +35,8 @@
 
 .nhentai-postrow {
 	display: block;
-	margin: 10px 0 25px 0;
+	width: 98%;
+	margin: 10px auto 25px auto;
 	background-color: #1f1f1f;
 	border-radius: 6px;
 }
@@ -251,8 +250,9 @@
 
 .nhentai-comic-info > div:first-child > img {
 	display: block;
-	max-width: 100%;
+	max-width: 350px;
 	height: auto;
+	max-height: 494px;
 	border-radius: 3px;
 	object-fit: cover;
 	object-position: center;
@@ -292,7 +292,7 @@
 	display: inline-flex;
 	flex-direction: row;
     justify-content: center;
-	margin: 2px;
+	margin: 3px;
 	background-color: transparent;
 	font-family: Noto Sans,sans-serif;
 	font-size: 15px;
@@ -326,4 +326,24 @@
 
 .nhentai-info-row > button:hover > span:not(:first-child) {
 	background-color: #404040;
+}
+
+.nhentai-images {
+	display: block;
+	width: 95% !important;
+	padding: 0 5px;
+	margin: 10px auto;
+	background-color: #222;
+	border-radius: 3px;
+	box-shadow: 0 2px 10px rgba(0,0,0,.7);
+}
+
+.nhentai-images > img {
+	display: block;
+	min-width: 100px;
+	min-height: 100px;
+	max-width: 100%;
+	max-height: 100%;
+	margin: 20px auto;
+	border-radius: 2px;
 }

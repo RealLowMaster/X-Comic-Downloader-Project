@@ -800,7 +800,6 @@ input::-webkit-input-placeholder { user-select: none }
 	margin: 0 50px 0 80px;
 	background-color: transparent;
 	cursor: pointer;
-	transition: background-color .1s;
 }
 
 #b-h-p-h-c > div > div:last-child > div > p:hover {

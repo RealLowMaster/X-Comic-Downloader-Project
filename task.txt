@@ -49,9 +49,9 @@ DB => {
 	collections 10 => {
 		name = n
 		comics = c = [
-		comic_id = 0
-	]
-	_id
+			comic_id = 0
+		]
+		_id
 	}
 	have 11 => {
 		site = s
@@ -77,7 +77,7 @@ Added To Version {
 }
 
 Doing {
-	Make nhentai Browser System Part 4++
+	Make nhentai Browser System Part 5++
 }
 
 Tasks => {

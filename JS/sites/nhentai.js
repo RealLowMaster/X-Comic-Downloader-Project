@@ -251,10 +251,31 @@ function nhentaiOpenPost(id, makeNewTab, updateTabIndex) {
 			if (result.date != undefined) {
 				html += `<div class="nhentai-info-row">Uploaded: <time class="nobold" datetime="${result.date.dataTime}">${result.date.year}-${result.date.month}-${result.date.day} ${result.date.hours}:${result.date.minutes}:${result.date.secends}</time></div>`
 			}
-
 			html += '</div></div>'
 
+			if (have_comic) {
+				// Images
+			} else {
+				// Images
+				html += '<div class="nhentai-images">'
+				for (let i = 0; i < result.images.length; i++) html += `<img data-src="${result.images[i].url}">`
+				html += '</div>'
+
+				// Related
+				if (result.related != undefined && result.related.length != 0) {
+					html += '<div class="nhentai-postrow"><div>Related</div><div>'
+					for (let i = 0; i < result.related.length; i++) html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.related[i].id}, {tab}, true)')"><img src="${result.related[i].thumb}" loading="lazy"><div ${result.related[i].lang}>${result.related[i].title}</div></div>`
+					html += '</div></div>'
+				}
+			}
+
+			html += '</div></div>'
 			pageContent.innerHTML = html
+			const LoadingImages = pageContent.getElementsByClassName('nhentai-images')[0].getElementsByTagName('img')
+
+			for (let i = 0; i < LoadingImages.length; i++) {
+				imageLoadingObserver.observe(LoadingImages[i])
+			}
 			clearDownloadedComics(pageContent, 1)
 		})
 	})
