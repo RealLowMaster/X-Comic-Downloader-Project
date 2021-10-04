@@ -66,8 +66,6 @@ function IsHavingComic(site, id, callback) {
 	})
 }
 
-// openComicCharacters(), openComicLanguages(), openComicCategories()
-
 // Add New Character
 function UpdateCharacterList(comicId, newList) {
 	db.comic_characters.findOne({_id:comicId}, (err, doc) => {

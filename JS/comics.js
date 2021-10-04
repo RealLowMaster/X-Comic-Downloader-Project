@@ -1,3 +1,6 @@
+const comicCharactersContainer = document.getElementById('c-p-c')
+const comicLanguagesContainer = document.getElementById('c-p-l')
+const comicCategoriesContainer = document.getElementById('c-p-ct')
 const comicGroupsContainer = document.getElementById('c-p-g')
 const comicArtistsContainer = document.getElementById('c-p-a')
 const comicParodyContainer = document.getElementById('c-p-p')
@@ -283,6 +286,57 @@ function reloadLoadingComics(scroll) {
 	loadComics(page, search, scroll)
 }
 
+function openComicCharacters(comicId) {
+	db.comic_characters.findOne({_id:comicId}, (err, doc) => {
+		if (err) { error('OpenComicCharacter: '+err); return }
+		if (doc != undefined) {
+			const character = doc.t || null
+			if (character == null) return
+			comicCharactersContainer.innerHTML = 'Characters: '
+			for (let i in character) {
+				db.characters.findOne({_id:character[i]}, (err, doc) => {
+					if (err) { error(err); return }
+					comicCharactersContainer.innerHTML += `<button>${doc.n}</button>`
+				})
+			}
+		}
+	})
+}
+
+function openComicLanguages(comicId) {
+	db.comic_languages.findOne({_id:comicId}, (err, doc) => {
+		if (err) { error('OpenComicLanguage: '+err); return }
+		if (doc != undefined) {
+			const language = doc.t || null
+			if (language == null) return
+			comicLanguagesContainer.innerHTML = 'Languages: '
+			for (let i in language) {
+				db.languages.findOne({_id:language[i]}, (err, doc) => {
+					if (err) { error(err); return }
+					comicLanguagesContainer.innerHTML += `<button>${doc.n}</button>`
+				})
+			}
+		}
+	})
+}
+
+function openComicCategories(comicId) {
+	db.comic_categories.findOne({_id:comicId}, (err, doc) => {
+		if (err) { error('OpenComicCategory: '+err); return }
+		if (doc != undefined) {
+			const category = doc.t || null
+			if (category == null) return
+			comicCategoriesContainer.innerHTML = 'Categories: '
+			for (let i in category) {
+				db.categories.findOne({_id:category[i]}, (err, doc) => {
+					if (err) { error(err); return }
+					comicCategoriesContainer.innerHTML += `<button>${doc.n}</button>`
+				})
+			}
+		}
+	})
+}
+
 function openComicGroups(comicId) {
 	db.comic_groups.findOne({_id:comicId}, (err, doc) => {
 		if (err) { error('OpenComicGroup: '+err); return }
@@ -361,6 +415,9 @@ function openComic(id) {
 	let html = '', formatIndex = 0
 	var name, image, ImagesCount, formats
 
+	comicCharactersContainer.innerHTML = ''
+	comicLanguagesContainer.innerText = ''
+	comicCategoriesContainer.innerText = ''
 	comicGroupsContainer.innerHTML = ''
 	comicArtistsContainer.innerHTML = ''
 	comicParodyContainer.innerHTML = ''
@@ -474,6 +531,9 @@ function closeComicPanel() {
 	off_quality = null
 	document.getElementById('main').style.display = 'grid'
 
+	comicCharactersContainer.innerHTML = ''
+	comicLanguagesContainer.innerText = ''
+	comicCategoriesContainer.innerText = ''
 	comicGroupsContainer.innerHTML = ''
 	comicArtistsContainer.innerHTML = ''
 	comicParodyContainer.innerHTML = ''
