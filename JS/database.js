@@ -489,6 +489,9 @@ async function CreateComic(comicIndex, haveIndex, gottenResult, image, siteIndex
 		if (err) { error(err); return }
 		fix_index(1)
 		const id = doc._id
+		const characters = gottenResult.characters || null
+		const languages = gottenResult.languages || null
+		const categories = gottenResult.categories || null
 		const groups = gottenResult.groups || null
 		const artists = gottenResult.artists || null
 		const parody = gottenResult.parody || null
@@ -496,6 +499,33 @@ async function CreateComic(comicIndex, haveIndex, gottenResult, image, siteIndex
 
 		// Add Comic To Have
 		CreateHave(doc.s, doc.p, haveIndex, true)
+
+		// Characters
+		if (characters != null) {
+			const charactersList = []
+			for (let i in characters) {
+				charactersList.push(characters[i].name)
+			}
+			CreateCharacter(charactersList, id)
+		}
+
+		// Languages
+		if (languages != null) {
+			const languagesList = []
+			for (let i in languages) {
+				languagesList.push(languages[i].name)
+			}
+			CreateLanguage(languagesList, id)
+		}
+
+		// Categories
+		if (categories != null) {
+			const categoriesList = []
+			for (let i in categories) {
+				categoriesList.push(categories[i].name)
+			}
+			CreateCategory(categoriesList, id)
+		}
 
 		// Groups
 		if (groups != null) {

@@ -430,6 +430,7 @@ function openComic(id) {
 	const findComic = async() => {
 		await db.comics.findOne({_id:Number(id)}, (err, doc) => {
 			if (err) { error(err); return }
+			id = Number(id)
 			name = doc.n || null
 			if (name == null) return
 			ImagesCount = doc.c || null
@@ -505,10 +506,13 @@ function openComic(id) {
 				imageLoadingObserver.observe(LoadingImages[i])
 			}
 
-			openComicGroups(Number(id))
-			openComicArtists(Number(id))
-			openComicParodies(Number(id))
-			openComicTags(Number(id))
+			openComicCharacters(id)
+			openComicLanguages(id)
+			openComicCategories(id)
+			openComicGroups(id)
+			openComicArtists(id)
+			openComicParodies(id)
+			openComicTags(id)
 			comicPanel.style.display = 'block'
 			comicPanel.scrollTop = 0
 			keydownEventIndex = 1
