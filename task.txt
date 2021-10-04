@@ -59,6 +59,30 @@ DB => {
 		downloaded = d
 		_id
 	}
+	characters 12 => {
+		name = n
+		_id
+	}
+	comic_characters {
+		parodies = t = []
+		_id => Comic Id
+	}
+	languages 13 => {
+		name = n
+		_id
+	}
+	comic_languages {
+		parodies = t = []
+		_id => Comic Id
+	}
+	categories 14 => {
+		name = n
+		_id
+	}
+	comic_categories {
+		parodies = t = []
+		_id => Comic Id
+	}
 }
 
 Add Comic {
@@ -77,6 +101,7 @@ Added To Version {
 }
 
 Doing {
+	Add Characters, Languages and Categories System Part 1++
 	Make nhentai Browser System Part 5++
 }
 

@@ -596,6 +596,13 @@ function CreateDatabase() {
 	db.comic_parodies = new nedb({ filename: dirDB+'/comic_parodies', autoload: true })
 	db.collections = new nedb({ filename: dirDB+'/collections', autoload: true })
 	db.have = new nedb({ filename: dirDB+'/have', autoload: true })
+
+	db.characters = new nedb({ filename: dirDB+'/characters', autoload: true })
+	db.comic_characters = new nedb({ filename: dirDB+'/comic_characters', autoload: true })
+	db.languages = new nedb({ filename: dirDB+'/languages', autoload: true })
+	db.comic_languages = new nedb({ filename: dirDB+'/comic_languages', autoload: true })
+	db.categories = new nedb({ filename: dirDB+'/categories', autoload: true })
+	db.comic_categories = new nedb({ filename: dirDB+'/comic_categories', autoload: true })
 }
 
 function CheckSettings() {
@@ -836,6 +843,12 @@ async function makeDatabaseIndexs() {
 	await count_index(10)
 	// have
 	await count_index(11)
+	// characters
+	await count_index(12)
+	// languages
+	await count_index(13)
+	// categories
+	await count_index(14)
 }
 
 // Image Loading
