@@ -61,7 +61,7 @@ const keydownEvents = [
 ]
 const ThisWindow = remote.getCurrentWindow(), loading = new Loading(16), db = {}, procressPanel = new ProcressPanel(0), update_number = 3
 let comicDeleting = false, downloadCounter = 0, wt_fps = 20, dirDB, dirUL, dirTmp, isOptimizing = false, browserLastTabs = [], tabsHistory = [], dirHistory = '', keydownEventIndex = 0, new_update, save_value = null, save_value2 = null, afterDLReload = true
-var setting, tabs = [], downloadingList = [], lastComicId, lastHaveId, lastGroupId, lastArtistId, lastParodyId, lastTagId, searchTimer, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = [], openedMenuTabIndex, copiedTab = null
+var setting, tabs = [], downloadingList = [], lastComicId, lastHaveId, lastGroupId, lastArtistId, lastParodyId, lastTagId, lastCharacterId, lastLanguageId, lastCategoryId, searchTimer, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = [], openedMenuTabIndex, copiedTab = null
 
 /*
 	37 // Left Arrow
@@ -596,7 +596,6 @@ function CreateDatabase() {
 	db.comic_parodies = new nedb({ filename: dirDB+'/comic_parodies', autoload: true })
 	db.collections = new nedb({ filename: dirDB+'/collections', autoload: true })
 	db.have = new nedb({ filename: dirDB+'/have', autoload: true })
-
 	db.characters = new nedb({ filename: dirDB+'/characters', autoload: true })
 	db.comic_characters = new nedb({ filename: dirDB+'/comic_characters', autoload: true })
 	db.languages = new nedb({ filename: dirDB+'/languages', autoload: true })

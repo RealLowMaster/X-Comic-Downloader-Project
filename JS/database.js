@@ -66,6 +66,183 @@ function IsHavingComic(site, id, callback) {
 	})
 }
 
+// openComicCharacters(), openComicLanguages(), openComicCategories()
+// lastCharacterId, lastLanguageId, lastCategoryId
+
+// Add New Character
+function UpdateCharacterList(comicId, newList) {
+	db.comic_characters.findOne({_id:comicId}, (err, doc) => {
+		if (err) { error('CharacterListUpdateCheck: '+err); return }
+		if (doc != undefined) {
+			db.comic_characters.update({_id:comicId}, { $set: {t:newList} }, {}, (err) => {
+				if (err) { error('CharacterListUpdate: '+err); return }
+			})
+		} else CreateCharacterList(comicId, newList)
+		openComicCharacter(comicId)
+		loading.forward()
+		loading.hide()
+		PopAlert('Comic Characters Has Been Repaired!')
+	})
+}
+
+function CreateCharacterList(comicId, newList) {
+	db.comic_characters.insert({t:newList, _id:comicId}, err => {
+		if (err) { error('CharacterList: '+err); return }
+	})
+}
+
+function AddCharacterToList(comicId, newList, repairing) {
+	repairing = repairing || false
+	if (repairing == false) CreateCharacterList(comicId, newList)
+	else UpdateCharacterList(comicId, newList)
+}
+
+function CreateCharacterInsert(tagName, index, callback) {
+	db.characters.insert({n:tagName.toLowerCase(), _id:index}, callback)
+}
+
+function CreateCharacter(tagList, comicId, tagListIndex, repairing, newList) {
+	tagListIndex = tagListIndex || 0
+	newList = newList || []
+	repairing = repairing || false
+	db.characters.findOne({n:tagList[tagListIndex].toLowerCase()}, (err, num) => {
+		if (err) { error(err); return }
+		if (num != undefined) {
+			newList.push(num._id)
+			if (tagListIndex == tagList.length - 1) {
+				fix_index(12)
+				AddCharacterToList(comicId, newList, repairing)
+			} else CreateCharacter(tagList, comicId, tagListIndex + 1, repairing, newList)
+		} else {
+			lastCharacterId++
+			CreateCharacterInsert(tagList[tagListIndex], lastCharacterId - 1, (err, newDoc) => {
+				if (err) { error('Character: '+err); return }
+				newList.push(newDoc._id)
+				if (tagListIndex == tagList.length - 1) {
+					fix_index(12)
+					AddCharacterToList(comicId, newList, repairing)
+				} else CreateCharacter(tagList, comicId, tagListIndex + 1, repairing, newList)
+			})
+		}
+	})
+}
+
+// Add New Language
+function UpdateLanguageList(comicId, newList) {
+	db.comic_languages.findOne({_id:comicId}, (err, doc) => {
+		if (err) { error('LanguageListUpdateCheck: '+err); return }
+		if (doc != undefined) {
+			db.comic_languages.update({_id:comicId}, { $set: {t:newList} }, {}, (err) => {
+				if (err) { error('LanguageListUpdate: '+err); return }
+			})
+		} else CreateLanguageList(comicId, newList)
+		openComicLanguages(comicId)
+		loading.forward()
+		loading.hide()
+		PopAlert('Comic Languages Has Been Repaired!')
+	})
+}
+
+function CreateLanguageList(comicId, newList) {
+	db.comic_languages.insert({t:newList, _id:comicId}, err => {
+		if (err) { error('LanguageList: '+err); return }
+	})
+}
+
+function AddLanguageToList(comicId, newList, repairing) {
+	repairing = repairing || false
+	if (repairing == false) CreateLanguageList(comicId, newList)
+	else UpdateLanguageList(comicId, newList)
+}
+
+function CreateLanguageInsert(tagName, index, callback) {
+	db.languages.insert({n:tagName.toLowerCase(), _id:index}, callback)
+}
+
+function CreateLanguage(tagList, comicId, tagListIndex, repairing, newList) {
+	tagListIndex = tagListIndex || 0
+	newList = newList || []
+	repairing = repairing || false
+	db.languages.findOne({n:tagList[tagListIndex].toLowerCase()}, (err, num) => {
+		if (err) { error(err); return }
+		if (num != undefined) {
+			newList.push(num._id)
+			if (tagListIndex == tagList.length - 1) {
+				fix_index(13)
+				AddLanguageToList(comicId, newList, repairing)
+			} else CreateLanguage(tagList, comicId, tagListIndex + 1, repairing, newList)
+		} else {
+			lastLanguageId++
+			CreateLanguageInsert(tagList[tagListIndex], lastLanguageId - 1, (err, newDoc) => {
+				if (err) { error('Language: '+err); return }
+				newList.push(newDoc._id)
+				if (tagListIndex == tagList.length - 1) {
+					fix_index(13)
+					AddLanguageToList(comicId, newList, repairing)
+				} else CreateLanguage(tagList, comicId, tagListIndex + 1, repairing, newList)
+			})
+		}
+	})
+}
+
+// Add New Category
+function UpdateCategoryList(comicId, newList) {
+	db.comic_categories.findOne({_id:comicId}, (err, doc) => {
+		if (err) { error('CategoryListUpdateCheck: '+err); return }
+		if (doc != undefined) {
+			db.comic_categories.update({_id:comicId}, { $set: {t:newList} }, {}, (err) => {
+				if (err) { error('CategoryListUpdate: '+err); return }
+			})
+		} else CreateCategoryList(comicId, newList)
+		openComicCategories(comicId)
+		loading.forward()
+		loading.hide()
+		PopAlert('Comic Categories Has Been Repaired!')
+	})
+}
+
+function CreateCategoryList(comicId, newList) {
+	db.comic_categories.insert({t:newList, _id:comicId}, err => {
+		if (err) { error('CategoryList: '+err); return }
+	})
+}
+
+function AddCategoryToList(comicId, newList, repairing) {
+	repairing = repairing || false
+	if (repairing == false) CreateCategoryList(comicId, newList)
+	else UpdateCategoryList(comicId, newList)
+}
+
+function CreateCategoryInsert(tagName, index, callback) {
+	db.categories.insert({n:tagName.toLowerCase(), _id:index}, callback)
+}
+
+function CreateCategory(tagList, comicId, tagListIndex, repairing, newList) {
+	tagListIndex = tagListIndex || 0
+	newList = newList || []
+	repairing = repairing || false
+	db.categories.findOne({n:tagList[tagListIndex].toLowerCase()}, (err, num) => {
+		if (err) { error(err); return }
+		if (num != undefined) {
+			newList.push(num._id)
+			if (tagListIndex == tagList.length - 1) {
+				fix_index(4)
+				AddCategoryToList(comicId, newList, repairing)
+			} else CreateCategory(tagList, comicId, tagListIndex + 1, repairing, newList)
+		} else {
+			lastCategoryId++
+			CreateCategoryInsert(tagList[tagListIndex], lastCategoryId - 1, (err, newDoc) => {
+				if (err) { error('Category: '+err); return }
+				newList.push(newDoc._id)
+				if (tagListIndex == tagList.length - 1) {
+					fix_index(4)
+					AddCategoryToList(comicId, newList, repairing)
+				} else CreateCategory(tagList, comicId, tagListIndex + 1, repairing, newList)
+			})
+		}
+	})
+}
+
 // Add New Groups
 function UpdateGroupList(comicId, newList) {
 	db.comic_groups.findOne({_id:comicId}, (err, doc) => {
