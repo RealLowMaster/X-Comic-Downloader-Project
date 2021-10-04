@@ -101,7 +101,7 @@ Added To Version {
 }
 
 Doing {
-	Add Characters, Languages and Categories System Part 2++
+	Add Characters, Languages and Categories System Part 3++
 	Make nhentai Browser System Part 5++
 }
 

@@ -67,7 +67,6 @@ function IsHavingComic(site, id, callback) {
 }
 
 // openComicCharacters(), openComicLanguages(), openComicCategories()
-// lastCharacterId, lastLanguageId, lastCategoryId
 
 // Add New Character
 function UpdateCharacterList(comicId, newList) {
