@@ -51,6 +51,7 @@
 	background-color: #111111;
 	color: #fff;
 	border-radius: 7px 7px 0 0;
+	text-transform: capitalize;
 	text-align: center;
 	font-size: 19px;
 	font-weight: 600;
@@ -346,4 +347,9 @@
 	max-height: 100%;
 	margin: 20px auto;
 	border-radius: 2px;
+}
+
+.nhentai-glow {
+	color: #E67E22;
+	text-shadow: 0 0 10px #E67E22;
 }

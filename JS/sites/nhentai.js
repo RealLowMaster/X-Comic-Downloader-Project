@@ -336,7 +336,99 @@ function nhentaiOpenPost(id, makeNewTab, updateTabIndex) {
 }
 
 function nhentaiOpenInfo(name, page, whitch, makeNewTab, updateTabIndex) {
-	console.log(name)
+	name = name || null
+	if (name == null) return
+	page = page || 1
+	whitch = whitch || null
+	if (whitch == null) return
+	makeNewTab = makeNewTab || false
+	if (updateTabIndex == null) updateTabIndex = true
+	const types = ['parody','character','tag','artist','group','language','category']
+	let pageId
+	if (makeNewTab) {
+		pageId = createNewTab(`nhentaiOpenInfo('${name}', ${page}, ${whitch}, false, false)`, true, 0)
+		if (pageId == null) { PopAlert(defaultSettingLang.tab_at_limit, 'danger'); return }
+	} else {
+		pageId = activeTabComicId
+		const passImages = document.getElementById(pageId).getElementsByTagName('img')
+		if (passImages != undefined) {
+			for (let i = 0; i < passImages.length; i++) {
+				passImages[i].removeAttribute('data-src')
+				passImages[i].removeAttribute('src')
+			}
+		}
+
+		if (updateTabIndex == true) tabs[Number(tabsContainer.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))].addHistory(`nhentaiOpenInfo('${name}', ${page}, ${whitch}, false, false)`)
+	}
+
+	const pageContent = document.getElementById(pageId)
+	if (activeTabComicId == pageId) {
+		bjp.style.display = 'none'
+		bjp_i.setAttribute('oninput', '')
+	}
+
+	const tab = tabsContainer.querySelector(`[pi="${pageId}"]`)
+	const tabArea = tab.getElementsByTagName('span')[0]
+	const thisTabIndex = Number(tab.getAttribute('ti'))
+	tabs[thisTabIndex].ir = true
+	tabs[thisTabIndex].mp = 0
+	checkBrowserTools(thisTabIndex)
+	tabArea.innerHTML = `<img class="spin" src="Image/dual-ring-primary-${wt_fps}.gif">`
+	pageContent.innerHTML = `<div class="browser-page-loading"><img class="spin" style="width:60px;height:60px" src="Image/dual-ring-primary-${wt_fps}.gif"><p>Loading...</p></div>`
+
+	nhentai.getTypePage(types[whitch], name, page, (err, result) => {
+		if (document.getElementById(pageId) == undefined) return
+		tabs[thisTabIndex].ir = false
+		checkBrowserTools(thisTabIndex)
+		pageContent.innerHTML = ''
+		if (err) {
+			pageContent.innerHTML = nhentaiError.replace('{err}', err)
+			return
+		}
+		console.log(result)
+		tabArea.textContent = `${result.name} - ${page}`
+		let save, save2, html
+		html = '<div class="nhentai-container">'+nhentaiSiteTopMenu
+
+		if (result.pagination != undefined) {
+			save2 = result.pagination[result.pagination.length - 1][1]
+			if (save2 == null) save = page
+			else save = save2
+		} else save = 1
+
+		tabs[thisTabIndex].jp = 1
+		tabs[thisTabIndex].tp = page
+		tabs[thisTabIndex].mp = save
+		if (activeTabComicId == pageId) {
+			bjp.style.display = 'inline-block'
+			bjp_i.value = page
+			bjp_i.setAttribute('oninput', `inputLimit(this, ${save});browserJumpPage(1, Number(this.value))`)
+			bjp_m_p.textContent = save
+		}
+
+		// Content
+		html += `<div class="nhentai-postrow"><div>${types[whitch]} > <span class="nhentai-glow">${result.name}</span> > Page ${page}</div><div>`
+		if (setting.lazy_loading) {
+			for (let i = 0; i < result.content.length; i++) html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.content[i].id}, {tab}, true)')"><img src="${result.content[i].thumb}" loading="lazy"><div ${result.content[i].lang}>${result.content[i].title}</div></div>`
+		} else {
+			for (let i = 0; i < result.content.length; i++) html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.content[i].id}, {tab}, true)')"><img src="${result.content[i].thumb}" loading="lazy"><div ${result.content[i].lang}>${result.content[i].title}</div></div>`
+		}
+		html += '</div></div>'
+		
+		// Pagination
+		html += '</div>'
+		if (result.pagination != null && result.pagination.length != 0) {
+			html += '<div class="nhentai-pagination">'
+			for (let i = 0; i < result.pagination.length; i++) {
+				if (result.pagination[i][1] != null) html += `<button type="button" onmousedown="nhentaiLinkClick('nhentaiOpenInfo(\\'${name}\\', ${result.pagination[i][1]}, ${whitch}, {tab}, true)')">${result.pagination[i][0]}</button>`
+				else html += `<button type="button" disabled="true">${result.pagination[i][0]}</button>`
+			}
+			html += '</div>'
+		}
+
+		pageContent.innerHTML = html
+		clearDownloadedComics(pageContent, 1)
+	})
 }
 
 function nhentaiOpenPages(from, to, makeNewTab, updateTabIndex) {}
