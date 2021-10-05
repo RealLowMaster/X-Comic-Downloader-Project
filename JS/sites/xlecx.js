@@ -334,8 +334,8 @@ function xlecxOpenPost(whitchbutton, id, updateTabIndex) {
 			if (have_comic == true) {
 				db.comics.findOne({s:0, p:id}, (err, doc) => {
 					if (err) { error(err); return }
-					id = doc._id
-					var image, html = '', formatIndex = 0
+					let comic_id = doc._id
+					var image, html = ''
 					
 					if (err) { error(err); return }
 					ImagesCount = doc.c || null
@@ -343,35 +343,30 @@ function xlecxOpenPost(whitchbutton, id, updateTabIndex) {
 					formats = doc.f || null
 					if (formats == null) return
 					image = doc.i
+					
 
-					var lastIndex = formats[0][1]
-					var thisForamat = formats[0][2]
-					var repair = doc.m || null
-					if (repair == null || repair.length == 0) {
-						for (var i = 0; i < ImagesCount; i++) {
-							if (i <= lastIndex)
-								html += `<img src="${dirUL}/${id}${image}/${image}-${i}.${thisForamat}">`
-							else {
-								formatIndex++
-								lastIndex = formats[formatIndex][1]
-								thisForamat = formats[formatIndex][2]
-								html += `<img src="${dirUL}/${id}${image}/${image}-${i}.${thisForamat}">`
+					let lastIndex = formats[0][1]
+					let thisForamat = formats[0][2]
+					let src = ''
+					let formatIndex = 0
+					for (let i = 0; i < ImagesCount; i++) {
+						if (i <= lastIndex) {
+							src = `${dirUL}/${comic_id}${image}/${image}-${i}.${thisForamat}`
+							if (!fs.existsSync(src)) {
+								need_repair.push([src, i])
+								src = 'Image/no-img-300x300.png'
 							}
-						}
-					} else {
-						for (var i = 0; i < ImagesCount; i++) {
-							if (repair.indexOf(i) > -1) {
-								html += `<div class="repair-image" id="${i}"><p>Image hasn't Been Download Currectly.</p><button onclick="repairImage(${i}, ${repair.indexOf(i)}, ${image})">Repair</button></div>`
-							} else {
-								if (i <= lastIndex)
-									html += `<img src="${dirUL}/${id}${image}/${image}-${i}.${thisForamat}">`
-								else {
-									formatIndex++
-									lastIndex = formats[formatIndex][1]
-									thisForamat = formats[formatIndex][2]
-									html += `<img src="${dirUL}/${id}${image}/${image}-${i}.${thisForamat}">`
-								}
+							html += `<img data-src="${src}">`
+						} else {
+							formatIndex++
+							lastIndex = formats[formatIndex][1]
+							thisForamat = formats[formatIndex][2]
+							src = `${dirUL}/${comic_id}${image}/${image}-${i}.${thisForamat}`
+							if (!fs.existsSync(src)) {
+								need_repair.push([src, i])
+								src = 'Image/no-img-300x300.png'
 							}
+							html += `<img data-src="${src}">`
 						}
 					}
 					image_container.innerHTML = html

@@ -183,7 +183,7 @@ function nhentaiOpenPost(id, makeNewTab, updateTabIndex) {
 			if (result.parodies != undefined && result.parodies.length != 0) {
 				html += '<div class="nhentai-info-row">Parodies: '
 				for (let i = 0; i < result.parodies.length; i++) {
-					html += `<button type="button" onmousedown="nhentaiLinkClick('nhentaiOpenInfo(\'${result.parodies[i].url}\', 1, 0, {tab}, true)')"><span>${result.parodies[i].name}</span><span>${result.parodies[i].count}</span></button>`
+					html += `<button type="button" onmousedown="nhentaiLinkClick('nhentaiOpenInfo(\\'${result.parodies[i].url}\\', 1, 0, {tab}, true)')"><span>${result.parodies[i].name}</span><span>${result.parodies[i].count}</span></button>`
 				}
 				html += '</div>'
 			}
@@ -192,7 +192,7 @@ function nhentaiOpenPost(id, makeNewTab, updateTabIndex) {
 			if (result.characters != undefined && result.characters.length != 0) {
 				html += '<div class="nhentai-info-row">Characters: '
 				for (let i = 0; i < result.characters.length; i++) {
-					html += `<button type="button" onmousedown="nhentaiLinkClick('nhentaiOpenInfo(\'${result.characters[i].url}\', 1, 1, {tab}, true)')"><span>${result.characters[i].name}</span><span>${result.characters[i].count}</span></button>`
+					html += `<button type="button" onmousedown="nhentaiLinkClick('nhentaiOpenInfo(\\'${result.characters[i].url}\\', 1, 1, {tab}, true)')"><span>${result.characters[i].name}</span><span>${result.characters[i].count}</span></button>`
 				}
 				html += '</div>'
 			}
@@ -201,7 +201,7 @@ function nhentaiOpenPost(id, makeNewTab, updateTabIndex) {
 			if (result.tags != undefined && result.tags.length != 0) {
 				html += '<div class="nhentai-info-row">Tags: '
 				for (let i = 0; i < result.tags.length; i++) {
-					html += `<button type="button" onmousedown="nhentaiLinkClick('nhentaiOpenInfo(\'${result.tags[i].url}\', 1, 2, {tab}, true)')"><span>${result.tags[i].name}</span><span>${result.tags[i].count}</span></button>`
+					html += `<button type="button" onmousedown="nhentaiLinkClick('nhentaiOpenInfo(\\'${result.tags[i].url}\\', 1, 2, {tab}, true)')"><span>${result.tags[i].name}</span><span>${result.tags[i].count}</span></button>`
 				}
 				html += '</div>'
 			}
@@ -210,7 +210,7 @@ function nhentaiOpenPost(id, makeNewTab, updateTabIndex) {
 			if (result.artists != undefined && result.artists.length != 0) {
 				html += '<div class="nhentai-info-row">Artists: '
 				for (let i = 0; i < result.artists.length; i++) {
-					html += `<button type="button" onmousedown="nhentaiLinkClick('nhentaiOpenInfo(\'${result.artists[i].url}\', 1, 3, {tab}, true)')"><span>${result.artists[i].name}</span><span>${result.artists[i].count}</span></button>`
+					html += `<button type="button" onmousedown="nhentaiLinkClick('nhentaiOpenInfo(\\'${result.artists[i].url}\\', 1, 3, {tab}, true)')"><span>${result.artists[i].name}</span><span>${result.artists[i].count}</span></button>`
 				}
 				html += '</div>'
 			}
@@ -219,7 +219,7 @@ function nhentaiOpenPost(id, makeNewTab, updateTabIndex) {
 			if (result.groups != undefined && result.groups.length != 0) {
 				html += '<div class="nhentai-info-row">Groups: '
 				for (let i = 0; i < result.groups.length; i++) {
-					html += `<button type="button" onmousedown="nhentaiLinkClick('nhentaiOpenInfo(\'${result.groups[i].url}\', 1, 4, {tab}, true)')"><span>${result.groups[i].name}</span><span>${result.groups[i].count}</span></button>`
+					html += `<button type="button" onmousedown="nhentaiLinkClick('nhentaiOpenInfo(\\'${result.groups[i].url}\\', 1, 4, {tab}, true)')"><span>${result.groups[i].name}</span><span>${result.groups[i].count}</span></button>`
 				}
 				html += '</div>'
 			}
@@ -228,7 +228,7 @@ function nhentaiOpenPost(id, makeNewTab, updateTabIndex) {
 			if (result.languages != undefined && result.languages.length != 0) {
 				html += '<div class="nhentai-info-row">Languages: '
 				for (let i = 0; i < result.languages.length; i++) {
-					html += `<button type="button" onmousedown="nhentaiLinkClick('nhentaiOpenInfo(\'${result.languages[i].url}\', 1, 5, {tab}, true)')"><span>${result.languages[i].name}</span><span>${result.languages[i].count}</span></button>`
+					html += `<button type="button" onmousedown="nhentaiLinkClick('nhentaiOpenInfo(\\'${result.languages[i].url}\\', 1, 5, {tab}, true)')"><span>${result.languages[i].name}</span><span>${result.languages[i].count}</span></button>`
 				}
 				html += '</div>'
 			}
@@ -237,7 +237,7 @@ function nhentaiOpenPost(id, makeNewTab, updateTabIndex) {
 			if (result.categories != undefined && result.categories.length != 0) {
 				html += '<div class="nhentai-info-row">Categories: '
 				for (let i = 0; i < result.categories.length; i++) {
-					html += `<button type="button" onmousedown="nhentaiLinkClick('nhentaiOpenInfo(\'${result.categories[i].url}\', 1, 6, {tab}, true)')"><span>${result.categories[i].name}</span><span>${result.categories[i].count}</span></button>`
+					html += `<button type="button" onmousedown="nhentaiLinkClick('nhentaiOpenInfo(\\'${result.categories[i].url}\\', 1, 6, {tab}, true)')"><span>${result.categories[i].name}</span><span>${result.categories[i].count}</span></button>`
 				}
 				html += '</div>'
 			}
@@ -255,6 +255,60 @@ function nhentaiOpenPost(id, makeNewTab, updateTabIndex) {
 
 			if (have_comic) {
 				// Images
+				db.comics.findOne({s:0, p:id}, (err, doc) => {
+					if (err) { error(err); return }
+					let comic_id = doc._id
+					
+					if (err) { error(err); return }
+					let ImagesCount = doc.c || null
+					if (ImagesCount == null) return
+					let formats = doc.f || null
+					if (formats == null) return
+					let image = doc.i
+
+					let lastIndex = formats[0][1]
+					let thisForamat = formats[0][2]
+					let src = ''
+					let formatIndex = 0
+					html += '<div class="nhentai-images">'
+					for (let i = 0; i < ImagesCount; i++) {
+						if (i <= lastIndex) {
+							src = `${dirUL}/${comic_id}${image}/${image}-${i}.${thisForamat}`
+							if (!fs.existsSync(src)) {
+								need_repair.push([src, i])
+								src = 'Image/no-img-300x300.png'
+							}
+							html += `<img data-src="${src}">`
+						} else {
+							formatIndex++
+							lastIndex = formats[formatIndex][1]
+							thisForamat = formats[formatIndex][2]
+							src = `${dirUL}/${comic_id}${image}/${image}-${i}.${thisForamat}`
+							if (!fs.existsSync(src)) {
+								need_repair.push([src, i])
+								src = 'Image/no-img-300x300.png'
+							}
+							html += `<img data-src="${src}">`
+						}
+					}
+					html += '</div>'
+
+					// Related
+					if (result.related != undefined && result.related.length != 0) {
+						html += '<div class="nhentai-postrow"><div>Related</div><div>'
+						for (let i = 0; i < result.related.length; i++) html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.related[i].id}, {tab}, true)')"><img src="${result.related[i].thumb}" loading="lazy"><div ${result.related[i].lang}>${result.related[i].title}</div></div>`
+						html += '</div></div>'
+					}
+
+					html += '</div></div>'
+					pageContent.innerHTML = html
+					const LoadingImages = pageContent.getElementsByClassName('nhentai-images')[0].getElementsByTagName('img')
+
+					for (let i = 0; i < LoadingImages.length; i++) {
+						imageLoadingObserver.observe(LoadingImages[i])
+					}
+					clearDownloadedComics(pageContent, 1)
+				})
 			} else {
 				// Images
 				html += '<div class="nhentai-images">'
@@ -267,21 +321,23 @@ function nhentaiOpenPost(id, makeNewTab, updateTabIndex) {
 					for (let i = 0; i < result.related.length; i++) html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.related[i].id}, {tab}, true)')"><img src="${result.related[i].thumb}" loading="lazy"><div ${result.related[i].lang}>${result.related[i].title}</div></div>`
 					html += '</div></div>'
 				}
-			}
 
-			html += '</div></div>'
-			pageContent.innerHTML = html
-			const LoadingImages = pageContent.getElementsByClassName('nhentai-images')[0].getElementsByTagName('img')
+				html += '</div></div>'
+				pageContent.innerHTML = html
+				const LoadingImages = pageContent.getElementsByClassName('nhentai-images')[0].getElementsByTagName('img')
 
-			for (let i = 0; i < LoadingImages.length; i++) {
-				imageLoadingObserver.observe(LoadingImages[i])
+				for (let i = 0; i < LoadingImages.length; i++) {
+					imageLoadingObserver.observe(LoadingImages[i])
+				}
+				clearDownloadedComics(pageContent, 1)
 			}
-			clearDownloadedComics(pageContent, 1)
 		})
 	})
 }
 
-function nhentaiOpenInfo(name, page, whitch, makeNewTab, updateTabIndex) {}
+function nhentaiOpenInfo(name, page, whitch, makeNewTab, updateTabIndex) {
+	console.log(name)
+}
 
 function nhentaiOpenPages(from, to, makeNewTab, updateTabIndex) {}
 
