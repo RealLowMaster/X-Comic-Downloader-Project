@@ -168,13 +168,10 @@ function nhentaiOpenPost(id, makeNewTab, updateTabIndex) {
 			tabArea.textContent = result.name
 			let html
 			html = '<div class="nhentai-container">'+nhentaiSiteTopMenu
-
 			if (have_comic == true) html += '<div class="browser-comic-have"><span>You Downloaded This Comic.<span></div>'
-			else if (have_in_have == true) html += `<div class="browser-comic-have" ccid="${result.id}"><button class="remove-from-have" onclick="RemoveFromHave(1, ${result.id}, this)">You Have This Comic.</button></div>`
-			else if (IsDownloading(result.id)) html += `<div class="browser-comic-have" ccid="${result.id}"><p>Downloading... <img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"><p></div>`
-			else html += `<div class="browser-comic-have" ccid="${result.id}"><button onclick="xlecxDownloader('${result.id}')">Download</button><button class="add-to-have" onclick="AddToHave(1, '${result.id}')">Add To Have</button></div>`
-
-			console.log(result)
+			else if (have_in_have == true) html += `<div class="browser-comic-have" sssite="1" ccid="${id}"><button class="remove-from-have" onclick="RemoveFromHave(1, ${id}, this)">You Have This Comic.</button></div>`
+			else if (IsDownloading(id, 1)) html += `<div class="browser-comic-have" sssite="1" ccid="${id}"><p>Downloading... <img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"><p></div>`
+			else html += `<div class="browser-comic-have" sssite="1" ccid="${id}"><button onclick="nhentaiDownloader(${id})">Download</button><button class="add-to-have" onclick="AddToHave(1, ${id})">Add To Have</button></div>`
 
 			// Info
 			html += `<div class="nhentai-comic-info"><div><img src="${result.cover}" loading="lazy"></div><div><div class="nhentai-comic-title">${result.name}</div><div class="nhentai-comic-subtitle">${result.title}</div>`
@@ -255,7 +252,7 @@ function nhentaiOpenPost(id, makeNewTab, updateTabIndex) {
 
 			if (have_comic) {
 				// Images
-				db.comics.findOne({s:0, p:id}, (err, doc) => {
+				db.comics.findOne({s:1, p:id}, (err, doc) => {
 					if (err) { error(err); return }
 					let comic_id = doc._id
 					
@@ -385,7 +382,6 @@ function nhentaiOpenInfo(name, page, whitch, makeNewTab, updateTabIndex) {
 			pageContent.innerHTML = nhentaiError.replace('{err}', err)
 			return
 		}
-		console.log(result)
 		tabArea.textContent = `${result.name} - ${page}`
 		let save, save2, html
 		html = '<div class="nhentai-container">'+nhentaiSiteTopMenu
@@ -442,5 +438,68 @@ function nhentaiLinkClick(job) {
 }
 
 function nhentaiDownloader(id) {
-	console.log('downloading')
+	if (IsDownloading(id, 1)) { PopAlert('You are Downloading This Comic.', 'danger'); return }
+	IsHavingComic(0, id, (have, downloaded) => {
+		if (have == true) { PopAlert('You Already Have This Comic.', 'danger'); return }
+		const downloaderIndex = AddDownloaderList(1)
+		changeButtonsToDownloading(id, 1, false)
+		nhentai.getComic(id, false, (err, result) => {
+			if (err) { RemoveDownloaderList(downloaderIndex); PopAlert(err, 'danger'); changeButtonsToDownloading(id, 1, true); return }
+			
+			let name = result.name, downloadImageList = []
+	
+			for (let i = 0; i < result.images.length; i++) {
+				downloadImageList.push(result.images[i].url)
+			}
+			
+			MakeDownloadList(downloaderIndex, name, id, downloadImageList)
+	
+			const sendingResult = {}
+			sendingResult.title = result.name
+			if (result.characters != undefined)	{
+				sendingResult.characters = []
+				for (let i = 0; i < result.characters.length; i++) {
+					sendingResult.characters.push(result.characters[i].name)
+				}
+			}
+			if (result.languages != undefined)	{
+				sendingResult.languages = []
+				for (let i = 0; i < result.languages.length; i++) {
+					sendingResult.languages.push(result.languages[i].name)
+				}
+			}
+			if (result.categories != undefined)	{
+				sendingResult.categories = []
+				for (let i = 0; i < result.categories.length; i++) {
+					sendingResult.categories.push(result.categories[i].name)
+				}
+			}
+			if (result.groups != undefined)	{
+				sendingResult.groups = []
+				for (let i = 0; i < result.groups.length; i++) {
+					sendingResult.groups.push(result.groups[i].name)
+				}
+			}
+			if (result.artists != undefined)	{
+				sendingResult.artists = []
+				for (let i = 0; i < result.artists.length; i++) {
+					sendingResult.artists.push(result.artists[i].name)
+				}
+			}
+			if (result.parody != undefined)	{
+				sendingResult.parody = []
+				for (let i = 0; i < result.parodies.length; i++) {
+					sendingResult.parody.push(result.parodies[i].name)
+				}
+			}
+			if (result.tags != undefined)	{
+				sendingResult.tags = []
+				for (let i = 0; i < result.tags.length; i++) {
+					sendingResult.tags.push(result.tags[i].name)
+				}
+			}
+			PopAlert(`Download Started. '${name}'`, 'primary')
+			comicDownloader(downloaderIndex, sendingResult)
+		})
+	})
 }

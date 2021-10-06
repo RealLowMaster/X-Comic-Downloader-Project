@@ -104,7 +104,7 @@ Added To Version {
 }
 
 Doing {
-	Make nhentai Browser System Part 7++
+	Make nhentai Browser System Part 8++
 }
 
 Tasks => {

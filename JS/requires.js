@@ -41,7 +41,8 @@ const sites = [
 		home: 'xlecxChangePage(1, 0, true)',
 		repair: 'xlecxRepairComicInfoGetInfo({id}, {whitch})',
 		search: 'xlecxSearch({text}, 1, 0)',
-		jump: 'xlecxJumpPage({index}, {page})'
+		jump: 'xlecxJumpPage({index}, {page})',
+		downloader: 'xlecxDownloader({id})'
 	},
 	{
 		name: 'nhentai',
@@ -49,7 +50,8 @@ const sites = [
 		home: 'nhentaiChangePage(1, false, true)',
 		repair: '',
 		search: '',
-		jump: ''
+		jump: '',
+		downloader: 'nhentaiDownloader({id})'
 	}
 ]
 const keydownEvents = [

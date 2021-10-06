@@ -380,9 +380,9 @@ function browserJumpPage(index, page) {
 	eval(exec)
 }
 
-function AddDownloaderList() {
+function AddDownloaderList(site) {
 	const index = downloadingList.length
-	downloadingList[index] = [0, [], new Date().getTime(), null, [], [], [], [null, null], null]
+	downloadingList[index] = [0, [], new Date().getTime(), null, [], [], [], [null, null], null, site]
 	return index
 }
 
@@ -439,11 +439,11 @@ function MakeDownloadList(index, name, id, list) {
 	return index
 }
 
-function comicDownloader(index, result, quality, siteIndex) {
+function comicDownloader(index, result) {
 	if (downloadingList[index] == undefined || downloadingList[index][0] == null) return
 	if (downloadingList[index][8] > setting.download_limit) {
 		setTimeout(() => {
-			comicDownloader(index, result, quality, siteIndex)
+			comicDownloader(index, result)
 		}, 1000)
 		return
 	}
@@ -488,8 +488,8 @@ function comicDownloader(index, result, quality, siteIndex) {
 					if (j == downloadingList[index][1].length - 1) formatList.push([firstIndex, lastIndex, thisFormat])
 				}
 			}
-			CreateComic(downloadingList[index][7][0], downloadingList[index][7][1], result, downloadingList[index][2], siteIndex, downloadingList[index][3], downloadingList[index][1].length, formatList, index, true)
-		} else comicDownloader(index, result, quality, siteIndex)
+			CreateComic(downloadingList[index][7][0], downloadingList[index][7][1], result, downloadingList[index][2], downloadingList[index][9], downloadingList[index][3], downloadingList[index][1].length, formatList, index, true)
+		} else comicDownloader(index, result)
 	}).catch(err => {
 		if (downloadingList[index] == undefined) {
 			try {
@@ -517,8 +517,8 @@ function comicDownloader(index, result, quality, siteIndex) {
 					if (j == downloadingList[index][1].length - 1) formatList.push([firstIndex, lastIndex, thisFormat])
 				}
 			}
-			CreateComic(downloadingList[index][7][0], downloadingList[index][7][1], result, downloadingList[index][2], siteIndex, downloadingList[index][3], downloadingList[index][1].length, formatList, index, true)
-		} else comicDownloader(index, result, quality, siteIndex)
+			CreateComic(downloadingList[index][7][0], downloadingList[index][7][1], result, downloadingList[index][2], downloadingList[index][9], downloadingList[index][3], downloadingList[index][1].length, formatList, index, true)
+		} else comicDownloader(index, result)
 	})
 }
 
@@ -530,7 +530,7 @@ function cancelDownload(index) {
 	try {
 		fs.rmdirSync(`${dirUL}/${downloadingList[index][7][0]}${downloadingList[index][2]}`)
 	} catch(err) {}
-	changeButtonsToDownloading(downloadingList[index][3], true)
+	changeButtonsToDownloading(downloadingList[index][3], downloadingList[index][9], true)
 	RemoveDownloaderList(index)
 	PopAlert('Download Canceled.', 'warning')
 }
@@ -547,10 +547,10 @@ function cancelAllDownloads(closeApp) {
 	if (closeApp == true) closeApp()
 }
 
-function IsDownloading(id) {
+function IsDownloading(id, site) {
 	const arr = []
 	for (let i in downloadingList) {
-		if (downloadingList[i] != null) arr.push(downloadingList[i][3])
+		if (downloadingList[i] != null && downloadingList[i][9] == site) arr.push(downloadingList[i][3])
 	}
 
 	if (arr.indexOf(id) > -1) return true
@@ -628,9 +628,12 @@ function clearDownloadedComics(content, site) {
 	}
 }
 
-function changeButtonsToDownloading(id, backward) {
-	backward = backward || false
-	const comic_page_btns = document.querySelectorAll(`[ccid="${id}"]`)
+function changeButtonsToDownloading(id, site, backward) {
+	const comic_page_btns_elements = document.querySelectorAll(`[ccid="${id}"]`)
+	const comic_page_btns = []
+	for (let i = 0; i < comic_page_btns_elements.length; i++) {
+		if (Number(comic_page_btns_elements[i].getAttribute('sssite')) == site) comic_page_btns.push(comic_page_btns_elements[i])
+	}
 	const comic_overview_btns = document.querySelectorAll(`[cid="${id}"]`)
 	var element, parent
 
@@ -648,25 +651,33 @@ function changeButtonsToDownloading(id, backward) {
 			parent.appendChild(element)
 		}
 	} else {
+		let saveId
+		if (typeof(id) == 'number') saveId = id
+		else saveId = `'${id}'`
+		let dl = sites[site].downloader.replace('{id}', saveId)
 		for (let i = 0; i < comic_page_btns.length; i++) {
-			comic_page_btns[i].innerHTML = `<button onclick="xlecxDownloader('${id}')">Download</button><button class="add-to-have" onclick="AddToHave(0, '${id}')">Add To Have</button>`
+			comic_page_btns[i].innerHTML = `<button onclick="${dl}">Download</button><button class="add-to-have" onclick="AddToHave(${site}, ${saveId})">Add To Have</button>`
 		}
 	
+		dl = sites[site].downloader.replace('{id}', "this.getAttribute('cid')")
 		for (let i = 0; i < comic_overview_btns.length; i++) {
 			parent = comic_overview_btns[i].parentElement
 			comic_overview_btns[i].remove()
 			element = document.createElement('button')
 			element.setAttribute('cid', id)
-			element.setAttribute('onclick', "xlecxDownloader(this.getAttribute('cid'))")
+			element.setAttribute('onclick', dl)
 			element.textContent = 'Download'
 			parent.appendChild(element)
 		}
 	}
 }
 
-function changeButtonsToDownloaded(id, have, haveBackward) {
-	have = have || false
-	const comic_page_btns = document.querySelectorAll(`[ccid="${id}"]`)
+function changeButtonsToDownloaded(id, site, have, haveBackward) {
+	const comic_page_btns_elements = document.querySelectorAll(`[ccid="${id}"]`)
+	const comic_page_btns = []
+	for (let i = 0; i < comic_page_btns_elements.length; i++) {
+		if (Number(comic_page_btns_elements[i].getAttribute('sssite')) == site) comic_page_btns.push(comic_page_btns_elements[i])
+	}
 	const comic_overview_btns = document.querySelectorAll(`[cid="${id}"]`)
 	var element, parent
 
@@ -684,11 +695,13 @@ function changeButtonsToDownloaded(id, have, haveBackward) {
 			parent.appendChild(element)
 		}
 	} else {
-		haveBackward = haveBackward || false
+		let saveId
+		if (typeof(id) == 'number') saveId = id
+		else saveId = `'${id}'`
 
 		if (haveBackward == false) {
 			for (let i = 0; i < comic_page_btns.length; i++) {
-				comic_page_btns[i].innerHTML = `<button class="remove-from-have" onclick="RemoveFromHave(0, '${id}', this)">You Have This Comic.</button>`
+				comic_page_btns[i].innerHTML = `<button class="remove-from-have" onclick="RemoveFromHave(${site}, ${saveId}, this)">You Have This Comic.</button>`
 			}
 		
 			for (let i = 0; i < comic_overview_btns.length; i++) {
@@ -701,16 +714,18 @@ function changeButtonsToDownloaded(id, have, haveBackward) {
 				parent.appendChild(element)
 			}
 		} else {
+			let dl = sites[site].downloader.replace('{id}', saveId)
 			for (let i = 0; i < comic_page_btns.length; i++) {
-				comic_page_btns[i].innerHTML = `<button onclick="xlecxDownloader('${id}')">Download</button><button class="add-to-have" onclick="AddToHave(0, '${id}')">Add To Have</button>`
+				comic_page_btns[i].innerHTML = `<button onclick="${dl}">Download</button><button class="add-to-have" onclick="AddToHave(${site}, ${saveId})">Add To Have</button>`
 			}
-		
+
+			dl = sites[site].downloader.replace('{id}', "this.getAttribute('cid')")
 			for (let i = 0; i < comic_overview_btns.length; i++) {
 				parent = comic_overview_btns[i].parentElement
 				comic_overview_btns[i].remove()
 				element = document.createElement('button')
 				element.setAttribute('cid', id)
-				element.setAttribute('onclick', "xlecxDownloader(this.getAttribute('cid'))")
+				element.setAttribute('onclick', dl)
 				element.textContent = 'Download'
 				parent.appendChild(element)
 			}

@@ -182,9 +182,15 @@
 	font-size: 12px;
 }
 
+.nhentai-container > .browser-comic-have > span,
+.nhentai-container > .browser-comic-have > .remove-from-have {
+	border-radius: 7px;
+}
+
 .nhentai-container > .browser-comic-have > p {
 	display: inline-flex;
 	align-items: center;
+	color: #fff;
 	font-size: 14px;
 	text-align: right;
 }

@@ -30,9 +30,12 @@ async function CreateHave(site, id, index, downloaded) {
 function AddToHave(site, id) {
 	CreateHave(site, id, lastHaveId, false)
 	lastHaveId++
+	let saveId
+	if (typeof(id) == 'number') saveId = id
+	else saveId = `'${id}'`
 	const page = document.getElementById(activeTabComicId)
-	page.getElementsByClassName('browser-comic-have')[0].innerHTML = `<button class="remove-from-have" onclick="RemoveFromHave(0, '${id}', this)">You Have This Comic.</button>`
-	changeButtonsToDownloaded(id, true, false)
+	page.getElementsByClassName('browser-comic-have')[0].innerHTML = `<button class="remove-from-have" onclick="RemoveFromHave(${site}, ${saveId}, this)">You Have This Comic.</button>`
+	changeButtonsToDownloaded(id, site, true, false)
 	PopAlert('Comic Added To Have List.')
 }
 
@@ -45,7 +48,7 @@ function RemoveFromHave(site, id, who) {
 				const parent = who.parentElement
 				parent.innerHTML = `<button onclick="xlecxDownloader('${id}')">Download</button><button class="add-to-have" onclick="AddToHave(${site}, '${id}')">Add To Have</button>`
 			}
-			changeButtonsToDownloaded(id, true, true)
+			changeButtonsToDownloaded(id, site, true, true)
 			PopAlert('Comic Removed From Have List.')
 		}
 	})
@@ -500,68 +503,14 @@ async function CreateComic(comicIndex, haveIndex, gottenResult, image, siteIndex
 		// Add Comic To Have
 		CreateHave(doc.s, doc.p, haveIndex, true)
 
-		// Characters
-		if (characters != null) {
-			const charactersList = []
-			for (let i in characters) {
-				charactersList.push(characters[i].name)
-			}
-			CreateCharacter(charactersList, id)
-		}
-
-		// Languages
-		if (languages != null) {
-			const languagesList = []
-			for (let i in languages) {
-				languagesList.push(languages[i].name)
-			}
-			CreateLanguage(languagesList, id)
-		}
-
-		// Categories
-		if (categories != null) {
-			const categoriesList = []
-			for (let i in categories) {
-				categoriesList.push(categories[i].name)
-			}
-			CreateCategory(categoriesList, id)
-		}
-
-		// Groups
-		if (groups != null) {
-			const groupsList = []
-			for (let i in groups) {
-				groupsList.push(groups[i].name)
-			}
-			CreateGroup(groupsList, id)
-		}
-
-		// Artists
-		if (artists != null) {
-			const artistsList = []
-			for (let i in artists) {
-				artistsList.push(artists[i].name)
-			}
-			CreateArtist(artistsList, id)
-		}
-
-		// Parody
-		if (parody != null) {
-			const parodyList = []
-			for (let i in parody) {
-				parodyList.push(parody[i].name)
-			}
-			CreateParody(parodyList, id)
-		}
-
-		// Tags
-		if (tags != null) {
-			const tagsList = []
-			for (let i in tags) {
-				tagsList.push(tags[i].name)
-			}
-			CreateTag(tagsList, id)
-		}
+		// Creating Infos
+		if (characters != null) CreateCharacter(characters, id)
+		if (languages != null) CreateLanguage(languages, id)
+		if (categories != null) CreateCategory(categories, id)
+		if (groups != null) CreateGroup(groups, id)
+		if (artists != null) CreateArtist(artists, id)
+		if (parody != null) CreateParody(parody, id)
+		if (tags != null) CreateTag(tags, id)
 
 		makeThumbForDownloadingComic(doc.i, doc.f[0][2], doc._id, () => {
 			if (isDownloading == true && index != null) {
@@ -571,7 +520,7 @@ async function CreateComic(comicIndex, haveIndex, gottenResult, image, siteIndex
 				if (setting.notification_download_finish && remote.Notification.isSupported()) new remote.Notification({title: 'Comic Download Finished.', body: gottenResult.title}).show()
 				document.getElementById(downloadingList[index][2]).remove()
 				downloadingList[index] = null
-				changeButtonsToDownloaded(doc.p, false, false)
+				changeButtonsToDownloaded(doc.p, doc.s, false, false)
 				downloadCounter--
 				SetDownloadListNumbers()
 				if (downloadCounter == 0) {
