@@ -110,8 +110,6 @@ Doing {
 Tasks => {
 	
 	Fix Bug: nhentai -> Hibiku Kurenai | Tag -> Futanari -> Page 1073
-	Fix Bug: Multi-Downloading -> Index Error -> nhentai
-	Fix Bug: Downloader < and >
 
 	Optimize offlineChangePage()
 	Make New History System

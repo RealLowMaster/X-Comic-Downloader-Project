@@ -432,7 +432,7 @@ function MakeDownloadList(index, name, id, list) {
 	SetDownloaderList(index, id)
 	element.setAttribute('id', downloadingList[index][2])
 	element.setAttribute('i', index)
-	element.innerHTML = `<img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"><p>${name} <span>(0/${list.length})</span></p><div><div></div></div><button onclick="cancelDownload(${index})">x</button>`
+	element.innerHTML = `<img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"><p>${name.replace(/</g, ' ').replace(/>/g, ' ')} <span>(0/${list.length})</span></p><div><div></div></div><button onclick="cancelDownload(${index})">x</button>`
 	downloader.appendChild(element)
 	downloadingList[index][1] = list
 
