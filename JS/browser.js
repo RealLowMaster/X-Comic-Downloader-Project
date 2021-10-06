@@ -660,9 +660,14 @@ function changeButtonsToDownloading(id, site, backward) {
 	for (let i = 0; i < comic_page_btns_elements.length; i++) {
 		if (Number(comic_page_btns_elements[i].getAttribute('sssite')) == site) comic_page_btns.push(comic_page_btns_elements[i])
 	}
-	const comic_overview_btns = document.querySelectorAll(`[cid="${id}"]`)
-	var element, parent
 
+	const comic_overview_btns_elements = document.querySelectorAll(`[cid="${id}"]`)
+	const comic_overview_btns = []
+	for (let i = 0; i < comic_overview_btns_elements.length; i++) {
+		if (Number(comic_overview_btns_elements[i].getAttribute('ssite')) == site) comic_overview_btns.push(comic_overview_btns_elements[i])
+	}
+
+	let element, parent
 	if (backward == false) {
 		for (let i = 0; i < comic_page_btns.length; i++) {
 			comic_page_btns[i].innerHTML = `<p>Downloading... <img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"><p>`
@@ -672,6 +677,7 @@ function changeButtonsToDownloading(id, site, backward) {
 			parent = comic_overview_btns[i].parentElement
 			comic_overview_btns[i].remove()
 			element = document.createElement('cid')
+			element.setAttribute('ssite', site)
 			element.setAttribute('cid', id)
 			element.innerHTML = `<img class="spin" src="Image/dual-ring-success-${wt_fps}.gif">`
 			parent.appendChild(element)
@@ -690,6 +696,7 @@ function changeButtonsToDownloading(id, site, backward) {
 			parent = comic_overview_btns[i].parentElement
 			comic_overview_btns[i].remove()
 			element = document.createElement('button')
+			element.setAttribute('ssite', site)
 			element.setAttribute('cid', id)
 			element.setAttribute('onclick', dl)
 			element.textContent = 'Download'
@@ -734,6 +741,7 @@ function changeButtonsToDownloaded(id, site, have, haveBackward) {
 				parent = comic_overview_btns[i].parentElement
 				comic_overview_btns[i].remove()
 				element = document.createElement('button')
+				element.setAttribute('ssite', site)
 				element.setAttribute('cid', id)
 				element.classList.add('comic-had')
 				element.textContent = 'Had'
@@ -750,6 +758,7 @@ function changeButtonsToDownloaded(id, site, have, haveBackward) {
 				parent = comic_overview_btns[i].parentElement
 				comic_overview_btns[i].remove()
 				element = document.createElement('button')
+				element.setAttribute('ssite', site)
 				element.setAttribute('cid', id)
 				element.setAttribute('onclick', dl)
 				element.textContent = 'Download'

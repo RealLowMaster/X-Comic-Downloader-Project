@@ -452,6 +452,7 @@ function nhentaiLinkClick(job) {
 }
 
 function nhentaiDownloader(id) {
+	id = Number(id)
 	if (IsDownloading(id, 1)) { PopAlert('You are Downloading This Comic.', 'danger'); return }
 	IsHavingComic(0, id, (have, downloaded) => {
 		if (have == true) { PopAlert('You Already Have This Comic.', 'danger'); return }
@@ -465,7 +466,6 @@ function nhentaiDownloader(id) {
 			for (let i = 0; i < result.images.length; i++) {
 				downloadImageList.push(result.images[i].url)
 			}
-			
 			MakeDownloadList(downloaderIndex, name, id, downloadImageList)
 	
 			const sendingResult = {}

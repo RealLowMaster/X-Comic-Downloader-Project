@@ -113,9 +113,9 @@ function createNewXlecxTab(id, pageNumber) {
 
 			html += `${valueStorage}<p>${result.content[i].title}</p>`
 			if (IsDownloading(result.content[i].id, 0))
-				html += `<cid cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid>`
+				html += `<cid ssite="0" cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid>`
 			else
-				html += `<button cid="${result.content[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
+				html += `<button ssite="0" cid="${result.content[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
 			element.innerHTML = html
 			miniElement = document.createElement('div')
 			miniElement.setAttribute('id', result.content[i].id)
@@ -168,9 +168,9 @@ function createNewXlecxTab(id, pageNumber) {
 
 			html += `${valueStorage}<p>${result.random[i].title}</p>`
 			if (IsDownloading(result.random[i].id, 0))
-				html += `<cid cid="${result.random[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid>`
+				html += `<cid ssite="0" cid="${result.random[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid>`
 			else
-				html += `<button cid="${result.random[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
+				html += `<button ssite="0" cid="${result.random[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
 			element.innerHTML = html
 			miniElement = document.createElement('div')
 			miniElement.setAttribute('id', result.random[i].id)
@@ -416,9 +416,9 @@ function xlecxOpenPost(whitchbutton, id, updateTabIndex) {
 
 					html += `${valueStorage}<p>${result.related[i].title}</p>`
 					if (IsDownloading(result.related[i].id, 0))
-						html += `<cid cid="${result.related[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid>`
+						html += `<cid ssite="0" cid="${result.related[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid>`
 					else
-						html += `<button cid="${result.related[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
+						html += `<button ssite="0" cid="${result.related[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
 					element.innerHTML = html
 					miniElement = document.createElement('div')
 					miniElement.setAttribute('id', result.related[i].id)
@@ -549,9 +549,9 @@ function xlecxOpenCategory(name, page, shortName, whitchbutton, updateTabIndex) 
 
 			html += `${valueStorage}<p>${result.content[i].title}</p>`
 			if (IsDownloading(result.content[i].id, 0))
-				html += `<cid cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid>`
+				html += `<cid ssite="0" cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid>`
 			else
-				html += `<button cid="${result.content[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
+				html += `<button ssite="0" cid="${result.content[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
 			element.innerHTML = html
 			miniElement = document.createElement('div')
 			miniElement.setAttribute('id', result.content[i].id)
@@ -604,9 +604,9 @@ function xlecxOpenCategory(name, page, shortName, whitchbutton, updateTabIndex) 
 
 			html += `${valueStorage}<p>${result.random[i].title}</p>`
 			if (IsDownloading(result.random[i].id, 0))
-				html += `<cid cid="${result.random[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid>`
+				html += `<cid ssite="0" cid="${result.random[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid>`
 			else
-				html += `<button cid="${result.random[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
+				html += `<button ssite="0" cid="${result.random[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
 			element.innerHTML = html
 			miniElement = document.createElement('div')
 			miniElement.setAttribute('id', result.random[i].id)
@@ -671,9 +671,9 @@ function xlecxOpenTagContentMaker(result, pageContent, name, whitch) {
 
 		html += `${valueStorage}<p>${result.content[i].title}</p>`
 		if (IsDownloading(result.content[i].id, 0))
-			html += `<cid cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid>`
+			html += `<cid ssite="0" cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid>`
 		else
-			html += `<button cid="${result.content[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
+			html += `<button ssite="0" cid="${result.content[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
 		element.innerHTML = html
 		miniElement = document.createElement('div')
 		miniElement.setAttribute('id', result.content[i].id)
@@ -999,9 +999,9 @@ function xlecxSearch(text, page, whitchbutton, updateTabIndex) {
 
 				html += `${valueStorage}<p>${result.content[i].title}</p>`
 				if (IsDownloading(result.content[i].id, 0))
-					html += `<cid cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></span></cid>`
+					html += `<cid ssite="0" cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></span></cid>`
 				else
-					html += `<button cid="${result.content[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
+					html += `<button ssite="0" cid="${result.content[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
 				element.innerHTML = html
 				miniElement = document.createElement('div')
 				miniElement.setAttribute('id', result.content[i].id)
