@@ -133,6 +133,59 @@
 	background-image: url("data:image/gif;base64,R0lGODlhSAAwAOZhAO1UZPn6/PX+//X8//z9/vX4+/X//////+1TY+1PX/X7/vX7/fb///X9/+1SYvf4++1QYOxMXPn7/P7+//Xw9PXx9fGjre5pd/X8/vb4+/GnsPPN1O1OX/CQm+95hvTd4vXy9vGXovTb4PCVoO1TZPPS1+1OXu1QYfPT2fTm6/Ggqu1dbfX5/O5icPCSnfCTne1RYvTq7u5hcfGkrvTv8+5jce1UZfTr7/To7fKqsvPJz+1WZvPO0/CTnvXt8fPP1e93g/K0vPLEy/LEzO1PYO1YaO+Aje5od+1ZaPLDy+5gb/LFzO5ice+Klu1XZ++Cju1YZ+5hcPXs8PGirOxKW++JlexLXO+CjfK2v/K2vfXs8e+BjPG0u+5hb+1VZfb4+vX3+v///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAGEALAAAAABIADAAAAf/gGFhBwQBD1+IiYqLjI2Oj5CLDwEEB4JhEwFfYJydnp+goaKjpKNfARODEqWsra6vnRKEm7C1trBfhbe7vKQBGb3BwmCHw8a3iMfKr8nLzqTNz9Kf0dPW1dbS2NnO28MFCw0CBgINCwXdtMcFAz5LFi9NLxZCWgMsyt68GCBYTxdIIFhJAOWCkSAVBhzTdwsDjhBMIiRwAMALAAcJInQZkULhMIa1GtzoAYCIl5MoUUIg0SGGgI/qeimokGMHgpQ4T97UQEGBMJCvBJSoASOnUQcteAhA1wtoqwUUZnCwYdSoCRU0fDaNucvABw83q+ZEAESEgWBOWRlAIaOiWJwA0Fb8YICW6y0GGyy+zXlCB92twvDq3Zuy719eaUutbUsYZdy5dYV5BdtYZ9mzgINBlUq18dWskYUJJdoYqVKmiO3emlkzrNidPX+qviWSJASxK1u+lH3MYYgoEilaxBhBCUePvI8NAJHlyoUiCagkcHJkC5eEC2fzYudjiAUXVVxMSSLlXj7tvcCJI2cOdXZu19DDDz0/Xf1nie/jkq/fVv7+rXwBDIDGZBAAgcZQwh+CpeRywCoM8iILJppEWMspqQhCiCGRdOjhh5BMUokggQAAOw==");
 }
 
+.nhentai-postrow > div:last-child > div > button {
+	padding: 8px;
+	background-color: #222a;
+	color: #fff;
+	border-radius: 0 7px 0 0;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	cursor: pointer;
+	z-index: +100;
+	transition: background-color .2s, color .2s;
+}
+
+.nhentai-postrow > div:last-child > div > button:hover {
+	left: 0;
+	background-color: #fff;
+	color: #222;
+}
+
+.nhentai-postrow > div:last-child > div > .comic-downloaded,
+.nhentai-postrow > div:last-child > div > .comic-had {
+	padding: 6px !important;
+	background-color: #207000 !important;
+	color: #fff !important;
+	font-size: 14px !important;
+	cursor: default !important;
+}
+
+.nhentai-postrow > div:last-child > div > .comic-had {
+	background-color: #D68910 !important;
+}
+
+.nhentai-postrow > div:last-child > div > cid {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 4px;
+	background-color: #222a;
+	border-radius: 0 7px 0 0;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+}
+
+.nhentai-postrow > div:last-child > div > cid > .spin {
+	width: 27px;
+	height: 27px;
+	margin: 0;
+	border-width: 4px;
+}
+
+
+
 .nhentai-pagination {
 	display: block;
 	width: 100%;

@@ -598,9 +598,9 @@ function removeDownloadedComicsDownloadButton(site, id, parent, btn, haveCallbac
 function clearDownloadedComics(content, site) {
 	switch (site) {
 		case 0:
-			const postContainers = content.getElementsByClassName('xlecx-post-container')
-			for (let i = 0; i < postContainers.length; i++) {
-				const mainComics = postContainers[i].children
+			const xlecxPostContainers = content.getElementsByClassName('xlecx-post-container')
+			for (let i = 0; i < xlecxPostContainers.length; i++) {
+				const mainComics = xlecxPostContainers[i].children
 				for (let j = 0; j < mainComics.length; j++) {
 					var id = mainComics[j].getElementsByTagName('button')[0]
 					if (id != undefined) {
@@ -624,6 +624,32 @@ function clearDownloadedComics(content, site) {
 			}
 			break
 		case 1:
+			const nhentaicontainers = content.getElementsByClassName('nhentai-postrow')
+			const nhentaiposts = []
+			for (let i = 0; i < nhentaicontainers.length; i++) {
+				let nhentai_save = nhentaicontainers[i].getElementsByTagName('button')
+				for (let j = 0; j < nhentai_save.length; j++) {
+					nhentaiposts.push(nhentai_save[j])
+				}
+			}
+			for (let i = 0; i < nhentaiposts.length; i++) {
+				let id = Number(nhentaiposts[i].getAttribute('cid'))
+				removeDownloadedComicsDownloadButton(1, id, nhentaiposts[i].parentElement, nhentaiposts[i], (parent, btn, lastId) => {
+					btn.remove()
+					const element = document.createElement('button')
+					element.setAttribute('ssite', 1)
+					element.setAttribute('cid', lastId)
+					element.classList.add('comic-had')
+					element.textContent = 'Had'
+					parent.appendChild(element)
+				}, (parent, btn) => {
+					btn.remove()
+					const element = document.createElement('button')
+					element.classList.add('comic-downloaded')
+					element.textContent = 'Downloaded'
+					parent.appendChild(element)
+				})
+			}
 			break
 	}
 }

@@ -73,9 +73,15 @@ function nhentaiChangePage(page, makeNewPage, updateTabIndex) {
 		if (page == 1 && result.popular.length != 0) {
 			html += '<div class="nhentai-postrow"><div>Popular</div><div>'
 			if (setting.lazy_loading) {
-				for (let i = 0; i < result.popular.length; i++) html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.popular[i].id}, {tab}, true)')"><img src="${result.popular[i].thumb}" loading="lazy"><div ${result.popular[i].lang}>${result.popular[i].title}</div></div>`
+				for (let i = 0; i < result.popular.length; i++) {
+					if (IsDownloading(result.popular[i].id, 1)) html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.popular[i].id}, {tab}, true)')"><img src="${result.popular[i].thumb}" loading="lazy"><div ${result.popular[i].lang}>${result.popular[i].title}</div><cid ssite="1" cid="${result.popular[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
+					else html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.popular[i].id}, {tab}, true)')"><img src="${result.popular[i].thumb}" loading="lazy"><div ${result.popular[i].lang}>${result.popular[i].title}</div><button ssite="1" cid="${result.popular[i].id}" onclick="nhentaiDownloader(this.getAttribute('cid'))">Download</button></div>`
+				}
 			} else {
-				for (let i = 0; i < result.popular.length; i++) html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.popular[i].id}, {tab}, true)')"><img src="${result.popular[i].thumb}"><div ${result.popular[i].lang}>${result.popular[i].title}</div></div>`
+				for (let i = 0; i < result.popular.length; i++) {
+					if (IsDownloading(result.popular[i].id, 1)) html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.popular[i].id}, {tab}, true)')"><img src="${result.popular[i].thumb}"><div ${result.popular[i].lang}>${result.popular[i].title}</div><cid ssite="1" cid="${result.popular[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
+					else html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.popular[i].id}, {tab}, true)')"><img src="${result.popular[i].thumb}"><div ${result.popular[i].lang}>${result.popular[i].title}</div><button ssite="1" cid="${result.popular[i].id}" onclick="nhentaiDownloader(this.getAttribute('cid'))">Download</button></div>`
+				}
 			}
 			html += '</div></div>'
 		}
@@ -83,9 +89,15 @@ function nhentaiChangePage(page, makeNewPage, updateTabIndex) {
 		// Content
 		html += `<div class="nhentai-postrow"><div>Content Page ${page}</div><div>`
 		if (setting.lazy_loading) {
-			for (let i = 0; i < result.content.length; i++) html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.content[i].id}, {tab}, true)')"><img src="${result.content[i].thumb}" loading="lazy"><div ${result.content[i].lang}>${result.content[i].title}</div></div>`
+			for (let i = 0; i < result.content.length; i++) {
+				if (IsDownloading(result.content[i].id, 1)) html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.content[i].id}, {tab}, true)')"><img src="${result.content[i].thumb}" loading="lazy"><div ${result.content[i].lang}>${result.content[i].title}</div><cid ssite="1" cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
+				else html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.content[i].id}, {tab}, true)')"><img src="${result.content[i].thumb}" loading="lazy"><div ${result.content[i].lang}>${result.content[i].title}</div><button ssite="1" cid="${result.content[i].id}" onclick="nhentaiDownloader(this.getAttribute('cid'))">Download</button></div>`
+			}
 		} else {
-			for (let i = 0; i < result.content.length; i++) html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.content[i].id}, {tab}, true)')"><img src="${result.content[i].thumb}" loading="lazy"><div ${result.content[i].lang}>${result.content[i].title}</div></div>`
+			for (let i = 0; i < result.content.length; i++) {
+				if (IsDownloading(result.content[i].id, 1)) html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.content[i].id}, {tab}, true)')"><img src="${result.content[i].thumb}"><div ${result.content[i].lang}>${result.content[i].title}</div><cid ssite="1" cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
+				else html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.content[i].id}, {tab}, true)')"><img src="${result.content[i].thumb}"><div ${result.content[i].lang}>${result.content[i].title}</div><button ssite="1" cid="${result.content[i].id}" onclick="nhentaiDownloader(this.getAttribute('cid'))">Download</button></div>`
+			}
 		}
 		html += '</div></div>'
 		
@@ -433,6 +445,8 @@ function nhentaiLinkClick(job) {
 	const e = window.event, which = e.which
 	if (which == 3) return
 	e.preventDefault()
+	const target = e.target
+	if (target.tagName == 'BUTTON' && target.hasAttribute('ssite')) return
 	if (which == 1) eval(job.replace('{tab}', 'false'))
 	else eval(job.replace('{tab}', 'true'))
 }

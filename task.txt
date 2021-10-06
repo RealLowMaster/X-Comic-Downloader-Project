@@ -104,13 +104,10 @@ Added To Version {
 }
 
 Doing {
-	Make nhentai Browser System Part 8++
+	Make nhentai Browser System Part 9++
 }
 
 Tasks => {
-	
-	Fix Bug: nhentai -> Hibiku Kurenai | Tag -> Futanari -> Page 1073
-
 	Optimize offlineChangePage()
 	Make New History System
 	Add Slider System To Repaired Image
