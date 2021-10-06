@@ -226,7 +226,7 @@ function CreateCategory(tagList, comicId, tagListIndex, repairing, newList) {
 		if (num != undefined) {
 			newList.push(num._id)
 			if (tagListIndex == tagList.length - 1) {
-				fix_index(4)
+				fix_index(14)
 				AddCategoryToList(comicId, newList, repairing)
 			} else CreateCategory(tagList, comicId, tagListIndex + 1, repairing, newList)
 		} else {
@@ -235,7 +235,7 @@ function CreateCategory(tagList, comicId, tagListIndex, repairing, newList) {
 				if (err) { error('Category: '+err); return }
 				newList.push(newDoc._id)
 				if (tagListIndex == tagList.length - 1) {
-					fix_index(4)
+					fix_index(14)
 					AddCategoryToList(comicId, newList, repairing)
 				} else CreateCategory(tagList, comicId, tagListIndex + 1, repairing, newList)
 			})

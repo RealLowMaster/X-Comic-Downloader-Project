@@ -810,6 +810,36 @@ const fix_index = async(id, updateLast) => {
 				}
 			})
 			break
+		case 12:
+			db.characters.find({}, (err, doc) => {
+				if (err) { error(err); return }
+				const len = doc.length
+				if (len > 0) {
+					const neededId = doc[len - 1]._id
+					update_index(neededId, 12)
+				}
+			})
+			break
+		case 13:
+			db.languages.find({}, (err, doc) => {
+				if (err) { error(err); return }
+				const len = doc.length
+				if (len > 0) {
+					const neededId = doc[len - 1]._id
+					update_index(neededId, 13)
+				}
+			})
+			break
+		case 14:
+			db.categories.find({}, (err, doc) => {
+				if (err) { error(err); return }
+				const len = doc.length
+				if (len > 0) {
+					const neededId = doc[len - 1]._id
+					update_index(neededId, 14)
+				}
+			})
+			break
 	}
 }
 
