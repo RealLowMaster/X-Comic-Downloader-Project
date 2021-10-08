@@ -716,7 +716,7 @@ function deleteComic(id) {
 			const site = doc.s
 			const post_id = doc.p
 			
-			loading.reset(8 + ImagesCount)
+			loading.reset(3 + ImagesCount)
 			loading.show('Removing Comic From Database...')
 	
 			const fix_removed_index = () => {
@@ -729,12 +729,36 @@ function deleteComic(id) {
 				reloadLoadingComics()
 				keydownEventIndex = 0
 			}
+
+			const remove_characters = () => {
+				db.comic_characters.remove({_id:id}, {}, err => {
+					if (err) { loading.hide(); error(err); keydownEventIndex = 0; return }
+					loading.forward('Removing Comic Have From Database...')
+					fix_removed_index()
+				})
+			}
+
+			const remove_languages = () => {
+				db.comic_languages.remove({_id:id}, {}, err => {
+					if (err) { loading.hide(); error(err); keydownEventIndex = 0; return }
+					loading.forward('Removing Comic Have From Database...')
+					remove_characters()
+				})
+			}
+
+			const remove_categories = () => {
+				db.comic_categories.remove({_id:id}, {}, err => {
+					if (err) { loading.hide(); error(err); keydownEventIndex = 0; return }
+					loading.forward('Removing Comic Have From Database...')
+					remove_languages()
+				})
+			}
 	
 			const remove_tags = () => {
 				db.comic_tags.remove({_id:id}, {}, err => {
 					if (err) { loading.hide(); error(err); keydownEventIndex = 0; return }
 					loading.forward('Removing Comic Have From Database...')
-					fix_removed_index()
+					remove_categories()
 				})
 			}
 	
