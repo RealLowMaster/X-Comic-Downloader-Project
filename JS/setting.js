@@ -44,6 +44,7 @@ function setLuanchTimeSettings(reloadSettingPanel) {
 	document.getElementById('s_show_unoptimize').checked = setting.show_unoptimize
 	document.getElementById('s_check_update').checked = setting.check_update
 	document.getElementById('s_auto_close_optimize_panel').checked = setting.auto_close_optimize_panel
+	document.getElementById('s_open_br_startup').checked = setting.open_br_startup
 
 	s_file_location.setAttribute('location', setting.file_location)
 	const s_file_location_label = s_file_location.parentElement.parentElement.children[0]
@@ -113,7 +114,8 @@ function saveSetting(justSave) {
 		setting.download_limit = Number(document.getElementById('s_download_limit').value)
 		setting.check_update = document.getElementById('s_check_update').checked
 		setting.auto_close_optimize_panel = document.getElementById('s_auto_close_optimize_panel').checked
-		
+		setting.open_br_startup = document.getElementById('s_open_br_startup').checked
+
 		if (show_unoptimize != setting.show_unoptimize) {
 			reloadLoadingComics()
 			setting.show_unoptimize = show_unoptimize

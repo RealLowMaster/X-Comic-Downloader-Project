@@ -25,6 +25,7 @@ const defaultSetting = {
 	"check_update": true,
 	"auto_close_optimize_panel": false,
 	"file_location": null,
+	"open_br_startup": false,
 	"developer_mode": false
 }
 const comicPanel = document.getElementById('comic-panel')
@@ -48,7 +49,7 @@ const sites = [
 		name: 'nhentai',
 		url: 'nhentai.net',
 		home: 'nhentaiChangePage(1, false, true)',
-		repair: '',
+		repair: 'error("Nhentai is in Demo, Sorry Repair Abillity is Comming Soon! (Next Update)")',
 		search: 'nhentaiSearch({text}, 1, false, true)',
 		jump: 'nhentaiJumpPage({index}, {page})',
 		downloader: 'nhentaiDownloader({id})'
@@ -638,6 +639,7 @@ function CheckSettings() {
 	if (typeof(setting.show_unoptimize) != 'boolean') setting.show_unoptimize = defaultSetting.show_unoptimize
 	if (typeof(setting.check_update) != 'boolean') setting.check_update = defaultSetting.check_update
 	if (typeof(setting.auto_close_optimize_panel) != 'boolean') setting.auto_close_optimize_panel = defaultSetting.auto_close_optimize_panel
+	if (typeof(setting.open_br_startup) != 'boolean') setting.open_br_startup = defaultSetting.open_br_startup
 	if (typeof(setting.developer_mode) != 'boolean') setting.developer_mode = defaultSetting.developer_mode
 	if (setting.developer_mode == true) {
 		window.addEventListener('keydown', e => {

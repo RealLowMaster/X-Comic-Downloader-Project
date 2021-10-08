@@ -26,8 +26,7 @@ function AfterDatabaseDoneOnStartup() {
 	CheckReleaseNote()
 	document.getElementById('ex-p-l-input').value = remote.app.getPath('downloads')
 	if (setting.check_update) CheckUpdate()
-	active_site = 1
-	openBrowser()
+	if (setting.open_br_startup) openBrowser()
 }
 
 function makeSubFolder(sfComicsDoc, sfLength, index) {

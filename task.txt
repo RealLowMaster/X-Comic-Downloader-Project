@@ -95,6 +95,7 @@ Added To Version {
 	Fix Bug: Browser Removing Selected Histories do not Remove the right History
 	Fix Bug: ReOpening Slider will disable Slider Overview
 	Fix Bug: Reopening Search History That Contains ' Will Error
+	Add Open Browser On Startup Option To Setting
 	Add Character Saving System
 	Add Language Saving System
 	Add Category Saving System
