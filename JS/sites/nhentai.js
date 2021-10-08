@@ -2,7 +2,7 @@ const { futimesSync, readSync } = require("original-fs")
 
 const nhentai = new nHentaiAPI()
 const nhentaiError = '<div class="alert alert-danger">{err}</div>'
-const nhentaiSiteTopMenu = '<div class="nhentai-top-menu"><i><svg xmlns="http://www.w3.org/2000/svg" width="482.556" height="209.281" viewBox="45.002 196.466 482.556 209.281"><path fill="#EC2854" stroke="#EC2854" stroke-miterlimit="10" d="M217.198 232.5c-16.597 6.907-52.729 34.028-36.249 58.467 7.288 10.807 19.94 18.442 31.471 22.057 10.732 3.363 23.897-.761 33.709 3.721-2.09 5.103-9.479 23.689-15.812 22.319-11.827-2.544-23.787-.445-33.07 8.485-18.958-26.295-45.97-36.974-75.739-29.676 22.066-27.2 16.719-55.687-6.468-81.622-13.999-15.657-47.993-37.963-69.845-28.853 54.591-22.738 121.119-5.555 172.003 25.102-8.815 3.669-3.617-2.179 0 0zm138.167 0c16.595 6.908 52.729 34.028 36.249 58.467-7.288 10.807-19.939 18.443-31.473 22.059-10.731 3.365-23.896-.762-33.712 3.721 2.104 5.112 9.464 23.671 15.812 22.318 11.826-2.542 23.789-.448 33.068 8.484 18.959-26.294 45.974-36.975 75.738-29.676-22.056-27.206-16.726-55.682 6.471-81.622 13.997-15.654 47.995-37.967 69.847-28.854-54.586-22.733-121.116-5.562-172 25.103 8.817 3.669 3.616-2.18 0 0z"/><path fill="none" d="M723.057 240.921H824.18v56.18H723.057z"/><path fill="#FFF" d="M225.434 293.58h23.199v15.919c6.874-6.563 14.154-11.274 21.841-14.137 7.687-2.863 16.234-4.295 25.64-4.295 20.621 0 34.549 5.552 41.785 16.653 3.979 6.074 5.969 14.766 5.969 26.077v71.95h-24.826v-70.693c0-6.842-1.312-12.358-3.935-16.547-4.344-6.982-12.209-10.473-23.604-10.473-5.789 0-10.538.455-14.246 1.363-6.693 1.536-12.572 4.608-17.636 9.216-4.07 3.701-6.716 7.522-7.937 11.467-1.221 3.945-1.832 9.582-1.832 16.913v58.754h-24.419l.001-112.167z"/></svg></i><button type="button">Random</button><button type="button">Tags</button><button type="button">Artists</button><button type="button">Characters</button><button type="button">Parodies</button><button type="button">Groups</button></div>'
+const nhentaiSiteTopMenu = `<div class="nhentai-top-menu"><i><svg xmlns="http://www.w3.org/2000/svg" width="482.556" height="209.281" viewBox="45.002 196.466 482.556 209.281"><path fill="#EC2854" stroke="#EC2854" stroke-miterlimit="10" d="M217.198 232.5c-16.597 6.907-52.729 34.028-36.249 58.467 7.288 10.807 19.94 18.442 31.471 22.057 10.732 3.363 23.897-.761 33.709 3.721-2.09 5.103-9.479 23.689-15.812 22.319-11.827-2.544-23.787-.445-33.07 8.485-18.958-26.295-45.97-36.974-75.739-29.676 22.066-27.2 16.719-55.687-6.468-81.622-13.999-15.657-47.993-37.963-69.845-28.853 54.591-22.738 121.119-5.555 172.003 25.102-8.815 3.669-3.617-2.179 0 0zm138.167 0c16.595 6.908 52.729 34.028 36.249 58.467-7.288 10.807-19.939 18.443-31.473 22.059-10.731 3.365-23.896-.762-33.712 3.721 2.104 5.112 9.464 23.671 15.812 22.318 11.826-2.542 23.789-.448 33.068 8.484 18.959-26.294 45.974-36.975 75.738-29.676-22.056-27.206-16.726-55.682 6.471-81.622 13.997-15.654 47.995-37.967 69.847-28.854-54.586-22.733-121.116-5.562-172 25.103 8.817 3.669 3.616-2.18 0 0z"/><path fill="none" d="M723.057 240.921H824.18v56.18H723.057z"/><path fill="#FFF" d="M225.434 293.58h23.199v15.919c6.874-6.563 14.154-11.274 21.841-14.137 7.687-2.863 16.234-4.295 25.64-4.295 20.621 0 34.549 5.552 41.785 16.653 3.979 6.074 5.969 14.766 5.969 26.077v71.95h-24.826v-70.693c0-6.842-1.312-12.358-3.935-16.547-4.344-6.982-12.209-10.473-23.604-10.473-5.789 0-10.538.455-14.246 1.363-6.693 1.536-12.572 4.608-17.636 9.216-4.07 3.701-6.716 7.522-7.937 11.467-1.221 3.945-1.832 9.582-1.832 16.913v58.754h-24.419l.001-112.167z"/></svg></i><button type="button" onclick="error('Nhentai is in Demo, This Ability is Comming Soon.')">Random</button><button type="button" onclick="error('Nhentai is in Demo, This Ability is Comming Soon.')">Tags</button><button type="button" onclick="error('Nhentai is in Demo, This Ability is Comming Soon.')">Artists</button><button type="button" onclick="error('Nhentai is in Demo, This Ability is Comming Soon.')">Characters</button><button type="button" onclick="error('Nhentai is in Demo, This Ability is Comming Soon.')">Parodies</button><button type="button" onclick="error('Nhentai is in Demo, This Ability is Comming Soon.')">Groups</button></div>`
 
 function nhentaiChangePage(page, makeNewPage, updateTabIndex) {
 	page = page || 1
@@ -253,7 +253,7 @@ function nhentaiOpenPost(id, makeNewTab, updateTabIndex) {
 
 			// Pages
 			if (result.pages != undefined) {
-				html += `<div class="nhentai-info-row">Pages: <button type="button" onmousedown="nhentaiLinkClick('nhentaiOpenPages(${result.pages.from}, ${result.pages.to}, {tab}, true)')"><span>${result.pages.count}</span></button></div>`
+				html += `<div class="nhentai-info-row">Pages: <button type="button" onmousedown="nhentaiLinkClick('nhentaiOpenPages(${result.pages.from}, ${result.pages.to}, 1, {tab}, true)')"><span>${result.pages.count}</span></button></div>`
 			}
 
 			// Upload Date
@@ -439,7 +439,107 @@ function nhentaiOpenInfo(name, page, whitch, makeNewTab, updateTabIndex) {
 	})
 }
 
-function nhentaiOpenPages(from, to, makeNewTab, updateTabIndex) {}
+function nhentaiOpenPages(from, to, page, makeNewTab, updateTabIndex) {
+	
+}
+
+function nhentaiSearch(text, page, makeNewTab, updateTabIndex) {
+	text = text || null
+	if (text == null) return
+	page = page || 1
+	makeNewTab = makeNewTab || false
+	if (updateTabIndex == null) updateTabIndex = true
+	let pageId
+	if (makeNewTab) {
+		pageId = createNewTab(`nhentaiSearch(${text}, ${page}, false, false)`, true, 0)
+		if (pageId == null) { PopAlert(defaultSettingLang.tab_at_limit, 'danger'); return }
+	} else {
+		pageId = activeTabComicId
+		const passImages = document.getElementById(pageId).getElementsByTagName('img')
+		if (passImages != undefined) {
+			for (let i = 0; i < passImages.length; i++) {
+				passImages[i].removeAttribute('data-src')
+				passImages[i].removeAttribute('src')
+			}
+		}
+
+		if (updateTabIndex == true) tabs[Number(tabsContainer.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))].addHistory(`nhentaiSearch(${text}, ${page}, false, false)`)
+	}
+
+	const pageContent = document.getElementById(pageId)
+	if (activeTabComicId == pageId) {
+		bjp.style.display = 'none'
+		bjp_i.setAttribute('oninput', '')
+	}
+
+	const tab = tabsContainer.querySelector(`[pi="${pageId}"]`)
+	const tabArea = tab.getElementsByTagName('span')[0]
+	const thisTabIndex = Number(tab.getAttribute('ti'))
+	tabs[thisTabIndex].ir = true
+	tabs[thisTabIndex].mp = 0
+	checkBrowserTools(thisTabIndex)
+	tabArea.innerHTML = `<img class="spin" src="Image/dual-ring-primary-${wt_fps}.gif">`
+	pageContent.innerHTML = `<div class="browser-page-loading"><img class="spin" style="width:60px;height:60px" src="Image/dual-ring-primary-${wt_fps}.gif"><p>Loading...</p></div>`
+
+	nhentai.search(text, page, (err, result) => {
+		if (document.getElementById(pageId) == undefined) return
+		tabs[thisTabIndex].ir = false
+		checkBrowserTools(thisTabIndex)
+		pageContent.innerHTML = ''
+		if (err) {
+			pageContent.innerHTML = nhentaiError.replace('{err}', err)
+			return
+		}
+		tabArea.textContent = `S: ${convertToURL(text, true)} - ${page}`
+		let save, save2, html
+		html = '<div class="nhentai-container">'+nhentaiSiteTopMenu
+
+		if (result.pagination != undefined) {
+			save2 = result.pagination[result.pagination.length - 1][1]
+			if (save2 == null) save = page
+			else save = save2
+		} else save = 1
+
+		tabs[thisTabIndex].jp = 1
+		tabs[thisTabIndex].tp = page
+		tabs[thisTabIndex].mp = save
+		if (activeTabComicId == pageId) {
+			bjp.style.display = 'inline-block'
+			bjp_i.value = page
+			bjp_i.setAttribute('oninput', `inputLimit(this, ${save});browserJumpPage(1, Number(this.value))`)
+			bjp_m_p.textContent = save
+		}
+
+		// Content
+		html += `<div class="nhentai-postrow"><div>Search -> Page ${page} | Results: ${result.result}</div><div>`
+		if (setting.lazy_loading) {
+			for (let i = 0; i < result.content.length; i++) {
+				if (IsDownloading(result.content[i].id, 1)) html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.content[i].id}, {tab}, true)')"><img src="${result.content[i].thumb}" loading="lazy"><div ${result.content[i].lang}>${result.content[i].title}</div><cid ssite="1" cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
+				else html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.content[i].id}, {tab}, true)')"><img src="${result.content[i].thumb}" loading="lazy"><div ${result.content[i].lang}>${result.content[i].title}</div><button ssite="1" cid="${result.content[i].id}" onclick="nhentaiDownloader(this.getAttribute('cid'))">Download</button></div>`
+			}
+		} else {
+			for (let i = 0; i < result.content.length; i++) {
+				if (IsDownloading(result.content[i].id, 1)) html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.content[i].id}, {tab}, true)')"><img src="${result.content[i].thumb}"><div ${result.content[i].lang}>${result.content[i].title}</div><cid ssite="1" cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
+				else html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.content[i].id}, {tab}, true)')"><img src="${result.content[i].thumb}"><div ${result.content[i].lang}>${result.content[i].title}</div><button ssite="1" cid="${result.content[i].id}" onclick="nhentaiDownloader(this.getAttribute('cid'))">Download</button></div>`
+			}
+		}
+		html += '</div></div>'
+		
+		// Pagination
+		html += '</div>'
+		if (result.pagination != null && result.pagination.length != 0) {
+			html += '<div class="nhentai-pagination">'
+			for (let i = 0; i < result.pagination.length; i++) {
+				if (result.pagination[i][1] != null) html += `<button type="button" onmousedown="nhentaiLinkClick('nhentaiChangePage(${result.pagination[i][1]}, {tab}, true)')">${result.pagination[i][0]}</button>`
+				else html += `<button type="button" disabled="true">${result.pagination[i][0]}</button>`
+			}
+			html += '</div>'
+		}
+
+		pageContent.innerHTML = html
+		clearDownloadedComics(pageContent, 1)
+	})
+}
 
 function nhentaiLinkClick(job) {
 	const e = window.event, which = e.which

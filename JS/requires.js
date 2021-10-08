@@ -49,7 +49,7 @@ const sites = [
 		url: 'nhentai.net',
 		home: 'nhentaiChangePage(1, false, true)',
 		repair: '',
-		search: '',
+		search: 'nhentaiSearch({text}, 1, false, true)',
 		jump: '',
 		downloader: 'nhentaiDownloader({id})'
 	}
@@ -491,7 +491,6 @@ function toFileName(text) {
 function convertToURL(text, backward) {
 	backward = backward || false
 	if (backward) {
-		console.log(true)
 		return text.replace(/%26/g, '&')
 			.replace(/%21/g, '!')
 			.replace(/%22/g, '"')

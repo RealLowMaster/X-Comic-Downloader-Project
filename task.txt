@@ -104,10 +104,13 @@ Added To Version {
 }
 
 Doing {
-	Make nhentai Browser System Part 10++
+	Make nhentai Browser System Part 11++
 }
 
 Tasks => {
+	Remove loading spin from tabname when error
+
+	Optimize Gifs
 	Optimize offlineChangePage()
 	Make New History System
 	Add Slider System To Repaired Image
