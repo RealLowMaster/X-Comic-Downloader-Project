@@ -59,13 +59,13 @@ function nhentaiChangePage(page, makeNewPage, updateTabIndex) {
 			else save = save2
 		} else save = 1
 
-		tabs[thisTabIndex].jp = 1
+		tabs[thisTabIndex].jp = 0
 		tabs[thisTabIndex].tp = page
 		tabs[thisTabIndex].mp = save
 		if (activeTabComicId == pageId) {
 			bjp.style.display = 'inline-block'
 			bjp_i.value = page
-			bjp_i.setAttribute('oninput', `inputLimit(this, ${save});browserJumpPage(1, Number(this.value))`)
+			bjp_i.setAttribute('oninput', `inputLimit(this, ${save});browserJumpPage(0, Number(this.value))`)
 			bjp_m_p.textContent = save
 		}
 
@@ -348,7 +348,6 @@ function nhentaiOpenInfo(name, page, whitch, makeNewTab, updateTabIndex) {
 	name = name || null
 	if (name == null) return
 	page = page || 1
-	whitch = whitch || null
 	if (whitch == null) return
 	makeNewTab = makeNewTab || false
 	if (updateTabIndex == null) updateTabIndex = true
@@ -377,6 +376,7 @@ function nhentaiOpenInfo(name, page, whitch, makeNewTab, updateTabIndex) {
 	}
 
 	const tab = tabsContainer.querySelector(`[pi="${pageId}"]`)
+	tabs[Number(tab.getAttribute('ti'))].options = [name, whitch]
 	const tabArea = tab.getElementsByTagName('span')[0]
 	const thisTabIndex = Number(tab.getAttribute('ti'))
 	tabs[thisTabIndex].ir = true
@@ -470,6 +470,7 @@ function nhentaiOpenPages(from, to, page, makeNewTab, updateTabIndex) {
 	}
 
 	const tab = tabsContainer.querySelector(`[pi="${pageId}"]`)
+	tabs[Number(tab.getAttribute('ti'))].options = [from, to]
 	const tabArea = tab.getElementsByTagName('span')[0]
 	const thisTabIndex = Number(tab.getAttribute('ti'))
 	tabs[thisTabIndex].ir = true
@@ -490,7 +491,6 @@ function nhentaiOpenPages(from, to, page, makeNewTab, updateTabIndex) {
 		tabArea.textContent = `From ${from} To ${to} - ${page}`
 		let save, save2, html
 		html = '<div class="nhentai-container">'+nhentaiSiteTopMenu
-		console.log(result)
 
 		if (result.pagination != undefined) {
 			save2 = result.pagination[result.pagination.length - 1][1]
@@ -498,13 +498,13 @@ function nhentaiOpenPages(from, to, page, makeNewTab, updateTabIndex) {
 			else save = save2
 		} else save = 1
 
-		tabs[thisTabIndex].jp = 1
+		tabs[thisTabIndex].jp = 2
 		tabs[thisTabIndex].tp = page
 		tabs[thisTabIndex].mp = save
 		if (activeTabComicId == pageId) {
 			bjp.style.display = 'inline-block'
 			bjp_i.value = page
-			bjp_i.setAttribute('oninput', `inputLimit(this, ${save});browserJumpPage(1, Number(this.value))`)
+			bjp_i.setAttribute('oninput', `inputLimit(this, ${save});browserJumpPage(2, Number(this.value))`)
 			bjp_m_p.textContent = save
 		}
 
@@ -569,6 +569,7 @@ function nhentaiSearch(text, page, makeNewTab, updateTabIndex) {
 	}
 
 	const tab = tabsContainer.querySelector(`[pi="${pageId}"]`)
+	tabs[Number(tab.getAttribute('ti'))].options = text
 	const tabArea = tab.getElementsByTagName('span')[0]
 	const thisTabIndex = Number(tab.getAttribute('ti'))
 	tabs[thisTabIndex].ir = true
@@ -596,13 +597,13 @@ function nhentaiSearch(text, page, makeNewTab, updateTabIndex) {
 			else save = save2
 		} else save = 1
 
-		tabs[thisTabIndex].jp = 1
+		tabs[thisTabIndex].jp = 3
 		tabs[thisTabIndex].tp = page
 		tabs[thisTabIndex].mp = save
 		if (activeTabComicId == pageId) {
 			bjp.style.display = 'inline-block'
 			bjp_i.value = page
-			bjp_i.setAttribute('oninput', `inputLimit(this, ${save});browserJumpPage(1, Number(this.value))`)
+			bjp_i.setAttribute('oninput', `inputLimit(this, ${save});browserJumpPage(3, Number(this.value))`)
 			bjp_m_p.textContent = save
 		}
 
@@ -635,6 +636,31 @@ function nhentaiSearch(text, page, makeNewTab, updateTabIndex) {
 		pageContent.innerHTML = html
 		clearDownloadedComics(pageContent, 1)
 	})
+}
+
+function nhentaiJumpPage(index, page) {
+	switch (index) {
+		case 0:
+			searchTimer = setTimeout(() => {
+				nhentaiChangePage(page, false, true)
+			}, 185)
+			break
+		case 1:
+			searchTimer = setTimeout(() => {
+				nhentaiOpenInfo(tabs[activeTabIndex].options[0], page, tabs[activeTabIndex].options[1], false, true)
+			}, 185)
+			break
+		case 2:
+			searchTimer = setTimeout(() => {
+				nhentaiOpenPages(tabs[activeTabIndex].options[0], tabs[activeTabIndex].options[1], page, false, true)
+			}, 185)
+			break
+		case 3:
+			searchTimer = setTimeout(() => {
+				nhentaiSearch(tabs[activeTabIndex].options, page, false, true)
+			}, 185)
+			break
+	}
 }
 
 function nhentaiLinkClick(job) {

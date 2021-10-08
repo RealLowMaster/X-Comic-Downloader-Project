@@ -50,7 +50,7 @@ const sites = [
 		home: 'nhentaiChangePage(1, false, true)',
 		repair: '',
 		search: 'nhentaiSearch({text}, 1, false, true)',
-		jump: '',
+		jump: 'nhentaiJumpPage({index}, {page})',
 		downloader: 'nhentaiDownloader({id})'
 	}
 ]
