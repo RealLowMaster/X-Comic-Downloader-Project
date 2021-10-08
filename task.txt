@@ -101,7 +101,7 @@ Added To Version {
 	Add Category Saving System
 	Optimize Key Events
 	Change Offline Max Comic in Page Limit To 100
-	Make Browser Tab Removing Procress Kind Of Like Chrome (Tabs Will Resize After you finish Removing)
+	Change Browser Tab Removing Procress Kind Of Like Chrome (Tabs Will Resize After you finish Removing)
 }
 
 Doing {

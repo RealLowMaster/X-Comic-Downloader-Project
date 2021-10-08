@@ -62,7 +62,7 @@ const keydownEvents = [
 	'BrowserKeyEvents({ctrl},{shift},{key})',
 	'SettingKeyEvents({ctrl},{shift},{key})'
 ]
-const ThisWindow = remote.getCurrentWindow(), loading = new Loading(19), db = {}, procressPanel = new ProcressPanel(0), update_number = 3
+const ThisWindow = remote.getCurrentWindow(), loading = new Loading(19), db = {}, procressPanel = new ProcressPanel(0), update_number = 4
 let comicDeleting = false, downloadCounter = 0, wt_fps = 20, dirDB, dirUL, dirTmp, isOptimizing = false, browserLastTabs = [], tabsHistory = [], dirHistory = '', keydownEventIndex = 0, new_update, save_value = null, save_value2 = null, afterDLReload = true
 var setting, tabs = [], downloadingList = [], lastComicId, lastHaveId, lastGroupId, lastArtistId, lastParodyId, lastTagId, lastCharacterId, lastLanguageId, lastCategoryId, searchTimer, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = [], openedMenuTabIndex, copiedTab = null
 
@@ -657,7 +657,7 @@ function CheckReleaseNote() {
 		document.getElementById('r-n-n-v').innerHTML = "What's new in v"+new_update.v
 		let html = '<h2>Important Changes</h2>'
 		for (let i = 0; i < new_update.s.length; i++) {
-			html += `<p>${new_update.s[i]}</p>`
+			html += `<p class="${new_update.c[i]}">${new_update.s[i]}</p>`
 		}
 		document.getElementById('r-n-n-n').innerHTML = html
 		document.getElementById('release-note').style.display = 'flex'

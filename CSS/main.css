@@ -2363,7 +2363,7 @@ input::-webkit-input-placeholder { user-select: none }
 #r-n-n-c {
 	display: grid;
 	grid-template-rows: 50px 10fr 50px;
-	width: 450px;
+	width: 500px;
 	height: 80%;
 	background-color: #444;
 	color: #fff;
@@ -2406,6 +2406,20 @@ input::-webkit-input-placeholder { user-select: none }
 	font-size: 15px;
 	font-weight: 300;
 }
+
+#r-n-n-n > .add-important {
+	margin-bottom: 15px;
+	background-color: #F1C40F;
+	font-size: 17px;
+	font-weight: 600;
+	box-shadow: 0 0 10px 0 #F1C40F;
+	text-shadow: 0 2px 4px #000;
+}
+
+#r-n-n-n > .fix-bug { background-color: #1D8348; color: #eee }
+#r-n-n-n > .add-ab { background-color: #2874A6 }
+#r-n-n-n > .add-optimize { background-color: #D35400 }
+#r-n-n-n > .add-change { background-color: #8E44AD }
 
 #r-n-n-c > div:last-child {
 	background-color: #222;
