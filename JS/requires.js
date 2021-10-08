@@ -460,7 +460,7 @@ function UpdateNotes() {
 	document.getElementById('r-n-n-v').innerHTML = 'v'+new_update.version
 	let html = '<h2>Important Changes</h2>'
 	for (let i = 0; i < new_update.important_changes.length; i++) {
-		html += `<p>${new_update.important_changes[i]}</p>`
+		html += `<p class="${new_update.c[i]}">${new_update.important_changes[i]}</p>`
 	}
 	document.getElementById('r-n-n-n').innerHTML = html
 	document.getElementById('release-note').style.display = 'flex'
