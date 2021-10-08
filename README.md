@@ -17,6 +17,7 @@
 
 ### Supporting Sites:
 > - ###### xlecx.org
+> - ###### nhentai.net
 > - More Sites Gonna Be Added Later :)
 
 If you found any bug Please Write it In Issues Tab, Thank you ;)
