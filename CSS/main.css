@@ -125,6 +125,7 @@
 	--cp-img-repair-btn-hover-color: #fff;
 
 	--br-tab-con-bgc: #fff;
+	--br-pg-ld-color: #222;
 	--br-tab-bgc: #eee;
 	--br-tab-color: #000;
 	--br-tab-bd-color: #ddd;
@@ -150,6 +151,9 @@
 	--br-tool-s-btn-hover-color: #3498DB;
 	--br-tool-s-btn-hover-bd-color: #ddd;
 	--br-tool-s-input-focus-bd-color: #3498DB;
+	--br-jp-bgc: #fff;
+	--br-jp-bd-color: #eee;
+	--br-jp-input-color: #222;
 	--br-page-con-bgc: #fff;
 	--br-h-panel-top: 75px;
 	--br-h-panel-bgc: #eee;
@@ -642,6 +646,7 @@ input::-webkit-input-placeholder { user-select: none }
 	display: block;
 	width: 100%;
 	padding: 20px;
+	color: var(--br-pg-ld-color);
 	text-align: center;
 	background-color: transparent;
 }
@@ -1825,6 +1830,19 @@ input::-webkit-input-placeholder { user-select: none }
 	background-color: var(--obr-tmenu-jp-btn-hover-bgc);
 	color: var(--obr-tmenu-jp-btn-hover-color);
 	border-color: var(--obr-tmenu-jp-btn-hover-bd-color);
+}
+
+#browser-jump-page-container {
+	background-color: var(--br-jp-bgc);
+	border-color: var(--br-jp-bd-color);
+}
+
+#browser-jump-page-container > input {
+	color: var(--br-jp-input-color);
+}
+
+#browser-jump-page-container > span {
+	color: var(--br-jp-input-color);
 }
 /* Jump Page > */
 

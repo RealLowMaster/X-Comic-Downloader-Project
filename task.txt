@@ -100,8 +100,6 @@ Doing {
 
 Tasks => {
 	Fix Stucking At Loading
-	Add Download to Artists and etc
-	Fix Bug: nhentai search
 	Remove loading spin from tabname when error
 
 	Optimize Gifs
