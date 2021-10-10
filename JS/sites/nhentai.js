@@ -417,9 +417,15 @@ function nhentaiOpenInfo(name, page, whitch, makeNewTab, updateTabIndex) {
 		// Content
 		html += `<div class="nhentai-postrow"><div>${types[whitch]} > <span class="nhentai-glow">${result.name}</span> > Page ${page}</div><div>`
 		if (setting.lazy_loading) {
-			for (let i = 0; i < result.content.length; i++) html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.content[i].id}, {tab}, true)')"><img src="${result.content[i].thumb}" loading="lazy"><div ${result.content[i].lang}>${result.content[i].title}</div></div>`
+			for (let i = 0; i < result.content.length; i++) {
+				if (IsDownloading(result.content[i].id, 1)) html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.content[i].id}, {tab}, true)')"><img src="${result.content[i].thumb}" loading="lazy"><div ${result.content[i].lang}>${result.content[i].title}</div><cid ssite="1" cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
+				else html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.content[i].id}, {tab}, true)')"><img src="${result.content[i].thumb}" loading="lazy"><div ${result.content[i].lang}>${result.content[i].title}</div><button ssite="1" cid="${result.content[i].id}" onclick="nhentaiDownloader(this.getAttribute('cid'))">Download</button></div>`
+			}
 		} else {
-			for (let i = 0; i < result.content.length; i++) html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.content[i].id}, {tab}, true)')"><img src="${result.content[i].thumb}" loading="lazy"><div ${result.content[i].lang}>${result.content[i].title}</div></div>`
+			for (let i = 0; i < result.content.length; i++) {
+				if (IsDownloading(result.content[i].id, 1)) html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.content[i].id}, {tab}, true)')"><img src="${result.content[i].thumb}"><div ${result.content[i].lang}>${result.content[i].title}</div><cid ssite="1" cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
+				else html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.content[i].id}, {tab}, true)')"><img src="${result.content[i].thumb}"><div ${result.content[i].lang}>${result.content[i].title}</div><button ssite="1" cid="${result.content[i].id}" onclick="nhentaiDownloader(this.getAttribute('cid'))">Download</button></div>`
+			}
 		}
 		html += '</div></div>'
 		
