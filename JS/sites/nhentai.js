@@ -10,7 +10,7 @@ function nhentaiChangePage(page, makeNewPage, updateTabIndex) {
 	if (updateTabIndex == null) updateTabIndex = true
 	let pageId
 	if (makeNewPage) {
-		pageId = createNewTab(`nhentaiChangePage(${page}, false, false)`, true, 0)
+		pageId = createNewTab(`nhentaiChangePage(${page}, false, false)`, true, 1)
 		if (pageId == null) { PopAlert(defaultSettingLang.tab_at_limit, 'danger'); return }
 	} else {
 		pageId = activeTabComicId
@@ -124,7 +124,7 @@ function nhentaiOpenPost(id, makeNewTab, updateTabIndex) {
 	if (updateTabIndex == null) updateTabIndex = true
 	let pageId
 	if (makeNewTab) {
-		pageId = createNewTab(`nhentaiOpenPost(${id}, false, false)`, true, 0)
+		pageId = createNewTab(`nhentaiOpenPost(${id}, false, false)`, true, 1)
 		if (pageId == null) { PopAlert(defaultSettingLang.tab_at_limit, 'danger'); return }
 	} else {
 		pageId = activeTabComicId
@@ -354,7 +354,7 @@ function nhentaiOpenInfo(name, page, whitch, makeNewTab, updateTabIndex) {
 	const types = ['parody','character','tag','artist','group','language','category']
 	let pageId
 	if (makeNewTab) {
-		pageId = createNewTab(`nhentaiOpenInfo('${name}', ${page}, ${whitch}, false, false)`, true, 0)
+		pageId = createNewTab(`nhentaiOpenInfo('${name}', ${page}, ${whitch}, false, false)`, true, 1)
 		if (pageId == null) { PopAlert(defaultSettingLang.tab_at_limit, 'danger'); return }
 	} else {
 		pageId = activeTabComicId
@@ -448,7 +448,7 @@ function nhentaiOpenPages(from, to, page, makeNewTab, updateTabIndex) {
 	if (updateTabIndex == null) updateTabIndex = true
 	let pageId
 	if (makeNewTab) {
-		pageId = createNewTab(`nhentaiOpenPages(${from}, ${to}, ${page}, false, false)`, true, 0)
+		pageId = createNewTab(`nhentaiOpenPages(${from}, ${to}, ${page}, false, false)`, true, 1)
 		if (pageId == null) { PopAlert(defaultSettingLang.tab_at_limit, 'danger'); return }
 	} else {
 		pageId = activeTabComicId
@@ -547,7 +547,7 @@ function nhentaiSearch(text, page, makeNewTab, updateTabIndex) {
 	if (updateTabIndex == null) updateTabIndex = true
 	let pageId
 	if (makeNewTab) {
-		pageId = createNewTab(`nhentaiSearch('${text}', ${page}, false, false)`, true, 0)
+		pageId = createNewTab(`nhentaiSearch('${text}', ${page}, false, false)`, true, 1)
 		if (pageId == null) { PopAlert(defaultSettingLang.tab_at_limit, 'danger'); return }
 	} else {
 		pageId = activeTabComicId

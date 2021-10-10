@@ -91,17 +91,7 @@ Add Comic {
 }
 
 Added To Version {
-	Fix Bug: After Closing Browser, Offline Browsing Key Events Do not work anymore
-	Fix Bug: Browser Removing Selected Histories do not Remove the right History
-	Fix Bug: ReOpening Slider will disable Slider Overview
-	Fix Bug: Reopening Search History That Contains ' Will Error
-	Add Open Browser On Startup Option To Setting
-	Add Character Saving System
-	Add Language Saving System
-	Add Category Saving System
-	Optimize Key Events
-	Change Offline Max Comic in Page Limit To 100
-	Change Browser Tab Removing Procress Kind Of Like Chrome (Tabs Will Resize After you finish Removing)
+	
 }
 
 Doing {
@@ -109,6 +99,9 @@ Doing {
 }
 
 Tasks => {
+	Fix Stucking At Loading
+	Add Download to Artists and etc
+	Fix Bug: nhentai search
 	Remove loading spin from tabname when error
 
 	Optimize Gifs
