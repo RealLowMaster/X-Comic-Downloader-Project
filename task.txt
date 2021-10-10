@@ -95,7 +95,7 @@ Added To Version {
 }
 
 Doing {
-	
+	Fix Bug: Deleting Fully Crashed Comic Error
 }
 
 Tasks => {

@@ -468,7 +468,6 @@ function openComic(id) {
 			let thisForamat = formats[0][2]
 			let src = ''
 			let slider_overview_html = ''
-
 			for (let i = 0; i < ImagesCount; i++) {
 				if (i <= lastIndex) {
 					src = `${dirUL}/${id}${image}/${image}-${i}.${thisForamat}`
@@ -813,29 +812,31 @@ function deleteComic(id) {
 				}
 	
 				let formatIndex = 0, thisUrl
-				let lastIndex = ImagesFormats[0][1]
-				let thisForamat = ImagesFormats[0][2]
-				for (let i = 0; i < ImagesCount; i++) {
-					if (i <= lastIndex) thisUrl = `${dirUL}/${id}${ImagesId}/${ImagesId}-${i}.${thisForamat}`
-					else {
-						formatIndex++
-						lastIndex = ImagesFormats[formatIndex][1]
-						thisForamat = ImagesFormats[formatIndex][2]
-						thisUrl = `${dirUL}/${id}${ImagesId}/${ImagesId}-${i}.${thisForamat}`
-					}
-
-					if (fs.existsSync(thisUrl)) {
-						try {
-							fs.unlinkSync(thisUrl)
-						} catch(err) {
-							loading.hide()
-							error(err)
-							keydownEventIndex = 0
-							return
+				if (ImagesFormats[0] != undefined) {
+					let lastIndex = ImagesFormats[0][1]
+					let thisForamat = ImagesFormats[0][2]
+					for (let i = 0; i < ImagesCount; i++) {
+						if (i <= lastIndex) thisUrl = `${dirUL}/${id}${ImagesId}/${ImagesId}-${i}.${thisForamat}`
+						else {
+							formatIndex++
+							lastIndex = ImagesFormats[formatIndex][1]
+							thisForamat = ImagesFormats[formatIndex][2]
+							thisUrl = `${dirUL}/${id}${ImagesId}/${ImagesId}-${i}.${thisForamat}`
 						}
+	
+						if (fs.existsSync(thisUrl)) {
+							try {
+								fs.unlinkSync(thisUrl)
+							} catch(err) {
+								loading.hide()
+								error(err)
+								keydownEventIndex = 0
+								return
+							}
+						}
+						
+						loading.forward(`Deleting Comic Images (${i+1}/${ImagesCount})...`)
 					}
-					
-					loading.forward(`Deleting Comic Images (${i+1}/${ImagesCount})...`)
 				}
 
 				try {
