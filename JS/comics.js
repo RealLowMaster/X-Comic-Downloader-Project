@@ -550,12 +550,14 @@ function closeComicPanel() {
 	comicPanel.setAttribute('sid', null)
 }
 
+// Repair Comic
 async function repairComicInfo(whitch) {
+	if (window.navigator.onLine == false) { error('Your are Offline.'); return }
 	whitch = whitch || 0
 	const id = Number(comicPanel.getAttribute('cid'))
 	await db.comics.findOne({_id:id}, (err, doc) => {
 		if (err) { error(err); return }
-		if (doc.s == undefined) return
+		if (doc.p == undefined) return
 		if (doc.s == undefined) return
 		eval(sites[doc.s].repair.replace('{id}', `'${doc.p}'`).replace('{whitch}', whitch))
 	})

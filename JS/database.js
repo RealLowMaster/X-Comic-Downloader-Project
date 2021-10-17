@@ -78,7 +78,7 @@ function UpdateCharacterList(comicId, newList) {
 				if (err) { error('CharacterListUpdate: '+err); return }
 			})
 		} else CreateCharacterList(comicId, newList)
-		openComicCharacter(comicId)
+		openComicCharacters(comicId)
 		loading.forward()
 		loading.hide()
 		PopAlert('Comic Characters Has Been Repaired!')

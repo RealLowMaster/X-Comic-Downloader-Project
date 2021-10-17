@@ -1080,3 +1080,160 @@ function nhentaiDownloader(id) {
 		})
 	})
 }
+
+async function nhentaiRepairComicInfoGetInfo(id, whitch) {
+	var comic_id = Number(comicPanel.getAttribute('cid'))
+	var reset = 4
+	if (whitch == 0) reset = 2
+	loading.reset(reset)
+	loading.show('Connecting To Web...')
+	await nhentai.getComic(id, false, (err, result) => {
+		if (err) { loading.hide(); error(err); return }
+		switch (whitch) {
+			case 0:
+				db.comics.update({_id:comic_id}, { $set: {n:result.name.toLowerCase()} }, {}, (err) => {
+					if (err) { loading.hide(); error(err); return }
+					loading.forward('Repairing Name...')
+					document.getElementById('c-p-t').textContent = result.name
+					loading.forward()
+					loading.hide()
+					PopAlert('Comic Name has been Repaired!')
+				})
+				break
+			case 1:
+				var neededResult = result.groups || null
+				if (neededResult == null) {
+					loading.hide()
+					PopAlert('This Comic has no Group.', 'danger')
+					return
+				}
+				loading.forward('Listing Groups...')
+				const groupsList = []
+				for (let i in neededResult) {
+					groupsList.push(neededResult[i].name)
+				}
+				loading.forward('Add Groups To Database...')
+				CreateGroup(groupsList, comic_id, 0, true)
+				break
+			case 2:
+				var neededResult = result.artists || null
+				if (neededResult == null) {
+					loading.hide()
+					PopAlert('This Comic has no Artist.', 'danger')
+					return
+				}
+				loading.forward('Listing Artists...')
+				const artistsList = []
+				for (let i in neededResult) {
+					artistsList.push(neededResult[i].name)
+				}
+				loading.forward('Add Artists To Database...')
+				CreateArtist(artistsList, comic_id, 0, true)
+				break
+			case 3:
+				var neededResult = result.parodies || null
+				if (neededResult == null) {
+					loading.hide()
+					PopAlert('This Comic has no Parody.', 'danger')
+					return
+				}
+				loading.forward('Listing Parodies...')
+				const parodyList = []
+				for (let i in neededResult) {
+					parodyList.push(neededResult[i].name)
+				}
+				loading.forward('Add Parodies To Database...')
+				CreateParody(parodyList, comic_id, 0, true)
+				break
+			case 4:
+				var neededResult = result.tags || null
+				if (neededResult == null) {
+					loading.hide()
+					PopAlert('This Comic has no Tag.', 'danger')
+					return
+				}
+				loading.forward('Listing Tags...')
+				const tagsList = []
+				for (let i in neededResult) {
+					tagsList.push(neededResult[i].name)
+				}
+				loading.forward('Add Tags To Database...')
+				CreateTag(tagsList, comic_id, 0, true)
+				break
+			case 5:
+				loading.hide()
+				var neededResult = result.images || null
+				if (neededResult == null) {
+					PopAlert('This Comic has no Image.', 'danger')
+					openComic(comic_id)
+					return
+				}
+
+				procressPanel.reset(need_repair.length)
+				procressPanel.config({ bgClose:false, closeBtn:false, miniLog:true })
+				procressPanel.show(`Downloading Images (0/${need_repair.length})`)
+
+				const newList = [], saveList = []
+				for (let i = 0; i < need_repair.length; i++) {
+					newList.push(neededResult[need_repair[i][1]].url)
+					saveList.push(need_repair[i][0])
+				}
+
+				ImageListDownloader(newList, 0, saveList, false, err => {
+					if (err) {
+						procressPanel.config({ bgClose:true, closeBtn:true })
+					} else {
+						procressPanel.reset(1)
+					}
+					PopAlert('Comic Undownloaded Images Has Beed Downloaded.')
+					openComic(comic_id)
+				})
+				break
+			case 6:
+				var neededResult = result.characters || null
+				if (neededResult == null) {
+					loading.hide()
+					PopAlert('This Comic has no Characters.', 'danger')
+					return
+				}
+				loading.forward('Listing Characters...')
+				const charactersList = []
+				for (let i in neededResult) {
+					charactersList.push(neededResult[i].name)
+				}
+				loading.forward('Add Characters To Database...')
+				CreateCharacter(charactersList, comic_id, 0, true)
+				break
+			case 7:
+				var neededResult = result.languages || null
+				if (neededResult == null) {
+					loading.hide()
+					PopAlert('This Comic has no Languages.', 'danger')
+					return
+				}
+				loading.forward('Listing Languages...')
+				const languagesList = []
+				for (let i in neededResult) {
+					languagesList.push(neededResult[i].name)
+				}
+				loading.forward('Add Languages To Database...')
+				CreateLanguage(languagesList, comic_id, 0, true)
+				break
+			case 8:
+				var neededResult = result.categories || null
+				if (neededResult == null) {
+					loading.hide()
+					PopAlert('This Comic has no Categories.', 'danger')
+					return
+				}
+				loading.forward('Listing Categories...')
+				const categoriesList = []
+				for (let i in neededResult) {
+					categoriesList.push(neededResult[i].name)
+				}
+				loading.forward('Add Categories To Database...')
+				CreateCategory(categoriesList, comic_id, 0, true)
+				break
+		}
+	})
+}

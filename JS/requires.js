@@ -49,7 +49,7 @@ const sites = [
 		name: 'nhentai',
 		url: 'nhentai.net',
 		home: 'nhentaiChangePage(1, false, true)',
-		repair: 'error("Nhentai is in Demo, Sorry Repair Abillity is Comming Soon! (Next Update)")',
+		repair: 'nhentaiRepairComicInfoGetInfo({id}, {whitch})',
 		search: 'nhentaiSearch({text}, 1, false, true)',
 		jump: 'nhentaiJumpPage({index}, {page})',
 		downloader: 'nhentaiDownloader({id})'

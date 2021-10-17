@@ -1220,7 +1220,7 @@ function xlecxDownloader(id) {
 }
 
 async function xlecxRepairComicInfoGetInfo(id, whitch) {
-	if (window.navigator.onLine == false) { error('Your are Offline.'); return }
+	if (whitch > 5) { PopAlert("This Comic Does not have This Info."); return }
 	var comic_id = Number(comicPanel.getAttribute('cid'))
 	var reset = 4
 	if (whitch == 0) reset = 2
@@ -1232,7 +1232,7 @@ async function xlecxRepairComicInfoGetInfo(id, whitch) {
 			case 0:
 				db.comics.update({_id:comic_id}, { $set: {n:result.title.toLowerCase()} }, {}, (err) => {
 					if (err) { loading.hide(); error(err); return }
-					loading.forward('Repairing Title...')
+					loading.forward('Repairing Name...')
 					document.getElementById('c-p-t').textContent = result.title
 					loading.forward()
 					loading.hide()
