@@ -14,19 +14,23 @@ function test() {
 }
 
 function AfterDatabaseDoneOnStartup() {
-	loading.forward('Set Settings...')
-	setLuanchTimeSettings(false)
-	loading.forward('Set Sites...')
-	SetSite()
-	loading.forward('Load Comics...')
-	loadComics()
-	loading.forward()
-	document.getElementById('main').style.display = 'grid'
-	loading.hide()
-	CheckReleaseNote()
-	document.getElementById('ex-p-l-input').value = remote.app.getPath('downloads')
-	if (setting.check_update) CheckUpdate()
-	if (setting.open_br_startup) openBrowser()
+	try {
+		loading.forward('Set Settings...')
+		setLuanchTimeSettings(false)
+		loading.forward('Set Sites...')
+		SetSite()
+		loading.forward('Load Comics...')
+		loadComics()
+		loading.forward()
+		document.getElementById('main').style.display = 'grid'
+		loading.hide()
+		CheckReleaseNote()
+		document.getElementById('ex-p-l-input').value = remote.app.getPath('downloads')
+		if (setting.check_update) CheckUpdate()
+		if (setting.open_br_startup) openBrowser()
+	} catch(err) {
+		error('Statup->Err: '+err)
+	}
 }
 
 function makeSubFolder(sfComicsDoc, sfLength, index) {
@@ -69,37 +73,41 @@ function makeSubFolder(sfComicsDoc, sfLength, index) {
 document.addEventListener("DOMContentLoaded", () => {
 	loading.show('Getting Setting...', '#fff', '#222')
 
-	ChangeSizes()
+	try {
+		ChangeSizes()
 	
-	GetSettingFile()
-	loading.forward('Getting Directories...')
-	GetDirection()
-	loading.forward('Creating Databases...')
-	CreateDatabase()
-	loading.forward('Checking Settings...')
-	CheckSettings()
-	loading.forward('Set Window Event...')
+		GetSettingFile()
+		loading.forward('Getting Directories...')
+		GetDirection()
+		loading.forward('Creating Databases...')
+		CreateDatabase()
+		loading.forward('Checking Settings...')
+		CheckSettings()
+		loading.forward('Set Window Event...')
 
-	window.onresize = () => { updateTabSize(); ChangeSizes() }
-	tabsContainer.addEventListener('contextmenu', e => {
-		e.preventDefault()
-		if (copiedTab != null && browserTabMenu.style.display == 'none') {
-			browserPasteMenu.style.top = e.clientY+'px'
-			browserPasteMenu.style.right = -(e.clientX - window.innerWidth)+'px'
-			browserPasteMenu.style.display = 'block'
-		}
-	})
-	window.addEventListener('click', () => {
-		browserTabMenu.style.display = 'none'
-		browserPasteMenu.style.display = 'none'
-	})
-	window.addEventListener('keydown', e => {
-		if (keydownEventIndex != null) eval(keydownEvents[keydownEventIndex].replace('{ctrl}', e.ctrlKey).replace('{shift}', e.shiftKey).replace('{key}', e.which))
-	})
+		window.onresize = () => { updateTabSize(); ChangeSizes() }
+		tabsContainer.addEventListener('contextmenu', e => {
+			e.preventDefault()
+			if (copiedTab != null && browserTabMenu.style.display == 'none') {
+				browserPasteMenu.style.top = e.clientY+'px'
+				browserPasteMenu.style.right = -(e.clientX - window.innerWidth)+'px'
+				browserPasteMenu.style.display = 'block'
+			}
+		})
+		window.addEventListener('click', () => {
+			browserTabMenu.style.display = 'none'
+			browserPasteMenu.style.display = 'none'
+		})
+		window.addEventListener('keydown', e => {
+			if (keydownEventIndex != null) eval(keydownEvents[keydownEventIndex].replace('{ctrl}', e.ctrlKey).replace('{shift}', e.shiftKey).replace('{key}', e.which))
+		})
 
-	loading.forward('Indexing...')
-	makeDatabaseIndexs()
-	loading.forward('Comic Indexing...')
+		loading.forward('Indexing...')
+		makeDatabaseIndexs()
+		loading.forward('Comic Indexing...')
+	} catch(err) {
+		error(err)
+	}
 
 	setTimeout(() => {
 		db.index.findOne({_id:1}, (err, doc) => {

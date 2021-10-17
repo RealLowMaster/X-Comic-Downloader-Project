@@ -95,7 +95,10 @@ Add Comic {
 }
 
 Added To Version {
+	Complete Site: nhentai.net
 	Fix Bug: Deleting Fully Crashed Comic Error
+	Update Comic Option Menu UI
+	Add More Error Check To Statup
 }
 
 Doing {
