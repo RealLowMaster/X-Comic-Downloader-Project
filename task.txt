@@ -88,14 +88,15 @@ DB => {
 Add Comic {
 	League Of Legends
 	Aroma Sensei
+	nhentai => Group => Behind Moon
 }
 
 Added To Version {
-	
+	Fix Bug: Deleting Fully Crashed Comic Error
 }
 
 Doing {
-	Fix Bug: Deleting Fully Crashed Comic Error
+	
 }
 
 Tasks => {

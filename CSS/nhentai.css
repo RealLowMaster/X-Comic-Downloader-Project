@@ -113,13 +113,13 @@
 
 .nhentai-postrow > div:last-child > div > div::before {
 	content: "";
-    display: inline-block;
-    vertical-align: middle;
-    float: left;
-    z-index: 2;
-    background-size: contain;
-    width: 18px;
-    height: 12px;
+	display: inline-block;
+	vertical-align: middle;
+	float: left;
+	z-index: 2;
+	background-size: contain;
+	width: 18px;
+	height: 12px;
 }
 
 .nhentai-postrow > div:last-child > div > div[english]::before {
@@ -351,7 +351,7 @@
 .nhentai-info-row > button {
 	display: inline-flex;
 	flex-direction: row;
-    justify-content: center;
+	justify-content: center;
 	margin: 3px;
 	background-color: transparent;
 	font-family: Noto Sans,sans-serif;
@@ -385,6 +385,98 @@
 }
 
 .nhentai-info-row > button:hover > span:not(:first-child) {
+	background-color: #404040;
+}
+
+.nhentai-info-type {
+	display: block;
+	max-width: 1200px;
+	padding: 10px;
+	padding-bottom: 5px;
+	margin: 10px auto;
+	clear: both;
+	background-color: #1f1f1f;
+	text-align: center;
+	columns: 170px;
+	column-rule-width: 1px;
+	column-rule-style: solid;
+	column-rule-color: #2e2e2e;
+}
+
+.nhentai-info-type > section {
+	display: block;
+	border: 1px solid transparent;
+	border-radius: 5px;
+	text-align: center;
+}
+
+.nhentai-info-type > section > h2 {
+	display: block;
+	font-size: 1.5em;
+	margin-block-start: 0.83em;
+	margin-block-end: 0.83em;
+	margin-inline-start: 0px;
+	margin-inline-end: 0px;
+	margin-top: 0;
+	color: #d9d9d9;
+	font-family: Noto Sans,sans-serif;
+	font-size: 1.5em;
+	font-weight: 700;
+	line-height: 1.42857143;
+	text-align: center;
+}
+
+.nhentai-info-type > section > button {
+	display: flex;
+	width: 95%;
+	flex-direction: row;
+	justify-content: center;
+	margin: 1px auto 3px auto;
+	background-color: transparent;
+	vertical-align: middle;
+	-webkit-column-break-inside: avoid;
+	page-break-inside: avoid;
+	cursor: pointer;
+}
+
+.nhentai-info-type > section > button > span:first-child {
+	display: flex;
+	flex: 1;
+	align-items: center;
+	padding: .13em .39em;
+	background-color: #4d4d4d;
+	color: #d9d9d9;
+	border-top-left-radius: .3em;
+	border-bottom-left-radius: .3em;
+	font-family: Noto Sans,sans-serif;
+	font-size: 14px;
+	line-height: 1.42857143;
+	user-select: text;
+}
+
+.nhentai-info-type > section > button > span:last-child {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	min-width: 2.5em;
+	padding: .13em .26em;
+	background-color: #333;
+	color: grey;
+	border-top-right-radius: .3em;
+	border-bottom-right-radius: .3em;
+	font-family: Noto Sans,sans-serif;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 1.42857143;
+	text-align: center;
+	box-shadow: inset 0 0 0.4em #2b2b2b;
+}
+
+.nhentai-info-type > section > button:hover > span:first-child {
+	background-color: #595959;
+}
+
+.nhentai-info-type > section > button:hover > span:last-child {
 	background-color: #404040;
 }
 

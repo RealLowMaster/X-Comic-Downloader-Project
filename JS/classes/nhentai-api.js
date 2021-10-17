@@ -27,8 +27,8 @@ class nHentaiAPI {
 		callback = callback || null
 		const url = this.baseURL+'/?page='+page
 
-		if (callback == null) throw "You can't Set Callback as Null."
-		if (typeof callback != 'function') throw "The Type of Callback Should Be a Function."
+		if (callback == null) { callback("You can't Set Callback as Null.", null); return }
+		if (typeof callback != 'function') { callback("The Type of Callback Should Be a Function.", null); return }
 
 		fetch(url).then(response => {
 			if (response.status != 200) {
@@ -120,13 +120,13 @@ class nHentaiAPI {
 
 	getComic(id = 1, related = false, callback = () => {}) {
 		id = id || null
-		if (id == null) throw "No Id."
+		if (id == null) { callback("You can't Set Id as Null.", null); return }
 		related = related || false
 		callback = callback || null
 		const url = this.baseURL+this.comicURL+id
 
-		if (callback == null) throw "You can't Set Callback as Null."
-		if (typeof callback != 'function') throw "The Type of Callback Should Be a Function."
+		if (callback == null) { callback("You can't Set Callback as Null.", null); return }
+		if (typeof callback != 'function') { callback("The Type of Callback Should Be a Function.", null); return }
 
 		fetch(url).then(response => {
 			if (response.status != 200) {
@@ -322,20 +322,20 @@ class nHentaiAPI {
 	}
 
 	getTypePage(type = 'type', name = 'name', page = 1, callback = () => {}) {
-		if (type == null) throw "You can't Set Type as Null."
+		if (type == null) { callback("You can't Set Type as Null.", null); return }
 		name = name || null
-		if (name == null) throw "You can't Set Name as Null."
+		if (name == null) { callback("You can't Set Name as Null.", null); return }
 		page = page || 1
 		callback = callback || null
 
-		if (callback == null) throw "You can't Set Callback as Null."
-		if (typeof callback != 'function') throw "The Type of Callback Should Be a Function."
+		if (callback == null) { callback("You can't Set Callback as Null.", null); return }
+		if (typeof callback != 'function') { callback("The Type of Callback Should Be a Function.", null); return }
 
 		const types = ['group','parody','artist','tag','language','category','character']
 		let subURL
 
 		const findedIndex = types.indexOf(type.toLowerCase())
-		if (findedIndex == -1) throw "Type not Found."
+		if (findedIndex == -1) { callback("Type not Found.", null); return }
 		else {
 			const typeValues = [this.groupURL,this.parodyURL,this.artistURL,this.tagURL,this.languageURL,this.categoryURL,this.characterURL]
 			subURL = typeValues[findedIndex]
@@ -417,8 +417,8 @@ class nHentaiAPI {
 		page = page || 1
 		callback = callback || null
 
-		if (callback == null) throw "You can't Set Callback as Null."
-		if (typeof callback != 'function') throw "The Type of Callback Should Be a Function."
+		if (callback == null) { callback("You can't Set Callback as Null.", null); return }
+		if (typeof callback != 'function') { callback("The Type of Callback Should Be a Function.", null); return }
 
 		const url = this.baseURL+this.searchURL+'?q=pages%3A>'+from+'+pages%3A<'+to+'&page='+page
 
@@ -493,14 +493,14 @@ class nHentaiAPI {
 
 	search(text = 'name', page = 1, callback = () => {}) {
 		text = text || null
-		if (text == null) throw "No Name."
+		if (text == null) { callback("You can't Set Name as Null.", null); return }
 		text = text.replace(/ /g, '+')
 		page = page || 1
 		callback = callback || null
 		const url = this.baseURL+this.searchURL+'?q='+text+'&page='+page
 
-		if (callback == null) throw "You can't Set Callback as Null."
-		if (typeof callback != 'function') throw "The Type of Callback Should Be a Function."
+		if (callback == null) { callback("You can't Set Callback as Null.", null); return }
+		if (typeof callback != 'function') { callback("The Type of Callback Should Be a Function.", null); return }
 
 		fetch(url).then(response => {
 			if (response.status != 200) {
@@ -562,6 +562,209 @@ class nHentaiAPI {
 					save2 = Number(child[i].getAttribute('href').replace(this.searchURL, '').replace('?q=', '').replace(text, '').replace('&page=', ''))
 					arr.pagination.push([save, save2])
 				}
+			}
+
+			callback(null, arr)
+		}).catch(err => {
+			if (err == 'TypeError: Failed to fetch') err = 'Connection Timeout, Check Internet Connection.'
+			callback(err, null)
+		})
+	}
+
+	getAllInfoType(type = 'type', callback = () => {}) {
+		if (type == null) { callback("You can't Set Type as Null.", null); return }
+		callback = callback || null
+
+		if (callback == null) { callback("You can't Set Callback as Null.", null); return }
+		if (typeof callback != 'function') { callback("The Type of Callback Should Be a Function.", null); return }
+
+		const types = ['tag','artist','character','parody','group']
+		let subURL, subURLName
+
+		const findedIndex = types.indexOf(type.toLowerCase())
+		if (findedIndex == -1) { callback("Type not Found.", null); return }
+		else {
+			const typeValues = ['/tags/','/artists/','/characters/','/parodies/','/groups/']
+			const typeSubValues = [this.tagURL,this.artistURL,this.characterURL,this.parodyURL,this.groupURL]
+			subURL = typeValues[findedIndex]
+			subURLName = typeSubValues[findedIndex]
+		}
+
+		const save_url = this.baseURL+subURL+'?page='
+		const url = save_url+1
+
+		fetch(url).then(response => {
+			if (response.status != 200) {
+				const index = this.#status.indexOf(response.status)
+				if (index > -1) throw this.#statusMessage[index]
+				else throw "Error->Code->"+response.status
+			}
+			return response.text()
+		}).then(html => {
+			const htmlDoc = new DOMParser().parseFromString(html, 'text/html')
+			const arr = []
+			let child, save, save2, save3
+			
+			save = htmlDoc.getElementById('tag-container')
+			if (save != undefined) {
+				save = save.children
+
+				for (let i = 0; i < save.length; i++) {
+					child = save[i].getElementsByTagName('a')
+					for (let j = 0; j < child.length; j++) {
+						save2 = child[j].children
+
+						arr.push({
+							url: child[j].getAttribute('href').replace(subURLName, '').replace('/', ''),
+							name: save2[0].innerText,
+							count: save2[1].innerText
+						})
+					}
+				}
+
+				// Pagination
+				save = htmlDoc.getElementsByClassName('pagination')[0].getElementsByClassName('last')[0]
+				const pageCount = Number(save.getAttribute('href').replace(subURL, '').replace('?page=', ''))
+
+				this.#getAllInfoTypeOtherPages(subURL, subURLName, 2, pageCount, arr, callback)
+
+			} else {
+				callback("Nothing Has Been Found.", null)
+				return
+			}
+		}).catch(err => {
+			if (err == 'TypeError: Failed to fetch') err = 'Connection Timeout, Check Internet Connection.'
+			callback(err, null)
+		})
+	}
+
+	#getAllInfoTypeOtherPages(subURL, subURLName, page, max, arr, callback) {
+		const url = this.baseURL+subURL+'?page='+page
+
+		fetch(url).then(response => {
+			if (response.status != 200) {
+				const index = this.#status.indexOf(response.status)
+				if (index > -1) throw this.#statusMessage[index]
+				else throw "Error->Code->"+response.status
+			}
+			return response.text()
+		}).then(html => {
+			const htmlDoc = new DOMParser().parseFromString(html, 'text/html')
+			let child, save, save2
+			
+			save = htmlDoc.getElementById('tag-container')
+			if (save != undefined) {
+				save = save.children
+
+				for (let i = 0; i < save.length; i++) {
+					child = save[i].getElementsByTagName('a')
+					for (let j = 0; j < child.length; j++) {
+						save2 = child[j].children
+
+						arr.push({
+							url: child[j].getAttribute('href').replace(subURLName, '').replace('/', ''),
+							name: save2[0].innerText,
+							count: save2[1].innerText
+						})
+					}
+				}
+
+				if (page == max) callback(null, arr)
+				else this.#getAllInfoTypeOtherPages(subURL, subURLName, page + 1, max, arr, callback)
+			} else {
+				callback(null, arr)
+				return
+			}
+		}).catch(err => {
+			if (err == 'TypeError: Failed to fetch') err = 'Connection Timeout, Check Internet Connection.'
+			callback(err, null)
+		})
+	}
+
+	getInfoType(type = 'type', page = 1, callback = () => {}) {
+		if (type == null) { callback("You can't Set Type as Null.", null); return }
+		page = page || 1
+		callback = callback || null
+
+		if (callback == null) { callback("You can't Set Callback as Null.", null); return }
+		if (typeof callback != 'function') { callback("The Type of Callback Should Be a Function.", null); return }
+
+		const types = ['tag','artist','character','parody','group']
+		let subURL, subURLName
+
+		const findedIndex = types.indexOf(type.toLowerCase())
+		if (findedIndex == -1) { callback("Type not Found.", null); return }
+		else {
+			const typeValues = ['/tags/','/artists/','/characters/','/parodies/','/groups/']
+			const typeSubValues = [this.tagURL,this.artistURL,this.characterURL,this.parodyURL,this.groupURL]
+			subURL = typeValues[findedIndex]
+			subURLName = typeSubValues[findedIndex]
+		}
+
+		const url = this.baseURL+subURL+'?page='+page
+
+		fetch(url).then(response => {
+			if (response.status != 200) {
+				const index = this.#status.indexOf(response.status)
+				if (index > -1) throw this.#statusMessage[index]
+				else throw "Error->Code->"+response.status
+			}
+			return response.text()
+		}).then(html => {
+			const htmlDoc = new DOMParser().parseFromString(html, 'text/html')
+			const arr = []
+			let child, save, save2, save3
+			
+			save = htmlDoc.getElementById('tag-container')
+			if (save != undefined) {
+				arr.content = []
+				save = save.children
+
+				for (let i = 0; i < save.length; i++) {
+					arr.content.push({
+						name: save[i].getElementsByTagName('h2')[0].innerText,
+						info: []
+					})
+					child = save[i].getElementsByTagName('a')
+					for (let j = 0; j < child.length; j++) {
+						save2 = child[j].children
+
+						arr.content[i].info.push({
+							url: child[j].getAttribute('href').replace(subURLName, '').replace('/', ''),
+							name: save2[0].innerText,
+							count: save2[1].innerText
+						})
+					}
+				}
+
+				// Pagination
+				arr.pagination = null
+				child = htmlDoc.getElementsByClassName('pagination')
+				if (child.length > 0) {
+					arr.pagination = []
+					child = child[0].children
+					for (let i = 0; i < child.length; i++) {
+
+						save3 = child[i].classList
+						if (save3.contains('page')) {
+							if (save3.contains('current')) { arr.pagination.push([child[i].innerText, null]); continue }
+							else save = child[i].innerText
+						} else {
+							if (save3[0] == 'first') save = '<<'
+							else if (save3[0] == 'previous') save = '<'
+							else if (save3[0] == 'next') save = '>'
+							else if (save3[0] == 'last') save = '>>'
+							else continue
+						}
+
+						save2 = Number(child[i].getAttribute('href').replace(subURL, '').replace('?page=', ''))
+						arr.pagination.push([save, save2])
+					}
+				}
+
+			} else {
+				callback("Nothing Has Been Found.", null)
+				return
 			}
 
 			callback(null, arr)

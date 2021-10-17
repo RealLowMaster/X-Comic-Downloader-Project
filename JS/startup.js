@@ -11,6 +11,11 @@ function ChangeSizes() {
 
 function test() {
 	//sharp('Image/sites/nhentai.png').png({ quality: 100 }).resize(30,30).toFile('Image/sites/nhentai-30x30.png')
+
+	nhentai.getInfoType('tag', 1, (err, result) => {
+		console.log(err)
+		console.log(result)
+	})
 }
 
 function AfterDatabaseDoneOnStartup() {
