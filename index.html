@@ -103,19 +103,23 @@
 	</div>
 
 	<!-- Comic Action Panel -->
-	<div class="comic-action-panel" id="comic-action-panel">
+	<div id="comic-action-panel">
 		<div onclick="this.parentElement.style.display='none';keydownEventIndex = 1"></div>
 		<div>
-			<button onclick="makeThumbForAComic(Number(comicPanel.getAttribute('cid')), 100)" class="success-action" id="c-a-p-o-t" title="Make Thumb for faster loading in Overview">Make Thumb</button>
-			<button onclick="OptimizeComicImages(Number(comicPanel.getAttribute('cid')), true, 1)" class="success-action" id="c-a-p-o-b" title="Optimize Image For faster loading and Lower Space taken (May Take Time)">Optimize Images</button>
-			<button onclick="openComicExportPanel(Number(comicPanel.getAttribute('cid')))" title="Export Comic | Ctrl+E">Export</button>
-			<button onclick="repairComicInfo(0)" title="Repair Comic Title">Repair Comic Name</button>
-			<button onclick="repairComicInfo(1)" title="Repair Comic Groups if Have">Repair Comic Groups</button>
-			<button onclick="repairComicInfo(2)" title="Repair Comic Artists if Have">Repair Comic Artists</button>
-			<button onclick="repairComicInfo(3)" title="Repair Comic Parodies if Have">Repair Comic Parodies</button>
-			<button onclick="repairComicInfo(4)" title="Repair Comic Tags if Have">Repair Comic Tags</button>
-			<button onclick="repairComicInfo(5)" style="display:none">Repair Comic Images</button>
-			<button onclick="askForDeletingComic(Number(comicPanel.getAttribute('cid')))" class="danger-action" title="Fully Delete Comic">Delete Image</button>
+			<div>
+				<button onclick="repairComicInfo(0)" title="Repair Comic Title">Repair Comic Name</button>
+				<button onclick="repairComicInfo(1)" title="Repair Comic Groups if Have">Repair Comic Groups</button>
+				<button onclick="repairComicInfo(2)" title="Repair Comic Artists if Have">Repair Comic Artists</button>
+				<button onclick="repairComicInfo(3)" title="Repair Comic Parodies if Have">Repair Comic Parodies</button>
+				<button onclick="repairComicInfo(4)" title="Repair Comic Tags if Have">Repair Comic Tags</button>
+				<button onclick="repairComicInfo(5)" style="display:none">Repair Comic Images</button>
+			</div>
+			<div>
+				<button onclick="makeThumbForAComic(Number(comicPanel.getAttribute('cid')), 100)" class="success-action" id="c-a-p-o-t" title="Make Thumb for faster loading in Overview">Make Thumb</button>
+				<button onclick="OptimizeComicImages(Number(comicPanel.getAttribute('cid')), true, 1)" class="success-action" id="c-a-p-o-b" title="Optimize Image For faster loading and Lower Space taken (May Take Time)">Optimize Images</button>
+				<button onclick="openComicExportPanel(Number(comicPanel.getAttribute('cid')))" title="Export Comic | Ctrl+E">Export</button>
+				<button onclick="askForDeletingComic(Number(comicPanel.getAttribute('cid')))" class="danger-action" title="Fully Delete Comic">Delete Image</button>
+			</div>
 		</div>
 	</div>
 

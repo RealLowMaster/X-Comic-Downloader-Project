@@ -866,8 +866,8 @@ input::-webkit-input-placeholder { user-select: none }
 
 #b-h-p-o-btn:hover > button {
 	background-color: var(--br-h-con-option-hover-btn-bgc);
-    color: var(--br-h-con-option-hover-btn-color);
-    border-color: var(--br-h-con-option-hover-btn-bgc);
+	color: var(--br-h-con-option-hover-btn-color);
+	border-color: var(--br-h-con-option-hover-btn-bgc);
 	border-radius: 50% 0 0 50%;
 	transform: rotate(90deg);
 }
@@ -1396,8 +1396,8 @@ input::-webkit-input-placeholder { user-select: none }
 }
 
 /* Comic Action Panel */
-.comic-action-panel,
-.comic-action-panel > div:first-child {
+#comic-action-panel,
+#comic-action-panel > div:first-child {
 	display: block;
 	width: 100%;
 	height: 100%;
@@ -1407,73 +1407,81 @@ input::-webkit-input-placeholder { user-select: none }
 	left: 0;
 }
 
-.comic-action-panel {
+#comic-action-panel {
 	display: none;
 	justify-content: center;
 	align-items: center;
 }
 
-.comic-action-panel > div:first-child {
-	background-color: #222a !important;
+#comic-action-panel > div:first-child {
+	background-color: #000c !important;
 	position: absolute !important;
 }
 
-.comic-action-panel > div:last-child {
-	display: block;
-	width: 400px;
-	height: 300px;
-	background-color: #fff;
-	overflow-y: auto;
-	box-shadow: 1px 10px 10px 0 rgba(255,255,255,0.7);
+#comic-action-panel > div:last-child {
+	display: grid;
+	grid-template-columns: 6fr 6fr;
+	height: 400px;
 	z-index: +1;
 }
 
-.comic-action-panel > div:last-child > button {
+#comic-action-panel > div:last-child > div {
+	width: 300px;
+	height: 100%;
+	margin: 0 5px;
+	padding: 10px;
+	background-color: #fff;
+	border-radius: 5px;
+	box-shadow: 9px 7px 40px -6px rgba(0,0,0,.25);
+}
+
+#comic-action-panel > div:last-child > div > button {
 	display: block;
 	width: 100%;
 	padding: 10px;
-	background-color: #fff;
+	margin: 5px 0;
+	background-color: #fffa;
 	color: #222;
-	border-bottom: 1px solid #eee;
+	border-radius: 5px;
 	cursor: pointer;
 	box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1);
 	transition: background-color .2s, color .2s;
 }
 
-.comic-action-panel > div:last-child > button:hover {
+#comic-action-panel > div:last-child > div > button:hover {
 	background-color: #eee;
 	color: #111;
 }
 
-.comic-action-panel > div:last-child > .danger-action {
+#comic-action-panel > div:last-child > div > .danger-action {
 	background-color: #C0392B;
 	border-color: #A93226;
 	color: #fff;
 }
 
-.comic-action-panel > div:last-child > .danger-action:hover {
+#comic-action-panel > div:last-child > div > .danger-action:hover {
 	background-color: #A93226;
 	border-color: #C0392B;
 	color: #fff;
 }
 
-.comic-action-panel > div:last-child > .success-action {
+#comic-action-panel > div:last-child > div > .success-action {
 	background-color: #28B463;
 	border-color: #229954;
 }
 
-.comic-action-panel > div:last-child > .success-action:hover {
+#comic-action-panel > div:last-child > div > .success-action:hover {
 	background-color: #1E8449;
 	border-color: #196F3D;
 }
 
-.comic-action-panel > div:last-child > .warning-action {
+#comic-action-panel > div:last-child > div > .warning-action {
 	background-color: #ff7b00;
 	border-color: #E67E22;
 	color: #fff;
 }
 
-.comic-action-panel > div:last-child > .warning-action:hover {
+#comic-action-panel > div:last-child > div > .warning-action:hover {
 	background-color: #D68910;
 	border-color: #CA6F1E;
 }
@@ -1570,26 +1578,26 @@ input::-webkit-input-placeholder { user-select: none }
 #c-s-ov > button::after {
 	--color: #fff;
 
-    content: "";
-    position: absolute;
-    height: 7px;
-    width: 20px;
-    bottom: 0;
+	content: "";
+	position: absolute;
+	height: 7px;
+	width: 20px;
+	bottom: 0;
 	transition: box-shadow .2s;
 }
 
 #c-s-ov > button::after {
 	top: 0;
-    right: -20px;
-    border-radius: 7px 0 0 0;
-    box-shadow: -7px 0 0 0 var(--color);
+	right: -20px;
+	border-radius: 7px 0 0 0;
+	box-shadow: -7px 0 0 0 var(--color);
 }
 
 #c-s-ov > button::before {
 	top: 0;
-    left: -20px;
-    border-radius: 0 7px 0 0;
-    box-shadow: 7px 0 0 0 var(--color);
+	left: -20px;
+	border-radius: 0 7px 0 0;
+	box-shadow: 7px 0 0 0 var(--color);
 }
 
 #c-s-ov > button:hover {

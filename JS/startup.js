@@ -11,11 +11,6 @@ function ChangeSizes() {
 
 function test() {
 	//sharp('Image/sites/nhentai.png').png({ quality: 100 }).resize(30,30).toFile('Image/sites/nhentai-30x30.png')
-
-	nhentai.getRandom((err, result) => {
-		console.error(err)
-		console.log(result)
-	})
 }
 
 function AfterDatabaseDoneOnStartup() {
