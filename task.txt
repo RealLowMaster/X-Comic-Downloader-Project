@@ -106,9 +106,6 @@ Doing {
 }
 
 Tasks => {
-	Fix Stucking At Loading
-	Remove loading spin from tabname when error
-
 	Optimize Gifs
 	Optimize offlineChangePage()
 	Make New History System
