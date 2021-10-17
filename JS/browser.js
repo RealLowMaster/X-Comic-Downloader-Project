@@ -427,12 +427,13 @@ function MakeDownloadList(index, name, id, list) {
 	const downloader = document.getElementById('downloader')
 	downloader.style.display = 'block'
 	const element = document.createElement('div')
+	const fullname = name
 	if (name.length > 19) name = name.substr(0, 16)+'...'
 
 	SetDownloaderList(index, id)
 	element.setAttribute('id', downloadingList[index][2])
 	element.setAttribute('i', index)
-	element.innerHTML = `<img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"><p>${name.replace(/</g, ' ').replace(/>/g, ' ')} <span>(0/${list.length})</span></p><div><div></div></div><button onclick="cancelDownload(${index})">x</button>`
+	element.innerHTML = `<img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"><p title="${fullname.replace(/"/g, ' ').replace(/'/g, ' ')}">${name.replace(/</g, ' ').replace(/>/g, ' ')} <span>(0/${list.length})</span></p><div><div></div></div><button onclick="cancelDownload(${index})">x</button>`
 	downloader.appendChild(element)
 	downloadingList[index][1] = list
 

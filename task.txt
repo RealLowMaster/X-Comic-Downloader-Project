@@ -89,6 +89,9 @@ Add Comic {
 	League Of Legends
 	Aroma Sensei
 	nhentai => Group => Behind Moon
+	nhentai => Artist => Binbi
+	nhentai => Comic => Juukan Kyoushitsu - Bestiality Classroom
+	nhentai => Kemono DIRECT
 }
 
 Added To Version {

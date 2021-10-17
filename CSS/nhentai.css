@@ -504,3 +504,15 @@
 	color: #E67E22;
 	text-shadow: 0 0 10px #E67E22;
 }
+
+.nhentai-error {
+	display: block;
+	width: 90%;
+	margin: 20px auto;
+	padding: 25px;
+	background-color: #1f1f1f;
+	color: #d9d9d9;
+	font-weight: 700;
+	font-size: 22px;
+	text-align: center;
+}
