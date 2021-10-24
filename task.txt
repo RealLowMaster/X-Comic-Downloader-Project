@@ -104,6 +104,7 @@ Added To Version {
 
 Doing {
 	Add More Detail Error Check To Startup
+	Update Procress Menu (Optimization Menu etc...) UI
 }
 
 Tasks => {

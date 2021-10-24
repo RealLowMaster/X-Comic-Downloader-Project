@@ -2012,7 +2012,7 @@ input::-webkit-input-placeholder { user-select: none }
 	display: block;
 	width: 100%;
 	height: 100%;
-	background-color: #000e;
+	background-color: #000c;
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -2044,9 +2044,10 @@ input::-webkit-input-placeholder { user-select: none }
 	flex-flow: row;
 	width: calc(100% - 80px);
 	height: calc(100% - 80px);
-	background-color: #fff;
-	border: 1px solid #ddd;
-	box-shadow: 0 0 10px rgba(255,255,255,.5);
+	/* background-color: #fff; */
+	/* border: 1px solid #ddd; */
+	/* border-radius: 5px; */
+	/* box-shadow: 9px 7px 40px -6px rgba(0,0,0,.25); */
 	z-index: +1;
 }
 
@@ -2057,7 +2058,10 @@ input::-webkit-input-placeholder { user-select: none }
 	padding: 7px;
 	max-width: 30%;
 	height: 100%;
+	background-color: #fff;
+	border-radius: 5px;
 	overflow-y: auto;
+	box-shadow: 9px 7px 40px -6px rgba(0,0,0,.25);
 }
 
 .procress-panel[mini] > div:last-child > div:first-child {
@@ -2071,11 +2075,15 @@ input::-webkit-input-placeholder { user-select: none }
 	flex: 0 0 100%;
 	max-width: 100%;
 	height: 100%;
+	background-color: #fff;
+	border-radius: 5px;
+	box-shadow: 9px 7px 40px -6px rgba(0,0,0,.25);
 }
 
 .procress-panel[mini] > div:last-child > div:last-child {
 	flex: 0 0 70%;
 	max-width: 70%;
+	margin-left: 10px;
 }
 
 .procress-panel > div:last-child > div:last-child > div:first-child {
@@ -2121,16 +2129,20 @@ input::-webkit-input-placeholder { user-select: none }
 	width: 100%;
 	height: auto;
 	padding: 10px;
-	margin: 0;
+	margin: 2px 0;
 	background-color: transparent;
 	color: #222;
 	border: 1px solid transparent;
+	border-radius: 7px;
+	cursor: pointer;
+	box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1);
+	transition: background-color .2s, color .2s;
 }
 
 .pp-success {
-	background-color: #1D8348;
-	color: #fff;
-	border-color: #196F3D;
+	background-color: #28B463;
+	color: #000;
+	border-color: #229954;
 }
 
 .pp-danger {
@@ -2140,9 +2152,9 @@ input::-webkit-input-placeholder { user-select: none }
 }
 
 .pp-warning {
-	background-color: #E67E22;
+	background-color: #ff7b00;
 	color: #fff;
-	border-color: #CA6F1E;
+	border-color: #E67E22;
 }
 
 /* Export Panel */
