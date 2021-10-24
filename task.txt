@@ -90,8 +90,9 @@ Add Comic {
 	Aroma Sensei
 	nhentai => Group => Behind Moon
 	nhentai => Artist => Binbi
-	nhentai => Comic => Juukan Kyoushitsu - Bestiality Classroom
+	nhentai => Artist => Chikiko
 	nhentai => Kemono DIRECT
+	nhentai => Group => Piririnegi
 }
 
 Added To Version {
@@ -102,10 +103,12 @@ Added To Version {
 }
 
 Doing {
-	
+	Add More Detail Error Check To Startup
 }
 
 Tasks => {
+	Add Ability To Change Comic Name
+	Fix Bug: Downloading xlecx => Morning Stretches
 	Optimize Gifs
 	Optimize offlineChangePage()
 	Make New History System

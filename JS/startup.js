@@ -17,19 +17,60 @@ function AfterDatabaseDoneOnStartup() {
 	try {
 		loading.forward('Set Settings...')
 		setLuanchTimeSettings(false)
+	} catch(err) {
+		error("Startup->SetLuanchSetting->Err: "+err);
+	}
+
+	try {
 		loading.forward('Set Sites...')
 		SetSite()
+	} catch(err) {
+		error("Startup->SetSites->Err: "+err);
+	}
+
+	try {
 		loading.forward('Load Comics...')
 		loadComics()
+	} catch(err) {
+		error("Startup->LoadComics->Err: "+err);
+	}
+
+	try {
+
+	} catch(err) {
+		error("Startup->->Err: "+err);
+	}
+
+	try {
 		loading.forward()
 		document.getElementById('main').style.display = 'grid'
 		loading.hide()
+	} catch(err) {
+		error("Startup->HideLoading->Err: "+err);
+	}
+
+	try {
 		CheckReleaseNote()
+	} catch(err) {
+		error("Startup->CheckReleaseNote->Err: "+err);
+	}
+
+	try {
 		document.getElementById('ex-p-l-input').value = remote.app.getPath('downloads')
+	} catch(err) {
+		error("Startup->SetExportPath->Err: "+err);
+	}
+
+	try {
 		if (setting.check_update) CheckUpdate()
+	} catch(err) {
+		error("Startup->CheckUpdate->Err: "+err);
+	}
+
+	try {
 		if (setting.open_br_startup) openBrowser()
 	} catch(err) {
-		error('Statup->Err: '+err)
+		error("Startup->OpenBrowser->Err: "+err);
 	}
 }
 
@@ -75,14 +116,38 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	try {
 		ChangeSizes()
-	
+	} catch(err) {
+		error("Startup->ChangingSizes->Err: "+err);
+	}
+
+	try {
 		GetSettingFile()
+	} catch(err) {
+		error("Startup->GettingSettingFile->Err: "+err);
+	}
+
+	try {
 		loading.forward('Getting Directories...')
 		GetDirection()
+	} catch(err) {
+		error("Startup->GetDirections->Err: "+err);
+	}
+
+	try {
 		loading.forward('Creating Databases...')
 		CreateDatabase()
+	} catch(err) {
+		error("Startup->CreateDatabase->Err: "+err);
+	}
+
+	try {
 		loading.forward('Checking Settings...')
 		CheckSettings()
+	} catch(err) {
+		error("Startup->CheckSettings->Err: "+err);
+	}
+
+	try {
 		loading.forward('Set Window Event...')
 
 		window.onresize = () => { updateTabSize(); ChangeSizes() }
@@ -94,6 +159,11 @@ document.addEventListener("DOMContentLoaded", () => {
 				browserPasteMenu.style.display = 'block'
 			}
 		})
+	} catch(err) {
+		error("Startup->SetWindowEvents->Err: "+err);
+	}
+
+	try {
 		window.addEventListener('click', () => {
 			browserTabMenu.style.display = 'none'
 			browserPasteMenu.style.display = 'none'
@@ -101,13 +171,18 @@ document.addEventListener("DOMContentLoaded", () => {
 		window.addEventListener('keydown', e => {
 			if (keydownEventIndex != null) eval(keydownEvents[keydownEventIndex].replace('{ctrl}', e.ctrlKey).replace('{shift}', e.shiftKey).replace('{key}', e.which))
 		})
+	} catch(err) {
+		error("Startup->SetClickEvents->Err: "+err);
+	}
 
+	try {
 		loading.forward('Indexing...')
 		makeDatabaseIndexs()
-		loading.forward('Comic Indexing...')
 	} catch(err) {
-		error(err)
+		error("Startup->MakeDatabaseIndexes->Err: "+err);
 	}
+
+	loading.forward('Comic Indexing...')
 
 	setTimeout(() => {
 		db.index.findOne({_id:1}, (err, doc) => {
