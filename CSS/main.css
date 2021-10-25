@@ -462,6 +462,32 @@ input::-webkit-input-placeholder { user-select: none }
 	border-color: var(--br-tab-active-bd-color);
 }
 
+.browser-tab[active] {
+	position: relative;
+}
+
+.browser-tab[active]::before {
+	content: '';
+	width: 10px;
+    height: 10px;
+    position: absolute;
+	left: -12px;
+    bottom: 0;
+	border-radius: 0 0 7px 0;
+	box-shadow: 7px 2px 0 0 var(--br-tab-active-bgc);
+}
+
+.browser-tab[active]::after {
+	content: '';
+	width: 10px;
+    height: 10px;
+    position: absolute;
+	right: -12px;
+    bottom: 0;
+	border-radius: 0 0 0 7px;
+	box-shadow: -7px 2px 0 0 var(--br-tab-active-bgc);
+}
+
 .browser-tab:not([active]):hover { opacity: 0.7 }
 
 .browser-tab > span {
@@ -1969,7 +1995,7 @@ input::-webkit-input-placeholder { user-select: none }
 	background-color: transparent;
 	color: #222;
 	border: 1px solid transparent;
-	border-radius: 3px;
+	border-radius: 4px;
 	font-size: 16px;
 	font-weight: 300;
 	position: fixed;
@@ -2490,7 +2516,7 @@ input::-webkit-input-placeholder { user-select: none }
 	background-color: #ddd;
 	color: #222;
 	border: 1px solid #ccc;
-	border-radius: 5px !important;
+	border-radius: 4px !important;
 	font-size: 16px !important;
 	font-weight: 600 !important;
 	text-shadow: 0 0 5px rgba(0,0,0,0.3) !important;
