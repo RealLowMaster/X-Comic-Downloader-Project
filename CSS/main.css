@@ -1189,6 +1189,7 @@ input::-webkit-input-placeholder { user-select: none }
 	padding: 5px;
 	margin: 10px 5px;
 	background-color: var(--obr-comic-bgc);
+	border-radius: 3px;
 	position: relative;
 	cursor: pointer;
 	transition: background-color .2s;
@@ -1204,12 +1205,14 @@ input::-webkit-input-placeholder { user-select: none }
 	width: 225px;
 	height: 315px;
 	margin-bottom: 7px;
+	border-radius: 4px;
 	object-fit: cover;
 	object-position: center;
 	user-select: none;
 }
 
 .comic > span {
+	display: none;
 	min-width: 35px;
 	padding: 7px;
 	background-color: var(--obr-comic-num-bgc);
@@ -1230,6 +1233,7 @@ input::-webkit-input-placeholder { user-select: none }
 	margin: 5px auto 0 auto;
 	background-color: var(--obr-comic-text-bgc);
 	color: var(--obr-comic-text-color);
+	border-radius: 3px;
 	font-size: 16px;
 	line-height: 1.4;
 	text-transform: capitalize;
@@ -1239,6 +1243,8 @@ input::-webkit-input-placeholder { user-select: none }
 .comic:hover {
 	background-color: var(--obr-comic-hover-bgc)
 }
+
+.comic:hover > span { display: block }
 
 /* Comics Counter */
 #comics-counter {

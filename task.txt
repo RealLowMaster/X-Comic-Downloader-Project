@@ -104,9 +104,11 @@ Added To Version {
 
 Doing {
 	Add More Detail Error Check To Startup
+	Add Red, Orange, Purple, Yellow and Gray Theme To Pagination
 	Update Procress Menu (Optimization Menu etc...) UI
 	Update Offline Comic Right Click Menu UI
 	Update Pagination UI
+	Update Offline Comic Overview UI
 }
 
 Tasks => {
