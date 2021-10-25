@@ -45,14 +45,16 @@ function setLuanchTimeSettings(reloadSettingPanel) {
 	document.getElementById('s_check_update').checked = setting.check_update
 	document.getElementById('s_auto_close_optimize_panel').checked = setting.auto_close_optimize_panel
 	document.getElementById('s_open_br_startup').checked = setting.open_br_startup
+	document.getElementById('s_show_comic_pages').checked = setting.show_comic_pages
 
 	s_file_location.setAttribute('location', setting.file_location)
 	const s_file_location_label = s_file_location.parentElement.parentElement.children[0]
 
-	if (setting.file_location.match(/[\\]/g).length > 1)
-		s_file_location_label.textContent = setting.file_location.substr(0,2)+'\\...\\'+lastSlash(setting.file_location, '\\')
-	else
-		s_file_location_label.textContent = setting.file_location
+	if (setting.show_comic_pages) document.getElementById('comic-container').setAttribute('show-pages', true)
+	else document.getElementById('comic-container').removeAttribute('show-pages')
+
+	if (setting.file_location.match(/[\\]/g).length > 1) s_file_location_label.textContent = setting.file_location.substr(0,2)+'\\...\\'+lastSlash(setting.file_location, '\\')
+	else s_file_location_label.textContent = setting.file_location
 	s_file_location_label.setAttribute('title', setting.file_location)
 
 	if (reloadSettingPanel != true) {
@@ -115,6 +117,10 @@ function saveSetting(justSave) {
 		setting.check_update = document.getElementById('s_check_update').checked
 		setting.auto_close_optimize_panel = document.getElementById('s_auto_close_optimize_panel').checked
 		setting.open_br_startup = document.getElementById('s_open_br_startup').checked
+		setting.show_comic_pages = document.getElementById('s_show_comic_pages').checked
+
+		if (setting.show_comic_pages) document.getElementById('comic-container').setAttribute('show-pages', true)
+		else document.getElementById('comic-container').removeAttribute('show-pages')
 
 		if (show_unoptimize != setting.show_unoptimize) {
 			reloadLoadingComics()

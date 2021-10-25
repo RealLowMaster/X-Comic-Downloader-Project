@@ -1097,6 +1097,8 @@ input::-webkit-input-placeholder { user-select: none }
 	text-align: center;
 }
 
+#comic-container[show-pages] .comic > span { display: block !important }
+
 #c-c-r-c-p {
 	display: none;
 	width: 170px;

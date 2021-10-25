@@ -13,6 +13,7 @@ const defaultSetting = {
 	"browser_theme": 1,
 	"waiting_quality": 1,
 	"hover_downloader": false,
+	"show_comic_pages": false,
 	"max_per_page": 18,
 	"img_graphic": 1,
 	"notification_download_finish": false,
