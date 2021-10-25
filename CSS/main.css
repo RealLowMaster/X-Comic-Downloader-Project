@@ -432,14 +432,6 @@ input::-webkit-input-placeholder { user-select: none }
 	height: 100%;
 }
 
-.borwser-add-tab-btn > svg > g > path:first-child {
-	fill: #000;
-}
-
-.borwser-add-tab-btn > svg > g > path:last-child {
-	fill: #555;
-}
-
 .borwser-add-tab-btn:hover {
 	transform: rotate(360deg);
 	background-color: #eee;
@@ -2518,6 +2510,7 @@ input::-webkit-input-placeholder { user-select: none }
 	background-color: transparent;
 	color: #222;
 	border: 1px solid transparent;
+	border-radius: 3px;
 	cursor: pointer;
 	transition: background-color .2s, border-color .2s, color .2s;
 }

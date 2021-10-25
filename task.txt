@@ -96,19 +96,16 @@ Add Comic {
 }
 
 Added To Version {
-	Complete Site: nhentai.net
-	Fix Bug: Deleting Fully Crashed Comic Error
-	Update Comic Option Menu UI
-	Add More Error Check To Statup
-}
-
-Doing {
 	Add More Detail Error Check To Startup
 	Add Red, Orange, Purple, Yellow and Gray Theme To Pagination
 	Update Procress Menu (Optimization Menu etc...) UI
 	Update Offline Comic Right Click Menu UI
 	Update Pagination UI
 	Update Offline Comic Overview UI
+}
+
+Doing {
+	Update Icons Part 1++
 }
 
 Tasks => {
