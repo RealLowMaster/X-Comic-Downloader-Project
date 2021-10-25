@@ -15,14 +15,20 @@ const offline_theme_themes = [
 // Pagination Themes
 const pagination_theme_var = ['--pgnt-btn-bgc','--pgnt-btn-color','--pgnt-btn-bd-color','--pgnt-btn-hover-bgc','--pgnt-btn-hover-color','--pgnt-btn-hover-bd-color','--pgnt-btn-disable-bd-color']
 const pagination_theme_themes = [
-	[
+	[ // Blue
 		'#EBF5FB','#222','#D6EAF8','#3498DB','#fff','#D6EAF8','#2E86C1'
 	],
-	[
+	[ // Green
 		'#E9F7EF','#222','#D4EFDF','#229954','#fff','#D4EFDF','#1E8449'
 	],
-	[
+	[ // Red
 		'#FDEDEC','#222','#FADBD8','#E74C3C','#fff','#FADBD8','#C0392B'
+	],
+	[ // Orange
+		'#FBEEE6','#222','#F6DDCC','#E67E22','#fff','#F6DDCC','#D35400'
+	],
+	[ // Purple
+		'#F4ECF7','#222','#E8DAEF','#9B59B6','#fff','#E8DAEF','#8E44AD'
 	]
 ]
 
