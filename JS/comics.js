@@ -717,7 +717,7 @@ function deleteComic(id) {
 			const site = doc.s
 			const post_id = doc.p
 			
-			loading.reset(3 + ImagesCount)
+			loading.reset(11 + ImagesCount)
 			loading.show('Removing Comic From Database...')
 	
 			const fix_removed_index = () => {
