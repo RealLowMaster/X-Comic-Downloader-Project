@@ -34,7 +34,7 @@ const pagination_theme_themes = [
 		'#FEF9E7','#222','#FCF3CF','#F1C40F','#222','#FCF3CF','#F39C12'
 	],
 	[ // Gray
-		'#FEF9E7','#222','#FCF3CF','#F1C40F','#222','#FCF3CF','#F39C12'
+		'#F2F4F4','#222','#E5E8E8','#95A5A6','#fff','#E5E8E8','#707B7C'
 	]
 ]
 
