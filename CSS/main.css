@@ -1107,6 +1107,7 @@ input::-webkit-input-placeholder { user-select: none }
 	display: none;
 	width: 170px;
 	background-color: transparent;
+	border-radius: 4px;
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -1115,16 +1116,22 @@ input::-webkit-input-placeholder { user-select: none }
 }
 
 #c-c-r-c-p > button {
-	display: block;
+	display: flex;
+	align-items: center;
 	width: 100%;
-	padding: 10px;
+	padding: 7px 10px;
 	background-color: var(--ccp-btn-bgc);
 	color: var(--ccp-btn-color);
 	border: 1px solid var(--ccp-btn-bd-color);
-	font-size: 15px;
+	font-size: 12px;
+	text-align: left;
 	cursor: pointer;
 	transition: background-color .2s, color .2s, border-color .2s;
 }
+
+#c-c-r-c-p > button:first-child { border-radius: 5px 5px 0 0 }
+
+#c-c-r-c-p > button:last-child { border-radius: 0 0 5px 5px }
 
 #c-c-r-c-p > button:hover {
 	background-color: var(--ccp-btn-hover-bgc);
@@ -1166,6 +1173,12 @@ input::-webkit-input-placeholder { user-select: none }
 	background-color: var(--ccp-btn-dg-hover-bgc);
 	color: var(--ccp-btn-dg-hover-color);
 	border-color: var(--ccp-btn-dg-hover-bd-color);
+}
+
+#c-c-r-c-p > button > svg {
+	width: 17px;
+	height: 17px;
+	margin-right: 6px;
 }
 
 .comic {
