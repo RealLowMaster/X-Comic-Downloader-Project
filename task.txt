@@ -106,10 +106,19 @@ Doing {
 	Add More Detail Error Check To Startup
 	Update Procress Menu (Optimization Menu etc...) UI
 	Update Offline Comic Right Click Menu UI
+	Update Pagination UI
 }
 
 Tasks => {
+	Update Offline Comic UI
+	Update Alerts UI
+	Update Buttons UI
+	Update Slider UI
+	Update Tabs UI
+	Update UI Icons
 	Add Ability To Change Comic Name
+	Add Search To History
+
 	Fix Bug: Downloading xlecx => Morning Stretches
 	Optimize Gifs
 	Optimize offlineChangePage()

@@ -29,6 +29,7 @@
 	--obr-comic-text-color: #fff;
 	--obr-comic-hover-bgc: #025ba7;
 	--obr-comic-counter-color: #111;
+	--obr-pgnt-bgc: #fff;
 	--st-bgc: #fff;
 	--st-color: #333;
 	--st-rtitle-bgc: #eee;
@@ -100,6 +101,7 @@
 	--pgnt-btn-hover-bgc: #3498DB;
 	--pgnt-btn-hover-color: #fff;
 	--pgnt-btn-hover-bd-color: #2E86C1;
+	--pgnt-btn-disable-bd-color: #2E86C1;
 
 	--cp-bgc: #fff;
 	--cp-btns-bgc: transparent;
@@ -1762,26 +1764,29 @@ input::-webkit-input-placeholder { user-select: none }
 
 /* Pagination */
 #pagination {
-	display: block;
-	padding: 10px;
+	display: flex;
+	width: 500px;
+	padding: 20px 0;
+	margin: 40px auto;
+	background-color: var(--obr-pgnt-bgc);
+	border-radius: 4px;
 	text-align: center;
+	box-shadow: 9px 7px 40px -6px rgba(0,0,0,.25);
 }
 
 #pagination > div {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	padding: 10px;
+	display: inline-flex;
+	box-shadow: 0 10px 20px 0 rgba(black, 0.25);
 }
 
 #pagination > div > button {
 	display: inline-block;
 	height: 40px;
 	padding: 0 9px;
-	margin: 0 3px;
 	background-color: var(--pgnt-btn-bgc);
 	color: var(--pgnt-btn-color);
-	border: 1px solid var(--pgnt-btn-bd-color);
+	border: 5px solid var(--pgnt-btn-bgc);
+	border-bottom-color: var(--pgnt-btn-bd-color);
 	font-size: 15px;
 	text-align: center;
 	cursor: pointer;
@@ -1801,7 +1806,7 @@ input::-webkit-input-placeholder { user-select: none }
 #pagination > div > button:disabled {
 	background-color: var(--pgnt-btn-hover-bgc);
 	color: var(--pgnt-btn-hover-color);
-	border-color: var(--pgnt-btn-hover-bd-color);
+	border-color: var(--pgnt-btn-disable-bd-color);
 	cursor: default;
 }
 
