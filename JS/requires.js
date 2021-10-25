@@ -610,7 +610,7 @@ function CheckSettings() {
 	if (typeof(setting.comic_panel_theme) != 'number' || setting.comic_panel_theme < 0) setting.comic_panel_theme = defaultSetting.comic_panel_theme
 	if (setting.comic_panel_theme > 1) setting.comic_panel_theme = 1
 	if (typeof(setting.pagination_theme) != 'number' || setting.pagination_theme < 0) setting.pagination_theme = defaultSetting.pagination_theme
-	if (setting.pagination_theme > 1) setting.pagination_theme = 1
+	if (setting.pagination_theme > 2) setting.pagination_theme = 2
 	if (typeof(setting.offline_theme) != 'number') setting.offline_theme = defaultSetting.offline_theme
 	if (setting.offline_theme < 0) setting.offline_theme = 0
 	if (setting.offline_theme > 1) setting.offline_theme = 1

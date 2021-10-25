@@ -20,6 +20,9 @@ const pagination_theme_themes = [
 	],
 	[
 		'#E9F7EF','#222','#D4EFDF','#229954','#fff','#D4EFDF','#1E8449'
+	],
+	[
+		'#FDEDEC','#222','#FADBD8','#E74C3C','#fff','#FADBD8','#C0392B'
 	]
 ]
 
