@@ -29,6 +29,12 @@ const pagination_theme_themes = [
 	],
 	[ // Purple
 		'#F4ECF7','#222','#E8DAEF','#9B59B6','#fff','#E8DAEF','#8E44AD'
+	],
+	[ // Yellow
+		'#FEF9E7','#222','#FCF3CF','#F1C40F','#222','#FCF3CF','#F39C12'
+	],
+	[ // Gray
+		'#FEF9E7','#222','#FCF3CF','#F1C40F','#222','#FCF3CF','#F39C12'
 	]
 ]
 
