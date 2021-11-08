@@ -40,14 +40,14 @@ const pagination_theme_themes = [
 
 
 // Comic Panel Theme
-const comic_panel_theme_var = ['--cp-bgc','--cp-btns-bgc','--cp-btns-color','--cp-btns-bd-color','--cp-btns-hover-bgc','--cp-btns-hover-color','--cp-btns-hover-bd-color','--cp-title-bgc','--cp-title-color','--cp-info-color','--cp-info-btns-bgc','--cp-info-btns-color','--cp-info-btns-hover-bgc','--cp-info-btns-hover-color','--cp-img-con-bgc','--cp-img-repair-con-bgc','--cp-img-repair-con-bd-color','--cp-img-repair-color','--cp-img-repair-btn-bgc','--cp-img-repair-btn-color','--cp-img-repair-btn-hover-bgc','--cp-img-repair-btn-hover-color']
+const comic_panel_theme_var = ['--cp-bgc','--cp-btns-bgc','--cp-btns-color','--cp-btns-bd-color','--cp-btns-hover-bgc','--cp-btns-hover-color','--cp-btns-hover-bd-color','--cp-title-bgc','--cp-title-color','--cp-info-color','--cp-info-btns-bgc','--cp-info-btns-color','--cp-info-btns-hover-bgc','--cp-info-btns-hover-color','--cp-img-con-bgc','--cp-img-repair-con-bgc','--cp-img-repair-con-bd-color','--cp-img-repair-color','--cp-img-repair-btn-bgc','--cp-img-repair-btn-color','--cp-img-repair-btn-hover-bgc','--cp-img-repair-btn-hover-color','--cp-is-bgc','--cp-is-bdr','--cp-is-select-bgc','--cp-is-select-color','--cp-is-select-bd-color','--cp-is-select-hover-bd-color','--cp-is-select-focus-bgc','--cp-is-select-focus-color','--cp-is-select-focus-bd-color']
 
 const comic_panel_theme_themes = [
 	[
-		'#fff','transparent','#3334','#3334','#111','#fff','#222','#eee','#222','#111','#eee','#333','#eee','#d20068','#e8e8e8','#fff','#ddd','#e00','#eee','#222','#d20068','#fff'
+		'#fff','transparent','#3334','#3334','#111','#fff','#222','#eee','#222','#111','#eee','#333','#eee','#d20068','#e8e8e8','#fff','#ddd','#e00','#eee','#222','#d20068','#fff','#ccc','4px 4px 0 0','#fff','#222','#333','#555','#eee','#222','#666'
 	],
 	[
-		'#333','transparent','#eee6','#eee6','#fff','#222','#222','#282828','#fff','#fff','#222','#ccc','#222','#d20068','#282828','#333','#282828','#ff7b00','#eee','#222','#d20068','#fff'
+		'#333','transparent','#eee6','#eee6','#fff','#222','#222','#282828','#fff','#fff','#222','#ccc','#222','#d20068','#282828','#333','#282828','#ff7b00','#eee','#222','#d20068','#fff','#000','4px 4px 0 0','transparent','#fff','#333','#555','#222','#fff','#666'
 	]
 ]
 
