@@ -88,11 +88,13 @@ DB => {
 Add Comic {
 	League Of Legends
 	Aroma Sensei
+	xlecx => Search => ufos
 	nhentai => Group => Behind Moon
 	nhentai => Artist => Binbi
 	nhentai => Artist => Chikiko
-	nhentai => Kemono DIRECT
+	nhentai => Search => Kemono DIRECT
 	nhentai => Group => Piririnegi
+	nhentai => Group => Aoba Q Madou
 }
 
 Added To Version {
@@ -111,11 +113,14 @@ Doing {
 }
 
 Tasks => {
+	Add Ads
+	Make UI Beatiful
 	Update Offline Comic UI
 	Update Slider UI
-	Update Tabs UI
 	Add Ability To Change Comic Name
 	Add Search To History
+	ChangeRandom System On JumpPageRandom
+	Make an App for Designing HTML Page
 
 	Fix Bug: Downloading xlecx => Morning Stretches
 	Optimize Gifs

@@ -1,0 +1,22 @@
+{
+	"comic_panel_theme": 1,
+	"pagination_theme": 0,
+	"offline_theme": 1,
+	"browser_theme": 1,
+	"waiting_quality": 1,
+	"hover_downloader": false,
+	"max_per_page": 18,
+	"img_graphic": 1,
+	"notification_download_finish": false,
+	"notification_optimization_finish": true,
+	"lazy_loading": true,
+	"tabs_limit": 32,
+	"search_speed": 1,
+	"download_limit": 5,
+	"show_unoptimize": false,
+	"check_update": true,
+	"auto_close_optimize_panel": false,
+	"file_location": "C:\\Users\\Rene716\\Documents\\techzipfiles\\XComicDownloads",
+	"open_br_startup": false,
+	"developer_mode": false
+}
