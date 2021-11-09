@@ -3,7 +3,7 @@ const browserPasteMenu = document.getElementById('browser-paste-menu')
 const bjp = document.getElementById('browser-jump-page-container')
 const bjp_i = document.getElementById('bjp-i')
 const bjp_m_p = document.getElementById('bjp-m-p')
-let browserHistoryIndex = 0, br_history_selected_inputs = [], br_history_selected_indexs = [], resizeTabTimer, active_site = null, historyObserver, historyLaodCounter = 0
+let browserHistoryIndex = 0, browserHistoryRowOpElement, br_history_selected_inputs = [], br_history_selected_indexs = [], resizeTabTimer, active_site = null, historyObserver, historyLaodCounter = 0
 
 function openBrowser() {
 	keydownEventIndex = 3
@@ -987,7 +987,7 @@ function loadMoreHistory() {
 					container.appendChild(element)
 					element = document.createElement('button')
 					element.type = 'button'
-					element.setAttribute('onclick', 'openHistoryRowOption('+passHistory[j][1]+')')
+					element.setAttribute('onclick', 'openHistoryRowOption('+passHistory[j][1]+',this)')
 					element.innerText = '...'
 					container.appendChild(element)
 					bigContainer.appendChild(container)
@@ -1034,7 +1034,7 @@ function loadMoreHistory() {
 					container.appendChild(element)
 					element = document.createElement('button')
 					element.type = 'button'
-					element.setAttribute('onclick', 'openHistoryRowOption('+passHistory[j][1]+')')
+					element.setAttribute('onclick', 'openHistoryRowOption('+passHistory[j][1]+',this)')
 					element.innerText = '...'
 					container.appendChild(element)
 					bigContainer.appendChild(container)
@@ -1087,11 +1087,14 @@ function removeSelectedBrowserHistories() {
 	br_history_selected_indexs.sort(function(a, b){return b - a})
 	for (let i = 0; i < br_history_selected_indexs.length; i++) {
 		tabsHistory.splice(br_history_selected_indexs[i], 1)
+		const con = br_history_selected_inputs[i].parentElement.parentElement
+		if (con.children.length == 1) {
+			con.parentElement.remove()
+		} else br_history_selected_inputs[i].parentElement.remove()
 	}
 	br_history_selected_inputs = []
 	br_history_selected_indexs = []
 	document.getElementById('browser-history-panel').removeAttribute('selection')
-	openBrowserHistoryPanel(true)
 	setTimeout(() => {
 		saveHistory()
 	}, 100)
@@ -1124,10 +1127,11 @@ function openBrowserHistory(index) {
 	}, 100)
 }
 
-function openHistoryRowOption(index) {
+function openHistoryRowOption(index, element) {
 	const e = window.event
 	if (e.target.tagName == 'BUTTON') {
 		browserHistoryIndex = index
+		browserHistoryRowOpElement = element.parentElement
 		const menu = document.getElementById('b-h-p-m')
 		menu.style.top = e.clientY+'px'
 		menu.style.left = (e.clientX - 168)+'px'
@@ -1136,8 +1140,12 @@ function openHistoryRowOption(index) {
 }
 
 function removeBrowserHistoryRow() {
+	document.getElementById('b-h-p-m-c').style.display = 'none'
 	tabsHistory.splice(browserHistoryIndex, 1)
-	openBrowserHistoryPanel(true)
+	if (browserHistoryRowOpElement.parentElement.children.length == 1) {
+		browserHistoryRowOpElement.parentElement.parentElement.remove()
+	} else browserHistoryRowOpElement.remove()
+	browserHistoryRowOpElement = null
 	if (br_history_selected_indexs.length > 0) {
 		document.getElementById('browser-history-panel').removeAttribute('selection')
 		br_history_selected_inputs = []
@@ -1162,6 +1170,7 @@ function clearBrowserHistory() {
 	tabsHistory = []
 	fs.writeFileSync(dirHistory, JSON.stringify({h:[]}), {encoding:"utf8"})
 	document.getElementById('b-h-p-h-c').innerHTML = '<div class="alert alert-danger">There is no History.</div>'
+	historyLaodCounter = 0
 }
 
 function askClearBrowserHistory() {

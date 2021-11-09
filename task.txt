@@ -108,6 +108,7 @@ Added To Version {
 	Update Pagination UI
 	Update Offline Comic Overview UI
 	Update Buttons UI
+	Change Browser History View System
 }
 
 Doing {
