@@ -1023,6 +1023,11 @@ input::-webkit-input-placeholder { user-select: none }
 	display: flex;
 }
 
+#b-h-o-d {
+	width: 100%;
+	height: 5px;
+}
+
 /* Browser Sites */
 #browser-sites-panel {
 	background-color: var(--br-s-bgc) !important;

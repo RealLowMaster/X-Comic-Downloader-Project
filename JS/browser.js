@@ -3,7 +3,7 @@ const browserPasteMenu = document.getElementById('browser-paste-menu')
 const bjp = document.getElementById('browser-jump-page-container')
 const bjp_i = document.getElementById('bjp-i')
 const bjp_m_p = document.getElementById('bjp-m-p')
-let browserHistoryIndex = 0, br_history_selected_inputs = [], br_history_selected_indexs = [], resizeTabTimer, active_site = null
+let browserHistoryIndex = 0, br_history_selected_inputs = [], br_history_selected_indexs = [], resizeTabTimer, active_site = null, historyObserver, historyLaodCounter = 0
 
 function openBrowser() {
 	keydownEventIndex = 3
@@ -891,106 +891,158 @@ function openBrowserHistoryPanel(scoll=false) {
 	closeSitePanel()
 	const panel = document.getElementById('browser-history-panel')
 	document.getElementById('b-h-p-m-c').style.display = 'none'
+	document.getElementById('b-h-p-h-c').innerHTML = ''
 
+	panel.setAttribute('active', true)
 	if (tabsHistory.length > 0) {
-		panel.setAttribute('active', true)
-		let passYear, passMonth, passDay, passHistory = [], saveCheck = false
-
-		const check_new_date = function(checkhistoey) {
-			if (checkhistoey[2] == passYear) {
-				if (checkhistoey[3] == passMonth) {
-					if (checkhistoey[4] == passDay) return false
-					else return true
-				} else return true
-			} else return true
-		}
-
-		const update_date = function(checkhistoey) {
-			passYear = checkhistoey[2]
-			passMonth = checkhistoey[3]
-			passDay = checkhistoey[4]
-		}
-
-		const history_container = document.getElementById('b-h-p-h-c')
-		history_container.innerHTML = ''
-		let bigBigContainer, bigContainer, container, element
-		for (let i = tabsHistory.length - 1; i >= 0; i--) {
-			saveCheck = check_new_date(tabsHistory[i])
-			if (saveCheck || i == 0) {
-				
-				if (i == 0 && !saveCheck) passHistory.push([tabsHistory[i], i])
-				
-				if (passHistory.length > 0) {
-					bigBigContainer = document.createElement('div')
-					bigBigContainer.innerHTML = `<div>${passYear}-${passMonth}-${passDay}</div>`
-					bigContainer = document.createElement('div')
-					for (let j = 0; j < passHistory.length; j++) {
-						container = document.createElement('div')
-						element = document.createElement('input')
-						element.type = 'checkbox'
-						element.setAttribute('h', passHistory[j][1])
-						element.setAttribute('onclick', 'browserHistorySelect(this)')
-						container.appendChild(element)
-						element = document.createElement('img')
-						element.src = 'Image/sites/'+sites[passHistory[j][0][1][3]].name+'-30x30.png'
-						container.appendChild(element)
-						element = document.createElement('p')
-						element.setAttribute('onclick', 'openBrowserHistory('+passHistory[j][1]+')')
-						element.innerText = passHistory[j][0][0]
-						container.appendChild(element)
-						element = document.createElement('button')
-						element.type = 'button'
-						element.setAttribute('onclick', 'openHistoryRowOption('+passHistory[j][1]+')')
-						element.innerText = '...'
-						container.appendChild(element)
-						bigContainer.appendChild(container)
-					}
-					bigBigContainer.appendChild(bigContainer)
-					history_container.appendChild(bigBigContainer)
-				}
-
-				passHistory = []
-				passHistory.push([tabsHistory[i], i])
-				update_date(tabsHistory[i])
-				
-				if (i == 0 && saveCheck) {
-					bigBigContainer = document.createElement('div')
-					bigBigContainer.innerHTML = `<div>${passYear}-${passMonth}-${passDay}</div>`
-					bigContainer = document.createElement('div')
-					for (let j = 0; j < passHistory.length; j++) {
-						container = document.createElement('div')
-						element = document.createElement('input')
-						element.type = 'checkbox'
-						element.setAttribute('h', passHistory[j][1])
-						element.setAttribute('onclick', 'browserHistorySelect(this)')
-						container.appendChild(element)
-						element = document.createElement('img')
-						element.src = 'Image/sites/'+sites[passHistory[j][0][1][3]].name+'-30x30.png'
-						container.appendChild(element)
-						element = document.createElement('p')
-						element.setAttribute('onclick', 'openBrowserHistory('+passHistory[j][1]+')')
-						element.innerText = passHistory[j][0][0]
-						container.appendChild(element)
-						element = document.createElement('button')
-						element.type = 'button'
-						element.setAttribute('onclick', 'openHistoryRowOption('+passHistory[j][1]+')')
-						element.innerText = '...'
-						container.appendChild(element)
-						bigContainer.appendChild(container)
-					}
-					bigBigContainer.appendChild(bigContainer)
-					history_container.appendChild(bigBigContainer)
-				}
-			} else passHistory.push([tabsHistory[i], i])
-		}
-		
+		historyObserver = new IntersectionObserver(historyObserverFunc, {
+			root: document.getElementById('browser-history-panel'),
+			threshold: 0,
+			rootMargin: "0px 0px 400px 0px"
+		})
+		historyObserver.observe(document.getElementById('b-h-o-d'))
 		panel.style.display = 'block'
-		if (!scoll) panel.scrollTop = 0
 	} else {
-		panel.setAttribute('active', true)
 		document.getElementById('b-h-p-h-c').innerHTML = '<div class="alert alert-danger">There is no History.</div>'
 		panel.style.display = 'block'
 		if (!scoll) panel.scrollTop = 0
+	}
+}
+
+function historyObserverFunc(entries, observer) {
+	if (!document.getElementById('browser-history-panel').hasAttribute('active')) {
+		historyObserver = null
+		return
+	}
+	if (entries[0].isIntersecting) {
+		loadMoreHistory()
+		observer.unobserve(entries[0].target)
+		historyObserver = null
+	}
+}
+
+function loadMoreHistory() {
+	historyObserver = null
+	let passYear, passMonth, passDay, passHistory = [], saveCheck = false, count = 0
+
+	const check_new_date = function(checkhistoey) {
+		if (checkhistoey[2] == passYear) {
+			if (checkhistoey[3] == passMonth) {
+				if (checkhistoey[4] == passDay) return false
+				else return true
+			} else return true
+		} else return true
+	}
+
+	const update_date = function(checkhistoey) {
+		passYear = checkhistoey[2]
+		passMonth = checkhistoey[3]
+		passDay = checkhistoey[4]
+	}
+
+	const history_container = document.getElementById('b-h-p-h-c')
+	let bigBigContainer, bigContainer, container, element
+	for (let i = tabsHistory.length - 1; i >= 0; i--) {
+		saveCheck = check_new_date(tabsHistory[i])
+		if (saveCheck || i == 0) {
+			
+			if (i == 0 && !saveCheck) passHistory.push([tabsHistory[i], i])
+			
+			if (passHistory.length > 0) {
+				count++
+				if (count <= historyLaodCounter) {
+					passHistory = []
+					passHistory.push([tabsHistory[i], i])
+					update_date(tabsHistory[i])
+					continue
+				}
+				if (count > historyLaodCounter + 3) {
+					historyLaodCounter += 3
+					setTimeout(() => {
+						historyObserver = new IntersectionObserver(historyObserverFunc, {
+							root: document.getElementById('browser-history-panel'),
+							threshold: 0,
+							rootMargin: "0px 0px 400px 0px"
+						})
+						historyObserver.observe(document.getElementById('b-h-o-d'))
+					}, 300)
+					break
+				}
+				bigBigContainer = document.createElement('div')
+				bigBigContainer.innerHTML = `<div>${passYear}-${passMonth}-${passDay}</div>`
+				bigContainer = document.createElement('div')
+				for (let j = 0; j < passHistory.length; j++) {
+					container = document.createElement('div')
+					element = document.createElement('input')
+					element.type = 'checkbox'
+					element.setAttribute('h', passHistory[j][1])
+					element.setAttribute('onclick', 'browserHistorySelect(this)')
+					container.appendChild(element)
+					element = document.createElement('img')
+					element.src = 'Image/sites/'+sites[passHistory[j][0][1][3]].name+'-30x30.png'
+					container.appendChild(element)
+					element = document.createElement('p')
+					element.setAttribute('onclick', 'openBrowserHistory('+passHistory[j][1]+')')
+					element.innerText = passHistory[j][0][0]
+					container.appendChild(element)
+					element = document.createElement('button')
+					element.type = 'button'
+					element.setAttribute('onclick', 'openHistoryRowOption('+passHistory[j][1]+')')
+					element.innerText = '...'
+					container.appendChild(element)
+					bigContainer.appendChild(container)
+				}
+				bigBigContainer.appendChild(bigContainer)
+				history_container.appendChild(bigBigContainer)
+			}
+
+			passHistory = []
+			passHistory.push([tabsHistory[i], i])
+			update_date(tabsHistory[i])
+			
+			if (i == 0 && saveCheck) {
+				count++
+				if (count <= historyLaodCounter) continue
+				if (count > historyLaodCounter + 3) {
+					historyLaodCounter += 3
+					setTimeout(() => {
+						historyObserver = new IntersectionObserver(historyObserverFunc, {
+							root: document.getElementById('browser-history-panel'),
+							threshold: 0,
+							rootMargin: "0px 0px 400px 0px"
+						})
+						historyObserver.observe(document.getElementById('b-h-o-d'))
+					}, 300)
+					break
+				}
+				bigBigContainer = document.createElement('div')
+				bigBigContainer.innerHTML = `<div>${passYear}-${passMonth}-${passDay}</div>`
+				bigContainer = document.createElement('div')
+				for (let j = 0; j < passHistory.length; j++) {
+					container = document.createElement('div')
+					element = document.createElement('input')
+					element.type = 'checkbox'
+					element.setAttribute('h', passHistory[j][1])
+					element.setAttribute('onclick', 'browserHistorySelect(this)')
+					container.appendChild(element)
+					element = document.createElement('img')
+					element.src = 'Image/sites/'+sites[passHistory[j][0][1][3]].name+'-30x30.png'
+					container.appendChild(element)
+					element = document.createElement('p')
+					element.setAttribute('onclick', 'openBrowserHistory('+passHistory[j][1]+')')
+					element.innerText = passHistory[j][0][0]
+					container.appendChild(element)
+					element = document.createElement('button')
+					element.type = 'button'
+					element.setAttribute('onclick', 'openHistoryRowOption('+passHistory[j][1]+')')
+					element.innerText = '...'
+					container.appendChild(element)
+					bigContainer.appendChild(container)
+				}
+				bigBigContainer.appendChild(bigContainer)
+				history_container.appendChild(bigBigContainer)
+			}
+		} else passHistory.push([tabsHistory[i], i])
 	}
 }
 
@@ -1003,6 +1055,8 @@ function closeBrowserHistory() {
 	panel.removeAttribute('active')
 	document.getElementById('b-h-p-m-c').style.display = 'none'
 	document.getElementById('browser-history-panel').removeAttribute('selection')
+	historyLaodCounter = 0
+	historyObserver = null
 	if (tabsContainer.children.length == 0) openSitePanel()
 }
 
