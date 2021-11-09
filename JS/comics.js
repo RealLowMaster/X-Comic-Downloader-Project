@@ -869,6 +869,37 @@ function askForDeletingComic(id) {
 	])
 }
 
+// Rename a Comic
+function openRenameComic(id) {
+	const panel = document.getElementById('comic-rename-panel')
+	db.comics.findOne({_id:id}, (err, doc) => {
+		if (err) { error('FindingComic->Err: '+err); return }
+		if (doc == null) { error('Comic Not Found!'); return }
+		const name = doc.n || null
+		if (name == null) { error('Comic Not Found!'); return }
+		panel.children[1].children[0].value = toCapitalize(name);
+		panel.setAttribute('cid', id)
+		panel.style.display = 'flex'
+	})
+}
+
+function closeRenamePanel() {
+	const panel = document.getElementById('comic-rename-panel')
+	panel.style.display = 'none'
+	panel.removeAttribute('cid')
+	panel.children[1].children[0].value = null;
+}
+
+function renameComic(id, newName) {
+	if (newName == undefined || newName.replace(/ /g, '').length <= 0) { error('Please Fill name Input!'); return }
+	db.comics.update({_id:id}, { $set: {n:newName.toLowerCase()} }, {}, (err) => {
+		reloadLoadingComics()
+		if (comicPanel.getAttribute('cid') != 'null') openComic(id)
+		if (err) { error('UpdatingName->Err: '+err); return }
+		closeRenamePanel()
+	})
+}
+
 // Key Event
 function OfflineKeyEvents(ctrl, shift, key) {
 	if (ctrl) {

@@ -98,6 +98,7 @@ Add Comic {
 }
 
 Added To Version {
+	*Add Ability To Change Downloaded Comic Name
 	*Optimize and Fully Change Offline Comic Image Loading System
 	Add More Detail Error Check To Startup
 	Add Red, Orange, Purple, Yellow and Gray Theme To Pagination
@@ -118,7 +119,6 @@ Tasks => {
 	Make UI Beatiful
 	Update Offline Comic UI
 	Update Slider UI
-	Add Ability To Change Comic Name
 	Add Search To History
 	ChangeRandom System On JumpPageRandom
 	Make an App for Designing HTML Page
