@@ -499,8 +499,7 @@ function openComic(id) {
 			comicSliderOverview.setAttribute('count', ImagesCount - 1)
 			comicSliderMaxPages.textContent = ImagesCount
 
-			const LoadingImages = comicImageContainer.getElementsByTagName('img')
-			loadImagesOneByOne(LoadingImages, 0)
+			loadImagesOneByOne([...comicImageContainer.getElementsByTagName('img')])
 
 			openComicCharacters(id)
 			openComicLanguages(id)

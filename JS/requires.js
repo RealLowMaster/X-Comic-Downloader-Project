@@ -549,24 +549,25 @@ function convertToURL(text, backward) {
 	}
 }
 
-function loadImagesOneByOne(images, index) {
-	if (comicImageContainer.children.length <= 0 || index == images.length) return
-	let src = images[index].getAttribute('data-src')
-	images[index].removeAttribute('data-src')
+function loadImagesOneByOne(images) {
+	if (comicImageContainer.children.length <= 0 || images.length <= 0) return
+	let src = images[0].getAttribute('data-src')
+	images[0].removeAttribute('data-src')
 	if (!src) {
-		if (images[index].complete && images[index].naturalHeight !== 0) {
+		if (images[0].complete && images[0].naturalHeight !== 0) {
+			images.shift()
 			setTimeout(() => {
-				loadImagesOneByOne(images, index + 1)
+				loadImagesOneByOne(images)
 			}, 1)
 		} else {
 			setTimeout(() => {
-				loadImagesOneByOne(images, index)
+				loadImagesOneByOne(images)
 			}, 200)
 		}
 	} else {
-		images[index].src = src
+		images[0].src = src
 		setTimeout(() => {
-			loadImagesOneByOne(images, index)
+			loadImagesOneByOne(images)
 		}, 1)
 	}
 }
