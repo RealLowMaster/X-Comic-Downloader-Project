@@ -549,6 +549,28 @@ function convertToURL(text, backward) {
 	}
 }
 
+function loadImagesOneByOne(images, index) {
+	if (comicImageContainer.children.length <= 0 || index == images.length) return
+	let src = images[index].getAttribute('data-src')
+	images[index].removeAttribute('data-src')
+	if (!src) {
+		if (images[index].complete && images[index].naturalHeight !== 0) {
+			setTimeout(() => {
+				loadImagesOneByOne(images, index + 1)
+			}, 1)
+		} else {
+			setTimeout(() => {
+				loadImagesOneByOne(images, index)
+			}, 200)
+		}
+	} else {
+		images[index].src = src
+		setTimeout(() => {
+			loadImagesOneByOne(images, index)
+		}, 1)
+	}
+}
+
 // Main Loading Stuff
 const dirDocument = remote.app.getPath('documents')+'\\X Comic Downloader'
 

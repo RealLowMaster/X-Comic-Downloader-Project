@@ -5,6 +5,7 @@ const comicGroupsContainer = document.getElementById('c-p-g')
 const comicArtistsContainer = document.getElementById('c-p-a')
 const comicParodyContainer = document.getElementById('c-p-p')
 const comicTagsContainer = document.getElementById('c-p-ts')
+const comicImageContainer = document.getElementById('c-p-i')
 let off_site = null, off_id = null, off_comic_id = null, off_quality = null, need_repair = [], in_comic = false, comic_menu_id = null, passKeyEvent = null, export_comic_id = null
 
 function loadComics(page, search, safeScroll) {
@@ -411,7 +412,6 @@ function openComic(id) {
 	id = id || null
 	if (id == null) { error('Id Can\'t be Null.'); return }
 	const title_container = document.getElementById('c-p-t')
-	const image_container = document.getElementById('c-p-i')
 	let html = '', formatIndex = 0
 	var name, image, ImagesCount, formats
 
@@ -424,7 +424,7 @@ function openComic(id) {
 	comicTagsContainer.innerHTML = ''
 
 	title_container.textContent = ''
-	image_container.innerHTML = ''
+	comicImageContainer.innerHTML = ''
 	comicSliderOverview.setAttribute('aindex', '')
 
 	const findComic = async() => {
@@ -494,16 +494,13 @@ function openComic(id) {
 			if (need_repair.length == 0) document.getElementById('c-p-r-btn').style.display = 'none'
 			else document.getElementById('c-p-r-btn').style.display = 'flex'
 
-			image_container.innerHTML = html
+			comicImageContainer.innerHTML = html
 			comicSliderOverview.innerHTML = slider_overview_html
 			comicSliderOverview.setAttribute('count', ImagesCount - 1)
 			comicSliderMaxPages.textContent = ImagesCount
 
-			const LoadingImages = image_container.getElementsByTagName('img')
-
-			for (let i = 0; i < LoadingImages.length; i++) {
-				imageLoadingObserver.observe(LoadingImages[i])
-			}
+			const LoadingImages = comicImageContainer.getElementsByTagName('img')
+			loadImagesOneByOne(LoadingImages, 0)
 
 			openComicCharacters(id)
 			openComicLanguages(id)

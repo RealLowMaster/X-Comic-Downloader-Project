@@ -98,6 +98,7 @@ Add Comic {
 }
 
 Added To Version {
+	*Optimize and Fully Change Offline Comic Image Loading System
 	Add More Detail Error Check To Startup
 	Add Red, Orange, Purple, Yellow and Gray Theme To Pagination
 	Update Icons
