@@ -1895,18 +1895,24 @@ input::-webkit-input-placeholder { user-select: none }
 
 /* Pagination */
 #pagination {
-	display: flex;
-	width: 500px;
-	padding: 20px 0;
-	margin: 40px auto;
-	background-color: var(--obr-pgnt-bgc);
-	border-radius: 4px;
+	display: block;
 	text-align: center;
+	/* min-width: 500px;
+	padding: 20px 30px;
+	margin: 40px auto; */
+	/* background-color: var(--obr-pgnt-bgc);
+	border-radius: 4px;
+	text-align: center; */
 	box-shadow: 9px 7px 40px -6px rgba(0,0,0,.25);
 }
 
 #pagination > div {
 	display: inline-flex;
+	padding: 20px 50px;
+	margin: 40px auto;
+	background-color: var(--obr-pgnt-bgc);
+	border-radius: 4px;
+	text-align: center;
 	box-shadow: 0 10px 20px 0 rgba(black, 0.25);
 }
 
