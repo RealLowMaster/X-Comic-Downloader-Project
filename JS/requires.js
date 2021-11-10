@@ -63,7 +63,7 @@ const keydownEvents = [
 	'BrowserKeyEvents({ctrl},{shift},{key})',
 	'SettingKeyEvents({ctrl},{shift},{key})'
 ]
-const ThisWindow = remote.getCurrentWindow(), loading = new Loading(19), db = {}, procressPanel = new ProcressPanel(0), update_number = 5
+const ThisWindow = remote.getCurrentWindow(), loading = new Loading(19), db = {}, procressPanel = new ProcressPanel(0), update_number = 6
 let comicDeleting = false, downloadCounter = 0, wt_fps = 20, dirDB, dirUL, dirTmp, isOptimizing = false, browserLastTabs = [], tabsHistory = [], dirHistory = '', keydownEventIndex = 0, new_update, save_value = null, save_value2 = null, afterDLReload = true
 var setting, tabs = [], downloadingList = [], lastComicId, lastHaveId, lastGroupId, lastArtistId, lastParodyId, lastTagId, lastCharacterId, lastLanguageId, lastCategoryId, searchTimer, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = [], openedMenuTabIndex, copiedTab = null
 
@@ -175,11 +175,6 @@ function formatBytes(bytes, decimals = 2) {
 	const i = Math.floor(Math.log(bytes) / Math.log(1024));
 
 	return parseFloat((bytes / Math.pow(1024, i)).toFixed(dm)) + ' ' + sizes[i];
-}
-
-function MakeJsonString(json, backward) {
-	if (backward) return JSON.parse(json.replace(/\\n/g, '').replace(/\\t/g, '').replace(/": /g, '":').replace(/\\"/g, '"').replace(/\\\\\\\\/g, '\\').replace(/"{/g, '{').replace(/}"/g, '}'))
-	else return JSON.stringify(json).replace(/,/g, ',\n\t').replace(/{/g, '{\n\t').replace(/}/g, '\n}').replace(/":/g, '": ')
 }
 
 function PopAlertFrame(who) {
@@ -579,12 +574,12 @@ function GetSettingFile() {
 	if (!fs.existsSync(dirDocument)) {
 		fs.mkdirSync(dirDocument)
 		setting = defaultSetting
-		fs.writeFileSync(dirDocument+'/setting.json', MakeJsonString(setting, false), {encoding:"utf8"})
+		require('jsonfile').writeFileSync(dirDocument+'/setting.json', setting)
 	} else {
 		if (!fs.existsSync(dirDocument+'/setting.json')) {
 			setting = defaultSetting
-			fs.writeFileSync(dirDocument+'/setting.json', MakeJsonString(setting, false), {encoding:"utf8"})
-		} else setting = MakeJsonString(fs.readFileSync(dirDocument+'/setting.json', {encoding:'utf8', flag:'r'}), true)
+			require('jsonfile').writeFileSync(dirDocument+'/setting.json', setting)
+		} else setting = require('jsonfile').readFileSync(dirDocument+'/setting.json')
 	}
 }
 
@@ -605,8 +600,8 @@ function GetDirection() {
 	if (!fs.existsSync(dirUL+'/thumbs')) fs.mkdirSync(dirUL+'/thumbs')
 
 	dirHistory = dirDocument+'/history.array'
-	if (fs.existsSync(dirHistory)) tabsHistory = JSON.parse(fs.readFileSync(dirHistory, {encoding:'utf8', flag:'r'})).h
-	else fs.writeFileSync(dirHistory, '{"h":[]}', {encoding:"utf8"}) 
+	if (fs.existsSync(dirHistory)) tabsHistory = require('jsonfile').readFileSync(dirHistory).h
+	else require('jsonfile').writeFileSync(dirHistory, {h:[]})
 }
 
 function CreateDatabase() {
@@ -674,7 +669,7 @@ function CheckSettings() {
 
 function CheckReleaseNote() {
 	if (fs.existsSync(__dirname+'/release-note.json')) {
-		new_update = MakeJsonString(fs.readFileSync(__dirname+'/release-note.json', {encoding:'utf8', flag:'r'}), true)
+		new_update = require('jsonfile').readFileSync(__dirname+'/release-note.json')
 		fs.unlinkSync(__dirname+'/release-note.json')
 
 

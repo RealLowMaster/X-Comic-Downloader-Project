@@ -2661,6 +2661,7 @@ input::-webkit-input-placeholder { user-select: none }
 
 #r-n-n-n > .fix-bug { background-color: #1D8348; color: #eee }
 #r-n-n-n > .add-ab { background-color: #2874A6 }
+#r-n-n-n > .add-update { background-color: #5DADE2 }
 #r-n-n-n > .add-optimize { background-color: #D35400 }
 #r-n-n-n > .add-change { background-color: #8E44AD }
 

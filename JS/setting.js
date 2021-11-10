@@ -164,7 +164,7 @@ function saveSetting(justSave) {
 		PopAlert('Setting Saved.')
 	}
 
-	fs.writeFileSync(dirDocument+'/setting.json', MakeJsonString(setting, false), {encoding:"utf8"})
+	require('jsonfile').writeFileSync(dirDocument+'/setting.json', setting)
 	if (reload == true) {
 		if (downloadingList.length == 0) ThisWindow.reload()
 		else PopAlert('You cannot Change Saving Location when downloading.', 'danger')

@@ -1,11 +1,9 @@
 {
 	"name": "x-comic-downloader",
-	"version": "1.9.8",
+	"version": "1.9.9",
 	"description": "A Software for Downloading Adult and Hentai Comic and Manga and Manage Theme.",
 	"main": "index.js",
-	"author": {
-		"name": "Mehdi Enayatzadeh"
-	},
+	"author": "Mehdi Enayatzadeh (LowMaster)",
 	"license": "MIT",
 	"private": true,
 	"keywords": [
@@ -21,14 +19,14 @@
 	"build": {
 		"appId": "com.x-comic-downloader.id",
 		"productName": "X Comic Downloader",
-		"copyright": "Copyright © 2021 Mehdi Enayatzadeh",
+		"copyright": "Copyright © 2021 Mehdi Enayatzadeh (LowMaster)",
 		"compression": "maximum",
 		"directories": {
 			"output": "build"
 		},
 		"win": {
 			"target": "NSIS",
-			"publisherName": "Mehdi Enayatzadeh",
+			"publisherName": "Mehdi Enayatzadeh (LowMaster)",
 			"icon": "Image/favicon.ico"
 		},
 		"asar": false,
@@ -48,6 +46,7 @@
 	},
 	"dependencies": {
 		"image-downloader": "^4.0.2",
+		"jsonfile": "^6.1.0",
 		"jszip": "^3.7.1",
 		"nedb": "^1.8.0",
 		"node-hitomi": "^4.2.2",

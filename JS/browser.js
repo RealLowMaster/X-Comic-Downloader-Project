@@ -923,6 +923,10 @@ function historyObserverFunc(entries, observer) {
 
 function loadMoreHistory() {
 	historyObserver = null
+	if (tabsHistory.length == 0) {
+		document.getElementById('b-h-p-h-c').innerHTML = '<div class="alert alert-danger">There is no History.</div>'
+		return
+	}
 	let passYear, passMonth, passDay, passHistory = [], saveCheck = false, count = 0
 
 	const check_new_date = function(checkhistoey) {

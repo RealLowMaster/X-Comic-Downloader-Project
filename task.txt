@@ -98,17 +98,7 @@ Add Comic {
 }
 
 Added To Version {
-	*Add Ability To Change Downloaded Comic Name
-	*Optimize and Fully Change Offline Comic Image Loading System
-	Add More Detail Error Check To Startup
-	Add Red, Orange, Purple, Yellow and Gray Theme To Pagination
-	Update Icons
-	Update Procress Menu (Optimization Menu etc...) UI
-	Update Offline Comic Right Click Menu UI
-	Update Pagination UI
-	Update Offline Comic Overview UI
-	Update Buttons UI
-	Change Browser History View System
+	
 }
 
 Doing {
@@ -116,28 +106,27 @@ Doing {
 }
 
 Tasks => {
+	Fix sharp Usage
 	Add Ads
 	Make UI Beatiful
-	Update Offline Comic UI
 	Update Slider UI
 	Add Search To History
 	ChangeRandom System On JumpPageRandom
 	Make an App for Designing HTML Page
 
 	Fix Bug: Downloading xlecx => Morning Stretches
-	Optimize Gifs
+	Optimize Gifs { giflossy imagemin Packages }
 	Optimize offlineChangePage()
-	Make New History System
+	Make New History System [ Indexing ]
 	Add Slider System To Repaired Image
 	Add Reset Setting Button
 	Make Tab Doplicator inset after tab
 	Add Perfect Drag to Scroll To Slider Overview
 	Add Auto Scroll Down for Comic Panel
-	Add Fix Update Button
+	Make new Optimizing System
+	Make new Update System
 	Make Browser Selecting History Easier
-	Add Support For nhentai.net (Requested By Markus DarkOrb)
 	Make New Browser Change Page System
-	Add Search To History
 
 	Mybe in v2  {
 		Add More Comic Viewing Theme { 2x2, 3x3, 4x4, free-spect }
