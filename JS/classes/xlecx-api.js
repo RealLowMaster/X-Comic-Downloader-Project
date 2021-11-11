@@ -45,34 +45,30 @@ class XlecxAPI {
 			return response.text()
 		}).then(html => {
 			const parser = new DOMParser()
-			const htmlDoc = parser.parseFromString(html, 'text/html')
-			const arr = {}
-			var gg = 0, bb = 0, li, hasPost = false
-			const slashReg = new RegExp('/', 'g')
+			const arr = {}, slashReg = new RegExp('/', 'g'), htmlDoc = parser.parseFromString(html, 'text/html')
+			let gg = 0, bb = 0, li, hasPost = false, container, save, save2
+			container = htmlDoc.getElementsByClassName('main')[0].children
 			
 			// Category
 			if (category == true) {
 				arr.categories = []
 				li = htmlDoc.getElementsByClassName('side-bc')[0].getElementsByTagName('a')
-				for (var i=0; i<li.length; i++) {
-					arr.categories.push({ "name": li[i].textContent, "url": li[i].getAttribute('href').replace(this.baseURL+'/', '').replace(slashReg, '') })
-				}
+				for (let i=0; i<li.length; i++) arr.categories.push({ "name": li[i].textContent, "url": li[i].getAttribute('href').replace(this.baseURL+'/', '').replace(slashReg, '') })
 			}
 
 			// Random
 			if (random == true) {
 				arr.random = []
-				li = htmlDoc.getElementsByClassName('main')[0].children
-				for (var i=2; i<=13; i++) {
-					gg = li[i].getElementsByClassName('th-img img-resp-h')[0].getAttribute('href')
-					bb = li[i].getElementsByClassName('th-time icon-l')[0]
+				for (let i=2; i <= 13; i++) {
+					gg = container[i].getElementsByClassName('th-img img-resp-h')[0].getAttribute('href')
+					bb = container[i].getElementsByClassName('th-time icon-l')[0]
 					if (bb != undefined) bb = this.#getOverviewPages(bb.textContent)
 					else bb = null
 
 					arr.random.push({
 						"id": this.#lastSlash(gg),
-						"title": li[i].getElementsByClassName('th-title')[0].textContent,
-						"thumb": li[i].getElementsByTagName('img')[0].getAttribute('src').replace('http://xlecx.com', ''),
+						"title": container[i].getElementsByClassName('th-title')[0].textContent,
+						"thumb": container[i].getElementsByTagName('img')[0].getAttribute('src').replace('http://xlecx.com', ''),
 						"pages": bb,
 						"url": gg
 					})
@@ -84,16 +80,18 @@ class XlecxAPI {
 				arr.content = []
 				hasPost = true
 				// Content
-				for (var i=0; i<li.length; i++) {
-					gg = li[i].getElementsByClassName('th-img img-resp-h')[0].getAttribute('href')
-					bb = li[i].getElementsByClassName('th-time icon-l')[0]
+				for (let i = 0; i < li.length - 1; i++) {
+					save = li[i].children[0].children
+					save2 = save[0].children
+					gg = save[0].getAttribute('href')
+					bb = save2[2]
 					if (bb != undefined) bb = this.#getOverviewPages(bb.textContent)
 					else bb = null
 					
 					arr.content.push({
 						"id": this.#lastSlash(gg),
-						"title": li[i].getElementsByClassName('th-title')[0].textContent,
-						"thumb": li[i].getElementsByTagName('img')[0].getAttribute('src').replace('http://xlecx.com', ''),
+						"title": save[1].textContent,
+						"thumb": save2[0].getAttribute('src').replace('http://xlecx.com', ''),
 						"pages": bb,
 						"url": gg
 					})
@@ -101,10 +99,10 @@ class XlecxAPI {
 
 				// Pagination
 				if (pagination == true) {
-					var value, pPage
+					let value, pPage
 					arr.pagination = [];
 					li = htmlDoc.getElementById('bottom-nav').querySelector('.navigation').children
-					for (var i = 0; i < li.length; i++) {
+					for (let i = 0; i < li.length; i++) {
 						if (li[i].textContent == "")
 							if (i == li.length - 1) value = ">"
 							else value = "<"
@@ -118,9 +116,7 @@ class XlecxAPI {
 				}
 			}
 
-			if (hasPost == false && category == false && random == false)
-				arr = null
-
+			if (hasPost == false && category == false && random == false) arr = null
 			callback(null, arr)
 		}).catch(err => {
 			if (err == 'TypeError: Failed to fetch') err = 'Connection Timeout, Check Internet Connection.'
@@ -144,15 +140,9 @@ class XlecxAPI {
 			return response.text()
 		}).then(html => {
 			const parser = new DOMParser()
-			const htmlDoc = parser.parseFromString(html, 'text/html')
-			const slashReg = new RegExp('/', 'g')
-
-			var arr = []
-			var li = htmlDoc.getElementsByClassName('side-bc')[0].getElementsByTagName('a')
-			for (var i=0; i<li.length; i++) {
-				arr.push({ "name": li[i].textContent, "url": li[i].getAttribute('href').replace(this.baseURL, '').replace(slashReg, '') })
-			}
-
+			const htmlDoc = parser.parseFromString(html, 'text/html'), slashReg = new RegExp('/', 'g'), arr = []
+			let li = htmlDoc.getElementsByClassName('side-bc')[0].getElementsByTagName('a')
+			for (let i=0; i<li.length; i++) arr.push({ "name": li[i].textContent, "url": li[i].getAttribute('href').replace(this.baseURL, '').replace(slashReg, '') })
 			callback(null, arr)
 		}).catch(err => {
 			if (err == 'TypeError: Failed to fetch') err = 'Connection Timeout, Check Internet Connection.'
@@ -182,34 +172,30 @@ class XlecxAPI {
 			return response.text()
 		}).then(html => {
 			const parser = new DOMParser()
-			const htmlDoc = parser.parseFromString(html, 'text/html')
-			const arr = {}
-			var gg = 0, bb = 0, li, hasPost = false
-			const slashReg = new RegExp('/', 'g')
+			const arr = {}, slashReg = new RegExp('/', 'g'), htmlDoc = parser.parseFromString(html, 'text/html')
+			let gg = 0, bb = 0, li, hasPost = false, container, save, save2
+			container = htmlDoc.getElementsByClassName('main')[0].children
 			
 			// Category
 			if (category == true) {
 				arr.categories = []
-				var li = htmlDoc.getElementsByClassName('side-bc')[0].getElementsByTagName('a')
-				for (var i=0; i<li.length; i++) {
-					arr.categories.push({ "name": li[i].textContent, "url": li[i].getAttribute('href').replace(this.baseURL+'/', '').replace(slashReg, '') })
-				}
+				li = htmlDoc.getElementsByClassName('side-bc')[0].getElementsByTagName('a')
+				for (let i=0; i<li.length; i++) arr.categories.push({ "name": li[i].textContent, "url": li[i].getAttribute('href').replace(this.baseURL+'/', '').replace(slashReg, '') })
 			}
 
 			// Random
 			if (random == true) {
 				arr.random = []
-				li = htmlDoc.getElementsByClassName('main')[0].children
-				for (var i=2; i<=13; i++) {
-					gg = li[i].getElementsByClassName('th-img img-resp-h')[0].getAttribute('href')
-					bb = li[i].getElementsByClassName('th-time icon-l')[0]
+				for (let i=2; i<=13; i++) {
+					gg = container[i].getElementsByClassName('th-img img-resp-h')[0].getAttribute('href')
+					bb = container[i].getElementsByClassName('th-time icon-l')[0]
 					if (bb != undefined) bb = this.#getOverviewPages(bb.textContent)
 					else bb = null
 
 					arr.random.push({
 						"id": this.#lastSlash(gg),
-						"title": li[i].getElementsByClassName('th-title')[0].textContent,
-						"thumb": li[i].getElementsByTagName('img')[0].getAttribute('src').replace('http://xlecx.com', ''),
+						"title": container[i].getElementsByClassName('th-title')[0].textContent,
+						"thumb": container[i].getElementsByTagName('img')[0].getAttribute('src').replace('http://xlecx.com', ''),
 						"pages": bb,
 						"url": gg
 					})
@@ -221,16 +207,18 @@ class XlecxAPI {
 				arr.content = []
 				hasPost = true
 				// Contents
-				for (var i=0; i<li.length; i++) {
-					gg = li[i].getElementsByClassName('th-img img-resp-h')[0].getAttribute('href')
-					bb = li[i].getElementsByClassName('th-time icon-l')[0]
+				for (let i = 0; i < li.length - 1; i++) {
+					save = li[i].children[0].children
+					save2 = save[0].children
+					gg = save[0].getAttribute('href')
+					bb = save2[2]
 					if (bb != undefined) bb = this.#getOverviewPages(bb.textContent)
 					else bb = null
 	
 					arr.content.push({
 						"id": this.#lastSlash(gg),
-						"title": li[i].getElementsByClassName('th-title')[0].textContent,
-						"thumb": li[i].getElementsByTagName('img')[0].getAttribute('src').replace('http://xlecx.com', ''),
+						"title": save[1].textContent,
+						"thumb": save2[0].getAttribute('src').replace('http://xlecx.com', ''),
 						"pages": bb,
 						"url": gg
 					})
@@ -238,23 +226,17 @@ class XlecxAPI {
 
 				// Pagination
 				if (pagination == true) {
-					var value, pPage
+					let value, pPage
 					arr.pagination = []
 					li = htmlDoc.getElementById('bottom-nav').querySelector('.navigation').children
-					for (var i = 0; i < li.length; i++) {
+					for (let i = 0; i < li.length; i++) {
 						if (li[i].textContent == "")
-							if (i == li.length - 1)
-								value = ">"
-							else
-								value = "<"
-						else
-							value = li[i].textContent
+							if (i == li.length - 1) value = ">"
+							else value = "<"
+						else value = li[i].textContent
 						
-						if (li[i].getAttribute('href') == null)
-							pPage = null
-						else
-							pPage = Number(li[i].getAttribute('href').replace((this.baseURL+'/'+name+'/page/').replace(/ /g, '%20'), '').replace(slashReg, ''))
-						
+						if (li[i].getAttribute('href') == null) pPage = null
+						else pPage = Number(li[i].getAttribute('href').replace((this.baseURL+'/'+name+'/page/').replace(/ /g, '%20'), '').replace(slashReg, ''))
 						
 						arr.pagination.push([value, pPage])
 					}
@@ -262,7 +244,6 @@ class XlecxAPI {
 			}
 
 			if (hasPost == false && category == false && random == false) arr = null
-
 			callback(null, arr)
 		}).catch(err => {
 			if (err == 'TypeError: Failed to fetch') err = 'Connection Timeout, Check Internet Connection.'
@@ -289,20 +270,20 @@ class XlecxAPI {
 		}).then(html => {
 			const parser = new DOMParser()
 			const htmlDoc = parser.parseFromString(html, 'text/html')
-			const arr = {}
-			var gg = 0, bb = 0
+			let gg = 0, bb = 0, arr = {}
 
 			var li = htmlDoc.getElementsByClassName('full-in')
 			if (li.length != 0) {
-				arr.title = li[0].getElementsByTagName('h1')[0].textContent
+				li = li[0]
+				arr.title = li.getElementsByTagName('h1')[0].textContent
 				arr.images = []
-				var info = li[0].getElementsByClassName('full-tags')
+				let info = li.getElementsByClassName('full-tags')
 
 				// Groups
 				if (info.length >= 1 && info[0].children.length > 0) {
 					arr.groups = []
-					var t = info[0].getElementsByTagName('a')
-					for (var i=0; i<t.length; i++) {
+					let t = info[0].getElementsByTagName('a')
+					for (let i=0; i<t.length; i++) {
 						arr.groups.push({
 							"name": t[i].textContent,
 							"url": t[i].getAttribute('href')
@@ -313,8 +294,8 @@ class XlecxAPI {
 				// Artist
 				if (info.length >= 2 && info[1].children.length > 0) {
 					arr.artists = []
-					var t = info[1].getElementsByTagName('a')
-					for (var i=0; i<t.length; i++) {
+					let t = info[1].getElementsByTagName('a')
+					for (let i=0; i<t.length; i++) {
 						arr.artists.push({
 							"name": t[i].textContent,
 							"url": t[i].getAttribute('href')
@@ -325,8 +306,8 @@ class XlecxAPI {
 				// Parody
 				if (info.length >= 3 && info[2].children.length > 0) {
 					arr.parody = []
-					var t = info[2].getElementsByTagName('a')
-					for (var i=0; i<t.length; i++) {
+					let t = info[2].getElementsByTagName('a')
+					for (let i=0; i<t.length; i++) {
 						arr.parody.push({
 							"name": t[i].textContent,
 							"url": t[i].getAttribute('href')
@@ -337,8 +318,8 @@ class XlecxAPI {
 				// Tags
 				if (info.length >= 4 && info[3].children.length > 0) {
 					arr.tags = []
-					var t = info[3].getElementsByTagName('a')
-					for (var i=0; i<t.length; i++) {
+					let t = info[3].getElementsByTagName('a')
+					for (let i=0; i<t.length; i++) {
 						arr.tags.push({
 							"name": t[i].textContent,
 							"url": t[i].getAttribute('href')
@@ -347,9 +328,9 @@ class XlecxAPI {
 				}
 
 				// Images
-				var gg = li[0].getElementsByClassName('f-desc full-text clearfix')[0].getElementsByTagName('img')
+				gg = li.getElementsByClassName('f-desc full-text clearfix')[0].getElementsByTagName('img')
 				if (raw == true) {
-					for (var i=0; i<gg.length; i++) {
+					for (let i=0; i<gg.length; i++) {
 						bb = this.baseURL+gg[i].getAttribute('data-src')
 						bb = bb.replace('http://xlecx.com', '')
 						arr.images.push({
@@ -358,7 +339,7 @@ class XlecxAPI {
 						})
 					}
 				} else {
-					for (var i=0; i<gg.length; i++) {
+					for (let i=0; i<gg.length; i++) {
 						bb = gg[i].getAttribute('data-src')
 						bb = bb.replace('http://xlecx.com', '')
 						arr.images.push({
@@ -375,7 +356,7 @@ class XlecxAPI {
 						li = gg[0].getElementsByClassName('thumb')
 						if (li.length > 0) {
 							arr.related = []
-							for (var i = 0; i < li.length; i++) {
+							for (let i = 0; i < li.length; i++) {
 								gg = li[i].getElementsByClassName('th-img img-resp-h')[0].getAttribute('href')
 								bb = li[i].getElementsByClassName('th-time icon-l')[0]
 								if (bb != undefined) bb = this.#getOverviewPages(bb.textContent)
@@ -392,8 +373,7 @@ class XlecxAPI {
 						}
 					}
 				}
-			} else
-				arr = null
+			} else arr = null
 
 			callback(null, arr)
 		}).catch(err => {
@@ -419,7 +399,7 @@ class XlecxAPI {
 		}).then(html => {
 			const parser = new DOMParser()
 			const htmlDoc = parser.parseFromString(html, 'text/html')
-			var gg = 0, bb = 0, arr = []
+			let gg = 0, bb = 0, arr = [], li
 
 			var li = htmlDoc.getElementsByClassName('clearfix')[0].getElementsByClassName('full-in')
 			if (li.length != 0) {
@@ -427,7 +407,7 @@ class XlecxAPI {
 				if (gg.length > 0) {
 					li = gg[0].getElementsByClassName('thumb')
 					if (li.length > 0) {
-						for (var i = 0; i < li.length; i++) {
+						for (let i = 0; i < li.length; i++) {
 							gg = li[i].getElementsByClassName('th-img img-resp-h')[0].getAttribute('href')
 							bb = li[i].getElementsByClassName('th-time icon-l')[0]
 							if (bb != undefined) bb = this.#getOverviewPages(bb.textContent)
@@ -441,12 +421,9 @@ class XlecxAPI {
 								"url": gg
 							})
 						}
-					} else
-						arr = null
-				} else
-					arr = null
-			} else
-				arr = null
+					} else arr = null
+				} else arr = null
+			} else arr = null
 
 			callback(null, arr)
 		}).catch(err => {
@@ -472,14 +449,12 @@ class XlecxAPI {
 			return response.text()
 		}).then(html => {
 			const parser = new DOMParser()
-			const htmlDoc = parser.parseFromString(html, 'text/html')
-			const slashReg = new RegExp('/', 'g')
-			const arr = {}
-			var gg = 0
+			const arr = {}, slashReg = new RegExp('/', 'g'), htmlDoc = parser.parseFromString(html, 'text/html')
+			let gg = 0, li
 
-			var li = htmlDoc.getElementsByClassName('clouds_xsmall')
+			li = htmlDoc.getElementsByClassName('clouds_xsmall')
 			arr.tags = []
-			for (var i=0; i<li.length; i++) {
+			for (let i=0; i<li.length; i++) {
 				gg = li[i].children[0]
 				arr.tags.push({
 					"name": gg.textContent,
@@ -490,11 +465,10 @@ class XlecxAPI {
 			if (category == true) {
 				arr.categories = []
 				li = htmlDoc.getElementsByClassName('side-bc')[0].getElementsByTagName('a')
-				for (var i=0; i<li.length; i++) {
+				for (let i=0; i<li.length; i++) {
 					arr.categories.push({ "name": li[i].textContent, "url": li[i].getAttribute('href').replace(this.baseURL+'/', '').replace(slashReg, '') })
 				}
 			}
-				
 
 			callback(null, arr)
 		}).catch(err => {
@@ -524,18 +498,15 @@ class XlecxAPI {
 			return response.text()
 		}).then(html => {
 			const parser = new DOMParser()
-			const htmlDoc = parser.parseFromString(html, 'text/html')
-			const arr = {}
-			var gg = 0, bb = 0, li, hasPost = false
-			const slashReg = new RegExp('/', 'g')
+			const arr = {}, slashReg = new RegExp('/', 'g'), htmlDoc = parser.parseFromString(html, 'text/html')
+			let gg = 0, bb = 0, li, hasPost = false, container, save, save2
+			container = htmlDoc.getElementsByClassName('main')[0].children
 			
 			// Category
 			if (category == true) {
 				arr.categories = []
 				li = htmlDoc.getElementsByClassName('side-bc')[0].getElementsByTagName('a')
-				for (var i=0; i<li.length; i++) {
-					arr.categories.push({ "name": li[i].textContent, "url": li[i].getAttribute('href').replace(this.baseURL+'/', '').replace(slashReg, '') })
-				}
+				for (let i=0; i<li.length; i++) arr.categories.push({ "name": li[i].textContent, "url": li[i].getAttribute('href').replace(this.baseURL+'/', '').replace(slashReg, '') })
 			}
 
 			li = htmlDoc.getElementsByClassName('pages clearfix')[0].getElementsByClassName('th-in')
@@ -543,16 +514,18 @@ class XlecxAPI {
 				arr.content = []
 				hasPost = true
 				// Contents
-				for (var i=0; i<li.length; i++) {
-					gg = li[i].getElementsByClassName('th-img img-resp-h')[0].getAttribute('href')
-					bb = li[i].getElementsByClassName('th-time icon-l')[0]
+				for (let i = 0; i < container.length - 1; i++) {
+					save = container[i].children[0].children
+					save2 = save[0].children
+					gg = save[0].getAttribute('href')
+					bb = save2[2]
 					if (bb != undefined) bb = this.#getOverviewPages(bb.textContent)
 					else bb = null
 	
 					arr.content.push({
 						"id": this.#lastSlash(gg),
-						"title": li[i].getElementsByClassName('th-title')[0].textContent,
-						"thumb": li[i].getElementsByTagName('img')[0].getAttribute('src').replace('http://xlecx.com', ''),
+						"title": save[1].textContent,
+						"thumb": save2[0].getAttribute('src').replace('http://xlecx.com', ''),
 						"pages": bb,
 						"url": gg
 					})
@@ -567,20 +540,14 @@ class XlecxAPI {
 						arr.pagination = []
 						for (var i = 0; i < li.length; i++) {
 							if (li[i].textContent == "")
-								if (i == li.length - 1)
-									value = ">"
-								else
-									value = "<"
-							else
-								value = li[i].textContent
+								if (i == li.length - 1) value = ">"
+								else value = "<"
+							else value = li[i].textContent
 							
-							if (li[i].getAttribute('href') == null)
-								pPage = null
+							if (li[i].getAttribute('href') == null) pPage = null
 							else {
 								pPage = Number(li[i].getAttribute('href').replace((this.baseURL+this.groupURL+name+'/page/').replace(/ /g, '%20'), '').replace(slashReg, ''))
-								if (Number.isNaN(pPage)) {
-									pPage = 1
-								}
+								if (Number.isNaN(pPage)) pPage = 1
 							}
 							
 							arr.pagination.push([value, pPage])
@@ -589,9 +556,7 @@ class XlecxAPI {
 				}
 			}
 
-			if (hasPost == false && category == false)
-				arr = null
-
+			if (hasPost == false && category == false) arr = null
 			callback(null, arr)
 		}).catch(err => {
 			if (err == 'TypeError: Failed to fetch') err = 'Connection Timeout, Check Internet Connection.'
@@ -620,18 +585,14 @@ class XlecxAPI {
 			return response.text()
 		}).then(html => {
 			const parser = new DOMParser()
-			const htmlDoc = parser.parseFromString(html, 'text/html')
-			const arr = {}
-			var gg = 0, bb = 0, li, hasPost = false
-			const slashReg = new RegExp('/', 'g')
+			const arr = {}, slashReg = new RegExp('/', 'g'), htmlDoc = parser.parseFromString(html, 'text/html')
+			let gg = 0, bb = 0, li, hasPost = false, container, save, save2
 			
 			// Category
 			if (category == true) {
 				arr.categories = []
 				li = htmlDoc.getElementsByClassName('side-bc')[0].getElementsByTagName('a')
-				for (var i=0; i<li.length; i++) {
-					arr.categories.push({ "name": li[i].textContent, "url": li[i].getAttribute('href').replace(this.baseURL+'/', '').replace(slashReg, '') })
-				}
+				for (let i=0; i<li.length; i++) arr.categories.push({ "name": li[i].textContent, "url": li[i].getAttribute('href').replace(this.baseURL+'/', '').replace(slashReg, '') })
 			}
 
 			li = htmlDoc.getElementsByClassName('pages clearfix')[0].getElementsByClassName('th-in')
@@ -639,16 +600,18 @@ class XlecxAPI {
 				arr.content = []
 				hasPost = true
 				// Contents
-				for (var i=0; i<li.length; i++) {
-					gg = li[i].getElementsByClassName('th-img img-resp-h')[0].getAttribute('href')
-					bb = li[i].getElementsByClassName('th-time icon-l')[0]
+				for (let i = 0; i < container.length - 1; i++) {
+					save = container[i].children[0].children
+					save2 = save[0].children
+					gg = save[0].getAttribute('href')
+					bb = save2[2]
 					if (bb != undefined) bb = this.#getOverviewPages(bb.textContent)
 					else bb = null
-
+	
 					arr.content.push({
 						"id": this.#lastSlash(gg),
-						"title": li[i].getElementsByClassName('th-title')[0].textContent,
-						"thumb": li[i].getElementsByTagName('img')[0].getAttribute('src').replace('http://xlecx.com', ''),
+						"title": save[1].textContent,
+						"thumb": save2[0].getAttribute('src').replace('http://xlecx.com', ''),
 						"pages": bb,
 						"url": gg
 					})
@@ -659,24 +622,18 @@ class XlecxAPI {
 					li = htmlDoc.getElementById('bottom-nav') || null
 					if (li != null) {
 						li = li.querySelector('.navigation').children || null
-						var value, pPage
+						let value, pPage
 						arr.pagination = []
-						for (var i = 0; i < li.length; i++) {
+						for (let i = 0; i < li.length; i++) {
 							if (li[i].textContent == "")
-								if (i == li.length - 1)
-									value = ">"
-								else
-									value = "<"
-							else
-								value = li[i].textContent
+								if (i == li.length - 1) value = ">"
+								else value = "<"
+							else value = li[i].textContent
 							
-							if (li[i].getAttribute('href') == null)
-								pPage = null
+							if (li[i].getAttribute('href') == null) pPage = null
 							else {
 								pPage = Number(li[i].getAttribute('href').replace((this.baseURL+this.artistURL+name+'/page/').replace(/ /g, '%20'), '').replace(slashReg, ''))
-								if (Number.isNaN(pPage)) {
-									pPage = 1
-								}
+								if (Number.isNaN(pPage)) pPage = 1
 							}
 							
 							arr.pagination.push([value, pPage])
@@ -685,9 +642,7 @@ class XlecxAPI {
 				}
 			}
 
-			if (hasPost == false && category == false)
-				arr = null
-
+			if (hasPost == false && category == false) arr = null
 			callback(null, arr)
 		}).catch(err => {
 			if (err == 'TypeError: Failed to fetch') err = 'Connection Timeout, Check Internet Connection.'
@@ -716,18 +671,14 @@ class XlecxAPI {
 			return response.text()
 		}).then(html => {
 			const parser = new DOMParser()
-			const htmlDoc = parser.parseFromString(html, 'text/html')
-			const arr = {}
-			var gg = 0, bb = 0, li, hasPost = false
-			const slashReg = new RegExp('/', 'g')
+			const arr = {}, slashReg = new RegExp('/', 'g'), htmlDoc = parser.parseFromString(html, 'text/html')
+			let gg = 0, bb = 0, li, hasPost = false, container, save, save2
 			
 			// Category
 			if (category == true) {
 				arr.categories = []
 				li = htmlDoc.getElementsByClassName('side-bc')[0].getElementsByTagName('a')
-				for (var i=0; i<li.length; i++) {
-					arr.categories.push({ "name": li[i].textContent, "url": li[i].getAttribute('href').replace(this.baseURL+'/', '').replace(slashReg, '') })
-				}
+				for (let i=0; i<li.length; i++) arr.categories.push({ "name": li[i].textContent, "url": li[i].getAttribute('href').replace(this.baseURL+'/', '').replace(slashReg, '') })
 			}
 
 			li = htmlDoc.getElementsByClassName('pages clearfix')[0].getElementsByClassName('th-in')
@@ -735,16 +686,18 @@ class XlecxAPI {
 				arr.content = []
 				hasPost = true
 				// Contents
-				for (var i=0; i<li.length; i++) {
-					gg = li[i].getElementsByClassName('th-img img-resp-h')[0].getAttribute('href')
-					bb = li[i].getElementsByClassName('th-time icon-l')[0]
+				for (let i = 0; i < container.length - 1; i++) {
+					save = container[i].children[0].children
+					save2 = save[0].children
+					gg = save[0].getAttribute('href')
+					bb = save2[2]
 					if (bb != undefined) bb = this.#getOverviewPages(bb.textContent)
 					else bb = null
-
+	
 					arr.content.push({
 						"id": this.#lastSlash(gg),
-						"title": li[i].getElementsByClassName('th-title')[0].textContent,
-						"thumb": li[i].getElementsByTagName('img')[0].getAttribute('src').replace('http://xlecx.com', ''),
+						"title": save[1].textContent,
+						"thumb": save2[0].getAttribute('src').replace('http://xlecx.com', ''),
 						"pages": bb,
 						"url": gg
 					})
@@ -755,24 +708,18 @@ class XlecxAPI {
 					li = htmlDoc.getElementById('bottom-nav') || null
 					if (li != null) {
 						li = li.querySelector('.navigation').children || null
-						var value, pPage
+						let value, pPage
 						arr.pagination = []
-						for (var i = 0; i < li.length; i++) {
+						for (let i = 0; i < li.length; i++) {
 							if (li[i].textContent == "")
-								if (i == li.length - 1)
-									value = ">"
-								else
-									value = "<"
-							else
-								value = li[i].textContent
+								if (i == li.length - 1) value = ">"
+								else value = "<"
+							else value = li[i].textContent
 							
-							if (li[i].getAttribute('href') == null)
-								pPage = null
+							if (li[i].getAttribute('href') == null) pPage = null
 							else {
 								pPage = Number(li[i].getAttribute('href').replace((this.baseURL+this.parodyURL+name+'/page/').replace(/ /g, '%20'), '').replace(slashReg, ''))
-								if (Number.isNaN(pPage)) {
-									pPage = 1
-								}
+								if (Number.isNaN(pPage)) pPage = 1
 							}
 							
 							arr.pagination.push([value, pPage])
@@ -781,9 +728,7 @@ class XlecxAPI {
 				}
 			}
 
-			if (hasPost == false && category == false)
-				arr = null
-
+			if (hasPost == false && category == false) arr = null
 			callback(null, arr)
 		}).catch(err => {
 			if (err == 'TypeError: Failed to fetch') err = 'Connection Timeout, Check Internet Connection.'
@@ -812,18 +757,14 @@ class XlecxAPI {
 			return response.text()
 		}).then(html => {
 			const parser = new DOMParser()
-			const htmlDoc = parser.parseFromString(html, 'text/html')
-			const arr = {}
-			var gg = 0, bb = 0, li, hasPost = false
-			const slashReg = new RegExp('/', 'g')
+			const arr = {}, slashReg = new RegExp('/', 'g'), htmlDoc = parser.parseFromString(html, 'text/html')
+			let gg = 0, bb = 0, li, hasPost = false, container, save, save2
 			
 			// Category
 			if (category == true) {
 				arr.categories = []
 				li = htmlDoc.getElementsByClassName('side-bc')[0].getElementsByTagName('a')
-				for (var i=0; i<li.length; i++) {
-					arr.categories.push({ "name": li[i].textContent, "url": li[i].getAttribute('href').replace(this.baseURL+'/', '').replace(slashReg, '') })
-				}
+				for (let i=0; i<li.length; i++) arr.categories.push({ "name": li[i].textContent, "url": li[i].getAttribute('href').replace(this.baseURL+'/', '').replace(slashReg, '') })
 			}
 
 			li = htmlDoc.getElementsByClassName('pages clearfix')[0].getElementsByClassName('th-in')
@@ -831,16 +772,18 @@ class XlecxAPI {
 				arr.content = []
 				hasPost = true
 				// Contents
-				for (var i=0; i<li.length; i++) {
-					gg = li[i].getElementsByClassName('th-img img-resp-h')[0].getAttribute('href')
-					bb = li[i].getElementsByClassName('th-time icon-l')[0]
+				for (let i = 0; i < container.length - 1; i++) {
+					save = container[i].children[0].children
+					save2 = save[0].children
+					gg = save[0].getAttribute('href')
+					bb = save2[2]
 					if (bb != undefined) bb = this.#getOverviewPages(bb.textContent)
 					else bb = null
-
+	
 					arr.content.push({
 						"id": this.#lastSlash(gg),
-						"title": li[i].getElementsByClassName('th-title')[0].textContent,
-						"thumb": li[i].getElementsByTagName('img')[0].getAttribute('src').replace('http://xlecx.com', ''),
+						"title": save[1].textContent,
+						"thumb": save2[0].getAttribute('src').replace('http://xlecx.com', ''),
 						"pages": bb,
 						"url": gg
 					})
@@ -851,24 +794,18 @@ class XlecxAPI {
 					li = htmlDoc.getElementById('bottom-nav') || null
 					if (li != null) {
 						li = li.querySelector('.navigation').children || null
-						var value, pPage
+						let value, pPage
 						arr.pagination = []
-						for (var i = 0; i < li.length; i++) {
+						for (let i = 0; i < li.length; i++) {
 							if (li[i].textContent == "")
-								if (i == li.length - 1)
-									value = ">"
-								else
-									value = "<"
-							else
-								value = li[i].textContent
+								if (i == li.length - 1) value = ">"
+								else value = "<"
+							else value = li[i].textContent
 							
-							if (li[i].getAttribute('href') == null)
-								pPage = null
+							if (li[i].getAttribute('href') == null) pPage = null
 							else {
 								pPage = Number(li[i].getAttribute('href').replace((this.baseURL+this.tagURL+name+'/page/').replace(/ /g, '%20'), '').replace(slashReg, ''))
-								if (Number.isNaN(pPage)) {
-									pPage = 1
-								}
+								if (Number.isNaN(pPage)) pPage = 1
 							}
 							
 							arr.pagination.push([value, pPage])
@@ -877,9 +814,7 @@ class XlecxAPI {
 				}
 			}
 			
-			if (hasPost == false && category == false)
-				arr = null
-
+			if (hasPost == false && category == false) arr = null
 			callback(null, arr)
 		}).catch(err => {
 			if (err == 'TypeError: Failed to fetch') err = 'Connection Timeout, Check Internet Connection.'
@@ -914,18 +849,14 @@ class XlecxAPI {
 			return response.text()
 		}).then(html => {
 			const parser = new DOMParser()
-			const htmlDoc = parser.parseFromString(html, 'text/html')
-			const slashReg = new RegExp('/', 'g')
-			const arr = {}
-			var gg = 0, bb = 0, li, hasPost = false
-			
+			const arr = {}, slashReg = new RegExp('/', 'g'), htmlDoc = parser.parseFromString(html, 'text/html')
+			let gg = 0, bb = 0, li, hasPost = false, container, save, save2
+
 			// Category
 			if (category == true) {
 				arr.categories = []
 				li = htmlDoc.getElementsByClassName('side-bc')[0].getElementsByTagName('a')
-				for (var i=0; i<li.length; i++) {
-					arr.categories.push({ "name": li[i].textContent, "url": li[i].getAttribute('href').replace(this.baseURL+'/', '').replace(slashReg, '') })
-				}
+				for (let i=0; i<li.length; i++) arr.categories.push({ "name": li[i].textContent, "url": li[i].getAttribute('href').replace(this.baseURL+'/', '').replace(slashReg, '') })
 			}
 
 			li = htmlDoc.getElementsByClassName('pages clearfix')[0].getElementsByClassName('th-in')
@@ -933,16 +864,18 @@ class XlecxAPI {
 				arr.content = []
 				hasPost = true
 				// Content
-				for (var i=0; i<li.length; i++) {
-					gg = li[i].getElementsByClassName('th-img img-resp-h')[0].getAttribute('href')
-					bb = li[i].getElementsByClassName('th-time icon-l')[0]
+				for (let i = 1; i < container.length - 1; i++) {
+					save = container[i].children[0].children
+					save2 = save[0].children
+					gg = save[0].getAttribute('href')
+					bb = save2[2]
 					if (bb != undefined) bb = this.#getOverviewPages(bb.textContent)
 					else bb = null
-					
+	
 					arr.content.push({
 						"id": this.#lastSlash(gg),
-						"title": li[i].getElementsByClassName('th-title')[0].textContent,
-						"thumb": li[i].getElementsByTagName('img')[0].getAttribute('src').replace('http://xlecx.com', ''),
+						"title": save[1].textContent,
+						"thumb": save2[0].getAttribute('src').replace('http://xlecx.com', ''),
 						"pages": bb,
 						"url": gg
 					})
@@ -950,27 +883,21 @@ class XlecxAPI {
 
 				// Pagination
 				if (pagination == true) {
-					var value, pPage
+					let value, pPage
 					li = htmlDoc.getElementById('bottom-nav') || null
 					if (li != null) {
 						arr.pagination = []
 						li = li.querySelector('.navigation').children
-						for (var i = 0; i < li.length; i++) {
+						for (let i = 0; i < li.length; i++) {
 							if (li[i].textContent == "")
-								if (i == li.length - 1)
-									value = ">"
-								else
-									value = "<"
-							else
-								value = li[i].textContent
+								if (i == li.length - 1) value = ">"
+								else value = "<"
+							else value = li[i].textContent
 							
-							if (li[i].getAttribute('href') == null)
-								pPage = null
+							if (li[i].getAttribute('href') == null) pPage = null
 							else {
 								pPage = Number(li[i].getAttribute('onclick').replace('javascript:list_submit(', '').replace('); return(false)', ''))
-								if (Number.isNaN(pPage)) {
-									pPage = 1
-								}
+								if (Number.isNaN(pPage)) pPage = 1
 							}
 							
 							arr.pagination.push([value, pPage])
@@ -979,11 +906,8 @@ class XlecxAPI {
 				}
 			}
 
-			if (hasPost == false && category == false)
-				arr = null
-
+			if (hasPost == false && category == false) arr = null
 			callback(null, arr)
-
 		}).catch(err => {
 			if (err == 'TypeError: Failed to fetch') err = 'Connection Timeout, Check Internet Connection.'
 			callback(err, null)
