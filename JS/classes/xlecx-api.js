@@ -79,7 +79,7 @@ class XlecxAPI {
 				}
 			}
 
-			li = htmlDoc.getElementsByClassName('th-in')
+			li = htmlDoc.getElementsByClassName('floats clearfix')[0].getElementsByClassName('th-in')
 			if (li.length != 0) {
 				arr.content = []
 				hasPost = true
@@ -216,7 +216,7 @@ class XlecxAPI {
 				}
 			}
 
-			li = htmlDoc.getElementsByClassName('th-in')
+			li = htmlDoc.getElementsByClassName('floats clearfix')[0].getElementsByClassName('th-in')
 			if (li.length != 0) {
 				arr.content = []
 				hasPost = true
@@ -421,7 +421,7 @@ class XlecxAPI {
 			const htmlDoc = parser.parseFromString(html, 'text/html')
 			var gg = 0, bb = 0, arr = []
 
-			var li = htmlDoc.getElementsByClassName('full-in')
+			var li = htmlDoc.getElementsByClassName('clearfix')[0].getElementsByClassName('full-in')
 			if (li.length != 0) {
 				gg = htmlDoc.getElementsByClassName('floats clearfix')
 				if (gg.length > 0) {
@@ -538,7 +538,7 @@ class XlecxAPI {
 				}
 			}
 
-			li = htmlDoc.getElementsByClassName('th-in')
+			li = htmlDoc.getElementsByClassName('pages clearfix')[0].getElementsByClassName('th-in')
 			if (li.length != 0) {
 				arr.content = []
 				hasPost = true
@@ -634,7 +634,7 @@ class XlecxAPI {
 				}
 			}
 
-			li = htmlDoc.getElementsByClassName('th-in')
+			li = htmlDoc.getElementsByClassName('pages clearfix')[0].getElementsByClassName('th-in')
 			if (li.length != 0) {
 				arr.content = []
 				hasPost = true
@@ -730,7 +730,7 @@ class XlecxAPI {
 				}
 			}
 
-			li = htmlDoc.getElementsByClassName('th-in')
+			li = htmlDoc.getElementsByClassName('pages clearfix')[0].getElementsByClassName('th-in')
 			if (li.length != 0) {
 				arr.content = []
 				hasPost = true
@@ -826,7 +826,7 @@ class XlecxAPI {
 				}
 			}
 
-			li = htmlDoc.getElementsByClassName('th-in')
+			li = htmlDoc.getElementsByClassName('pages clearfix')[0].getElementsByClassName('th-in')
 			if (li.length != 0) {
 				arr.content = []
 				hasPost = true
@@ -928,7 +928,7 @@ class XlecxAPI {
 				}
 			}
 
-			li = htmlDoc.getElementsByClassName('th-in')
+			li = htmlDoc.getElementsByClassName('pages clearfix')[0].getElementsByClassName('th-in')
 			if (li.length != 0) {
 				arr.content = []
 				hasPost = true
