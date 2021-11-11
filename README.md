@@ -10,6 +10,8 @@
 > - ###### Download (Comics/Mangas).
 > - ###### Manage Downloaded (Comics/Mangas).
 > - ###### Useful Abilities For making program easier.
+> - ###### Ability To Optimize Downloaded Comic Without Losing Quality
+> - ###### Ability To Export Downloaded Comics To .zip and .cbz
 > - ###### Easy Too Use.
 > - ###### Good Performance (After Loading).
 > - ###### Nice and Powerful Setting :)

@@ -2672,7 +2672,7 @@ input::-webkit-input-placeholder { user-select: none }
 
 /* Public */
 .alert {
-	display: block !important;
+	display: block;
 	padding: 10px !important;
 	margin: 5px 10px !important;
 	background-color: #ddd;
