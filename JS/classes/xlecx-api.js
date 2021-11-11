@@ -79,7 +79,7 @@ class XlecxAPI {
 				}
 			}
 
-			li = htmlDoc.getElementById('dle-content').getElementsByClassName('th-in')
+			li = htmlDoc.getElementsByClassName('th-in')
 			if (li.length != 0) {
 				arr.content = []
 				hasPost = true
@@ -216,7 +216,7 @@ class XlecxAPI {
 				}
 			}
 
-			li = htmlDoc.getElementById('dle-content').getElementsByClassName('th-in')
+			li = htmlDoc.getElementsByClassName('th-in')
 			if (li.length != 0) {
 				arr.content = []
 				hasPost = true
@@ -292,7 +292,7 @@ class XlecxAPI {
 			const arr = {}
 			var gg = 0, bb = 0
 
-			var li = htmlDoc.getElementById('dle-content').getElementsByClassName('full-in')
+			var li = htmlDoc.getElementsByClassName('full-in')
 			if (li.length != 0) {
 				arr.title = li[0].getElementsByTagName('h1')[0].textContent
 				arr.images = []
@@ -370,7 +370,7 @@ class XlecxAPI {
 
 				// Related
 				if (related == true) {
-					gg = htmlDoc.getElementById('dle-content').getElementsByClassName('floats clearfix')
+					gg = htmlDoc.getElementsByClassName('floats clearfix')
 					if (gg.length > 0) {
 						li = gg[0].getElementsByClassName('thumb')
 						if (li.length > 0) {
@@ -421,9 +421,9 @@ class XlecxAPI {
 			const htmlDoc = parser.parseFromString(html, 'text/html')
 			var gg = 0, bb = 0, arr = []
 
-			var li = htmlDoc.getElementById('dle-content').getElementsByClassName('full-in')
+			var li = htmlDoc.getElementsByClassName('full-in')
 			if (li.length != 0) {
-				gg = htmlDoc.getElementById('dle-content').getElementsByClassName('floats clearfix')
+				gg = htmlDoc.getElementsByClassName('floats clearfix')
 				if (gg.length > 0) {
 					li = gg[0].getElementsByClassName('thumb')
 					if (li.length > 0) {
@@ -538,7 +538,7 @@ class XlecxAPI {
 				}
 			}
 
-			li = htmlDoc.getElementById('dle-content').getElementsByClassName('th-in')
+			li = htmlDoc.getElementsByClassName('th-in')
 			if (li.length != 0) {
 				arr.content = []
 				hasPost = true
@@ -634,7 +634,7 @@ class XlecxAPI {
 				}
 			}
 
-			li = htmlDoc.getElementById('dle-content').getElementsByClassName('th-in')
+			li = htmlDoc.getElementsByClassName('th-in')
 			if (li.length != 0) {
 				arr.content = []
 				hasPost = true
@@ -730,7 +730,7 @@ class XlecxAPI {
 				}
 			}
 
-			li = htmlDoc.getElementById('dle-content').getElementsByClassName('th-in')
+			li = htmlDoc.getElementsByClassName('th-in')
 			if (li.length != 0) {
 				arr.content = []
 				hasPost = true
@@ -826,7 +826,7 @@ class XlecxAPI {
 				}
 			}
 
-			li = htmlDoc.getElementById('dle-content').getElementsByClassName('th-in')
+			li = htmlDoc.getElementsByClassName('th-in')
 			if (li.length != 0) {
 				arr.content = []
 				hasPost = true
@@ -928,7 +928,7 @@ class XlecxAPI {
 				}
 			}
 
-			li = htmlDoc.getElementById('dle-content').getElementsByClassName('th-in')
+			li = htmlDoc.getElementsByClassName('th-in')
 			if (li.length != 0) {
 				arr.content = []
 				hasPost = true
