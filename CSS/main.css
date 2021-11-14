@@ -2670,6 +2670,105 @@ input::-webkit-input-placeholder { user-select: none }
 	border-radius: 0 0 8px 8px;
 }
 
+/* Collections */
+#collections-panel {
+	display: none;
+	width: 100%;
+	height: 100%;
+	background-color: #fff;
+	position: fixed;
+	top: 0;
+	left: 0;
+}
+
+#c-p-t-m {
+	width: 100%;
+	margin-bottom: 20px;
+}
+
+#c-p-c-c {
+	width: 100%;
+	padding: 10px 30px;
+	text-align: center;
+}
+
+#c-p-c-c > div {
+	display: inline-block;
+	width: 200px;
+	max-height: 300px;
+	background-color: #eee;
+	border-radius: 10px;
+	position: relative;
+	box-shadow: 0px 8px 24px rgba(149, 157, 165, 0.2);
+	cursor: pointer;
+	transition: box-shadow .2s;
+}
+
+#c-p-c-c > div:hover {
+	box-shadow: 0px 7px 29px 0px rgba(100, 100, 111, 0.2);
+}
+
+#c-p-c-c > div > img {
+	display: block;
+	width: 200px;
+	max-height: 100%;
+	border-radius: 10px;
+	object-fit: cover;
+	object-position: center;
+}
+
+#c-p-c-c > div > span {
+	display: none;
+	background-color: #000a;
+	color: #fff;
+	padding: 3px;
+	border-radius: 7px;
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	user-select: none;
+}
+
+#c-p-c-c > div:hover > span {
+	display: block;
+}
+
+#c-p-c-c > div > div {
+	width: 100%;
+	height: 100%;
+	border-radius: 10px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	box-shadow: rgba(0,0,0,.2) 0px -50px 36px -28px inset;
+	transition: box-shadow .2s;
+}
+
+#c-p-c-c > div:hover > div {
+	box-shadow: rgba(0,0,0,.15) 0px -23px 25px 0px inset, rgba(0,0,0,.13) 0px -36px 30px 0px inset, rgba(0,0,0,.09) 0px -79px 40px 0px inset, rgba(0,0,0,.06) 0px 2px 1px, rgba(0,0,0,.07) 0px 4px 2px, rgba(0,0,0,.07) 0px 8px 4px, rgba(0,0,0,.07) 0px 16px 8px, rgba(0,0,0,.07) 0px 32px 16px;
+}
+
+#c-p-c-c > div > p {
+	display: block;
+	width: 100%;
+	max-height: 100%;
+	padding: 10px 5px;
+	background-color: transparent;
+	color: #000;
+	font-size: 15px;
+	text-align: center;
+	word-wrap: break-word;
+	overflow: hidden;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	transition: color .2s;
+}
+
+#c-p-c-c > div:hover > p {
+	color: #fff;
+}
+
 /* Public */
 .alert {
 	display: block;

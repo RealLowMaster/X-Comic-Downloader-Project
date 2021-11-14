@@ -24,6 +24,7 @@
 	<script type="text/javascript" src="JS/slider.js" defer></script>
 	<script type="text/javascript" src="JS/browser.js" defer></script>
 	<script type="text/javascript" src="JS/database.js" defer></script>
+	<script type="text/javascript" src="JS/collections.js" defer></script>
 	<script type="text/javascript" src="JS/make-thumb.js" defer></script>
 	<script type="text/javascript" src="JS/image-optimizer.js" defer></script>
 	<script type="text/javascript" src="JS/setting.js" defer></script>
@@ -48,6 +49,7 @@
 							<button style="display:none;" onclick="" title="Optimize all UnOptimized Comics in this page">Optimize Page Comics</button>
 						</div>
 					</div>
+					<button onclick="openCollectionsPanel()">Collections</button>
 					<button onclick="openSetting()">Setting</button>
 				</div>
 				<div>
@@ -247,6 +249,21 @@
 			</div>
 
 			<div id="b-h-o-d"></div>
+		</div>
+	</div>
+
+	<!-- Collections -->
+	<div id="collections-panel">
+		<div id="c-p-t-m">
+			<button type="button" class="btn btn-primary" onclick="OpenAddCollectionMenu()">Add Collection</button>
+		</div>
+		<div id="c-p-c-c">
+			<div>
+				<img src="Image/no-img-300x300.png" loading="lazy">
+				<span>14</span>
+				<div></div>
+				<p>Collection 1</p>
+			</div>
 		</div>
 	</div>
 
