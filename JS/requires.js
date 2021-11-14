@@ -64,8 +64,8 @@ const keydownEvents = [
 	'BrowserKeyEvents({ctrl},{shift},{key})',
 	'SettingKeyEvents({ctrl},{shift},{key})'
 ]
-const ThisWindow = remote.getCurrentWindow(), loading = new Loading(19), db = {}, procressPanel = new ProcressPanel(0), update_number = 7
-let comicDeleting = false, downloadCounter = 0, wt_fps = 20, dirDB, dirUL, dirTmp, isOptimizing = false, browserLastTabs = [], tabsHistory = [], dirHistory = '', keydownEventIndex = 0, new_update, save_value = null, save_value2 = null, afterDLReload = true, collectionsDB = {a:[]}
+const ThisWindow = remote.getCurrentWindow(), loading = new Loading(20), db = {}, procressPanel = new ProcressPanel(0), update_number = 7
+let comicDeleting = false, downloadCounter = 0, wt_fps = 20, dirDB, dirUL, dirTmp, isOptimizing = false, browserLastTabs = [], tabsHistory = [], dirHistory = '', keydownEventIndex = 0, new_update, save_value = null, save_value2 = null, afterDLReload = true, collectionsDB = []
 var setting, tabs = [], downloadingList = [], lastComicId, lastHaveId, lastGroupId, lastArtistId, lastParodyId, lastTagId, lastCharacterId, lastLanguageId, lastCategoryId, searchTimer, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = [], openedMenuTabIndex, copiedTab = null
 
 /*
@@ -623,8 +623,8 @@ function CreateDatabase() {
 	db.comic_languages = new nedb({ filename: dirDB+'/comic_languages', autoload: true })
 	db.categories = new nedb({ filename: dirDB+'/categories', autoload: true })
 	db.comic_categories = new nedb({ filename: dirDB+'/comic_categories', autoload: true })
-	if (fs.existsSync(dirDB+'/collections.lowdb')) collectionsDB = jsonfile.readFileSync(dirDB+'/collections.lowdb')
-	else jsonfile.writeFileSync(dirDB+'/collections.lowdb',collectionsDB)
+	if (fs.existsSync(dirDB+'/collections.lowdb')) collectionsDB = jsonfile.readFileSync(dirDB+'/collections.lowdb').a
+	else jsonfile.writeFileSync(dirDB+'/collections.lowdb',{a:[]})
 }
 
 function CheckSettings() {

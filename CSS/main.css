@@ -2683,13 +2683,36 @@ input::-webkit-input-placeholder { user-select: none }
 
 #c-p-t-m {
 	width: 100%;
+	padding: 10px;
 	margin-bottom: 20px;
+	direction: rtl;
+}
+
+#c-p-t-m > * {
+	direction: ltr;
 }
 
 #c-p-c-c {
 	width: 100%;
 	padding: 10px 30px;
 	text-align: center;
+}
+
+#c-p-c-c > h6 {
+	display: inline-block;
+    width: 200px;
+	padding: 10px;
+    margin: 5px 10px;
+    background-color: #eee;
+	color: #222;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+    text-shadow: 0 0 5px rgb(0 0 0 / 30%);
+    box-shadow: 0 1px 10px 0 rgb(0 0 0 / 10%);
+    cursor: default;
+	user-select: none;
 }
 
 #c-p-c-c > div {

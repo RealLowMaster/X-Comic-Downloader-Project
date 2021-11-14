@@ -46,13 +46,11 @@ DB => {
 		parodies = t = []
 		_id => Comic Id
 	}
-	collections 10 => {
-		name = n
-		comics = c = [
-			comic_id = 0
-		]
-		_id
-	}
+	collections 10 => [
+		'title' = name => 0
+		[0,1,...] = ids => 1
+		'image.jpg' = image url => 2
+	]
 	have 11 => {
 		site = s
 		comic_real_id = i

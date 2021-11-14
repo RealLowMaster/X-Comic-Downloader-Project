@@ -36,9 +36,10 @@ function AfterDatabaseDoneOnStartup() {
 	}
 
 	try {
-
+		loading.forward('Load Collections...')
+		LoadCollections()
 	} catch(err) {
-		error("Startup->->Err: "+err);
+		error("Startup->LoadCollections->Err: "+err);
 	}
 
 	try {
