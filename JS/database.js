@@ -532,3 +532,8 @@ async function CreateComic(comicIndex, haveIndex, gottenResult, image, siteIndex
 		})
 	})
 }
+
+// Collections
+function AddCollection() {}
+function OpenAddCollection() {}
+function CloseAddCollection() {}

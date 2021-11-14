@@ -2,6 +2,7 @@ const { remote } = require('electron')
 const fs = require('fs')
 const nedb = require('nedb')
 const sharp = require('sharp')
+const jsonfile = require('jsonfile')
 const ImageDownloader = require('image-downloader')
 const defaultSettingLang = {
 	tab_at_limit: "You Can't Make Any More Tab."
@@ -64,7 +65,7 @@ const keydownEvents = [
 	'SettingKeyEvents({ctrl},{shift},{key})'
 ]
 const ThisWindow = remote.getCurrentWindow(), loading = new Loading(19), db = {}, procressPanel = new ProcressPanel(0), update_number = 7
-let comicDeleting = false, downloadCounter = 0, wt_fps = 20, dirDB, dirUL, dirTmp, isOptimizing = false, browserLastTabs = [], tabsHistory = [], dirHistory = '', keydownEventIndex = 0, new_update, save_value = null, save_value2 = null, afterDLReload = true
+let comicDeleting = false, downloadCounter = 0, wt_fps = 20, dirDB, dirUL, dirTmp, isOptimizing = false, browserLastTabs = [], tabsHistory = [], dirHistory = '', keydownEventIndex = 0, new_update, save_value = null, save_value2 = null, afterDLReload = true, collectionsDB = {a:[]}
 var setting, tabs = [], downloadingList = [], lastComicId, lastHaveId, lastGroupId, lastArtistId, lastParodyId, lastTagId, lastCharacterId, lastLanguageId, lastCategoryId, searchTimer, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = [], openedMenuTabIndex, copiedTab = null
 
 /*
@@ -485,7 +486,7 @@ function toFileName(text) {
 	return text.replace(/</g, ' ').replace(/>/g, ' ').replace(/:/g, ' ').replace(/"/g, ' ').replace(/\//g, '').replace(/\\/g, '').replace(/\|/g, '').replace(/\?/g, '').replace(/\*/g, ' ')
 }
 
-function convertToURL(text, backward) {
+function convertToURL(text = 'text', backward = false) {
 	backward = backward || false
 	if (backward) {
 		return text.replace(/%26/g, '&')
@@ -574,12 +575,12 @@ function GetSettingFile() {
 	if (!fs.existsSync(dirDocument)) {
 		fs.mkdirSync(dirDocument)
 		setting = defaultSetting
-		require('jsonfile').writeFileSync(dirDocument+'/setting.json', setting)
+		jsonfile.writeFileSync(dirDocument+'/setting.json', setting)
 	} else {
 		if (!fs.existsSync(dirDocument+'/setting.json')) {
 			setting = defaultSetting
-			require('jsonfile').writeFileSync(dirDocument+'/setting.json', setting)
-		} else setting = require('jsonfile').readFileSync(dirDocument+'/setting.json')
+			jsonfile.writeFileSync(dirDocument+'/setting.json', setting)
+		} else setting = jsonfile.readFileSync(dirDocument+'/setting.json')
 	}
 }
 
@@ -600,8 +601,8 @@ function GetDirection() {
 	if (!fs.existsSync(dirUL+'/thumbs')) fs.mkdirSync(dirUL+'/thumbs')
 
 	dirHistory = dirDocument+'/history.array'
-	if (fs.existsSync(dirHistory)) tabsHistory = require('jsonfile').readFileSync(dirHistory).h
-	else require('jsonfile').writeFileSync(dirHistory, {h:[]})
+	if (fs.existsSync(dirHistory)) tabsHistory = jsonfile.readFileSync(dirHistory).h
+	else jsonfile.writeFileSync(dirHistory, {h:[]})
 }
 
 function CreateDatabase() {
@@ -615,7 +616,6 @@ function CreateDatabase() {
 	db.comic_groups = new nedb({ filename: dirDB+'/comic_groups', autoload: true })
 	db.parodies = new nedb({ filename: dirDB+'/parodies', autoload: true })
 	db.comic_parodies = new nedb({ filename: dirDB+'/comic_parodies', autoload: true })
-	db.collections = new nedb({ filename: dirDB+'/collections', autoload: true })
 	db.have = new nedb({ filename: dirDB+'/have', autoload: true })
 	db.characters = new nedb({ filename: dirDB+'/characters', autoload: true })
 	db.comic_characters = new nedb({ filename: dirDB+'/comic_characters', autoload: true })
@@ -623,6 +623,8 @@ function CreateDatabase() {
 	db.comic_languages = new nedb({ filename: dirDB+'/comic_languages', autoload: true })
 	db.categories = new nedb({ filename: dirDB+'/categories', autoload: true })
 	db.comic_categories = new nedb({ filename: dirDB+'/comic_categories', autoload: true })
+	if (fs.existsSync(dirDB+'/collections.lowdb')) collectionsDB = jsonfile.readFileSync(dirDB+'/collections.lowdb')
+	else jsonfile.writeFileSync(dirDB+'/collections.lowdb',collectionsDB)
 }
 
 function CheckSettings() {
@@ -669,7 +671,7 @@ function CheckSettings() {
 
 function CheckReleaseNote() {
 	if (fs.existsSync(__dirname+'/release-note.json')) {
-		new_update = require('jsonfile').readFileSync(__dirname+'/release-note.json')
+		new_update = jsonfile.readFileSync(__dirname+'/release-note.json')
 		fs.unlinkSync(__dirname+'/release-note.json')
 
 
