@@ -599,6 +599,7 @@ function GetDirection() {
 	if (!fs.existsSync(dirUL)) fs.mkdirSync(dirUL)
 	if (!fs.existsSync(dirTmp)) fs.mkdirSync(dirTmp)
 	if (!fs.existsSync(dirUL+'/thumbs')) fs.mkdirSync(dirUL+'/thumbs')
+	if (!fs.existsSync(dirUL+'/cthumbs')) fs.mkdirSync(dirUL+'/cthumbs')
 
 	dirHistory = dirDocument+'/history.array'
 	if (fs.existsSync(dirHistory)) tabsHistory = jsonfile.readFileSync(dirHistory).h

@@ -537,7 +537,7 @@ async function CreateComic(comicIndex, haveIndex, gottenResult, image, siteIndex
 function CreateCollection(name) {
 	name = name || null
 	if (name == null) return
-	collectionsDB.push([name,[],''])
+	collectionsDB.push([name,[],null])
 	LoadCollections()
 	jsonfile.writeFileSync(dirDB+'/collections.lowdb',{a:collectionsDB})
 }
