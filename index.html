@@ -255,9 +255,18 @@
 	<!-- Collections -->
 	<div id="collections-panel">
 		<div id="c-p-t-m">
-			<button type="button" class="btn btn-primary" onclick="openAddCollectionMenu()">Add Collection</button>
+			<button type="button" class="btn btn-danger" onclick="closeCollectionsPanel()">Close</button>
+			<button type="button" class="btn btn-primary" onclick="openAddCollection()">Add Collection</button>
 		</div>
 		<div id="c-p-c-c"></div>
+		<div id="c-p-a-c-p">
+			<div onclick="closeAddCollection()"></div>
+			<div>
+				<input class="form-text" id="c-p-a-c-p-n" type="text" placeholder="Collection Name...">
+				<button type="button" class="btn btn-danger" onclick="closeAddCollection()">Cancel</button>
+				<button type="button" class="btn btn-success" onclick="addCollection()">Save</button>
+			</div>
+		</div>
 	</div>
 
 	<!-- Setting -->

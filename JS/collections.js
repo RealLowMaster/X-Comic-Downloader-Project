@@ -24,11 +24,26 @@ function LoadCollections() {
 		}
 	}
 
-	
 	container.innerHTML = html
 }
 
 function openCollection(index) {}
 
-function openAddCollectionMenu() {}
-function closeAddCollectionMenu() {}
+function openAddCollection() {
+	document.getElementById('c-p-a-c-p').style.display = 'flex'
+}
+
+function closeAddCollection() {
+	document.getElementById('c-p-a-c-p').style.display = 'none'
+	document.getElementById('c-p-a-c-p-n').value = null
+}
+
+function addCollection() {
+	let val = document.getElementById('c-p-a-c-p-n').value || null
+	if (val == null || val.replace(/ /g, '').length == 0) {
+		error('Please Write a Name For Collection.')
+		return
+	}
+	closeAddCollection()
+	CreateCollection(val)
+}

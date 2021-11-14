@@ -2792,6 +2792,38 @@ input::-webkit-input-placeholder { user-select: none }
 	color: #fff;
 }
 
+#c-p-a-c-p {
+	display: none;
+	width: 100%;
+	height: 100%;
+	justify-content: center;
+	align-items: center;
+	position: fixed;
+	top: 0;
+	left: 0;
+}
+
+#c-p-a-c-p > div:first-child {
+	width: 100%;
+	height: 100%;
+	background-color: #0005;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+#c-p-a-c-p > div:last-child {
+	width: 300px;
+	padding: 10px;
+	background-color: #fff;
+	text-align: center;
+	z-index: +1;
+}
+
+#c-p-a-c-p > div:last-child > input {
+	margin-bottom: 15px;
+}
+
 /* Public */
 .alert {
 	display: block;
@@ -3223,6 +3255,26 @@ input::-webkit-input-placeholder { user-select: none }
 	appearance: none;
 	word-wrap: normal;
 	text-transform: none;
+}
+
+.form-text {
+	display: block;
+	width: 100%;
+    padding: 7px 20px 7px 10px;
+    background-color: #fff;
+    color: #212529;
+    border: 1px solid #ced4da;
+	border-radius: 4px;
+	font-weight: 400;
+    line-height: 1.5;
+	word-wrap: normal;
+	text-transform: none;
+	transition: border-color .2s;
+}
+
+.form-text:hover,
+.form-text:focus {
+	border-color: #5DADE2;
 }
 
 .nobold { font-weight: 300 !important }

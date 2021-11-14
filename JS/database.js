@@ -534,6 +534,12 @@ async function CreateComic(comicIndex, haveIndex, gottenResult, image, siteIndex
 }
 
 // Collections
-function CreateCollection() {}
+function CreateCollection(name) {
+	name = name || null
+	if (name == null) return
+	collectionsDB.push([name,[],''])
+	LoadCollections()
+	jsonfile.writeFileSync(dirDB+'/collections.lowdb',{a:collectionsDB})
+}
 
-function DeleteCollection() {}
+function DeleteCollection(index) {}
