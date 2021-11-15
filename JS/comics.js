@@ -521,7 +521,8 @@ function openComic(id) {
 
 function closeComicPanel() {
 	comicPanel.style.display = 'none'
-	keydownEventIndex = 0
+	if (inCollection) keydownEventIndex = null
+	else keydownEventIndex = 0
 	need_repair = []
 	in_comic = false
 	off_site = null

@@ -71,18 +71,6 @@
 			<div id="comic-container" page=""></div>
 			<div id="pagination"></div>
 			<p id="comics-counter"></p>
-
-			<div id="c-c-r-c-p">
-				<button type="button" onclick="openRenameComic(comic_menu_id)"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><g><path fill="currentColor" d="M304 416a16 16 0 0 1 16 16v32a16 16 0 0 1-16 16H144a16 16 0 0 1-16-16v-32a16 16 0 0 1 16-16z" style="opacity:.4"></path><path fill="currentColor" d="M448 48v96a16 16 0 0 1-16 16h-32a16 16 0 0 1-16-16v-32H264v304h-80V112H64v32a16 16 0 0 1-16 16H16a16 16 0 0 1-16-16V48a16 16 0 0 1 16-16h416a16 16 0 0 1 16 16z"></path></g></svg> Rename</button>
-
-				<button type="button" thumb-btn onclick="makeThumbForAComic(comic_menu_id, 0)" thumb-btn title="Make Thumb">Make Thumb</button>
-
-				<button type="button" onclick="OptimizeComicImages(comic_menu_id, false, 0)" title="Optimize Comic Images"> Optimize</button>
-				
-				<button type="button" onclick="openComicExportPanel(comic_menu_id)" title="Export Comic"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><g><path fill="currentColor" d="M384 352.05v136.07A23.94 23.94 0 0 1 360 512H23.88A23.94 23.94 0 0 1 0 488V23.88A23.94 23.94 0 0 1 24 0h232v112a16 16 0 0 0 16 16h112v160.05H208a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16z" style="opacity:.4"></path><path fill="currentColor" d="M272 128h112v-6.1a23.9 23.9 0 0 0-7-16.9L279.1 7a24 24 0 0 0-17-7H256v112a16 16 0 0 0 16 16zm299 180.05l-95.61-96.5c-10.1-10.1-27.41-3-27.41 11.3v65.2H208a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h239.93v65.1c0 14.3 17.31 21.4 27.41 11.3l95.71-96.4a17 17 0 0 0-.05-24z"></path></g></svg> Export</button>
-				
-				<button type="button" onclick="askForDeletingComic(comic_menu_id)" danger-btn title="Delete Comic"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><g><path fill="currentColor" d="M32 464a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V96H32zm272-288a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0z" style="opacity:.4"></path><path fill="currentColor" d="M432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16zM128 160a16 16 0 0 0-16 16v224a16 16 0 0 0 32 0V176a16 16 0 0 0-16-16zm96 0a16 16 0 0 0-16 16v224a16 16 0 0 0 32 0V176a16 16 0 0 0-16-16zm96 0a16 16 0 0 0-16 16v224a16 16 0 0 0 32 0V176a16 16 0 0 0-16-16z"></path></g></svg> Delete</button>
-			</div>
 		</div>
 	</div>
 
@@ -92,7 +80,7 @@
 			<button type="button" class="btn btn-danger" onclick="closeCollectionsPanel()">Close</button>
 			<button type="button" class="btn btn-primary" onclick="openAddCollection()">Add Collection</button>
 		</div>
-		<input id="c-p-s" type="text" placeholder="Seach..">
+		<input id="c-p-s" type="text" placeholder="Search.." oninput="collectionSearch(this.value)">
 		<div id="c-p-c-c"></div>
 		<div id="c-p-a-c-p">
 			<div onclick="closeAddCollection()"></div>
@@ -102,6 +90,27 @@
 				<button type="button" class="btn btn-success" onclick="addCollection()">Save</button>
 			</div>
 		</div>
+	</div>
+
+	<!-- Opened Collections -->
+	<div id="opened-collections-panel">
+		<div id="o-c-p-t-m">
+			<button type="button" class="btn btn-danger" onclick="closeCollection()">Close</button>
+		</div>
+		<div id="o-c-p-c-c"></div>
+	</div>
+
+	<!-- Offline Comic RightClick Menu -->
+	<div id="c-c-r-c-p">
+		<button type="button" onclick="openRenameComic(comic_menu_id)"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><g><path fill="currentColor" d="M304 416a16 16 0 0 1 16 16v32a16 16 0 0 1-16 16H144a16 16 0 0 1-16-16v-32a16 16 0 0 1 16-16z" style="opacity:.4"></path><path fill="currentColor" d="M448 48v96a16 16 0 0 1-16 16h-32a16 16 0 0 1-16-16v-32H264v304h-80V112H64v32a16 16 0 0 1-16 16H16a16 16 0 0 1-16-16V48a16 16 0 0 1 16-16h416a16 16 0 0 1 16 16z"></path></g></svg> Rename</button>
+
+		<button type="button" thumb-btn onclick="makeThumbForAComic(comic_menu_id, 0)" thumb-btn title="Make Thumb">Make Thumb</button>
+
+		<button type="button" onclick="OptimizeComicImages(comic_menu_id, false, 0)" title="Optimize Comic Images"> Optimize</button>
+		
+		<button type="button" onclick="openComicExportPanel(comic_menu_id)" title="Export Comic"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><g><path fill="currentColor" d="M384 352.05v136.07A23.94 23.94 0 0 1 360 512H23.88A23.94 23.94 0 0 1 0 488V23.88A23.94 23.94 0 0 1 24 0h232v112a16 16 0 0 0 16 16h112v160.05H208a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16z" style="opacity:.4"></path><path fill="currentColor" d="M272 128h112v-6.1a23.9 23.9 0 0 0-7-16.9L279.1 7a24 24 0 0 0-17-7H256v112a16 16 0 0 0 16 16zm299 180.05l-95.61-96.5c-10.1-10.1-27.41-3-27.41 11.3v65.2H208a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h239.93v65.1c0 14.3 17.31 21.4 27.41 11.3l95.71-96.4a17 17 0 0 0-.05-24z"></path></g></svg> Export</button>
+		
+		<button type="button" onclick="askForDeletingComic(comic_menu_id)" danger-btn title="Delete Comic"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><g><path fill="currentColor" d="M32 464a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V96H32zm272-288a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0z" style="opacity:.4"></path><path fill="currentColor" d="M432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16zM128 160a16 16 0 0 0-16 16v224a16 16 0 0 0 32 0V176a16 16 0 0 0-16-16zm96 0a16 16 0 0 0-16 16v224a16 16 0 0 0 32 0V176a16 16 0 0 0-16-16zm96 0a16 16 0 0 0-16 16v224a16 16 0 0 0 32 0V176a16 16 0 0 0-16-16z"></path></g></svg> Delete</button>
 	</div>
 
 	<!-- Comic Panel -->
