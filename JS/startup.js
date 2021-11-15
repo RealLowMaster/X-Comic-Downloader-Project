@@ -80,6 +80,13 @@ function makeSubFolder(sfComicsDoc, sfLength, index) {
 	const subFolder = `${dirUL}/${sfComicsDoc[index]._id}${image}`
 	if (!fs.existsSync(subFolder)) fs.mkdirSync(subFolder)
 
+	if(typeof formats[0] === "undefined") {
+		setTimeout(() => {
+			makeSubFolder(sfComicsDoc, sfLength, index + 1)
+		}, 1)
+		return
+	}
+
 	let lastIndex = formats[0][1], thisForamat = formats[0][2], src = '', formatIndex = 0
 	for (let i = 0; i < imageCount; i++) {
 		if (i <= lastIndex) {

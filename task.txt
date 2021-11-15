@@ -96,7 +96,7 @@ Add Comic {
 }
 
 Added To Version {
-	
+	Fix Bug: Rescanning SubFolders In Startup (Fixed By PBXg33k)
 }
 
 Doing {
@@ -104,6 +104,7 @@ Doing {
 }
 
 Tasks => {
+	Add Search To collections
 	Fix sharp Usage
 	Add Ads
 	Make UI Beatiful
@@ -143,7 +144,6 @@ Tasks => {
 	New Abilities For v2 {
 		Add Ability To Zoom in Image in Sldier
 		Add Custom Theme Maker
-		Make Collection Basics
 		Add ReDownload Comic or A Picture
 		Make Repair Part Work Better
 		Add Repair All Crashed Image Button
