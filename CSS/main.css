@@ -2692,6 +2692,33 @@ input::-webkit-input-placeholder { user-select: none }
 	direction: ltr;
 }
 
+#c-p-s {
+	display: block;
+	width: 90%;
+	padding: 7px 20px 7px 10px;
+	margin: 10px auto;
+    background-color: #fff;
+    color: #212529;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-weight: 400;
+    line-height: 1.5;
+    word-wrap: normal;
+    text-transform: none;
+	box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+    transition: border-color .2s, transform .2s, box-shadow .2s;
+}
+
+#c-p-s:hover {
+	border-color: #3498DB;
+}
+
+#c-p-s:focus {
+	border-color: #b700ff;
+	box-shadow: rgba(0, 0, 0, 0.2) 0px 18px 50px -10px;
+	transform: translate(0, -6px);
+}
+
 #c-p-c-c {
 	width: 100%;
 	padding: 10px 30px;

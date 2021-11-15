@@ -105,6 +105,7 @@ Doing {
 
 Tasks => {
 	Add Search To collections
+	Fix Bug: Problem with Comics That have just 1 Image
 	Fix sharp Usage
 	Add Ads
 	Make UI Beatiful
