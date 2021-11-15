@@ -188,6 +188,8 @@ function onComicClicked(id, thumb, optimize) {
 			childs[1].innerHTML = '<svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><g><path fill="currentColor" d="M448 384H64v-48l71.51-71.52a12 12 0 0 1 17 0L208 320l135.51-135.52a12 12 0 0 1 17 0L448 272z" style="opacity:.4"></path><path fill="currentColor" d="M464 64H48a48 48 0 0 0-48 48v288a48 48 0 0 0 48 48h416a48 48 0 0 0 48-48V112a48 48 0 0 0-48-48zm-352 56a56 56 0 1 1-56 56 56 56 0 0 1 56-56zm336 264H64v-48l71.51-71.52a12 12 0 0 1 17 0L208 320l135.51-135.52a12 12 0 0 1 17 0L448 272z"></path></g></svg> Make Thumb'
 			childs[1].setAttribute('title', 'Make Thumb')
 		}
+		if (inCollection) childs[1].setAttribute('onclick', 'makeThumbForAComic(comic_menu_id, null)')
+		else childs[1].setAttribute('onclick', 'makeThumbForAComic(comic_menu_id, 0)')
 
 		if (optimize) {
 			childs[2].removeAttribute('success-btn')
@@ -725,7 +727,21 @@ function deleteComic(id) {
 				PopAlert('Comic Deleted.', 'warning')
 				comicDeleting = false
 				reloadLoadingComics()
-				keydownEventIndex = 0
+				if (inCollection) {
+					keydownEventIndex = null
+					document.getElementById('o-c-p-c-c').innerHTML = ''
+					CheckAllCollectionIds(openedCollectionIndex, 0, false, () => {
+						if (collectionsDB[openedCollectionIndex][1].length == 0) {
+							document.getElementById('o-c-p-c-c').innerHTML = '<div class="alert alert-danger">This Collection Have no Comic.</div>'
+							return
+						}
+						document.getElementById('o-c-p-c-c').innerHTML = ''
+						LoadCollection(0)
+						document.getElementById('opened-collections-panel').style.display = 'block'
+						document.getElementById('collections-panel').style.display = 'none'
+					})
+				} else keydownEventIndex = 0
+				
 			}
 
 			const remove_characters = () => {
@@ -894,7 +910,11 @@ function closeRenamePanel() {
 function renameComic(id, newName) {
 	if (newName == undefined || newName.replace(/ /g, '').length <= 0) { error('Please Fill name Input!'); return }
 	db.comics.update({_id:id}, { $set: {n:newName.toLowerCase()} }, {}, (err) => {
-		reloadLoadingComics()
+		if (inCollection) {
+			document.getElementById('o-c-p-c-c').innerHTML = ''
+			LoadCollection(0)
+			keydownEventIndex = null
+		} else reloadLoadingComics()
 		if (comicPanel.getAttribute('cid') != 'null') openComic(id)
 		if (err) { error('UpdatingName->Err: '+err); return }
 		closeRenamePanel()

@@ -162,7 +162,7 @@
 			</div>
 			<div>
 				<button type="button" onclick="openRenameComic(Number(comicPanel.getAttribute('cid')))" title="Rename Comic">Rename Comic</button>
-				<button type="button" onclick="makeThumbForAComic(Number(comicPanel.getAttribute('cid')), 100)" class="success-action" id="c-a-p-o-t" title="Make Thumb for faster loading in Overview">Make Thumb</button>
+				<button type="button" onclick="makeThumbForAComic(Number(comicPanel.getAttribute('cid')), null)" class="success-action" id="c-a-p-o-t" title="Make Thumb for faster loading in Overview">Make Thumb</button>
 				<button type="button" onclick="OptimizeComicImages(Number(comicPanel.getAttribute('cid')), true, 1)" class="success-action" id="c-a-p-o-b" title="Optimize Image For faster loading and Lower Space taken (May Take Time)">Optimize Images</button>
 				<button type="button" onclick="openComicExportPanel(Number(comicPanel.getAttribute('cid')))" title="Export Comic | Ctrl+E">Export</button>
 				<button type="button" onclick="askForDeletingComic(Number(comicPanel.getAttribute('cid')))" class="danger-action" title="Fully Delete Comic">Delete Image</button>

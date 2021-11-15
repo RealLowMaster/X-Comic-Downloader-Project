@@ -2777,7 +2777,7 @@ input::-webkit-input-placeholder { user-select: none }
 	display: none;
 	background-color: #000a;
 	color: #fff;
-	padding: 3px;
+	padding: 3px 7px;
 	border-radius: 7px;
 	position: absolute;
 	top: 10px;

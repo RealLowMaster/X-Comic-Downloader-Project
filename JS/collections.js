@@ -41,8 +41,8 @@ function openCollection(index) {
 	CheckAllCollectionIds(index, 0, false, () => {
 		if (collectionsDB[index][1].length == 0) { PopAlert('There is no Comic In this Collection.', 'danger'); return }
 		inCollection = true
-		LoadCollection(0)
 		document.getElementById('o-c-p-c-c').innerHTML = ''
+		LoadCollection(0)
 		document.getElementById('opened-collections-panel').style.display = 'block'
 		document.getElementById('collections-panel').style.display = 'none'
 	})
@@ -51,6 +51,7 @@ function openCollection(index) {
 function CheckAllCollectionIds(collectionIndex, index, changed, callback) {
 	if (collectionsDB[collectionIndex][1].length == index) {
 		if (changed) jsonfile.writeFileSync(dirDB+'/collections.lowdb',{a:collectionsDB})
+		LoadCollections()
 		callback()
 		return
 	}

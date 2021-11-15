@@ -104,9 +104,8 @@ Doing {
 }
 
 Tasks => {
-	Add Search To collections
 	Fix Bug: Problem with Comics That have just 1 Image
-	Fix sharp Usage
+	Fix sharp Usage { Download Thumb, Thumb, Optimizing }
 	Add Ads
 	Make UI Beatiful
 	Update Slider UI
