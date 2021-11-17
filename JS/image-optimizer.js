@@ -105,7 +105,10 @@ function convertImagesToOptimize(list, index, comic_id, image, callback) {
 			PopAlert('Comic Images Has Been Optimize')
 			isOptimizing = false
 			if (setting.notification_optimization_finish && remote.Notification.isSupported()) new remote.Notification({title: 'Comic Optimization Finished.', body: doc.n}).show()
-			if (setting.show_unoptimize) reloadLoadingComics()
+			if (setting.show_unoptimize) {
+				if (inCollection) LoadCollection()
+				else reloadLoadingComics()
+			}
 		})
 		isOptimizing = false
 		return

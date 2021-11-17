@@ -2684,7 +2684,7 @@ input::-webkit-input-placeholder { user-select: none }
 	display: none;
 	width: 100%;
 	height: 100%;
-	background-color: #fff;
+	background-color: var(--obr-con-bgc);
 	overflow-y: auto;
 	position: fixed;
 	top: 0;
