@@ -19,19 +19,29 @@ function closeCollectionsPanel() {
 }
 
 function LoadCollections() {
-	let html = ''
+	let html = '', isChanged = false
 	document.getElementById('c-p-s').value = null
 
 	if (collectionsDB.length == 0) html = '<h6>There is no Collection.</h6>'
 	else {
 		for (let i = 0; i < collectionsDB.length; i++) {
 			let image = collectionsDB[i][2] || null
-			if (!fs.existsSync(dirUL+'/cthumbs/'+image)) image = 'Image/no-img-300x300.png'
+			if (image != null) {
+				image = dirUL+'/thumbs/'+image
+				// if (!fs.existsSync(dirUL+'/cthumbs/'+image)) image = 'Image/no-img-300x300.png'
+				if (!fs.existsSync(image)) {
+					collectionsDB[i][2] = null
+					isChanged = true
+					image = 'Image/no-img-300x300.png'
+				}
+			} else image = 'Image/no-img-300x300.png'
 
 			html += `<div onclick="openCollection(${i})"><img src="${image}" loading="lazy"><span>${collectionsDB[i][1].length}</span><div></div>
 			<p>${collectionsDB[i][0]}</p></div>`
 		}
 	}
+
+	if (isChanged) jsonfile.writeFileSync(dirDB+'/collections.lowdb',{a:collectionsDB})
 
 	CollectionContainer.innerHTML = html
 }
@@ -62,7 +72,15 @@ function CheckAllCollectionIds(collectionIndex, index, changed, callback) {
 		if (doc == undefined || doc == null) {
 			collectionsDB[collectionIndex][1].splice(index, 1)
 			CheckAllCollectionIds(collectionIndex, index, true, callback)
-		} else CheckAllCollectionIds(collectionIndex, index + 1, changed, callback)
+		} else {
+			if (collectionsDB[collectionIndex][2] == null) {
+				if (fs.existsSync(`${dirUL}/thumbs/${doc.i}.jpg`)) {
+					collectionsDB[collectionIndex][2] = doc.i+'.jpg'
+					changed = true
+				}
+			}
+			CheckAllCollectionIds(collectionIndex, index + 1, changed, callback)
+		}
 	})
 }
 
