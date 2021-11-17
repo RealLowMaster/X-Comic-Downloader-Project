@@ -109,6 +109,8 @@
 		<button type="button" onclick="OptimizeComicImages(comic_menu_id, false, 0)" title="Optimize Comic Images"> Optimize</button>
 		
 		<button type="button" onclick="openComicExportPanel(comic_menu_id)" title="Export Comic"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><g><path fill="currentColor" d="M384 352.05v136.07A23.94 23.94 0 0 1 360 512H23.88A23.94 23.94 0 0 1 0 488V23.88A23.94 23.94 0 0 1 24 0h232v112a16 16 0 0 0 16 16h112v160.05H208a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16z" style="opacity:.4"></path><path fill="currentColor" d="M272 128h112v-6.1a23.9 23.9 0 0 0-7-16.9L279.1 7a24 24 0 0 0-17-7H256v112a16 16 0 0 0 16 16zm299 180.05l-95.61-96.5c-10.1-10.1-27.41-3-27.41 11.3v65.2H208a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h239.93v65.1c0 14.3 17.31 21.4 27.41 11.3l95.71-96.4a17 17 0 0 0-.05-24z"></path></g></svg> Export</button>
+
+		<button type="button" onclick="openAddComicToCollection(comic_menu_id)" title="Add Comic To Collection"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><g><path fill="currentColor" d="M12.41 236.31L70.51 210l161.63 73.27a57.64 57.64 0 0 0 47.72 0L441.5 210l58.09 26.33c16.55 7.5 16.55 32.5 0 40L266.64 381.9a25.68 25.68 0 0 1-21.29 0L12.41 276.31c-16.55-7.5-16.55-32.5 0-40z" style="opacity:.4"></path><path fill="currentColor" d="M12.41 148l232.94 105.7a25.61 25.61 0 0 0 21.29 0L499.58 148c16.55-7.51 16.55-32.52 0-40L266.65 2.32a25.61 25.61 0 0 0-21.29 0L12.41 108c-16.55 7.5-16.55 32.52 0 40zm487.18 216.11l-57.87-26.23-161.86 73.37a57.64 57.64 0 0 1-47.72 0L70.29 337.88l-57.88 26.23c-16.55 7.5-16.55 32.5 0 40L245.35 509.7a25.68 25.68 0 0 0 21.29 0l233-105.59c16.5-7.5 16.5-32.5-.05-40z"></path></g></svg> Collections</button>
 		
 		<button type="button" onclick="askForDeletingComic(comic_menu_id)" danger-btn title="Delete Comic"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><g><path fill="currentColor" d="M32 464a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V96H32zm272-288a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0z" style="opacity:.4"></path><path fill="currentColor" d="M432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16zM128 160a16 16 0 0 0-16 16v224a16 16 0 0 0 32 0V176a16 16 0 0 0-16-16zm96 0a16 16 0 0 0-16 16v224a16 16 0 0 0 32 0V176a16 16 0 0 0-16-16zm96 0a16 16 0 0 0-16 16v224a16 16 0 0 0 32 0V176a16 16 0 0 0-16-16z"></path></g></svg> Delete</button>
 	</div>
@@ -167,6 +169,15 @@
 				<button type="button" onclick="openComicExportPanel(Number(comicPanel.getAttribute('cid')))" title="Export Comic | Ctrl+E">Export</button>
 				<button type="button" onclick="askForDeletingComic(Number(comicPanel.getAttribute('cid')))" class="danger-action" title="Fully Delete Comic">Delete Image</button>
 			</div>
+		</div>
+	</div>
+
+	<!-- Comic Collection Panel -->
+	<div id="comic-collection-panel">
+		<div onclick="closeAddComicToCollection()"></div>
+		<div>
+			<input id="c-c-p-s-i" type="text" placeholder="Search..." oninput="onComicCollectionPanelSearch(this.value)">
+			<div id="c-c-p-c-c"></div>
 		</div>
 	</div>
 

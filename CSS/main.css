@@ -2857,6 +2857,92 @@ input::-webkit-input-placeholder { user-select: none }
 	margin-bottom: 15px;
 }
 
+/* Comic Collection Panel */
+#comic-collection-panel {
+	display: none;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	top: 0;
+	left: 0;
+}
+
+#comic-collection-panel > div:first-child {
+	width: 100%;
+	height: 100%;
+	background-color: #000c;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+#comic-collection-panel > div:last-child {
+	width: calc(100% - 100px);
+	height: calc(100% - 100px);
+	background-color: #fff;
+	border-radius: 7px;
+	z-index: +1;
+}
+
+#c-c-p-s-i {
+	display: block;
+	width: 90%;
+	padding: 9px 10px;
+	margin: 35px auto 25px auto;
+	background-color: #fff;
+	color: #222;
+	border: 1px solid #eee;
+	border-radius: 4px;
+	box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+    transition: border-color .2s, transform .2s, box-shadow .2s;
+}
+
+#c-c-p-s-i:hover {
+	border-color: #3498DB;
+}
+
+#c-c-p-s-i:focus {
+	border-color: #b700ff;
+	box-shadow: rgba(0, 0, 0, 0.2) 0px 18px 50px -10px;
+	transform: translate(0, -6px);
+}
+
+#c-c-p-c-c {
+	width: 100%;
+	height: calc(100% - 105px);
+	overflow-y: auto;
+}
+
+#c-c-p-c-c > div {
+	display: flex;
+	align-items: center;
+	width: 100%;
+	height: 50px;
+	background-color: #fff;
+	border: 0 solid #eee;
+	border-width: 1px 0 1px 0;
+	overflow: hidden;
+	position: relative;
+}
+
+#c-c-p-c-c > div > p {
+	display: block;
+	width: calc(100% - 140px);
+	max-width: calc(100% - 140px);
+	margin-left: 10px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+	overflow: hidden;
+	text-align: left;
+}
+
+#c-c-p-c-c > div > button {
+	position: absolute;
+	right: 20px;
+}
+
 /* Public */
 .alert {
 	display: block;

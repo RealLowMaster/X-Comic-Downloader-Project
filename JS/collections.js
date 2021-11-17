@@ -1,4 +1,5 @@
 const CollectionContainer = document.getElementById('c-p-c-c')
+const ComicCollectionPanelContainer = document.getElementById('c-c-p-c-c')
 let collectionPage = null, openedCollectionIndex = null, inCollection = false
 
 function openCollectionsPanel() {
@@ -154,5 +155,61 @@ function collectionSearch(val) {
 		if (children[i].children[3].innerText.toLowerCase().indexOf(val) > -1) children[i].style.display = 'inline-block'
 		else children[i].style.display = 'none'
 	}
+}
 
+function openAddComicToCollection(comic_id) {
+	document.getElementById('comic-collection-panel').style.display = 'flex'
+	let html = ''
+	for (let i = 0; i < collectionsDB.length; i++) {
+		if (collectionsDB[i][1].indexOf(comic_id) > -1) html += `<div><p>${collectionsDB[i][0]}</p><button type="button" class="btn btn-danger" onclick="RemoveComicToCollection(this, ${i}, ${comic_id})">Remove</button></div>`
+		else html += `<div><p>${collectionsDB[i][0]}</p><button type="button" class="btn btn-success" onclick="AddComicToCollection(this, ${i}, ${comic_id})">Add</button></div>`
+	}
+	ComicCollectionPanelContainer.innerHTML = html
+}
+
+function closeAddComicToCollection() {
+	document.getElementById('comic-collection-panel').style.display = 'none'
+	document.getElementById('c-c-p-s-i').value = null
+	ComicCollectionPanelContainer.innerHTML = null
+}
+
+function onComicCollectionPanelSearch(val) {
+	const children = ComicCollectionPanelContainer.children
+	if (children.length == 0) return
+
+	if (val.replace(/ /g, '').length == 0) {
+		for (let i = 0; i < children.length; i++) {
+			children[i].style.display = 'flex'
+		}
+		return
+	}
+	val = val.toLowerCase()
+	
+	for (let i = 0; i < children.length; i++) {
+		if (children[i].children[3].innerText.toLowerCase().indexOf(val) > -1) children[i].style.display = 'iflex'
+		else children[i].style.display = 'none'
+	}
+}
+
+function AddComicToCollection(who, collection_index, comic_id) {
+	who.removeAttribute('onclick')
+	if (collectionsDB[collection_index][1].indexOf(comic_id) == -1) {
+		collectionsDB[collection_index][1].push(comic_id)
+		jsonfile.writeFileSync(dirDB+'/collections.lowdb',{a:collectionsDB})
+	}
+	who.innerText = 'Remove'
+	who.setAttribute('class', 'btn btn-danger')
+	who.setAttribute('onclick', `RemoveComicToCollection(this, ${collection_index}, ${comic_id})`)
+}
+
+function RemoveComicToCollection(who, collection_index, comic_id) {
+	who.removeAttribute('onclick')
+	const index = collectionsDB[collection_index][1].indexOf(comic_id)
+	if (index > -1) {
+		collectionsDB[collection_index][1].splice(index, 1)
+		jsonfile.writeFileSync(dirDB+'/collections.lowdb',{a:collectionsDB})
+	}
+	who.innerText = 'Add'
+	who.setAttribute('class', 'btn btn-success')
+	who.setAttribute('onclick', `AddComicToCollection(this, ${collection_index}, ${comic_id})`)
 }
