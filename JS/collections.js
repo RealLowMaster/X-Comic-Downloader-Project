@@ -316,3 +316,64 @@ function closeCollectionMenu() {
 	CollectionRightClickMenu.style.display = 'none'
 	removeCollectionMenuEvents()
 }
+
+// Delete Collection
+function deleteCollection(index) {
+	collectionsDB.splice(index, 1)
+	jsonfile.writeFileSync(dirDB+'/collections.lowdb',{a:collectionsDB})
+	LoadCollections()
+}
+
+function askForRemovingCollection(index) {
+	errorSelector('Are you sure you want To Delete This Collection ?', [
+		[
+			"Yes",
+			"btn btn-danger m-2",
+			`deleteCollection(${index});this.parentElement.parentElement.remove()`
+		],
+		[
+			"No",
+			"btn btn-primary m-2",
+			'comicDeleting = false;this.parentElement.parentElement.remove()'
+		]
+	])
+}
+
+// Reset Collection Thumb
+function resetCollectionThumb(index) {
+	collectionsDB[index][2] = null
+	jsonfile.writeFileSync(dirDB+'/collections.lowdb',{a:collectionsDB})
+	LoadCollections()
+}
+
+function askForResetingCollectionThumb(index) {
+	errorSelector('Are you sure you want To Reset (Remove) This Collection Thumb ?', [
+		[
+			"Yes",
+			"btn btn-danger m-2",
+			`resetCollectionThumb(${index});this.parentElement.parentElement.remove()`
+		],
+		[
+			"No",
+			"btn btn-primary m-2",
+			'comicDeleting = false;this.parentElement.parentElement.remove()'
+		]
+	])
+}
+
+// Rename
+function openCollectionRename() {
+	const input = document.getElementById('c-p-a-c-r-p-n')
+	input.value = collectionsDB[collection_menu_index][0]
+	document.getElementById('c-p-a-c-r-p').style.display = 'flex'
+	input.focus()
+}
+
+function renameCollection() {
+	const val = document.getElementById('c-p-a-c-r-p-n').value
+	if (val.replace(/ /g, '').length == 0) { error('Please Write a name for collection.'); return }
+	document.getElementById('c-p-a-c-r-p').style.display = 'none'
+	collectionsDB[collection_menu_index][0] = val
+	jsonfile.writeFileSync(dirDB+'/collections.lowdb',{a:collectionsDB})
+	LoadCollections()
+}

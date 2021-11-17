@@ -81,6 +81,7 @@ function makeSubFolder(sfComicsDoc, sfLength, index) {
 	if (!fs.existsSync(subFolder)) fs.mkdirSync(subFolder)
 
 	if(typeof formats[0] === "undefined") {
+		loading.forward(`Making SubFolders (${index + 1}/${sfLength})`)
 		setTimeout(() => {
 			makeSubFolder(sfComicsDoc, sfLength, index + 1)
 		}, 1)
