@@ -1953,12 +1953,14 @@ input::-webkit-input-placeholder { user-select: none }
 }
 
 /* Pagination */
-#pagination {
+#pagination,
+#o-c-p-p {
 	display: block;
 	text-align: center;
 }
 
-#pagination > div {
+#pagination > div,
+#o-c-p-p > div {
 	display: inline-flex;
 	padding: 20px 50px;
 	margin: 40px auto;
@@ -1968,7 +1970,8 @@ input::-webkit-input-placeholder { user-select: none }
 	box-shadow: 0 10px 20px 0 rgba(black, 0.25);
 }
 
-#pagination > div > button {
+#pagination > div > button,
+#o-c-p-p > div > button {
 	display: inline-block;
 	height: 40px;
 	padding: 0 9px;
@@ -1981,18 +1984,21 @@ input::-webkit-input-placeholder { user-select: none }
 	cursor: pointer;
 }
 
-#pagination > div > button:not(:disabled) {
+#pagination > div > button:not(:disabled),
+#o-c-p-p > div > button:not(:disabled) {
 	transition: transform .2s, background-color .2s, color .2s, border-color .2s;
 }
 
-#pagination > div > button:not(:disabled):hover {
+#pagination > div > button:not(:disabled):hover,
+#o-c-p-p > div > button:not(:disabled):hover {
 	transform: scale(1.1);
 	background-color: var(--pgnt-btn-hover-bgc);
 	color: var(--pgnt-btn-hover-color);
 	border-color: var(--pgnt-btn-hover-bd-color);
 }
 
-#pagination > div > button:disabled {
+#pagination > div > button:disabled,
+#o-c-p-p > div > button:disabled {
 	background-color: var(--pgnt-btn-hover-bgc);
 	color: var(--pgnt-btn-hover-color);
 	border-color: var(--pgnt-btn-disable-bd-color);
@@ -2679,6 +2685,7 @@ input::-webkit-input-placeholder { user-select: none }
 	width: 100%;
 	height: 100%;
 	background-color: #fff;
+	overflow-y: auto;
 	position: fixed;
 	top: 0;
 	left: 0;

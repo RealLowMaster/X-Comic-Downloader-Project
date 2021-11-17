@@ -83,6 +83,8 @@ function LoadCollection(index) {
 		return
 	}
 
+	index = index || 1
+
 	if (ids.length == index) {
 		return
 	}
@@ -191,7 +193,7 @@ function onComicCollectionPanelSearch(val) {
 	val = val.toLowerCase()
 	
 	for (let i = 0; i < children.length; i++) {
-		if (children[i].children[3].innerText.toLowerCase().indexOf(val) > -1) children[i].style.display = 'iflex'
+		if (children[i].innerText.toLowerCase().indexOf(val) > -1) children[i].style.display = 'iflex'
 		else children[i].style.display = 'none'
 	}
 }
