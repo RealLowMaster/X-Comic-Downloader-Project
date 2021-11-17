@@ -78,6 +78,11 @@ function closeCollection() {
 function LoadCollection(index) {
 	const ids = collectionsDB[openedCollectionIndex][1]
 
+	if (ids.length == 0) {
+		document.getElementById('o-c-p-c-c').innerHTML = '<div class="alert alert-danger">This Collection Have no Comic.</div>'
+		return
+	}
+
 	if (ids.length == index) {
 		return
 	}
@@ -196,6 +201,11 @@ function AddComicToCollection(who, collection_index, comic_id) {
 	if (collectionsDB[collection_index][1].indexOf(comic_id) == -1) {
 		collectionsDB[collection_index][1].push(comic_id)
 		jsonfile.writeFileSync(dirDB+'/collections.lowdb',{a:collectionsDB})
+		LoadCollections()
+		if (inCollection) {
+			document.getElementById('o-c-p-c-c').innerHTML = null
+			LoadCollection(0)
+		}
 	}
 	who.innerText = 'Remove'
 	who.setAttribute('class', 'btn btn-danger')
@@ -208,6 +218,11 @@ function RemoveComicToCollection(who, collection_index, comic_id) {
 	if (index > -1) {
 		collectionsDB[collection_index][1].splice(index, 1)
 		jsonfile.writeFileSync(dirDB+'/collections.lowdb',{a:collectionsDB})
+		LoadCollections()
+		if (inCollection) {
+			document.getElementById('o-c-p-c-c').innerHTML = null
+			LoadCollection(0)
+		}
 	}
 	who.innerText = 'Add'
 	who.setAttribute('class', 'btn btn-success')
