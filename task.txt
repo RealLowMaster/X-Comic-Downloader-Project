@@ -91,11 +91,11 @@ Add Comic {
 	nhentai => Artist => Binbi
 	nhentai => Artist => Chikiko
 	nhentai => Search => Kemono DIRECT
-	nhentai => Group => Piririnegi
 	nhentai => Group => Aoba Q Madou
 }
 
 Added To Version {
+	Fix Bug: fix xlecx support for new xlecx site structure
 	Fix Bug: Rescanning SubFolders In Startup (Fixed By PBXg33k)
 }
 
@@ -104,6 +104,9 @@ Doing {
 }
 
 Tasks => {
+	Add Pagination To collection
+	Add Edit and Remove Ability To collection
+	Add Ability To Add Comic To Collections
 	Fix Bug: Problem with Comics That have just 1 Image
 	Fix sharp Usage { Download Thumb, Thumb, Optimizing }
 	Add Ads

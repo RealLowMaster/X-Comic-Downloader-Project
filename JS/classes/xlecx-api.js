@@ -80,7 +80,8 @@ class XlecxAPI {
 				arr.content = []
 				hasPost = true
 				// Content
-				for (let i = 0; i < li.length - 1; i++) {
+				for (let i = 0; i < li.length; i++) {
+					if (li[i].className != 'thumb') continue
 					save = li[i].children[0].children
 					save2 = save[0].children
 					gg = save[0].getAttribute('href')
@@ -207,7 +208,8 @@ class XlecxAPI {
 				arr.content = []
 				hasPost = true
 				// Contents
-				for (let i = 0; i < li.length - 1; i++) {
+				for (let i = 0; i < li.length; i++) {
+					if (li[i].className != 'thumb') continue
 					save = li[i].children[0].children
 					save2 = save[0].children
 					gg = save[0].getAttribute('href')
@@ -514,7 +516,8 @@ class XlecxAPI {
 				arr.content = []
 				hasPost = true
 				// Contents
-				for (let i = 0; i < container.length - 1; i++) {
+				for (let i = 0; i < container.length; i++) {
+					if (container[i].className != 'thumb') continue
 					save = container[i].children[0].children
 					save2 = save[0].children
 					gg = save[0].getAttribute('href')
@@ -600,7 +603,8 @@ class XlecxAPI {
 				arr.content = []
 				hasPost = true
 				// Contents
-				for (let i = 0; i < container.length - 1; i++) {
+				for (let i = 0; i < container.length; i++) {
+					if (container[i].className != 'thumb') continue
 					save = container[i].children[0].children
 					save2 = save[0].children
 					gg = save[0].getAttribute('href')
@@ -686,7 +690,8 @@ class XlecxAPI {
 				arr.content = []
 				hasPost = true
 				// Contents
-				for (let i = 0; i < container.length - 1; i++) {
+				for (let i = 0; i < container.length; i++) {
+					if (container[i].className != 'thumb') continue
 					save = container[i].children[0].children
 					save2 = save[0].children
 					gg = save[0].getAttribute('href')
@@ -772,7 +777,8 @@ class XlecxAPI {
 				arr.content = []
 				hasPost = true
 				// Contents
-				for (let i = 0; i < container.length - 1; i++) {
+				for (let i = 0; i < container.length; i++) {
+					if (container[i].className != 'thumb') continue
 					save = container[i].children[0].children
 					save2 = save[0].children
 					gg = save[0].getAttribute('href')
@@ -864,7 +870,8 @@ class XlecxAPI {
 				arr.content = []
 				hasPost = true
 				// Content
-				for (let i = 1; i < container.length - 1; i++) {
+				for (let i = 1; i < container.length; i++) {
+					if (container[i].className != 'thumb') continue
 					save = container[i].children[0].children
 					save2 = save[0].children
 					gg = save[0].getAttribute('href')
