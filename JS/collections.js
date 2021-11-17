@@ -1,5 +1,6 @@
 const CollectionContainer = document.getElementById('c-p-c-c')
 const ComicCollectionPanelContainer = document.getElementById('c-c-p-c-c')
+const CollectionPagination = document.getElementById('o-c-p-p')
 let collectionPage = null, openedCollectionIndex = null, inCollection = false
 
 function openCollectionsPanel() {
@@ -42,8 +43,7 @@ function openCollection(index) {
 	CheckAllCollectionIds(index, 0, false, () => {
 		if (collectionsDB[index][1].length == 0) { PopAlert('There is no Comic In this Collection.', 'danger'); return }
 		inCollection = true
-		document.getElementById('o-c-p-c-c').innerHTML = ''
-		LoadCollection(0)
+		LoadCollection()
 		document.getElementById('opened-collections-panel').style.display = 'block'
 		document.getElementById('collections-panel').style.display = 'none'
 	})
@@ -73,26 +73,62 @@ function closeCollection() {
 	document.getElementById('collections-panel').style.display = 'block'
 	document.getElementById('opened-collections-panel').style.display = 'none'
 	document.getElementById('o-c-p-c-c').innerHTML = ''
+	CollectionPagination.style.display = 'none'
+	CollectionPagination.innerHTML = null
 }
 
-function LoadCollection(index) {
+function LoadCollection(index, maxPage, min, max) {
 	const ids = collectionsDB[openedCollectionIndex][1]
+
+	if (ids.length == index) {
+		return
+	}
+
+	if (maxPage != null) {
+		if (min + index == max) {
+			const thisPagination = pagination(maxPage, collectionPage)
+			html = '<div>'
+			for (let i in thisPagination) {
+				if (thisPagination[i][1] == null) html += `<button disabled>${thisPagination[i][0]}</button>`
+				else html += `<button onclick="collectionPage=${thisPagination[i][1]};LoadCollection()">${thisPagination[i][0]}</button>`
+			}
+			html += '</div>'
+			CollectionPagination.innerHTML = html
+			CollectionPagination.style.display = 'block'
+			return
+		}
+	} else CollectionPagination.style.display = 'none'
 
 	if (ids.length == 0) {
 		document.getElementById('o-c-p-c-c').innerHTML = '<div class="alert alert-danger">This Collection Have no Comic.</div>'
 		return
 	}
 
-	index = index || 1
+	index = index || null
+	maxPage = maxPage || null
+	if (index == null) index = 0
 
-	if (ids.length == index) {
-		return
+	const max_per_page = setting.max_per_page
+	if (maxPage == null) {
+		document.getElementById('o-c-p-c-c').innerHTML = null
+		min = 0
+		max = ids.length
+		maxPage = Math.ceil(max / max_per_page)
+		while (collectionPage > maxPage) {
+			collectionPage--
+		}
+
+		if (max >= max_per_page) {
+			min = (max_per_page * collectionPage) - max_per_page
+			max = min + max_per_page
+			if (max > ids.length) max = ids.length
+		}
 	}
 
-	db.comics.findOne({_id:ids[index]}, (err, doc) => {
+	db.comics.findOne({_id:ids[min + index]}, (err, doc) => {
 		if (err) { error('LoadCollection->Err: '+err); return }
 		if (doc == undefined || doc == null) {
-			LoadCollection(index + 1)
+			LoadCollection(index + 1, maxPage, min, max)
 			return
 		}
 
@@ -122,7 +158,7 @@ function LoadCollection(index) {
 			html += `<div class="comic" onmousedown="onComicClicked(${id}, ${thumb}, ${optimize})"><img src="${image}"><span>${doc.c}</span><p>${_name}</p></div>`
 		}
 		document.getElementById('o-c-p-c-c').innerHTML += html
-		LoadCollection(index + 1)
+		LoadCollection(index + 1, maxPage, min, max)
 	})
 }
 
@@ -204,10 +240,7 @@ function AddComicToCollection(who, collection_index, comic_id) {
 		collectionsDB[collection_index][1].push(comic_id)
 		jsonfile.writeFileSync(dirDB+'/collections.lowdb',{a:collectionsDB})
 		LoadCollections()
-		if (inCollection) {
-			document.getElementById('o-c-p-c-c').innerHTML = null
-			LoadCollection(0)
-		}
+		if (inCollection) LoadCollection()
 	}
 	who.innerText = 'Remove'
 	who.setAttribute('class', 'btn btn-danger')
@@ -221,10 +254,7 @@ function RemoveComicToCollection(who, collection_index, comic_id) {
 		collectionsDB[collection_index][1].splice(index, 1)
 		jsonfile.writeFileSync(dirDB+'/collections.lowdb',{a:collectionsDB})
 		LoadCollections()
-		if (inCollection) {
-			document.getElementById('o-c-p-c-c').innerHTML = null
-			LoadCollection(0)
-		}
+		if (inCollection) LoadCollection()
 	}
 	who.innerText = 'Add'
 	who.setAttribute('class', 'btn btn-success')

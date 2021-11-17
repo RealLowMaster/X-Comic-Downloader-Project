@@ -30,7 +30,7 @@ function loadComics(page, search, safeScroll) {
 	const working = (doc) => {
 		max = doc.length
 		allPages = Math.ceil(doc.length / max_per_page)
-		if (page > 1 && page > allPages) { loadComics(page - 1, search, safeScroll) }
+		if (page > 1 && page > allPages) { loadComics(page - 1, search, safeScroll); return }
 		if (doc.length >= max_per_page) {
 			min = (max_per_page * page) - max_per_page
 			max = min + max_per_page
@@ -78,10 +78,8 @@ function loadComics(page, search, safeScroll) {
 			const thisPagination = pagination(allPages, page)
 			html = '<div>'
 			for (let i in thisPagination) {
-				if (thisPagination[i][1] == null)
-					html += `<button disabled>${thisPagination[i][0]}</button>`
-				else
-					html += `<button onclick="loadComics(${thisPagination[i][1]}, '${search}')">${thisPagination[i][0]}</button>`
+				if (thisPagination[i][1] == null) html += `<button disabled>${thisPagination[i][0]}</button>`
+				else html += `<button onclick="loadComics(${thisPagination[i][1]}, '${search}')">${thisPagination[i][0]}</button>`
 			}
 			html += '</div>'
 			document.getElementById('pagination').innerHTML = html
@@ -735,8 +733,7 @@ function deleteComic(id) {
 							document.getElementById('o-c-p-c-c').innerHTML = '<div class="alert alert-danger">This Collection Have no Comic.</div>'
 							return
 						}
-						document.getElementById('o-c-p-c-c').innerHTML = ''
-						LoadCollection(0)
+						LoadCollection()
 						document.getElementById('opened-collections-panel').style.display = 'block'
 						document.getElementById('collections-panel').style.display = 'none'
 					})
@@ -911,8 +908,7 @@ function renameComic(id, newName) {
 	if (newName == undefined || newName.replace(/ /g, '').length <= 0) { error('Please Fill name Input!'); return }
 	db.comics.update({_id:id}, { $set: {n:newName.toLowerCase()} }, {}, (err) => {
 		if (inCollection) {
-			document.getElementById('o-c-p-c-c').innerHTML = ''
-			LoadCollection(0)
+			LoadCollection()
 			keydownEventIndex = null
 		} else reloadLoadingComics()
 		if (comicPanel.getAttribute('cid') != 'null') openComic(id)
