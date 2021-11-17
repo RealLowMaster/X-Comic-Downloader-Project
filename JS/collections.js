@@ -1,7 +1,8 @@
 const CollectionContainer = document.getElementById('c-p-c-c')
 const ComicCollectionPanelContainer = document.getElementById('c-c-p-c-c')
 const CollectionPagination = document.getElementById('o-c-p-p')
-let collectionPage = null, openedCollectionIndex = null, inCollection = false
+const CollectionRightClickMenu = document.getElementById('c-r-c-m')
+let collectionPage = null, openedCollectionIndex = null, inCollection = false, collection_menu_index
 
 function openCollectionsPanel() {
 	keydownEventIndex = null
@@ -36,7 +37,7 @@ function LoadCollections() {
 				}
 			} else image = 'Image/no-img-300x300.png'
 
-			html += `<div onclick="openCollection(${i})"><img src="${image}" loading="lazy"><span>${collectionsDB[i][1].length}</span><div></div>
+			html += `<div onmousedown="OnCollectionMouseDown(${i})"><img src="${image}" loading="lazy"><span>${collectionsDB[i][1].length}</span><div></div>
 			<p>${collectionsDB[i][0]}</p></div>`
 		}
 	}
@@ -277,4 +278,41 @@ function RemoveComicToCollection(who, collection_index, comic_id) {
 	who.innerText = 'Add'
 	who.setAttribute('class', 'btn btn-success')
 	who.setAttribute('onclick', `AddComicToCollection(this, ${collection_index}, ${comic_id})`)
+}
+
+function OnCollectionMouseDown(index) {
+	const e = window.event, key = e.which
+	if (key == 2) {
+		e.preventDefault()
+		return
+	}
+
+	if (key == 1) openCollection(index)
+	else {
+		collection_menu_index = index
+		const x = e.clientX, y = e.clientY
+		CollectionRightClickMenu.style.display = 'block'
+		if (window.innerWidth <= x+170) x = window.innerWidth - 170
+		if (window.innerHeight <= y+CollectionRightClickMenu.clientHeight) y = window.innerHeight - CollectionRightClickMenu.clientHeight
+		CollectionRightClickMenu.style.top = y+'px'
+		CollectionRightClickMenu.style.left = x+'px'
+		setCollectionMenuEvents()
+	}
+}
+
+function setCollectionMenuEvents() {
+	window.addEventListener('click', closeCollectionMenu)
+	document.getElementById('collections-panel').addEventListener('scroll', closeCollectionMenu)
+	window.addEventListener('resize', closeCollectionMenu)
+}
+
+function removeCollectionMenuEvents() {
+	window.removeEventListener('click', closeCollectionMenu)
+	document.getElementById('collections-panel').removeEventListener('scroll', closeCollectionMenu)
+	window.removeEventListener('resize', closeCollectionMenu)
+}
+
+function closeCollectionMenu() {
+	CollectionRightClickMenu.style.display = 'none'
+	removeCollectionMenuEvents()
 }
