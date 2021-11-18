@@ -211,6 +211,7 @@ function addCollection() {
 }
 
 function collectionSearch(val) {
+	if (collectionsDB.length == 0) return
 	const children = CollectionContainer.children
 	if (children.length == 0) return
 
