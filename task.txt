@@ -107,7 +107,6 @@ Doing {
 }
 
 Tasks => {
-	Add Icon To Tab
 	Remake Optimization System
 	Add Email System
 	Fix Bug: Problem with Comics That have just 1 Image
@@ -128,7 +127,6 @@ Tasks => {
 	Make Tab Doplicator inset after tab
 	Add Perfect Drag to Scroll To Slider Overview
 	Add Auto Scroll Down for Comic Panel
-	Make new Optimizing System
 	Make new Update System
 	Make Browser Selecting History Easier
 	Make New Browser Change Page System

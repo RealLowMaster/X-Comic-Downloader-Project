@@ -12,16 +12,14 @@ function xlecxChangePage(page, whitchbutton, updateTabIndex) {
 		if (id == null) { PopAlert(defaultSettingLang.tab_at_limit, 'danger'); return }
 	} else {
 		id = activeTabComicId
-		const passImageCon = document.getElementById(id).querySelector('[img-con="true"]')
-		if (passImageCon != undefined) {
-			const passImages = passImageCon.children
-			for (let i = 0; i < passImages.length; i++) {
-				passImages[i].removeAttribute('data-src')
-				passImages[i].removeAttribute('src')
-			}
+		const thisTagIndex = GetTabIndexById(id)
+		const passImages = tabs[thisTagIndex].page.getElementsByTagName('img')
+		for (let i = 0; i < passImages.length; i++) {
+			passImages[i].removeAttribute('data-src')
+			passImages[i].removeAttribute('src')
 		}
 
-		if (updateTabIndex == true) tabs[GetTabIndexById(pageId)].addHistory(`xlecxChangePage(${page}, 0, false)`)
+		if (updateTabIndex == true) tabs[thisTagIndex].addHistory(`xlecxChangePage(${page}, 0, false)`)
 	}
 	createNewXlecxTab(id, page)
 }
@@ -191,25 +189,22 @@ function createNewXlecxTab(id, pageNumber) {
 
 function xlecxOpenPost(whitchbutton, id, updateTabIndex) {
 	if (whitchbutton == 3) return
-	let makeNewPage = false
+	let makeNewPage = false, pageId, thisTabIndex
 	if (whitchbutton == 2) makeNewPage = true
 	if (updateTabIndex == null) updateTabIndex = true
-	
-	let pageId
 	if (makeNewPage) {
 		pageId = createNewTab(`xlecxOpenPost(0, '${id}', false)`, true, 0)
 		if (pageId == null) { PopAlert(defaultSettingLang.tab_at_limit, 'danger'); return }
+		thisTabIndex = GetTabIndexById(pageId)
 	} else {
 		pageId = activeTabComicId
-		const passImageCon = document.getElementById(pageId).querySelector('[img-con="true"]')
-		if (passImageCon != undefined) {
-			const passImages = passImageCon.children
-			for (let i = 0; i < passImages.length; i++) {
-				passImages[i].removeAttribute('data-src')
-				passImages[i].removeAttribute('src')
-			}
+		thisTabIndex = GetTabIndexById(pageId)
+		const passImages = tabs[thisTabIndex].page.getElementsByTagName('img')
+		for (let i = 0; i < passImages.length; i++) {
+			passImages[i].removeAttribute('data-src')
+			passImages[i].removeAttribute('src')
 		}
-		if (updateTabIndex == true) tabs[GetTabIndexById(pageId)].addHistory(`xlecxOpenPost(0, '${id}', false)`)
+		if (updateTabIndex == true) tabs[thisTabIndex].addHistory(`xlecxOpenPost(0, '${id}', false)`)
 	}
 
 	if (activeTabComicId == pageId) {
@@ -217,7 +212,6 @@ function xlecxOpenPost(whitchbutton, id, updateTabIndex) {
 		bjp_i.setAttribute('oninput', '')
 	}
 
-	const thisTabIndex = GetTabIndexById(pageId)
 	tabs[thisTabIndex].ir = true
 	tabs[thisTabIndex].mp = 0
 	checkBrowserTools(thisTabIndex)
@@ -438,28 +432,29 @@ function xlecxOpenPost(whitchbutton, id, updateTabIndex) {
 
 function xlecxOpenCategory(name, page, shortName, whitchbutton, updateTabIndex) {
 	if (whitchbutton == 3) return
-	var makeNewPage = false
+	let makeNewPage = false
 	if (whitchbutton == 2) makeNewPage = true
 	name = name || null
 	page = page || 1
 	shortName = shortName || null
 	if (name == null || shortName == null) return
 	if (updateTabIndex == null) updateTabIndex = true
-	var pageId = activeTabComicId
-	const passImageCon = document.getElementById(pageId).querySelector('[img-con="true"]')
-	if (passImageCon != undefined) {
-		const passImages = passImageCon.children
-		for (let i = 0; i < passImages.length; i++) {
-			passImages[i].removeAttribute('data-src')
-			passImages[i].removeAttribute('src')
-		}
-	}
+	let pageId = activeTabComicId, thisTabIndex
+	
+	
 	
 	if (makeNewPage) {
 		pageId = createNewTab(`xlecxOpenCategory('${name}', ${page}, '${shortName}', 0, false)`, true, 0)
 		if (pageId == null) { PopAlert(defaultSettingLang.tab_at_limit, 'danger'); return }
+		thisTabIndex = GetTabIndexById(pageId)
 	} else {
-		if (updateTabIndex == true) tabs[GetTabIndexById(pageId)].addHistory(`xlecxOpenCategory('${name}', ${page}, '${shortName}', 0, false)`)
+		thisTabIndex = GetTabIndexById(pageId)
+		const passImages = tabs[thisTabIndex].page.getElementsByTagName('img')
+		for (let i = 0; i < passImages.length; i++) {
+			passImages[i].removeAttribute('data-src')
+			passImages[i].removeAttribute('src')
+		}
+		if (updateTabIndex == true) tabs[thisTabIndex].addHistory(`xlecxOpenCategory('${name}', ${page}, '${shortName}', 0, false)`)
 	}
 
 	if (activeTabComicId == pageId) {
@@ -467,7 +462,6 @@ function xlecxOpenCategory(name, page, shortName, whitchbutton, updateTabIndex) 
 		bjp_i.setAttribute('oninput', '')
 	}
 
-	const thisTabIndex = GetTabIndexById(pageId)
 	tabs[thisTabIndex].ir = true
 	tabs[thisTabIndex].mp = 0
 	tabs[thisTabIndex].options = [name, shortName]
@@ -707,7 +701,7 @@ function xlecxOpenTagContentMaker(result, thisTabIndex, name, whitch) {
 
 function xlecxOpenTag(name, page, whitch, whitchbutton, updateTabIndex) {
 	if (whitchbutton == 3) return
-	let makeNewPage = false, pageId
+	let makeNewPage = false, pageId, thisTabIndex
 	if (whitchbutton == 2) makeNewPage = true
 	name = name || null
 	page = page || 1
@@ -717,17 +711,16 @@ function xlecxOpenTag(name, page, whitch, whitchbutton, updateTabIndex) {
 	if (makeNewPage) {
 		pageId = createNewTab(`xlecxOpenTag('${name}', ${page}, ${whitch}, 0, false)`, true, 0)
 		if (pageId == null) { PopAlert(defaultSettingLang.tab_at_limit, 'danger'); return }
+		thisTabIndex = GetTabIndexById(pageId)
 	} else {
 		pageId = activeTabComicId
-		const passImageCon = document.getElementById(pageId).querySelector('[img-con="true"]')
-		if (passImageCon != undefined) {
-			const passImages = passImageCon.children
-			for (let i = 0; i < passImages.length; i++) {
-				passImages[i].removeAttribute('data-src')
-				passImages[i].removeAttribute('src')
-			}
+		thisTabIndex = GetTabIndexById(pageId)
+		const passImages = tabs[thisTabIndex].page.getElementsByTagName('img')
+		for (let i = 0; i < passImages.length; i++) {
+			passImages[i].removeAttribute('data-src')
+			passImages[i].removeAttribute('src')
 		}
-		if (updateTabIndex == true) tabs[GetTabIndexById(pageId)].addHistory(`xlecxOpenTag('${name}', ${page}, ${whitch}, 0, false)`)
+		if (updateTabIndex == true) tabs[thisTabIndex].addHistory(`xlecxOpenTag('${name}', ${page}, ${whitch}, 0, false)`)
 	}
 
 	if (activeTabComicId == pageId) {
@@ -735,7 +728,6 @@ function xlecxOpenTag(name, page, whitch, whitchbutton, updateTabIndex) {
 		bjp_i.setAttribute('oninput', '')
 	}
 
-	const thisTabIndex = GetTabIndexById(pageId)
 	tabs[thisTabIndex].ir = true
 	tabs[thisTabIndex].mp = 0
 	tabs[thisTabIndex].options = [name, whitch]
@@ -878,28 +870,26 @@ function xlecxOpenTag(name, page, whitch, whitchbutton, updateTabIndex) {
 
 function xlecxSearch(text, page, whitchbutton, updateTabIndex) {
 	if (whitchbutton == 3) return
-	let makeNewPage = false
+	let makeNewPage = false, pageId, thisTabIndex
 	if (whitchbutton == 2) makeNewPage = true
 	text = text || null
 	if (text == null) return
 	page = page || 1
 	if (updateTabIndex == null) updateTabIndex = true
 
-	let pageId
 	if (makeNewPage) {
 		pageId = createNewTab(`xlecxSearch('${text}', ${page}, 0, false)`, true, 0)
 		if (pageId == null) { PopAlert(defaultSettingLang.tab_at_limit, 'danger'); return }
+		thisTabIndex = GetTabIndexById(pageId)
 	} else {
 		pageId = activeTabComicId
-		const passImageCon = document.getElementById(pageId).querySelector('[img-con="true"]')
-		if (passImageCon != undefined) {
-			const passImages = passImageCon.children
-			for (let i = 0; i < passImages.length; i++) {
-				passImages[i].removeAttribute('data-src')
-				passImages[i].removeAttribute('src')
-			}
+		thisTabIndex = GetTabIndexById(pageId)
+		const passImages = tabs[thisTabIndex].page.getElementsByTagName('img')
+		for (let i = 0; i < passImages.length; i++) {
+			passImages[i].removeAttribute('data-src')
+			passImages[i].removeAttribute('src')
 		}
-		if (updateTabIndex == true) tabs[GetTabIndexById(pageId)].addHistory(`xlecxSearch('${text}', ${page}, 0, false)`)
+		if (updateTabIndex == true) tabs[thisTabIndex].addHistory(`xlecxSearch('${text}', ${page}, 0, false)`)
 	}
 
 	if (activeTabComicId == pageId) {
@@ -907,7 +897,6 @@ function xlecxSearch(text, page, whitchbutton, updateTabIndex) {
 		bjp_i.setAttribute('oninput', '')
 	}
 	
-	const thisTabIndex = GetTabIndexById(pageId)
 	tabs[thisTabIndex].ir = true
 	tabs[thisTabIndex].mp = 0
 	checkBrowserTools(thisTabIndex)
@@ -1035,27 +1024,24 @@ function xlecxSearch(text, page, whitchbutton, updateTabIndex) {
 
 function xlecxOpenAllTags(whitchbutton, updateTabIndex) {
 	if (whitchbutton == 3) return
-	var makeNewPage = false
+	var makeNewPage = false, pageId, thisTabIndex
 	if (whitchbutton == 2) makeNewPage = true
 	if (updateTabIndex == null) updateTabIndex = true
-	let pageId
 	if (makeNewPage) {
 		pageId = createNewTab('xlecxOpenAllTags(0, false)', true, 0)
 		if (pageId == null) { PopAlert(defaultSettingLang.tab_at_limit, 'danger'); return }
+		thisTabIndex = GetTabIndexById(pageId)
 	} else {
 		pageId = activeTabComicId
-		const passImageCon = document.getElementById(pageId).querySelector('[img-con="true"]')
-		if (passImageCon != undefined) {
-			const passImages = passImageCon.children
-			for (let i = 0; i < passImages.length; i++) {
-				passImages[i].removeAttribute('data-src')
-				passImages[i].removeAttribute('src')
-			}
+		thisTabIndex = GetTabIndexById(pageId)
+		const passImages = tabs[thisTabIndex].page.getElementsByTagName('img')
+		for (let i = 0; i < passImages.length; i++) {
+			passImages[i].removeAttribute('data-src')
+			passImages[i].removeAttribute('src')
 		}
-		if (updateTabIndex == true) tabs[GetTabIndexById(pageId)].addHistory('xlecxOpenAllTags(0, false)')
+		if (updateTabIndex == true) tabs[thisTabIndex].addHistory('xlecxOpenAllTags(0, false)')
 	}
 
-	const thisTabIndex = GetTabIndexById(pageId)
 	tabs[thisTabIndex].ir = true
 	tabs[thisTabIndex].mp = 0
 	checkBrowserTools(thisTabIndex)

@@ -6,21 +6,20 @@ function nhentaiChangePage(page, makeNewPage, updateTabIndex) {
 	page = page || 1
 	makeNewPage = makeNewPage || false
 	if (updateTabIndex == null) updateTabIndex = true
-	let pageId
+	let pageId, thisTabIndex
 	if (makeNewPage) {
 		pageId = createNewTab(`nhentaiChangePage(${page}, false, false)`, true, 1)
 		if (pageId == null) { PopAlert(defaultSettingLang.tab_at_limit, 'danger'); return }
+		thisTabIndex = GetTabIndexById(pageId)
 	} else {
 		pageId = activeTabComicId
-		const passImages = document.getElementById(pageId).getElementsByTagName('img')
-		if (passImages != undefined) {
-			for (let i = 0; i < passImages.length; i++) {
-				passImages[i].removeAttribute('data-src')
-				passImages[i].removeAttribute('src')
-			}
+		thisTabIndex = GetTabIndexById(pageId)
+		const passImages = tabs[thisTabIndex].page.getElementsByTagName('img')
+		for (let i = 0; i < passImages.length; i++) {
+			passImages[i].removeAttribute('data-src')
+			passImages[i].removeAttribute('src')
 		}
-
-		if (updateTabIndex == true) tabs[GetTabIndexById(pageId)].addHistory(`nhentaiChangePage(${page}, false, false)`)
+		if (updateTabIndex == true) tabs[thisTabIndex].addHistory(`nhentaiChangePage(${page}, false, false)`)
 	}
 
 	if (activeTabComicId == pageId) {
@@ -28,7 +27,6 @@ function nhentaiChangePage(page, makeNewPage, updateTabIndex) {
 		bjp_i.setAttribute('oninput', '')
 	}
 
-	const thisTabIndex = GetTabIndexById(pageId)
 	tabs[thisTabIndex].ir = true
 	tabs[thisTabIndex].mp = 0
 	checkBrowserTools(thisTabIndex)
@@ -122,21 +120,20 @@ function nhentaiOpenPost(id, makeNewTab, updateTabIndex) {
 	if (id == null) return
 	makeNewTab = makeNewTab || false
 	if (updateTabIndex == null) updateTabIndex = true
-	let pageId
+	let pageId, thisTabIndex
 	if (makeNewTab) {
 		pageId = createNewTab(`nhentaiOpenPost(${id}, false, false)`, true, 1)
 		if (pageId == null) { PopAlert(defaultSettingLang.tab_at_limit, 'danger'); return }
+		thisTabIndex = GetTabIndexById(pageId)
 	} else {
 		pageId = activeTabComicId
-		const passImages = document.getElementById(pageId).getElementsByTagName('img')
-		if (passImages != undefined) {
-			for (let i = 0; i < passImages.length; i++) {
-				passImages[i].removeAttribute('data-src')
-				passImages[i].removeAttribute('src')
-			}
+		thisTabIndex = GetTabIndexById(pageId)
+		const passImages = tabs[thisTabIndex].page.getElementsByTagName('img')
+		for (let i = 0; i < passImages.length; i++) {
+			passImages[i].removeAttribute('data-src')
+			passImages[i].removeAttribute('src')
 		}
-
-		if (updateTabIndex == true) tabs[GetTabIndexById(pageId)].addHistory(`nhentaiOpenPost(${id}, false, false)`)
+		if (updateTabIndex == true) tabs[thisTabIndex].addHistory(`nhentaiOpenPost(${id}, false, false)`)
 	}
 
 	if (activeTabComicId == pageId) {
@@ -144,7 +141,6 @@ function nhentaiOpenPost(id, makeNewTab, updateTabIndex) {
 		bjp_i.setAttribute('oninput', '')
 	}
 
-	const thisTabIndex = GetTabIndexById(pageId)
 	tabs[thisTabIndex].ir = true
 	tabs[thisTabIndex].mp = 0
 	checkBrowserTools(thisTabIndex)
@@ -355,21 +351,20 @@ function nhentaiOpenInfo(name, page, whitch, makeNewTab, updateTabIndex) {
 	makeNewTab = makeNewTab || false
 	if (updateTabIndex == null) updateTabIndex = true
 	const types = ['parody','character','tag','artist','group','language','category']
-	let pageId
+	let pageId, thisTabIndex
 	if (makeNewTab) {
 		pageId = createNewTab(`nhentaiOpenInfo('${name}', ${page}, ${whitch}, false, false)`, true, 1)
 		if (pageId == null) { PopAlert(defaultSettingLang.tab_at_limit, 'danger'); return }
+		thisTabIndex = GetTabIndexById(pageId)
 	} else {
 		pageId = activeTabComicId
-		const passImages = document.getElementById(pageId).getElementsByTagName('img')
-		if (passImages != undefined) {
-			for (let i = 0; i < passImages.length; i++) {
-				passImages[i].removeAttribute('data-src')
-				passImages[i].removeAttribute('src')
-			}
+		thisTabIndex = GetTabIndexById(pageId)
+		const passImages = tabs[thisTabIndex].page.getElementsByTagName('img')
+		for (let i = 0; i < passImages.length; i++) {
+			passImages[i].removeAttribute('data-src')
+			passImages[i].removeAttribute('src')
 		}
-
-		if (updateTabIndex == true) tabs[GetTabIndexById(pageId)].addHistory(`nhentaiOpenInfo('${name}', ${page}, ${whitch}, false, false)`)
+		if (updateTabIndex == true) tabs[thisTabIndex].addHistory(`nhentaiOpenInfo('${name}', ${page}, ${whitch}, false, false)`)
 	}
 
 	if (activeTabComicId == pageId) {
@@ -377,7 +372,6 @@ function nhentaiOpenInfo(name, page, whitch, makeNewTab, updateTabIndex) {
 		bjp_i.setAttribute('oninput', '')
 	}
 
-	const thisTabIndex = GetTabIndexById(pageId)
 	tabs[thisTabIndex].ir = true
 	tabs[thisTabIndex].mp = 0
 	tabs[thisTabIndex].options = [name, whitch]
@@ -457,21 +451,20 @@ function nhentaiOpenPages(from, to, page, makeNewTab, updateTabIndex) {
 	page = page || 1
 	makeNewTab = makeNewTab || false
 	if (updateTabIndex == null) updateTabIndex = true
-	let pageId
+	let pageId, thisTabIndex
 	if (makeNewTab) {
 		pageId = createNewTab(`nhentaiOpenPages(${from}, ${to}, ${page}, false, false)`, true, 1)
 		if (pageId == null) { PopAlert(defaultSettingLang.tab_at_limit, 'danger'); return }
+		thisTabIndex = GetTabIndexById(pageId)
 	} else {
 		pageId = activeTabComicId
-		const passImages = document.getElementById(pageId).getElementsByTagName('img')
-		if (passImages != undefined) {
-			for (let i = 0; i < passImages.length; i++) {
-				passImages[i].removeAttribute('data-src')
-				passImages[i].removeAttribute('src')
-			}
+		thisTabIndex = GetTabIndexById(pageId)
+		const passImages = tabs[thisTabIndex].page.getElementsByTagName('img')
+		for (let i = 0; i < passImages.length; i++) {
+			passImages[i].removeAttribute('data-src')
+			passImages[i].removeAttribute('src')
 		}
-
-		if (updateTabIndex == true) tabs[GetTabIndexById(pageId)].addHistory(`nhentaiOpenPages(${from}, ${to}, ${page}, false, false)`)
+		if (updateTabIndex == true) tabs[thisTabIndex].addHistory(`nhentaiOpenPages(${from}, ${to}, ${page}, false, false)`)
 	}
 
 	if (activeTabComicId == pageId) {
@@ -479,7 +472,6 @@ function nhentaiOpenPages(from, to, page, makeNewTab, updateTabIndex) {
 		bjp_i.setAttribute('oninput', '')
 	}
 
-	const thisTabIndex = GetTabIndexById(pageId)
 	tabs[thisTabIndex].ir = true
 	tabs[thisTabIndex].mp = 0
 	tabs[thisTabIndex].options = [from, to]
@@ -558,21 +550,20 @@ function nhentaiSearch(text, page, makeNewTab, updateTabIndex) {
 	page = page || 1
 	makeNewTab = makeNewTab || false
 	if (updateTabIndex == null) updateTabIndex = true
-	let pageId
+	let pageId, thisTabIndex
 	if (makeNewTab) {
 		pageId = createNewTab(`nhentaiSearch('${text}', ${page}, false, false)`, true, 1)
 		if (pageId == null) { PopAlert(defaultSettingLang.tab_at_limit, 'danger'); return }
+		thisTabIndex = GetTabIndexById(pageId)
 	} else {
 		pageId = activeTabComicId
-		const passImages = document.getElementById(pageId).getElementsByTagName('img')
-		if (passImages != undefined) {
-			for (let i = 0; i < passImages.length; i++) {
-				passImages[i].removeAttribute('data-src')
-				passImages[i].removeAttribute('src')
-			}
+		thisTabIndex = GetTabIndexById(pageId)
+		const passImages = tabs[thisTabIndex].page.getElementsByTagName('img')
+		for (let i = 0; i < passImages.length; i++) {
+			passImages[i].removeAttribute('data-src')
+			passImages[i].removeAttribute('src')
 		}
-
-		if (updateTabIndex == true) tabs[GetTabIndexById(pageId)].addHistory(`nhentaiSearch('${text}', ${page}, false, false)`)
+		if (updateTabIndex == true) tabs[thisTabIndex].addHistory(`nhentaiSearch('${text}', ${page}, false, false)`)
 	}
 
 	if (activeTabComicId == pageId) {
@@ -580,7 +571,6 @@ function nhentaiSearch(text, page, makeNewTab, updateTabIndex) {
 		bjp_i.setAttribute('oninput', '')
 	}
 
-	const thisTabIndex = GetTabIndexById(pageId)
 	tabs[thisTabIndex].ir = true
 	tabs[thisTabIndex].mp = 0
 	tabs[thisTabIndex].options = text
@@ -660,20 +650,20 @@ function nhentaiInfoType(page, whitch, makeNewTab, updateTabIndex) {
 	if (updateTabIndex == null) updateTabIndex = true
 	const types = ['tag','artist','character','parody','group']
 	const typesIndex = [2,3,1,0,4]
-	let pageId
+	let pageId, thisTabIndex
 	if (makeNewTab) {
 		pageId = createNewTab(`nhentaiInfoType(${page}, ${whitch}, false, false)`, true, 1)
 		if (pageId == null) { PopAlert(defaultSettingLang.tab_at_limit, 'danger'); return }
+		thisTabIndex = GetTabIndexById(pageId)
 	} else {
 		pageId = activeTabComicId
-		const passImages = document.getElementById(pageId).getElementsByTagName('img')
-		if (passImages != undefined) {
-			for (let i = 0; i < passImages.length; i++) {
-				passImages[i].removeAttribute('data-src')
-				passImages[i].removeAttribute('src')
-			}
+		thisTabIndex = GetTabIndexById(pageId)
+		const passImages = tabs[thisTabIndex].page.getElementsByTagName('img')
+		for (let i = 0; i < passImages.length; i++) {
+			passImages[i].removeAttribute('data-src')
+			passImages[i].removeAttribute('src')
 		}
-		if (updateTabIndex == true) tabs[GetTabIndexById(pageId)].addHistory(`nhentaiInfoType(${page}, ${whitch}, false, false)`)
+		if (updateTabIndex == true) tabs[thisTabIndex].addHistory(`nhentaiInfoType(${page}, ${whitch}, false, false)`)
 	}
 
 	if (activeTabComicId == pageId) {
@@ -681,7 +671,6 @@ function nhentaiInfoType(page, whitch, makeNewTab, updateTabIndex) {
 		bjp_i.setAttribute('oninput', '')
 	}
 
-	const thisTabIndex = GetTabIndexById(pageId)
 	tabs[thisTabIndex].ir = true
 	tabs[thisTabIndex].mp = 0
 	tabs[thisTabIndex].options = whitch
@@ -753,21 +742,20 @@ function nhentaiInfoType(page, whitch, makeNewTab, updateTabIndex) {
 function nhentaiRandom(makeNewTab, updateTabIndex) {
 	makeNewTab = makeNewTab || false
 	if (updateTabIndex == null) updateTabIndex = true
-	let pageId
+	let pageId, thisTabIndex
 	if (makeNewTab) {
 		pageId = createNewTab(`nhentaiRandom(false, false)`, true, 1)
 		if (pageId == null) { PopAlert(defaultSettingLang.tab_at_limit, 'danger'); return }
+		thisTabIndex = GetTabIndexById(pageId)
 	} else {
 		pageId = activeTabComicId
-		const passImages = document.getElementById(pageId).getElementsByTagName('img')
-		if (passImages != undefined) {
-			for (let i = 0; i < passImages.length; i++) {
-				passImages[i].removeAttribute('data-src')
-				passImages[i].removeAttribute('src')
-			}
+		thisTabIndex = GetTabIndexById(pageId)
+		const passImages = tabs[thisTabIndex].page.getElementsByTagName('img')
+		for (let i = 0; i < passImages.length; i++) {
+			passImages[i].removeAttribute('data-src')
+			passImages[i].removeAttribute('src')
 		}
-
-		if (updateTabIndex == true) tabs[GetTabIndexById(pageId)].addHistory(`nhentaiRandom(false, false)`)
+		if (updateTabIndex == true) tabs[thisTabIndex].addHistory(`nhentaiRandom(false, false)`)
 	}
 
 	if (activeTabComicId == pageId) {
@@ -775,7 +763,6 @@ function nhentaiRandom(makeNewTab, updateTabIndex) {
 		bjp_i.setAttribute('oninput', '')
 	}
 
-	const thisTabIndex = GetTabIndexById(pageId)
 	tabs[thisTabIndex].ir = true
 	tabs[thisTabIndex].mp = 0
 	checkBrowserTools(thisTabIndex)
