@@ -39,7 +39,7 @@ function loadComics(page, search, safeScroll) {
 		
 		if (setting.show_unoptimize) {
 			let unoptimize = ''
-			for (let i=min; i < max; i++) {
+			for (let i = min; i < max; i++) {
 				id = doc[i]._id
 				name = doc[i].n
 				image = `${dirUL}/thumbs/${doc[i].i}.jpg`
@@ -52,7 +52,7 @@ function loadComics(page, search, safeScroll) {
 				html += `<div class="comic" onmousedown="onComicClicked(${id}, ${thumb}, ${optimize})"${unoptimize}><img src="${image}"><span>${doc[i].c}</span><p>${name}</p></div>`
 			}
 		} else {
-			for (let i=min; i < max; i++) {
+			for (let i = min; i < max; i++) {
 				id = doc[i]._id
 				name = doc[i].n
 				image = `${dirUL}/thumbs/${doc[i].i}.jpg`

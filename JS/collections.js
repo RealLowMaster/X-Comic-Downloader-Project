@@ -96,58 +96,57 @@ function closeCollection() {
 	CollectionPagination.innerHTML = null
 }
 
-function LoadCollection(index, maxPage, min, max) {
+function LoadCollection() {
 	const ids = collectionsDB[openedCollectionIndex][1]
-
-	if (ids.length == index) {
-		return
-	}
-
-	if (maxPage != null) {
-		if (min + index == max) {
-			const thisPagination = pagination(maxPage, collectionPage)
-			html = '<div>'
-			for (let i in thisPagination) {
-				if (thisPagination[i][1] == null) html += `<button disabled>${thisPagination[i][0]}</button>`
-				else html += `<button onclick="collectionPage=${thisPagination[i][1]};LoadCollection()">${thisPagination[i][0]}</button>`
-			}
-			html += '</div>'
-			CollectionPagination.innerHTML = html
-			CollectionPagination.style.display = 'block'
-			return
-		}
-	} else CollectionPagination.style.display = 'none'
 
 	if (ids.length == 0) {
 		document.getElementById('o-c-p-c-c').innerHTML = '<div class="alert alert-danger">This Collection Have no Comic.</div>'
 		return
 	}
 
-	index = index || null
-	maxPage = maxPage || null
-	if (index == null) index = 0
+	document.getElementById('o-c-p-c-c').innerHTML = null
 
 	const max_per_page = setting.max_per_page
-	if (maxPage == null) {
-		document.getElementById('o-c-p-c-c').innerHTML = null
-		min = 0
-		max = ids.length
-		maxPage = Math.ceil(max / max_per_page)
-		while (collectionPage > maxPage) {
-			collectionPage--
-		}
-
-		if (max >= max_per_page) {
-			min = (max_per_page * collectionPage) - max_per_page
-			max = min + max_per_page
-			if (max > ids.length) max = ids.length
-		}
+	let min = 0
+	let max = ids.length
+	const maxPage = Math.ceil(max / max_per_page)
+	while (collectionPage > maxPage) {
+		collectionPage--
 	}
 
-	db.comics.findOne({_id:ids[min + index]}, (err, doc) => {
+	if (max >= max_per_page) {
+		min = (max_per_page * collectionPage) - max_per_page
+		max = min + max_per_page
+		if (max > ids.length) max = ids.length
+	}
+
+	const newIds = []
+	for (let i = ids.length; i >= 0; i--) newIds.push(ids[i])
+
+	const comic_ids = []
+	for (let i = min; i < max; i++) comic_ids.push(newIds[i])
+	LoadCollectionComics(comic_ids, maxPage)
+}
+
+function LoadCollectionComics(contents, maxPage) {
+	if (contents.length == 0) {
+		const thisPagination = pagination(maxPage, collectionPage)
+		html = '<div>'
+		for (let i in thisPagination) {
+			if (thisPagination[i][1] == null) html += `<button disabled>${thisPagination[i][0]}</button>`
+			else html += `<button onclick="collectionPage=${thisPagination[i][1]};LoadCollection()">${thisPagination[i][0]}</button>`
+		}
+		html += '</div>'
+		CollectionPagination.innerHTML = html
+		CollectionPagination.style.display = 'block'
+		return
+	} else CollectionPagination.style.display = 'none'
+
+	db.comics.findOne({_id:contents[0]}, (err, doc) => {
 		if (err) { error('LoadCollection->Err: '+err); return }
 		if (doc == undefined || doc == null) {
-			LoadCollection(index + 1, maxPage, min, max)
+			contents.shift()
+			LoadCollectionComics(contents, maxPage)
 			return
 		}
 
@@ -177,7 +176,8 @@ function LoadCollection(index, maxPage, min, max) {
 			html += `<div class="comic" onmousedown="onComicClicked(${id}, ${thumb}, ${optimize})"><img src="${image}"><span>${doc.c}</span><p>${_name}</p></div>`
 		}
 		document.getElementById('o-c-p-c-c').innerHTML += html
-		LoadCollection(index + 1, maxPage, min, max)
+		contents.shift()
+		LoadCollectionComics(contents, maxPage)
 	})
 }
 
