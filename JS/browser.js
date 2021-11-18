@@ -148,7 +148,7 @@ function createNewTab(history, addFront, site) {
 	element.setAttribute('pi', newTabId)
 	element.setAttribute('ti', tabIndex)
 	element.setAttribute('draggable', true)
-	element.innerHTML = `<span><img class="spin" src="Image/dual-ring-primary-${wt_fps}.gif"></span> <button onclick="removeTab('${newTabId}')">X</button>`
+	element.innerHTML = `<img src="Image/dual-ring-primary-${wt_fps}.gif"><span></span> <button onclick="removeTab('${newTabId}')">X</button>`
 	element.addEventListener('dragstart',() => { element.classList.add('dragging') })
 	element.addEventListener('dragend', () => { element.classList.remove('dragging') })
 	element.addEventListener('contextmenu', e => {
@@ -548,8 +548,9 @@ function IsDownloading(id, site) {
 }
 
 function browserError(err, tabIndex) {
-	document.getElementById(id).innerHTML = `<br><div class="alert alert-danger">${err}</div><button class="btn btn-primary" style="display:block;margin:3px auto" onclick="browserTabReload()">Reload</button>`
-	tabs[tabIndex].rename('*Error*', true)
+	tabs[tabIndex].page.innerHTML = `<br><div class="alert alert-danger">${err}</div><button class="btn btn-primary" style="display:block;margin:3px auto" onclick="browserTabReload()">Reload</button>`
+	tabs[tabIndex].rename('*Error*')
+	tabs[thisTabIndex].icon.style.display = 'none'
 }
 
 function searchFilter(txt, database, alert) {
@@ -801,7 +802,7 @@ document.getElementById('browser-tool-search-form').addEventListener('submit', e
 // Sites
 function SetSite() {
 	let html = ''
-	for (let i = 0; i < sites.length; i++) html += `<div onclick="openSite(${i})" title="${sites[i].url}"><img src="Image/sites/${sites[i].name}-60x60.png"><p>${sites[i].name}</p></div>`
+	for (let i = 0; i < sites.length; i++) html += `<div onclick="openSite(${i})" title="${sites[i].url}"><img src="Image/sites/${sites[i].name}-60x60.jpg"><p>${sites[i].name}</p></div>`
 	document.getElementById('b-s-p-c').innerHTML = html
 }
 
@@ -981,7 +982,7 @@ function loadMoreHistory() {
 					element.setAttribute('onclick', 'browserHistorySelect(this)')
 					container.appendChild(element)
 					element = document.createElement('img')
-					element.src = 'Image/sites/'+sites[passHistory[j][0][1][3]].name+'-30x30.png'
+					element.src = 'Image/sites/'+sites[passHistory[j][0][1][3]].name+'-30x30.jpg'
 					container.appendChild(element)
 					element = document.createElement('p')
 					element.setAttribute('onclick', 'openBrowserHistory('+passHistory[j][1]+')')
@@ -1028,7 +1029,7 @@ function loadMoreHistory() {
 					element.setAttribute('onclick', 'browserHistorySelect(this)')
 					container.appendChild(element)
 					element = document.createElement('img')
-					element.src = 'Image/sites/'+sites[passHistory[j][0][1][3]].name+'-30x30.png'
+					element.src = 'Image/sites/'+sites[passHistory[j][0][1][3]].name+'-30x30.jpg'
 					container.appendChild(element)
 					element = document.createElement('p')
 					element.setAttribute('onclick', 'openBrowserHistory('+passHistory[j][1]+')')

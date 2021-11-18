@@ -99,6 +99,7 @@ Added To Version {
 	Fix Bug: fix xlecx support for new xlecx site structure
 	Fix Bug: Rescanning SubFolders In Startup (Fixed By PBXg33k)
 	Optimize Browser Tab and Page System
+	Add Icon To Browser Tab
 }
 
 Doing {
@@ -106,6 +107,7 @@ Doing {
 }
 
 Tasks => {
+	Add Icon To Tab
 	Remake Optimization System
 	Add Email System
 	Fix Bug: Problem with Comics That have just 1 Image
@@ -115,6 +117,7 @@ Tasks => {
 	Update Slider UI
 	Add Search To History
 	ChangeRandom System On JumpPageRandom
+	Convert tag, artists, etc... To array insted
 
 	Fix Bug: Downloading xlecx => Morning Stretches
 	Optimize Gifs { giflossy imagemin Packages }
@@ -133,12 +136,7 @@ Tasks => {
 
 	Mybe in v2  {
 		Add Bookmark || Favoriet Posts
-		Make Browser Tabs Style Better {
-			Add curve to selected Tab
-			Add Icon To Tab
-			Add Title Attrbiute To Tabs
-			Make Tab Resizing Work Better
-		}
+		Make Tab Resizing Work Better
 		Add Ability That Check Post Updated Image
 		Add Find Artist and ... To Offline Part
 		Add Report Bug Button

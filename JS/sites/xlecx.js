@@ -39,7 +39,9 @@ function createNewXlecxTab(id, pageNumber) {
 	tabs[thisTabIndex].ir = true
 	tabs[thisTabIndex].mp = 0
 	checkBrowserTools(thisTabIndex)
-	tabs[thisTabIndex].rename(`<img class="spin" src="Image/dual-ring-primary-${wt_fps}.gif">`, false)
+	tabs[thisTabIndex].rename('')
+	tabs[thisTabIndex].icon.style.display = 'inline-block'
+	tabs[thisTabIndex].icon.setAttribute('src', `Image/dual-ring-primary-${wt_fps}.gif`)
 	tabs[thisTabIndex].page.innerHTML = `<div class="browser-page-loading"><img class="spin" style="width:60px;height:60px" src="Image/dual-ring-primary-${wt_fps}.gif"><p>Loading...</p></div>`
 	xlecx.getPage({page:pageNumber, random:true, category:true}, (err, result) => {
 		if (document.getElementById(id) == undefined) return
@@ -50,7 +52,8 @@ function createNewXlecxTab(id, pageNumber) {
 			browserError(err, thisTabIndex)
 			return
 		}
-		tabs[thisTabIndex].rename(`Page ${pageNumber}`, true)
+		tabs[thisTabIndex].rename(`Page ${pageNumber}`)
+		tabs[thisTabIndex].icon.setAttribute('src', 'Image/sites/xlecx-30x30.jpg')
 		let container = document.createElement('div')
 		container.classList.add("xlecx-container")
 		let elementContainerContainer, elementContainer, element, miniElement, html, valueStorage
@@ -218,7 +221,9 @@ function xlecxOpenPost(whitchbutton, id, updateTabIndex) {
 	tabs[thisTabIndex].ir = true
 	tabs[thisTabIndex].mp = 0
 	checkBrowserTools(thisTabIndex)
-	tabs[thisTabIndex].rename(`<img class="spin" src="Image/dual-ring-primary-${wt_fps}.gif">`, false)
+	tabs[thisTabIndex].rename('')
+	tabs[thisTabIndex].icon.style.display = 'inline-block'
+	tabs[thisTabIndex].icon.setAttribute('src', `Image/dual-ring-primary-${wt_fps}.gif`)
 	tabs[thisTabIndex].page.innerHTML = `<div class="browser-page-loading"><img class="spin" style="width:60px;height:60px" src="Image/dual-ring-primary-${wt_fps}.gif"><p>Loading...</p></div>`
 	db.have.findOne({s:0, i:id}, (err, haveDoc) => {
 		if (err) { error(err); return }
@@ -238,7 +243,8 @@ function xlecxOpenPost(whitchbutton, id, updateTabIndex) {
 				browserError(err, thisTabIndex)
 				return
 			}
-			tabs[thisTabIndex].rename(result.title, true)
+			tabs[thisTabIndex].rename(result.title)
+			tabs[thisTabIndex].icon.setAttribute('src', 'Image/sites/xlecx-30x30.jpg')
 			var image_container = document.createElement('div')
 			image_container.classList.add('xlecx-image-container-1x1')
 			var containerContainer = document.createElement('div')
@@ -466,7 +472,9 @@ function xlecxOpenCategory(name, page, shortName, whitchbutton, updateTabIndex) 
 	tabs[thisTabIndex].mp = 0
 	tabs[thisTabIndex].options = [name, shortName]
 	checkBrowserTools(thisTabIndex)
-	tabs[thisTabIndex].rename(`<img class="spin" src="Image/dual-ring-primary-${wt_fps}.gif">`, false)
+	tabs[thisTabIndex].rename('')
+	tabs[thisTabIndex].icon.style.display = 'inline-block'
+	tabs[thisTabIndex].icon.setAttribute('src', `Image/dual-ring-primary-${wt_fps}.gif`)
 	tabs[thisTabIndex].page.innerHTML = `<div class="browser-page-loading"><img class="spin" style="width:60px;height:60px" src="Image/dual-ring-primary-${wt_fps}.gif"><p>Loading...</p></div>`
 	xlecx.getCategory(name, {page:page, random:true, category:true}, (err, result) => {
 		if (document.getElementById(pageId) == undefined) return
@@ -477,7 +485,8 @@ function xlecxOpenCategory(name, page, shortName, whitchbutton, updateTabIndex) 
 			browserError(err, thisTabIndex)
 			return
 		}
-		tabs[thisTabIndex].rename(`${shortName} - ${page}`, true)
+		tabs[thisTabIndex].rename(`${shortName} - ${page}`)
+		tabs[thisTabIndex].icon.setAttribute('src', 'Image/sites/xlecx-30x30.jpg')
 		var container = document.createElement('div')
 		container.classList.add("xlecx-container")
 		var elementContainerContainer, elementContainer, element, miniElement, html, valueStorage
@@ -731,7 +740,9 @@ function xlecxOpenTag(name, page, whitch, whitchbutton, updateTabIndex) {
 	tabs[thisTabIndex].mp = 0
 	tabs[thisTabIndex].options = [name, whitch]
 	checkBrowserTools(thisTabIndex)
-	tabs[thisTabIndex].rename(`<img class="spin" src="Image/dual-ring-primary-${wt_fps}.gif">`, false)
+	tabs[thisTabIndex].rename('')
+	tabs[thisTabIndex].icon.style.display = 'inline-block'
+	tabs[thisTabIndex].icon.setAttribute('src', `Image/dual-ring-primary-${wt_fps}.gif`)
 	tabs[thisTabIndex].page.innerHTML = `<div class="browser-page-loading"><img class="spin" style="width:60px;height:60px" src="Image/dual-ring-primary-${wt_fps}.gif"><p>Loading...</p></div>`
 	switch (whitch) {
 		case 1:
@@ -744,7 +755,8 @@ function xlecxOpenTag(name, page, whitch, whitchbutton, updateTabIndex) {
 					browserError(err, thisTabIndex)
 					return
 				}
-				tabs[thisTabIndex].rename(`${name} - ${page}`, true)
+				tabs[thisTabIndex].rename(`${name} - ${page}`)
+				tabs[thisTabIndex].icon.setAttribute('src', 'Image/sites/xlecx-30x30.jpg')
 				var valueStorage
 	
 				if (result.pagination == undefined) valueStorage = 0
@@ -775,7 +787,8 @@ function xlecxOpenTag(name, page, whitch, whitchbutton, updateTabIndex) {
 					browserError(err, thisTabIndex)
 					return
 				}
-				tabs[thisTabIndex].rename(`${name} - ${page}`, true)
+				tabs[thisTabIndex].rename(`${name} - ${page}`)
+				tabs[thisTabIndex].icon.setAttribute('src', 'Image/sites/xlecx-30x30.jpg')
 				var valueStorage
 	
 				if (result.pagination == undefined) valueStorage = 0
@@ -806,7 +819,8 @@ function xlecxOpenTag(name, page, whitch, whitchbutton, updateTabIndex) {
 					browserError(err, thisTabIndex)
 					return
 				}
-				tabs[thisTabIndex].rename(`${name} - ${page}`, true)
+				tabs[thisTabIndex].rename(`${name} - ${page}`)
+				tabs[thisTabIndex].icon.setAttribute('src', 'Image/sites/xlecx-30x30.jpg')
 				var valueStorage
 	
 				if (result.pagination == undefined) valueStorage = 0
@@ -837,7 +851,8 @@ function xlecxOpenTag(name, page, whitch, whitchbutton, updateTabIndex) {
 					browserError(err, thisTabIndex)
 					return
 				}
-				tabs[thisTabIndex].rename(`${name} - ${page}`, true)
+				tabs[thisTabIndex].rename(`${name} - ${page}`)
+				tabs[thisTabIndex].icon.setAttribute('src', 'Image/sites/xlecx-30x30.jpg')
 				var valueStorage
 	
 				if (result.pagination == undefined) valueStorage = 0
@@ -896,7 +911,9 @@ function xlecxSearch(text, page, whitchbutton, updateTabIndex) {
 	tabs[thisTabIndex].ir = true
 	tabs[thisTabIndex].mp = 0
 	checkBrowserTools(thisTabIndex)
-	tabs[thisTabIndex].rename(`<img class="spin" src="Image/dual-ring-primary-${wt_fps}.gif">`, false)
+	tabs[thisTabIndex].rename('')
+	tabs[thisTabIndex].icon.style.display = 'inline-block'
+	tabs[thisTabIndex].icon.setAttribute('src', `Image/dual-ring-primary-${wt_fps}.gif`)
 	tabs[thisTabIndex].page.innerHTML = `<div class="browser-page-loading"><img class="spin" style="width:60px;height:60px" src="Image/dual-ring-primary-${wt_fps}.gif"><p>Loading...</p></div>`
 	xlecx.search(text, {page:page, category:true}, (err, result) => {
 		if (document.getElementById(pageId) == undefined) return
@@ -907,7 +924,8 @@ function xlecxSearch(text, page, whitchbutton, updateTabIndex) {
 			browserError(err, thisTabIndex)
 			return
 		}
-		tabs[thisTabIndex].rename(`S: ${convertToURL(text, true)} - ${page}`, true)
+		tabs[thisTabIndex].rename(`S: ${convertToURL(text, true)} - ${page}`)
+		tabs[thisTabIndex].icon.setAttribute('src', 'Image/sites/xlecx-30x30.jpg')
 		var container = document.createElement('div')
 		container.classList.add("xlecx-container")
 		var elementContainerContainer = document.createElement('div')
@@ -1041,7 +1059,9 @@ function xlecxOpenAllTags(whitchbutton, updateTabIndex) {
 	tabs[thisTabIndex].ir = true
 	tabs[thisTabIndex].mp = 0
 	checkBrowserTools(thisTabIndex)
-	tabs[thisTabIndex].rename(`<img class="spin" src="Image/dual-ring-primary-${wt_fps}.gif">`, false)
+	tabs[thisTabIndex].rename('')
+	tabs[thisTabIndex].icon.style.display = 'inline-block'
+	tabs[thisTabIndex].icon.setAttribute('src', `Image/dual-ring-primary-${wt_fps}.gif`)
 	tabs[thisTabIndex].page.innerHTML = `<div class="browser-page-loading"><img class="spin" style="width:60px;height:60px" src="Image/dual-ring-primary-${wt_fps}.gif"><p>Loading...</p></div>`
 	xlecx.getAllTags(true, (err, result) => {
 		if (document.getElementById(pageId) == undefined) return
@@ -1052,7 +1072,8 @@ function xlecxOpenAllTags(whitchbutton, updateTabIndex) {
 			browserError(err, pageId)
 			return
 		}
-		tabs[thisTabIndex].rename('All Tags', true)
+		tabs[thisTabIndex].rename('All Tags')
+		tabs[thisTabIndex].icon.setAttribute('src', 'Image/sites/xlecx-30x30.jpg')
 		var container = document.createElement('div')
 		container.classList.add("xlecx-container")
 		var elementContainerContainer, elementContainer, element, miniElement, html, valueStorage

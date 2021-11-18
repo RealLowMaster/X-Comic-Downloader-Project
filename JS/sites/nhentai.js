@@ -32,7 +32,9 @@ function nhentaiChangePage(page, makeNewPage, updateTabIndex) {
 	tabs[thisTabIndex].ir = true
 	tabs[thisTabIndex].mp = 0
 	checkBrowserTools(thisTabIndex)
-	tabs[thisTabIndex].rename(`<img class="spin" src="Image/dual-ring-primary-${wt_fps}.gif">`, false)
+	tabs[thisTabIndex].rename('')
+	tabs[thisTabIndex].icon.style.display = 'inline-block'
+	tabs[thisTabIndex].icon.setAttribute('src', `Image/dual-ring-primary-${wt_fps}.gif`)
 	tabs[thisTabIndex].page.innerHTML = `<div class="browser-page-loading"><img class="spin" style="width:60px;height:60px" src="Image/dual-ring-primary-${wt_fps}.gif"><p>Loading...</p></div>`
 
 	nhentai.getPage(page, (err, result) => {
@@ -41,11 +43,13 @@ function nhentaiChangePage(page, makeNewPage, updateTabIndex) {
 		checkBrowserTools(thisTabIndex)
 		tabs[thisTabIndex].page.innerHTML = null
 		if (err) {
-			tabs[thisTabIndex].rename(err, true)
+			tabs[thisTabIndex].rename(err)
+			tabs[thisTabIndex].icon.style.display = 'none'
 			tabs[thisTabIndex].page.innerHTML = nhentaiError.replace('{err}', err)
 			return
 		}
-		tabs[thisTabIndex].rename(`Page ${page}`, true)
+		tabs[thisTabIndex].rename(`Page ${page}`)
+		tabs[thisTabIndex].icon.setAttribute('src', 'Image/sites/nhentai-30x30.jpg')
 		let save, save2, html
 		html = '<div class="nhentai-container">'+nhentaiSiteTopMenu
 
@@ -144,14 +148,17 @@ function nhentaiOpenPost(id, makeNewTab, updateTabIndex) {
 	tabs[thisTabIndex].ir = true
 	tabs[thisTabIndex].mp = 0
 	checkBrowserTools(thisTabIndex)
-	tabs[thisTabIndex].rename(`<img class="spin" src="Image/dual-ring-primary-${wt_fps}.gif">`, false)
+	tabs[thisTabIndex].rename('')
+	tabs[thisTabIndex].icon.style.display = 'inline-block'
+	tabs[thisTabIndex].icon.setAttribute('src', `Image/dual-ring-primary-${wt_fps}.gif`)
 	tabs[thisTabIndex].page.innerHTML = `<div class="browser-page-loading"><img class="spin" style="width:60px;height:60px" src="Image/dual-ring-primary-${wt_fps}.gif"><p>Loading...</p></div>`
 	db.have.findOne({s:1, i:id}, (err, haveDoc) => {
 		if (err) {
 			if (document.getElementById(pageId) == undefined) return
 			tabs[thisTabIndex].ir = false
 			checkBrowserTools(thisTabIndex)
-			tabs[thisTabIndex].rename(err, true)
+			tabs[thisTabIndex].rename(err)
+			tabs[thisTabIndex].icon.style.display = 'none'
 			tabs[thisTabIndex].page.innerHTML = nhentaiError.replace('{err}', err)
 			return
 		}
@@ -167,11 +174,13 @@ function nhentaiOpenPost(id, makeNewTab, updateTabIndex) {
 			checkBrowserTools(thisTabIndex)
 			tabs[thisTabIndex].page.innerHTML = null
 			if (err) {
-				tabs[thisTabIndex].rename(err, true)
+				tabs[thisTabIndex].rename(err)
+				tabs[thisTabIndex].icon.style.display = 'none'
 				tabs[thisTabIndex].page.innerHTML = nhentaiError.replace('{err}', err)
 				return
 			}
-			tabs[thisTabIndex].rename(result.name, true)
+			tabs[thisTabIndex].rename(result.name)
+			tabs[thisTabIndex].icon.setAttribute('src', 'Image/sites/nhentai-30x30.jpg')
 			let html
 			html = '<div class="nhentai-container">'+nhentaiSiteTopMenu
 			if (have_comic == true) html += '<div class="browser-comic-have"><span>You Downloaded This Comic.<span></div>'
@@ -373,7 +382,9 @@ function nhentaiOpenInfo(name, page, whitch, makeNewTab, updateTabIndex) {
 	tabs[thisTabIndex].mp = 0
 	tabs[thisTabIndex].options = [name, whitch]
 	checkBrowserTools(thisTabIndex)
-	tabs[thisTabIndex].rename(`<img class="spin" src="Image/dual-ring-primary-${wt_fps}.gif">`, false)
+	tabs[thisTabIndex].rename('')
+	tabs[thisTabIndex].icon.style.display = 'inline-block'
+	tabs[thisTabIndex].icon.setAttribute('src', `Image/dual-ring-primary-${wt_fps}.gif`)
 	tabs[thisTabIndex].page.innerHTML = `<div class="browser-page-loading"><img class="spin" style="width:60px;height:60px" src="Image/dual-ring-primary-${wt_fps}.gif"><p>Loading...</p></div>`
 
 	nhentai.getTypePage(types[whitch], name, page, (err, result) => {
@@ -382,11 +393,13 @@ function nhentaiOpenInfo(name, page, whitch, makeNewTab, updateTabIndex) {
 		checkBrowserTools(thisTabIndex)
 		tabs[thisTabIndex].page.innerHTML = null
 		if (err) {
-			tabs[thisTabIndex].rename(err, true)
+			tabs[thisTabIndex].rename(err)
+			tabs[thisTabIndex].icon.style.display = 'none'
 			tabs[thisTabIndex].page.innerHTML = nhentaiError.replace('{err}', err)
 			return
 		}
-		tabs[thisTabIndex].rename(`${result.name} - ${page}`, true)
+		tabs[thisTabIndex].rename(`${result.name} - ${page}`)
+		tabs[thisTabIndex].icon.setAttribute('src', 'Image/sites/nhentai-30x30.jpg')
 		let save, save2, html
 		html = '<div class="nhentai-container">'+nhentaiSiteTopMenu
 
@@ -471,7 +484,9 @@ function nhentaiOpenPages(from, to, page, makeNewTab, updateTabIndex) {
 	tabs[thisTabIndex].mp = 0
 	tabs[thisTabIndex].options = [from, to]
 	checkBrowserTools(thisTabIndex)
-	tabs[thisTabIndex].rename(`<img class="spin" src="Image/dual-ring-primary-${wt_fps}.gif">`, false)
+	tabs[thisTabIndex].rename('')
+	tabs[thisTabIndex].icon.style.display = 'inline-block'
+	tabs[thisTabIndex].icon.setAttribute('src', `Image/dual-ring-primary-${wt_fps}.gif`)
 	tabs[thisTabIndex].page.innerHTML = `<div class="browser-page-loading"><img class="spin" style="width:60px;height:60px" src="Image/dual-ring-primary-${wt_fps}.gif"><p>Loading...</p></div>`
 
 	nhentai.searchPages(from, to, page, (err, result) => {
@@ -480,11 +495,13 @@ function nhentaiOpenPages(from, to, page, makeNewTab, updateTabIndex) {
 		checkBrowserTools(thisTabIndex)
 		tabs[thisTabIndex].page.innerHTML = null
 		if (err) {
-			tabs[thisTabIndex].rename(err, true)
+			tabs[thisTabIndex].rename(err)
+			tabs[thisTabIndex].icon.style.display = 'none'
 			tabs[thisTabIndex].page.innerHTML = nhentaiError.replace('{err}', err)
 			return
 		}
-		tabs[thisTabIndex].rename(`From ${from} To ${to} - ${page}`, true)
+		tabs[thisTabIndex].rename(`From ${from} To ${to} - ${page}`)
+		tabs[thisTabIndex].icon.setAttribute('src', 'Image/sites/nhentai-30x30.jpg')
 		let save, save2, html
 		html = '<div class="nhentai-container">'+nhentaiSiteTopMenu
 
@@ -568,7 +585,9 @@ function nhentaiSearch(text, page, makeNewTab, updateTabIndex) {
 	tabs[thisTabIndex].mp = 0
 	tabs[thisTabIndex].options = text
 	checkBrowserTools(thisTabIndex)
-	tabs[thisTabIndex].rename(`<img class="spin" src="Image/dual-ring-primary-${wt_fps}.gif">`, false)
+	tabs[thisTabIndex].rename('')
+	tabs[thisTabIndex].icon.style.display = 'inline-block'
+	tabs[thisTabIndex].icon.setAttribute('src', `Image/dual-ring-primary-${wt_fps}.gif`)
 	tabs[thisTabIndex].page.innerHTML = `<div class="browser-page-loading"><img class="spin" style="width:60px;height:60px" src="Image/dual-ring-primary-${wt_fps}.gif"><p>Loading...</p></div>`
 
 	nhentai.search(text, page, (err, result) => {
@@ -577,11 +596,13 @@ function nhentaiSearch(text, page, makeNewTab, updateTabIndex) {
 		checkBrowserTools(thisTabIndex)
 		tabs[thisTabIndex].page.innerHTML = null
 		if (err) {
-			tabs[thisTabIndex].rename(err, true)
+			tabs[thisTabIndex].rename(err)
+			tabs[thisTabIndex].icon.style.display = 'none'
 			tabs[thisTabIndex].page.innerHTML = nhentaiError.replace('{err}', err)
 			return
 		}
-		tabs[thisTabIndex].rename(`S: ${convertToURL(text, true)} - ${page}`, true)
+		tabs[thisTabIndex].rename(`S: ${convertToURL(text, true)} - ${page}`)
+		tabs[thisTabIndex].icon.setAttribute('src', 'Image/sites/nhentai-30x30.jpg')
 		let save, save2, html
 		html = '<div class="nhentai-container">'+nhentaiSiteTopMenu
 
@@ -665,7 +686,9 @@ function nhentaiInfoType(page, whitch, makeNewTab, updateTabIndex) {
 	tabs[thisTabIndex].mp = 0
 	tabs[thisTabIndex].options = whitch
 	checkBrowserTools(thisTabIndex)
-	tabs[thisTabIndex].rename(`<img class="spin" src="Image/dual-ring-primary-${wt_fps}.gif">`, false)
+	tabs[thisTabIndex].rename('')
+	tabs[thisTabIndex].icon.style.display = 'inline-block'
+	tabs[thisTabIndex].icon.setAttribute('src', `Image/dual-ring-primary-${wt_fps}.gif`)
 	tabs[thisTabIndex].page.innerHTML = `<div class="browser-page-loading"><img class="spin" style="width:60px;height:60px" src="Image/dual-ring-primary-${wt_fps}.gif"><p>Loading...</p></div>`
 
 	nhentai.getInfoType(types[whitch], page, (err, result) => {
@@ -674,11 +697,13 @@ function nhentaiInfoType(page, whitch, makeNewTab, updateTabIndex) {
 		checkBrowserTools(thisTabIndex)
 		tabs[thisTabIndex].page.innerHTML = null
 		if (err) {
-			tabs[thisTabIndex].rename(err, true)
+			tabs[thisTabIndex].rename(err)
+			tabs[thisTabIndex].icon.style.display = 'none'
 			tabs[thisTabIndex].page.innerHTML = nhentaiError.replace('{err}', err)
 			return
 		}
-		tabs[thisTabIndex].rename(`${types[whitch]} - ${page}`, true)
+		tabs[thisTabIndex].rename(`${types[whitch]} - ${page}`)
+		tabs[thisTabIndex].icon.setAttribute('src', 'Image/sites/nhentai-30x30.jpg')
 		let save, save2, html
 		html = '<div class="nhentai-container">'+nhentaiSiteTopMenu
 
@@ -754,7 +779,9 @@ function nhentaiRandom(makeNewTab, updateTabIndex) {
 	tabs[thisTabIndex].ir = true
 	tabs[thisTabIndex].mp = 0
 	checkBrowserTools(thisTabIndex)
-	tabs[thisTabIndex].rename(`<img class="spin" src="Image/dual-ring-primary-${wt_fps}.gif">`, false)
+	tabs[thisTabIndex].rename('')
+	tabs[thisTabIndex].icon.style.display = 'inline-block'
+	tabs[thisTabIndex].icon.setAttribute('src', `Image/dual-ring-primary-${wt_fps}.gif`)
 	tabs[thisTabIndex].page.innerHTML = `<div class="browser-page-loading"><img class="spin" style="width:60px;height:60px" src="Image/dual-ring-primary-${wt_fps}.gif"><p>Loading...</p></div>`
 
 	nhentai.getRandom((err, result) => {
@@ -763,7 +790,8 @@ function nhentaiRandom(makeNewTab, updateTabIndex) {
 		checkBrowserTools(thisTabIndex)
 		tabs[thisTabIndex].page.innerHTML = null
 		if (err) {
-			tabs[thisTabIndex].rename(err, true)
+			tabs[thisTabIndex].rename(err)
+			tabs[thisTabIndex].icon.style.display = 'none'
 			tabs[thisTabIndex].page.innerHTML = nhentaiError.replace('{err}', err)
 			return
 		}
@@ -784,7 +812,8 @@ function nhentaiRandom(makeNewTab, updateTabIndex) {
 				if (haveDoc.d != undefined) have_comic = true
 			}
 	
-			tabs[thisTabIndex].rename(result.name, true)
+			tabs[thisTabIndex].rename(result.name)
+			tabs[thisTabIndex].icon.setAttribute('src', 'Image/sites/nhentai-30x30.jpg')
 			let html
 			html = '<div class="nhentai-container">'+nhentaiSiteTopMenu
 			if (have_comic == true) html += '<div class="browser-comic-have"><span>You Downloaded This Comic.<span></div>'

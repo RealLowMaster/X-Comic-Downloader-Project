@@ -968,3 +968,29 @@ function OfflineComicKeyEvents(ctrl, shift, key) {
 		}
 	}
 }
+
+// Load Comic With tags
+function testLoad() {
+	const tagId = 37 // yaoi
+	db.comic_tags.find({}, (err, doc) => {
+		if (err) {error(err);return}
+		const found_comics = []
+		for (let i = 0; i < doc.length; i++) {
+			if (doc[i].t.indexOf(tagId) > -1) found_comics.push(doc[i]._id)
+		}
+
+		console.log(found_comics)
+	})
+}
+
+function convertOldTagsToNew() {
+	db.tags.find({}, (err, doc) => {
+		if (err) { error(err); return }
+		const newTag = []
+		for (let i = 0; i < doc.length; i++) {
+			newTag[doc[i]._id] = doc[i].n
+		}
+
+		console.log(newTag)
+	})
+}

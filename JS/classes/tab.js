@@ -11,7 +11,8 @@ class Tab {
 		this.site = site
 		this.ir = isReloading
 		this.tab = element
-		this.span = element.children[0]
+		this.icon = element.children[0]
+		this.span = element.children[1]
 		this.page = pageElement
 		this.options = null
 	}
@@ -49,13 +50,12 @@ class Tab {
 		}
 	}
 
-	rename(name, isText) {
-		if (isText) {
-			this.span.innerText = name
-			this.tab.setAttribute('title', name)
-		} else {
-			this.span.innerHTML = name
-			this.tab.removeAttribute('title')
-		}
+	rename(name) {
+		this.span.innerText = name
+		this.tab.setAttribute('title', name)
+	}
+
+	changeIcon(url) {
+		this.icon.setAttribute('src', url)
 	}
 }
