@@ -28,7 +28,6 @@ function xlecxChangePage(page, whitchbutton, updateTabIndex) {
 
 function createNewXlecxTab(id, pageNumber) {
 	if (id == null) { PopAlert(defaultSettingLang.tab_at_limit, 'danger'); return }
-	const pageContent = document.getElementById(id)
 	pageNumber = pageNumber || 1
 
 	if (activeTabComicId == id) {
@@ -36,27 +35,25 @@ function createNewXlecxTab(id, pageNumber) {
 		bjp_i.setAttribute('oninput', '')
 	}
 
-	const tab = tabsContainer.querySelector(`[pi="${id}"]`)
-	const tabArea = tab.getElementsByTagName('span')[0]
-	const thisTabIndex = Number(tab.getAttribute('ti'))
+	const thisTabIndex = GetTabIndexById(id)
 	tabs[thisTabIndex].ir = true
 	tabs[thisTabIndex].mp = 0
 	checkBrowserTools(thisTabIndex)
-	tabArea.innerHTML = `<img class="spin" src="Image/dual-ring-primary-${wt_fps}.gif">`
-	pageContent.innerHTML = `<div class="browser-page-loading"><img class="spin" style="width:60px;height:60px" src="Image/dual-ring-primary-${wt_fps}.gif"><p>Loading...</p></div>`
+	tabs[thisTabIndex].rename(`<img class="spin" src="Image/dual-ring-primary-${wt_fps}.gif">`, false)
+	tabs[thisTabIndex].page.innerHTML = `<div class="browser-page-loading"><img class="spin" style="width:60px;height:60px" src="Image/dual-ring-primary-${wt_fps}.gif"><p>Loading...</p></div>`
 	xlecx.getPage({page:pageNumber, random:true, category:true}, (err, result) => {
 		if (document.getElementById(id) == undefined) return
 		tabs[thisTabIndex].ir = false
+		tabs[thisTabIndex].page.innerHTML = null
 		checkBrowserTools(thisTabIndex)
-		pageContent.innerHTML = ''
 		if (err) {
-			browserError(err, id)
+			browserError(err, thisTabIndex)
 			return
 		}
-		tabArea.textContent = `Page ${pageNumber}`
-		var container = document.createElement('div')
+		tabs[thisTabIndex].rename(`Page ${pageNumber}`, true)
+		let container = document.createElement('div')
 		container.classList.add("xlecx-container")
-		var elementContainerContainer, elementContainer, element, miniElement, html, valueStorage
+		let elementContainerContainer, elementContainer, element, miniElement, html, valueStorage
 
 		if (result.pagination[result.pagination.length - 1][1] > result.pagination[result.pagination.length - 2][1]) valueStorage = result.pagination[result.pagination.length - 1][1]
 		else valueStorage = result.pagination[result.pagination.length - 2][1]
@@ -184,8 +181,8 @@ function createNewXlecxTab(id, pageNumber) {
 		elementContainerContainer.appendChild(elementContainer)
 		container.appendChild(elementContainerContainer)
 
-		pageContent.appendChild(container)
-		clearDownloadedComics(pageContent, 0)
+		tabs[thisTabIndex].page.appendChild(container)
+		clearDownloadedComics(tabs[thisTabIndex].page, 0)
 	})
 }
 
@@ -195,11 +192,10 @@ function xlecxOpenPost(whitchbutton, id, updateTabIndex) {
 	if (whitchbutton == 2) makeNewPage = true
 	if (updateTabIndex == null) updateTabIndex = true
 	
-	var page, pageId
+	let pageId
 	if (makeNewPage) {
 		pageId = createNewTab(`xlecxOpenPost(0, '${id}', false)`, true, 0)
 		if (pageId == null) { PopAlert(defaultSettingLang.tab_at_limit, 'danger'); return }
-		page = document.getElementById(pageId)
 	} else {
 		pageId = activeTabComicId
 		const passImageCon = document.getElementById(pageId).querySelector('[img-con="true"]')
@@ -210,8 +206,7 @@ function xlecxOpenPost(whitchbutton, id, updateTabIndex) {
 				passImages[i].removeAttribute('src')
 			}
 		}
-		page = document.getElementById(pageId)
-		if (updateTabIndex == true) tabs[Number(tabsContainer.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))].addHistory(`xlecxOpenPost(0, '${id}', false)`)
+		if (updateTabIndex == true) tabs[GetTabIndexById(pageId)].addHistory(`xlecxOpenPost(0, '${id}', false)`)
 	}
 
 	if (activeTabComicId == pageId) {
@@ -219,14 +214,12 @@ function xlecxOpenPost(whitchbutton, id, updateTabIndex) {
 		bjp_i.setAttribute('oninput', '')
 	}
 
-	const tab = tabsContainer.querySelector(`[pi="${pageId}"]`)
-	const tabArea = tab.getElementsByTagName('span')[0]
-	const thisTabIndex = Number(tab.getAttribute('ti'))
+	const thisTabIndex = GetTabIndexById(pageId)
 	tabs[thisTabIndex].ir = true
 	tabs[thisTabIndex].mp = 0
 	checkBrowserTools(thisTabIndex)
-	tabArea.innerHTML = `<img class="spin" src="Image/dual-ring-primary-${wt_fps}.gif">`
-	page.innerHTML = `<div class="browser-page-loading"><img class="spin" style="width:60px;height:60px" src="Image/dual-ring-primary-${wt_fps}.gif"><p>Loading...</p></div>`
+	tabs[thisTabIndex].rename(`<img class="spin" src="Image/dual-ring-primary-${wt_fps}.gif">`, false)
+	tabs[thisTabIndex].page.innerHTML = `<div class="browser-page-loading"><img class="spin" style="width:60px;height:60px" src="Image/dual-ring-primary-${wt_fps}.gif"><p>Loading...</p></div>`
 	db.have.findOne({s:0, i:id}, (err, haveDoc) => {
 		if (err) { error(err); return }
 		var have_in_have, have_comic = false
@@ -239,13 +232,13 @@ function xlecxOpenPost(whitchbutton, id, updateTabIndex) {
 		xlecx.getComic(id, {}, (err, result) => {
 			if (document.getElementById(pageId) == undefined) return
 			tabs[thisTabIndex].ir = false
+			tabs[thisTabIndex].page.innerHTML = null
 			checkBrowserTools(thisTabIndex)
-			page.innerHTML = ''
 			if (err) {
-				browserError(err, pageId)
+				browserError(err, thisTabIndex)
 				return
 			}
-			tabArea.textContent = result.title
+			tabs[thisTabIndex].rename(result.title, true)
 			var image_container = document.createElement('div')
 			image_container.classList.add('xlecx-image-container-1x1')
 			var containerContainer = document.createElement('div')
@@ -253,14 +246,10 @@ function xlecxOpenPost(whitchbutton, id, updateTabIndex) {
 			var container = document.createElement('div')
 			var element, miniElement
 			container.innerHTML = `<p class="xlecx-post-title">${result.title}</p>`
-			if (have_comic == true)
-				container.innerHTML += '<div class="browser-comic-have"><span>You Downloaded This Comic.<span></div>'
-			else if (have_in_have == true)
-				container.innerHTML += `<div class="browser-comic-have" sssite="0" ccid="${id}"><button class="remove-from-have" onclick="RemoveFromHave(0, '${id}', this)">You Have This Comic.</button></div>`
-			else if (IsDownloading(id, 0))
-				container.innerHTML += `<div class="browser-comic-have" sssite="0" ccid="${id}"><p>Downloading... <img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"><p></div>`
-			else
-				container.innerHTML += `<div class="browser-comic-have" sssite="0" ccid="${id}"><button onclick="xlecxDownloader('${id}')">Download</button><button class="add-to-have" onclick="AddToHave(0, '${id}')">Add To Have</button></div>`
+			if (have_comic == true) container.innerHTML += '<div class="browser-comic-have"><span>You Downloaded This Comic.<span></div>'
+			else if (have_in_have == true) container.innerHTML += `<div class="browser-comic-have" sssite="0" ccid="${id}"><button class="remove-from-have" onclick="RemoveFromHave(0, '${id}', this)">You Have This Comic.</button></div>`
+			else if (IsDownloading(id, 0)) container.innerHTML += `<div class="browser-comic-have" sssite="0" ccid="${id}"><p>Downloading... <img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"><p></div>`
+			else container.innerHTML += `<div class="browser-comic-have" sssite="0" ccid="${id}"><button onclick="xlecxDownloader('${id}')">Download</button><button class="add-to-have" onclick="AddToHave(0, '${id}')">Add To Have</button></div>`
 
 			// Groups
 			if (result.groups != undefined) {
@@ -435,8 +424,8 @@ function xlecxOpenPost(whitchbutton, id, updateTabIndex) {
 				containerContainer.appendChild(bigContainer)
 			}
 
-			page.appendChild(containerContainer)
-			clearDownloadedComics(page, 0)
+			tabs[thisTabIndex].page.appendChild(containerContainer)
+			clearDownloadedComics(tabs[thisTabIndex].page, 0)
 		})
 	})
 }
@@ -460,13 +449,10 @@ function xlecxOpenCategory(name, page, shortName, whitchbutton, updateTabIndex) 
 		}
 	}
 	
-	var pageContent
 	if (makeNewPage) {
 		pageId = createNewTab(`xlecxOpenCategory('${name}', ${page}, '${shortName}', 0, false)`, true, 0)
 		if (pageId == null) { PopAlert(defaultSettingLang.tab_at_limit, 'danger'); return }
-		pageContent = document.getElementById(pageId)
 	} else {
-		pageContent = document.getElementById(pageId)
 		if (updateTabIndex == true) tabs[Number(tabsContainer.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))].addHistory(`xlecxOpenCategory('${name}', ${page}, '${shortName}', 0, false)`)
 	}
 
@@ -477,24 +463,22 @@ function xlecxOpenCategory(name, page, shortName, whitchbutton, updateTabIndex) 
 		bjp_i.setAttribute('oninput', '')
 	}
 
-	const tab = tabsContainer.querySelector(`[pi="${pageId}"]`)
-	const tabArea = tab.getElementsByTagName('span')[0]
-	const thisTabIndex = Number(tab.getAttribute('ti'))
+	const thisTabIndex = GetTabIndexById(pageId)
 	tabs[thisTabIndex].ir = true
 	tabs[thisTabIndex].mp = 0
 	checkBrowserTools(thisTabIndex)
-	tabArea.innerHTML = `<img class="spin" src="Image/dual-ring-primary-${wt_fps}.gif">`
-	pageContent.innerHTML = `<div class="browser-page-loading"><img class="spin" style="width:60px;height:60px" src="Image/dual-ring-primary-${wt_fps}.gif"><p>Loading...</p></div>`
+	tabs[thisTabIndex].rename(`<img class="spin" src="Image/dual-ring-primary-${wt_fps}.gif">`, false)
+	tabs[thisTabIndex].page.innerHTML = `<div class="browser-page-loading"><img class="spin" style="width:60px;height:60px" src="Image/dual-ring-primary-${wt_fps}.gif"><p>Loading...</p></div>`
 	xlecx.getCategory(name, {page:page, random:true, category:true}, (err, result) => {
 		if (document.getElementById(pageId) == undefined) return
 		tabs[thisTabIndex].ir = false
 		checkBrowserTools(thisTabIndex)
-		pageContent.innerHTML = ''
+		tabs[thisTabIndex].page.innerHTML = null
 		if (err) {
-			browserError(err, pageId)
+			browserError(err, thisTabIndex)
 			return
 		}
-		tabArea.textContent = `${shortName} - ${page}`
+		tabs[thisTabIndex].rename(`${shortName} - ${page}`, true)
 		var container = document.createElement('div')
 		container.classList.add("xlecx-container")
 		var elementContainerContainer, elementContainer, element, miniElement, html, valueStorage
@@ -620,12 +604,12 @@ function xlecxOpenCategory(name, page, shortName, whitchbutton, updateTabIndex) 
 		elementContainerContainer.appendChild(elementContainer)
 		container.appendChild(elementContainerContainer)
 
-		pageContent.appendChild(container)
-		clearDownloadedComics(pageContent, 0)
+		tabs[thisTabIndex].page.appendChild(container)
+		clearDownloadedComics(tabs[thisTabIndex].page, 0)
 	})
 }
 
-function xlecxOpenTagContentMaker(result, pageContent, name, whitch) {
+function xlecxOpenTagContentMaker(result, thisTabIndex, name, whitch) {
 	var container = document.createElement('div')
 	container.classList.add("xlecx-container")
 	var elementContainerContainer, elementContainer, element, miniElement, html, valueStorage
@@ -709,8 +693,8 @@ function xlecxOpenTagContentMaker(result, pageContent, name, whitch) {
 	}
 
 	container.appendChild(elementContainerContainer)
-	pageContent.appendChild(container)
-	clearDownloadedComics(pageContent, 0)
+	tabs[thisTabIndex].page.appendChild(container)
+	clearDownloadedComics(tabs[thisTabIndex].page, 0)
 }
 
 function xlecxOpenTag(name, page, whitch, whitchbutton, updateTabIndex) {
@@ -738,35 +722,30 @@ function xlecxOpenTag(name, page, whitch, whitchbutton, updateTabIndex) {
 		if (updateTabIndex == true) tabs[Number(tabsContainer.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))].addHistory(`xlecxOpenTag('${name}', ${page}, ${whitch}, 0, false)`)
 	}
 
-	const pageContent = document.getElementById(pageId)
-
-	tabs[Number(tabsContainer.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))].options = [name, whitch]
-
 	if (activeTabComicId == pageId) {
 		bjp.style.display = 'none'
 		bjp_i.setAttribute('oninput', '')
 	}
 
-	const tab = tabsContainer.querySelector(`[pi="${pageId}"]`)
-	const tabArea = tab.getElementsByTagName('span')[0]
-	const thisTabIndex = Number(tab.getAttribute('ti'))
+	const thisTabIndex = GetTabIndexById(pageId)
 	tabs[thisTabIndex].ir = true
 	tabs[thisTabIndex].mp = 0
+	tabs[thisTabIndex].options = [name, whitch]
 	checkBrowserTools(thisTabIndex)
-	tabArea.innerHTML = `<img class="spin" src="Image/dual-ring-primary-${wt_fps}.gif">`
-	pageContent.innerHTML = `<div class="browser-page-loading"><img class="spin" style="width:60px;height:60px" src="Image/dual-ring-primary-${wt_fps}.gif"><p>Loading...</p></div>`
+	tabs[thisTabIndex].rename(`<img class="spin" src="Image/dual-ring-primary-${wt_fps}.gif">`, false)
+	tabs[thisTabIndex].page.innerHTML = `<div class="browser-page-loading"><img class="spin" style="width:60px;height:60px" src="Image/dual-ring-primary-${wt_fps}.gif"><p>Loading...</p></div>`
 	switch (whitch) {
 		case 1:
 			xlecx.getGroup(name, {page:page, category:true}, (err, result) => {
 				if (document.getElementById(pageId) == undefined) return
 				tabs[thisTabIndex].ir = false
 				checkBrowserTools(thisTabIndex)
-				pageContent.innerHTML = ''
+				tabs[thisTabIndex].page.innerHTML = null
 				if (err) {
-					browserError(err, pageId)
+					browserError(err, thisTabIndex)
 					return
 				}
-				tabArea.textContent = `${name} - ${page}`
+				tabs[thisTabIndex].rename(`${name} - ${page}`, true)
 				var valueStorage
 	
 				if (result.pagination == undefined) valueStorage = 0
@@ -784,7 +763,7 @@ function xlecxOpenTag(name, page, whitch, whitchbutton, updateTabIndex) {
 					bjp_i.setAttribute('oninput', `inputLimit(this, ${valueStorage});browserJumpPage(3, Number(this.value))`)
 					bjp_m_p.textContent = valueStorage
 				}
-				xlecxOpenTagContentMaker(result, pageContent, name, whitch)
+				xlecxOpenTagContentMaker(result, thisTabIndex, name, whitch)
 			})
 			break
 		case 2:
@@ -792,12 +771,12 @@ function xlecxOpenTag(name, page, whitch, whitchbutton, updateTabIndex) {
 				if (document.getElementById(pageId) == undefined) return
 				tabs[thisTabIndex].ir = false
 				checkBrowserTools(thisTabIndex)
-				pageContent.innerHTML = ''
+				tabs[thisTabIndex].page.innerHTML = null
 				if (err) {
-					browserError(err, pageId)
+					browserError(err, thisTabIndex)
 					return
 				}
-				tabArea.textContent = `${name} - ${page}`
+				tabs[thisTabIndex].rename(`${name} - ${page}`, true)
 				var valueStorage
 	
 				if (result.pagination == undefined) valueStorage = 0
@@ -815,7 +794,7 @@ function xlecxOpenTag(name, page, whitch, whitchbutton, updateTabIndex) {
 					bjp_i.setAttribute('oninput', `inputLimit(this, ${valueStorage});browserJumpPage(3, Number(this.value))`)
 					bjp_m_p.textContent = valueStorage
 				}
-				xlecxOpenTagContentMaker(result, pageContent, name, whitch)
+				xlecxOpenTagContentMaker(result, thisTabIndex, name, whitch)
 			})
 			break
 		case 3:
@@ -823,12 +802,12 @@ function xlecxOpenTag(name, page, whitch, whitchbutton, updateTabIndex) {
 				if (document.getElementById(pageId) == undefined) return
 				tabs[thisTabIndex].ir = false
 				checkBrowserTools(thisTabIndex)
-				pageContent.innerHTML = ''
+				tabs[thisTabIndex].page.innerHTML = null
 				if (err) {
-					browserError(err, pageId)
+					browserError(err, thisTabIndex)
 					return
 				}
-				tabArea.textContent = `${name} - ${page}`
+				tabs[thisTabIndex].rename(`${name} - ${page}`, true)
 				var valueStorage
 	
 				if (result.pagination == undefined) valueStorage = 0
@@ -846,7 +825,7 @@ function xlecxOpenTag(name, page, whitch, whitchbutton, updateTabIndex) {
 					bjp_i.setAttribute('oninput', `inputLimit(this, ${valueStorage});browserJumpPage(3, Number(this.value))`)
 					bjp_m_p.textContent = valueStorage
 				}
-				xlecxOpenTagContentMaker(result, pageContent, name, whitch)
+				xlecxOpenTagContentMaker(result, thisTabIndex, name, whitch)
 			})
 			break
 		case 4:
@@ -854,12 +833,12 @@ function xlecxOpenTag(name, page, whitch, whitchbutton, updateTabIndex) {
 				if (document.getElementById(pageId) == undefined) return
 				tabs[thisTabIndex].ir = false
 				checkBrowserTools(thisTabIndex)
-				pageContent.innerHTML = ''
+				tabs[thisTabIndex].page.innerHTML = null
 				if (err) {
-					browserError(err, pageId)
+					browserError(err, thisTabIndex)
 					return
 				}
-				tabArea.textContent = `${name} - ${page}`
+				tabs[thisTabIndex].rename(`${name} - ${page}`, true)
 				var valueStorage
 	
 				if (result.pagination == undefined) valueStorage = 0
@@ -877,7 +856,7 @@ function xlecxOpenTag(name, page, whitch, whitchbutton, updateTabIndex) {
 					bjp_i.setAttribute('oninput', `inputLimit(this, ${valueStorage});browserJumpPage(3, Number(this.value))`)
 					bjp_m_p.textContent = valueStorage
 				}
-				xlecxOpenTagContentMaker(result, pageContent, name, whitch)
+				xlecxOpenTagContentMaker(result, thisTabIndex, name, whitch)
 			})
 			break
 	}
@@ -885,18 +864,17 @@ function xlecxOpenTag(name, page, whitch, whitchbutton, updateTabIndex) {
 
 function xlecxSearch(text, page, whitchbutton, updateTabIndex) {
 	if (whitchbutton == 3) return
-	var makeNewPage = false
+	let makeNewPage = false
 	if (whitchbutton == 2) makeNewPage = true
 	text = text || null
 	if (text == null) return
 	page = page || 1
 	if (updateTabIndex == null) updateTabIndex = true
 
-	var pageContent, pageId
+	let pageId
 	if (makeNewPage) {
 		pageId = createNewTab(`xlecxSearch('${text}', ${page}, 0, false)`, true, 0)
 		if (pageId == null) { PopAlert(defaultSettingLang.tab_at_limit, 'danger'); return }
-		pageContent = document.getElementById(pageId)
 	} else {
 		pageId = activeTabComicId
 		const passImageCon = document.getElementById(pageId).querySelector('[img-con="true"]')
@@ -907,36 +885,30 @@ function xlecxSearch(text, page, whitchbutton, updateTabIndex) {
 				passImages[i].removeAttribute('src')
 			}
 		}
-		pageContent = document.getElementById(pageId)
 		if (updateTabIndex == true) tabs[Number(tabsContainer.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))].addHistory(`xlecxSearch('${text}', ${page}, 0, false)`)
 	}
-
-	pageContent = document.getElementById(pageId)
-	pageContent.innerHTML = ''
 
 	if (activeTabComicId == pageId) {
 		bjp.style.display = 'none'
 		bjp_i.setAttribute('oninput', '')
 	}
 	
-	const tab = tabsContainer.querySelector(`[pi="${pageId}"]`)
-	const tabArea = tab.getElementsByTagName('span')[0]
-	const thisTabIndex = Number(tab.getAttribute('ti'))
+	const thisTabIndex = GetTabIndexById(pageId)
 	tabs[thisTabIndex].ir = true
 	tabs[thisTabIndex].mp = 0
 	checkBrowserTools(thisTabIndex)
-	tabArea.innerHTML = `<img class="spin" src="Image/dual-ring-primary-${wt_fps}.gif">`
-	pageContent.innerHTML = `<div class="browser-page-loading"><img class="spin" style="width:60px;height:60px" src="Image/dual-ring-primary-${wt_fps}.gif"><p>Loading...</p></div>`
+	tabs[thisTabIndex].rename(`<img class="spin" src="Image/dual-ring-primary-${wt_fps}.gif">`, false)
+	tabs[thisTabIndex].page.innerHTML = `<div class="browser-page-loading"><img class="spin" style="width:60px;height:60px" src="Image/dual-ring-primary-${wt_fps}.gif"><p>Loading...</p></div>`
 	xlecx.search(text, {page:page, category:true}, (err, result) => {
 		if (document.getElementById(pageId) == undefined) return
 		tabs[thisTabIndex].ir = false
 		checkBrowserTools(thisTabIndex)
-		pageContent.innerHTML = ''
+		tabs[thisTabIndex].page.innerHTML = null
 		if (err) {
-			page.innerHTML = `<br><div class="alert alert-danger">${err}</div><button class="btn btn-primary" style="display:block;margin:3px auto" onclick="reloadTab()">Reload</button>`
+			browserError(err, thisTabIndex)
 			return
 		}
-		tabArea.textContent = `S: ${convertToURL(text, true)} - ${page}`
+		tabs[thisTabIndex].rename(`S: ${convertToURL(text, true)} - ${page}`, true)
 		var container = document.createElement('div')
 		container.classList.add("xlecx-container")
 		var elementContainerContainer = document.createElement('div')
@@ -1039,8 +1011,8 @@ function xlecxSearch(text, page, whitchbutton, updateTabIndex) {
 		}
 
 		container.appendChild(elementContainerContainer)
-		pageContent.appendChild(container)
-		clearDownloadedComics(pageContent, 0)
+		tabs[thisTabIndex].page.appendChild(container)
+		clearDownloadedComics(tabs[thisTabIndex].page, 0)
 	})
 }
 
@@ -1049,11 +1021,10 @@ function xlecxOpenAllTags(whitchbutton, updateTabIndex) {
 	var makeNewPage = false
 	if (whitchbutton == 2) makeNewPage = true
 	if (updateTabIndex == null) updateTabIndex = true
-	var page, pageId
+	let pageId
 	if (makeNewPage) {
 		pageId = createNewTab('xlecxOpenAllTags(0, false)', true, 0)
 		if (pageId == null) { PopAlert(defaultSettingLang.tab_at_limit, 'danger'); return }
-		page = document.getElementById(pageId)
 	} else {
 		pageId = activeTabComicId
 		const passImageCon = document.getElementById(pageId).querySelector('[img-con="true"]')
@@ -1064,28 +1035,25 @@ function xlecxOpenAllTags(whitchbutton, updateTabIndex) {
 				passImages[i].removeAttribute('src')
 			}
 		}
-		page = document.getElementById(pageId)
 		if (updateTabIndex == true) tabs[Number(tabsContainer.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))].addHistory('xlecxOpenAllTags(0, false)')
 	}
 
-	const tab = tabsContainer.querySelector(`[pi="${pageId}"]`)
-	const tabArea = tab.getElementsByTagName('span')[0]
-	const thisTabIndex = Number(tab.getAttribute('ti'))
+	const thisTabIndex = GetTabIndexById(pageId)
 	tabs[thisTabIndex].ir = true
 	tabs[thisTabIndex].mp = 0
 	checkBrowserTools(thisTabIndex)
-	tabArea.innerHTML = `<img class="spin" src="Image/dual-ring-primary-${wt_fps}.gif">`
-	page.innerHTML = `<div class="browser-page-loading"><img class="spin" style="width:60px;height:60px" src="Image/dual-ring-primary-${wt_fps}.gif"><p>Loading...</p></div>`
+	tabs[thisTabIndex].rename(`<img class="spin" src="Image/dual-ring-primary-${wt_fps}.gif">`, false)
+	tabs[thisTabIndex].page.innerHTML = `<div class="browser-page-loading"><img class="spin" style="width:60px;height:60px" src="Image/dual-ring-primary-${wt_fps}.gif"><p>Loading...</p></div>`
 	xlecx.getAllTags(true, (err, result) => {
 		if (document.getElementById(pageId) == undefined) return
 		tabs[thisTabIndex].ir = false
 		checkBrowserTools(thisTabIndex)
-		page.innerHTML = ''
+		tabs[thisTabIndex].page.innerHTML = null
 		if (err) {
 			browserError(err, pageId)
 			return
 		}
-		tabArea.textContent = 'All Tags'
+		tabs[thisTabIndex].rename('All Tags', true)
 		var container = document.createElement('div')
 		container.classList.add("xlecx-container")
 		var elementContainerContainer, elementContainer, element, miniElement, html, valueStorage
@@ -1132,7 +1100,7 @@ function xlecxOpenAllTags(whitchbutton, updateTabIndex) {
 
 		container.appendChild(elementContainerContainer)
 
-		page.appendChild(container)
+		tabs[thisTabIndex].page.appendChild(container)
 	})
 }
 

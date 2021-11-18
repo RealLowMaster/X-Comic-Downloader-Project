@@ -95,15 +95,18 @@ Add Comic {
 }
 
 Added To Version {
+	*Add Collections
 	Fix Bug: fix xlecx support for new xlecx site structure
 	Fix Bug: Rescanning SubFolders In Startup (Fixed By PBXg33k)
 }
 
 Doing {
-	
+	Optimize Browser Tab and Page System Part 1
 }
 
 Tasks => {
+	Remake Optimization System
+	Add Email System
 	Fix Bug: Problem with Comics That have just 1 Image
 	Fix sharp Usage { Download Thumb, Thumb, Optimizing }
 	Add Ads
@@ -111,7 +114,6 @@ Tasks => {
 	Update Slider UI
 	Add Search To History
 	ChangeRandom System On JumpPageRandom
-	Make an App for Designing HTML Page
 
 	Fix Bug: Downloading xlecx => Morning Stretches
 	Optimize Gifs { giflossy imagemin Packages }
@@ -126,9 +128,9 @@ Tasks => {
 	Make new Update System
 	Make Browser Selecting History Easier
 	Make New Browser Change Page System
+	Make Tab Element Be Save in Tab Class
 
 	Mybe in v2  {
-		Add More Comic Viewing Theme { 2x2, 3x3, 4x4, free-spect }
 		Add Bookmark || Favoriet Posts
 		Make Browser Tabs Style Better {
 			Add curve to selected Tab

@@ -1,6 +1,6 @@
 class Tab {
-	constructor(id, scroll, search, jumpPage, thisPage, maxPage, site, isReloading) {
-		this.pageId = id
+	constructor(id, scroll, search, jumpPage, thisPage, maxPage, site, isReloading, element, pageElement) {
+		this.id = id
 		this.history = []
 		this.activeHistory = 0
 		this.sc = scroll
@@ -10,6 +10,9 @@ class Tab {
 		this.mp = maxPage
 		this.site = site
 		this.ir = isReloading
+		this.tab = element
+		this.span = element.children[0]
+		this.page = pageElement
 		this.options = null
 	}
 
@@ -43,6 +46,16 @@ class Tab {
 		if (this.ir == false) {
 			this.ir = true
 			eval(this.history[this.activeHistory])
+		}
+	}
+
+	rename(name, isText) {
+		if (isText) {
+			this.span.innerText = name
+			this.tab.setAttribute('title', name)
+		} else {
+			this.span.innerHTML = name
+			this.tab.removeAttribute('title')
 		}
 	}
 }

@@ -78,14 +78,8 @@ function updateTabSize() {
 		const tabs = tabsContainer.getElementsByTagName('div')
 		if (((windowWidth - 60) / 200) <= tabs.length) {
 			const tabWidth = (windowWidth - 60) / tabs.length
-			for (let i = 0; i < tabs.length; i++) {
-				tabs[i].style.width = tabWidth+'px'
-			}
-		} else {
-			for (let i = 0; i < tabs.length; i++) {
-				tabs[i].style.width = '200px'
-			}
-		}
+			for (let i = 0; i < tabs.length; i++) tabs[i].style.width = tabWidth+'px'
+		} else for (let i = 0; i < tabs.length; i++) tabs[i].style.width = '200px'
 	}
 }
 
@@ -119,7 +113,7 @@ function activateTab(who) {
 		}
 	}
 	activeTabIndex = Number(who.getAttribute('ti'))
-	activeTabComicId = tabs[activeTabIndex].pageId
+	activeTabComicId = tabs[activeTabIndex].id
 	checkBrowserTools(activeTabIndex)
 	who.setAttribute('active', true)
 	document.getElementById(activeTabComicId).style.display = 'block'
@@ -168,7 +162,7 @@ function createNewTab(history, addFront, site) {
 		browserTabMenu.style.display = 'block'
 	})
 
-	tabs[tabIndex] = new Tab(newTabId, 0, '', 0, 1, 0, site, true)
+	tabs[tabIndex] = new Tab(newTabId, 0, '', 0, 1, 0, site, true, element, page)
 	tabs[tabIndex].history.push(history)
 	page.setAttribute('class', 'browser-page')
 	page.setAttribute('id', newTabId)
@@ -558,12 +552,9 @@ function IsDownloading(id, site) {
 	else return false
 }
 
-function browserError(err, id) {
-	const page = document.getElementById(id)
-	const tabArea = tabsContainer.querySelector(`[pi="${id}"]`).getElementsByTagName('span')[0]
-
-	page.innerHTML = `<br><div class="alert alert-danger">${err}</div><button class="btn btn-primary" style="display:block;margin:3px auto" onclick="browserTabReload()">Reload</button>`
-	tabArea.innerHTML = '*Error*'
+function browserError(err, tabIndex) {
+	document.getElementById(id).innerHTML = `<br><div class="alert alert-danger">${err}</div><button class="btn btn-primary" style="display:block;margin:3px auto" onclick="browserTabReload()">Reload</button>`
+	tabs[tabIndex].rename('*Error*', true)
 }
 
 function searchFilter(txt, database, alert) {
@@ -785,6 +776,17 @@ function ImageListDownloader(list, index, saveList, error, callback) {
 			ImageListDownloader(list, index + 1, saveList, error, callback)
 		})
 	}
+}
+
+function GetTabIndexById(id) {
+	let index = null
+	for (let i = 0; i < tabs.length; i++) {
+		if (tabs[i].id == id) {
+			index = i
+			break
+		}
+	}
+	return index
 }
 
 document.getElementById('browser-tool-search-form').addEventListener('submit', e => {
