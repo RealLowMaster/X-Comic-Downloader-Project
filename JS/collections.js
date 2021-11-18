@@ -4,6 +4,14 @@ const CollectionPagination = document.getElementById('o-c-p-p')
 const CollectionRightClickMenu = document.getElementById('c-r-c-m')
 let collectionPage = null, openedCollectionIndex = null, inCollection = false, collection_menu_index
 
+function CreateCollection(name) {
+	name = name || null
+	if (name == null) return
+	collectionsDB.push([name,[],null])
+	LoadCollections()
+	jsonfile.writeFileSync(dirDB+'/collections.lowdb',{a:collectionsDB})
+}
+
 function openCollectionsPanel() {
 	keydownEventIndex = null
 	afterDLReload = false
@@ -57,6 +65,7 @@ function openCollection(index) {
 		LoadCollection()
 		document.getElementById('opened-collections-panel').style.display = 'block'
 		document.getElementById('collections-panel').style.display = 'none'
+		CollectionRightClickMenu.style.display = 'none'
 	})
 }
 

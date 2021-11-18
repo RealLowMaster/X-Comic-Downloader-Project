@@ -104,9 +104,6 @@ Doing {
 }
 
 Tasks => {
-	Add Pagination To collection
-	Add Edit and Remove Ability To collection
-	Add Ability To Add Comic To Collections
 	Fix Bug: Problem with Comics That have just 1 Image
 	Fix sharp Usage { Download Thumb, Thumb, Optimizing }
 	Add Ads

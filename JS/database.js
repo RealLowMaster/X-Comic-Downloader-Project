@@ -532,14 +532,3 @@ async function CreateComic(comicIndex, haveIndex, gottenResult, image, siteIndex
 		})
 	})
 }
-
-// Collections
-function CreateCollection(name) {
-	name = name || null
-	if (name == null) return
-	collectionsDB.push([name,[],null])
-	LoadCollections()
-	jsonfile.writeFileSync(dirDB+'/collections.lowdb',{a:collectionsDB})
-}
-
-function DeleteCollection(index) {}

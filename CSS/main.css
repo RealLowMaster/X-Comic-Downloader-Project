@@ -68,6 +68,13 @@
 	--st-cselect-btn-at-bgc: #229954;
 	--st-cselect-btn-at-color: #fff;
 	--st-cselect-btn-at-shadow: 0 0 10px 0 rgba(30,132,73,.5);
+	--cc-s-bgc: #fff;
+	--cc-s-color: #212529;
+	--cc-s-bd-color: #ced4da;
+	--cc-s-hover-bd-color: #3498DB;
+	--cc-s-focus-bd-color: #b700ff;
+	--cc-s-bshadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+	--cc-s-focus-bshadow: rgba(0, 0, 0, 0.2) 0px 18px 50px -10px;
 
 	--ccp-box-shadow: 0 1px 10px 3px rgb(0,0,0,.6);
 	--ccp-btn-bgc: #eee;
@@ -2716,26 +2723,26 @@ input::-webkit-input-placeholder { user-select: none }
 	display: block;
 	width: 90%;
 	padding: 7px 20px 7px 10px;
-	margin: 10px auto;
-    background-color: #fff;
-    color: #212529;
-    border: 1px solid #ced4da;
+	margin: 10px auto 35px auto;
+    background-color: var(--cc-s-bgc);
+    color: var(--cc-s-color);
+    border: 1px solid var(--cc-s-bd-color);
     border-radius: 4px;
     font-weight: 400;
     line-height: 1.5;
     word-wrap: normal;
     text-transform: none;
-	box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+	box-shadow: var(--cc-s-bshadow);
     transition: border-color .2s, transform .2s, box-shadow .2s;
 }
 
 #c-p-s:hover {
-	border-color: #3498DB;
+	border-color: var(--cc-s-hover-bd-color);
 }
 
 #c-p-s:focus {
-	border-color: #b700ff;
-	box-shadow: rgba(0, 0, 0, 0.2) 0px 18px 50px -10px;
+	border-color: var(--cc-s-focus-bd-color);
+	box-shadow: var(--cc-s-focus-bshadow);
 	transform: translate(0, -6px);
 }
 
