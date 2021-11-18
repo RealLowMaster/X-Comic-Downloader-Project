@@ -82,13 +82,6 @@
 		</div>
 		<input id="c-p-s" type="text" placeholder="Search.." oninput="collectionSearch(this.value)">
 		<div id="c-p-c-c"></div>
-		<div id="c-r-c-m">
-			<button type="button" onclick="openCollectionRename()" title="Rename Collection"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><g><path fill="currentColor" d="M304 416a16 16 0 0 1 16 16v32a16 16 0 0 1-16 16H144a16 16 0 0 1-16-16v-32a16 16 0 0 1 16-16z" style="opacity:.4"></path><path fill="currentColor" d="M448 48v96a16 16 0 0 1-16 16h-32a16 16 0 0 1-16-16v-32H264v304h-80V112H64v32a16 16 0 0 1-16 16H16a16 16 0 0 1-16-16V48a16 16 0 0 1 16-16h416a16 16 0 0 1 16 16z"></path></g></svg> Rename</button>
-			
-			<button type="button" onclick="askForResetingCollectionThumb(collection_menu_index)" title="Reseting Collection Thumb"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><g><path fill="currentColor" d="M448 384H64v-48l71.51-71.52a12 12 0 0 1 17 0L208 320l135.51-135.52a12 12 0 0 1 17 0L448 272z" style="opacity:.4"></path><path fill="currentColor" d="M464 64H48a48 48 0 0 0-48 48v288a48 48 0 0 0 48 48h416a48 48 0 0 0 48-48V112a48 48 0 0 0-48-48zm-352 56a56 56 0 1 1-56 56 56 56 0 0 1 56-56zm336 264H64v-48l71.51-71.52a12 12 0 0 1 17 0L208 320l135.51-135.52a12 12 0 0 1 17 0L448 272z"></path></g></svg> Reset Thumb</button>
-			
-			<button type="button" onclick="askForRemovingCollection(collection_menu_index)" danger-btn title="Delete Collection"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><g><path fill="currentColor" d="M32 464a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V96H32zm272-288a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0z" style="opacity:.4"></path><path fill="currentColor" d="M432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16zM128 160a16 16 0 0 0-16 16v224a16 16 0 0 0 32 0V176a16 16 0 0 0-16-16zm96 0a16 16 0 0 0-16 16v224a16 16 0 0 0 32 0V176a16 16 0 0 0-16-16zm96 0a16 16 0 0 0-16 16v224a16 16 0 0 0 32 0V176a16 16 0 0 0-16-16z"></path></g></svg> Delete</button>
-		</div>
 		<div id="c-p-a-c-p">
 			<div onclick="closeAddCollection()"></div>
 			<div>
@@ -105,6 +98,15 @@
 				<button type="button" class="btn btn-success" onclick="renameCollection()">Save</button>
 			</div>
 		</div>
+	</div>
+
+	<!-- Collection RightClick Menu -->
+	<div id="c-r-c-m">
+		<button type="button" onclick="openCollectionRename()" title="Rename Collection"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><g><path fill="currentColor" d="M304 416a16 16 0 0 1 16 16v32a16 16 0 0 1-16 16H144a16 16 0 0 1-16-16v-32a16 16 0 0 1 16-16z" style="opacity:.4"></path><path fill="currentColor" d="M448 48v96a16 16 0 0 1-16 16h-32a16 16 0 0 1-16-16v-32H264v304h-80V112H64v32a16 16 0 0 1-16 16H16a16 16 0 0 1-16-16V48a16 16 0 0 1 16-16h416a16 16 0 0 1 16 16z"></path></g></svg> Rename</button>
+		
+		<button type="button" onclick="askForResetingCollectionThumb(collection_menu_index)" title="Reseting Collection Thumb"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><g><path fill="currentColor" d="M448 384H64v-48l71.51-71.52a12 12 0 0 1 17 0L208 320l135.51-135.52a12 12 0 0 1 17 0L448 272z" style="opacity:.4"></path><path fill="currentColor" d="M464 64H48a48 48 0 0 0-48 48v288a48 48 0 0 0 48 48h416a48 48 0 0 0 48-48V112a48 48 0 0 0-48-48zm-352 56a56 56 0 1 1-56 56 56 56 0 0 1 56-56zm336 264H64v-48l71.51-71.52a12 12 0 0 1 17 0L208 320l135.51-135.52a12 12 0 0 1 17 0L448 272z"></path></g></svg> Reset Thumb</button>
+		
+		<button type="button" onclick="askForRemovingCollection(collection_menu_index)" danger-btn title="Delete Collection"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><g><path fill="currentColor" d="M32 464a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V96H32zm272-288a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0z" style="opacity:.4"></path><path fill="currentColor" d="M432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16zM128 160a16 16 0 0 0-16 16v224a16 16 0 0 0 32 0V176a16 16 0 0 0-16-16zm96 0a16 16 0 0 0-16 16v224a16 16 0 0 0 32 0V176a16 16 0 0 0-16-16zm96 0a16 16 0 0 0-16 16v224a16 16 0 0 0 32 0V176a16 16 0 0 0-16-16z"></path></g></svg> Delete</button>
 	</div>
 
 	<!-- Opened Collections -->

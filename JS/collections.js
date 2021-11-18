@@ -290,7 +290,7 @@ function OnCollectionMouseDown(index) {
 	if (key == 1) openCollection(index)
 	else {
 		collection_menu_index = index
-		const x = e.clientX, y = e.clientY
+		let x = e.clientX, y = e.clientY
 		CollectionRightClickMenu.style.display = 'block'
 		if (window.innerWidth <= x+170) x = window.innerWidth - 170
 		if (window.innerHeight <= y+CollectionRightClickMenu.clientHeight) y = window.innerHeight - CollectionRightClickMenu.clientHeight
