@@ -121,7 +121,7 @@ function LoadCollection() {
 	}
 
 	const newIds = []
-	for (let i = ids.length; i >= 0; i--) newIds.push(ids[i])
+	for (let i = ids.length - 1; i >= 0; i--) newIds.push(ids[i])
 
 	const comic_ids = []
 	for (let i = min; i < max; i++) comic_ids.push(newIds[i])
