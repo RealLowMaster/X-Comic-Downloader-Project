@@ -255,7 +255,7 @@ function pasteTab(newTab) {
 		browserTabMenu.style.display = 'block'
 	})
 
-	tabs[tabIndex] = new Tab(newTabId, 0, newTab[0], 0, 1, 0, newTab[3], false)
+	tabs[tabIndex] = new Tab(newTabId, 0, newTab[0], 0, 1, 0, newTab[3], false, element, page)
 	tabs[tabIndex].history = newTab[1]
 	tabs[tabIndex].activeHistory = newTab[2]
 	page.setAttribute('class', 'browser-page')
@@ -278,22 +278,17 @@ function pasteTab(newTab) {
 
 function removeTab(id) {
 	clearTimeout(resizeTabTimer)
-	const removingTab = tabsContainer.querySelector(`[pi="${id}"]`)
-	const removingTabIndex = Number(removingTab.getAttribute('ti'))
+	const thisTabIndex = GetTabIndexById(id)
 	browserLastTabs = []
-	addHistory(tabs[removingTabIndex], removingTab.children[0].innerText)
+	addHistory(tabs[thisTabIndex], tabs[thisTabIndex].span.innerText)
 	saveHistory()
-	tabs[removingTabIndex] = null
 	const btabs = tabsContainer.children
 	const tabPosIndex = tabsPos.indexOf(id)
 
-	const passImageCon = document.getElementById(id).querySelector('[img-con="true"]')
-	if (passImageCon != undefined) {
-		const passImages = passImageCon.children
-		for (let i = 0; i < passImages.length; i++) {
-			passImages[i].removeAttribute('data-src')
-			passImages[i].removeAttribute('src')
-		}
+	const passImages = tabs[thisTabIndex].page.getElementsByTagName('img')
+	for (let i = 0; i < passImages.length; i++) {
+		passImages[i].removeAttribute('data-src')
+		passImages[i].removeAttribute('src')
 	}
 
 	if (activeTabComicId == id && btabs.length != 1) {
@@ -310,10 +305,13 @@ function removeTab(id) {
 		}
 	}
 
+	tabs[thisTabIndex].tab.remove()
+	tabs[thisTabIndex].page.remove()
+	tabs[thisTabIndex] = null
+
 	tabsPos.splice(tabPosIndex, 1)
 	tabsPosParent.splice(tabPosIndex, 1)
-
-	if (btabs.length == 1) {
+	if (btabs.length == 0) {
 		tabs = []
 		activeTabIndex = null
 		activeTabComicId = null
@@ -325,11 +323,8 @@ function removeTab(id) {
 		bjp.style.display = 'none'
 		setTimeout(() => {
 			openSitePanel()
-		}, 30)
+		}, 1)
 	}
-
-	removingTab.remove()
-	document.getElementById(id).remove()
 
 	checkTabHistoryButtons()
 	resizeTabTimer = setTimeout(() => {
@@ -781,6 +776,7 @@ function ImageListDownloader(list, index, saveList, error, callback) {
 function GetTabIndexById(id) {
 	let index = null
 	for (let i = 0; i < tabs.length; i++) {
+		if (tabs[i] == null) continue
 		if (tabs[i].id == id) {
 			index = i
 			break

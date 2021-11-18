@@ -21,7 +21,7 @@ function xlecxChangePage(page, whitchbutton, updateTabIndex) {
 			}
 		}
 
-		if (updateTabIndex == true) tabs[Number(tabsContainer.querySelector(`[pi="${id}"]`).getAttribute('ti'))].addHistory(`xlecxChangePage(${page}, 0, false)`)
+		if (updateTabIndex == true) tabs[GetTabIndexById(pageId)].addHistory(`xlecxChangePage(${page}, 0, false)`)
 	}
 	createNewXlecxTab(id, page)
 }
@@ -453,10 +453,8 @@ function xlecxOpenCategory(name, page, shortName, whitchbutton, updateTabIndex) 
 		pageId = createNewTab(`xlecxOpenCategory('${name}', ${page}, '${shortName}', 0, false)`, true, 0)
 		if (pageId == null) { PopAlert(defaultSettingLang.tab_at_limit, 'danger'); return }
 	} else {
-		if (updateTabIndex == true) tabs[Number(tabsContainer.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))].addHistory(`xlecxOpenCategory('${name}', ${page}, '${shortName}', 0, false)`)
+		if (updateTabIndex == true) tabs[GetTabIndexById(pageId)].addHistory(`xlecxOpenCategory('${name}', ${page}, '${shortName}', 0, false)`)
 	}
-
-	tabs[Number(tabsContainer.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))].options = [name, shortName]
 
 	if (activeTabComicId == pageId) {
 		bjp.style.display = 'none'
@@ -466,6 +464,7 @@ function xlecxOpenCategory(name, page, shortName, whitchbutton, updateTabIndex) 
 	const thisTabIndex = GetTabIndexById(pageId)
 	tabs[thisTabIndex].ir = true
 	tabs[thisTabIndex].mp = 0
+	tabs[thisTabIndex].options = [name, shortName]
 	checkBrowserTools(thisTabIndex)
 	tabs[thisTabIndex].rename(`<img class="spin" src="Image/dual-ring-primary-${wt_fps}.gif">`, false)
 	tabs[thisTabIndex].page.innerHTML = `<div class="browser-page-loading"><img class="spin" style="width:60px;height:60px" src="Image/dual-ring-primary-${wt_fps}.gif"><p>Loading...</p></div>`
@@ -719,7 +718,7 @@ function xlecxOpenTag(name, page, whitch, whitchbutton, updateTabIndex) {
 				passImages[i].removeAttribute('src')
 			}
 		}
-		if (updateTabIndex == true) tabs[Number(tabsContainer.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))].addHistory(`xlecxOpenTag('${name}', ${page}, ${whitch}, 0, false)`)
+		if (updateTabIndex == true) tabs[GetTabIndexById(pageId)].addHistory(`xlecxOpenTag('${name}', ${page}, ${whitch}, 0, false)`)
 	}
 
 	if (activeTabComicId == pageId) {
@@ -885,7 +884,7 @@ function xlecxSearch(text, page, whitchbutton, updateTabIndex) {
 				passImages[i].removeAttribute('src')
 			}
 		}
-		if (updateTabIndex == true) tabs[Number(tabsContainer.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))].addHistory(`xlecxSearch('${text}', ${page}, 0, false)`)
+		if (updateTabIndex == true) tabs[GetTabIndexById(pageId)].addHistory(`xlecxSearch('${text}', ${page}, 0, false)`)
 	}
 
 	if (activeTabComicId == pageId) {
@@ -1035,7 +1034,7 @@ function xlecxOpenAllTags(whitchbutton, updateTabIndex) {
 				passImages[i].removeAttribute('src')
 			}
 		}
-		if (updateTabIndex == true) tabs[Number(tabsContainer.querySelector(`[pi="${pageId}"]`).getAttribute('ti'))].addHistory('xlecxOpenAllTags(0, false)')
+		if (updateTabIndex == true) tabs[GetTabIndexById(pageId)].addHistory('xlecxOpenAllTags(0, false)')
 	}
 
 	const thisTabIndex = GetTabIndexById(pageId)
