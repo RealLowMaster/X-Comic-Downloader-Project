@@ -8,7 +8,7 @@ async function CreateHaveInsert(site, id, index, downloaded) {
 	insertInfo._id = index
 	await db.have.insert(insertInfo, err => {
 		if (err) { error(err); return }
-		fix_index(11)
+		FixIndex(1, false)
 	})
 }
 
@@ -428,7 +428,7 @@ async function CreateComic(comicIndex, haveIndex, gottenResult, image, siteIndex
 	insertInfo._id = comicIndex
 	await db.comics.insert(insertInfo, (err, doc) => {
 		if (err) { error(err); return }
-		fix_index(1)
+		FixIndex(0, false)
 		const id = doc._id
 		const characters = gottenResult.characters || null
 		const languages = gottenResult.languages || null

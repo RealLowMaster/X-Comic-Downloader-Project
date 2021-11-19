@@ -64,11 +64,9 @@ const keydownEvents = [
 	'BrowserKeyEvents({ctrl},{shift},{key})',
 	'SettingKeyEvents({ctrl},{shift},{key})'
 ]
-const ThisWindow = remote.getCurrentWindow(), loading = new Loading(9), db = {}, procressPanel = new ProcressPanel(0), update_number = 7
-let comicDeleting = false, downloadCounter = 0, wt_fps = 20, dirDB, dirUL, dirTmp, isOptimizing = false, browserLastTabs = [], tabsHistory = [], dirHistory = '', keydownEventIndex = 0, new_update, save_value = null, save_value2 = null, afterDLReload = true, setting
+const ThisWindow = remote.getCurrentWindow(), loading = new Loading(10), db = {}, procressPanel = new ProcressPanel(0), update_number = 7
+let comicDeleting = false, downloadCounter = 0, wt_fps = 20, dirDB, dirUL, dirTmp, isOptimizing = false, browserLastTabs = [], tabsHistory = [], dirHistory = '', keydownEventIndex = 0, new_update, save_value = null, save_value2 = null, afterDLReload = true, setting, openedMenuTabIndex, copiedTab = null, tabs = [], downloadingList = [], lastComicId, lastHaveId, searchTimer, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = []
 let collectionsDB = [], groupsDB = [], artistsDB = [], parodiesDB = [], tagsDB = [], charactersDB = [], languagesDB = [], categoriesDB = [], comicGroupsDB = [], comicArtistsDB = [], comicParodiesDB = [], comicTagsDB = [], comicCharactersDB = [], comicLanguagesDB = [], comicCategoriesDB = [], indexDB = []
-
-let tabs = [], downloadingList = [], lastComicId, lastHaveId, searchTimer, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = [], openedMenuTabIndex, copiedTab = null
 
 /*
 	37 // Left Arrow
@@ -619,25 +617,22 @@ function CreateDatabase() {
 	db.comic_languages = new nedb({ filename: dirDB+'/comic_languages', autoload: true })
 	db.comic_categories = new nedb({ filename: dirDB+'/comic_categories', autoload: true })
 
-	db.index = new nedb({ filename: dirDB+'/index', autoload: true })
-
 	// Index
 	if (fs.existsSync(dirDB+'/index')) {
-		//let temp_index = new nedb({ filename: dirDB+'/index', autoload: true })
+		let temp_index = new nedb({ filename: dirDB+'/index', autoload: true })
 		indexDB = []
-		db.index.find({}, (err, doc) => {
+		temp_index.find({}, (err, doc) => {
 			if (err) { error('OptimizingIndex->Err: '+err); return }
 			let subFolder = false
 			for (let i = 0; i < doc.length; i++) {
 				if (doc[i]._id == 1) indexDB[0] = doc[i].i
 				else if (doc[i]._id == 11) indexDB[1] = doc[i].i
 				else if (doc[i]._id == 100) subFolder = true
-				console.log(indexDB)
 			}
 			indexDB[2] = subFolder
-			//temp_index = null
+			temp_index = null
 			jsonfile.writeFileSync(dirDB+'/index.lowdb',{a:indexDB})
-			//fs.unlinkSync(dirDB+'/groups')
+			fs.unlinkSync(dirDB+'/index')
 		})
 	} else if (fs.existsSync(dirDB+'/index.lowdb')) indexDB = jsonfile.readFileSync(dirDB+'/index.lowdb').a
 	else {
@@ -868,40 +863,32 @@ function getDragAfterElement(container, x) {
 }
 
 // Database Main Stuff
-const update_index = async(index, id) => {
-	await db.index.update({_id:id}, { $set: {i:(index+1)} }, {}, (err) => {
-		if (err) error(err)
-	})
-}
-
-const fix_index = async(id, updateLast) => {
-	if (id == undefined) return
-	updateLast = updateLast || false
+const FixIndex = async(id, updateLast) => {
 	switch (id) {
-		case 1:
+		case 0:
 			db.comics.find({}, (err, doc) => {
 				if (err) { error(err); return }
 				const len = doc.length
 				if (len > 0) {
 					const neededId = doc[len - 1]._id
-					update_index(neededId, 1)
+					UpdateIndex(0, neededId + 1)
 					if (updateLast == true && downloadCounter == 0) lastComicId = neededId + 1
 				} else {
-					update_index(0, 1)
+					UpdateIndex(0, 1)
 					if (updateLast == true && downloadCounter == 0) lastComicId = 1
 				}
 			})
 			break
-		case 11:
+		case 1:
 			db.have.find({}, (err, doc) => {
 				if (err) { error(err); return }
 				const len = doc.length
 				if (len > 0) {
 					const neededId = doc[len - 1]._id
-					update_index(neededId, 11)
+					UpdateIndex(1, neededId + 1)
 					if (updateLast == true && downloadCounter == 0) lastHaveId = neededId + 1
 				} else {
-					update_index(0, 11)
+					UpdateIndex(1, 1)
 					if (updateLast == true && downloadCounter == 0) lastHaveId = 1
 				}
 			})

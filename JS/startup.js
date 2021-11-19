@@ -182,6 +182,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		error("Startup->SetClickEvents->Err: "+err);
 	}
 
+	loading.forward('Checking SubFolder...')
 	const IndexLoadCheck = () => {
 		if (indexDB.length < 3) { setTimeout(IndexLoadCheck, 250); return }
 		for (let i = 0; i < indexDB.length; i++) {
@@ -190,7 +191,6 @@ document.addEventListener("DOMContentLoaded", () => {
 		lastComicId = indexDB[0]
 		lastHaveId = indexDB[1]
 
-		loading.forward('Checking SubFolder...')
 		if (indexDB[2]) AfterDatabaseDoneOnStartup()
 		else {
 			db.comics.find({}, (err, doc) => {
