@@ -64,9 +64,9 @@ const keydownEvents = [
 	'BrowserKeyEvents({ctrl},{shift},{key})',
 	'SettingKeyEvents({ctrl},{shift},{key})'
 ]
-const ThisWindow = remote.getCurrentWindow(), loading = new Loading(13), db = {}, procressPanel = new ProcressPanel(0), update_number = 7
+const ThisWindow = remote.getCurrentWindow(), loading = new Loading(9), db = {}, procressPanel = new ProcressPanel(0), update_number = 7
 let comicDeleting = false, downloadCounter = 0, wt_fps = 20, dirDB, dirUL, dirTmp, isOptimizing = false, browserLastTabs = [], tabsHistory = [], dirHistory = '', keydownEventIndex = 0, new_update, save_value = null, save_value2 = null, afterDLReload = true, setting
-let collectionsDB = [], groupsDB = [], artistsDB = [], parodiesDB = [], tagsDB = [], charactersDB = [], languagesDB = [], categoriesDB = [], comicGroupsDB = [], comicArtistsDB = [], comicParodiesDB = [], comicTagsDB = [], comicCharactersDB = [], comicLanguagesDB = [], comicCategoriesDB = []
+let collectionsDB = [], groupsDB = [], artistsDB = [], parodiesDB = [], tagsDB = [], charactersDB = [], languagesDB = [], categoriesDB = [], comicGroupsDB = [], comicArtistsDB = [], comicParodiesDB = [], comicTagsDB = [], comicCharactersDB = [], comicLanguagesDB = [], comicCategoriesDB = [], indexDB = []
 
 let tabs = [], downloadingList = [], lastComicId, lastHaveId, searchTimer, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = [], openedMenuTabIndex, copiedTab = null
 
@@ -555,7 +555,6 @@ function loadImagesOneByOne(images) {
 		if (images[0].complete) {
 			images.shift()
 			setTimeout(() => {
-				console.log(true)
 				loadImagesOneByOne(images)
 			}, 1)
 		} else {
@@ -566,7 +565,6 @@ function loadImagesOneByOne(images) {
 	} else {
 		images[0].src = src
 		setTimeout(() => {
-			console.log(false)
 			loadImagesOneByOne(images)
 		}, 1)
 	}
@@ -613,7 +611,6 @@ function GetDirection() {
 function CreateDatabase() {
 	db.comics = new nedb({ filename: dirDB+'/comics', autoload: true })
 	db.have = new nedb({ filename: dirDB+'/have', autoload: true })
-	db.index = new nedb({ filename: dirDB+'/index', autoload: true })
 	db.comic_groups = new nedb({ filename: dirDB+'/comic_groups', autoload: true })
 	db.comic_artists = new nedb({ filename: dirDB+'/comic_artists', autoload: true })
 	db.comic_parodies = new nedb({ filename: dirDB+'/comic_parodies', autoload: true })
@@ -621,6 +618,32 @@ function CreateDatabase() {
 	db.comic_characters = new nedb({ filename: dirDB+'/comic_characters', autoload: true })
 	db.comic_languages = new nedb({ filename: dirDB+'/comic_languages', autoload: true })
 	db.comic_categories = new nedb({ filename: dirDB+'/comic_categories', autoload: true })
+
+	db.index = new nedb({ filename: dirDB+'/index', autoload: true })
+
+	// Index
+	if (fs.existsSync(dirDB+'/index')) {
+		//let temp_index = new nedb({ filename: dirDB+'/index', autoload: true })
+		indexDB = []
+		db.index.find({}, (err, doc) => {
+			if (err) { error('OptimizingIndex->Err: '+err); return }
+			let subFolder = false
+			for (let i = 0; i < doc.length; i++) {
+				if (doc[i]._id == 1) indexDB[0] = doc[i].i
+				else if (doc[i]._id == 11) indexDB[1] = doc[i].i
+				else if (doc[i]._id == 100) subFolder = true
+				console.log(indexDB)
+			}
+			indexDB[2] = subFolder
+			//temp_index = null
+			jsonfile.writeFileSync(dirDB+'/index.lowdb',{a:indexDB})
+			//fs.unlinkSync(dirDB+'/groups')
+		})
+	} else if (fs.existsSync(dirDB+'/index.lowdb')) indexDB = jsonfile.readFileSync(dirDB+'/index.lowdb').a
+	else {
+		indexDB = [1,1,true]
+		jsonfile.writeFileSync(dirDB+'/index.lowdb',{a:indexDB})
+	}
 
 
 	// Groups DB
@@ -845,10 +868,6 @@ function getDragAfterElement(container, x) {
 }
 
 // Database Main Stuff
-const insert_index = async(id) => {
-	await db.index.insert({ i:1, _id:id }, (err) => { if (err) error(err) })
-}
-
 const update_index = async(index, id) => {
 	await db.index.update({_id:id}, { $set: {i:(index+1)} }, {}, (err) => {
 		if (err) error(err)
@@ -890,29 +909,9 @@ const fix_index = async(id, updateLast) => {
 	}
 }
 
-const delete_index = async(id) => {
-	await db.index.delete({ _id:1 }, { multi:true })
-}
-
-const count_index = async(id) => {
-	await db.index.count({_id:id}, (err, num) => {
-		if (err) throw err
-		if (num == 0) {
-			insert_index(id)
-		} else if (num > 1) {
-			delete_index(id)
-			insert_index(id)
-		}
-	})
-}
-
-async function makeDatabaseIndexs() {
-	// comics
-	await count_index(1)
-	// collections
-	await count_index(10)
-	// have
-	await count_index(11)
+function UpdateIndex(index, value) {
+	indexDB[index] = value
+	jsonfile.writeFileSync(dirDB+'/index.lowdb',{a:indexDB})
 }
 
 // Image Loading

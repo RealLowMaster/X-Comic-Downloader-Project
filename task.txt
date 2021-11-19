@@ -3,7 +3,7 @@ DB => {
 		index = i
 		_id
 	}
-	comics 1 => {
+	comics 0 => {
 		name = n
 		images = i
 		ImagesCount = c
@@ -42,14 +42,14 @@ DB => {
 		parodies = t = []
 		_id => Comic Id
 	}
-	collections 10 => [
+	collections => [
 		[
 			'title' = name => 0
 			[0,1,...] = ids => 1
 			'image.jpg' = image url => 2
 		]
 	]
-	have 11 => {
+	have 1 => {
 		site = s
 		comic_real_id = i
 		downloaded = d
@@ -103,7 +103,7 @@ Added To Version {
 }
 
 Doing {
-	
+	Optimize Index Database Part 1
 }
 
 Tasks => {

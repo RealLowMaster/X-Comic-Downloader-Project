@@ -109,10 +109,8 @@ function makeSubFolder(sfComicsDoc, sfLength, index) {
 	loading.forward(`Making SubFolders (${index + 1}/${sfLength})`)
 
 	if (index + 1 == sfLength) {
-		db.index.insert({_id:100}, err => {
-			if (err) { error('SaveSubFolderInDatabase->ERR: '+err); return }
-			AfterDatabaseDoneOnStartup()
-		})
+		UpdateIndex(2, true)
+		AfterDatabaseDoneOnStartup()
 	} else {
 		setTimeout(() => {
 			makeSubFolder(sfComicsDoc, sfLength, index + 1)
@@ -184,50 +182,34 @@ document.addEventListener("DOMContentLoaded", () => {
 		error("Startup->SetClickEvents->Err: "+err);
 	}
 
-	try {
-		loading.forward('Indexing...')
-		makeDatabaseIndexs()
-	} catch(err) {
-		error("Startup->MakeDatabaseIndexes->Err: "+err);
+	const IndexLoadCheck = () => {
+		if (indexDB.length < 3) { setTimeout(IndexLoadCheck, 250); return }
+		for (let i = 0; i < indexDB.length; i++) {
+			if (indexDB[i] == undefined) { setTimeout(IndexLoadCheck, 250); return }
+		}
+		lastComicId = indexDB[0]
+		lastHaveId = indexDB[1]
+
+		loading.forward('Checking SubFolder...')
+		if (indexDB[2]) AfterDatabaseDoneOnStartup()
+		else {
+			db.comics.find({}, (err, doc) => {
+				if (err) { error('SubFolder->ComicLoading->ERR: '+err); return }
+				if (doc == null) {
+					UpdateIndex(2, true)
+					AfterDatabaseDoneOnStartup()
+				} else if (doc.length == 0) {
+					UpdateIndex(2, true)
+					AfterDatabaseDoneOnStartup()
+				} else {
+					const sfLength = doc.length
+					loading.reset(sfLength)
+					loading.show(`Making SubFolders (0/${sfLength})`)
+					setTimeout(() => { makeSubFolder(doc, sfLength, 0) }, 100)
+				}
+			})
+		}
 	}
 
-	loading.forward('Comic Indexing...')
-
-	setTimeout(() => {
-		db.index.findOne({_id:1}, (err, doc) => {
-			if (err) { error('ComicIndexing: '+err); return }
-			if (doc == undefined) lastComicId = 1
-			else lastComicId = doc.i || null
-			if (lastComicId == null) { error('Comic Indexing Problem.'); return }
-			loading.forward('Have Indexing...')
-	
-			db.index.findOne({_id:11}, (err, haveDoc) => {
-				if (err) { error('HaveIndexing: '+err); return }
-				if (haveDoc == undefined) lastHaveId = 1
-				else lastHaveId = haveDoc.i || null
-				if (lastHaveId == null) { error('Have Indexing Problem.'); return }
-				loading.forward('Checking SubFolder...')
-											
-				db.index.findOne({_id:100}, (err, subFolderDoc) => {
-					if (err) { error('SubFolderCheckingERR: '+err); return }
-					if (subFolderDoc == null) {
-						db.comics.find({}, (err, sfComicsDoc) => {
-							if (err) { error('SubFolder->ComicLoading->ERR: '+err); return }
-							if (sfComicsDoc != null && sfComicsDoc.length != 0) {
-								const sfLength = sfComicsDoc.length
-								loading.reset(sfLength)
-								loading.show(`Making SubFolders (0/${sfLength})`)
-								setTimeout(() => { makeSubFolder(sfComicsDoc, sfLength, 0) }, 100)
-							} else {
-								db.index.insert({_id:100}, err => {
-									if (err) { error('SaveSubFolderInIndex->ERR: '+err); return }
-									AfterDatabaseDoneOnStartup()
-								})
-							}
-						})
-					} else AfterDatabaseDoneOnStartup()
-				})
-			})
-		})
-	}, 200)
+	IndexLoadCheck()
 })
