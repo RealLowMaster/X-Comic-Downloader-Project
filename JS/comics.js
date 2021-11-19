@@ -293,13 +293,9 @@ function openComicCharacters(comicId) {
 		if (doc != undefined) {
 			const character = doc.t || null
 			if (character == null) return
-			comicCharactersContainer.innerHTML = 'Characters: '
-			for (let i in character) {
-				db.characters.findOne({_id:character[i]}, (err, doc) => {
-					if (err) { error(err); return }
-					comicCharactersContainer.innerHTML += `<button>${doc.n}</button>`
-				})
-			}
+			let html = 'Characters: '
+			for (let i = 0; i < character.length; i++) html += `<button>${charactersDB[character[i]]}</button>`
+			comicCharactersContainer.innerHTML = html
 		}
 	})
 }
@@ -310,13 +306,9 @@ function openComicLanguages(comicId) {
 		if (doc != undefined) {
 			const language = doc.t || null
 			if (language == null) return
-			comicLanguagesContainer.innerHTML = 'Languages: '
-			for (let i in language) {
-				db.languages.findOne({_id:language[i]}, (err, doc) => {
-					if (err) { error(err); return }
-					comicLanguagesContainer.innerHTML += `<button>${doc.n}</button>`
-				})
-			}
+			let html = 'Languages: '
+			for (let i = 0; i < language.length; i++) html += `<button>${languagesDB[language[i]]}</button>`
+			comicLanguagesContainer.innerHTML = html
 		}
 	})
 }
@@ -327,13 +319,9 @@ function openComicCategories(comicId) {
 		if (doc != undefined) {
 			const category = doc.t || null
 			if (category == null) return
-			comicCategoriesContainer.innerHTML = 'Categories: '
-			for (let i in category) {
-				db.categories.findOne({_id:category[i]}, (err, doc) => {
-					if (err) { error(err); return }
-					comicCategoriesContainer.innerHTML += `<button>${doc.n}</button>`
-				})
-			}
+			let html = 'Categories: '
+			for (let i = 0; i < category.length; i++) html += `<button>${categoriesDB[category[i]]}</button>`
+			comicCategoriesContainer.innerHTML = html
 		}
 	})
 }
@@ -344,13 +332,9 @@ function openComicGroups(comicId) {
 		if (doc != undefined) {
 			const groups = doc.t || null
 			if (groups == null) return
-			comicGroupsContainer.innerHTML = 'Groups: '
-			for (let i in groups) {
-				db.groups.findOne({_id:groups[i]}, (err, doc) => {
-					if (err) { error(err); return }
-					comicGroupsContainer.innerHTML += `<button>${doc.n}</button>`
-				})
-			}
+			let html = 'Groups: '
+			for (let i = 0; i < groups.length; i++) html += `<button>${groupsDB[groups[i]]}</button>`
+			comicGroupsContainer.innerHTML = html
 		}
 	})
 }
@@ -361,13 +345,9 @@ function openComicArtists(comicId) {
 		if (doc != undefined) {
 			const artists = doc.t || null
 			if (artists == null) return
-			comicArtistsContainer.innerHTML = 'Artists: '
-			for (let i in artists) {
-				db.artists.findOne({_id:artists[i]}, (err, doc) => {
-					if (err) { error(err); return }
-					comicArtistsContainer.innerHTML += `<button>${doc.n}</button>`
-				})
-			}
+			let html = 'Artists: '
+			for (let i = 0; i < artists.length; i++) html += `<button>${artistsDB[artists[i]]}</button>`
+			comicArtistsContainer.innerHTML = html
 		}
 	})
 }
@@ -378,13 +358,9 @@ function openComicParodies(comicId) {
 		if (doc != undefined) {
 			const parodies = doc.t || null
 			if (parodies == null) return
-			comicParodyContainer.innerHTML = 'Parody: '
-			for (let i in parodies) {
-				db.parodies.findOne({_id:parodies[i]}, (err, doc) => {
-					if (err) { error(err); return }
-					comicParodyContainer.innerHTML += `<button>${doc.n}</button>`
-				})
-			}
+			let html = 'Parody: '
+			for (let i = 0; i < parodies.length; i++) html += `<button>${parodiesDB[parodies[i]]}</button>`
+			comicParodyContainer.innerHTML = html
 		}
 	})
 }
@@ -395,13 +371,9 @@ function openComicTags(comicId) {
 		if (doc != undefined) {
 			const tags = doc.t || null
 			if (tags == null) return
-			comicTagsContainer.innerHTML = 'Tags: '
-			for (let i in tags) {
-				db.tags.findOne({_id:tags[i]}, (err, doc) => {
-					if (err) { error(err); return }
-					comicTagsContainer.innerHTML += `<button>${doc.n}</button>`
-				})
-			}
+			let html = 'Tags: '
+			for (let i = 0; i < tags.length; i++) html += `<button>${tagsDB[tags[i]]}</button>`
+			comicTagsContainer.innerHTML = html
 		}
 	})
 }
@@ -967,30 +939,4 @@ function OfflineComicKeyEvents(ctrl, shift, key) {
 			}
 		}
 	}
-}
-
-// Load Comic With tags
-function testLoad() {
-	const tagId = 37 // yaoi
-	db.comic_tags.find({}, (err, doc) => {
-		if (err) {error(err);return}
-		const found_comics = []
-		for (let i = 0; i < doc.length; i++) {
-			if (doc[i].t.indexOf(tagId) > -1) found_comics.push(doc[i]._id)
-		}
-
-		console.log(found_comics)
-	})
-}
-
-function convertOldTagsToNew() {
-	db.tags.find({}, (err, doc) => {
-		if (err) { error(err); return }
-		const newTag = []
-		for (let i = 0; i < doc.length; i++) {
-			newTag[doc[i]._id] = doc[i].n
-		}
-
-		console.log(newTag)
-	})
 }

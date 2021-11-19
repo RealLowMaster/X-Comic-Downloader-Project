@@ -65,7 +65,7 @@ const keydownEvents = [
 	'SettingKeyEvents({ctrl},{shift},{key})'
 ]
 const ThisWindow = remote.getCurrentWindow(), loading = new Loading(20), db = {}, procressPanel = new ProcressPanel(0), update_number = 7
-let comicDeleting = false, downloadCounter = 0, wt_fps = 20, dirDB, dirUL, dirTmp, isOptimizing = false, browserLastTabs = [], tabsHistory = [], dirHistory = '', keydownEventIndex = 0, new_update, save_value = null, save_value2 = null, afterDLReload = true, collectionsDB = []
+let comicDeleting = false, downloadCounter = 0, wt_fps = 20, dirDB, dirUL, dirTmp, isOptimizing = false, browserLastTabs = [], tabsHistory = [], dirHistory = '', keydownEventIndex = 0, new_update, save_value = null, save_value2 = null, afterDLReload = true, collectionsDB = [], groupsDB = [], artistsDB = [], parodiesDB = [], tagsDB = [], charactersDB = [], languagesDB = [], categoriesDB = []
 var setting, tabs = [], downloadingList = [], lastComicId, lastHaveId, lastGroupId, lastArtistId, lastParodyId, lastTagId, lastCharacterId, lastLanguageId, lastCategoryId, searchTimer, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = [], openedMenuTabIndex, copiedTab = null
 
 /*
@@ -609,23 +609,136 @@ function GetDirection() {
 function CreateDatabase() {
 	db.index = new nedb({ filename: dirDB+'/index', autoload: true })
 	db.comics = new nedb({ filename: dirDB+'/comics', autoload: true })
-	db.artists = new nedb({ filename: dirDB+'/artists', autoload: true })
-	db.comic_artists = new nedb({ filename: dirDB+'/comic_artists', autoload: true })
-	db.tags = new nedb({ filename: dirDB+'/tags', autoload: true })
-	db.comic_tags = new nedb({ filename: dirDB+'/comic_tags', autoload: true })
-	db.groups = new nedb({ filename: dirDB+'/groups', autoload: true })
+
 	db.comic_groups = new nedb({ filename: dirDB+'/comic_groups', autoload: true })
-	db.parodies = new nedb({ filename: dirDB+'/parodies', autoload: true })
+	db.comic_artists = new nedb({ filename: dirDB+'/comic_artists', autoload: true })
 	db.comic_parodies = new nedb({ filename: dirDB+'/comic_parodies', autoload: true })
-	db.have = new nedb({ filename: dirDB+'/have', autoload: true })
-	db.characters = new nedb({ filename: dirDB+'/characters', autoload: true })
+	db.comic_tags = new nedb({ filename: dirDB+'/comic_tags', autoload: true })
 	db.comic_characters = new nedb({ filename: dirDB+'/comic_characters', autoload: true })
-	db.languages = new nedb({ filename: dirDB+'/languages', autoload: true })
 	db.comic_languages = new nedb({ filename: dirDB+'/comic_languages', autoload: true })
-	db.categories = new nedb({ filename: dirDB+'/categories', autoload: true })
 	db.comic_categories = new nedb({ filename: dirDB+'/comic_categories', autoload: true })
+	db.have = new nedb({ filename: dirDB+'/have', autoload: true })
+
+	
+	// Groups DB
+	if (fs.existsSync(dirDB+'/groups')) {
+		let temp_comic_groups = new nedb({ filename: dirDB+'/groups', autoload: true })
+		temp_comic_groups.find({}, (err, doc) => {
+			if (err) { error('OptimizeGroups->Err: '+err); return }
+
+			groupsDB = []
+			for (let i = 0; i < doc.length; i++) groupsDB[doc[i]._id] = doc[i].n
+			temp_comic_groups = null
+			jsonfile.writeFileSync(dirDB+'/groups.lowdb',{a:groupsDB})
+			fs.unlinkSync(dirDB+'/groups')
+		})
+	} else if (fs.existsSync(dirDB+'/groups.lowdb')) groupsDB = jsonfile.readFileSync(dirDB+'/groups.lowdb').a
+	else jsonfile.writeFileSync(dirDB+'/groups.lowdb',{a:[]})
+
+	// Artists DB
+	if (fs.existsSync(dirDB+'/artists')) {
+		let temp_comic_artists = new nedb({ filename: dirDB+'/artists', autoload: true })
+		temp_comic_artists.find({}, (err, doc) => {
+			if (err) { error('OptimizeArtists->Err: '+err); return }
+
+			artistsDB = []
+			for (let i = 0; i < doc.length; i++) artistsDB[doc[i]._id] = doc[i].n
+			temp_comic_artists = null
+			jsonfile.writeFileSync(dirDB+'/artists.lowdb',{a:artistsDB})
+			fs.unlinkSync(dirDB+'/artists')
+		})
+	} else if (fs.existsSync(dirDB+'/artists.lowdb')) artistsDB = jsonfile.readFileSync(dirDB+'/artists.lowdb').a
+	else jsonfile.writeFileSync(dirDB+'/artists.lowdb',{a:[]})
+
+	// Parodies DB
+	if (fs.existsSync(dirDB+'/parodies')) {
+		let temp_comic_parodies = new nedb({ filename: dirDB+'/parodies', autoload: true })
+		temp_comic_parodies.find({}, (err, doc) => {
+			if (err) { error('OptimizeParodies->Err: '+err); return }
+
+			parodiesDB = []
+			for (let i = 0; i < doc.length; i++) parodiesDB[doc[i]._id] = doc[i].n
+			temp_comic_parodies = null
+			jsonfile.writeFileSync(dirDB+'/parodies.lowdb',{a:parodiesDB})
+			fs.unlinkSync(dirDB+'/parodies')
+		})
+	} else if (fs.existsSync(dirDB+'/parodies.lowdb')) parodiesDB = jsonfile.readFileSync(dirDB+'/parodies.lowdb').a
+	else jsonfile.writeFileSync(dirDB+'/parodies.lowdb',{a:[]})
+
+	// Tags DB
+	if (fs.existsSync(dirDB+'/tags')) {
+		let temp_comic_tags = new nedb({ filename: dirDB+'/tags', autoload: true })
+		temp_comic_tags.find({}, (err, doc) => {
+			if (err) { error('OptimizeTags->Err: '+err); return }
+
+			tagsDB = []
+			for (let i = 0; i < doc.length; i++) tagsDB[doc[i]._id] = doc[i].n
+			temp_comic_tags = null
+			jsonfile.writeFileSync(dirDB+'/tags.lowdb',{a:tagsDB})
+			fs.unlinkSync(dirDB+'/tags')
+		})
+	} else if (fs.existsSync(dirDB+'/tags.lowdb')) tagsDB = jsonfile.readFileSync(dirDB+'/tags.lowdb').a
+	else jsonfile.writeFileSync(dirDB+'/tags.lowdb',{a:[]})
+
+	// Characters DB
+	if (fs.existsSync(dirDB+'/characters')) {
+		let temp_comic_characters = new nedb({ filename: dirDB+'/characters', autoload: true })
+		temp_comic_characters.find({}, (err, doc) => {
+			if (err) { error('OptimizeCharacters->Err: '+err); return }
+
+			charactersDB = []
+			for (let i = 0; i < doc.length; i++) charactersDB[doc[i]._id] = doc[i].n
+			temp_comic_characters = null
+			jsonfile.writeFileSync(dirDB+'/characters.lowdb',{a:charactersDB})
+			fs.unlinkSync(dirDB+'/characters')
+		})
+	} else if (fs.existsSync(dirDB+'/characters.lowdb')) charactersDB = jsonfile.readFileSync(dirDB+'/characters.lowdb').a
+	else jsonfile.writeFileSync(dirDB+'/characters.lowdb',{a:[]})
+
+	// Languages DB
+	if (fs.existsSync(dirDB+'/languages')) {
+		let temp_comic_languages = new nedb({ filename: dirDB+'/languages', autoload: true })
+		temp_comic_languages.find({}, (err, doc) => {
+			if (err) { error('OptimizeLanguages->Err: '+err); return }
+
+			languagesDB = []
+			for (let i = 0; i < doc.length; i++) languagesDB[doc[i]._id] = doc[i].n
+			temp_comic_languages = null
+			jsonfile.writeFileSync(dirDB+'/languages.lowdb',{a:languagesDB})
+			fs.unlinkSync(dirDB+'/languages')
+		})
+	} else if (fs.existsSync(dirDB+'/languages.lowdb')) languagesDB = jsonfile.readFileSync(dirDB+'/languages.lowdb').a
+	else jsonfile.writeFileSync(dirDB+'/languages.lowdb',{a:[]})
+
+	// Categories DB
+	if (fs.existsSync(dirDB+'/categories')) {
+		let temp_comic_categories = new nedb({ filename: dirDB+'/categories', autoload: true })
+		temp_comic_categories.find({}, (err, doc) => {
+			if (err) { error('OptimizeCategories->Err: '+err); return }
+
+			categoriesDB = []
+			for (let i = 0; i < doc.length; i++) categoriesDB[doc[i]._id] = doc[i].n
+			temp_comic_categories = null
+			jsonfile.writeFileSync(dirDB+'/categories.lowdb',{a:categoriesDB})
+			fs.unlinkSync(dirDB+'/categories')
+		})
+	} else if (fs.existsSync(dirDB+'/categories.lowdb')) categoriesDB = jsonfile.readFileSync(dirDB+'/categories.lowdb').a
+	else jsonfile.writeFileSync(dirDB+'/categories.lowdb',{a:[]})
+	
 	if (fs.existsSync(dirDB+'/collections.lowdb')) collectionsDB = jsonfile.readFileSync(dirDB+'/collections.lowdb').a
 	else jsonfile.writeFileSync(dirDB+'/collections.lowdb',{a:[]})
+}
+
+function convertOldTagsToNew() {
+	db.tags.find({}, (err, doc) => {
+		if (err) { error(err); return }
+		const newTag = []
+		for (let i = 0; i < doc.length; i++) {
+			newTag[doc[i]._id] = doc[i].n
+		}
+
+		console.log(newTag)
+	})
 }
 
 function CheckSettings() {

@@ -28,7 +28,6 @@ function OptimizeComicImages(comic_id, opened_comic, keyEvent) {
 
 	setTimeout(() => {
 		if (!isOptimizing) {
-			console.log(true)
 			procressPanel.hide()
 			if (opened_comic) openComic(comic_id)
 			isOptimizing = false
