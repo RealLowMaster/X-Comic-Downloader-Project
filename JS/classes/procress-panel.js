@@ -89,6 +89,8 @@ class ProcressPanel {
 		this.#txt.innerText = 'Waiting...'
 		this.#saveProcress = 0
 		this.#procress.style.width = 0
+		this.#constainer.children[0].setAttribute('onclick', "this.parentElement.style.display='none'")
+		this.#closeBtn.setAttribute('onclick', "this.parentElement.style.display='none'")
 	}
 
 	hide() { this.#constainer.style.display = 'none' }
@@ -102,7 +104,7 @@ class ProcressPanel {
 		this.#txt.innerHTML = text
 	}
 
-	config(config = { miniLog:false, miniSize:30, bgClose:false, closeBtn:false }) {
+	config(config = { miniLog:false, miniSize:30, bgClose:false, closeBtn:false, closeEvent:'event' }) {
 		if (config.miniLog != undefined) {
 			if (config.miniLog) {
 				this.#constainer.setAttribute('mini', true)
@@ -134,6 +136,11 @@ class ProcressPanel {
 		if (config.closeBtn != undefined) {
 			if (config.closeBtn) this.#closeBtn.style.display = 'flex'
 			else this.#closeBtn.style.display = 'none'
+		}
+
+		if (config.closeEvent != undefined) {
+			this.#constainer.children[0].setAttribute('onclick', config.closeEvent)
+			this.#closeBtn.setAttribute('onclick', config.closeEvent)
 		}
 	}
 

@@ -92,6 +92,7 @@ Add Comic {
 	nhentai => Artist => Chikiko
 	nhentai => Search => Kemono DIRECT
 	nhentai => Group => Aoba Q Madou
+	nhentai => Artist => Momomo
 }
 
 Added To Version {
@@ -100,6 +101,7 @@ Added To Version {
 	Fix Bug: Rescanning SubFolders In Startup (Fixed By PBXg33k)
 	Optimize Browser Tab and Page System
 	Add Icon To Browser Tab
+	Add Ability To Stop Comic Optimization
 }
 
 Doing {

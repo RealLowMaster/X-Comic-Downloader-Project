@@ -2372,7 +2372,7 @@ input::-webkit-input-placeholder { user-select: none }
 	color: #222;
 	border: 1px solid transparent;
 	border-radius: 7px;
-	cursor: pointer;
+	cursor: default;
 	box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1);
 	transition: background-color .2s, color .2s;
 }

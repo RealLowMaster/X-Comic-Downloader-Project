@@ -550,7 +550,7 @@ function IsDownloading(id, site) {
 function browserError(err, tabIndex) {
 	tabs[tabIndex].page.innerHTML = `<br><div class="alert alert-danger">${err}</div><button class="btn btn-primary" style="display:block;margin:3px auto" onclick="browserTabReload()">Reload</button>`
 	tabs[tabIndex].rename('*Error*')
-	tabs[thisTabIndex].icon.style.display = 'none'
+	tabs[tabIndex].icon.style.display = 'none'
 }
 
 function searchFilter(txt, database, alert) {

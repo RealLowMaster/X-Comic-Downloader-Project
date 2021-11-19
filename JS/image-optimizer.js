@@ -8,8 +8,8 @@ function OptimizeComicImages(comic_id, opened_comic, keyEvent) {
 	optimizeFullSize = 0
 	optimizeConvertSize = 0
 
-	procressPanel.config({ miniLog: true, miniSize:42, bgClose: false, closeBtn: false })
 	procressPanel.reset(0)
+	procressPanel.config({ miniLog: true, miniSize:42, bgClose: true, closeBtn: true, closeEvent:'isOptimizing=false' })
 	procressPanel.show('Calculating...')
 	
 	if (opened_comic) {
@@ -27,35 +27,36 @@ function OptimizeComicImages(comic_id, opened_comic, keyEvent) {
 	}
 
 	setTimeout(() => {
+		if (!isOptimizing) {
+			console.log(true)
+			procressPanel.hide()
+			if (opened_comic) openComic(comic_id)
+			isOptimizing = false
+			keydownEventIndex = keyEvent
+			return
+		}
 		db.comics.findOne({ _id:comic_id }, (err, doc) => {
-			if (err) { procressPanel.hide(); error(err); openComic(comic_id); isOptimizing = false; keydownEventIndex = keyEvent; return }
+			if (err) {
+				procressPanel.hide()
+				error(err)
+				if (opened_comic) openComic(comic_id)
+				isOptimizing = false
+				keydownEventIndex = keyEvent
+				return
+			}
 	
 			if (opened_comic) document.getElementById('comic-action-panel').style.display='none'
 			let ImagesCount = doc.c, formats = doc.f, image = doc.i, lastIndex = formats[0][1], thisForamat = formats[0][2], urls = [], formatIndex = 0, size
 
 			for (let i = 0; i < ImagesCount; i++) {
-				if (i <= lastIndex) {
-					if (!fs.existsSync(`${dirUL}/${comic_id}${image}/${image}-${i}.${thisForamat}`)) procressPanel.add(`Image ${i+1}: Undownloaded Image.`, 'danger')
-					else if (thisForamat != 'gif') urls.push([`${image}-${i}.${thisForamat}`, thisForamat])
-					else {
-						size = fs.statSync(`${dirUL}/${comic_id}${image}/${image}-${i}.${thisForamat}`).size
-						optimizeFullSize += size
-						optimizeConvertSize += size
-						procressPanel.add("Warning: we can't optimize .gif!", 'warning')
-					}
-				} else {
+				if (i > lastIndex) {
 					formatIndex++
 					lastIndex = formats[formatIndex][1]
 					thisForamat = formats[formatIndex][2]
-					if (!fs.existsSync(`${dirUL}/${comic_id}${image}/${image}-${i}.${thisForamat}`)) procressPanel.add(`Image ${i+1}: Undownloaded Image.`, 'danger')
-					else if (thisForamat != 'gif') urls.push([`${image}-${i}.${thisForamat}`, thisForamat])
-					else {
-						size = fs.statSync(`${dirUL}/${comic_id}${image}/${image}-${i}.${thisForamat}`).size
-						optimizeFullSize += size
-						optimizeConvertSize += size
-						procressPanel.add("Warning: we can't optimize .gif!", 'warning')
-					}
 				}
+
+				if (!fs.existsSync(`${dirUL}/${comic_id}${image}/${image}-${i}.${thisForamat}`)) procressPanel.add(`Image ${i+1}: Undownloaded Image.`, 'danger')
+				else urls.push([`${image}-${i}.${thisForamat}`, thisForamat])
 			}
 	
 			procressPanel.changePercent(urls.length + 2)
@@ -67,10 +68,10 @@ function OptimizeComicImages(comic_id, opened_comic, keyEvent) {
 						size = fs.statSync(`${dirUL}/${comic_id}${image}/${urls[i][0]}`).size
 						optimizeFullSize += size
 						optimizeLog.push(size)
-						fs.renameSync(`${dirUL}/${comic_id}${image}/${urls[i][0]}`, `${dirTmp}/${urls[i][0]}`)
+						if (urls[i][1] != 'gif') fs.renameSync(`${dirUL}/${comic_id}${image}/${urls[i][0]}`, `${dirTmp}/${urls[i][0]}`)
 					} catch(err) {
 						for (let j = 0; j < i; j++) {
-							fs.renameSync(`${dirTmp}/${urls[j][0]}`, `${dirUL}/${comic_id}${image}/${urls[j][0]}`)
+							if (urls[j][1] != 'gif') fs.renameSync(`${dirTmp}/${urls[j][0]}`, `${dirUL}/${comic_id}${image}/${urls[j][0]}`)
 						}
 						procressPanel.hide()
 						error("MovingTemp: "+err)
@@ -112,6 +113,32 @@ function convertImagesToOptimize(list, index, comic_id, image, callback) {
 		})
 		isOptimizing = false
 		return
+	} else if (!isOptimizing) {
+		const errorList = []
+		for (let i = index; i < list.length; i++) {
+			try {
+				fs.renameSync(`${dirTmp}/${list[i][0]}`, `${dirUL}/${comic_id}${image}/${list[i][0]}`)
+			} catch(err) {
+				errorList.push('MovingBackImages->Err: '+err)
+			}
+		}
+		if (errorList.length > 0) errorList(errorList)
+		procressPanel.hide()
+		callback()
+		return
+	} else if (list[index][1] == 'gif') {
+		try {
+			optimizeConvertSize += fs.statSync(`${dirUL}/${comic_id}${image}/${list[index][0]}`).size
+			procressPanel.add(`Warning: Img ${index+1} -> Cannot Optimize .gif Files`, 'warning')
+		} catch(err) {
+			procressPanel.add('CheckingFileSize->Err: '+err, 'danger')
+		}
+
+		procressPanel.forward(`Optimizing Image (${index+1}/${list.length})...`)
+		setTimeout(() => {
+			convertImagesToOptimize(list, index + 1, comic_id, image, callback) 
+		}, 1)
+
 	} else if (list[index][1] == 'jpg' || list[index][1] == 'jpeg') {
 		sharp(`${dirTmp}/${list[index][0]}`).jpeg({ mozjpeg: true }).toFile(`${dirUL}/${comic_id}${image}/${list[index][0]}`).then(() => {
 			try {
@@ -134,7 +161,16 @@ function convertImagesToOptimize(list, index, comic_id, image, callback) {
 				convertImagesToOptimize(list, index + 1, comic_id, image, callback) 
 			}, 1)
 		}).catch(err => {
-			procressPanel.add('Optimizing: '+err, 'danger')
+			try {
+				fs.renameSync(`${dirTmp}/${list[index][0]}`, `${dirUL}/${comic_id}${image}/${list[index][0]}`)
+				optimizeConvertSize += fs.statSync(`${dirUL}/${comic_id}${image}/${list[index][0]}`).size
+			} catch(err2) {}
+
+			procressPanel.add(`Error: Img ${index+1} -> `+err, 'danger')
+			procressPanel.forward(`Optimizing Image (${index+1}/${list.length})...`)
+			setTimeout(() => {
+				convertImagesToOptimize(list, index + 1, comic_id, image, callback) 
+			}, 1)
 		})
 	} else if (list[index][1] == 'png') {
 		sharp(`${dirTmp}/${list[index][0]}`).png({ quality: 100 }).toFile(`${dirUL}/${comic_id}${image}/${list[index][0]}`).then(() => {
@@ -176,7 +212,11 @@ function convertImagesToOptimize(list, index, comic_id, image, callback) {
 				convertImagesToOptimize(list, index + 1, comic_id, image, callback) 
 			}, 1)
 		}).catch(err => {
-			procressPanel.add('Optimizing: '+err, 'danger')
+			procressPanel.add(`Error: Img ${index+1} -> `+err, 'danger')
+			procressPanel.forward(`Optimizing Image (${index+1}/${list.length})...`)
+			setTimeout(() => {
+				convertImagesToOptimize(list, index + 1, comic_id, image, callback) 
+			}, 1)
 		})
 	} else {
 		try {
@@ -191,7 +231,11 @@ function convertImagesToOptimize(list, index, comic_id, image, callback) {
 				convertImagesToOptimize(list, index + 1, comic_id, image, callback) 
 			}, 1)
 		} catch(err) {
-			procressPanel.add('Optimize: '+err, 'danger')
+			procressPanel.add(`Error: Img ${index+1} -> `+err, 'danger')
+			procressPanel.forward(`Optimizing Image (${index+1}/${list.length})...`)
+			setTimeout(() => {
+				convertImagesToOptimize(list, index + 1, comic_id, image, callback) 
+			}, 1)
 		}
 	}
 }
