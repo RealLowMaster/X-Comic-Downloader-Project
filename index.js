@@ -7,6 +7,7 @@ function createWindow () {
 		icon: __dirname+'/Image/favicon.ico',
 		minWidth: 800,
 		minHeight: 600,
+		frame: false,
 		center: true,
 		title: 'X Comic Downloader v1.9.91',
 		webPreferences: {

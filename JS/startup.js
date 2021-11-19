@@ -44,7 +44,7 @@ function AfterDatabaseDoneOnStartup() {
 
 	try {
 		loading.forward()
-		document.getElementById('main').style.display = 'grid'
+		document.getElementById('main').style.display = 'flex'
 		loading.hide()
 	} catch(err) {
 		error("Startup->HideLoading->Err: "+err);
@@ -120,7 +120,6 @@ function makeSubFolder(sfComicsDoc, sfLength, index) {
 
 document.addEventListener("DOMContentLoaded", () => {
 	loading.show('Getting Setting...', '#fff', '#222')
-
 	try {
 		ChangeSizes()
 	} catch(err) {

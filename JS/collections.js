@@ -23,7 +23,7 @@ function closeCollectionsPanel() {
 	keydownEventIndex = 0
 	afterDLReload = true
 	reloadLoadingComics()
-	document.getElementById('main').style.display = 'grid'
+	document.getElementById('main').style.display = 'flex'
 	document.getElementById('collections-panel').style.display = 'none'
 }
 

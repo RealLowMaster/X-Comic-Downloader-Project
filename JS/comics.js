@@ -501,7 +501,7 @@ function closeComicPanel() {
 	off_comic_id = null
 	off_id = null
 	off_quality = null
-	document.getElementById('main').style.display = 'grid'
+	document.getElementById('main').style.display = 'flex'
 
 	comicCharactersContainer.innerHTML = ''
 	comicLanguagesContainer.innerText = ''

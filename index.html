@@ -4,8 +4,8 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- Links -->
-	<link rel="stylesheet" type="text/css" href="CSS/action.css">
 	<link rel="stylesheet" type="text/css" href="CSS/main.css">
+	<link rel="stylesheet" type="text/css" href="CSS/action.css">
 	<link rel="stylesheet" type="text/css" href="CSS/public.css">
 	<link rel="stylesheet" type="text/css" href="CSS/xlecx.css">
 	<link rel="stylesheet" type="text/css" href="CSS/nhentai.css">
@@ -35,43 +35,53 @@
 	<script type="text/javascript" src="JS/sites/nhentai.js" defer></script>
 </head>
 <body>
-	<div id="main">
-		<!-- Top Menu -->
+	<div id="window">
 		<div>
-			<div class="top-menu" id="top-menu">
-				<div>
-					<button onclick="openBrowser()">Browser</button>
-					<div class="menu-dropdown">
-						<button>Optimzation</button>
-						<div>
-							<button onclick="makeThumb(false)" title="Create Thumbs For All Comics That Missied They Thumb">Make Thumb</button>
-							<button onclick="makeThumb(true)" title="ReCreate Comic Thumbs if They had, if don't Create New One">ReMake Thumbs</button>
-							<button style="display:none;" onclick="" title="Choose Comics To Optimize">Optimize Comics</button>
-							<button style="display:none;" onclick="" title="Optimize all UnOptimized Comics in this page">Optimize Page Comics</button>
+			<div>X Comic Downloader v1.9.91</div>
+			<div>
+				<button type="button" onclick="closeApp()">X</button>
+				<button type="button" onclick="maximizeApp()">[]</button>
+				<button type="button" onclick="minimizeApp()">-</button>
+			</div>
+		</div>
+		<div id="main">
+			<!-- Top Menu -->
+			<div>
+				<div class="top-menu" id="top-menu">
+					<div>
+						<button onclick="openBrowser()">Browser</button>
+						<div class="menu-dropdown">
+							<button>Optimzation</button>
+							<div>
+								<button onclick="makeThumb(false)" title="Create Thumbs For All Comics That Missied They Thumb">Make Thumb</button>
+								<button onclick="makeThumb(true)" title="ReCreate Comic Thumbs if They had, if don't Create New One">ReMake Thumbs</button>
+								<button style="display:none;" onclick="" title="Choose Comics To Optimize">Optimize Comics</button>
+								<button style="display:none;" onclick="" title="Optimize all UnOptimized Comics in this page">Optimize Page Comics</button>
+							</div>
 						</div>
+						<button onclick="openCollectionsPanel()">Collections</button>
+						<button onclick="openSetting()">Setting</button>
 					</div>
-					<button onclick="openCollectionsPanel()">Collections</button>
-					<button onclick="openSetting()">Setting</button>
-				</div>
-				<div>
-					<form class="browser-tool-search-form" id="offline-search-form" style="display:none">
-						<input type="text" placeholder="Search..." id="offline-search-form-input" style="border-radius: 7px;" onfocus="keydownEventIndex = null" onfocusout="keydownEventIndex = 0" oninput="searchComics(this.value)">
-					</form>
-				</div>
-				<div>
-					<div class="jump-page" id="jump-page-container">
-						<input type="number" id="jp-i"  onfocus="keydownEventIndex = null" onfocusout="keydownEventIndex = 0" oninput> / <span id="jp-m-p"></span>
-						<button type="button" onclick="randomJumpPage(Number(this.parentElement.children[1].textContent))" title="Random"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="redo-alt" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256.455 8c66.269.119 126.437 26.233 170.859 68.685l35.715-35.715C478.149 25.851 504 36.559 504 57.941V192c0 13.255-10.745 24-24 24H345.941c-21.382 0-32.09-25.851-16.971-40.971l41.75-41.75c-30.864-28.899-70.801-44.907-113.23-45.273-92.398-.798-170.283 73.977-169.484 169.442C88.764 348.009 162.184 424 256 424c41.127 0 79.997-14.678 110.629-41.556 4.743-4.161 11.906-3.908 16.368.553l39.662 39.662c4.872 4.872 4.631 12.815-.482 17.433C378.202 479.813 319.926 504 256 504 119.034 504 8.001 392.967 8 256.002 7.999 119.193 119.646 7.755 256.455 8z"></path></svg></button>
+					<div>
+						<form class="browser-tool-search-form" id="offline-search-form" style="display:none">
+							<input type="text" placeholder="Search..." id="offline-search-form-input" style="border-radius: 7px;" onfocus="keydownEventIndex = null" onfocusout="keydownEventIndex = 0" oninput="searchComics(this.value)">
+						</form>
+					</div>
+					<div>
+						<div class="jump-page" id="jump-page-container">
+							<input type="number" id="jp-i"  onfocus="keydownEventIndex = null" onfocusout="keydownEventIndex = 0" oninput> / <span id="jp-m-p"></span>
+							<button type="button" onclick="randomJumpPage(Number(this.parentElement.children[1].textContent))" title="Random"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="redo-alt" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256.455 8c66.269.119 126.437 26.233 170.859 68.685l35.715-35.715C478.149 25.851 504 36.559 504 57.941V192c0 13.255-10.745 24-24 24H345.941c-21.382 0-32.09-25.851-16.971-40.971l41.75-41.75c-30.864-28.899-70.801-44.907-113.23-45.273-92.398-.798-170.283 73.977-169.484 169.442C88.764 348.009 162.184 424 256 424c41.127 0 79.997-14.678 110.629-41.556 4.743-4.161 11.906-3.908 16.368.553l39.662 39.662c4.872 4.872 4.631 12.815-.482 17.433C378.202 479.813 319.926 504 256 504 119.034 504 8.001 392.967 8 256.002 7.999 119.193 119.646 7.755 256.455 8z"></path></svg></button>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-
-		<!-- Body -->
-		<div id="main-body">
-			<div id="comic-container" page=""></div>
-			<div id="pagination"></div>
-			<p id="comics-counter"></p>
+	
+			<!-- Body -->
+			<div id="main-body">
+				<div id="comic-container" page=""></div>
+				<div id="pagination"></div>
+				<p id="comics-counter"></p>
+			</div>
 		</div>
 	</div>
 
@@ -293,7 +303,7 @@
 					<button type="button" onclick="askClearBrowserHistory()">Clear History</button>
 				</div>
 			</div>
-			<button type="button" class="comic-panel-close-btn"  id="b-h-p-close-btn" style="top: 85px;" onclick="closeBrowserHistory()" title="Close Browser Histories | Ctrl+H"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"><g><path fill="currentColor" d="M9.21,356.07a31.46,31.46,0,0,0,0,44.48l22.24,22.24a31.46,31.46,0,0,0,44.48,0L176,322.72,109.28,256ZM342.79,111.45,320.55,89.21a31.46,31.46,0,0,0-44.48,0L176,189.28,242.72,256,342.79,155.93a31.46,31.46,0,0,0,0-44.48Z" style="opacity:.6"></path><path fill="currentColor" d="M342.79,356.07a31.46,31.46,0,0,1,0,44.48l-22.24,22.24a31.46,31.46,0,0,1-44.48,0L9.21,155.93a31.46,31.46,0,0,1,0-44.48L31.45,89.21a31.46,31.46,0,0,1,44.48,0Z"></path></g></svg></button>
+			<button type="button" class="comic-panel-close-btn"  id="b-h-p-close-btn" onclick="closeBrowserHistory()" title="Close Browser Histories | Ctrl+H"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"><g><path fill="currentColor" d="M9.21,356.07a31.46,31.46,0,0,0,0,44.48l22.24,22.24a31.46,31.46,0,0,0,44.48,0L176,322.72,109.28,256ZM342.79,111.45,320.55,89.21a31.46,31.46,0,0,0-44.48,0L176,189.28,242.72,256,342.79,155.93a31.46,31.46,0,0,0,0-44.48Z" style="opacity:.6"></path><path fill="currentColor" d="M342.79,356.07a31.46,31.46,0,0,1,0,44.48l-22.24,22.24a31.46,31.46,0,0,1-44.48,0L9.21,155.93a31.46,31.46,0,0,1,0-44.48L31.45,89.21a31.46,31.46,0,0,1,44.48,0Z"></path></g></svg></button>
 			<div id="b-h-p-h-c"></div>
 			<div id="b-h-p-s-m">
 				<button type="button" onclick="unSelectAllBrowserHistory()">Cancel</button>

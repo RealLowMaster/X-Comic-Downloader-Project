@@ -29,7 +29,7 @@ function closeBrowser() {
 	imageLoadingObserver = new IntersectionObserver(ObserverFunction, imageLazyLoadingOptions)
 	reloadLoadingComics()
 	document.getElementById('browser').style.display = 'none'
-	document.getElementById('main').style.display = 'grid'
+	document.getElementById('main').style.display = 'flex'
 	closeSitePanel()
 	closeBrowserHistory()
 	keydownEventIndex = 0

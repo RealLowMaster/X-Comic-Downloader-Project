@@ -57,13 +57,13 @@ function checkThumbs(doc, reCreate, scrollTop) {
 		createThumb(list, 0)
 	} else if (thumbErrLog.length == 0) {
 		loading.hide()
-		document.getElementById('main').style.display = 'grid'
+		document.getElementById('main').style.display = 'flex'
 		keydownEventIndex = 0
 		PopAlert('All Thumbs Made Successfuly.')
 		reloadLoadingComics(scrollTop)
 	} else {
 		loading.hide()
-		document.getElementById('main').style.display = 'grid'
+		document.getElementById('main').style.display = 'flex'
 		keydownEventIndex = 0
 		errorList(thumbErrLog)
 		reloadLoadingComics(scrollTop)
@@ -79,7 +79,7 @@ function createThumb(list, index, scrollTop) {
 			}, 1)
 		} else {
 			loading.hide()
-			document.getElementById('main').style.display = 'grid'
+			document.getElementById('main').style.display = 'flex'
 			keydownEventIndex = 0
 			reloadLoadingComics(scrollTop)
 			if (thumbErrLog.length == 0) PopAlert('All Thumbs Made Successfuly.')
@@ -94,7 +94,7 @@ function createThumb(list, index, scrollTop) {
 			}, 1)
 		} else {
 			loading.hide()
-			document.getElementById('main').style.display = 'grid'
+			document.getElementById('main').style.display = 'flex'
 			keydownEventIndex = 0
 			reloadLoadingComics(scrollTop)
 			if (thumbErrLog.length == 0) PopAlert('All Thumbs Made Successfuly.')

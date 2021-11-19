@@ -118,6 +118,15 @@ ThisWindow.addListener('close', e => {
 	} else closeApp()
 })
 
+function maximizeApp() {
+	if (ThisWindow.isMaximized()) ThisWindow.unmaximize()
+	else ThisWindow.maximize()
+}
+
+function minimizeApp() {
+	ThisWindow.minimize()
+}
+
 // Needable Functions
 function fileExt(str) {
 	return new String(str).substring(str.lastIndexOf('.') + 1)

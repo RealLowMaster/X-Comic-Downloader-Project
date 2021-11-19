@@ -98,6 +98,7 @@ Added To Version {
 	Fix Bug: App will freeze when There is an Error in Optimization
 	Optimize Browser Tab and Page System
 	Optimize Databases
+	Change Windows Frame
 	Add Icon To Browser Tab
 	Add Ability To Stop Comic Optimization
 }
@@ -107,11 +108,10 @@ Doing {
 }
 
 Tasks => {
+	Mix Slider Fulllscreen With new Frame
 	Add Ability To Delete Comic Image
-	Remake Optimization System
 	Add Email System
 	Fix Bug: Problem with Comics That have just 1 Image
-	Fix sharp Usage { Download Thumb, Thumb, Optimizing }
 	Add Ads
 	Make UI Beatiful
 	Update Slider UI
@@ -131,7 +131,6 @@ Tasks => {
 	Make new Update System
 	Make Browser Selecting History Easier
 	Make New Browser Change Page System
-	Make Tab Element Be Save in Tab Class
 
 	Mybe in v2  {
 		Add Bookmark || Favoriet Posts
@@ -145,10 +144,7 @@ Tasks => {
 		Add Ability To Zoom in Image in Sldier
 		Add Custom Theme Maker
 		Add ReDownload Comic or A Picture
-		Make Repair Part Work Better
-		Add Repair All Crashed Image Button
 		Add Jump to Picture to Comic Panel
-		Add Transform Slider Mouse Move To Display on Another Side To Contniue drag to scroll
 	}
 
 	Mybe Later {

@@ -181,7 +181,7 @@ function saveSetting(justSave) {
 	} else {
 		keydownEventIndex = 0
 		document.getElementById('setting-panel').style.display = 'none'
-		document.getElementById('main').style.display = 'grid'
+		document.getElementById('main').style.display = 'flex'
 	}
 }
 
@@ -197,7 +197,7 @@ function closeSetting() {
 	document.getElementById('setting-panel').style.display = 'none'
 	setLuanchTimeSettings(true)
 	keydownEventIndex = 0
-	document.getElementById('main').style.display = 'grid'
+	document.getElementById('main').style.display = 'flex'
 }
 
 function SettingKeyEvents(ctrl,shift,key) {
