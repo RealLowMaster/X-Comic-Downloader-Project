@@ -64,9 +64,11 @@ const keydownEvents = [
 	'BrowserKeyEvents({ctrl},{shift},{key})',
 	'SettingKeyEvents({ctrl},{shift},{key})'
 ]
-const ThisWindow = remote.getCurrentWindow(), loading = new Loading(20), db = {}, procressPanel = new ProcressPanel(0), update_number = 7
-let comicDeleting = false, downloadCounter = 0, wt_fps = 20, dirDB, dirUL, dirTmp, isOptimizing = false, browserLastTabs = [], tabsHistory = [], dirHistory = '', keydownEventIndex = 0, new_update, save_value = null, save_value2 = null, afterDLReload = true, collectionsDB = [], groupsDB = [], artistsDB = [], parodiesDB = [], tagsDB = [], charactersDB = [], languagesDB = [], categoriesDB = []
-var setting, tabs = [], downloadingList = [], lastComicId, lastHaveId, lastGroupId, lastArtistId, lastParodyId, lastTagId, lastCharacterId, lastLanguageId, lastCategoryId, searchTimer, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = [], openedMenuTabIndex, copiedTab = null
+const ThisWindow = remote.getCurrentWindow(), loading = new Loading(13), db = {}, procressPanel = new ProcressPanel(0), update_number = 7
+let comicDeleting = false, downloadCounter = 0, wt_fps = 20, dirDB, dirUL, dirTmp, isOptimizing = false, browserLastTabs = [], tabsHistory = [], dirHistory = '', keydownEventIndex = 0, new_update, save_value = null, save_value2 = null, afterDLReload = true, setting
+let collectionsDB = [], groupsDB = [], artistsDB = [], parodiesDB = [], tagsDB = [], charactersDB = [], languagesDB = [], categoriesDB = []
+
+let tabs = [], downloadingList = [], lastComicId, lastHaveId, searchTimer, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = [], openedMenuTabIndex, copiedTab = null
 
 /*
 	37 // Left Arrow
@@ -729,18 +731,6 @@ function CreateDatabase() {
 	else jsonfile.writeFileSync(dirDB+'/collections.lowdb',{a:[]})
 }
 
-function convertOldTagsToNew() {
-	db.tags.find({}, (err, doc) => {
-		if (err) { error(err); return }
-		const newTag = []
-		for (let i = 0; i < doc.length; i++) {
-			newTag[doc[i]._id] = doc[i].n
-		}
-
-		console.log(newTag)
-	})
-}
-
 function CheckSettings() {
 	if (typeof(setting.comic_panel_theme) != 'number' || setting.comic_panel_theme < 0) setting.comic_panel_theme = defaultSetting.comic_panel_theme
 	if (setting.comic_panel_theme > 1) setting.comic_panel_theme = 1
@@ -882,56 +872,6 @@ const fix_index = async(id, updateLast) => {
 				}
 			})
 			break
-		case 2:
-			db.artists.find({}, (err, doc) => {
-				if (err) { error(err); return }
-				const len = doc.length
-				if (len > 0) {
-					const neededId = doc[len - 1]._id
-					update_index(neededId, 2)
-				}
-			})
-			break
-		case 4:
-			db.tags.find({}, (err, doc) => {
-				if (err) { error(err); return }
-				const len = doc.length
-				if (len > 0) {
-					const neededId = doc[len - 1]._id
-					update_index(neededId, 4)
-				}
-			})
-			break
-		case 6:
-			db.groups.find({}, (err, doc) => {
-				if (err) { error(err); return }
-				const len = doc.length
-				if (len > 0) {
-					const neededId = doc[len - 1]._id
-					update_index(neededId, 6)
-				}
-			})
-			break
-		case 8:
-			db.parodies.find({}, (err, doc) => {
-				if (err) { error(err); return }
-				const len = doc.length
-				if (len > 0) {
-					const neededId = doc[len - 1]._id
-					update_index(neededId, 8)
-				}
-			})
-			break
-		case 10:
-			db.collections.find({}, (err, doc) => {
-				if (err) { error(err); return }
-				const len = doc.length
-				if (len > 0) {
-					const neededId = doc[len - 1]._id
-					update_index(neededId, 10)
-				}
-			})
-			break
 		case 11:
 			db.have.find({}, (err, doc) => {
 				if (err) { error(err); return }
@@ -943,36 +883,6 @@ const fix_index = async(id, updateLast) => {
 				} else {
 					update_index(0, 11)
 					if (updateLast == true && downloadCounter == 0) lastHaveId = 1
-				}
-			})
-			break
-		case 12:
-			db.characters.find({}, (err, doc) => {
-				if (err) { error(err); return }
-				const len = doc.length
-				if (len > 0) {
-					const neededId = doc[len - 1]._id
-					update_index(neededId, 12)
-				}
-			})
-			break
-		case 13:
-			db.languages.find({}, (err, doc) => {
-				if (err) { error(err); return }
-				const len = doc.length
-				if (len > 0) {
-					const neededId = doc[len - 1]._id
-					update_index(neededId, 13)
-				}
-			})
-			break
-		case 14:
-			db.categories.find({}, (err, doc) => {
-				if (err) { error(err); return }
-				const len = doc.length
-				if (len > 0) {
-					const neededId = doc[len - 1]._id
-					update_index(neededId, 14)
 				}
 			})
 			break
@@ -998,24 +908,10 @@ const count_index = async(id) => {
 async function makeDatabaseIndexs() {
 	// comics
 	await count_index(1)
-	// artists
-	await count_index(2)
-	// tags
-	await count_index(4)
-	// groups
-	await count_index(6)
-	// parodies
-	await count_index(8)
 	// collections
 	await count_index(10)
 	// have
 	await count_index(11)
-	// characters
-	await count_index(12)
-	// languages
-	await count_index(13)
-	// categories
-	await count_index(14)
 }
 
 // Image Loading

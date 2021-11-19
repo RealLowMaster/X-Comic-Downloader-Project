@@ -91,40 +91,31 @@ function CreateCharacterList(comicId, newList) {
 	})
 }
 
-function AddCharacterToList(comicId, newList, repairing) {
+function AddCharacterToList(comicId, newList, repairing, changed) {
 	repairing = repairing || false
+	if (changed) jsonfile.writeFileSync(dirDB+'/characters.lowdb',{a:charactersDB})
 	if (repairing == false) CreateCharacterList(comicId, newList)
 	else UpdateCharacterList(comicId, newList)
 }
 
-function CreateCharacterInsert(tagName, index, callback) {
-	db.characters.insert({n:tagName.toLowerCase(), _id:index}, callback)
-}
-
-function CreateCharacter(tagList, comicId, tagListIndex, repairing, newList) {
+function CreateCharacter(tagList, comicId, tagListIndex, repairing, newList, changed) {
 	tagListIndex = tagListIndex || 0
 	newList = newList || []
 	repairing = repairing || false
-	db.characters.findOne({n:tagList[tagListIndex].toLowerCase()}, (err, num) => {
-		if (err) { error(err); return }
-		if (num != undefined) {
-			newList.push(num._id)
-			if (tagListIndex == tagList.length - 1) {
-				fix_index(12)
-				AddCharacterToList(comicId, newList, repairing)
-			} else CreateCharacter(tagList, comicId, tagListIndex + 1, repairing, newList)
-		} else {
-			lastCharacterId++
-			CreateCharacterInsert(tagList[tagListIndex], lastCharacterId - 1, (err, newDoc) => {
-				if (err) { error('Character: '+err); return }
-				newList.push(newDoc._id)
-				if (tagListIndex == tagList.length - 1) {
-					fix_index(12)
-					AddCharacterToList(comicId, newList, repairing)
-				} else CreateCharacter(tagList, comicId, tagListIndex + 1, repairing, newList)
-			})
-		}
-	})
+	changed = changed || false
+	const index = charactersDB.indexOf(tagList[tagListIndex].toLowerCase())
+	if (index > -1) {
+		newList.push(index)
+		if (tagListIndex == tagList.length - 1) AddCharacterToList(comicId, newList, repairing, changed)
+		else CreateCharacter(tagList, comicId, tagListIndex + 1, repairing, newList, changed)
+	} else {
+		const newIndex = charactersDB.length
+		charactersDB[newIndex] = tagList[tagListIndex].toLowerCase()
+		newList.push(newIndex)
+		changed = true
+		if (tagListIndex == tagList.length - 1) AddCharacterToList(comicId, newList, repairing, changed)
+		else CreateCharacter(tagList, comicId, tagListIndex + 1, repairing, newList, changed)
+	}
 }
 
 // Add New Language
@@ -149,40 +140,31 @@ function CreateLanguageList(comicId, newList) {
 	})
 }
 
-function AddLanguageToList(comicId, newList, repairing) {
+function AddLanguageToList(comicId, newList, repairing, changed) {
 	repairing = repairing || false
+	if (changed) jsonfile.writeFileSync(dirDB+'/languages.lowdb',{a:languagesDB})
 	if (repairing == false) CreateLanguageList(comicId, newList)
 	else UpdateLanguageList(comicId, newList)
 }
 
-function CreateLanguageInsert(tagName, index, callback) {
-	db.languages.insert({n:tagName.toLowerCase(), _id:index}, callback)
-}
-
-function CreateLanguage(tagList, comicId, tagListIndex, repairing, newList) {
+function CreateLanguage(tagList, comicId, tagListIndex, repairing, newList, changed) {
 	tagListIndex = tagListIndex || 0
 	newList = newList || []
 	repairing = repairing || false
-	db.languages.findOne({n:tagList[tagListIndex].toLowerCase()}, (err, num) => {
-		if (err) { error(err); return }
-		if (num != undefined) {
-			newList.push(num._id)
-			if (tagListIndex == tagList.length - 1) {
-				fix_index(13)
-				AddLanguageToList(comicId, newList, repairing)
-			} else CreateLanguage(tagList, comicId, tagListIndex + 1, repairing, newList)
-		} else {
-			lastLanguageId++
-			CreateLanguageInsert(tagList[tagListIndex], lastLanguageId - 1, (err, newDoc) => {
-				if (err) { error('Language: '+err); return }
-				newList.push(newDoc._id)
-				if (tagListIndex == tagList.length - 1) {
-					fix_index(13)
-					AddLanguageToList(comicId, newList, repairing)
-				} else CreateLanguage(tagList, comicId, tagListIndex + 1, repairing, newList)
-			})
-		}
-	})
+	changed = changed || false
+	const index = languagesDB.indexOf(tagList[tagListIndex].toLowerCase())
+	if (index > -1) {
+		newList.push(index)
+		if (tagListIndex == tagList.length - 1) AddLanguageToList(comicId, newList, repairing, changed)
+		else CreateLanguage(tagList, comicId, tagListIndex + 1, repairing, newList, changed)
+	} else {
+		const newIndex = languagesDB.length
+		languagesDB[newIndex] = tagList[tagListIndex].toLowerCase()
+		newList.push(newIndex)
+		changed = true
+		if (tagListIndex == tagList.length - 1) AddLanguageToList(comicId, newList, repairing, changed)
+		else CreateLanguage(tagList, comicId, tagListIndex + 1, repairing, newList, changed)
+	}
 }
 
 // Add New Category
@@ -207,40 +189,31 @@ function CreateCategoryList(comicId, newList) {
 	})
 }
 
-function AddCategoryToList(comicId, newList, repairing) {
+function AddCategoryToList(comicId, newList, repairing, changed) {
 	repairing = repairing || false
+	if (changed) jsonfile.writeFileSync(dirDB+'/categories.lowdb',{a:categoriesDB})
 	if (repairing == false) CreateCategoryList(comicId, newList)
 	else UpdateCategoryList(comicId, newList)
 }
 
-function CreateCategoryInsert(tagName, index, callback) {
-	db.categories.insert({n:tagName.toLowerCase(), _id:index}, callback)
-}
-
-function CreateCategory(tagList, comicId, tagListIndex, repairing, newList) {
+function CreateCategory(tagList, comicId, tagListIndex, repairing, newList, changed) {
 	tagListIndex = tagListIndex || 0
 	newList = newList || []
 	repairing = repairing || false
-	db.categories.findOne({n:tagList[tagListIndex].toLowerCase()}, (err, num) => {
-		if (err) { error(err); return }
-		if (num != undefined) {
-			newList.push(num._id)
-			if (tagListIndex == tagList.length - 1) {
-				fix_index(14)
-				AddCategoryToList(comicId, newList, repairing)
-			} else CreateCategory(tagList, comicId, tagListIndex + 1, repairing, newList)
-		} else {
-			lastCategoryId++
-			CreateCategoryInsert(tagList[tagListIndex], lastCategoryId - 1, (err, newDoc) => {
-				if (err) { error('Category: '+err); return }
-				newList.push(newDoc._id)
-				if (tagListIndex == tagList.length - 1) {
-					fix_index(14)
-					AddCategoryToList(comicId, newList, repairing)
-				} else CreateCategory(tagList, comicId, tagListIndex + 1, repairing, newList)
-			})
-		}
-	})
+	changed = changed || false
+	const index = categoriesDB.indexOf(tagList[tagListIndex].toLowerCase())
+	if (index > -1) {
+		newList.push(index)
+		if (tagListIndex == tagList.length - 1) AddCategoryToList(comicId, newList, repairing, changed)
+		else CreateCategory(tagList, comicId, tagListIndex + 1, repairing, newList, changed)
+	} else {
+		const newIndex = categoriesDB.length
+		categoriesDB[newIndex] = tagList[tagListIndex].toLowerCase()
+		newList.push(newIndex)
+		changed = true
+		if (tagListIndex == tagList.length - 1) AddCategoryToList(comicId, newList, repairing, changed)
+		else CreateCategory(tagList, comicId, tagListIndex + 1, repairing, newList, changed)
+	}
 }
 
 // Add New Groups
@@ -265,40 +238,31 @@ function CreatGroupList(comicId, newList) {
 	})
 }
 
-function AddGroupToList(comicId, newList, repairing) {
+function AddGroupToList(comicId, newList, repairing, changed) {
 	repairing = repairing || false
+	if (changed) jsonfile.writeFileSync(dirDB+'/groups.lowdb',{a:groupsDB})
 	if (repairing == false) CreatGroupList(comicId, newList)
 	else UpdateGroupList(comicId, newList)
 }
 
-function CreateGroupInsert(tagName, index, callback) {
-	db.groups.insert({n:tagName.toLowerCase(), _id:index}, callback)
-}
-
-function CreateGroup(tagList, comicId, tagListIndex, repairing, newList) {
+function CreateGroup(tagList, comicId, tagListIndex, repairing, newList, changed) {
 	tagListIndex = tagListIndex || 0
 	newList = newList || []
 	repairing = repairing || false
-	db.groups.findOne({n:tagList[tagListIndex].toLowerCase()}, (err, num) => {
-		if (err) { error(err); return }
-		if (num != undefined) {
-			newList.push(num._id)
-			if (tagListIndex == tagList.length - 1) {
-				fix_index(6)
-				AddGroupToList(comicId, newList, repairing)
-			} else CreateGroup(tagList, comicId, tagListIndex + 1, repairing, newList)
-		} else {
-			lastGroupId++
-			CreateGroupInsert(tagList[tagListIndex], lastGroupId - 1, (err, newDoc) => {
-				if (err) { error('Group: '+err); return }
-				newList.push(newDoc._id)
-				if (tagListIndex == tagList.length - 1) {
-					fix_index(6)
-					AddGroupToList(comicId, newList, repairing)
-				} else CreateGroup(tagList, comicId, tagListIndex + 1, repairing, newList)
-			})
-		}
-	})
+	changed = changed || false
+	const index = groupsDB.indexOf(tagList[tagListIndex].toLowerCase())
+	if (index > -1) {
+		newList.push(index)
+		if (tagListIndex == tagList.length - 1) AddGroupToList(comicId, newList, repairing, changed)
+		else CreateGroup(tagList, comicId, tagListIndex + 1, repairing, newList, changed)
+	} else {
+		const newIndex = groupsDB.length
+		groupsDB[newIndex] = tagList[tagListIndex].toLowerCase()
+		newList.push(newIndex)
+		changed = true
+		if (tagListIndex == tagList.length - 1) AddGroupToList(comicId, newList, repairing, changed)
+		else CreateGroup(tagList, comicId, tagListIndex + 1, repairing, newList, changed)
+	}
 }
 
 // Add New Artist
@@ -323,40 +287,32 @@ function CreatArtistList(comicId, newList) {
 	})
 }
 
-function AddArtistToList(comicId, newList, repairing) {
+function AddArtistToList(comicId, newList, repairing, changed) {
 	repairing = repairing || false
+	if (changed) jsonfile.writeFileSync(dirDB+'/artists.lowdb',{a:artistsDB})
 	if (repairing == false) CreatArtistList(comicId, newList)
 	else UpdateArtistList(comicId, newList)
 }
 
-function CreateArtistInsert(tagName, index, callback) {
-	db.artists.insert({n:tagName.toLowerCase(), _id:index}, callback)
-}
-
-function CreateArtist(tagList, comicId, tagListIndex, repairing, newList) {
+function CreateArtist(tagList, comicId, tagListIndex, repairing, newList, changed) {
 	tagListIndex = tagListIndex || 0
 	newList = newList || []
 	repairing = repairing || false
-	db.artists.findOne({n:tagList[tagListIndex].toLowerCase()}, (err, num) => {
-		if (err) { error(err); return }
-		if (num != undefined) {
-			newList.push(num._id)
-			if (tagListIndex == tagList.length - 1) {
-				fix_index(2)
-				AddArtistToList(comicId, newList, repairing)
-			} else CreateArtist(tagList, comicId, tagListIndex + 1, repairing, newList)
-		} else {
-			lastArtistId++
-			CreateArtistInsert(tagList[tagListIndex], lastArtistId - 1, (err, newDoc) => {
-				if (err) { error('Artist: '+err); return }
-				newList.push(newDoc._id)
-				if (tagListIndex == tagList.length - 1) {
-					fix_index(2)
-					AddArtistToList(comicId, newList, repairing)
-				} else CreateArtist(tagList, comicId, tagListIndex + 1, repairing, newList)
-			})
-		}
-	})
+	changed = changed || false
+	const index = artistsDB.indexOf(tagList[tagListIndex].toLowerCase())
+	if (index > -1) {
+		newList.push(index)
+		if (tagListIndex == tagList.length - 1) AddArtistToList(comicId, newList, repairing, changed)
+		else CreateArtist(tagList, comicId, tagListIndex + 1, repairing, newList, changed)
+	} else {
+		const newIndex = artistsDB.length
+		artistsDB[newIndex] = tagList[tagListIndex].toLowerCase()
+		newList.push(newIndex)
+		changed = true
+		if (tagListIndex == tagList.length - 1) AddArtistToList(comicId, newList, repairing, changed)
+		else CreateArtist(tagList, comicId, tagListIndex + 1, repairing, newList, changed)
+	}
+			
 }
 
 // Add New Parody
@@ -381,40 +337,31 @@ function CreatParodyList(comicId, newList) {
 	})
 }
 
-function AddParodyToList(comicId, newList, repairing) {
+function AddParodyToList(comicId, newList, repairing, changed) {
 	repairing = repairing || false
+	if (changed) jsonfile.writeFileSync(dirDB+'/parodies.lowdb',{a:parodiesDB})
 	if (repairing == false) CreatParodyList(comicId, newList)
 	else UpdateParodyList(comicId, newList)
 }
 
-function CreateParodyInsert(tagName, index, callback) {
-	db.parodies.insert({n:tagName.toLowerCase(), _id:index}, callback)
-}
-
-function CreateParody(tagList, comicId, tagListIndex, repairing, newList) {
+function CreateParody(tagList, comicId, tagListIndex, repairing, newList, changed) {
 	tagListIndex = tagListIndex || 0
 	newList = newList || []
 	repairing = repairing || false
-	db.parodies.findOne({n:tagList[tagListIndex].toLowerCase()}, (err, num) => {
-		if (err) { error(err); return }
-		if (num != undefined) {
-			newList.push(num._id)
-			if (tagListIndex == tagList.length - 1) {
-				fix_index(8)
-				AddParodyToList(comicId, newList, repairing)
-			} else CreateParody(tagList, comicId, tagListIndex + 1, repairing, newList)
-		} else {
-			lastParodyId++
-			CreateParodyInsert(tagList[tagListIndex], lastParodyId - 1, (err, newDoc) => {
-				if (err) { error('Parody: '+err); return }
-				newList.push(newDoc._id)
-				if (tagListIndex == tagList.length - 1) {
-					fix_index(8)
-					AddParodyToList(comicId, newList, repairing)
-				} else CreateParody(tagList, comicId, tagListIndex + 1, repairing, newList)
-			})
-		}
-	})
+	changed = changed || false
+	const index = parodiesDB.indexOf(tagList[tagListIndex].toLowerCase())
+	if (index > -1) {
+		newList.push(index)
+		if (tagListIndex == tagList.length - 1) AddParodyToList(comicId, newList, repairing, changed)
+		else CreateParody(tagList, comicId, tagListIndex + 1, repairing, newList, changed)
+	} else {
+		const newIndex = parodiesDB.length
+		parodiesDB[newIndex] = tagList[tagListIndex].toLowerCase()
+		newList.push(newIndex)
+		changed = true
+		if (tagListIndex == tagList.length - 1) AddParodyToList(comicId, newList, repairing, changed)
+		else CreateParody(tagList, comicId, tagListIndex + 1, repairing, newList, changed)
+	}
 }
 
 // Add New Tag
@@ -439,40 +386,31 @@ function CreatTagList(comicId, newList) {
 	})
 }
 
-function AddTagToList(comicId, newList, repairing) {
+function AddTagToList(comicId, newList, repairing, changed) {
 	repairing = repairing || false
+	if (changed) jsonfile.writeFileSync(dirDB+'/tags.lowdb',{a:tagsDB})
 	if (repairing == false) CreatTagList(comicId, newList)
 	else UpdateTagList(comicId, newList)
 }
 
-function CreateTagInsert(tagName, index, callback) {
-	db.tags.insert({n:tagName.toLowerCase(), _id:index}, callback)
-}
-
-function CreateTag(tagList, comicId, tagListIndex, repairing, newList) {
+function CreateTag(tagList, comicId, tagListIndex, repairing, newList, changed) {
 	tagListIndex = tagListIndex || 0
 	newList = newList || []
 	repairing = repairing || false
-	db.tags.findOne({n:tagList[tagListIndex].toLowerCase()}, (err, num) => {
-		if (err) { error(err); return }
-		if (num != undefined) {
-			newList.push(num._id)
-			if (tagListIndex == tagList.length - 1) {
-				fix_index(4)
-				AddTagToList(comicId, newList, repairing)
-			} else CreateTag(tagList, comicId, tagListIndex + 1, repairing, newList)
-		} else {
-			lastTagId++
-			CreateTagInsert(tagList[tagListIndex], lastTagId - 1, (err, newDoc) => {
-				if (err) { error('Tag: '+err); return }
-				newList.push(newDoc._id)
-				if (tagListIndex == tagList.length - 1) {
-					fix_index(4)
-					AddTagToList(comicId, newList, repairing)
-				} else CreateTag(tagList, comicId, tagListIndex + 1, repairing, newList)
-			})
-		}
-	})
+	changed = changed || false
+	const index = tagsDB.indexOf(tagList[tagListIndex].toLowerCase())
+	if (index > -1) {
+		newList.push(index)
+		if (tagListIndex == tagList.length - 1) AddTagToList(comicId, newList, repairing, changed)
+		else CreateTag(tagList, comicId, tagListIndex + 1, repairing, newList, changed)
+	} else {
+		const newIndex = tagsDB.length
+		tagsDB[newIndex] = tagList[tagListIndex].toLowerCase()
+		newList.push(newIndex)
+		changed = true
+		if (tagListIndex == tagList.length - 1) AddTagToList(comicId, newList, repairing, changed)
+		else CreateTag(tagList, comicId, tagListIndex + 1, repairing, newList, changed)
+	}
 }
 
 // Add New Comic

@@ -14,42 +14,40 @@ DB => {
 		optimized = o
 		_id
 	}
-	artists 2 => {
-		name = n
-		_id
-	}
+	artists => [
+		'name'
+	]
 	comic_artists {
 		artists = t = []
 		_id => Comic Id
 	}
-	tags 4 => {
-		name = n
-		_id
-	}
+	tags => [
+		'name'
+	]
 	comic_tags {
 		tags = t = []
 		_id => Comic Id
 	}
-	groups 6 => {
-		name = n
-		_id
-	}
+	groups => [
+		'name'
+	]
 	comic_groups {
 		groups = t = []
 		_id => Comic Id
 	}
-	parodies 8 => {
-		name = n
-		_id
-	}
+	parodies => [
+		'name'
+	]
 	comic_parodies {
 		parodies = t = []
 		_id => Comic Id
 	}
 	collections 10 => [
-		'title' = name => 0
-		[0,1,...] = ids => 1
-		'image.jpg' = image url => 2
+		[
+			'title' = name => 0
+			[0,1,...] = ids => 1
+			'image.jpg' = image url => 2
+		]
 	]
 	have 11 => {
 		site = s
@@ -57,26 +55,23 @@ DB => {
 		downloaded = d
 		_id
 	}
-	characters 12 => {
-		name = n
-		_id
-	}
+	characters => [
+		'name'
+	]
 	comic_characters {
 		parodies = t = []
 		_id => Comic Id
 	}
-	languages 13 => {
-		name = n
-		_id
-	}
+	languages => [
+		'name'
+	]
 	comic_languages {
 		parodies = t = []
 		_id => Comic Id
 	}
-	categories 14 => {
-		name = n
-		_id
-	}
+	categories => [
+		'name'
+	]
 	comic_categories {
 		parodies = t = []
 		_id => Comic Id
@@ -105,7 +100,7 @@ Added To Version {
 }
 
 Doing {
-	Optimizing Databases Part 1
+	Optimizing Databases Part 2
 }
 
 Tasks => {

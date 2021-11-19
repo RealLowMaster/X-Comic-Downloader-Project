@@ -206,77 +206,26 @@ document.addEventListener("DOMContentLoaded", () => {
 				if (haveDoc == undefined) lastHaveId = 1
 				else lastHaveId = haveDoc.i || null
 				if (lastHaveId == null) { error('Have Indexing Problem.'); return }
-				loading.forward('Groups Indexing...')
-	
-				db.index.findOne({_id:6}, (err, groupDoc) => {
-					if (err) { error('GroupIndexing: '+err); return }
-					if (groupDoc == undefined) lastGroupId = 1
-					else lastGroupId = groupDoc.i || null
-					if (lastGroupId == null) { error('Group Indexing Problem.'); return }
-					loading.forward('Artists Indexing...')
-	
-					db.index.findOne({_id:2}, (err, artistDoc) => {
-						if (err) { error('ArtistIndexing: '+err); return }
-						if (artistDoc == undefined) lastArtistId = 1
-						else lastArtistId = artistDoc.i || null
-						if (lastArtistId == null) { error('Artist Indexing Problem.'); return }
-						loading.forward('Parodies Indexing...')
-	
-						db.index.findOne({_id:8}, (err, parodyDoc) => {
-							if (err) { error('ParodyIndexing: '+err); return }
-							if (parodyDoc == undefined) lastParodyId = 1
-							else lastParodyId = parodyDoc.i || null
-							if (lastParodyId == null) { error('Parody Indexing Problem.'); return }
-							loading.forward('Tags Indexing...')
-	
-							db.index.findOne({_id:4}, (err, tagDoc) => {
-								if (err) { error('TagIndexing: '+err); return }
-								if (tagDoc == undefined) lastTagId = 1
-								else lastTagId = tagDoc.i || null
-								if (lastTagId == null) { error('Tag Indexing Problem.'); return }
-								loading.forward('Character Indexing...')
-
-								db.index.findOne({_id:12}, (err, characterDoc) => {
-									if (err) { error('CharacterIndexing: '+err); return }
-									if (characterDoc == undefined) lastCharacterId = 1
-									else lastCharacterId = characterDoc.i || null
-									if (lastCharacterId == null) { error('Character Indexing Problem.'); return }
-									loading.forward('Language Indexing...')
-
-									db.index.findOne({_id:13}, (err, languageDoc) => {
-										if (err) { error('LanguageIndexing: '+err); return }
-										if (languageDoc == undefined) lastLanguageId = 1
-										else lastLanguageId = languageDoc.i || null
-										if (lastLanguageId == null) { error('Language Indexing Problem.'); return }
-										loading.forward('Category Indexing...')
-
-										db.index.findOne({_id:14}, (err, categoryDoc) => {
-											if (err) { error('CategoryIndexing: '+err); return }
-											if (categoryDoc == undefined) lastCategoryId = 1
-											else lastCategoryId = categoryDoc.i || null
-											if (lastCategoryId == null) { error('Category Indexing Problem.'); return }
-											loading.forward('Check subFolders...')
+				loading.forward('Checking SubFolder...')
 											
-											db.index.findOne({_id:100}, (err, subFolderDoc) => {
-												if (err) { error('SubFolderCheckingERR: '+err); return }
-												if (subFolderDoc == null) {
-													db.comics.find({}, (err, sfComicsDoc) => {
-														if (err) { error('SubFolder->ComicLoading->ERR: '+err); return }
-														if (sfComicsDoc != null && sfComicsDoc.length != 0) {
-															const sfLength = sfComicsDoc.length
-															loading.reset(sfLength)
-															loading.show(`Making SubFolders (0/${sfLength})`)
-															setTimeout(() => { makeSubFolder(sfComicsDoc, sfLength, 0) }, 100)
-														} else AfterDatabaseDoneOnStartup()
-													})
-												} else AfterDatabaseDoneOnStartup()
-											})
-										})
-									})
+				db.index.findOne({_id:100}, (err, subFolderDoc) => {
+					if (err) { error('SubFolderCheckingERR: '+err); return }
+					if (subFolderDoc == null) {
+						db.comics.find({}, (err, sfComicsDoc) => {
+							if (err) { error('SubFolder->ComicLoading->ERR: '+err); return }
+							if (sfComicsDoc != null && sfComicsDoc.length != 0) {
+								const sfLength = sfComicsDoc.length
+								loading.reset(sfLength)
+								loading.show(`Making SubFolders (0/${sfLength})`)
+								setTimeout(() => { makeSubFolder(sfComicsDoc, sfLength, 0) }, 100)
+							} else {
+								db.index.insert({_id:100}, err => {
+									if (err) { error('SaveSubFolderInIndex->ERR: '+err); return }
+									AfterDatabaseDoneOnStartup()
 								})
-							})
+							}
 						})
-					})
+					} else AfterDatabaseDoneOnStartup()
 				})
 			})
 		})
