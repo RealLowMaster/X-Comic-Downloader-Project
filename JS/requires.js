@@ -66,7 +66,7 @@ const keydownEvents = [
 ]
 const ThisWindow = remote.getCurrentWindow(), loading = new Loading(13), db = {}, procressPanel = new ProcressPanel(0), update_number = 7
 let comicDeleting = false, downloadCounter = 0, wt_fps = 20, dirDB, dirUL, dirTmp, isOptimizing = false, browserLastTabs = [], tabsHistory = [], dirHistory = '', keydownEventIndex = 0, new_update, save_value = null, save_value2 = null, afterDLReload = true, setting
-let collectionsDB = [], groupsDB = [], artistsDB = [], parodiesDB = [], tagsDB = [], charactersDB = [], languagesDB = [], categoriesDB = []
+let collectionsDB = [], groupsDB = [], artistsDB = [], parodiesDB = [], tagsDB = [], charactersDB = [], languagesDB = [], categoriesDB = [], comicGroupsDB = [], comicArtistsDB = [], comicParodiesDB = [], comicTagsDB = [], comicCharactersDB = [], comicLanguagesDB = [], comicCategoriesDB = []
 
 let tabs = [], downloadingList = [], lastComicId, lastHaveId, searchTimer, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = [], openedMenuTabIndex, copiedTab = null
 
@@ -552,19 +552,21 @@ function loadImagesOneByOne(images) {
 	let src = images[0].getAttribute('data-src')
 	images[0].removeAttribute('data-src')
 	if (!src) {
-		if (images[0].complete && images[0].naturalHeight !== 0) {
+		if (images[0].complete) {
 			images.shift()
 			setTimeout(() => {
+				console.log(true)
 				loadImagesOneByOne(images)
 			}, 1)
 		} else {
 			setTimeout(() => {
 				loadImagesOneByOne(images)
-			}, 200)
+			}, 250)
 		}
 	} else {
 		images[0].src = src
 		setTimeout(() => {
+			console.log(false)
 			loadImagesOneByOne(images)
 		}, 1)
 	}
@@ -609,9 +611,9 @@ function GetDirection() {
 }
 
 function CreateDatabase() {
-	db.index = new nedb({ filename: dirDB+'/index', autoload: true })
 	db.comics = new nedb({ filename: dirDB+'/comics', autoload: true })
-
+	db.have = new nedb({ filename: dirDB+'/have', autoload: true })
+	db.index = new nedb({ filename: dirDB+'/index', autoload: true })
 	db.comic_groups = new nedb({ filename: dirDB+'/comic_groups', autoload: true })
 	db.comic_artists = new nedb({ filename: dirDB+'/comic_artists', autoload: true })
 	db.comic_parodies = new nedb({ filename: dirDB+'/comic_parodies', autoload: true })
@@ -619,9 +621,8 @@ function CreateDatabase() {
 	db.comic_characters = new nedb({ filename: dirDB+'/comic_characters', autoload: true })
 	db.comic_languages = new nedb({ filename: dirDB+'/comic_languages', autoload: true })
 	db.comic_categories = new nedb({ filename: dirDB+'/comic_categories', autoload: true })
-	db.have = new nedb({ filename: dirDB+'/have', autoload: true })
 
-	
+
 	// Groups DB
 	if (fs.existsSync(dirDB+'/groups')) {
 		let temp_comic_groups = new nedb({ filename: dirDB+'/groups', autoload: true })
