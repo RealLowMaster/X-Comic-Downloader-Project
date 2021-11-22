@@ -146,13 +146,18 @@ function sliderImageBorderHighlighter() {
 }
 
 function toggleComicSliderScreen() {
-	const parent = document.getElementById('comic-slider').children[1]
+	const comic_slider = document.getElementById('comic-slider')
+	const parent = comic_slider.children[1]
 	if (ThisWindow.isFullScreen()) {
 		ThisWindow.setFullScreen(false)
 		parent.style.backgroundColor = '#000000f3'
+		comic_slider.removeAttribute('fullscreen')
+		document.getElementById('window-menu').style.display = 'grid'
 	} else {
 		ThisWindow.setFullScreen(true)
 		parent.style.backgroundColor = '#000'
+		comic_slider.setAttribute('fullscreen', true)
+		document.getElementById('window-menu').style.display = 'none'
 	}
 }
 

@@ -272,7 +272,7 @@ input::-webkit-input-placeholder { user-select: none }
 	height: 100%;
 }
 
-#window > div:first-child {
+#window-menu:first-child {
 	display: grid;
 	grid-template-columns: 10fr 2fr;
 	width: 100%;
@@ -283,7 +283,7 @@ input::-webkit-input-placeholder { user-select: none }
 	z-index: 1;
 }
 
-#window > div:first-child > div:first-child {
+#window-menu:first-child > div:first-child {
 	display: flex;
 	align-items: center;
 	height: var(--topMenuSize);
@@ -292,13 +292,13 @@ input::-webkit-input-placeholder { user-select: none }
 	font-size: 14px;
 }
 
-#window > div:first-child > div:last-child {
+#window-menu:first-child > div:last-child {
 	display: flex;
 	height: var(--topMenuSize);
 	direction: rtl;
 }
 
-#window > div:first-child > div:last-child > button {
+#window-menu:first-child > div:last-child > button {
 	height: var(--topMenuSize);
 	-webkit-app-region: no-drag;
 	padding: 0 20px;
@@ -306,11 +306,11 @@ input::-webkit-input-placeholder { user-select: none }
 	color: #eee;
 }
 
-#window > div:first-child > div:last-child > button:hover {
+#window-menu:first-child > div:last-child > button:hover {
 	background-color: #333;
 }
 
-#window > div:first-child > div:last-child > button:first-child:hover {
+#window-menu:first-child > div:last-child > button:first-child:hover {
 	background-color: #E74C3C;
 }
 
@@ -1786,6 +1786,11 @@ input::-webkit-input-placeholder { user-select: none }
 
 #comic-slider[opened-overview] {
 	grid-template-rows: 210px 11fr;
+}
+
+#comic-slider[fullscreen] {
+	height: 100%;
+	top: 0;
 }
 
 #c-s-ov {

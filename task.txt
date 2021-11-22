@@ -108,7 +108,7 @@ Doing {
 }
 
 Tasks => {
-	Mix Slider Fulllscreen With new Frame
+	Add Ability To Play Song
 	Add Ability To Delete Comic Image
 	Add Email System
 	Fix Bug: Problem with Comics That have just 1 Image
@@ -145,9 +145,5 @@ Tasks => {
 		Add Custom Theme Maker
 		Add ReDownload Comic or A Picture
 		Add Jump to Picture to Comic Panel
-	}
-
-	Mybe Later {
-		Remove Electron Window Frame And Make a Custome One
 	}
 }
