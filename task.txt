@@ -91,16 +91,7 @@ Add Comic {
 }
 
 Added To Version {
-	*Add Collections
-	Fix Bug: Stop Loading Comic When a Comic Image is Crashed
-	Fix Bug: fix xlecx support for new xlecx site structure
-	Fix Bug: Rescanning SubFolders In Startup (Fixed By PBXg33k)
-	Fix Bug: App will freeze when There is an Error in Optimization
-	Optimize Browser Tab and Page System
-	Optimize Databases
-	Change Windows Frame
-	Add Icon To Browser Tab
-	Add Ability To Stop Comic Optimization
+
 }
 
 Doing {
@@ -108,6 +99,8 @@ Doing {
 }
 
 Tasks => {
+	Add Auto Backup Ability
+	Fix bug: nhentai -> Searching B-trayal pagination won't work
 	Add Ability To Play Song
 	Add Ability To Delete Comic Image
 	Add Email System
