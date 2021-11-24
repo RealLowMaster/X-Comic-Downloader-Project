@@ -252,13 +252,30 @@ function SliderKeyEvents(ctrl, shift, key) {
 					const count = Number(comicSliderOverview.getAttribute('count'))
 					if (index2 != count) changeSliderIndex(index2 + 1)
 					break
+			}
+		}
+	} else {
+		if (!shift) {
+			switch (key) {
+				case 65:
+					const index3 = Number(comicSliderOverview.getAttribute('aindex'))
+					if (index3 != 0) changeSliderIndex(index3 - 1)
+					break
+				case 68:
+					const index4 = Number(comicSliderOverview.getAttribute('aindex'))
+					const count = Number(comicSliderOverview.getAttribute('count'))
+					if (index4 != count) changeSliderIndex(index4 + 1)
+					break
 				case 79:
 					toggleComicSliderSize()
 					break
 				case 87:
 					closeComicSlider()
 					break
+				case 122:
+					toggleComicSliderScreen()
+					break
 			}
 		}
-	} else if (!shift && key == 122) toggleComicSliderScreen()
+	}
 }
