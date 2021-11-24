@@ -91,7 +91,7 @@ Add Comic {
 }
 
 Added To Version {
-
+	Update Slider UI
 }
 
 Doing {
@@ -99,6 +99,8 @@ Doing {
 }
 
 Tasks => {
+	Add Ability To Control gallery with keyboard (Requested By wakeupjeff64)
+	import my own comics manually using images ia lready have on my computer. (Requested By wakeupjeff64)
 	Add Auto Backup Ability
 	Fix bug: nhentai -> Searching B-trayal pagination won't work
 	Add Ability To Play Song
@@ -107,10 +109,7 @@ Tasks => {
 	Fix Bug: Problem with Comics That have just 1 Image
 	Add Ads
 	Make UI Beatiful
-	Update Slider UI
 	Add Search To History
-	ChangeRandom System On JumpPageRandom
-	Convert tag, artists, etc... To array insted
 
 	Fix Bug: Downloading xlecx => Morning Stretches
 	Optimize Gifs { giflossy imagemin Packages }
