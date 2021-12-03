@@ -231,17 +231,19 @@ function pasteTab(newTab) {
 		PopAlert("You Can't Make Any More Tab.", 'danger')
 		return
 	}
-	
+
 	const tabIndex = tabs.length
 	const newTabId = `${new Date().getTime()}${Math.floor(Math.random() * 9)}`
 	const page = document.createElement('div')
 	const element = document.createElement('div')
+
 	element.classList.add('browser-tab')
 	element.setAttribute('onclick', 'activateTab(this)')
 	element.setAttribute('pi', newTabId)
 	element.setAttribute('ti', tabIndex)
 	element.setAttribute('draggable', true)
-	element.innerHTML = `<span><img class="spin" src="Image/dual-ring-primary-${wt_fps}.gif"></span> <button onclick="removeTab('${newTabId}')">X</button>`
+	
+	element.innerHTML = `<img src="Image/dual-ring-primary-${wt_fps}.gif"><span></span> <button onclick="removeTab('${newTabId}')">X</button>`
 	element.addEventListener('dragstart',() => { element.classList.add('dragging') })
 	element.addEventListener('dragend', () => { element.classList.remove('dragging') })
 	element.addEventListener('contextmenu', e => {

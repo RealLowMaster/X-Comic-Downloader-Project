@@ -5,6 +5,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- Links -->
 	<link rel="stylesheet" type="text/css" href="CSS/main.css">
+	<link rel="stylesheet" type="text/css" href="CSS/browser.css">
+	<link rel="stylesheet" type="text/css" href="CSS/slider.css">
+	<link rel="stylesheet" type="text/css" href="CSS/collections.css">
 	<link rel="stylesheet" type="text/css" href="CSS/action.css">
 	<link rel="stylesheet" type="text/css" href="CSS/public.css">
 	<link rel="stylesheet" type="text/css" href="CSS/xlecx.css">
@@ -28,6 +31,7 @@
 	<script type="text/javascript" src="JS/collections.js" defer></script>
 	<script type="text/javascript" src="JS/make-thumb.js" defer></script>
 	<script type="text/javascript" src="JS/image-optimizer.js" defer></script>
+	<script type="text/javascript" src="JS/manages.js" defer></script>
 	<script type="text/javascript" src="JS/setting.js" defer></script>
 	<script type="text/javascript" src="JS/startup.js" defer></script>
 	<!-- Sites -->
@@ -59,7 +63,19 @@
 								<button style="display:none;" onclick="" title="Optimize all UnOptimized Comics in this page">Optimize Page Comics</button>
 							</div>
 						</div>
-						<button onclick="openCollectionsPanel()">Collections</button>
+						<div class="menu-dropdown">
+							<button>Manage</button>
+							<div>
+								<button onclick="openCollectionsPanel()">Collections</button>
+								<button onclick="">Groups</button>
+								<button onclick="">Artists</button>
+								<button onclick="">Parodies</button>
+								<button onclick="">Tags</button>
+								<button onclick="">Characters</button>
+								<button onclick="">Languages</button>
+								<button onclick="">Categories</button>
+							</div>
+						</div>
 						<button onclick="openSetting()">Setting</button>
 					</div>
 					<div>

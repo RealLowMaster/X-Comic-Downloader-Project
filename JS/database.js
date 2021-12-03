@@ -1,25 +1,25 @@
 // Add Comic To Have
-async function CreateHaveInsert(site, id, index, downloaded) {
+function CreateHaveInsert(site, id, index, downloaded) {
 	downloaded = downloaded || false
 	const insertInfo = {}
 	insertInfo.s = site
 	insertInfo.i = id
 	if (downloaded == true) insertInfo.d = 0
 	insertInfo._id = index
-	await db.have.insert(insertInfo, err => {
+	db.have.insert(insertInfo, err => {
 		if (err) { error(err); return }
 		FixIndex(1, false)
 	})
 }
 
-async function CreateHave(site, id, index, downloaded) {
+function CreateHave(site, id, index, downloaded) {
 	index = index || null
 	downloaded = downloaded || false
 
 	if (index != null) {
 		CreateHaveInsert(site, id, index, downloaded)
 	} else {
-		await db.index.findOne({_id:11}, (err, doc) => {
+		db.index.findOne({_id:11}, (err, doc) => {
 			if (err) { error(err); return }
 			const haveIndex = doc.i
 			CreateHaveInsert(site, id, haveIndex, downloaded)
@@ -414,7 +414,7 @@ function CreateTag(tagList, comicId, tagListIndex, repairing, newList, changed) 
 }
 
 // Add New Comic
-async function CreateComic(comicIndex, haveIndex, gottenResult, image, siteIndex, comic_id, imagesCount, formats, index, isDownloading) {
+function CreateComic(comicIndex, haveIndex, gottenResult, image, siteIndex, comic_id, imagesCount, formats, index, isDownloading) {
 	if (typeof(index) != 'number') index = null
 	isDownloading = isDownloading || false
 	const insertInfo = {}
@@ -426,7 +426,7 @@ async function CreateComic(comicIndex, haveIndex, gottenResult, image, siteIndex
 	insertInfo.s = siteIndex
 	insertInfo.p = comic_id
 	insertInfo._id = comicIndex
-	await db.comics.insert(insertInfo, (err, doc) => {
+	db.comics.insert(insertInfo, (err, doc) => {
 		if (err) { error(err); return }
 		FixIndex(0, false)
 		const id = doc._id

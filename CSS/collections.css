@@ -1,0 +1,271 @@
+#collections-panel,
+#opened-collections-panel {
+	display: none;
+	width: 100%;
+	height: calc(100% - var(--topMenuSize));
+	background-color: var(--obr-con-bgc);
+	overflow-y: auto;
+	position: fixed;
+	top: var(--topMenuSize);
+	left: 0;
+}
+
+#c-p-t-m,
+#o-c-p-t-m {
+	width: 100%;
+	padding: 10px;
+	margin-bottom: 20px;
+	direction: rtl;
+}
+
+#c-p-t-m > *,
+#o-c-p-t-m > * {
+	direction: ltr;
+}
+
+#c-p-s {
+	display: block;
+	width: 90%;
+	padding: 7px 20px 7px 10px;
+	margin: 10px auto 35px auto;
+    background-color: var(--cc-s-bgc);
+    color: var(--cc-s-color);
+    border: 1px solid var(--cc-s-bd-color);
+    border-radius: 4px;
+    font-weight: 400;
+    line-height: 1.5;
+    word-wrap: normal;
+    text-transform: none;
+	box-shadow: var(--cc-s-bshadow);
+    transition: border-color .2s, transform .2s, box-shadow .2s;
+}
+
+#c-p-s:hover {
+	border-color: var(--cc-s-hover-bd-color);
+}
+
+#c-p-s:focus {
+	border-color: var(--cc-s-focus-bd-color);
+	box-shadow: var(--cc-s-focus-bshadow);
+	transform: translate(0, -6px);
+}
+
+#c-p-c-c {
+	width: 100%;
+	padding: 10px 30px;
+	text-align: center;
+}
+
+#c-p-c-c > h6 {
+	display: inline-block;
+    width: 200px;
+	padding: 10px;
+    margin: 5px 10px;
+    background-color: #eee;
+	color: #222;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+    text-shadow: 0 0 5px rgb(0 0 0 / 30%);
+    box-shadow: 0 1px 10px 0 rgb(0 0 0 / 10%);
+    cursor: default;
+	user-select: none;
+}
+
+#c-p-c-c > div {
+	display: inline-block;
+	width: 200px;
+	max-height: 300px;
+	margin: 7px;
+	background-color: #eee;
+	border-radius: 10px;
+	position: relative;
+	box-shadow: 0px 8px 24px rgba(149,157,165,.35);
+	cursor: pointer;
+	transition: box-shadow .2s;
+}
+
+#c-p-c-c > div:hover {
+	box-shadow: 0px 7px 29px 0px rgba(100,100,111,.6);
+}
+
+#c-p-c-c > div > img {
+	display: block;
+	width: 200px;
+	max-height: 100%;
+	border-radius: 10px;
+	object-fit: cover;
+	object-position: center;
+}
+
+#c-p-c-c > div > span {
+	display: none;
+	background-color: #000a;
+	color: #fff;
+	padding: 3px 7px;
+	border-radius: 7px;
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	user-select: none;
+}
+
+#c-p-c-c > div:hover > span {
+	display: block;
+}
+
+#c-p-c-c > div > div {
+	width: 100%;
+	height: 100%;
+	border-radius: 10px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	box-shadow: rgba(0,0,0,.2) 0px -50px 36px -28px inset;
+	transition: box-shadow .2s;
+}
+
+#c-p-c-c > div:hover > div {
+	box-shadow: rgba(0,0,0,.15) 0px -23px 25px 0px inset, rgba(0,0,0,.13) 0px -36px 30px 0px inset, rgba(0,0,0,.09) 0px -79px 40px 0px inset, rgba(0,0,0,.06) 0px 2px 1px, rgba(0,0,0,.07) 0px 4px 2px, rgba(0,0,0,.07) 0px 8px 4px, rgba(0,0,0,.07) 0px 16px 8px, rgba(0,0,0,.07) 0px 32px 16px;
+}
+
+#c-p-c-c > div > p {
+	display: block;
+	width: 100%;
+	max-height: 100%;
+	padding: 10px 5px;
+	background-color: transparent;
+	color: #fff;
+	font-size: 15px;
+	text-align: center;
+	word-wrap: break-word;
+	overflow: hidden;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	transition: color .2s;
+}
+
+#c-p-a-c-p,
+#c-p-a-c-r-p {
+	display: none;
+	width: 100%;
+	height: 100%;
+	justify-content: center;
+	align-items: center;
+	position: fixed;
+	top: 0;
+	left: 0;
+}
+
+#c-p-a-c-p > div:first-child,
+#c-p-a-c-r-p > div:first-child {
+	width: 100%;
+	height: 100%;
+	background-color: #0005;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+#c-p-a-c-p > div:last-child,
+#c-p-a-c-r-p > div:last-child {
+	width: 300px;
+	padding: 10px;
+	background-color: #fff;
+	text-align: center;
+	z-index: +1;
+}
+
+#c-p-a-c-p > div:last-child > input,
+#c-p-a-c-r-p > div:last-child > input {
+	margin-bottom: 15px;
+}
+
+/* Comic Collection Panel */
+#comic-collection-panel {
+	display: none;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: calc(100% - var(--topMenuSize));
+	position: fixed;
+	top: var(--topMenuSize);
+	left: 0;
+}
+
+#comic-collection-panel > div:first-child {
+	width: 100%;
+	height: 100%;
+	background-color: #000c;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+#comic-collection-panel > div:last-child {
+	width: calc(100% - 100px);
+	height: calc(100% - 100px);
+	background-color: #fff;
+	border-radius: 7px;
+	z-index: +1;
+}
+
+#c-c-p-s-i {
+	display: block;
+	width: 90%;
+	padding: 9px 10px;
+	margin: 35px auto 25px auto;
+	background-color: #fff;
+	color: #222;
+	border: 1px solid #eee;
+	border-radius: 4px;
+	box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+    transition: border-color .2s, transform .2s, box-shadow .2s;
+}
+
+#c-c-p-s-i:hover {
+	border-color: #3498DB;
+}
+
+#c-c-p-s-i:focus {
+	border-color: #b700ff;
+	box-shadow: rgba(0, 0, 0, 0.2) 0px 18px 50px -10px;
+	transform: translate(0, -6px);
+}
+
+#c-c-p-c-c {
+	width: 100%;
+	height: calc(100% - 105px);
+	overflow-y: auto;
+	user-select: none;
+}
+
+#c-c-p-c-c > div {
+	display: flex;
+	align-items: center;
+	width: 100%;
+	height: 50px;
+	background-color: #fff;
+	border: 0 solid #eee;
+	border-width: 1px 0 1px 0;
+	overflow: hidden;
+	position: relative;
+}
+
+#c-c-p-c-c > div > p {
+	display: block;
+	width: calc(100% - 140px);
+	max-width: calc(100% - 140px);
+	margin-left: 10px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+	overflow: hidden;
+	text-align: left;
+}
+
+#c-c-p-c-c > div > button {
+	position: absolute;
+	right: 20px;
+}

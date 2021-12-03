@@ -99,6 +99,8 @@ Doing {
 }
 
 Tasks => {
+	Fix Bug: Ctrl+Shift+T Paste Tab
+	Add Repair All
 	Add Ability To Control gallery with keyboard (Requested By wakeupjeff64)
 	import my own comics manually using images ia lready have on my computer. (Requested By wakeupjeff64)
 	Add Auto Backup Ability
@@ -107,9 +109,8 @@ Tasks => {
 	Add Ability To Delete Comic Image
 	Add Email System
 	Fix Bug: Problem with Comics That have just 1 Image
-	Add Ads
 	Make UI Beatiful
-	Add Search To History
+	Add Search To History Panel
 
 	Fix Bug: Downloading xlecx => Morning Stretches
 	Optimize Gifs { giflossy imagemin Packages }
