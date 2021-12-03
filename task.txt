@@ -91,6 +91,7 @@ Add Comic {
 }
 
 Added To Version {
+	Fix Bug: Duplicating Or Copy-Pasting Tabs
 	Update Slider UI
 }
 
@@ -99,7 +100,7 @@ Doing {
 }
 
 Tasks => {
-	Fix Bug: Ctrl+Shift+T Paste Tab
+	Add Set This Image To Comic Thumb To Comic Panel Right Menu
 	Add Repair All
 	Add Ability To Control gallery with keyboard (Requested By wakeupjeff64)
 	import my own comics manually using images ia lready have on my computer. (Requested By wakeupjeff64)

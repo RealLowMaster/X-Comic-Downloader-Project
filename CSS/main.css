@@ -463,12 +463,13 @@ input::-webkit-input-placeholder { user-select: none }
 #o-c-p-c-c[show-pages] .comic > span { display: block !important }
 
 #c-c-r-c-p,
+#c-p-i-r-p,
 #c-r-c-m {
 	display: none;
 	width: 170px;
 	background-color: transparent;
 	border-radius: 4px;
-	position: absolute;
+	position: fixed;
 	top: 0;
 	left: 0;
 	z-index: +100;
@@ -476,6 +477,7 @@ input::-webkit-input-placeholder { user-select: none }
 }
 
 #c-c-r-c-p > button,
+#c-p-i-r-p > button,
 #c-r-c-m > button {
 	display: flex;
 	align-items: center;
@@ -491,12 +493,21 @@ input::-webkit-input-placeholder { user-select: none }
 }
 
 #c-c-r-c-p > button:first-child,
-#c-r-c-m > button:first-child { border-radius: 5px 5px 0 0 }
+#c-p-i-r-p > button:first-child,
+#c-r-c-m > button:first-child {
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+}
 
 #c-c-r-c-p > button:last-child,
-#c-r-c-m > button:last-child { border-radius: 0 0 5px 5px }
+#c-p-i-r-p > button:last-child,
+#c-r-c-m > button:last-child {
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
 
 #c-c-r-c-p > button:hover,
+#c-p-i-r-p > button:hover,
 #c-r-c-m > button:hover {
 	background-color: var(--ccp-btn-hover-bgc);
 	color: var(--ccp-btn-hover-color);
@@ -528,6 +539,7 @@ input::-webkit-input-placeholder { user-select: none }
 }
 
 #c-c-r-c-p > button[danger-btn],
+#c-p-i-r-p > button[danger-btn],
 #c-r-c-m > button[danger-btn] {
 	background-color: var(--ccp-btn-dg-bgc);
 	color: var(--ccp-btn-dg-color);
@@ -535,6 +547,7 @@ input::-webkit-input-placeholder { user-select: none }
 }
 
 #c-c-r-c-p > button[danger-btn]:hover,
+#c-p-i-r-p > button[danger-btn]:hover,
 #c-r-c-m > button[danger-btn]:hover {
 	background-color: var(--ccp-btn-dg-hover-bgc);
 	color: var(--ccp-btn-dg-hover-color);
@@ -542,6 +555,7 @@ input::-webkit-input-placeholder { user-select: none }
 }
 
 #c-c-r-c-p > button > svg,
+#c-p-i-r-p > button > svg,
 #c-r-c-m > button > svg {
 	width: 17px;
 	height: 17px;

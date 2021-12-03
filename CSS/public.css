@@ -428,6 +428,7 @@
 	appearance: none;
 	word-wrap: normal;
 	text-transform: none;
+	user-select: none;
 }
 
 .form-text {
