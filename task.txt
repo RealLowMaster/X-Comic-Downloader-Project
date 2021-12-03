@@ -92,6 +92,9 @@ Add Comic {
 
 Added To Version {
 	Fix Bug: Duplicating Or Copy-Pasting Tabs
+	Add Right Click Menu To Comic Images
+	Add Ability To Delete single Comic Image
+	Add Optimize All UnOptimized Ability
 	Update Slider UI
 }
 
@@ -112,6 +115,7 @@ Tasks => {
 	Fix Bug: Problem with Comics That have just 1 Image
 	Make UI Beatiful
 	Add Search To History Panel
+	Add Auto Optimize Image After Download
 
 	Fix Bug: Downloading xlecx => Morning Stretches
 	Optimize Gifs { giflossy imagemin Packages }

@@ -46,7 +46,7 @@ function loadComics(page, search, safeScroll) {
 				thumb = true
 				
 				if (!fs.existsSync(image)) { image = 'Image/no-img-300x300.png'; thumb = false }
-				if (typeof(doc[i].o) == 'number') { unoptimize = ''; optimize = true }
+				if (typeof doc[i].o == 'number') { unoptimize = ''; optimize = true }
 				else { unoptimize = ' unoptimize'; optimize = false }
 				
 				html += `<div class="comic" onmousedown="onComicClicked(${id}, ${thumb}, ${optimize})"${unoptimize}><img src="${image}"><span>${doc[i].c}</span><p>${name}</p></div>`

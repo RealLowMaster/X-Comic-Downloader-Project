@@ -104,7 +104,7 @@ class ProcressPanel {
 		this.#txt.innerHTML = text
 	}
 
-	config(config = { miniLog:false, miniSize:30, bgClose:false, closeBtn:false, closeEvent:'event' }) {
+	config(config = { miniLog:false, miniSize:30, bgClose:false, closeBtn:false, closeEvent:'event', closeBGEvent:'event' }) {
 		if (config.miniLog != undefined) {
 			if (config.miniLog) {
 				this.#constainer.setAttribute('mini', true)
@@ -139,8 +139,11 @@ class ProcressPanel {
 		}
 
 		if (config.closeEvent != undefined) {
-			this.#constainer.children[0].setAttribute('onclick', config.closeEvent)
 			this.#closeBtn.setAttribute('onclick', config.closeEvent)
+		}
+
+		if (config.closeBGEvent != undefined) {
+			this.#constainer.children[0].setAttribute('onclick', config.closeBGEvent)
 		}
 	}
 

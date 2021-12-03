@@ -485,9 +485,7 @@ function WhichMouseButton(event) {
 
 function toCapitalize(text) {
 	const words = text.split(" ")
-	for (let i = 0; i < words.length; i++) {
-		words[i] = words[i][0].toUpperCase() + words[i].substr(1);
-	}
+	for (let i = 0; i < words.length; i++) words[i] = words[i][0].toUpperCase() + words[i].substr(1)
 	return words.join(" ")
 }
 

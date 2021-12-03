@@ -1,5 +1,7 @@
-let optimizeLog = [], optimizeFullSize = 0, optimizeConvertSize = 0
+const optimizingValidFormats = ['jpg','jpeg','png','webp']
+let optimizeLog = [], optimizeFullSize = 0, optimizeConvertSize = 0, isOptimzingContiue = false, optimizeAllFullSize, optimizeAllConvertSize
 
+// Optimize Single Comic
 function OptimizeComicImages(comic_id, opened_comic, keyEvent) {
 	if (opened_comic && downloadCounter > 0) { error("You Can't Optimze Image When you are Downloading Something!"); return }
 	keydownEventIndex = null
@@ -9,7 +11,7 @@ function OptimizeComicImages(comic_id, opened_comic, keyEvent) {
 	optimizeConvertSize = 0
 
 	procressPanel.reset(0)
-	procressPanel.config({ miniLog: true, miniSize:42, bgClose: true, closeBtn: true, closeEvent:'isOptimizing=false' })
+	procressPanel.config({ miniLog: true, miniSize:42, bgClose: false, closeBtn: true, closeEvent:'isOptimizing=false' })
 	procressPanel.show('Calculating...')
 	
 	if (opened_comic) {
@@ -137,7 +139,6 @@ function convertImagesToOptimize(list, index, comic_id, image, callback) {
 		setTimeout(() => {
 			convertImagesToOptimize(list, index + 1, comic_id, image, callback) 
 		}, 1)
-
 	} else if (list[index][1] == 'jpg' || list[index][1] == 'jpeg') {
 		sharp(`${dirTmp}/${list[index][0]}`).jpeg({ mozjpeg: true }).toFile(`${dirUL}/${comic_id}${image}/${list[index][0]}`).then(() => {
 			try {
@@ -194,7 +195,16 @@ function convertImagesToOptimize(list, index, comic_id, image, callback) {
 				convertImagesToOptimize(list, index + 1, comic_id, image, callback) 
 			}, 1)
 		}).catch(err => {
-			procressPanel.add('Optimizing: '+err, 'danger')
+			try {
+				fs.renameSync(`${dirTmp}/${list[index][0]}`, `${dirUL}/${comic_id}${image}/${list[index][0]}`)
+				optimizeConvertSize += fs.statSync(`${dirUL}/${comic_id}${image}/${list[index][0]}`).size
+			} catch(err2) {}
+
+			procressPanel.add(`Error: Img ${index+1} -> `+err, 'danger')
+			procressPanel.forward(`Optimizing Image (${index+1}/${list.length})...`)
+			setTimeout(() => {
+				convertImagesToOptimize(list, index + 1, comic_id, image, callback) 
+			}, 1)
 		})
 	} else if (list[index][1] == 'webp') {
 		sharp(`${dirTmp}/${list[index][0]}`).webp().toFile(`${dirUL}/${comic_id}${image}/${list[index][0]}`).then(() => {
@@ -234,6 +244,259 @@ function convertImagesToOptimize(list, index, comic_id, image, callback) {
 			procressPanel.forward(`Optimizing Image (${index+1}/${list.length})...`)
 			setTimeout(() => {
 				convertImagesToOptimize(list, index + 1, comic_id, image, callback) 
+			}, 1)
+		}
+	}
+}
+
+// Optimize All Comics
+function startOptimizingAll() {
+	if (isOptimizing) return
+	isOptimizing = true
+	isOptimzingContiue = true
+	const passKeyEventIndex = keydownEventIndex
+	keydownEventIndex = null
+	optimizeAllFullSize = 0
+	optimizeAllConvertSize = 0
+
+	procressPanel.reset(0)
+	procressPanel.config({ miniLog: true, miniSize:42, bgClose: false, closeBtn: true, closeEvent:'isOptimzingContiue=false' })
+	procressPanel.show('Calculating...')
+
+	db.comics.find({}, (err, doc) => {
+		if (err) { error('CollectingComics->Err: '+err); procressPanel.reset(0); isOptimizing = false; isOptimzingContiue = false; keydownEventIndex = passKeyEventIndex; return }
+		if (doc == undefined || doc.length == 0) { PopAlert('There is no Comic Downloaded.', 'warning'); procressPanel.reset(0); isOptimizing = false; isOptimzingContiue = false; keydownEventIndex = passKeyEventIndex; return }
+		const collected_comics = []
+		for (let i = 0; i < doc.length; i++) {
+			if (typeof doc[i].o != 'number') collected_comics.push([doc[i].n, doc[i].i, doc[i].c, doc[i].f, doc[i]._id])
+		}
+
+		if (collected_comics.length == 0) { PopAlert('All Comics are Optimized!'); procressPanel.reset(0); isOptimizing = false; isOptimzingContiue = false; keydownEventIndex = passKeyEventIndex; return }
+
+		OptimizeAll(collected_comics, 0, collected_comics.length)
+	})
+}
+
+function ConvertDocToOptimzationList(docList) {
+	const optimization_list = []
+	let formats = docList[3], lastIndex = formats[0][1], thisForamat = formats[0][2], urls = [], formatIndex = 0, found = false
+
+	for (let i = 0; i < docList[2]; i++) {
+		if (i > lastIndex) {
+			formatIndex++
+			lastIndex = formats[formatIndex][1]
+			thisForamat = formats[formatIndex][2]
+		}
+
+		if (!fs.existsSync(`${dirUL}/${docList[4]}${docList[1]}/${docList[1]}-${i}.${thisForamat}`)) urls.push([null, null])
+		else {
+			urls.push([`${docList[1]}-${i}.${thisForamat}`, thisForamat])
+			found = true
+		}
+	}
+
+	optimizeFullSize = 0
+	optimizeLog = []
+	optimizeFullSize = 0
+	optimizeConvertSize = 0
+	let size = 0
+
+	for (let i = 0; i < urls.length; i++) {
+		try {
+			if (urls[i][1] != null) {
+				size = fs.statSync(`${dirUL}/${docList[4]}${docList[1]}/${urls[i][0]}`).size
+				optimizeFullSize += size
+				optimizeLog.push(size)
+				if (urls[i][1] != 'gif' && optimizingValidFormats.indexOf(urls[i][1]) > -1) fs.renameSync(`${dirUL}/${docList[4]}${docList[1]}/${urls[i][0]}`, `${dirTmp}/${urls[i][0]}`)
+			}
+		} catch(err) {
+			for (let j = 0; j < i; j++) {
+				if (urls[j][1] != 'gif' && urls[i][1] != null && optimizingValidFormats.indexOf(urls[i][1]) > -1) fs.renameSync(`${dirTmp}/${urls[j][0]}`, `${dirUL}/${docList[4]}${docList[1]}/${urls[j][0]}`)
+			}
+			procressPanel.add(`Comic "${toCapitalize(docList[0])}"->Err: `+err, 'danger')
+			return null
+		}
+	}
+
+	optimizeAllFullSize += optimizeFullSize
+
+	if (found == false) {
+		procressPanel.add(`Comic "${toCapitalize(docList[0])}", Doesn't have any Image Downloaded`, 'danger')
+		return null
+	}
+	else return urls
+}
+
+function OptimizeAll(docList, index, maxLength, list) {
+
+	if (docList.length == 0) {
+		procressPanel.clearMini()
+		procressPanel.config({closeBtn:true, bgClose:true})
+		procressPanel.text(`___Complete___>>> <span class="tx-danger">${formatBytes(optimizeAllFullSize)}</span> To <span class="tx-danger">${formatBytes(optimizeAllConvertSize)}</span>`)
+		if (setting.show_unoptimize) reloadLoadingComics()
+		if (setting.notification_optimization_finish && remote.Notification.isSupported()) new remote.Notification({title: 'Comics Optimization Finished.', body: doc.n}).show()
+		isOptimizing = false
+		isOptimzingContiue = false
+		keydownEventIndex = 0
+		PopAlert('Comic Images Has Been Optimize')
+		return
+	}
+
+	if (index == 0) list = ConvertDocToOptimzationList(docList[0])
+	if (list == null) {
+		docList.shift()
+		OptimizeAll(docList, 0, maxLength)
+		return
+	}
+
+	if (index == list.length) {
+		procressPanel.clearMini()
+		db.comics.update({_id:docList[0][4]}, { $set: {o:0} }, {}, (err, doc) => {
+			if (err) procressPanel.add(`Comic "${docList[0][0]}" -> SaveComicOptimizedInDatabase: ${err}`, 'danger')
+			else procressPanel.add(`Comic "${docList[0][0]}" -> <span class="tx-danger">${formatBytes(optimizeFullSize)}</span> To <span class="tx-danger">${formatBytes(optimizeConvertSize)}</span>`)
+			optimizeAllConvertSize += optimizeConvertSize
+			docList.shift()
+			OptimizeAll(docList, 0, maxLength)
+		})
+		return
+	}
+
+	if (!isOptimzingContiue) {
+		const errorList = []
+		for (let i = index; i < list.length; i++) {
+			try {
+				fs.renameSync(`${dirTmp}/${list[i][0]}`, `${dirUL}/${docList[0][4]}${docList[0][1]}/${list[i][0]}`)
+			} catch(err) {
+				errorList.push('MovingBackImages->Err: '+err)
+			}
+		}
+		if (errorList.length > 0) errorList(errorList)
+		procressPanel.hide()
+		procressPanel.reset()
+		isOptimizing = false
+		if (setting.show_unoptimize) reloadLoadingComics()
+		return
+	} else if (list[index][1] == null) {
+		procressPanel.addMini(`Img ${index+1} -> Undownloaded Image`, 'danger')
+		procressPanel.forward(`(${maxLength - docList.length + 1}/${maxLength}) Optimizing Image (${index+1}/${list.length})...`)
+		setTimeout(() => {
+			OptimizeAll(docList, index + 1, maxLength, list) 
+		}, 1)
+	} else if (list[index][1] == 'gif') {
+		try {
+			optimizeConvertSize += fs.statSync(`${dirUL}/${docList[0][4]}${docList[0][1]}/${list[index][0]}`).size
+			procressPanel.addMini(`Img ${index+1} -> Cannot Optimize .gif Files`, 'warning')
+		} catch(err) {
+			procressPanel.addMini(`Img ${index+1} -> CheckingFileSize->Err: `+err, 'danger')
+		}
+
+		procressPanel.forward(`(${maxLength - docList.length + 1}/${maxLength}) Optimizing Image (${index+1}/${list.length})...`)
+		setTimeout(() => {
+			OptimizeAll(docList, index + 1, maxLength, list)
+		}, 1)
+	} else if (list[index][1] == 'jpg' || list[index][1] == 'jpeg') {
+		sharp(`${dirTmp}/${list[index][0]}`).jpeg({ mozjpeg: true }).toFile(`${dirUL}/${docList[0][4]}${docList[0][1]}/${list[index][0]}`).then(() => {
+			try {
+				const size = fs.statSync(`${dirUL}/${docList[0][4]}${docList[0][1]}/${list[index][0]}`).size
+				if (size <= optimizeLog[index]) {
+					optimizeConvertSize += size
+					procressPanel.addMini(`Img ${index+1} - From: <span class="tx-secendery tx-underline">${formatBytes(optimizeLog[index])}</span> To: <span class="tx-secendery tx-underline">${formatBytes(size)}</span>`)
+					fs.unlinkSync(`${dirTmp}/${list[index][0]}`)
+				} else {
+					optimizeConvertSize += optimizeLog[index]
+					procressPanel.addMini(`Img ${index+1} - From: <span class="tx-secendery tx-underline">${formatBytes(optimizeLog[index])}</span> To: <span class="tx-secendery tx-underline">${formatBytes(optimizeLog[index])}</span>`)
+					fs.renameSync(`${dirTmp}/${list[index][0]}`, `${dirUL}/${docList[0][4]}${docList[0][1]}/${list[index][0]}`)
+				}
+			} catch(err) {
+				procressPanel.addMini(`Img ${index+1} -> SavingFileSize: ${err}`, 'danger')
+			}
+
+			procressPanel.forward(`(${maxLength - docList.length + 1}/${maxLength}) Optimizing Image (${index+1}/${list.length})...`)
+			setTimeout(() => {
+				OptimizeAll(docList, index + 1, maxLength, list)
+			}, 1)
+		}).catch(err => {
+			try {
+				fs.renameSync(`${dirTmp}/${list[index][0]}`, `${dirUL}/${docList[0][4]}${docList[0][1]}/${list[index][0]}`)
+				optimizeConvertSize += fs.statSync(`${dirUL}/${docList[0][4]}${docList[0][1]}/${list[index][0]}`).size
+			} catch(err2) {}
+
+			procressPanel.addMini(`Img ${index+1} -> ${err}`, 'danger')
+			procressPanel.forward(`(${maxLength - docList.length + 1}/${maxLength}) Optimizing Image (${index+1}/${list.length})...`)
+			setTimeout(() => {
+				OptimizeAll(docList, index + 1, maxLength, list)
+			}, 1)
+		})
+	} else if (list[index][1] == 'png') {
+		sharp(`${dirTmp}/${list[index][0]}`).png({ quality: 100 }).toFile(`${dirUL}/${docList[0][4]}${docList[0][1]}/${list[index][0]}`).then(() => {
+
+			try {
+				const size = fs.statSync(`${dirUL}/${docList[0][4]}${docList[0][1]}/${list[index][0]}`).size
+				if (size <= optimizeLog[index]) {
+					optimizeConvertSize += size
+					procressPanel.addMini(`Img ${index+1} - From: <span class="tx-secendery tx-underline">${formatBytes(optimizeLog[index])}</span> To: <span class="tx-secendery tx-underline">${formatBytes(size)}</span>`)
+					fs.unlinkSync(`${dirTmp}/${list[index][0]}`)
+				} else {
+					optimizeConvertSize += optimizeLog[index]
+					procressPanel.addMini(`Img ${index+1} - From: <span class="tx-secendery tx-underline">${formatBytes(optimizeLog[index])}</span> To: <span class="tx-secendery tx-underline">${formatBytes(optimizeLog[index])}</span>`)
+					fs.renameSync(`${dirTmp}/${list[index][0]}`, `${dirUL}/${docList[0][4]}${docList[0][1]}/${list[index][0]}`)
+				}
+			} catch(err) {
+				procressPanel.addMini(`Img ${index+1} -> SavingFileSize: ${err}`, 'danger')
+			}
+
+			procressPanel.forward(`(${maxLength - docList.length + 1}/${maxLength}) Optimizing Image (${index+1}/${list.length})...`)
+			setTimeout(() => {
+				OptimizeAll(docList, index + 1, maxLength, list)
+			}, 1)
+		}).catch(err => {
+			try {
+				fs.renameSync(`${dirTmp}/${list[index][0]}`, `${dirUL}/${docList[0][4]}${docList[0][1]}/${list[index][0]}`)
+				optimizeConvertSize += fs.statSync(`${dirUL}/${docList[0][4]}${docList[0][1]}/${list[index][0]}`).size
+			} catch(err2) {}
+
+			procressPanel.addMini(`Img ${index+1} -> ${err}`, 'danger')
+			procressPanel.forward(`(${maxLength - docList.length + 1}/${maxLength}) Optimizing Image (${index+1}/${list.length})...`)
+			setTimeout(() => {
+				OptimizeAll(docList, index + 1, maxLength, list)
+			}, 1)
+		})
+	} else if (list[index][1] == 'webp') {
+		sharp(`${dirTmp}/${list[index][0]}`).webp().toFile(`${dirUL}/${docList[0][4]}${docList[0][1]}/${list[index][0]}`).then(() => {
+			try {
+				const size = fs.statSync(`${dirUL}/${docList[0][4]}${docList[0][1]}/${list[index][0]}`).size
+				optimizeConvertSize += size
+				procressPanel.addMini(`Img ${index+1} - From: <span class="tx-secendery tx-underline">${formatBytes(optimizeLog[index])}</span> To: <span class="tx-secendery tx-underline">${formatBytes(size)}</span>`)
+			} catch(err) {
+				procressPanel.addMini(`Img ${index+1} -> SavingFileSize: ${err}`, 'danger')
+			}
+
+			procressPanel.forward(`(${maxLength - docList.length + 1}/${maxLength}) Optimizing Image (${index+1}/${list.length})...`)
+			setTimeout(() => {
+				OptimizeAll(docList, index + 1, maxLength, list)
+			}, 1)
+		}).catch(err => {
+			procressPanel.addMini(`Img ${index+1} -> ${err}`, 'danger')
+			procressPanel.forward(`(${maxLength - docList.length + 1}/${maxLength}) Optimizing Image (${index+1}/${list.length})...`)
+			setTimeout(() => {
+				OptimizeAll(docList, index + 1, maxLength, list)
+			}, 1)
+		})
+	} else {
+		try {
+			const size = fs.statSync(`${dirUL}/${docList[0][4]}${docList[0][1]}/${list[index][0]}`).size
+			optimizeConvertSize += size
+			procressPanel.addMini(`Img ${index+1} - From: <span class="tx-secendery tx-underline">${formatBytes(optimizeLog[index])}</span> To: <span class="tx-secendery tx-underline">${formatBytes(size)}</span>`)
+
+			procressPanel.forward(`(${maxLength - docList.length + 1}/${maxLength}) Optimizing Image (${index+1}/${list.length})...`)
+			setTimeout(() => {
+				OptimizeAll(docList, index + 1, maxLength, list)
+			}, 1)
+		} catch(err) {
+			procressPanel.addMini(`Img ${index+1} -> ${err}`, 'danger')
+			procressPanel.forward(`(${maxLength - docList.length + 1}/${maxLength}) Optimizing Image (${index+1}/${list.length})...`)
+			setTimeout(() => {
+				OptimizeAll(docList, index + 1, maxLength, list)
 			}, 1)
 		}
 	}
