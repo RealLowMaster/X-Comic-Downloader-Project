@@ -78,6 +78,7 @@
 .nhentai-postrow > div:last-child > div > img {
 	display: block;
 	width: 100%;
+	min-height: 50px;
 	max-height: 328px;
 	border-radius: 5px 5px 0 0;
 	object-fit: cover;

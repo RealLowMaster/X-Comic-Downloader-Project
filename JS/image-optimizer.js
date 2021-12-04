@@ -1,5 +1,5 @@
 const optimizingValidFormats = ['jpg','jpeg','png','webp']
-let optimizeLog = [], optimizeFullSize = 0, optimizeConvertSize = 0, isOptimzingContiue = false, optimizeAllFullSize, optimizeAllConvertSize
+let optimizeLog = [], optimizeFullSize = 0, optimizeConvertSize = 0, isOptimzingContiue = false, optimizeAllFullSize = 0, optimizeAllConvertSize = 0
 
 // Optimize Single Comic
 function OptimizeComicImages(comic_id, opened_comic, keyEvent) {
@@ -268,7 +268,7 @@ function startOptimizingAll() {
 		if (doc == undefined || doc.length == 0) { PopAlert('There is no Comic Downloaded.', 'warning'); procressPanel.reset(0); isOptimizing = false; isOptimzingContiue = false; keydownEventIndex = passKeyEventIndex; return }
 		const collected_comics = []
 		for (let i = 0; i < doc.length; i++) {
-			if (typeof doc[i].o != 'number') collected_comics.push([doc[i].n, doc[i].i, doc[i].c, doc[i].f, doc[i]._id])
+			if (typeof doc[i].o != 'number') collected_comics.push([toCapitalize(doc[i].n), doc[i].i, doc[i].c, doc[i].f, doc[i]._id])
 		}
 
 		if (collected_comics.length == 0) { PopAlert('All Comics are Optimized!'); procressPanel.reset(0); isOptimizing = false; isOptimzingContiue = false; keydownEventIndex = passKeyEventIndex; return }
@@ -313,7 +313,7 @@ function ConvertDocToOptimzationList(docList) {
 			for (let j = 0; j < i; j++) {
 				if (urls[j][1] != 'gif' && urls[i][1] != null && optimizingValidFormats.indexOf(urls[i][1]) > -1) fs.renameSync(`${dirTmp}/${urls[j][0]}`, `${dirUL}/${docList[4]}${docList[1]}/${urls[j][0]}`)
 			}
-			procressPanel.add(`Comic "${toCapitalize(docList[0])}"->Err: `+err, 'danger')
+			procressPanel.add(`Comic "${docList[0]}"->Err: `+err, 'danger')
 			return null
 		}
 	}
@@ -321,7 +321,7 @@ function ConvertDocToOptimzationList(docList) {
 	optimizeAllFullSize += optimizeFullSize
 
 	if (found == false) {
-		procressPanel.add(`Comic "${toCapitalize(docList[0])}", Doesn't have any Image Downloaded`, 'danger')
+		procressPanel.add(`Comic "${docList[0]}", Doesn't have any Image Downloaded`, 'danger')
 		return null
 	}
 	else return urls
@@ -354,7 +354,7 @@ function OptimizeAll(docList, index, maxLength, list) {
 		db.comics.update({_id:docList[0][4]}, { $set: {o:0} }, {}, (err, doc) => {
 			if (err) procressPanel.add(`Comic "${docList[0][0]}" -> SaveComicOptimizedInDatabase: ${err}`, 'danger')
 			else procressPanel.add(`Comic "${docList[0][0]}" -> <span class="tx-danger">${formatBytes(optimizeFullSize)}</span> To <span class="tx-danger">${formatBytes(optimizeConvertSize)}</span>`)
-			optimizeAllConvertSize += optimizeConvertSize
+			if (optimizeConvertSize > 0 && !Number.isNaN(optimizeConvertSize)) optimizeAllConvertSize += optimizeConvertSize
 			docList.shift()
 			OptimizeAll(docList, 0, maxLength)
 		})

@@ -55,7 +55,7 @@
 					<div>
 						<button onclick="openBrowser()">Browser</button>
 						<div class="menu-dropdown">
-							<button>Optimzation</button>
+							<p>Optimzation</p>
 							<div>
 								<button onclick="makeThumb(false)" title="Create Thumbs For All Comics That Missied They Thumb">Make Thumb</button>
 								<button onclick="makeThumb(true)" title="ReCreate Comic Thumbs if They had, if don't Create New One">ReMake Thumbs</button>
@@ -63,16 +63,21 @@
 							</div>
 						</div>
 						<div class="menu-dropdown">
-							<button>Manage</button>
+							<p>Manage</p>
 							<div>
 								<button onclick="openCollectionsPanel()">Collections</button>
-								<button onclick="">Groups</button>
-								<button onclick="">Artists</button>
-								<button onclick="">Parodies</button>
-								<button onclick="">Tags</button>
-								<button onclick="">Characters</button>
-								<button onclick="">Languages</button>
-								<button onclick="">Categories</button>
+								<div class="menu-dropdown">
+									<p>Infos</p>
+									<div>
+										<button onclick="">Groups</button>
+										<button onclick="">Artists</button>
+										<button onclick="">Parodies</button>
+										<button onclick="">Tags</button>
+										<button onclick="">Characters</button>
+										<button onclick="">Languages</button>
+										<button onclick="">Categories</button>
+									</div>
+								</div>
 							</div>
 						</div>
 						<button onclick="openSetting()">Setting</button>

@@ -94,7 +94,7 @@ Added To Version {
 	Fix Bug: Duplicating Or Copy-Pasting Tabs
 	Add Right Click Menu To Comic Images
 	Add Ability To Delete single Comic Image
-	Add Optimize All UnOptimized Ability
+	Add Optimize All UnOptimized Comic Ability
 	Update Slider UI
 }
 
@@ -105,8 +105,6 @@ Doing {
 Tasks => {
 	Add Set This Image To Comic Thumb To Comic Panel Right Menu
 	Add Repair All
-	Add Ability To Control gallery with keyboard (Requested By wakeupjeff64)
-	import my own comics manually using images ia lready have on my computer. (Requested By wakeupjeff64)
 	Add Auto Backup Ability
 	Fix bug: nhentai -> Searching B-trayal pagination won't work
 	Add Ability To Play Song
@@ -129,6 +127,12 @@ Tasks => {
 	Make new Update System
 	Make Browser Selecting History Easier
 	Make New Browser Change Page System
+
+	Requests {
+		Add Site pururin.to (Requested By John Smith)
+		Add Ability To Control gallery with keyboard (Requested By wakeupjeff64)
+		import my own comics manually using images ia lready have on my computer. (Requested By wakeupjeff64)
+	}
 
 	Mybe in v2  {
 		Add Bookmark || Favoriet Posts
