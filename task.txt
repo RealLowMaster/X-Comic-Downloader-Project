@@ -8,7 +8,6 @@ DB => {
 		images = i
 		ImagesCount = c
 		formats = f = []
-		quality = q
 		site = s
 		post_id = p
 		optimized = o

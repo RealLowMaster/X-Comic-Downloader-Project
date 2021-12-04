@@ -6,7 +6,7 @@ const comicArtistsContainer = document.getElementById('c-p-a')
 const comicParodyContainer = document.getElementById('c-p-p')
 const comicTagsContainer = document.getElementById('c-p-ts')
 const comicImageContainer = document.getElementById('c-p-i')
-let off_site = null, off_id = null, off_comic_id = null, off_quality = null, need_repair = [], in_comic = false, comic_menu_id = null, passKeyEvent = null, export_comic_id = null, comic_panel_menu_info = null, isThumbing = false
+let off_site = null, off_id = null, off_comic_id = null, off_quality = null, need_repair = [], in_comic = false, comic_menu_id = null, passKeyEvent = null, export_comic_id = null, comic_panel_menu_info = null, isThumbing = false, isRepairing = false, isRepairingContiue = false
 
 function loadComics(page, search, safeScroll) {
 	page = page || 1
@@ -673,6 +673,27 @@ function SetComicThumb(id, index) {
 		}, 1)
 	})
 	// if (fs.existsSync(dirUL+'/thumbs/'))
+}
+
+// Repair All Comic Infos
+function RepairAllComicInfos() {
+	if (isRepairing) return
+	isRepairing = true
+	isRepairingContiue = true
+	procressPanel.reset(0)
+	procressPanel.show('Collecting Comics...')
+	procressPanel.config({bgClose:false, closeBtn:true, closeEvent:''})
+	const passKeyEvent = keydownEventIndex
+	keydownEventIndex = null
+
+	db.comics.find({}, (err, doc) => {
+		if (err) { error('CollectingComics->Err: '+err); procressPanel.hide(); isRepairing = false; isRepairingContiue = false; keydownEventIndex = passKeyEvent; return }
+		if (doc == undefined || doc.length == 0) { PopAlert('There is no Comic Downloaded'); procressPanel.hide(); isRepairing = false; isRepairingContiue = false; keydownEventIndex = passKeyEvent; return }
+		const collected_comics = []
+		for (let i = 0; i < doc.length; i++) collected_comics.push([doc.s, doc.p, doc._id])
+
+		console.log(collected_comics)
+	})
 }
 
 // Repair Comic

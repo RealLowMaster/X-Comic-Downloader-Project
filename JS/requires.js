@@ -43,6 +43,7 @@ const sites = [
 		url: 'xlecx.org',
 		home: 'xlecxChangePage(1, 0, true)',
 		repair: 'xlecxRepairComicInfoGetInfo({id}, {whitch})',
+		repairAll: '',
 		search: 'xlecxSearch({text}, 1, 0)',
 		jump: 'xlecxJumpPage({index}, {page})',
 		downloader: 'xlecxDownloader({id})'
@@ -52,6 +53,7 @@ const sites = [
 		url: 'nhentai.net',
 		home: 'nhentaiChangePage(1, false, true)',
 		repair: 'nhentaiRepairComicInfoGetInfo({id}, {whitch})',
+		repairAll: '',
 		search: 'nhentaiSearch({text}, 1, false, true)',
 		jump: 'nhentaiJumpPage({index}, {page})',
 		downloader: 'nhentaiDownloader({id})'
