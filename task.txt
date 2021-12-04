@@ -96,6 +96,7 @@ Added To Version {
 	Add Ability To Delete single Comic Image
 	Add Optimize All UnOptimized Comic Ability
 	Update Slider UI
+	Improve Update a Little
 }
 
 Doing {
@@ -103,6 +104,7 @@ Doing {
 }
 
 Tasks => {
+	Add Downloaded Comic Site Icon In Comic Panel
 	Add Set This Image To Comic Thumb To Comic Panel Right Menu
 	Add Repair All
 	Add Auto Backup Ability

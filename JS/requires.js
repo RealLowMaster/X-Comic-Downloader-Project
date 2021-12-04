@@ -65,7 +65,7 @@ const keydownEvents = [
 	'SettingKeyEvents({ctrl},{shift},{key})'
 ]
 const ThisWindow = remote.getCurrentWindow(), loading = new Loading(10), db = {}, procressPanel = new ProcressPanel(0), update_number = 8
-let comicDeleting = false, downloadCounter = 0, wt_fps = 20, dirDB, dirUL, dirTmp, isOptimizing = false, browserLastTabs = [], tabsHistory = [], dirHistory = '', keydownEventIndex = 0, new_update, save_value = null, save_value2 = null, afterDLReload = true, setting, openedMenuTabIndex, copiedTab = null, tabs = [], downloadingList = [], lastComicId, lastHaveId, searchTimer, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = []
+let comicDeleting = false, downloadCounter = 0, wt_fps = 20, dirDB, dirUL, dirTmp, isOptimizing = false, browserLastTabs = [], tabsHistory = [], dirHistory = '', keydownEventIndex = 0, new_update, save_value = null, save_value2 = null, afterDLReload = true, setting, openedMenuTabIndex, copiedTab = null, tabs = [], downloadingList = [], lastComicId, lastHaveId, searchTimer, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = [], isUpdating = false
 let collectionsDB = [], groupsDB = [], artistsDB = [], parodiesDB = [], tagsDB = [], charactersDB = [], languagesDB = [], categoriesDB = [], comicGroupsDB = [], comicArtistsDB = [], comicParodiesDB = [], comicTagsDB = [], comicCharactersDB = [], comicLanguagesDB = [], comicCategoriesDB = [], indexDB = []
 
 /*
@@ -101,6 +101,7 @@ function closeApp() {
 
 ThisWindow.addListener('close', e => {
 	e.preventDefault()
+	if (isUpdating) { PopAlert('You Cannot Close App When Updating.', 'danger') }
 	if (comicDeleting) { PopAlert("You can't Close App When you are Deleting a Comic.", "danger"); return }
 	if (isOptimizing) { PopAlert("You can't Close App When you are Optimzating.", "danger"); return }
 	if (downloadingList.length > 0) {
@@ -290,6 +291,8 @@ function UpdateApp() {
 	if (isOptimizing) { PopAlert("You can't Update App When you are Optimzating.", "danger"); return }
 	if (downloadingList.length > 0) { PopAlert("You can't Update App When you are Downloading Comic.", "danger"); return }
 	if (window.navigator.onLine == false) { PopAlert('You are Offline.', 'danger'); return }
+	if (isUpdating) return
+	isUpdating = true
 	procressPanel.config({ miniLog: false, bgClose: false, closeBtn: false })
 	procressPanel.reset(3)
 	procressPanel.show('Checking Connection...')
@@ -321,6 +324,7 @@ function UpdateApp() {
 			stream.on('error', err => {
 				file.close()
 				fs.unlinkSync(`${dirTmp}/update.zip`)
+				isUpdating = false
 				reject(err)
 			})
 
@@ -351,6 +355,7 @@ function UpdateApp() {
 				const zip = new StreamZip.async({ file: `${dirTmp}/update.zip` })
 
 				zip.on('error', err => {
+					isUpdating = false
 					error('UPDATE::UNZIPING::ERR::'+err)
 				})
 
@@ -392,6 +397,7 @@ function UpdateApp() {
 						secendStream.on('error', err => {
 							secendFile.close()
 							fs.unlinkSync(`${dirTmp}/node_update.zip`)
+							isUpdating = false
 							reject(err)
 						})
 
@@ -411,6 +417,7 @@ function UpdateApp() {
 							const secendZip = new StreamZip.async({ file: `${dirTmp}/node_update.zip` })
 
 							secendZip.on('error', err => {
+								isUpdating = false
 								error('UPDATE-2::UNZIPING::ERR::'+err)
 							})
 
@@ -446,6 +453,7 @@ function UpdateApp() {
 					} else {
 						procressPanel.add('Update Complete.')
 						procressPanel.forward('Closing App...')
+						isUpdating = false
 						resolve()
 						setTimeout(() => {
 							ThisWindow.removeAllListeners()
@@ -457,6 +465,7 @@ function UpdateApp() {
 				})
 			})
 		}).catch(err => {
+			isUpdating = false
 			error('UPDATE::DOWNLOAD::ERR::'+err)
 		})
 	}, 100)
