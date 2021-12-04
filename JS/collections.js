@@ -45,7 +45,7 @@ function LoadCollections() {
 				}
 			} else image = 'Image/no-img-300x300.png'
 
-			html += `<div onmousedown="OnCollectionMouseDown(${i})"><img src="${image}" loading="lazy"><span>${collectionsDB[i][1].length}</span><div></div>
+			html += `<div onmousedown="OnCollectionMouseDown(${i})"><img src="${image}?${new Date().getTime()}" loading="lazy"><span>${collectionsDB[i][1].length}</span><div></div>
 			<p>${collectionsDB[i][0]}</p></div>`
 		}
 	}
@@ -171,7 +171,7 @@ function LoadCollectionComics(contents, maxPage) {
 			if (typeof(doc.o) == 'number') { unoptimize = ''; optimize = true }
 			else { unoptimize = ' unoptimize'; optimize = false }
 			
-			html += `<div class="comic" onmousedown="onComicClicked(${id}, ${thumb}, ${optimize})"${unoptimize}><img src="${image}"><span>${doc.c}</span><p>${_name}</p></div>`
+			html += `<div class="comic" onmousedown="onComicClicked(${id}, ${thumb}, ${optimize})"${unoptimize}><img src="${image}?${new Date().getTime()}"><span>${doc.c}</span><p>${_name}</p></div>`
 		} else {
 			id = doc._id
 			_name = doc.n
@@ -182,7 +182,7 @@ function LoadCollectionComics(contents, maxPage) {
 			if (typeof(doc.o) == 'number') optimize = true
 			else optimize = false
 
-			html += `<div class="comic" onmousedown="onComicClicked(${id}, ${thumb}, ${optimize})"><img src="${image}"><span>${doc.c}</span><p>${_name}</p></div>`
+			html += `<div class="comic" onmousedown="onComicClicked(${id}, ${thumb}, ${optimize})"><img src="${image}?${new Date().getTime()}"><span>${doc.c}</span><p>${_name}</p></div>`
 		}
 		document.getElementById('o-c-p-c-c').innerHTML += html
 		contents.shift()

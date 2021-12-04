@@ -93,8 +93,9 @@ Add Comic {
 Added To Version {
 	Fix Bug: Duplicating Or Copy-Pasting Tabs
 	Add Right Click Menu To Comic Images
-	Add Ability To Delete single Comic Image
 	Add Optimize All UnOptimized Comic Ability
+	Add Ability To Delete single Comic Image
+	Add Ability To Set a Comic Image as Comic Thumb
 	Update Slider UI
 	Improve Update a Little
 }
@@ -105,7 +106,6 @@ Doing {
 
 Tasks => {
 	Add Downloaded Comic Site Icon In Comic Panel
-	Add Set This Image To Comic Thumb To Comic Panel Right Menu
 	Add Repair All
 	Add Auto Backup Ability
 	Fix bug: nhentai -> Searching B-trayal pagination won't work

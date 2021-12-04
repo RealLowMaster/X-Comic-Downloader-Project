@@ -6,7 +6,7 @@ const comicArtistsContainer = document.getElementById('c-p-a')
 const comicParodyContainer = document.getElementById('c-p-p')
 const comicTagsContainer = document.getElementById('c-p-ts')
 const comicImageContainer = document.getElementById('c-p-i')
-let off_site = null, off_id = null, off_comic_id = null, off_quality = null, need_repair = [], in_comic = false, comic_menu_id = null, passKeyEvent = null, export_comic_id = null, comic_panel_menu_info = null
+let off_site = null, off_id = null, off_comic_id = null, off_quality = null, need_repair = [], in_comic = false, comic_menu_id = null, passKeyEvent = null, export_comic_id = null, comic_panel_menu_info = null, isThumbing = false
 
 function loadComics(page, search, safeScroll) {
 	page = page || 1
@@ -49,7 +49,7 @@ function loadComics(page, search, safeScroll) {
 				if (typeof doc[i].o == 'number') { unoptimize = ''; optimize = true }
 				else { unoptimize = ' unoptimize'; optimize = false }
 				
-				html += `<div class="comic" onmousedown="onComicClicked(${id}, ${thumb}, ${optimize})"${unoptimize}><img src="${image}"><span>${doc[i].c}</span><p>${name}</p></div>`
+				html += `<div class="comic" onmousedown="onComicClicked(${id}, ${thumb}, ${optimize})"${unoptimize}><img src="${image}?${new Date().getTime()}"><span>${doc[i].c}</span><p>${name}</p></div>`
 			}
 		} else {
 			for (let i = min; i < max; i++) {
@@ -62,7 +62,7 @@ function loadComics(page, search, safeScroll) {
 				if (typeof(doc[i].o) == 'number') optimize = true
 				else optimize = false
 
-				html += `<div class="comic" onmousedown="onComicClicked(${id}, ${thumb}, ${optimize})"><img src="${image}"><span>${doc[i].c}</span><p>${name}</p></div>`
+				html += `<div class="comic" onmousedown="onComicClicked(${id}, ${thumb}, ${optimize})"><img src="${image}?${new Date().getTime()}"><span>${doc[i].c}</span><p>${name}</p></div>`
 			}
 		}
 		comic_container.innerHTML = html
@@ -610,6 +610,69 @@ function askForDeletingComicImage(id, index) {
 			'comicDeleting = false;this.parentElement.parentElement.remove()'
 		]
 	])
+}
+
+// SetComicThumb 
+function SetComicThumb(id, index) {
+	if (isThumbing) return
+	isThumbing = true
+	const passKeyEvent = keydownEventIndex
+	keydownEventIndex = null
+	loading.reset(3)
+	loading.show('Loading Comic')
+
+	db.comics.findOne({_id:id}, (err, doc) => {
+		if (err) { error(err); loading.hide(); isThumbing = false; keydownEventIndex = passKeyEvent; return }
+		if (doc == undefined) { error('Comic not Found.'); loading.hide(); isThumbing = false; keydownEventIndex = passKeyEvent; return }
+		loading.forward('Checking Existed Thumb')
+		const pass_thumb = `${dirUL}/thumbs/${doc.i}.jpg`
+		if (fs.existsSync(pass_thumb)) {
+			try {
+				fs.unlinkSync(pass_thumb)
+			} catch (dErr) {
+				error('Could not Delete Existed Thumb -> '+dErr)
+				loading.hide()
+				isThumbing = false
+				keydownEventIndex = passKeyEvent
+				return
+			}
+		}
+		loading.forward('Get New Thumb Image URL')
+		const ImageFormats = doc.f
+		let format = null
+		for (let i = 0; i < ImageFormats.length; i++) if (index >= ImageFormats[i][0] && index <= ImageFormats[i][1]) { format = ImageFormats[i][2]; break }
+		const src = `${dirUL}/${id}${doc.i}/${doc.i}-${index}.${format}`
+		if (!fs.existsSync(src)) {
+			if (inCollection) LoadCollection()
+			else reloadLoadingComics()
+			error('Could not Find Image')
+			loading.hide()
+			isThumbing = false
+			keydownEventIndex = passKeyEvent
+			return
+		}
+		if (!fs.existsSync(dirUL+'/thumbs')) fs.mkdirSync(dirUL+'/thumbs')
+		setTimeout(() => {
+			sharp(src).resize(225, 315).jpeg().toFile(`${dirUL}/thumbs/${doc.i}.jpg`).then(() => {
+				reloadLoadingComics(true)
+				if (inCollection) LoadCollection()
+				else reloadLoadingComics()
+				loading.forward()
+				loading.hide()
+				isThumbing = false
+				keydownEventIndex = passKeyEvent
+			}).catch(tErr => {
+				if (inCollection) LoadCollection()
+				else reloadLoadingComics()
+				error('MakingThumb->Err: '+tErr)
+				loading.hide()
+				isThumbing = false
+				keydownEventIndex = passKeyEvent
+				return
+			})
+		}, 1)
+	})
+	// if (fs.existsSync(dirUL+'/thumbs/'))
 }
 
 // Repair Comic
