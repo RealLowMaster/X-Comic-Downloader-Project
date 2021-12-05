@@ -12,7 +12,7 @@ function loadComics(page, search, safeScroll) {
 	page = page || 1
 	search = search || null
 	if (search == 'null') search = null
-	var RegSearch
+	let RegSearch
 	if (search != null) RegSearch = new RegExp(search.toLowerCase())
 	const comic_container = document.getElementById('comic-container')
 	let min = 0, max = 0, allPages = 0, html = '', main_body, scrollTop, id, name, image, thumb, optimize
@@ -37,6 +37,7 @@ function loadComics(page, search, safeScroll) {
 			if (max > doc.length) max = doc.length
 		}
 		
+		const time = new Date().getTime()
 		if (setting.show_unoptimize) {
 			let unoptimize = ''
 			for (let i = min; i < max; i++) {
@@ -49,7 +50,7 @@ function loadComics(page, search, safeScroll) {
 				if (typeof doc[i].o == 'number') { unoptimize = ''; optimize = true }
 				else { unoptimize = ' unoptimize'; optimize = false }
 				
-				html += `<div class="comic" onmousedown="onComicClicked(${id}, ${thumb}, ${optimize})"${unoptimize}><img src="${image}?${new Date().getTime()}"><span>${doc[i].c}</span><p>${name}</p></div>`
+				html += `<div class="comic" onmousedown="onComicClicked(${id}, ${thumb}, ${optimize})"${unoptimize}><img src="${image}?${time}"><span>${doc[i].c}</span><p>${name}</p></div>`
 			}
 		} else {
 			for (let i = min; i < max; i++) {
@@ -62,7 +63,7 @@ function loadComics(page, search, safeScroll) {
 				if (typeof(doc[i].o) == 'number') optimize = true
 				else optimize = false
 
-				html += `<div class="comic" onmousedown="onComicClicked(${id}, ${thumb}, ${optimize})"><img src="${image}?${new Date().getTime()}"><span>${doc[i].c}</span><p>${name}</p></div>`
+				html += `<div class="comic" onmousedown="onComicClicked(${id}, ${thumb}, ${optimize})"><img src="${image}?${time}"><span>${doc[i].c}</span><p>${name}</p></div>`
 			}
 		}
 		comic_container.innerHTML = html
@@ -384,8 +385,7 @@ function openComic(id) {
 	id = id || null
 	if (id == null) { error('Id Can\'t be Null.'); return }
 	const title_container = document.getElementById('c-p-t')
-	let html = '', formatIndex = 0
-	var name, image, ImagesCount, formats
+	let html = '', formatIndex = 0, name, image, ImagesCount, formats
 
 	comicCharactersContainer.innerHTML = ''
 	comicLanguagesContainer.innerText = ''

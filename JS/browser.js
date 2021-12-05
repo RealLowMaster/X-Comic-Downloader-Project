@@ -465,8 +465,8 @@ function comicDownloader(index, result) {
 		downloaderRow.getElementsByTagName('div')[0].getElementsByTagName('div')[0].style.width = percentage+'%'
 		downloaderRow.getElementsByTagName('p')[0].getElementsByTagName('span')[0].textContent = `(${downloadingList[index][0]}/${max})`
 		if (downloadingList[index][0] == max) {
-			var formatList = [], firstIndex = 0, lastIndex = 0
-			var thisFormat = fileExt(downloadingList[index][1][0])
+			let formatList = [], firstIndex = 0, lastIndex = 0
+			let thisFormat = fileExt(downloadingList[index][1][0])
 			for (let j = 1; j < downloadingList[index][1].length; j++) {
 				lastIndex++
 				if (fileExt(downloadingList[index][1][j]) == thisFormat) {
@@ -494,8 +494,8 @@ function comicDownloader(index, result) {
 		downloadingList[index][4].push(downloadingList[index][0] - 1)
 		downloadingList[index][5].push(downloadingList[index][1][downloadingList[index][0] - 1])
 		if (downloadingList[index][0] == max) {
-			var formatList = [], firstIndex = 0, lastIndex = 0
-			var thisFormat = fileExt(downloadingList[index][1][0])
+			let formatList = [], firstIndex = 0, lastIndex = 0
+			let thisFormat = fileExt(downloadingList[index][1][0])
 			for (let j = 1; j < downloadingList[index][1].length; j++) {
 				lastIndex++
 				if (fileExt(downloadingList[index][1][j]) == thisFormat) {
@@ -592,7 +592,7 @@ function clearDownloadedComics(content, site) {
 			for (let i = 0; i < xlecxPostContainers.length; i++) {
 				const mainComics = xlecxPostContainers[i].children
 				for (let j = 0; j < mainComics.length; j++) {
-					var id = mainComics[j].getElementsByTagName('button')[0]
+					let id = mainComics[j].getElementsByTagName('button')[0]
 					if (id != undefined) {
 						id = id.getAttribute('cid')
 						removeDownloadedComicsDownloadButton(0, id, mainComics[j], mainComics[j].getElementsByTagName('button')[0], (parent, btn, lastId) => {
@@ -702,7 +702,7 @@ function changeButtonsToDownloaded(id, site, have, haveBackward) {
 		if (Number(comic_page_btns_elements[i].getAttribute('sssite')) == site) comic_page_btns.push(comic_page_btns_elements[i])
 	}
 	const comic_overview_btns = document.querySelectorAll(`[cid="${id}"]`)
-	var element, parent
+	let element, parent
 
 	if (have == false) {
 		for (let i = 0; i < comic_page_btns.length; i++) {

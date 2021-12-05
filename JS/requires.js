@@ -937,4 +937,4 @@ function ObserverFunction(entries, imageLoadingObserver) {
 	})
 }
 
-var imageLoadingObserver = new IntersectionObserver(ObserverFunction, imageLazyLoadingOptions)
+let imageLoadingObserver = new IntersectionObserver(ObserverFunction, imageLazyLoadingOptions)

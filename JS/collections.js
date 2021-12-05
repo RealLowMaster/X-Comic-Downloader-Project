@@ -33,6 +33,7 @@ function LoadCollections() {
 
 	if (collectionsDB.length == 0) html = '<h6>There is no Collection.</h6>'
 	else {
+		const time = new Date().getTime()
 		for (let i = 0; i < collectionsDB.length; i++) {
 			let image = collectionsDB[i][2] || null
 			if (image != null) {
@@ -45,7 +46,7 @@ function LoadCollections() {
 				}
 			} else image = 'Image/no-img-300x300.png'
 
-			html += `<div onmousedown="OnCollectionMouseDown(${i})"><img src="${image}?${new Date().getTime()}" loading="lazy"><span>${collectionsDB[i][1].length}</span><div></div>
+			html += `<div onmousedown="OnCollectionMouseDown(${i})"><img src="${image}?${time}" loading="lazy"><span>${collectionsDB[i][1].length}</span><div></div>
 			<p>${collectionsDB[i][0]}</p></div>`
 		}
 	}
