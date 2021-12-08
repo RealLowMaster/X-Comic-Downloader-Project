@@ -49,6 +49,8 @@ class ProcressPanel {
 
 	changePercent(times = 0) {
 		this.times = (100/times)
+		this.#saveProcress = 0
+		this.#procress.style.width = '0%'
 	}
 
 	add(text, color) {

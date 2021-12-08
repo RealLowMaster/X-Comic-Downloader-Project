@@ -6,7 +6,7 @@ const comicArtistsContainer = document.getElementById('c-p-a')
 const comicParodyContainer = document.getElementById('c-p-p')
 const comicTagsContainer = document.getElementById('c-p-ts')
 const comicImageContainer = document.getElementById('c-p-i')
-let off_site = null, off_id = null, off_comic_id = null, off_quality = null, need_repair = [], in_comic = false, comic_menu_id = null, passKeyEvent = null, export_comic_id = null, comic_panel_menu_info = null, isThumbing = false, isRepairing = false, isRepairingContiue = false
+let off_site = null, off_id = null, off_comic_id = null, off_quality = null, need_repair = [], in_comic = false, comic_menu_id = null, passKeyEvent = null, export_comic_id = null, comic_panel_menu_info = null, isThumbing = false, isRepairing = false, isRepairingContiue = false, repair_all_list = null, repair_all_error_list = null
 
 function loadComics(page, search, safeScroll) {
 	page = page || 1
@@ -682,30 +682,72 @@ function RepairAllComicInfos() {
 	isRepairingContiue = true
 	procressPanel.reset(0)
 	procressPanel.show('Collecting Comics...')
-	procressPanel.config({bgClose:false, closeBtn:true, closeEvent:''})
+	procressPanel.config({bgClose:false, closeBtn:true, closeEvent:'isRepairingContiue=false'})
 	const passKeyEvent = keydownEventIndex
 	keydownEventIndex = null
+	repair_all_error_list = []
+	repair_all_looped = false
 
 	db.comics.find({}, (err, doc) => {
 		if (err) { error('CollectingComics->Err: '+err); procressPanel.hide(); isRepairing = false; isRepairingContiue = false; keydownEventIndex = passKeyEvent; return }
 		if (doc == undefined || doc.length == 0) { PopAlert('There is no Comic Downloaded'); procressPanel.hide(); isRepairing = false; isRepairingContiue = false; keydownEventIndex = passKeyEvent; return }
-		const collected_comics = []
-		for (let i = 0; i < doc.length; i++) collected_comics.push([doc.s, doc.p, doc._id])
+		repair_all_list = []
+		for (let i = 0; i < doc.length; i++) repair_all_list.push([toCapitalize(doc[i].n), doc[i].s, doc[i].p, doc[i]._id])
 
-		console.log(collected_comics)
+		procressPanel.changePercent(repair_all_list.length)
+		RepairAllComicLoop()
 	})
 }
 
+function RepairAllComicLoop() {
+	if (repair_all_list.length == 0) {
+		if (repair_all_error_list.length > 0) {
+			procressPanel.add('+=+=+=+=+=+=+=+=+=+=+', 'warning')
+			procressPanel.forward('Re Repairing Un-Success Comic Repairing')
+			repair_all_list = []
+			for (let i = 0; i < repair_all_error_list.length; i++) repair_all_list.push(repair_all_error_list[i])
+			repair_all_error_list = []
+			repair_all_looped = true
+			procressPanel.changePercent(repair_all_list.length)
+			RepairAllComicLoop()
+		} else {
+			procressPanel.forward('Repair Has Been Finished')
+			procressPanel.config({bgClose:true, closeBtn:true})
+			isRepairing = false
+			isRepairingContiue = false
+			keydownEventIndex = 0
+			reloadLoadingComics(true)
+		}
+		return
+	}
+
+	if (!isRepairingContiue) {
+		isRepairing = false
+		procressPanel.hide()
+		procressPanel.reset(0)
+		keydownEventIndex = 0
+		reloadLoadingComics(true)
+		return
+	}
+
+	procressPanel.forward(repair_all_list.length+' Repairing: '+repair_all_list[0][0])
+
+	if (typeof repair_all_list[0][2] == 'string') eval(sites[repair_all_list[0][1]].repairAll.replace('{id}', `'${repair_all_list[0][2]}'`).replace('{comic_id}', repair_all_list[0][3]))
+	else eval(sites[repair_all_list[0][1]].repairAll.replace('{id}', repair_all_list[0][2]).replace('{comic_id}', repair_all_list[0][3]))
+}
+
 // Repair Comic
-async function repairComicInfo(whitch) {
+function repairComicInfo(whitch) {
 	if (window.navigator.onLine == false) { error('Your are Offline.'); return }
 	whitch = whitch || 0
 	const id = Number(comicPanel.getAttribute('cid'))
-	await db.comics.findOne({_id:id}, (err, doc) => {
+	db.comics.findOne({_id:id}, (err, doc) => {
 		if (err) { error(err); return }
 		if (doc.p == undefined) return
 		if (doc.s == undefined) return
-		eval(sites[doc.s].repair.replace('{id}', `'${doc.p}'`).replace('{whitch}', whitch))
+
+		if (typeof doc.p == 'string') eval(sites[doc.s].repair.replace('{id}', `'${doc.p}'`).replace('{whitch}', whitch))
+		else eval(sites[doc.s].repair.replace('{id}', doc.p).replace('{whitch}', whitch))
 	})
 }
 

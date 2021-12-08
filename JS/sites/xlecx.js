@@ -80,7 +80,7 @@ function createNewXlecxTab(id, pageNumber) {
 			xlecxOpenAllTags(WhichMouseButton(e))
 		}
 		elementContainer.appendChild(element)
-		for (var i = 0; i < result.categories.length; i++) {
+		for (let i = 0; i < result.categories.length; i++) {
 			element = document.createElement('button')
 			element.setAttribute('c', result.categories[i].url)
 			element.textContent = result.categories[i].name
@@ -96,7 +96,7 @@ function createNewXlecxTab(id, pageNumber) {
 		elementContainerContainer = document.createElement('div')
 		elementContainer = document.createElement('div')
 		elementContainer.classList.add("xlecx-post-container")
-		for (var i = 0; i < result.content.length; i++) {
+		for (let i = 0; i < result.content.length; i++) {
 			element = document.createElement('div')
 			valueStorage = ''
 
@@ -129,7 +129,7 @@ function createNewXlecxTab(id, pageNumber) {
 		// Pagination
 		elementContainer = document.createElement('div')
 		elementContainer.classList.add("xlecx-pagination")
-		for (var i = 0; i < result.pagination.length; i++) {
+		for (let i = 0; i < result.pagination.length; i++) {
 			element = document.createElement('button')
 			if (result.pagination[i][1] == null) {
 				element.setAttribute('disable', true)
@@ -150,7 +150,7 @@ function createNewXlecxTab(id, pageNumber) {
 		// Random
 		elementContainer = document.createElement('div')
 		elementContainer.classList.add("xlecx-post-container")
-		for (var i = 0; i < result.random.length; i++) {
+		for (let i = 0; i < result.random.length; i++) {
 			element = document.createElement('div')
 			valueStorage = ''
 
@@ -221,7 +221,7 @@ function xlecxOpenPost(whitchbutton, id, updateTabIndex) {
 	tabs[thisTabIndex].page.innerHTML = `<div class="browser-page-loading"><img class="spin" style="width:60px;height:60px" src="Image/dual-ring-primary-${wt_fps}.gif"><p>Loading...</p></div>`
 	db.have.findOne({s:0, i:id}, (err, haveDoc) => {
 		if (err) { error(err); return }
-		var have_in_have, have_comic = false
+		let have_in_have, have_comic = false
 		if (haveDoc == undefined) have_in_have = false
 		else {
 			have_in_have = true
@@ -239,12 +239,12 @@ function xlecxOpenPost(whitchbutton, id, updateTabIndex) {
 			}
 			tabs[thisTabIndex].rename(result.title)
 			tabs[thisTabIndex].icon.setAttribute('src', 'Image/sites/xlecx-30x30.jpg')
-			var image_container = document.createElement('div')
+			let image_container = document.createElement('div')
 			image_container.classList.add('xlecx-image-container-1x1')
-			var containerContainer = document.createElement('div')
+			let containerContainer = document.createElement('div')
 			containerContainer.classList.add('xlecx-container-one-row')
-			var container = document.createElement('div')
-			var element, miniElement
+			let container = document.createElement('div')
+			let element, miniElement
 			container.innerHTML = `<p class="xlecx-post-title">${result.title}</p>`
 			if (have_comic == true) container.innerHTML += '<div class="browser-comic-have"><span>You Downloaded This Comic.<span></div>'
 			else if (have_in_have == true) container.innerHTML += `<div class="browser-comic-have" sssite="0" ccid="${id}"><button class="remove-from-have" onclick="RemoveFromHave(0, '${id}', this)">You Have This Comic.</button></div>`
@@ -256,7 +256,7 @@ function xlecxOpenPost(whitchbutton, id, updateTabIndex) {
 				element = document.createElement('div')
 				element.classList.add('xlecx-post-tags')
 				element.innerHTML = "Group: "
-				for(var i = 0; i < result.groups.length; i++) {
+				for(let i = 0; i < result.groups.length; i++) {
 					miniElement = document.createElement('button')
 					miniElement.innerHTML = result.groups[i].name
 					miniElement.onmousedown = e => {
@@ -273,7 +273,7 @@ function xlecxOpenPost(whitchbutton, id, updateTabIndex) {
 				element = document.createElement('div')
 				element.classList.add('xlecx-post-tags')
 				element.innerHTML = "Artist: "
-				for(var i = 0; i < result.artists.length; i++) {
+				for(let i = 0; i < result.artists.length; i++) {
 					miniElement = document.createElement('button')
 					miniElement.innerHTML = result.artists[i].name
 					miniElement.onmousedown = e => {
@@ -290,7 +290,7 @@ function xlecxOpenPost(whitchbutton, id, updateTabIndex) {
 				element = document.createElement('div')
 				element.classList.add('xlecx-post-tags')
 				element.innerHTML = "Parody: "
-				for(var i = 0; i < result.parody.length; i++) {
+				for(let i = 0; i < result.parody.length; i++) {
 					miniElement = document.createElement('button')
 					miniElement.innerHTML = result.parody[i].name
 					miniElement.onmousedown = e => {
@@ -307,7 +307,7 @@ function xlecxOpenPost(whitchbutton, id, updateTabIndex) {
 				element = document.createElement('div')
 				element.classList.add('xlecx-post-tags')
 				element.innerHTML = "Tag: "
-				for(var i = 0; i < result.tags.length; i++) {
+				for(let i = 0; i < result.tags.length; i++) {
 					miniElement = document.createElement('button')
 					miniElement.innerHTML = result.tags[i].name
 					miniElement.onmousedown = e => {
@@ -324,7 +324,7 @@ function xlecxOpenPost(whitchbutton, id, updateTabIndex) {
 				db.comics.findOne({s:0, p:id}, (err, doc) => {
 					if (err) { error(err); return }
 					let comic_id = doc._id
-					var image, html = ''
+					let image, html = ''
 					
 					if (err) { error(err); return }
 					ImagesCount = doc.c || null
@@ -368,7 +368,7 @@ function xlecxOpenPost(whitchbutton, id, updateTabIndex) {
 				})
 			} else {
 				image_container.setAttribute('img-con', true)
-				for (var i = 0; i < result.images.length; i++) {
+				for (let i = 0; i < result.images.length; i++) {
 					image_container.innerHTML += `<img data-src="${xlecx.baseURL}/${result.images[i].thumb}">`
 				}
 				const LoadingImages = image_container.getElementsByTagName('img')
@@ -382,7 +382,7 @@ function xlecxOpenPost(whitchbutton, id, updateTabIndex) {
 			containerContainer.appendChild(container)
 
 			if (result.related != undefined) {
-				var bigContainer = document.createElement('div')
+				let bigContainer = document.createElement('div')
 				element = document.createElement('p')
 				element.classList.add('xlecx-post-title')
 				element.textContent = 'Related:'
@@ -390,7 +390,7 @@ function xlecxOpenPost(whitchbutton, id, updateTabIndex) {
 
 				container = document.createElement('div')
 				container.classList.add('xlecx-post-container')
-				for (var i = 0; i < result.related.length; i++) {
+				for (let i = 0; i < result.related.length; i++) {
 					element = document.createElement('div')
 					valueStorage = ''
 
@@ -481,9 +481,9 @@ function xlecxOpenCategory(name, page, shortName, whitchbutton, updateTabIndex) 
 		}
 		tabs[thisTabIndex].rename(`${shortName} - ${page}`)
 		tabs[thisTabIndex].icon.setAttribute('src', 'Image/sites/xlecx-30x30.jpg')
-		var container = document.createElement('div')
+		let container = document.createElement('div')
 		container.classList.add("xlecx-container")
-		var elementContainerContainer, elementContainer, element, miniElement, html, valueStorage
+		let elementContainerContainer, elementContainer, element, miniElement, html, valueStorage
 
 		if (result.pagination == undefined) valueStorage = 0
 		else if (result.pagination[result.pagination.length - 1][1] > result.pagination[result.pagination.length - 2][1]) valueStorage = result.pagination[result.pagination.length - 1][1]
@@ -503,7 +503,7 @@ function xlecxOpenCategory(name, page, shortName, whitchbutton, updateTabIndex) 
 
 		// Categories
 		elementContainer = document.createElement('div')
-		for (var i = 0; i < result.categories.length; i++) {
+		for (let i = 0; i < result.categories.length; i++) {
 			element = document.createElement('button')
 			element.setAttribute('c', result.categories[i].url)
 			element.textContent = result.categories[i].name
@@ -519,7 +519,7 @@ function xlecxOpenCategory(name, page, shortName, whitchbutton, updateTabIndex) 
 		elementContainerContainer = document.createElement('div')
 		elementContainer = document.createElement('div')
 		elementContainer.classList.add("xlecx-post-container")
-		for (var i = 0; i < result.content.length; i++) {
+		for (let i = 0; i < result.content.length; i++) {
 			element = document.createElement('div')
 			valueStorage = ''
 
@@ -553,7 +553,7 @@ function xlecxOpenCategory(name, page, shortName, whitchbutton, updateTabIndex) 
 		// Pagination
 		elementContainer = document.createElement('div')
 		elementContainer.classList.add("xlecx-pagination")
-		for (var i = 0; i < result.pagination.length; i++) {
+		for (let i = 0; i < result.pagination.length; i++) {
 			element = document.createElement('button')
 			if (result.pagination[i][1] == null) {
 				element.setAttribute('disable', true)
@@ -574,7 +574,7 @@ function xlecxOpenCategory(name, page, shortName, whitchbutton, updateTabIndex) 
 		// Random
 		elementContainer = document.createElement('div')
 		elementContainer.classList.add("xlecx-post-container")
-		for (var i = 0; i < result.random.length; i++) {
+		for (let i = 0; i < result.random.length; i++) {
 			element = document.createElement('div')
 			valueStorage = ''
 
@@ -612,9 +612,9 @@ function xlecxOpenCategory(name, page, shortName, whitchbutton, updateTabIndex) 
 }
 
 function xlecxOpenTagContentMaker(result, thisTabIndex, name, whitch) {
-	var container = document.createElement('div')
+	let container = document.createElement('div')
 	container.classList.add("xlecx-container")
-	var elementContainerContainer, elementContainer, element, miniElement, html, valueStorage
+	let elementContainerContainer, elementContainer, element, miniElement, html, valueStorage
 
 	// Categories
 	elementContainer = document.createElement('div')
@@ -625,7 +625,7 @@ function xlecxOpenTagContentMaker(result, thisTabIndex, name, whitch) {
 		xlecxOpenAllTags(WhichMouseButton(e))
 	}
 	elementContainer.appendChild(element)
-	for (var i = 0; i < result.categories.length; i++) {
+	for (let i = 0; i < result.categories.length; i++) {
 		element = document.createElement('button')
 		element.setAttribute('c', result.categories[i].url)
 		element.textContent = result.categories[i].name
@@ -641,7 +641,7 @@ function xlecxOpenTagContentMaker(result, thisTabIndex, name, whitch) {
 	elementContainerContainer = document.createElement('div')
 	elementContainer = document.createElement('div')
 	elementContainer.classList.add("xlecx-post-container")
-	for (var i = 0; i < result.content.length; i++) {
+	for (let i = 0; i < result.content.length; i++) {
 		element = document.createElement('div')
 		valueStorage = ''
 
@@ -676,7 +676,7 @@ function xlecxOpenTagContentMaker(result, thisTabIndex, name, whitch) {
 	if (result.pagination != undefined) {
 		elementContainer = document.createElement('div')
 		elementContainer.classList.add("xlecx-pagination")
-		for (var i = 0; i < result.pagination.length; i++) {
+		for (let i = 0; i < result.pagination.length; i++) {
 			element = document.createElement('button')
 			if (result.pagination[i][1] == null) {
 				element.setAttribute('disable', true)
@@ -749,7 +749,7 @@ function xlecxOpenTag(name, page, whitch, whitchbutton, updateTabIndex) {
 				}
 				tabs[thisTabIndex].rename(`${name} - ${page}`)
 				tabs[thisTabIndex].icon.setAttribute('src', 'Image/sites/xlecx-30x30.jpg')
-				var valueStorage
+				let valueStorage
 	
 				if (result.pagination == undefined) valueStorage = 0
 				else if (result.pagination[result.pagination.length - 1][1] > result.pagination[result.pagination.length - 2][1]) valueStorage = result.pagination[result.pagination.length - 1][1]
@@ -781,7 +781,7 @@ function xlecxOpenTag(name, page, whitch, whitchbutton, updateTabIndex) {
 				}
 				tabs[thisTabIndex].rename(`${name} - ${page}`)
 				tabs[thisTabIndex].icon.setAttribute('src', 'Image/sites/xlecx-30x30.jpg')
-				var valueStorage
+				let valueStorage
 	
 				if (result.pagination == undefined) valueStorage = 0
 				else if (result.pagination[result.pagination.length - 1][1] > result.pagination[result.pagination.length - 2][1]) valueStorage = result.pagination[result.pagination.length - 1][1]
@@ -813,7 +813,7 @@ function xlecxOpenTag(name, page, whitch, whitchbutton, updateTabIndex) {
 				}
 				tabs[thisTabIndex].rename(`${name} - ${page}`)
 				tabs[thisTabIndex].icon.setAttribute('src', 'Image/sites/xlecx-30x30.jpg')
-				var valueStorage
+				let valueStorage
 	
 				if (result.pagination == undefined) valueStorage = 0
 				else if (result.pagination[result.pagination.length - 1][1] > result.pagination[result.pagination.length - 2][1]) valueStorage = result.pagination[result.pagination.length - 1][1]
@@ -845,7 +845,7 @@ function xlecxOpenTag(name, page, whitch, whitchbutton, updateTabIndex) {
 				}
 				tabs[thisTabIndex].rename(`${name} - ${page}`)
 				tabs[thisTabIndex].icon.setAttribute('src', 'Image/sites/xlecx-30x30.jpg')
-				var valueStorage
+				let valueStorage
 	
 				if (result.pagination == undefined) valueStorage = 0
 				else if (result.pagination[result.pagination.length - 1][1] > result.pagination[result.pagination.length - 2][1]) valueStorage = result.pagination[result.pagination.length - 1][1]
@@ -915,10 +915,10 @@ function xlecxSearch(text, page, whitchbutton, updateTabIndex) {
 		}
 		tabs[thisTabIndex].rename(`S: ${convertToURL(text, true)} - ${page}`)
 		tabs[thisTabIndex].icon.setAttribute('src', 'Image/sites/xlecx-30x30.jpg')
-		var container = document.createElement('div')
+		let container = document.createElement('div')
 		container.classList.add("xlecx-container")
-		var elementContainerContainer = document.createElement('div')
-		var elementContainer, element, miniElement, html, valueStorage
+		let elementContainerContainer = document.createElement('div')
+		let elementContainer, element, miniElement, html, valueStorage
 
 		if (result.pagination == undefined) valueStorage = 0
 		else if (result.pagination[result.pagination.length - 1][1] > result.pagination[result.pagination.length - 2][1]) valueStorage = result.pagination[result.pagination.length - 1][1]
@@ -945,7 +945,7 @@ function xlecxSearch(text, page, whitchbutton, updateTabIndex) {
 			xlecxOpenAllTags(WhichMouseButton(e))
 		}
 		elementContainer.appendChild(element)
-		for (var i = 0; i < result.categories.length; i++) {
+		for (let i = 0; i < result.categories.length; i++) {
 			element = document.createElement('button')
 			element.setAttribute('c', result.categories[i].url)
 			element.textContent = result.categories[i].name
@@ -961,7 +961,7 @@ function xlecxSearch(text, page, whitchbutton, updateTabIndex) {
 		if (result.content != undefined) {
 			elementContainer = document.createElement('div')
 			elementContainer.classList.add("xlecx-post-container")
-			for (var i = 0; i < result.content.length; i++) {
+			for (let i = 0; i < result.content.length; i++) {
 				element = document.createElement('div')
 				valueStorage = ''
 
@@ -996,7 +996,7 @@ function xlecxSearch(text, page, whitchbutton, updateTabIndex) {
 			if (result.pagination != undefined) {
 				elementContainer = document.createElement('div')
 				elementContainer.classList.add("xlecx-pagination")
-				for (var i = 0; i < result.pagination.length; i++) {
+				for (let i = 0; i < result.pagination.length; i++) {
 					element = document.createElement('button')
 					if (result.pagination[i][1] == null) {
 						element.setAttribute('disable', true)
@@ -1024,7 +1024,7 @@ function xlecxSearch(text, page, whitchbutton, updateTabIndex) {
 
 function xlecxOpenAllTags(whitchbutton, updateTabIndex) {
 	if (whitchbutton == 3) return
-	var makeNewPage = false, pageId, thisTabIndex
+	let makeNewPage = false, pageId, thisTabIndex
 	if (whitchbutton == 2) makeNewPage = true
 	if (updateTabIndex == null) updateTabIndex = true
 	if (makeNewPage) {
@@ -1060,13 +1060,13 @@ function xlecxOpenAllTags(whitchbutton, updateTabIndex) {
 		}
 		tabs[thisTabIndex].rename('All Tags')
 		tabs[thisTabIndex].icon.setAttribute('src', 'Image/sites/xlecx-30x30.jpg')
-		var container = document.createElement('div')
+		let container = document.createElement('div')
 		container.classList.add("xlecx-container")
-		var elementContainerContainer, elementContainer, element, miniElement, html, valueStorage
+		let elementContainerContainer, elementContainer, element, miniElement, html, valueStorage
 
 		// Categories
 		elementContainer = document.createElement('div')
-		for (var i = 0; i < result.categories.length; i++) {
+		for (let i = 0; i < result.categories.length; i++) {
 			element = document.createElement('button')
 			element.setAttribute('c', result.categories[i].url)
 			element.textContent = result.categories[i].name
@@ -1193,15 +1193,16 @@ function xlecxDownloader(id) {
 	})
 }
 
-async function xlecxRepairComicInfoGetInfo(id, whitch) {
+function xlecxRepairComicInfoGetInfo(id, whitch) {
 	if (whitch > 5) { PopAlert("This Comic Does not have This Info."); return }
-	var comic_id = Number(comicPanel.getAttribute('cid'))
-	var reset = 4
+	let comic_id = Number(comicPanel.getAttribute('cid'))
+	let reset = 4
 	if (whitch == 0) reset = 2
 	loading.reset(reset)
 	loading.show('Connecting To Web...')
-	await xlecx.getComic(id, {related:false}, (err, result) => {
+	xlecx.getComic(id, {related:false}, (err, result) => {
 		if (err) { loading.hide(); error(err); return }
+		let neededResult
 		switch (whitch) {
 			case 0:
 				db.comics.update({_id:comic_id}, { $set: {n:result.title.toLowerCase()} }, {}, (err) => {
@@ -1214,68 +1215,60 @@ async function xlecxRepairComicInfoGetInfo(id, whitch) {
 				})
 				break
 			case 1:
-				var neededResult = result.groups || null
+				neededResult = result.groups || null
 				if (neededResult == null) {
 					loading.hide()
 					PopAlert('This Comic has no Group.', 'danger')
 					return
 				}
 				loading.forward('Listing Groups...')
-				var groupsList = []
-				for (var i in neededResult) {
-					groupsList.push(neededResult[i].name)
-				}
+				const groupsList = []
+				for (let i in neededResult) groupsList.push(neededResult[i].name)
 				loading.forward('Add Groups To Database...')
 				CreateGroup(groupsList, comic_id, 0, true)
 				break
 			case 2:
-				var neededResult = result.artists || null
+				neededResult = result.artists || null
 				if (neededResult == null) {
 					loading.hide()
 					PopAlert('This Comic has no Artist.', 'danger')
 					return
 				}
 				loading.forward('Listing Artists...')
-				var artistsList = []
-				for (var i in neededResult) {
-					artistsList.push(neededResult[i].name)
-				}
+				const artistsList = []
+				for (let i in neededResult) artistsList.push(neededResult[i].name)
 				loading.forward('Add Artists To Database...')
 				CreateArtist(artistsList, comic_id, 0, true)
 				break
 			case 3:
-				var neededResult = result.parody || null
+				neededResult = result.parody || null
 				if (neededResult == null) {
 					loading.hide()
 					PopAlert('This Comic has no Parody.', 'danger')
 					return
 				}
 				loading.forward('Listing Parodies...')
-				var parodyList = []
-				for (var i in neededResult) {
-					parodyList.push(neededResult[i].name)
-				}
+				const parodyList = []
+				for (let i in neededResult) parodyList.push(neededResult[i].name)
 				loading.forward('Add Parodies To Database...')
 				CreateParody(parodyList, comic_id, 0, true)
 				break
 			case 4:
-				var neededResult = result.tags || null
+				neededResult = result.tags || null
 				if (neededResult == null) {
 					loading.hide()
 					PopAlert('This Comic has no Tag.', 'danger')
 					return
 				}
 				loading.forward('Listing Tags...')
-				var tagsList = []
-				for (var i in neededResult) {
-					tagsList.push(neededResult[i].name)
-				}
+				const tagsList = []
+				for (let i in neededResult) tagsList.push(neededResult[i].name)
 				loading.forward('Add Tags To Database...')
 				CreateTag(tagsList, comic_id, 0, true)
 				break
 			case 5:
 				loading.hide()
-				var neededResult = result.images || null
+				neededResult = result.images || null
 				if (neededResult == null) {
 					PopAlert('This Comic has no Image.', 'danger')
 					openComic(comic_id)
@@ -1310,5 +1303,55 @@ async function xlecxRepairComicInfoGetInfo(id, whitch) {
 				})
 				break
 		}
+	})
+}
+
+function xlecxRepairAllComicInfo(id, comic_id) {
+	xlecx.getComic(id, {related:false}, (err, result) => {
+		if (err) {
+			procressPanel.add(`"${repair_all_list[0][0]}" -> ${err}`, 'danger')
+			repair_all_error_list.push(repair_all_list[0])
+			repair_all_list.shift()
+			RepairAllComicLoop()
+			return
+		}
+
+		const title = result.title.toLowerCase() || null
+		let neededResult
+		
+		neededResult = result.groups || null
+		if (neededResult != null) {
+			const groupsList = []
+			for (let i in neededResult) groupsList.push(neededResult[i].name)
+			CreateGroup(groupsList, comic_id, 0, true)
+		}
+
+		neededResult = result.artists || null
+		if (neededResult != null) {
+			const artistsList = []
+			for (let i in neededResult) artistsList.push(neededResult[i].name)
+			CreateArtist(artistsList, comic_id, 0, true)
+		}
+
+		neededResult = result.parody || null
+		if (neededResult != null) {
+			const parodyList = []
+			for (let i in neededResult) parodyList.push(neededResult[i].name)
+			CreateParody(parodyList, comic_id, 0, true)
+		}
+
+		neededResult = result.tags || null
+		if (neededResult != null) {
+			const tagsList = []
+			for (let i in neededResult) tagsList.push(neededResult[i].name)
+			CreateTag(tagsList, comic_id, 0, true)
+		}
+
+		db.comics.update({_id:comic_id}, { $set: {n:title} }, {}, (err) => {
+			if (err) procressPanel.add(`UpdateComicName -> "${repair_all_list[0][0]}" -> ${err}`, 'danger')
+			else procressPanel.add(`Comic "${repair_all_list[0][0]}" Has Been Repair`)
+			repair_all_list.shift()
+			RepairAllComicLoop()
+		})
 	})
 }

@@ -72,16 +72,32 @@ function IsHavingComic(site, id, callback) {
 // Add New Character
 function UpdateCharacterList(comicId, newList) {
 	db.comic_characters.findOne({_id:comicId}, (err, doc) => {
-		if (err) { error('CharacterListUpdateCheck: '+err); return }
+		if (err) {
+			if (!isRepairing) {
+				openComicCharacters(comicId)
+				loading.hide()
+				error('CharacterListUpdateCheck: '+err)
+			}
+			return
+		}
 		if (doc != undefined) {
 			db.comic_characters.update({_id:comicId}, { $set: {t:newList} }, {}, (err) => {
-				if (err) { error('CharacterListUpdate: '+err); return }
+				if (err) {
+					if (!isRepairing) {
+						openComicCharacters(comicId)
+						loading.hide()
+						error('CharacterListUpdate: '+err)
+					}
+					return
+				}
 			})
 		} else CreateCharacterList(comicId, newList)
-		openComicCharacters(comicId)
-		loading.forward()
-		loading.hide()
-		PopAlert('Comic Characters Has Been Repaired!')
+		if (!isRepairing) {
+			openComicCharacters(comicId)
+			loading.forward()
+			loading.hide()
+			PopAlert('Comic Characters Has Been Repaired!')
+		}
 	})
 }
 
@@ -121,16 +137,32 @@ function CreateCharacter(tagList, comicId, tagListIndex, repairing, newList, cha
 // Add New Language
 function UpdateLanguageList(comicId, newList) {
 	db.comic_languages.findOne({_id:comicId}, (err, doc) => {
-		if (err) { error('LanguageListUpdateCheck: '+err); return }
+		if (err) {
+			if (!isRepairing) {
+				openComicLanguages(comicId)
+				loading.hide()
+				error('LanguageListUpdateCheck: '+err)
+			}
+			return
+		}
 		if (doc != undefined) {
 			db.comic_languages.update({_id:comicId}, { $set: {t:newList} }, {}, (err) => {
-				if (err) { error('LanguageListUpdate: '+err); return }
+				if (err) {
+					if (!isRepairing) {
+						openComicLanguages(comicId)
+						loading.hide()
+						error('LanguageListUpdate: '+err)
+					}
+					return
+				}
 			})
 		} else CreateLanguageList(comicId, newList)
-		openComicLanguages(comicId)
-		loading.forward()
-		loading.hide()
-		PopAlert('Comic Languages Has Been Repaired!')
+		if (!isRepairing) {
+			openComicLanguages(comicId)
+			loading.forward()
+			loading.hide()
+			PopAlert('Comic Languages Has Been Repaired!')
+		}
 	})
 }
 
@@ -170,16 +202,32 @@ function CreateLanguage(tagList, comicId, tagListIndex, repairing, newList, chan
 // Add New Category
 function UpdateCategoryList(comicId, newList) {
 	db.comic_categories.findOne({_id:comicId}, (err, doc) => {
-		if (err) { error('CategoryListUpdateCheck: '+err); return }
+		if (err) {
+			if (!isRepairing) {
+				openComicCategories(comicId)
+				loading.hide()
+				error('CategoryListUpdateCheck: '+err)
+			}
+			return
+		}
 		if (doc != undefined) {
 			db.comic_categories.update({_id:comicId}, { $set: {t:newList} }, {}, (err) => {
-				if (err) { error('CategoryListUpdate: '+err); return }
+				if (err) {
+					if (!isRepairing) {
+						openComicCategories(comicId)
+						loading.hide()
+						error('CategoryListUpdate: '+err)
+					}
+					return
+				}
 			})
 		} else CreateCategoryList(comicId, newList)
-		openComicCategories(comicId)
-		loading.forward()
-		loading.hide()
-		PopAlert('Comic Categories Has Been Repaired!')
+		if (!isRepairing) {
+			openComicCategories(comicId)
+			loading.forward()
+			loading.hide()
+			PopAlert('Comic Categories Has Been Repaired!')
+		}
 	})
 }
 
@@ -219,16 +267,32 @@ function CreateCategory(tagList, comicId, tagListIndex, repairing, newList, chan
 // Add New Groups
 function UpdateGroupList(comicId, newList) {
 	db.comic_groups.findOne({_id:comicId}, (err, doc) => {
-		if (err) { error('GroupListUpdateCheck: '+err); return }
+		if (err) {
+			if (!isRepairing) {
+				openComicGroups(comicId)
+				loading.hide()
+				error('GroupListUpdateCheck: '+err)
+			}
+			return
+		}
 		if (doc != undefined) {
 			db.comic_groups.update({_id:comicId}, { $set: {t:newList} }, {}, (err) => {
-				if (err) { error('GroupListUpdate: '+err); return }
+				if (err) {
+					if (!isRepairing) {
+						openComicGroups(comicId)
+						loading.hide()
+						error('GroupListUpdate: '+err)
+					}
+					return
+				}
 			})
 		} else CreatGroupList(comicId, newList)
-		openComicGroups(comicId)
-		loading.forward()
-		loading.hide()
-		PopAlert('Comic Groups Has Been Repaired!')
+		if (!isRepairing) {
+			openComicGroups(comicId)
+			loading.forward()
+			loading.hide()
+			PopAlert('Comic Groups Has Been Repaired!')
+		}
 	})
 }
 
@@ -268,16 +332,32 @@ function CreateGroup(tagList, comicId, tagListIndex, repairing, newList, changed
 // Add New Artist
 function UpdateArtistList(comicId, newList) {
 	db.comic_artists.findOne({_id:comicId}, (err, doc) => {
-		if (err) { error('ArtistListUpdateCheck: '+err); return }
+		if (err) {
+			if (!isRepairing) {
+				openComicArtists(comicId)
+				loading.hide()
+				error('ArtistListUpdateCheck: '+err)
+			}
+			return
+		}
 		if (doc != undefined) {
 			db.comic_artists.update({_id:comicId}, { $set: {t:newList} }, {}, (err) => {
-				if (err) { error('ArtistListUpdate: '+err); return }
+				if (err) {
+					if (!isRepairing) {
+						openComicArtists(comicId)
+						loading.hide()
+						error('ArtistListUpdate: '+err)
+					}
+					return
+				}
 			})
 		} else CreatArtistList(comicId, newList)
-		openComicArtists(comicId)
-		loading.forward()
-		loading.hide()
-		PopAlert('Comic Artists Has Been Repaired!')
+		if (!isRepairing) {
+			openComicArtists(comicId)
+			loading.forward()
+			loading.hide()
+			PopAlert('Comic Artists Has Been Repaired!')
+		}
 	})
 }
 
@@ -318,16 +398,32 @@ function CreateArtist(tagList, comicId, tagListIndex, repairing, newList, change
 // Add New Parody
 function UpdateParodyList(comicId, newList) {
 	db.comic_parodies.findOne({_id:comicId}, (err, doc) => {
-		if (err) { error('ParodyListUpdateCheck: '+err); return }
+		if (err) {
+			if (!isRepairing) {
+				openComicParodies(comicId)
+				loading.hide()
+				error('ParodyListUpdateCheck: '+err)
+			}
+			return
+		}
 		if (doc != undefined) {
 			db.comic_parodies.update({_id:comicId}, { $set: {t:newList} }, {}, (err) => {
-				if (err) { error('ParodyListUpdate: '+err); return }
+				if (err) {
+					if (!isRepairing) {
+						openComicParodies(comicId)
+						loading.hide()
+						error('ParodyListUpdate: '+err)
+					}
+					return
+				}
 			})
 		} else CreatParodyList(comicId, newList)
-		openComicParodies(comicId)
-		loading.forward()
-		loading.hide()
-		PopAlert('Comic Parodies Has Been Repaired!')
+		if (!isRepairing) {
+			openComicParodies(comicId)
+			loading.forward()
+			loading.hide()
+			PopAlert('Comic Parodies Has Been Repaired!')
+		}
 	})
 }
 
@@ -367,16 +463,32 @@ function CreateParody(tagList, comicId, tagListIndex, repairing, newList, change
 // Add New Tag
 function UpdateTagList(comicId, newList) {
 	db.comic_tags.findOne({_id:comicId}, (err, doc) => {
-		if (err) { error('TagListUpdateCheck: '+err); return }
+		if (err) {
+			if (!isRepairing) {
+				openComicTags(comicId)
+				loading.hide()
+				error('TagListUpdateCheck: '+err)
+			}
+			return
+		}
 		if (doc != undefined) {
 			db.comic_tags.update({_id:comicId}, { $set: {t:newList} }, {}, (err) => {
-				if (err) { error('TagListUpdate: '+err); return }
+				if (err) {
+					if (!isRepairing) {
+						openComicTags(comicId)
+						loading.hide()
+						error('TagListUpdate: '+err)
+					}
+					return
+				}
 			})
 		} else CreatTagList(comicId, newList)
-		openComicTags(comicId)
-		loading.forward()
-		loading.hide()
-		PopAlert('Comic Tags Has Been Repaired!')
+		if (!isRepairing) {
+			openComicTags(comicId)
+			loading.forward()
+			loading.hide()
+			PopAlert('Comic Tags Has Been Repaired!')
+		}
 	})
 }
 

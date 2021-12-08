@@ -95,6 +95,7 @@ Added To Version {
 	Add Optimize All UnOptimized Comic Ability
 	Add Ability To Delete single Comic Image
 	Add Ability To Set a Comic Image as Comic Thumb
+	Add Repair All Comic Infos Ability
 	Update Slider UI
 	Improve Update a Little
 }

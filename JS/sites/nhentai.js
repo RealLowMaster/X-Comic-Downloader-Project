@@ -1074,14 +1074,15 @@ function nhentaiDownloader(id) {
 	})
 }
 
-async function nhentaiRepairComicInfoGetInfo(id, whitch) {
-	var comic_id = Number(comicPanel.getAttribute('cid'))
-	var reset = 4
+function nhentaiRepairComicInfoGetInfo(id, whitch) {
+	let comic_id = Number(comicPanel.getAttribute('cid'))
+	let reset = 4
 	if (whitch == 0) reset = 2
 	loading.reset(reset)
 	loading.show('Connecting To Web...')
-	await nhentai.getComic(id, false, (err, result) => {
+	nhentai.getComic(id, false, (err, result) => {
 		if (err) { loading.hide(); error(err); return }
+		let neededResult
 		switch (whitch) {
 			case 0:
 				db.comics.update({_id:comic_id}, { $set: {n:result.name.toLowerCase()} }, {}, (err) => {
@@ -1094,7 +1095,7 @@ async function nhentaiRepairComicInfoGetInfo(id, whitch) {
 				})
 				break
 			case 1:
-				var neededResult = result.groups || null
+				neededResult = result.groups || null
 				if (neededResult == null) {
 					loading.hide()
 					PopAlert('This Comic has no Group.', 'danger')
@@ -1102,14 +1103,12 @@ async function nhentaiRepairComicInfoGetInfo(id, whitch) {
 				}
 				loading.forward('Listing Groups...')
 				const groupsList = []
-				for (let i in neededResult) {
-					groupsList.push(neededResult[i].name)
-				}
+				for (let i in neededResult) groupsList.push(neededResult[i].name)
 				loading.forward('Add Groups To Database...')
 				CreateGroup(groupsList, comic_id, 0, true)
 				break
 			case 2:
-				var neededResult = result.artists || null
+				neededResult = result.artists || null
 				if (neededResult == null) {
 					loading.hide()
 					PopAlert('This Comic has no Artist.', 'danger')
@@ -1117,14 +1116,12 @@ async function nhentaiRepairComicInfoGetInfo(id, whitch) {
 				}
 				loading.forward('Listing Artists...')
 				const artistsList = []
-				for (let i in neededResult) {
-					artistsList.push(neededResult[i].name)
-				}
+				for (let i in neededResult) artistsList.push(neededResult[i].name)
 				loading.forward('Add Artists To Database...')
 				CreateArtist(artistsList, comic_id, 0, true)
 				break
 			case 3:
-				var neededResult = result.parodies || null
+				neededResult = result.parodies || null
 				if (neededResult == null) {
 					loading.hide()
 					PopAlert('This Comic has no Parody.', 'danger')
@@ -1132,14 +1129,12 @@ async function nhentaiRepairComicInfoGetInfo(id, whitch) {
 				}
 				loading.forward('Listing Parodies...')
 				const parodyList = []
-				for (let i in neededResult) {
-					parodyList.push(neededResult[i].name)
-				}
+				for (let i in neededResult) parodyList.push(neededResult[i].name)
 				loading.forward('Add Parodies To Database...')
 				CreateParody(parodyList, comic_id, 0, true)
 				break
 			case 4:
-				var neededResult = result.tags || null
+				neededResult = result.tags || null
 				if (neededResult == null) {
 					loading.hide()
 					PopAlert('This Comic has no Tag.', 'danger')
@@ -1147,15 +1142,13 @@ async function nhentaiRepairComicInfoGetInfo(id, whitch) {
 				}
 				loading.forward('Listing Tags...')
 				const tagsList = []
-				for (let i in neededResult) {
-					tagsList.push(neededResult[i].name)
-				}
+				for (let i in neededResult) tagsList.push(neededResult[i].name)
 				loading.forward('Add Tags To Database...')
 				CreateTag(tagsList, comic_id, 0, true)
 				break
 			case 5:
 				loading.hide()
-				var neededResult = result.images || null
+				neededResult = result.images || null
 				if (neededResult == null) {
 					PopAlert('This Comic has no Image.', 'danger')
 					openComic(comic_id)
@@ -1183,7 +1176,7 @@ async function nhentaiRepairComicInfoGetInfo(id, whitch) {
 				})
 				break
 			case 6:
-				var neededResult = result.characters || null
+				neededResult = result.characters || null
 				if (neededResult == null) {
 					loading.hide()
 					PopAlert('This Comic has no Characters.', 'danger')
@@ -1191,14 +1184,12 @@ async function nhentaiRepairComicInfoGetInfo(id, whitch) {
 				}
 				loading.forward('Listing Characters...')
 				const charactersList = []
-				for (let i in neededResult) {
-					charactersList.push(neededResult[i].name)
-				}
+				for (let i in neededResult) charactersList.push(neededResult[i].name)
 				loading.forward('Add Characters To Database...')
 				CreateCharacter(charactersList, comic_id, 0, true)
 				break
 			case 7:
-				var neededResult = result.languages || null
+				neededResult = result.languages || null
 				if (neededResult == null) {
 					loading.hide()
 					PopAlert('This Comic has no Languages.', 'danger')
@@ -1206,14 +1197,12 @@ async function nhentaiRepairComicInfoGetInfo(id, whitch) {
 				}
 				loading.forward('Listing Languages...')
 				const languagesList = []
-				for (let i in neededResult) {
-					languagesList.push(neededResult[i].name)
-				}
+				for (let i in neededResult) languagesList.push(neededResult[i].name)
 				loading.forward('Add Languages To Database...')
 				CreateLanguage(languagesList, comic_id, 0, true)
 				break
 			case 8:
-				var neededResult = result.categories || null
+				neededResult = result.categories || null
 				if (neededResult == null) {
 					loading.hide()
 					PopAlert('This Comic has no Categories.', 'danger')
@@ -1221,12 +1210,81 @@ async function nhentaiRepairComicInfoGetInfo(id, whitch) {
 				}
 				loading.forward('Listing Categories...')
 				const categoriesList = []
-				for (let i in neededResult) {
-					categoriesList.push(neededResult[i].name)
-				}
+				for (let i in neededResult) categoriesList.push(neededResult[i].name)
 				loading.forward('Add Categories To Database...')
 				CreateCategory(categoriesList, comic_id, 0, true)
 				break
 		}
+	})
+}
+
+function nhentaiRepairAllComicInfo(id, comic_id) {
+	nhentai.getComic(id, false, (err, result) => {
+		if (err) {
+			procressPanel.add(`"${repair_all_list[0][0]}" -> ${err}`, 'danger')
+			repair_all_error_list.push(repair_all_list[0])
+			repair_all_list.shift()
+			RepairAllComicLoop()
+			return
+		}
+
+		const title = result.title.toLowerCase() || null
+		let neededResult
+		
+		neededResult = result.groups || null
+		if (neededResult != null) {
+			const groupsList = []
+			for (let i in neededResult) groupsList.push(neededResult[i].name)
+			CreateGroup(groupsList, comic_id, 0, true)
+		}
+
+		neededResult = result.artists || null
+		if (neededResult != null) {
+			const artistsList = []
+			for (let i in neededResult) artistsList.push(neededResult[i].name)
+			CreateArtist(artistsList, comic_id, 0, true)
+		}
+
+		neededResult = result.parodies || null
+		if (neededResult != null) {
+			const parodyList = []
+			for (let i in neededResult) parodyList.push(neededResult[i].name)
+			CreateParody(parodyList, comic_id, 0, true)
+		}
+
+		neededResult = result.tags || null
+		if (neededResult != null) {
+			const tagsList = []
+			for (let i in neededResult) tagsList.push(neededResult[i].name)
+			CreateTag(tagsList, comic_id, 0, true)
+		}
+
+		neededResult = result.characters || null
+		if (neededResult != null) {
+			const charactersList = []
+			for (let i in neededResult) charactersList.push(neededResult[i].name)
+			CreateCharacter(charactersList, comic_id, 0, true)
+		}
+
+		neededResult = result.languages || null
+		if (neededResult != null) {
+			const languagesList = []
+			for (let i in neededResult) languagesList.push(neededResult[i].name)
+			CreateLanguage(languagesList, comic_id, 0, true)
+		}
+
+		neededResult = result.categories || null
+		if (neededResult != null) {
+			const categoriesList = []
+			for (let i in neededResult) categoriesList.push(neededResult[i].name)
+			CreateCategory(categoriesList, comic_id, 0, true)
+		}
+
+		db.comics.update({_id:comic_id}, { $set: {n:title} }, {}, (err) => {
+			if (err) procressPanel.add(`UpdateComicName -> "${repair_all_list[0][0]}" -> ${err}`, 'danger')
+			else procressPanel.add(`Comic "${repair_all_list[0][0]}" Has Been Repair`)
+			repair_all_list.shift()
+			RepairAllComicLoop()
+		})
 	})
 }

@@ -43,7 +43,7 @@ const sites = [
 		url: 'xlecx.org',
 		home: 'xlecxChangePage(1, 0, true)',
 		repair: 'xlecxRepairComicInfoGetInfo({id}, {whitch})',
-		repairAll: '',
+		repairAll: 'xlecxRepairAllComicInfo({id}, {comic_id})',
 		search: 'xlecxSearch({text}, 1, 0)',
 		jump: 'xlecxJumpPage({index}, {page})',
 		downloader: 'xlecxDownloader({id})'
@@ -53,7 +53,7 @@ const sites = [
 		url: 'nhentai.net',
 		home: 'nhentaiChangePage(1, false, true)',
 		repair: 'nhentaiRepairComicInfoGetInfo({id}, {whitch})',
-		repairAll: '',
+		repairAll: 'nhentaiRepairAllComicInfo({id}, {comic_id})',
 		search: 'nhentaiSearch({text}, 1, false, true)',
 		jump: 'nhentaiJumpPage({index}, {page})',
 		downloader: 'nhentaiDownloader({id})'
@@ -104,8 +104,9 @@ function closeApp() {
 ThisWindow.addListener('close', e => {
 	e.preventDefault()
 	if (isUpdating) { PopAlert('You Cannot Close App When Updating.', 'danger') }
-	if (comicDeleting) { PopAlert("You can't Close App When you are Deleting a Comic.", "danger"); return }
 	if (isOptimizing) { PopAlert("You can't Close App When you are Optimzating.", "danger"); return }
+	if (isRepairing) { PopAlert("You can't Close App When you are Repairing.", "danger"); return }
+	if (comicDeleting) { PopAlert("You can't Close App When you are Deleting a Comic.", "danger"); return }
 	if (downloadingList.length > 0) {
 		errorSelector('You are Downloading Comics, Are you sure you want To Close Software ?', [
 			[
