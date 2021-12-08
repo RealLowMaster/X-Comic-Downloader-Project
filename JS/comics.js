@@ -436,9 +436,7 @@ function openComic(id) {
 				comic_optimize_btn.textContent = 'Optimize Images'
 			}
 
-			let lastIndex = formats[0][1]
-			let thisForamat = formats[0][2]
-			let src = '', slider_overview_html = '', save
+			let lastIndex = formats[0][1], thisForamat = formats[0][2], slider_overview_html = '', save, src = ''
 			for (let i = 0; i < ImagesCount; i++) {
 				if (i <= lastIndex) {
 					src = `${dirUL}/${id}${image}/${image}-${i}.${thisForamat}`
@@ -463,6 +461,7 @@ function openComic(id) {
 					slider_overview_html += `<div i="${i}" onclick="changeSliderIndex(${i})"><img src="${src}" loading="lazy"><p>${i+1}</p></div>`
 				}
 			}
+			
 
 			if (need_repair.length == 0) document.getElementById('c-p-r-btn').style.display = 'none'
 			else document.getElementById('c-p-r-btn').style.display = 'flex'

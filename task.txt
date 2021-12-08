@@ -91,9 +91,7 @@ Add Comic {
 
 Added To Version {
 	Fix Bug: Duplicating Or Copy-Pasting Tabs
-
 	Fix Bug: Downloading Comics With Only 1 Image
-
 	Add Right Click Menu To Comic Images
 	Add Optimize All UnOptimized Comic Ability
 	Add Ability To Delete single Comic Image
@@ -110,8 +108,6 @@ Doing {
 }
 
 Tasks => {
-	Fix Bug: Downloading xlecx => Morning Stretches
-
 	Add Downloaded Comic Site Icon In Comic Panel
 	Fix bug: nhentai -> Searching B-trayal pagination won't work
 	Add Ability To Play Song

@@ -481,7 +481,7 @@ function comicDownloader(index, result) {
 						if (j == downloadingList[index][1].length - 1) formatList.push([firstIndex, lastIndex, thisFormat])
 					}
 				}
-			} else formatList = [0,0,fileExt(downloadingList[index][1][0])]
+			} else formatList = [[0,0,fileExt(downloadingList[index][1][0])]]
 			
 			CreateComic(downloadingList[index][7][0], downloadingList[index][7][1], result, downloadingList[index][2], downloadingList[index][9], downloadingList[index][3], downloadingList[index][1].length, formatList, index, true)
 		} else comicDownloader(index, result)
@@ -513,7 +513,7 @@ function comicDownloader(index, result) {
 						if (j == downloadingList[index][1].length - 1) formatList.push([firstIndex, lastIndex, thisFormat])
 					}
 				}
-			} else formatList = [0,0,fileExt(downloadingList[index][1][0])]
+			} else formatList = [[0,0,fileExt(downloadingList[index][1][0])]]
 			CreateComic(downloadingList[index][7][0], downloadingList[index][7][1], result, downloadingList[index][2], downloadingList[index][9], downloadingList[index][3], downloadingList[index][1].length, formatList, index, true)
 		} else comicDownloader(index, result)
 	})
