@@ -467,19 +467,22 @@ function comicDownloader(index, result) {
 		if (downloadingList[index][0] == max) {
 			let formatList = [], firstIndex = 0, lastIndex = 0
 			let thisFormat = fileExt(downloadingList[index][1][0])
-			for (let j = 1; j < downloadingList[index][1].length; j++) {
-				lastIndex++
-				if (fileExt(downloadingList[index][1][j]) == thisFormat) {
-					if (j == downloadingList[index][1].length - 1) formatList.push([firstIndex, lastIndex, thisFormat])
-				} else {
-					formatList.push([firstIndex, lastIndex - 1, thisFormat])
-		
-					thisFormat = fileExt(downloadingList[index][1][j])
-					firstIndex = lastIndex
-		
-					if (j == downloadingList[index][1].length - 1) formatList.push([firstIndex, lastIndex, thisFormat])
+			if (downloadingList[index][1].length > 1) {
+				for (let j = 1; j < downloadingList[index][1].length; j++) {
+					lastIndex++
+					if (fileExt(downloadingList[index][1][j]) == thisFormat) {
+						if (j == downloadingList[index][1].length - 1) formatList.push([firstIndex, lastIndex, thisFormat])
+					} else {
+						formatList.push([firstIndex, lastIndex - 1, thisFormat])
+			
+						thisFormat = fileExt(downloadingList[index][1][j])
+						firstIndex = lastIndex
+			
+						if (j == downloadingList[index][1].length - 1) formatList.push([firstIndex, lastIndex, thisFormat])
+					}
 				}
-			}
+			} else formatList = [0,0,fileExt(downloadingList[index][1][0])]
+			
 			CreateComic(downloadingList[index][7][0], downloadingList[index][7][1], result, downloadingList[index][2], downloadingList[index][9], downloadingList[index][3], downloadingList[index][1].length, formatList, index, true)
 		} else comicDownloader(index, result)
 	}).catch(err => {
@@ -496,19 +499,21 @@ function comicDownloader(index, result) {
 		if (downloadingList[index][0] == max) {
 			let formatList = [], firstIndex = 0, lastIndex = 0
 			let thisFormat = fileExt(downloadingList[index][1][0])
-			for (let j = 1; j < downloadingList[index][1].length; j++) {
-				lastIndex++
-				if (fileExt(downloadingList[index][1][j]) == thisFormat) {
-					if (j == downloadingList[index][1].length - 1) formatList.push([firstIndex, lastIndex, thisFormat])
-				} else {
-					formatList.push([firstIndex, lastIndex - 1, thisFormat])
-		
-					thisFormat = fileExt(downloadingList[index][1][j])
-					firstIndex = lastIndex
-		
-					if (j == downloadingList[index][1].length - 1) formatList.push([firstIndex, lastIndex, thisFormat])
+			if (downloadingList[index][1].length > 1) {
+				for (let j = 1; j < downloadingList[index][1].length; j++) {
+					lastIndex++
+					if (fileExt(downloadingList[index][1][j]) == thisFormat) {
+						if (j == downloadingList[index][1].length - 1) formatList.push([firstIndex, lastIndex, thisFormat])
+					} else {
+						formatList.push([firstIndex, lastIndex - 1, thisFormat])
+			
+						thisFormat = fileExt(downloadingList[index][1][j])
+						firstIndex = lastIndex
+			
+						if (j == downloadingList[index][1].length - 1) formatList.push([firstIndex, lastIndex, thisFormat])
+					}
 				}
-			}
+			} else formatList = [0,0,fileExt(downloadingList[index][1][0])]
 			CreateComic(downloadingList[index][7][0], downloadingList[index][7][1], result, downloadingList[index][2], downloadingList[index][9], downloadingList[index][3], downloadingList[index][1].length, formatList, index, true)
 		} else comicDownloader(index, result)
 	})

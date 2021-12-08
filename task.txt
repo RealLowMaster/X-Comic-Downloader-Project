@@ -91,11 +91,16 @@ Add Comic {
 
 Added To Version {
 	Fix Bug: Duplicating Or Copy-Pasting Tabs
+
+	Fix Bug: Downloading Comics With Only 1 Image
+
 	Add Right Click Menu To Comic Images
 	Add Optimize All UnOptimized Comic Ability
 	Add Ability To Delete single Comic Image
 	Add Ability To Set a Comic Image as Comic Thumb
 	Add Repair All Comic Infos Ability
+	Add Backup Database Ability
+	Add Auto Backup Ability
 	Update Slider UI
 	Improve Update a Little
 }
@@ -105,19 +110,16 @@ Doing {
 }
 
 Tasks => {
+	Fix Bug: Downloading xlecx => Morning Stretches
+
 	Add Downloaded Comic Site Icon In Comic Panel
-	Add Repair All
-	Add Auto Backup Ability
 	Fix bug: nhentai -> Searching B-trayal pagination won't work
 	Add Ability To Play Song
-	Add Ability To Delete Comic Image
 	Add Email System
-	Fix Bug: Problem with Comics That have just 1 Image
 	Make UI Beatiful
 	Add Search To History Panel
 	Add Auto Optimize Image After Download
 
-	Fix Bug: Downloading xlecx => Morning Stretches
 	Optimize Gifs { giflossy imagemin Packages }
 	Optimize offlineChangePage()
 	Make New History System [ Indexing ]

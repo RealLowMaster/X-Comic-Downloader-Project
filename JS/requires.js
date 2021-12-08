@@ -67,7 +67,7 @@ const keydownEvents = [
 	'SettingKeyEvents({ctrl},{shift},{key})'
 ]
 const ThisWindow = remote.getCurrentWindow(), loading = new Loading(10), db = {}, procressPanel = new ProcressPanel(0), update_number = 8
-let comicDeleting = false, downloadCounter = 0, wt_fps = 20, dirDB, dirUL, dirTmp, isOptimizing = false, browserLastTabs = [], tabsHistory = [], dirHistory = '', keydownEventIndex = 0, new_update, save_value = null, save_value2 = null, afterDLReload = true, setting, openedMenuTabIndex, copiedTab = null, tabs = [], downloadingList = [], lastComicId, lastHaveId, searchTimer, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = [], isUpdating = false
+let comicDeleting = false, downloadCounter = 0, wt_fps = 20, dirDB, dirUL, dirBU, dirTmp, isOptimizing = false, browserLastTabs = [], tabsHistory = [], dirHistory = '', keydownEventIndex = 0, new_update, save_value = null, save_value2 = null, afterDLReload = true, setting, openedMenuTabIndex, copiedTab = null, tabs = [], downloadingList = [], lastComicId, lastHaveId, searchTimer, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = [], isUpdating = false
 let collectionsDB = [], groupsDB = [], artistsDB = [], parodiesDB = [], tagsDB = [], charactersDB = [], languagesDB = [], categoriesDB = [], comicGroupsDB = [], comicArtistsDB = [], comicParodiesDB = [], comicTagsDB = [], comicCharactersDB = [], comicLanguagesDB = [], comicCategoriesDB = [], indexDB = []
 
 /*
@@ -89,6 +89,8 @@ let collectionsDB = [], groupsDB = [], artistsDB = [], parodiesDB = [], tagsDB =
 
 // Set Windows Closing Event
 function closeApp() {
+	loading.reset(0)
+	loading.show('Shutting Down')
 	const tabsElement = tabsContainer.children
 	if (tabsElement.length > 0) {
 		for (let i = 0; i < tabsElement.length; i++) {
@@ -97,8 +99,16 @@ function closeApp() {
 		}
 		saveHistory()
 	}
-	ThisWindow.removeAllListeners()
-	remote.app.quit()
+
+	try {
+		if (fs.existsSync(dirBU+'/AutoBackup.zip')) fs.unlinkSync(dirBU+'/AutoBackup.zip')
+		BackUp('AutoBackup.zip', () => {
+			ThisWindow.removeAllListeners()
+			remote.app.quit()
+		})
+	} catch(err) {
+		error('AutoBackup->Err: '+err)
+	}
 }
 
 ThisWindow.addListener('close', e => {
@@ -242,6 +252,7 @@ function GetFileLocationCallback(err, result) {
 		return
 	}
 	dirDB = result+'\\ComicsDB'
+	dirBU = result+'\\Backups'
 	dirUL = result+'\\DownloadedComics'
 	dirTmp = result+'\\ComicsTemp'
 	setting.file_location = result
@@ -609,6 +620,7 @@ function GetDirection() {
 		if (!fs.existsSync(setting.file_location)) ChooseDirectory('Choose Directory For Saving Downloaded Comics', GetFileLocationCallback)
 		else {
 			dirDB = setting.file_location+'\\ComicsDB'
+			dirBU = setting.file_location+'\\Backups'
 			dirUL = setting.file_location+'\\DownloadedComics'
 			dirTmp = setting.file_location+'\\ComicsTemp'
 		}
@@ -616,6 +628,7 @@ function GetDirection() {
 
 	if (!fs.existsSync(dirDB)) fs.mkdirSync(dirDB)
 	if (!fs.existsSync(dirUL)) fs.mkdirSync(dirUL)
+	if (!fs.existsSync(dirBU)) fs.mkdirSync(dirBU)
 	if (!fs.existsSync(dirTmp)) fs.mkdirSync(dirTmp)
 	if (!fs.existsSync(dirUL+'/thumbs')) fs.mkdirSync(dirUL+'/thumbs')
 	if (!fs.existsSync(dirUL+'/cthumbs')) fs.mkdirSync(dirUL+'/cthumbs')

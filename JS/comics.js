@@ -791,9 +791,7 @@ function exportComic(filepath, filelist) {
 	loading.show(`Compressing...`)
 	setTimeout(() => {
 		const zip = new JSZip()
-		for (let i = 0; i < filelist.length; i++) {
-			zip.file(i+'.'+fileExt(filelist[i]), fs.readFileSync(filelist[i]), { base64: true })
-		}
+		for (let i = 0; i < filelist.length; i++) zip.file(i+'.'+fileExt(filelist[i]), fs.readFileSync(filelist[i]), { base64: true })
 
 		loading.forward(`Making File...`)
 		setTimeout(async() => {

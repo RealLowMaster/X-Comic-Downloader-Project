@@ -200,6 +200,46 @@ function closeSetting() {
 	document.getElementById('main').style.display = 'flex'
 }
 
+function BackUp(filename = null, callback = null) {
+	const backup_files = [
+		'artists.lowdb',
+		'categories.lowdb',
+		'characters.lowdb',
+		'collections',
+		'collections.lowdb',
+		'comic_artists',
+		'comic_categories',
+		'comic_characters',
+		'comic_groups',
+		'comic_groups.lowdb',
+		'comic_languages',
+		'comic_parodies',
+		'comic_tags',
+		'comics',
+		'groups.lowdb',
+		'have',
+		'index.lowdb',
+		'languages.lowdb',
+		'parodies.lowdb',
+		'tags.lowdb'
+	]
+
+	const zip = new require('jszip')()
+
+	for (let i = 0; i < backup_files.length; i++) zip.file(backup_files[i], fs.readFileSync(`${dirDB}/${backup_files[i]}`), { base64: true })
+
+	setTimeout(async() => {
+		const content = await zip.generateAsync({ type: "nodebuffer" })
+		const date = new Date()
+		if (filename == null) filename = `${date.getFullYear()}-${date.getMonth() < 12 ? date.getMonth() + 1 : 1}-${date.getDate()} - ${date.getHours() < 10 ? '0'+date.getHours() : date.getHours()}-${date.getMinutes() < 10 ? '0'+date.getMinutes() : date.getMinutes()}-${date.getSeconds() < 10 ? '0'+date.getSeconds() : date.getSeconds()} Backup.zip`
+		if (!fs.existsSync(dirBU)) fs.mkdirSync(dirBU)
+		fs.writeFileSync(`${dirBU}/${filename}`, content)
+		if (callback != null) callback()
+		else PopAlert('Backup Finished')
+	}, 1)
+}
+
+// Key Events
 function SettingKeyEvents(ctrl,shift,key) {
 	if (ctrl) {
 		if (!shift) {

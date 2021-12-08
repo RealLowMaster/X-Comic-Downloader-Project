@@ -1222,7 +1222,7 @@ function nhentaiRepairAllComicInfo(id, comic_id) {
 	nhentai.getComic(id, false, (err, result) => {
 		if (err) {
 			procressPanel.add(`"${repair_all_list[0][0]}" -> ${err}`, 'danger')
-			repair_all_error_list.push(repair_all_list[0])
+			if (err != "You don't have the permission to View this Page.") repair_all_error_list.push(repair_all_list[0])
 			repair_all_list.shift()
 			RepairAllComicLoop()
 			return
@@ -1282,7 +1282,6 @@ function nhentaiRepairAllComicInfo(id, comic_id) {
 
 		db.comics.update({_id:comic_id}, { $set: {n:title} }, {}, (err) => {
 			if (err) procressPanel.add(`UpdateComicName -> "${repair_all_list[0][0]}" -> ${err}`, 'danger')
-			else procressPanel.add(`Comic "${repair_all_list[0][0]}" Has Been Repair`)
 			repair_all_list.shift()
 			RepairAllComicLoop()
 		})
