@@ -181,6 +181,14 @@ document.addEventListener("DOMContentLoaded", () => {
 		error("Startup->SetClickEvents->Err: "+err);
 	}
 
+	try {
+		window.addEventListener('keydown', e => {
+			if (!e.ctrlKey && !e.shiftKey && e.keyCode == 122) ChangeScreenMode()
+		})
+	} catch(err) {
+		error("Startup->SetFullScreenEvents->Err: "+err)
+	}
+
 	loading.forward('Checking SubFolder...')
 	const IndexLoadCheck = () => {
 		if (indexDB.length < 3) { setTimeout(IndexLoadCheck, 250); return }

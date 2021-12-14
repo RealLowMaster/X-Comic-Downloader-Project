@@ -44,6 +44,7 @@ function setLuanchTimeSettings(reloadSettingPanel) {
 	document.getElementById('s_show_unoptimize').checked = setting.show_unoptimize
 	document.getElementById('s_check_update').checked = setting.check_update
 	document.getElementById('s_auto_close_optimize_panel').checked = setting.auto_close_optimize_panel
+	document.getElementById('s_full_screen').checked = setting.full_screen
 	document.getElementById('s_open_br_startup').checked = setting.open_br_startup
 	document.getElementById('s_show_comic_pages').checked = setting.show_comic_pages
 
@@ -62,10 +63,13 @@ function setLuanchTimeSettings(reloadSettingPanel) {
 	else s_file_location_label.textContent = setting.file_location
 	s_file_location_label.setAttribute('title', setting.file_location)
 
+	ChangeScreenMode(setting.full_screen, false)
+
 	if (reloadSettingPanel != true) {
-		const style = document.documentElement.style
+		
 		if (setting.hover_downloader == false) document.getElementById('downloader').setAttribute('fixed', true)
 
+		const style = document.documentElement.style
 		for (let i = 0; i < offline_theme_var.length; i++) {
 			style.setProperty(offline_theme_var[i], offline_theme_themes[setting.offline_theme][i])
 		}
@@ -123,6 +127,7 @@ function saveSetting(justSave) {
 		setting.auto_close_optimize_panel = document.getElementById('s_auto_close_optimize_panel').checked
 		setting.open_br_startup = document.getElementById('s_open_br_startup').checked
 		setting.show_comic_pages = document.getElementById('s_show_comic_pages').checked
+		setting.full_screen = document.getElementById('s_full_screen').checked
 
 		if (setting.show_comic_pages) {
 			document.getElementById('comic-container').setAttribute('show-pages', true)
@@ -139,11 +144,8 @@ function saveSetting(justSave) {
 
 		if (lazy_loading != setting.lazy_loading) {
 			setting.lazy_loading = lazy_loading
-			if (lazy_loading == true)
-				imageLazyLoadingOptions.rootMargin = "0px 0px 300px 0px"
-			else
-				imageLazyLoadingOptions.rootMargin = "0px 0px 1200px 0px"
-
+			if (lazy_loading == true) imageLazyLoadingOptions.rootMargin = "0px 0px 300px 0px"
+			else imageLazyLoadingOptions.rootMargin = "0px 0px 1200px 0px"
 			imageLoadingObserver = new IntersectionObserver(ObserverFunction, imageLazyLoadingOptions)
 		}
 
@@ -174,7 +176,7 @@ function saveSetting(justSave) {
 		PopAlert('Setting Saved.')
 	}
 
-	require('jsonfile').writeFileSync(dirDocument+'/setting.json', setting)
+	ChangeScreenMode(setting.full_screen)
 	if (reload == true) {
 		if (downloadingList.length == 0) ThisWindow.reload()
 		else PopAlert('You cannot Change Saving Location when downloading.', 'danger')
@@ -247,7 +249,12 @@ function SettingKeyEvents(ctrl,shift,key) {
 				case 83:
 					saveSetting(false)
 					break
-				case 87:
+			}
+		}
+	} else {
+		if (!shift) {
+			switch (key) {
+				case 27:
 					closeSetting()
 					break
 			}

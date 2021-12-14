@@ -1105,6 +1105,10 @@ function renameComic(id, newName) {
 	})
 }
 
+function askForClosingApp() {
+	
+}
+
 // Key Event
 function OfflineKeyEvents(ctrl, shift, key) {
 	if (ctrl) {
@@ -1118,6 +1122,9 @@ function OfflineKeyEvents(ctrl, shift, key) {
 	} else {
 		if (!shift) {
 			switch (key) {
+				case 27:
+					askForClosingApp()
+					break
 				case 39:
 					offlineChangePage()
 					break
@@ -1149,7 +1156,12 @@ function OfflineComicKeyEvents(ctrl, shift, key) {
 				case 83:
 					reOpenLastSlider()
 					break
-				case 87:
+			}
+		}
+	} else {
+		if (!shift) {
+			switch (key) {
+				case 27:
 					closeComicPanel()
 					break
 			}

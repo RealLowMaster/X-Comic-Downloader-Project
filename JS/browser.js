@@ -1226,6 +1226,13 @@ function BrowserKeyEvents(ctrl, shift, key) {
 			}
 			
 		} else if (key == 84) openBrowserLastTabs()
+	} else {
+		if (!shift) {
+			switch (key) {
+				case 27:
+					closeBrowser()
+					break
+			}
+		}
 	}
-	
 }

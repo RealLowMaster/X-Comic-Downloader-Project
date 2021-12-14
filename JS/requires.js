@@ -27,6 +27,7 @@ const defaultSetting = {
 	"check_update": true,
 	"auto_close_optimize_panel": false,
 	"file_location": null,
+	"full_screen": true,
 	"open_br_startup": false,
 	"developer_mode": false
 }
@@ -280,7 +281,7 @@ function GetFileLocationForInput(who) {
 function CheckUpdate(alert) {
 	alert = alert || false
 	if (window.navigator.onLine) {
-		fetch('https://api.jsonbin.io/b/612915922aa800361270d567/latest', { method: "GET" }).then(response => {
+		fetch('https://api.npoint.io/1cc57afc1a05329fe920', { method: "GET" }).then(response => {
 			if (!response.ok) {
 				PopAlert('UPDATE->CHECKING->ERR->HTTP: '+response.status, 'danger')
 				return
@@ -598,6 +599,27 @@ function loadImagesOneByOne(images) {
 	}
 }
 
+function ChangeScreenMode(fullscreen = null, save = true) {
+	if (fullscreen == null) fullscreen = !ThisWindow.isFullScreen()
+
+	const style = document.documentElement.style
+	if (fullscreen) {
+		if (save) setting.full_screen = true
+		ThisWindow.setFullScreen(true)
+		document.getElementById('window-menu').style.display = 'none'
+		style.setProperty('--topMenuSize', '0.000001px')
+	} else {
+		if (save) setting.full_screen = false
+		ThisWindow.setFullScreen(false)
+		document.getElementById('window-menu').style.display = 'grid'
+		style.setProperty('--topMenuSize', '30px')
+	}
+
+	document.getElementById('s_full_screen').checked = setting.full_screen
+
+	if (save) jsonfile.writeFileSync(dirDocument+'/setting.json', setting)
+}
+
 // Main Loading Stuff
 const dirDocument = remote.app.getPath('documents')+'\\X Comic Downloader'
 
@@ -816,6 +838,7 @@ function CheckSettings() {
 	if (typeof(setting.check_update) != 'boolean') setting.check_update = defaultSetting.check_update
 	if (typeof(setting.auto_close_optimize_panel) != 'boolean') setting.auto_close_optimize_panel = defaultSetting.auto_close_optimize_panel
 	if (typeof(setting.open_br_startup) != 'boolean') setting.open_br_startup = defaultSetting.open_br_startup
+	if (typeof(setting.full_screen) != 'boolean') setting.full_screen = defaultSetting.full_screen
 	if (typeof(setting.developer_mode) != 'boolean') setting.developer_mode = defaultSetting.developer_mode
 	if (setting.developer_mode == true) {
 		window.addEventListener('keydown', e => {

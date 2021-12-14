@@ -11,11 +11,6 @@
 	grid-template-rows: 210px 11fr;
 }
 
-#comic-slider[fullscreen] {
-	height: 100%;
-	top: 0;
-}
-
 #c-s-ov {
 	display: block;
 	width: 100%;
@@ -135,7 +130,7 @@
 
 #c-s-ct {
 	display: flex;
-	background-color: #000000f3;
+	background-color: #000;
 	justify-content: center;
 	align-items: center;
 	overflow: auto;

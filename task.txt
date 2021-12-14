@@ -87,9 +87,12 @@ Add Comic {
 	nhentai => Search => Kemono DIRECT
 	nhentai => Group => Aoba Q Madou
 	nhentai => Artist => Momomo
+	nhentai => Artist => Muneshiro
+	nhentai => Comic => OneShota Byoutou
 }
 
 Added To Version {
+	Fix Update Checker
 	Fix Bug: Duplicating Or Copy-Pasting Tabs
 	Fix Bug: Downloading Comics With Only 1 Image
 	Add Right Click Menu To Comic Images
@@ -99,6 +102,8 @@ Added To Version {
 	Add Repair All Comic Infos Ability
 	Add Backup Database Ability
 	Add Auto Backup Ability
+	Add Exit Panel Hotkey (Esc)
+	Add Fullscreen Mode (F11 & Settings)
 	Update Slider UI
 	Improve Update a Little
 }

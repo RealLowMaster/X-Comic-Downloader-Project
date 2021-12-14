@@ -145,22 +145,6 @@ function sliderImageBorderHighlighter() {
 	else comicSliderCanvas.style.borderBottomColor = '#000'
 }
 
-function toggleComicSliderScreen() {
-	const comic_slider = document.getElementById('comic-slider')
-	const parent = comic_slider.children[1]
-	if (ThisWindow.isFullScreen()) {
-		ThisWindow.setFullScreen(false)
-		parent.style.backgroundColor = '#000000f3'
-		comic_slider.removeAttribute('fullscreen')
-		document.getElementById('window-menu').style.display = 'grid'
-	} else {
-		ThisWindow.setFullScreen(true)
-		parent.style.backgroundColor = '#000'
-		comic_slider.setAttribute('fullscreen', true)
-		document.getElementById('window-menu').style.display = 'none'
-	}
-}
-
 function changeSliderIndex(index) {
 	const prev = document.getElementById('c-s-p')
 	const next = document.getElementById('c-s-n')
@@ -217,8 +201,6 @@ function reOpenLastSlider() {
 function closeComicSlider() {
 	keydownEventIndex = 1
 	comicSlider.style.display = 'none'
-	ThisWindow.setFullScreen(false)
-	document.getElementById('comic-slider').children[1].style.backgroundColor = '#000000f3'
 	comicSlider.setAttribute('src', '')
 	comicSlider.removeAttribute('opened-overview')
 	toggleComicSliderSize(false)
@@ -257,6 +239,9 @@ function SliderKeyEvents(ctrl, shift, key) {
 	} else {
 		if (!shift) {
 			switch (key) {
+				case 27:
+					closeComicSlider()
+					break
 				case 65:
 					const index3 = Number(comicSliderOverview.getAttribute('aindex'))
 					if (index3 != 0) changeSliderIndex(index3 - 1)
@@ -268,12 +253,6 @@ function SliderKeyEvents(ctrl, shift, key) {
 					break
 				case 79:
 					toggleComicSliderSize()
-					break
-				case 87:
-					closeComicSlider()
-					break
-				case 122:
-					toggleComicSliderScreen()
 					break
 			}
 		}
