@@ -316,12 +316,9 @@ function UpdateApp() {
 	procressPanel.show('Checking Connection...')
 
 	let node_update = false
-	for (let i = 0; i < new_update.node_modules_updates_number.length; i++) {
-		if (new_update.node_modules_updates_number > update_number) {
-			node_update = true
-			procressPanel.changePercent(5)
-			break
-		}
+	if (new_update.node_modules_updates_number > update_number) {
+		node_update = true
+		procressPanel.changePercent(5)
 	}
 
 	procressPanel.add('Connected To Update Data.')
