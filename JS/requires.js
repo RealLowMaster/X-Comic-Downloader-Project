@@ -90,6 +90,7 @@ let collectionsDB = [], groupsDB = [], artistsDB = [], parodiesDB = [], tagsDB =
 
 // Set Windows Closing Event
 function closeApp() {
+	closingApp = true
 	loading.reset(0)
 	loading.show('Shutting Down')
 	const tabsElement = tabsContainer.children
@@ -109,15 +110,16 @@ function closeApp() {
 		})
 	} catch(err) {
 		error('AutoBackup->Err: '+err)
+		closingApp = false
 	}
 }
 
 ThisWindow.addListener('close', e => {
 	e.preventDefault()
-	if (isUpdating) { PopAlert('You Cannot Close App When Updating.', 'danger') }
-	if (isOptimizing) { PopAlert("You can't Close App When you are Optimzating.", "danger"); return }
-	if (isRepairing) { PopAlert("You can't Close App When you are Repairing.", "danger"); return }
-	if (comicDeleting) { PopAlert("You can't Close App When you are Deleting a Comic.", "danger"); return }
+	if (isUpdating) { PopAlert('You Cannot Close App When Updating.', 'danger'); closingApp = false; return }
+	if (isOptimizing) { PopAlert("You can't Close App When you are Optimzating.", "danger"); closingApp = false; return }
+	if (isRepairing) { PopAlert("You can't Close App When you are Repairing.", "danger"); closingApp = false; return }
+	if (comicDeleting) { PopAlert("You can't Close App When you are Deleting a Comic.", "danger"); closingApp = false; return }
 	if (downloadingList.length > 0) {
 		errorSelector('You are Downloading Comics, Are you sure you want To Close Software ?', [
 			[
@@ -127,7 +129,8 @@ ThisWindow.addListener('close', e => {
 			],
 			[
 				"No",
-				"btn btn-danger m-2"
+				"btn btn-danger m-2",
+				"closingApp = false;this.parentElement.parentElement.remove()"
 			]
 		])
 	} else closeApp()

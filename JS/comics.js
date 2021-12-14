@@ -6,7 +6,7 @@ const comicArtistsContainer = document.getElementById('c-p-a')
 const comicParodyContainer = document.getElementById('c-p-p')
 const comicTagsContainer = document.getElementById('c-p-ts')
 const comicImageContainer = document.getElementById('c-p-i')
-let off_site = null, off_id = null, off_comic_id = null, off_quality = null, need_repair = [], in_comic = false, comic_menu_id = null, passKeyEvent = null, export_comic_id = null, comic_panel_menu_info = null, isThumbing = false, isRepairing = false, isRepairingContiue = false, repair_all_list = null, repair_all_error_list = null
+let off_site = null, off_id = null, off_comic_id = null, off_quality = null, need_repair = [], in_comic = false, comic_menu_id = null, passKeyEvent = null, export_comic_id = null, comic_panel_menu_info = null, isThumbing = false, isRepairing = false, isRepairingContiue = false, repair_all_list = null, repair_all_error_list = null, closingApp = false
 
 function loadComics(page, search, safeScroll) {
 	page = page || 1
@@ -1106,7 +1106,20 @@ function renameComic(id, newName) {
 }
 
 function askForClosingApp() {
-	
+	if (closingApp == true) return
+	closingApp = true
+	errorSelector('Do you want to Quit?', [
+		[
+			"Yes",
+			"btn btn-danger m-2",
+			"this.parentElement.parentElement.remove();remote.app.quit()"
+		],
+		[
+			"No",
+			"btn btn-primary m-2",
+			'closingApp = false;this.parentElement.parentElement.remove()'
+		]
+	])
 }
 
 // Key Event
