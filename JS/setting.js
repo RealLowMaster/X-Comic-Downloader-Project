@@ -207,7 +207,6 @@ function BackUp(filename = null, callback = null) {
 		'artists.lowdb',
 		'categories.lowdb',
 		'characters.lowdb',
-		'collections',
 		'collections.lowdb',
 		'comic_artists',
 		'comic_categories',
@@ -228,7 +227,10 @@ function BackUp(filename = null, callback = null) {
 
 	const zip = new require('jszip')()
 
-	for (let i = 0; i < backup_files.length; i++) zip.file(backup_files[i], fs.readFileSync(`${dirDB}/${backup_files[i]}`), { base64: true })
+	for (let i = 0; i < backup_files.length; i++) {
+		let src = `${dirDB}/${backup_files[i]}`
+		if (fs.existsSync(src)) zip.file(backup_files[i], fs.readFileSync(src), { base64: true })
+	}
 
 	setTimeout(async() => {
 		const content = await zip.generateAsync({ type: "nodebuffer" })
