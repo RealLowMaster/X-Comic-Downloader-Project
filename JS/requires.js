@@ -29,6 +29,7 @@ const defaultSetting = {
 	"file_location": null,
 	"full_screen": true,
 	"open_br_startup": false,
+	"auto_backup": true,
 	"developer_mode": false
 }
 const comicPanel = document.getElementById('comic-panel')
@@ -102,15 +103,20 @@ function closeApp() {
 		saveHistory()
 	}
 
-	try {
-		if (fs.existsSync(dirBU+'/AutoBackup.zip')) fs.unlinkSync(dirBU+'/AutoBackup.zip')
-		BackUp('AutoBackup.zip', () => {
-			ThisWindow.removeAllListeners()
-			remote.app.quit()
-		})
-	} catch(err) {
-		error('AutoBackup->Err: '+err)
-		closingApp = false
+	if (setting.auto_backup) {
+		try {
+			if (fs.existsSync(dirBU+'/AutoBackup.zip')) fs.unlinkSync(dirBU+'/AutoBackup.zip')
+			BackUp('AutoBackup.zip', () => {
+				ThisWindow.removeAllListeners()
+				remote.app.quit()
+			})
+		} catch(err) {
+			error('AutoBackup->Err: '+err)
+			closingApp = false
+		}
+	} else {
+		ThisWindow.removeAllListeners()
+		remote.app.quit()
 	}
 }
 
@@ -839,6 +845,7 @@ function CheckSettings() {
 	if (typeof(setting.auto_close_optimize_panel) != 'boolean') setting.auto_close_optimize_panel = defaultSetting.auto_close_optimize_panel
 	if (typeof(setting.open_br_startup) != 'boolean') setting.open_br_startup = defaultSetting.open_br_startup
 	if (typeof(setting.full_screen) != 'boolean') setting.full_screen = defaultSetting.full_screen
+	if (typeof(setting.auto_backup) != 'boolean') setting.auto_backup = defaultSetting.auto_backup
 	if (typeof(setting.developer_mode) != 'boolean') setting.developer_mode = defaultSetting.developer_mode
 	if (setting.developer_mode == true) {
 		window.addEventListener('keydown', e => {

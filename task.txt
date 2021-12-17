@@ -93,6 +93,7 @@ Add Comic {
 
 Added To Version {
 	Fix Bug: Exiting App Error collections not Found
+	Add Ability For Disabling Autobackup To Setting
 }
 
 Doing {
@@ -100,7 +101,7 @@ Doing {
 }
 
 Tasks => {
-	Add Ability For Autobackup To Setting
+	Fix Bug: Download Stop When you are downloading more than 200 image comic
 	Update Add Procress-Panels { Update, etc... }
 	Add Downloaded Comic Site Icon In Comic Panel
 	Fix bug: nhentai -> Searching B-trayal pagination won't work

@@ -47,6 +47,7 @@ function setLuanchTimeSettings(reloadSettingPanel) {
 	document.getElementById('s_full_screen').checked = setting.full_screen
 	document.getElementById('s_open_br_startup').checked = setting.open_br_startup
 	document.getElementById('s_show_comic_pages').checked = setting.show_comic_pages
+	document.getElementById('s_auto_backup').checked = setting.auto_backup
 
 	s_file_location.setAttribute('location', setting.file_location)
 	const s_file_location_label = s_file_location.parentElement.parentElement.children[0]
@@ -128,6 +129,7 @@ function saveSetting(justSave) {
 		setting.open_br_startup = document.getElementById('s_open_br_startup').checked
 		setting.show_comic_pages = document.getElementById('s_show_comic_pages').checked
 		setting.full_screen = document.getElementById('s_full_screen').checked
+		setting.auto_backup = document.getElementById('s_auto_backup').checked
 
 		if (setting.show_comic_pages) {
 			document.getElementById('comic-container').setAttribute('show-pages', true)
