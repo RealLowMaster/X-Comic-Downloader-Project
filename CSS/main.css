@@ -2,7 +2,7 @@
 	font-family: Tahoma, monospace, sans-serif;
 	font-size: 16px;
 
-	--topMenuSize: 30px;
+	--topMenuSize: 25px;
 
 	--obr-tmenu-bgc: #eee;
 	--obr-con-bgc: #fff;
@@ -289,7 +289,7 @@ input::-webkit-input-placeholder { user-select: none }
 	height: var(--topMenuSize);
 	padding-left: 10px;
 	color: #eee;
-	font-size: 14px;
+	font-size: 12px;
 }
 
 #window-menu > div:last-child {
@@ -306,6 +306,11 @@ input::-webkit-input-placeholder { user-select: none }
 	color: #eee;
 }
 
+#window-menu > div:last-child > button > svg {
+	width: auto;
+	height: calc(var(--topMenuSize) - 13px);
+}
+
 #window-menu > div:last-child > button:hover {
 	background-color: #333;
 }
@@ -313,7 +318,6 @@ input::-webkit-input-placeholder { user-select: none }
 #window-menu > div:last-child > button:first-child:hover {
 	background-color: #E74C3C;
 }
-
 
 #main {
 	display: none;

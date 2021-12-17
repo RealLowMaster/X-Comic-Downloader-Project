@@ -92,8 +92,7 @@ Add Comic {
 }
 
 Added To Version {
-	Fix Bug: Exiting App Error collections not Found
-	Add Ability For Disabling Autobackup To Setting
+	
 }
 
 Doing {
@@ -101,6 +100,11 @@ Doing {
 }
 
 Tasks => {
+	Improve Release-Note
+	Add Browser-Right Click
+	Change Tab Remove Activating Next Tab
+	Add Search In Tags, Artists, and etc...
+	Change Window Icons
 	Fix Bug: Download Stop When you are downloading more than 200 image comic
 	Update Add Procress-Panels { Update, etc... }
 	Add Downloaded Comic Site Icon In Comic Panel
@@ -110,6 +114,7 @@ Tasks => {
 	Make UI Beatiful
 	Add Search To History Panel
 	Add Auto Optimize Image After Download
+	Make New Download System { Download Panel, Stop Download and etc... }
 
 	Optimize Gifs { giflossy imagemin Packages }
 	Optimize offlineChangePage()
