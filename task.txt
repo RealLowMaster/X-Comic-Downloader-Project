@@ -81,6 +81,7 @@ Add Comic {
 	League Of Legends
 	Aroma Sensei
 	xlecx => Search => ufos
+	xlecx => Group => Tracy Scops
 	nhentai => Group => Behind Moon
 	nhentai => Artist => Binbi
 	nhentai => Artist => Chikiko
@@ -92,7 +93,7 @@ Add Comic {
 }
 
 Added To Version {
-	
+	Fix Bug: databases been empty error
 }
 
 Doing {

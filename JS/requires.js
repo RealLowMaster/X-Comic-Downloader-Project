@@ -808,6 +808,15 @@ function CreateDatabase() {
 	
 	if (fs.existsSync(dirDB+'/collections.lowdb')) collectionsDB = jsonfile.readFileSync(dirDB+'/collections.lowdb').a
 	else jsonfile.writeFileSync(dirDB+'/collections.lowdb',{a:[]})
+
+	// Check DBs
+	if (typeof groupsDB != 'object') groupsDB = []
+	if (typeof artistsDB != 'object') artistsDB = []
+	if (typeof parodiesDB != 'object') parodiesDB = []
+	if (typeof tagsDB != 'object') tagsDB = []
+	if (typeof charactersDB != 'object') charactersDB = []
+	if (typeof categoriesDB != 'object') categoriesDB = []
+	if (typeof collectionsDB != 'object') collectionsDB = []
 }
 
 function CheckSettings() {
