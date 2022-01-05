@@ -12,9 +12,6 @@ function ChangeSizes() {
 
 function test() {
 	//sharp('Image/sites/nhentai.png').png({ quality: 100 }).resize(30,30).toFile('Image/sites/nhentai-30x30.png')
-	const index = Downloader.AddToStarting(0, 'id')
-	console.log(index)
-	Downloader.Add(index, 'Comic Name', 'Comic URL', '../00. test/DownloadedComics/thumbs/1637309427428.jpg', [])
 }
 
 function AfterDatabaseDoneOnStartup() {

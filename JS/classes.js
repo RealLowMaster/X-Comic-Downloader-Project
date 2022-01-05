@@ -283,6 +283,11 @@ class DownloadManager {
 		this.#info = []
 	}
 
+	HasDownload() {
+		if (this.#indexs.length == 0) return false
+		else return true
+	}
+
 	IsDownloading(site, id) {
 		for (let i = 0; i < this.#info.length; i++) if (this.#info[i].site == site && this.#info[i].id == id) return true
 		return false

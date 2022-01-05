@@ -251,6 +251,7 @@
 	outline: none;
 	border: none;
 	box-sizing: border-box;
+	font-family: var(--font-family);
 }
 
 html, body {
@@ -260,6 +261,7 @@ html, body {
 	overflow: hidden;
 	font-family: var(--font);
 	-webkit-font-smoothing: antialiased;
+	text-rendering: optimizeLegibility;
 }
 
 button { user-select: none }
@@ -1437,6 +1439,7 @@ input::-webkit-input-placeholder { user-select: none }
 	width: 100%;
 	height: calc(100% - var(--topMenuSize));
 	background-color: #fff;
+	overflow-x: visible;
 	overflow-y: auto;
 	position: fixed;
 	top: var(--topMenuSize);
@@ -1445,19 +1448,31 @@ input::-webkit-input-placeholder { user-select: none }
 	z-index: 100000;
 }
 
-#download-panel[active] {
-	left: 0;
+#download-panel[active] { left: 0 }
+
+#d-p-t {
+	display: block;
+	width: 35px;
+	height: 35px;
+	padding: 7px;
+	background-color: #2488cb;
+	color: #fff;
+	border-radius: 50%;
+	position: fixed;
+	right: 20px;
+	bottom: 35px;
+	box-shadow: 0 1px 5px 0 rgba(60, 64, 67, .3);
+	transition: right .4s, background-color .2s;
+	cursor: pointer;
 }
 
-#download-panel-toggle {
-	display: none;
-	width: 30px;
-	background-color: #fff;
-	position: absolute;
-	top: 0;
-	right: 0;
-	bottom: 0;
+#d-p-t[hov] {
+	
 }
+
+#d-p-t:hover { background-color: #b82197 }
+#download-panel[active] > #d-p-t { right: -100px }
+#d-p-t > svg { width: 100%; height: 100% }
 
 #d-p-c-btn {
 	width: 30px;
@@ -1471,18 +1486,9 @@ input::-webkit-input-placeholder { user-select: none }
 	cursor: pointer;
 }
 
-#d-p-c-btn > svg {
-	width: 100%;
-	height: 100%;
-}
-
-#d-p-c-btn:hover {
-	color: #f00;
-}
-
-#d-p-c {
-	padding: 30px 0;
-}
+#d-p-c-btn > svg { width: 100%; height: 100% }
+#d-p-c-btn:hover { color: #f00 }
+#d-p-c { padding: 30px 0 }
 
 #d-p-c > div {
 	display: flex;
@@ -1632,7 +1638,6 @@ input::-webkit-input-placeholder { user-select: none }
 }
 
 #d-p-c > div > div[detail] > btns > btn:hover { border-color: rgb(187, 187, 189) }
-
 #d-p-c > div > div[detail] > btns > btn[resume] { color: #fff; background-color: rgb(26, 115, 232) }
 
 #d-p-c > div > div:last-child {

@@ -37,7 +37,6 @@ function setLuanchTimeSettings(reloadSettingPanel) {
 
 	document.getElementById('s_max_per_page').value = setting.max_per_page
 	document.getElementById('s_download_limit').value = setting.download_limit
-	document.getElementById('s_hover_downloader').checked = setting.hover_downloader
 	document.getElementById('s_notification_download_finish').checked = setting.notification_download_finish
 	document.getElementById('s_notification_optimization_finish').checked = setting.notification_optimization_finish
 	document.getElementById('s_lazy_loading').checked = setting.lazy_loading
@@ -67,25 +66,11 @@ function setLuanchTimeSettings(reloadSettingPanel) {
 	ChangeScreenMode(setting.full_screen, false)
 
 	if (reloadSettingPanel != true) {
-		
-		if (setting.hover_downloader == false) document.getElementById('downloader').setAttribute('fixed', true)
-
 		const style = document.documentElement.style
-		for (let i = 0; i < offline_theme_var.length; i++) {
-			style.setProperty(offline_theme_var[i], offline_theme_themes[setting.offline_theme][i])
-		}
-
-		for (let i = 0; i < comic_panel_theme_var.length; i++) {
-			style.setProperty(comic_panel_theme_var[i], comic_panel_theme_themes[setting.comic_panel_theme][i])
-		}
-
-		for (let i = 0; i < browser_theme_var.length; i++) {
-			style.setProperty(browser_theme_var[i], browser_theme_themes[setting.browser_theme][i])
-		}
-
-		for (let i = 0; i < pagination_theme_var.length; i++) {
-			style.setProperty(pagination_theme_var[i], pagination_theme_themes[setting.pagination_theme][i])
-		}
+		for (let i = 0; i < offline_theme_var.length; i++) style.setProperty(offline_theme_var[i], offline_theme_themes[setting.offline_theme][i])
+		for (let i = 0; i < comic_panel_theme_var.length; i++) style.setProperty(comic_panel_theme_var[i], comic_panel_theme_themes[setting.comic_panel_theme][i])
+		for (let i = 0; i < browser_theme_var.length; i++) style.setProperty(browser_theme_var[i], browser_theme_themes[setting.browser_theme][i])
+		for (let i = 0; i < pagination_theme_var.length; i++) style.setProperty(pagination_theme_var[i], pagination_theme_themes[setting.pagination_theme][i])
 	}
 }
 
@@ -103,10 +88,6 @@ function saveSetting(justSave) {
 		if (setting.waiting_quality != waiting_quality) {
 			setting.waiting_quality = waiting_quality
 			wt_fps = waiting_quality + 10 - waiting_quality + (10 * waiting_quality)
-			const dl_imgs = document.getElementById('downloader').getElementsByTagName('img')
-			for (let i = 0; i < dl_imgs.length; i++) {
-				dl_imgs[i].setAttribute('src', `Image/dual-ring-success-${wt_fps}.gif`)
-			}
 		}
 
 		if (setting.max_per_page != max_per_page) {
@@ -120,7 +101,6 @@ function saveSetting(justSave) {
 		setting.pagination_theme = Number(document.getElementById('s_pagination_theme').getAttribute('value'))
 		setting.img_graphic = Number(document.getElementById('s_img_graphic').getAttribute('value'))
 		setting.search_speed = Number(document.getElementById('s_search_speed').getAttribute('value'))
-		setting.hover_downloader = document.getElementById('s_hover_downloader').checked
 		setting.notification_download_finish = document.getElementById('s_notification_download_finish').checked
 		setting.notification_optimization_finish = document.getElementById('s_notification_optimization_finish').checked
 		setting.download_limit = Number(document.getElementById('s_download_limit').value)
@@ -155,9 +135,6 @@ function saveSetting(justSave) {
 			reload = true
 			setting.file_location = file_location
 		}
-
-		if (setting.hover_downloader == false) document.getElementById('downloader').setAttribute('fixed', true)
-		else document.getElementById('downloader').removeAttribute('fixed')
 
 		for (let i = 0; i < offline_theme_var.length; i++) {
 			style.setProperty(offline_theme_var[i], offline_theme_themes[setting.offline_theme][i])

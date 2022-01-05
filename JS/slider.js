@@ -185,7 +185,7 @@ function openComicSlider(index) {
 	comicSliderOverview.parentElement.children[1].setAttribute('onclick', 'toggleComicSliderOverview(true, this)')
 	changeSliderIndex(index)
 	comicSliderContent.addEventListener('wheel', sliderScrollHandler)
-	document.getElementById('downloader').removeAttribute('fixed')
+	document.getElementById('d-p-t').setAttribute('hov','')
 }
 
 function reOpenLastSlider() {
@@ -195,7 +195,7 @@ function reOpenLastSlider() {
 	if (comicSliderOverview.hasAttribute('aindex')) changeSliderIndex(Number(comicSliderOverview.getAttribute('aindex')))
 	else changeSliderIndex(0)
 	comicSliderContent.addEventListener('wheel', sliderScrollHandler)
-	document.getElementById('downloader').removeAttribute('fixed')
+	document.getElementById('d-p-t').setAttribute('hov','')
 }
 
 function closeComicSlider() {
@@ -206,7 +206,7 @@ function closeComicSlider() {
 	toggleComicSliderSize(false)
 	comicSliderContent.removeEventListener('wheel', sliderScrollHandler)
 	comicSliderBackground.removeEventListener('wheel', sliderScrollHandler)
-	if (setting.hover_downloader == false) document.getElementById('downloader').setAttribute('fixed', true)
+	document.getElementById('d-p-t').removeAttribute('hov')
 }
 
 function sliderScrollHandler(e) {

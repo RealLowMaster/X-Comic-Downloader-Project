@@ -13,7 +13,6 @@ const defaultSetting = {
 	"offline_theme": 1,
 	"browser_theme": 1,
 	"waiting_quality": 1,
-	"hover_downloader": false,
 	"show_comic_pages": false,
 	"max_per_page": 18,
 	"img_graphic": 1,
@@ -838,7 +837,6 @@ function CheckSettings() {
 	if (setting.img_graphic > 1) setting.img_graphic = 1
 	if (typeof(setting.notification_download_finish) != 'boolean') setting.notification_download_finish = defaultSetting.notification_download_finish
 	if (typeof(setting.notification_optimization_finish) != 'boolean') setting.notification_optimization_finish = defaultSetting.notification_optimization_finish
-	if (typeof(setting.hover_downloader) != 'boolean') setting.hover_downloader = defaultSetting.hover_downloader
 	if (typeof(setting.lazy_loading) != 'boolean') setting.lazy_loading = defaultSetting.lazy_loading
 	if (setting.lazy_loading == false) imageLazyLoadingOptions.rootMargin = "0px 0px 1200px 0px"
 	if (typeof(setting.tabs_limit) != 'number') setting.tabs_limit = defaultSetting.tabs_limit

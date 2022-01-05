@@ -46,7 +46,7 @@ function RemoveFromHave(site, id, who) {
 		if (num == 1) {
 			if (who != null) {
 				const parent = who.parentElement
-				parent.innerHTML = `<button onclick="xlecxDownloader('${id}')">Download</button><button class="add-to-have" onclick="AddToHave(${site}, '${id}')">Add To Have</button>`
+				parent.innerHTML = `<button onclick="${id}">Download</button><button class="add-to-have" onclick="AddToHave(${site}, '${id}')">Add To Have</button>`
 			}
 			changeButtonsToDownloaded(id, site, true, true)
 			PopAlert('Comic Removed From Have List.')
