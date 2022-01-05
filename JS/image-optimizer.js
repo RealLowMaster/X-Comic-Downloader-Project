@@ -3,7 +3,7 @@ let optimizeLog = [], optimizeFullSize = 0, optimizeConvertSize = 0, isOptimzing
 
 // Optimize Single Comic
 function OptimizeComicImages(comic_id, opened_comic, keyEvent) {
-	if (opened_comic && downloadCounter > 0) { error("You Can't Optimze Image When you are Downloading Something!"); return }
+	if (opened_comic && Downloader.HasDownload()) { error("You Can't Optimze Image When you are Downloading Something and Opening Offline Comic, Close and Optimize with Right Click!"); return }
 	keydownEventIndex = null
 	isOptimizing = true
 	optimizeLog = []

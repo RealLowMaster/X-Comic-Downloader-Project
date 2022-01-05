@@ -371,22 +371,6 @@ function browserJumpPage(index, page) {
 	eval(exec)
 }
 
-function cancelDownload(index) {
-	PopAlert('Download Canceled.', 'warning')
-}
-
-function cancelAllDownloads(closeApp) {
-	closeApp = closeApp || false
-
-	if (closeApp == true) setting.download_limit = 0
-
-	for (let i = 0; i < downloadingList.length; i++) {
-		if (downloadingList[i] != null) cancelDownload(i)
-	}
-
-	if (closeApp == true) closeApp()
-}
-
 function browserError(err, tabIndex) {
 	tabs[tabIndex].page.innerHTML = `<br><div class="alert alert-danger">${err}</div><button class="btn btn-primary" style="display:block;margin:3px auto" onclick="browserTabReload()">Reload</button>`
 	tabs[tabIndex].rename('*Error*')

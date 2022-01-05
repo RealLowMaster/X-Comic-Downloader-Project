@@ -1,4 +1,3 @@
-const Downloader = new DownloadManager()
 function ChangeSizes() {
 	const size = window.innerWidth
 	comicSlider.style.width = size+'px'

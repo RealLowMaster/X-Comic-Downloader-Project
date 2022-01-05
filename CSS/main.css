@@ -1451,7 +1451,7 @@ input::-webkit-input-placeholder { user-select: none }
 #download-panel[active] { left: 0 }
 
 #d-p-t {
-	display: block;
+	display: none;
 	width: 35px;
 	height: 35px;
 	padding: 7px;

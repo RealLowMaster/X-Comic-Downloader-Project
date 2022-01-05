@@ -67,8 +67,8 @@ const keydownEvents = [
 	'BrowserKeyEvents({ctrl},{shift},{key})',
 	'SettingKeyEvents({ctrl},{shift},{key})'
 ]
-const ThisWindow = remote.getCurrentWindow(), loading = new Loading(10), db = {}, procressPanel = new ProcressPanel(0), update_number = 10
-let comicDeleting = false, downloadCounter = 0, wt_fps = 20, dirDB, dirUL, dirBU, dirTmp, isOptimizing = false, browserLastTabs = [], tabsHistory = [], dirHistory = '', keydownEventIndex = 0, new_update, save_value = null, save_value2 = null, afterDLReload = true, setting, openedMenuTabIndex, copiedTab = null, tabs = [], downloadingList = [], lastComicId, lastHaveId, searchTimer, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = [], isUpdating = false
+const ThisWindow = remote.getCurrentWindow(), loading = new Loading(10), Downloader = new DownloadManager(), db = {}, procressPanel = new ProcressPanel(0), update_number = 10
+let comicDeleting = false, wt_fps = 20, dirDB, dirUL, dirBU, dirTmp, isOptimizing = false, browserLastTabs = [], tabsHistory = [], dirHistory = '', keydownEventIndex = 0, new_update, save_value = null, save_value2 = null, afterDLReload = true, setting, openedMenuTabIndex, copiedTab = null, tabs = [], lastComicId, lastHaveId, searchTimer, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = [], isUpdating = false
 let collectionsDB = [], groupsDB = [], artistsDB = [], parodiesDB = [], tagsDB = [], charactersDB = [], languagesDB = [], categoriesDB = [], comicGroupsDB = [], comicArtistsDB = [], comicParodiesDB = [], comicTagsDB = [], comicCharactersDB = [], comicLanguagesDB = [], comicCategoriesDB = [], indexDB = []
 
 /*
@@ -91,14 +91,34 @@ let collectionsDB = [], groupsDB = [], artistsDB = [], parodiesDB = [], tagsDB =
 // Set Windows Closing Event
 function closeApp() {
 	closingApp = true
+
+	if (isUpdating) { PopAlert('You Cannot Close App When Updating.', 'danger'); closingApp = false; return }
+	if (isOptimizing) { PopAlert("You can't Close App When you are Optimzating.", "danger"); closingApp = false; return }
+	if (isRepairing) { PopAlert("You can't Close App When you are Repairing.", "danger"); closingApp = false; return }
+	if (comicDeleting) { PopAlert("You can't Close App When you are Deleting a Comic.", "danger"); closingApp = false; return }
+
+	if (Downloader.HasDownload()) {
+		errorSelector('You are Downloading Comics, Are you sure you want To Close Software ?', [
+			[
+				"Yes",
+				"btn btn-primary m-2",
+				"Downloader.CancelAll();remote.app.quit()"
+			],
+			[
+				"No",
+				"btn btn-danger m-2",
+				"closingApp = false;this.parentElement.parentElement.remove()"
+			]
+		])
+		return
+	}
+
+
 	loading.reset(0)
 	loading.show('Shutting Down')
 	const tabsElement = tabsContainer.children
 	if (tabsElement.length > 0) {
-		for (let i = 0; i < tabsElement.length; i++) {
-			const thisTabIndex = Number(tabsElement[i].getAttribute('ti'))
-			addHistory(tabs[thisTabIndex], tabsElement[i].children[0].innerText)
-		}
+		for (let i = 0; i < tabsElement.length; i++) addHistory(tabs[Number(tabsElement[i].getAttribute('ti'))], tabsElement[i].children[0].innerText)
 		saveHistory()
 	}
 
@@ -111,7 +131,10 @@ function closeApp() {
 			})
 		} catch(err) {
 			error('AutoBackup->Err: '+err)
-			closingApp = false
+			setTimeout(() => {
+				ThisWindow.removeAllListeners()
+				remote.app.quit()
+			}, 5000);
 		}
 	} else {
 		ThisWindow.removeAllListeners()
@@ -121,24 +144,7 @@ function closeApp() {
 
 ThisWindow.addListener('close', e => {
 	e.preventDefault()
-	if (isUpdating) { PopAlert('You Cannot Close App When Updating.', 'danger'); closingApp = false; return }
-	if (isOptimizing) { PopAlert("You can't Close App When you are Optimzating.", "danger"); closingApp = false; return }
-	if (isRepairing) { PopAlert("You can't Close App When you are Repairing.", "danger"); closingApp = false; return }
-	if (comicDeleting) { PopAlert("You can't Close App When you are Deleting a Comic.", "danger"); closingApp = false; return }
-	if (downloadingList.length > 0) {
-		errorSelector('You are Downloading Comics, Are you sure you want To Close Software ?', [
-			[
-				"Yes",
-				"btn btn-primary m-2",
-				"cancelAllDownloads(true)"
-			],
-			[
-				"No",
-				"btn btn-danger m-2",
-				"closingApp = false;this.parentElement.parentElement.remove()"
-			]
-		])
-	} else closeApp()
+	closeApp()
 })
 
 function maximizeApp() {
@@ -312,7 +318,7 @@ function CheckUpdate(alert) {
 function UpdateApp() {
 	if (comicDeleting) { PopAlert("You can't Update App When you are Deleting a Comic.", "danger"); return }
 	if (isOptimizing) { PopAlert("You can't Update App When you are Optimzating.", "danger"); return }
-	if (downloadingList.length > 0) { PopAlert("You can't Update App When you are Downloading Comic.", "danger"); return }
+	if (Downloader.HasDownload()) { PopAlert("You can't Update App When you are Downloading Comic.", "danger"); return }
 	if (window.navigator.onLine == false) { PopAlert('You are Offline.', 'danger'); return }
 	if (isUpdating) return
 	isUpdating = true
@@ -940,10 +946,10 @@ const FixIndex = async(id, updateLast) => {
 				if (len > 0) {
 					const neededId = doc[len - 1]._id
 					UpdateIndex(0, neededId + 1)
-					if (updateLast == true && downloadCounter == 0) lastComicId = neededId + 1
+					if (updateLast == true && !Downloader.HasDownload()) lastComicId = neededId + 1
 				} else {
 					UpdateIndex(0, 1)
-					if (updateLast == true && downloadCounter == 0) lastComicId = 1
+					if (updateLast == true && !Downloader.HasDownload()) lastComicId = 1
 				}
 			})
 			break
@@ -954,10 +960,10 @@ const FixIndex = async(id, updateLast) => {
 				if (len > 0) {
 					const neededId = doc[len - 1]._id
 					UpdateIndex(1, neededId + 1)
-					if (updateLast == true && downloadCounter == 0) lastHaveId = neededId + 1
+					if (updateLast == true && !Downloader.HasDownload()) lastHaveId = neededId + 1
 				} else {
 					UpdateIndex(1, 1)
-					if (updateLast == true && downloadCounter == 0) lastHaveId = 1
+					if (updateLast == true && !Downloader.HasDownload()) lastHaveId = 1
 				}
 			})
 			break

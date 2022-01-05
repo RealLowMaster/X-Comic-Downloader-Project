@@ -284,8 +284,13 @@ class DownloadManager {
 	}
 
 	HasDownload() {
-		if (this.#indexs.length == 0) return false
-		else return true
+		if (this.#indexs.length == 0) {
+			document.getElementById('d-p-t').style.display = 'none'
+			return false
+		} else {
+			document.getElementById('d-p-t').style.display = 'block'
+			return true
+		}
 	}
 
 	IsDownloading(site, id) {
@@ -311,6 +316,7 @@ class DownloadManager {
 		this.#indexs.splice(num,1)
 		this.#info.splice(num,1)
 		changeButtonsToDownloading(site, id, true)
+		this.HasDownload()
 	}
 
 	Add(index, url, thumb, list, result) {
@@ -360,6 +366,7 @@ class DownloadManager {
 		this.#info[num].text = second_first_first
 		this.#info[num].proc = second_first_second_first
 		PopAlert(`Download Started. '${result.title.length > 26 ? result.title : result.title.substr(0, 23)+'...'}'`, 'primary')
+		document.getElementById('d-p-t').style.display = 'block'
 		this.Download(index)
 	}
 
@@ -382,13 +389,13 @@ class DownloadManager {
 			const num2 = this.#indexs.indexOf(index)
 			if (num2 < 0) {
 				try {
-					fs.unlinkSync(filename)
+					fs.unlinkSync(filename.filename)
 					fs.rmdirSync(SubFolder)
 				} catch(err) {}
 				return
 			}
 			this.#info[num2].dlList.shift()
-			this.#info[num2].dls.push(filename)
+			this.#info[num2].dls.push(filename.filename)
 			this.#info[num2].proc.style.width = Percent+'%'
 			this.#info[num2].text.innerText = this.#info[num2].dlIndex+' / '+this.#info[num2].max
 
@@ -397,6 +404,7 @@ class DownloadManager {
 				this.#info[num2].container.remove()
 				this.#indexs.splice(num2,1)
 				this.#info.splice(num2,1)
+				this.HasDownload()
 			} else this.Download(index)
 		}).catch(dlErr => {
 			const num2 = this.#indexs.indexOf(index)
@@ -413,6 +421,7 @@ class DownloadManager {
 				this.#info[num2].container.remove()
 				this.#indexs.splice(num2,1)
 				this.#info.splice(num2,1)
+				this.HasDownload()
 			} else this.Download(index)
 		})
 	}
@@ -470,12 +479,16 @@ class DownloadManager {
 			fs.rmdirSync(SubFolder)
 		} catch(err) {}
 		changeButtonsToDownloading(id, site, true)
-		if (alert) PopAlert('Download Canceled.', 'warning')
+		if (alert) {
+			PopAlert('Download Canceled.', 'warning')
+			this.HasDownload()
+		}
 	}
 
 	CancelAll() {
 		for (let i = 0; i < this.#indexs.length; i++) this.Cancel(this.#indexs[i], false)
 		PopAlert('Downloads Canceled.', 'warning')
+		this.HasDownload()
 	}
 
 	OpenURL(url) {

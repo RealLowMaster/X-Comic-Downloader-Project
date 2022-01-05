@@ -157,7 +157,7 @@ function saveSetting(justSave) {
 
 	ChangeScreenMode(setting.full_screen)
 	if (reload == true) {
-		if (downloadingList.length == 0) ThisWindow.reload()
+		if (!Downloader.HasDownload()) ThisWindow.reload()
 		else PopAlert('You cannot Change Saving Location when downloading.', 'danger')
 	} else {
 		keydownEventIndex = 0
