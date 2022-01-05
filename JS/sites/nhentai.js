@@ -72,12 +72,12 @@ function nhentaiChangePage(page, makeNewPage, updateTabIndex) {
 			html += '<div class="nhentai-postrow"><div>Popular</div><div>'
 			if (setting.lazy_loading) {
 				for (let i = 0; i < result.popular.length; i++) {
-					if (IsDownloading(result.popular[i].id, 1)) html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.popular[i].id}, {tab}, true)')"><img src="${result.popular[i].thumb}" loading="lazy"><div ${result.popular[i].lang}>${result.popular[i].title}</div><cid ssite="1" cid="${result.popular[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
+					if (Downloader.IsDownloading(1, result.popular[i].id)) html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.popular[i].id}, {tab}, true)')"><img src="${result.popular[i].thumb}" loading="lazy"><div ${result.popular[i].lang}>${result.popular[i].title}</div><cid ssite="1" cid="${result.popular[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
 					else html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.popular[i].id}, {tab}, true)')"><img src="${result.popular[i].thumb}" loading="lazy"><div ${result.popular[i].lang}>${result.popular[i].title}</div><button ssite="1" cid="${result.popular[i].id}" onclick="nhentaiDownloader(this.getAttribute('cid'))">Download</button></div>`
 				}
 			} else {
 				for (let i = 0; i < result.popular.length; i++) {
-					if (IsDownloading(result.popular[i].id, 1)) html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.popular[i].id}, {tab}, true)')"><img src="${result.popular[i].thumb}"><div ${result.popular[i].lang}>${result.popular[i].title}</div><cid ssite="1" cid="${result.popular[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
+					if (Downloader.IsDownloading(1, result.popular[i].id)) html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.popular[i].id}, {tab}, true)')"><img src="${result.popular[i].thumb}"><div ${result.popular[i].lang}>${result.popular[i].title}</div><cid ssite="1" cid="${result.popular[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
 					else html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.popular[i].id}, {tab}, true)')"><img src="${result.popular[i].thumb}"><div ${result.popular[i].lang}>${result.popular[i].title}</div><button ssite="1" cid="${result.popular[i].id}" onclick="nhentaiDownloader(this.getAttribute('cid'))">Download</button></div>`
 				}
 			}
@@ -88,12 +88,12 @@ function nhentaiChangePage(page, makeNewPage, updateTabIndex) {
 		html += `<div class="nhentai-postrow"><div>Content Page ${page}</div><div>`
 		if (setting.lazy_loading) {
 			for (let i = 0; i < result.content.length; i++) {
-				if (IsDownloading(result.content[i].id, 1)) html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.content[i].id}, {tab}, true)')"><img src="${result.content[i].thumb}" loading="lazy"><div ${result.content[i].lang}>${result.content[i].title}</div><cid ssite="1" cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
+				if (Downloader.IsDownloading(1, result.content[i].id)) html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.content[i].id}, {tab}, true)')"><img src="${result.content[i].thumb}" loading="lazy"><div ${result.content[i].lang}>${result.content[i].title}</div><cid ssite="1" cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
 				else html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.content[i].id}, {tab}, true)')"><img src="${result.content[i].thumb}" loading="lazy"><div ${result.content[i].lang}>${result.content[i].title}</div><button ssite="1" cid="${result.content[i].id}" onclick="nhentaiDownloader(this.getAttribute('cid'))">Download</button></div>`
 			}
 		} else {
 			for (let i = 0; i < result.content.length; i++) {
-				if (IsDownloading(result.content[i].id, 1)) html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.content[i].id}, {tab}, true)')"><img src="${result.content[i].thumb}"><div ${result.content[i].lang}>${result.content[i].title}</div><cid ssite="1" cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
+				if (Downloader.IsDownloading(1, result.content[i].id)) html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.content[i].id}, {tab}, true)')"><img src="${result.content[i].thumb}"><div ${result.content[i].lang}>${result.content[i].title}</div><cid ssite="1" cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
 				else html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.content[i].id}, {tab}, true)')"><img src="${result.content[i].thumb}"><div ${result.content[i].lang}>${result.content[i].title}</div><button ssite="1" cid="${result.content[i].id}" onclick="nhentaiDownloader(this.getAttribute('cid'))">Download</button></div>`
 			}
 		}
@@ -181,7 +181,7 @@ function nhentaiOpenPost(id, makeNewTab, updateTabIndex) {
 			html = '<div class="nhentai-container">'+nhentaiSiteTopMenu
 			if (have_comic == true) html += '<div class="browser-comic-have"><span>You Downloaded This Comic.<span></div>'
 			else if (have_in_have == true) html += `<div class="browser-comic-have" sssite="1" ccid="${id}"><button class="remove-from-have" onclick="RemoveFromHave(1, ${id}, this)">You Have This Comic.</button></div>`
-			else if (IsDownloading(id, 1)) html += `<div class="browser-comic-have" sssite="1" ccid="${id}"><p>Downloading... <img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"><p></div>`
+			else if (Downloader.IsDownloading(1, id)) html += `<div class="browser-comic-have" sssite="1" ccid="${id}"><p>Downloading... <img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"><p></div>`
 			else html += `<div class="browser-comic-have" sssite="1" ccid="${id}"><button onclick="nhentaiDownloader(${id})">Download</button><button class="add-to-have" onclick="AddToHave(1, ${id})">Add To Have</button></div>`
 
 			// Info
@@ -417,12 +417,12 @@ function nhentaiOpenInfo(name, page, whitch, makeNewTab, updateTabIndex) {
 		html += `<div class="nhentai-postrow"><div>${types[whitch]} > <span class="nhentai-glow">${result.name}</span> > Page ${page}</div><div>`
 		if (setting.lazy_loading) {
 			for (let i = 0; i < result.content.length; i++) {
-				if (IsDownloading(result.content[i].id, 1)) html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.content[i].id}, {tab}, true)')"><img src="${result.content[i].thumb}" loading="lazy"><div ${result.content[i].lang}>${result.content[i].title}</div><cid ssite="1" cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
+				if (Downloader.IsDownloading(1, result.content[i].id)) html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.content[i].id}, {tab}, true)')"><img src="${result.content[i].thumb}" loading="lazy"><div ${result.content[i].lang}>${result.content[i].title}</div><cid ssite="1" cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
 				else html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.content[i].id}, {tab}, true)')"><img src="${result.content[i].thumb}" loading="lazy"><div ${result.content[i].lang}>${result.content[i].title}</div><button ssite="1" cid="${result.content[i].id}" onclick="nhentaiDownloader(this.getAttribute('cid'))">Download</button></div>`
 			}
 		} else {
 			for (let i = 0; i < result.content.length; i++) {
-				if (IsDownloading(result.content[i].id, 1)) html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.content[i].id}, {tab}, true)')"><img src="${result.content[i].thumb}"><div ${result.content[i].lang}>${result.content[i].title}</div><cid ssite="1" cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
+				if (Downloader.IsDownloading(1, result.content[i].id)) html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.content[i].id}, {tab}, true)')"><img src="${result.content[i].thumb}"><div ${result.content[i].lang}>${result.content[i].title}</div><cid ssite="1" cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
 				else html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.content[i].id}, {tab}, true)')"><img src="${result.content[i].thumb}"><div ${result.content[i].lang}>${result.content[i].title}</div><button ssite="1" cid="${result.content[i].id}" onclick="nhentaiDownloader(this.getAttribute('cid'))">Download</button></div>`
 			}
 		}
@@ -517,12 +517,12 @@ function nhentaiOpenPages(from, to, page, makeNewTab, updateTabIndex) {
 		html += `<div class="nhentai-postrow"><div>${result.title} -> Page ${page} | Results: ${result.result}</div><div>`
 		if (setting.lazy_loading) {
 			for (let i = 0; i < result.content.length; i++) {
-				if (IsDownloading(result.content[i].id, 1)) html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.content[i].id}, {tab}, true)')"><img src="${result.content[i].thumb}" loading="lazy"><div ${result.content[i].lang}>${result.content[i].title}</div><cid ssite="1" cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
+				if (Downloader.IsDownloading(1, result.content[i].id)) html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.content[i].id}, {tab}, true)')"><img src="${result.content[i].thumb}" loading="lazy"><div ${result.content[i].lang}>${result.content[i].title}</div><cid ssite="1" cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
 				else html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.content[i].id}, {tab}, true)')"><img src="${result.content[i].thumb}" loading="lazy"><div ${result.content[i].lang}>${result.content[i].title}</div><button ssite="1" cid="${result.content[i].id}" onclick="nhentaiDownloader(this.getAttribute('cid'))">Download</button></div>`
 			}
 		} else {
 			for (let i = 0; i < result.content.length; i++) {
-				if (IsDownloading(result.content[i].id, 1)) html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.content[i].id}, {tab}, true)')"><img src="${result.content[i].thumb}"><div ${result.content[i].lang}>${result.content[i].title}</div><cid ssite="1" cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
+				if (Downloader.IsDownloading(1, result.content[i].id)) html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.content[i].id}, {tab}, true)')"><img src="${result.content[i].thumb}"><div ${result.content[i].lang}>${result.content[i].title}</div><cid ssite="1" cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
 				else html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.content[i].id}, {tab}, true)')"><img src="${result.content[i].thumb}"><div ${result.content[i].lang}>${result.content[i].title}</div><button ssite="1" cid="${result.content[i].id}" onclick="nhentaiDownloader(this.getAttribute('cid'))">Download</button></div>`
 			}
 		}
@@ -616,12 +616,12 @@ function nhentaiSearch(text, page, makeNewTab, updateTabIndex) {
 		html += `<div class="nhentai-postrow"><div>Search -> Page ${page} | Results: ${result.result}</div><div>`
 		if (setting.lazy_loading) {
 			for (let i = 0; i < result.content.length; i++) {
-				if (IsDownloading(result.content[i].id, 1)) html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.content[i].id}, {tab}, true)')"><img src="${result.content[i].thumb}" loading="lazy"><div ${result.content[i].lang}>${result.content[i].title}</div><cid ssite="1" cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
+				if (Downloader.IsDownloading(1, result.content[i].id)) html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.content[i].id}, {tab}, true)')"><img src="${result.content[i].thumb}" loading="lazy"><div ${result.content[i].lang}>${result.content[i].title}</div><cid ssite="1" cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
 				else html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.content[i].id}, {tab}, true)')"><img src="${result.content[i].thumb}" loading="lazy"><div ${result.content[i].lang}>${result.content[i].title}</div><button ssite="1" cid="${result.content[i].id}" onclick="nhentaiDownloader(this.getAttribute('cid'))">Download</button></div>`
 			}
 		} else {
 			for (let i = 0; i < result.content.length; i++) {
-				if (IsDownloading(result.content[i].id, 1)) html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.content[i].id}, {tab}, true)')"><img src="${result.content[i].thumb}"><div ${result.content[i].lang}>${result.content[i].title}</div><cid ssite="1" cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
+				if (Downloader.IsDownloading(1, result.content[i].id)) html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.content[i].id}, {tab}, true)')"><img src="${result.content[i].thumb}"><div ${result.content[i].lang}>${result.content[i].title}</div><cid ssite="1" cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
 				else html += `<div onmousedown="nhentaiLinkClick('nhentaiOpenPost(${result.content[i].id}, {tab}, true)')"><img src="${result.content[i].thumb}"><div ${result.content[i].lang}>${result.content[i].title}</div><button ssite="1" cid="${result.content[i].id}" onclick="nhentaiDownloader(this.getAttribute('cid'))">Download</button></div>`
 			}
 		}
@@ -805,7 +805,7 @@ function nhentaiRandom(makeNewTab, updateTabIndex) {
 			html = '<div class="nhentai-container">'+nhentaiSiteTopMenu
 			if (have_comic == true) html += '<div class="browser-comic-have"><span>You Downloaded This Comic.<span></div>'
 			else if (have_in_have == true) html += `<div class="browser-comic-have" sssite="1" ccid="${id}"><button class="remove-from-have" onclick="RemoveFromHave(1, ${id}, this)">You Have This Comic.</button></div>`
-			else if (IsDownloading(id, 1)) html += `<div class="browser-comic-have" sssite="1" ccid="${id}"><p>Downloading... <img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"><p></div>`
+			else if (Downloader.IsDownloading(1, id)) html += `<div class="browser-comic-have" sssite="1" ccid="${id}"><p>Downloading... <img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"><p></div>`
 			else html += `<div class="browser-comic-have" sssite="1" ccid="${id}"><button onclick="nhentaiDownloader(${id})">Download</button><button class="add-to-have" onclick="AddToHave(1, ${id})">Add To Have</button></div>`
 
 			// Info
@@ -1009,67 +1009,47 @@ function nhentaiLinkClick(job) {
 
 function nhentaiDownloader(id) {
 	id = Number(id)
-	if (IsDownloading(id, 1)) { PopAlert('You are Downloading This Comic.', 'danger'); return }
+	if (Downloader.IsDownloading(1, id)) { PopAlert('You are Downloading This Comic.', 'danger'); return }
 	IsHavingComic(0, id, (have, downloaded) => {
 		if (have == true) { PopAlert('You Already Have This Comic.', 'danger'); return }
-		const downloaderIndex = AddDownloaderList(1)
-		changeButtonsToDownloading(id, 1, false)
+		const index = Downloader.AddToStarting(1, id)
 		nhentai.getComic(id, false, (err, result) => {
-			if (err) { RemoveDownloaderList(downloaderIndex); PopAlert(err, 'danger'); changeButtonsToDownloading(id, 1, true); return }
+			if (err) { Downloader.StopFromStarting(index); PopAlert(err, 'danger'); return }
 			
-			let name = result.name, downloadImageList = []
-	
-			for (let i = 0; i < result.images.length; i++) {
-				downloadImageList.push(result.images[i].url)
-			}
-			MakeDownloadList(downloaderIndex, name, id, downloadImageList)
+			let downloadImageList = []
+			for (let i = 0; i < result.images.length; i++) downloadImageList.push(result.images[i].url)
 	
 			const sendingResult = {}
 			sendingResult.title = result.name
 			if (result.characters != undefined)	{
 				sendingResult.characters = []
-				for (let i = 0; i < result.characters.length; i++) {
-					sendingResult.characters.push(result.characters[i].name)
-				}
+				for (let i = 0; i < result.characters.length; i++) sendingResult.characters.push(result.characters[i].name)
 			}
 			if (result.languages != undefined)	{
 				sendingResult.languages = []
-				for (let i = 0; i < result.languages.length; i++) {
-					sendingResult.languages.push(result.languages[i].name)
-				}
+				for (let i = 0; i < result.languages.length; i++) sendingResult.languages.push(result.languages[i].name)
 			}
 			if (result.categories != undefined)	{
 				sendingResult.categories = []
-				for (let i = 0; i < result.categories.length; i++) {
-					sendingResult.categories.push(result.categories[i].name)
-				}
+				for (let i = 0; i < result.categories.length; i++) sendingResult.categories.push(result.categories[i].name)
 			}
 			if (result.groups != undefined)	{
 				sendingResult.groups = []
-				for (let i = 0; i < result.groups.length; i++) {
-					sendingResult.groups.push(result.groups[i].name)
-				}
+				for (let i = 0; i < result.groups.length; i++) sendingResult.groups.push(result.groups[i].name)
 			}
 			if (result.artists != undefined)	{
 				sendingResult.artists = []
-				for (let i = 0; i < result.artists.length; i++) {
-					sendingResult.artists.push(result.artists[i].name)
-				}
+				for (let i = 0; i < result.artists.length; i++) sendingResult.artists.push(result.artists[i].name)
 			}
 			if (result.parody != undefined)	{
 				sendingResult.parody = []
-				for (let i = 0; i < result.parodies.length; i++) {
-					sendingResult.parody.push(result.parodies[i].name)
-				}
+				for (let i = 0; i < result.parodies.length; i++) sendingResult.parody.push(result.parodies[i].name)
 			}
 			if (result.tags != undefined)	{
 				sendingResult.tags = []
-				for (let i = 0; i < result.tags.length; i++) {
-					sendingResult.tags.push(result.tags[i].name)
-				}
+				for (let i = 0; i < result.tags.length; i++) sendingResult.tags.push(result.tags[i].name)
 			}
-			PopAlert(`Download Started. '${name}'`, 'primary')
-			comicDownloader(downloaderIndex, sendingResult)
+			Downloader.Add(index, 'url', 'thumb', downloadImageList, sendingResult)
 		})
 	})
 }

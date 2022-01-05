@@ -82,18 +82,40 @@ Add Comic {
 	Aroma Sensei
 	xlecx => Search => ufos
 	xlecx => Group => Tracy Scops
-	nhentai => Group => Behind Moon
-	nhentai => Artist => Binbi
-	nhentai => Artist => Chikiko
-	nhentai => Search => Kemono DIRECT
-	nhentai => Group => Aoba Q Madou
-	nhentai => Artist => Momomo
-	nhentai => Artist => Muneshiro
-	nhentai => Comic => OneShota Byoutou
+
+	nhentai =>
+	Group => Behind Moon
+	Artist => Binbi
+	Artist => Chikiko
+	Search => Kemono DIRECT
+	Group => Aoba Q Madou
+	Artist => Momomo
+	Artist => Muneshiro
+	Comic => OneShota Byoutou
+
+	Artist => Miitoban
+	Artist => Okunoha
+	Artist => Takura Mahiro
+	Artist => Bakuya
+	Artist => Tsukudani
+	Artist => Nemu
+	Artist => Jun
+	Artist => Ganmarei
+	Artist => 
+	Artist => 
+
+	Artist => Ikezaki Misa
+	Artist => Aichi Shiho
+
+	Tag => Bestiality
+	Tag => Insect
+
+	Comic => [Togo Mito] Ookami-san to Ushi-san Ch. 1
 }
 
 Added To Version {
 	Fix Bug: databases been empty error
+	Change Font
 }
 
 Doing {
@@ -101,11 +123,19 @@ Doing {
 }
 
 Tasks => {
+	Update Xlecx API - Pages Number etc...
+	{
+		update: for those who still have v2.0.0: xlecx page system wont work, so im getting the newest version here now (v2.0.71)
+		Edit: same issue with v2.0.71
+
+		i want to go to the next page on xlecx and it just keeps me on page 1;
+
+		if i want to go to a certain catagory, in my case furry, i get an error message "Page not found".
+	}
 	Improve Release-Note
 	Add Browser-Right Click
 	Change Tab Remove Activating Next Tab
 	Add Search In Tags, Artists, and etc...
-	Change Window Icons
 	Fix Bug: Download Stop When you are downloading more than 200 image comic
 	Update Add Procress-Panels { Update, etc... }
 	Add Downloaded Comic Site Icon In Comic Panel

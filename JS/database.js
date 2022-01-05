@@ -526,9 +526,7 @@ function CreateTag(tagList, comicId, tagListIndex, repairing, newList, changed) 
 }
 
 // Add New Comic
-function CreateComic(comicIndex, haveIndex, gottenResult, image, siteIndex, comic_id, imagesCount, formats, index, isDownloading) {
-	if (typeof(index) != 'number') index = null
-	isDownloading = isDownloading || false
+function CreateComic(comicIndex, haveIndex, gottenResult, image, siteIndex, comic_id, imagesCount, formats) {
 	const insertInfo = {}
 
 	insertInfo.n = gottenResult.title.toLowerCase()
@@ -563,21 +561,11 @@ function CreateComic(comicIndex, haveIndex, gottenResult, image, siteIndex, comi
 		if (tags != null) CreateTag(tags, id)
 
 		makeThumbForDownloadingComic(doc.i, doc.f[0][2], doc._id, () => {
-			if (isDownloading == true && index != null) {
-				var shortName = gottenResult.title
-				if (shortName.length > 26) shortName = shortName.substr(0, 23)+'...'
-				PopAlert(`Comic (${shortName}) Downloaded.`)
-				if (setting.notification_download_finish && remote.Notification.isSupported()) new remote.Notification({title: 'Comic Download Finished.', body: gottenResult.title}).show()
-				document.getElementById(downloadingList[index][2]).remove()
-				downloadingList[index] = null
-				changeButtonsToDownloaded(doc.p, doc.s, false, false)
-				downloadCounter--
-				SetDownloadListNumbers()
-				if (downloadCounter == 0) {
-					downloadingList = []
-					document.getElementById('downloader').style.display = 'none'
-				}
-			}
+			let shortName = gottenResult.title
+			if (shortName.length > 26) shortName = shortName.substr(0, 23)+'...'
+			PopAlert(`Comic (${shortName}) Downloaded.`)
+			if (setting.notification_download_finish && remote.Notification.isSupported()) new remote.Notification({title: 'Comic Download Finished.', body: gottenResult.title}).show()
+			changeButtonsToDownloaded(doc.p, doc.s, false, false)
 			if (afterDLReload == true) reloadLoadingComics()
 		})
 	})

@@ -99,21 +99,15 @@ function createNewXlecxTab(id, pageNumber) {
 		for (let i = 0; i < result.content.length; i++) {
 			element = document.createElement('div')
 			valueStorage = ''
-
 			if (setting.lazy_loading == true) valueStorage = ' loading="lazy"'
-
 			html = `<img src="${xlecx.baseURL+result.content[i].thumb}"${valueStorage}>`
 
-			if (result.content[i].pages == null)
-				valueStorage = ''
-			else
-				valueStorage = `<span>${result.content[i].pages}</span>`
+			if (result.content[i].pages == null) valueStorage = ''
+			else valueStorage = `<span>${result.content[i].pages}</span>`
 
 			html += `${valueStorage}<p>${result.content[i].title}</p>`
-			if (IsDownloading(result.content[i].id, 0))
-				html += `<cid ssite="0" cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid>`
-			else
-				html += `<button ssite="0" cid="${result.content[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
+			if (Downloader.IsDownloading(0, result.content[i].id)) html += `<cid ssite="0" cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid>`
+			else html += `<button ssite="0" cid="${result.content[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
 			element.innerHTML = html
 			miniElement = document.createElement('div')
 			miniElement.setAttribute('id', result.content[i].id)
@@ -153,22 +147,15 @@ function createNewXlecxTab(id, pageNumber) {
 		for (let i = 0; i < result.random.length; i++) {
 			element = document.createElement('div')
 			valueStorage = ''
-
-			if (setting.lazy_loading == true)
-				valueStorage = ' loading="lazy"'
-
+			if (setting.lazy_loading == true) valueStorage = ' loading="lazy"'
 			html = `<img src="${xlecx.baseURL+result.random[i].thumb}"${valueStorage}>`
 
-			if (result.random[i].pages == null)
-				valueStorage = ''
-			else
-				valueStorage = `<span>${result.random[i].pages}</span>`
+			if (result.random[i].pages == null) valueStorage = ''
+			else valueStorage = `<span>${result.random[i].pages}</span>`
 
 			html += `${valueStorage}<p>${result.random[i].title}</p>`
-			if (IsDownloading(result.random[i].id, 0))
-				html += `<cid ssite="0" cid="${result.random[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid>`
-			else
-				html += `<button ssite="0" cid="${result.random[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
+			if (Downloader.IsDownloading(0, result.random[i].id)) html += `<cid ssite="0" cid="${result.random[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid>`
+			else html += `<button ssite="0" cid="${result.random[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
 			element.innerHTML = html
 			miniElement = document.createElement('div')
 			miniElement.setAttribute('id', result.random[i].id)
@@ -248,7 +235,7 @@ function xlecxOpenPost(whitchbutton, id, updateTabIndex) {
 			container.innerHTML = `<p class="xlecx-post-title">${result.title}</p>`
 			if (have_comic == true) container.innerHTML += '<div class="browser-comic-have"><span>You Downloaded This Comic.<span></div>'
 			else if (have_in_have == true) container.innerHTML += `<div class="browser-comic-have" sssite="0" ccid="${id}"><button class="remove-from-have" onclick="RemoveFromHave(0, '${id}', this)">You Have This Comic.</button></div>`
-			else if (IsDownloading(id, 0)) container.innerHTML += `<div class="browser-comic-have" sssite="0" ccid="${id}"><p>Downloading... <img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"><p></div>`
+			else if (Downloader.IsDownloading(0, id)) container.innerHTML += `<div class="browser-comic-have" sssite="0" ccid="${id}"><p>Downloading... <img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"><p></div>`
 			else container.innerHTML += `<div class="browser-comic-have" sssite="0" ccid="${id}"><button onclick="xlecxDownloader('${id}')">Download</button><button class="add-to-have" onclick="AddToHave(0, '${id}')">Add To Have</button></div>`
 
 			// Groups
@@ -393,21 +380,15 @@ function xlecxOpenPost(whitchbutton, id, updateTabIndex) {
 				for (let i = 0; i < result.related.length; i++) {
 					element = document.createElement('div')
 					valueStorage = ''
-
 					if (setting.lazy_loading == true) valueStorage = ' loading="lazy"'
-					
 					html = `<img src="${xlecx.baseURL+result.related[i].thumb}"${valueStorage}>`
 
-					if (result.related[i].pages == null)
-						valueStorage = ''
-					else
-						valueStorage = `<span>${result.related[i].pages}</span>`
+					if (result.related[i].pages == null) valueStorage = ''
+					else valueStorage = `<span>${result.related[i].pages}</span>`
 
 					html += `${valueStorage}<p>${result.related[i].title}</p>`
-					if (IsDownloading(result.related[i].id, 0))
-						html += `<cid ssite="0" cid="${result.related[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid>`
-					else
-						html += `<button ssite="0" cid="${result.related[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
+					if (Downloader.IsDownloading(0, result.related[i].id)) html += `<cid ssite="0" cid="${result.related[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid>`
+					else html += `<button ssite="0" cid="${result.related[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
 					element.innerHTML = html
 					miniElement = document.createElement('div')
 					miniElement.setAttribute('id', result.related[i].id)
@@ -522,22 +503,15 @@ function xlecxOpenCategory(name, page, shortName, whitchbutton, updateTabIndex) 
 		for (let i = 0; i < result.content.length; i++) {
 			element = document.createElement('div')
 			valueStorage = ''
-
-			if (setting.lazy_loading == true)
-				valueStorage = ' loading="lazy"'
-
+			if (setting.lazy_loading == true) valueStorage = ' loading="lazy"'
 			html = `<img src="${xlecx.baseURL+result.content[i].thumb}"${valueStorage}>`
 
-			if (result.content[i].pages == null)
-				valueStorage = ''
-			else
-				valueStorage = `<span>${result.content[i].pages}</span>`
+			if (result.content[i].pages == null) valueStorage = ''
+			else valueStorage = `<span>${result.content[i].pages}</span>`
 
 			html += `${valueStorage}<p>${result.content[i].title}</p>`
-			if (IsDownloading(result.content[i].id, 0))
-				html += `<cid ssite="0" cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid>`
-			else
-				html += `<button ssite="0" cid="${result.content[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
+			if (Downloader.IsDownloading(0, result.content[i].id)) html += `<cid ssite="0" cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid>`
+			else html += `<button ssite="0" cid="${result.content[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
 			element.innerHTML = html
 			miniElement = document.createElement('div')
 			miniElement.setAttribute('id', result.content[i].id)
@@ -577,22 +551,15 @@ function xlecxOpenCategory(name, page, shortName, whitchbutton, updateTabIndex) 
 		for (let i = 0; i < result.random.length; i++) {
 			element = document.createElement('div')
 			valueStorage = ''
-
-			if (setting.lazy_loading == true)
-				valueStorage = ' loading="lazy"'
-
+			if (setting.lazy_loading == true) valueStorage = ' loading="lazy"'
 			html = `<img src="${xlecx.baseURL+result.random[i].thumb}"${valueStorage}>`
 
-			if (result.random[i].pages == null)
-				valueStorage = ''
-			else
-				valueStorage = `<span>${result.random[i].pages}</span>`
+			if (result.random[i].pages == null) valueStorage = ''
+			else valueStorage = `<span>${result.random[i].pages}</span>`
 
 			html += `${valueStorage}<p>${result.random[i].title}</p>`
-			if (IsDownloading(result.random[i].id, 0))
-				html += `<cid ssite="0" cid="${result.random[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid>`
-			else
-				html += `<button ssite="0" cid="${result.random[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
+			if (Downloader.IsDownloading(0, result.random[i].id)) html += `<cid ssite="0" cid="${result.random[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid>`
+			else html += `<button ssite="0" cid="${result.random[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
 			element.innerHTML = html
 			miniElement = document.createElement('div')
 			miniElement.setAttribute('id', result.random[i].id)
@@ -644,22 +611,15 @@ function xlecxOpenTagContentMaker(result, thisTabIndex, name, whitch) {
 	for (let i = 0; i < result.content.length; i++) {
 		element = document.createElement('div')
 		valueStorage = ''
-
-		if (setting.lazy_loading == true)
-			valueStorage = ' loading="lazy"'
-
+		if (setting.lazy_loading == true) valueStorage = ' loading="lazy"'
 		html = `<img src="${xlecx.baseURL+result.content[i].thumb}"${valueStorage}>`
 
-		if (result.content[i].pages == null)
-			valueStorage = ''
-		else
-			valueStorage = `<span>${result.content[i].pages}</span>`
+		if (result.content[i].pages == null) valueStorage = ''
+		else valueStorage = `<span>${result.content[i].pages}</span>`
 
 		html += `${valueStorage}<p>${result.content[i].title}</p>`
-		if (IsDownloading(result.content[i].id, 0))
-			html += `<cid ssite="0" cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid>`
-		else
-			html += `<button ssite="0" cid="${result.content[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
+		if (Downloader.IsDownloading(0, result.content[i].id)) html += `<cid ssite="0" cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid>`
+		else html += `<button ssite="0" cid="${result.content[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
 		element.innerHTML = html
 		miniElement = document.createElement('div')
 		miniElement.setAttribute('id', result.content[i].id)
@@ -964,22 +924,15 @@ function xlecxSearch(text, page, whitchbutton, updateTabIndex) {
 			for (let i = 0; i < result.content.length; i++) {
 				element = document.createElement('div')
 				valueStorage = ''
-
-				if (setting.lazy_loading == true)
-					valueStorage = ' loading="lazy"'
-
+				if (setting.lazy_loading == true) valueStorage = ' loading="lazy"'
 				html = `<img src="${xlecx.baseURL+result.content[i].thumb}"${valueStorage}>`
 
-				if (result.content[i].pages == null)
-					valueStorage = ''
-				else
-					valueStorage = `<span>${result.content[i].pages}</span>`
+				if (result.content[i].pages == null) valueStorage = ''
+				else valueStorage = `<span>${result.content[i].pages}</span>`
 
 				html += `${valueStorage}<p>${result.content[i].title}</p>`
-				if (IsDownloading(result.content[i].id, 0))
-					html += `<cid ssite="0" cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></span></cid>`
-				else
-					html += `<button ssite="0" cid="${result.content[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
+				if (Downloader.IsDownloading(0, result.content[i].id)) html += `<cid ssite="0" cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></span></cid>`
+				else html += `<button ssite="0" cid="${result.content[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
 				element.innerHTML = html
 				miniElement = document.createElement('div')
 				miniElement.setAttribute('id', result.content[i].id)
@@ -1136,59 +1089,42 @@ function xlecxJumpPage(index, page) {
 }
 
 function xlecxDownloader(id) {
-	if (IsDownloading(id, 0)) { PopAlert('You are Downloading This Comic.', 'danger'); return }
+	if (Downloader.IsDownloading(0, id)) { PopAlert('You are Downloading This Comic.', 'danger'); return }
 	IsHavingComic(0, id, (have, downloaded) => {
 		if (have == true) { PopAlert('You Already Have This Comic.', 'danger'); return }
-		const downloaderIndex = AddDownloaderList(0)
-		changeButtonsToDownloading(id, 0, false)
+		const index = Downloader.AddToStarting(0, id)
 		xlecx.getComic(id, {related:false}, (err, result) => {
-			if (err) { RemoveDownloaderList(downloaderIndex); PopAlert(err, 'danger'); changeButtonsToDownloading(id, 0, true); return }
+			if (err) { Downloader.StopFromStarting(index); PopAlert(err, 'danger'); return }
 			
-			let name = result.title, quality = 0, downloadImageList = []
+			let quality = 0, downloadImageList = []
 			if (result.images[0].src == result.images[0].thumb) quality = 1
 			else quality = setting.img_graphic
 	
 			if (quality == 0) {
-				for (let i = 0; i < result.images.length; i++) {
-					downloadImageList.push(xlecx.baseURL+result.images[i].thumb)
-				}
+				for (let i = 0; i < result.images.length; i++) downloadImageList.push(xlecx.baseURL+result.images[i].thumb)
 			} else {
-				for (let i = 0; i < result.images.length; i++) {
-					downloadImageList.push(xlecx.baseURL+result.images[i].src)
-				}
+				for (let i = 0; i < result.images.length; i++) downloadImageList.push(xlecx.baseURL+result.images[i].src)
 			}
-			
-	
-			MakeDownloadList(downloaderIndex, name, id, downloadImageList)
 	
 			const sendingResult = {}
 			sendingResult.title = result.title
 			if (result.groups != undefined)	{
 				sendingResult.groups = []
-				for (let i = 0; i < result.groups.length; i++) {
-					sendingResult.groups.push(result.groups[i].name)
-				}
+				for (let i = 0; i < result.groups.length; i++) sendingResult.groups.push(result.groups[i].name)
 			}
 			if (result.artists != undefined)	{
 				sendingResult.artists = []
-				for (let i = 0; i < result.artists.length; i++) {
-					sendingResult.artists.push(result.artists[i].name)
-				}
+				for (let i = 0; i < result.artists.length; i++) sendingResult.artists.push(result.artists[i].name)
 			}
 			if (result.parody != undefined)	{
 				sendingResult.parody = []
-				for (let i = 0; i < result.parody.length; i++) {
-					sendingResult.parody.push(result.parody[i].name)
-				}
+				for (let i = 0; i < result.parody.length; i++) sendingResult.parody.push(result.parody[i].name)
 			}
 			if (result.tags != undefined)	{
 				sendingResult.tags = []
-				for (let i = 0; i < result.tags.length; i++) {
-					sendingResult.tags.push(result.tags[i].name)
-				}
+				for (let i = 0; i < result.tags.length; i++) sendingResult.tags.push(result.tags[i].name)
 			}
-			PopAlert(`Download Started. '${name}'`, 'primary')
-			comicDownloader(downloaderIndex, sendingResult, quality)
+			Downloader.Add(index, 'url', 'thumb', downloadImageList, sendingResult)
 		})
 	})
 }

@@ -17,11 +17,9 @@
 		if (typeof module === 'object') { window.module = module; module = undefined; }
 	</script>
 	<script type="text/javascript" src="JS/actions.js"></script>
-	<script type="text/javascript" src="JS/classes/xlecx-api.js"></script>
-	<script type="text/javascript" src="JS/classes/nhentai-api.js"></script>
-	<script type="text/javascript" src="JS/classes/tab.js"></script>
-	<script type="text/javascript" src="JS/classes/loading.js"></script>
-	<script type="text/javascript" src="JS/classes/procress-panel.js"></script>
+	<script type="text/javascript" src="JS/apis/xlecx-api.js"></script>
+	<script type="text/javascript" src="JS/apis/nhentai-api.js"></script>
+	<script type="text/javascript" src="JS/classes.js"></script>
 	<script type="text/javascript" src="JS/requires.js" defer></script>
 	<script type="text/javascript" src="JS/themes.js" defer></script>
 	<script type="text/javascript" src="JS/comics.js" defer></script>
@@ -714,6 +712,15 @@
 			</div>
 
 		</div>
+	</div>
+
+	<!-- Download Panel -->
+	<div id="download-panel">
+		<div id="download-panel-toggle" onclick="Downloader.OpenPanel()"></div>
+
+		<div id="d-p-c-btn" onclick="Downloader.ClosePanel()"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"><g><path fill="currentColor" d="M9.21,356.07a31.46,31.46,0,0,0,0,44.48l22.24,22.24a31.46,31.46,0,0,0,44.48,0L176,322.72,109.28,256ZM342.79,111.45,320.55,89.21a31.46,31.46,0,0,0-44.48,0L176,189.28,242.72,256,342.79,155.93a31.46,31.46,0,0,0,0-44.48Z" style="opacity:.5"></path><path fill="currentColor" d="M342.79,356.07a31.46,31.46,0,0,1,0,44.48l-22.24,22.24a31.46,31.46,0,0,1-44.48,0L9.21,155.93a31.46,31.46,0,0,1,0-44.48L31.45,89.21a31.46,31.46,0,0,1,44.48,0Z"></path></g></svg></div>
+
+		<div id="d-p-c"></div>
 	</div>
 </body>
 </html>

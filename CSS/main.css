@@ -1,5 +1,8 @@
+@font-face { font-family: Outfit; src: url('../fonts/Outfit.ttf') }
+
 :root {
-	font-family: Tahoma, monospace, sans-serif;
+	--font: Outfit, monospace, sans-serif;
+	font-family: var(--font);
 	font-size: 16px;
 
 	--topMenuSize: 25px;
@@ -255,6 +258,7 @@ html, body {
 	height: 100vh;
 	user-select: text;
 	overflow: hidden;
+	font-family: var(--font);
 	-webkit-font-smoothing: antialiased;
 }
 
@@ -1425,6 +1429,234 @@ input::-webkit-input-placeholder { user-select: none }
 	background-color: #3498DB;
 	color: #fff;
 	border-color: #2488cb;
+}
+
+/* Download Panel */
+#download-panel {
+	display: block;
+	width: 100%;
+	height: calc(100% - var(--topMenuSize));
+	background-color: #fff;
+	overflow-y: auto;
+	position: fixed;
+	top: var(--topMenuSize);
+	left: -100%;
+	transition: left .3s;
+	z-index: 100000;
+}
+
+#download-panel[active] {
+	left: 0;
+}
+
+#download-panel-toggle {
+	display: none;
+	width: 30px;
+	background-color: #fff;
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+}
+
+#d-p-c-btn {
+	width: 30px;
+	height: 30px;
+	color: #000;
+	position: sticky;
+	top: 10px;
+	right: 10px;
+	float: right;
+	left: auto;
+	cursor: pointer;
+}
+
+#d-p-c-btn > svg {
+	width: 100%;
+	height: 100%;
+}
+
+#d-p-c-btn:hover {
+	color: #f00;
+}
+
+#d-p-c {
+	padding: 30px 0;
+}
+
+#d-p-c > div {
+	display: flex;
+	flex: none;
+	margin: 10px auto;
+	min-width: 103px;
+	width: 680px;
+	min-height: 128px;
+	background-color: #fff;
+	border-radius: 4px;
+	box-shadow: rgba(60, 64, 67, .3) 0 1px 2px 0,
+		rgba(60, 64, 67, .15) 0 1px 3px 1px;
+}
+
+#d-p-c > div > div:first-child {
+	flex: none;
+	justify-content: center;
+	align-self: center;
+	overflow: hidden;
+	position: relative;
+	user-select: none;
+}
+
+#d-p-c > div > div:first-child > img:first-child {
+	display: block;
+	margin: 13px;
+	width: 110px;
+	height: auto;
+	border-radius: 4px;
+	max-height: 150px;
+	object-fit: cover;
+	object-position: center;
+	box-shadow: 0 1px 5px 0 rgba(60, 64, 67, .15);
+}
+
+#d-p-c > div > div:first-child > img:last-child {
+	width: 24px;
+	height: 24px;
+	border-radius: 50%;
+	object-fit: cover;
+	object-position: center;
+	position: absolute;
+	top: 2.5px;
+	right: 2.5px;
+	box-shadow: 0 1px 5px 0 rgba(60, 64, 67, .3);
+}
+
+#d-p-c > div > div[detail] {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	min-width: 0;
+	padding: 16px 16px 12px 24px;
+	border-left: 1px #d8d8d8 solid;
+}
+
+#d-p-c > div > div[detail] > name {
+	display: block;
+	width: 100%;
+	max-width: 100%;
+	color: rgb(26, 115, 232);
+	font-size: 14px;
+	font-weight: 500;
+	word-break: break-all;
+	cursor: default;
+}
+
+#d-p-c > div > div[detail] > url {
+	display: block;
+	width: 100%;
+	margin-top: 6px;
+	color: rgb(95, 99, 104);
+	font-size: 13px;
+	font-weight: 500;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	cursor: pointer;
+}
+
+#d-p-c > div > div[detail] > url:hover { text-decoration: underline }
+
+#d-p-c > div > div[detail] > showinfolder {
+	display: block;
+	margin-top: 16px;
+	padding: 10px 0;
+	width: 100%;
+	user-select: none;
+}
+
+#d-p-c > div > div[detail] > showinfolder > div {
+	display: inline-block;
+	color: rgb(26, 115, 232);
+	font-size: 13px;
+	cursor: pointer;
+}
+
+#d-p-c > div > div[detail] > showinfolder > div:hover { color: rgb(27, 104, 204) }
+
+#d-p-c > div > div[detail] > proc {
+	display: block;
+	width: 100%;
+	margin-top: 16px;
+	user-select: none;
+}
+
+#d-p-c > div > div[detail] > proc > div {
+	display: block;
+	width: 100%;
+	color: #616161;
+	text-align: left;
+	font-size: 14px;
+	font-weight: 500;
+}
+
+#d-p-c > div > div[detail] > proc > pr {
+	display: block;
+	width: 100%;
+	height: 3px;
+	margin-top: 5px;
+	background-color: #ddd;
+}
+
+#d-p-c > div > div[detail] > proc > pr > div {
+	display: block;
+	width: 0;
+	height: 100%;
+	background-color: #1d97e9;
+}
+
+#d-p-c > div > div[detail] > btns {
+	display: block;
+	width: 100%;
+	margin-top: 16px;
+	user-select: none;
+}
+
+#d-p-c > div > div[detail] > btns > btn {
+	display: inline-block;
+	padding: 7px 14px;
+	color: rgb(26, 115, 232);
+	margin-left: 5px;
+	border: 1px solid rgb(218, 220, 224);
+	border-radius: 4px;
+	font-size: 14px;
+	cursor: pointer;
+}
+
+#d-p-c > div > div[detail] > btns > btn:hover { border-color: rgb(187, 187, 189) }
+
+#d-p-c > div > div[detail] > btns > btn[resume] { color: #fff; background-color: rgb(26, 115, 232) }
+
+#d-p-c > div > div:last-child {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding-top: 10px;
+	width: 60px;
+}
+
+#d-p-c > div > div:last-child > div {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: transparent;
+	color: #000;
+	font-size: 16px;
+	font-weight: 300;
+	cursor: pointer;
+	user-select: none;
+}
+
+#d-p-c > div > div:last-child > div:hover {
+	color: #f00;
 }
 
 /* New Release */

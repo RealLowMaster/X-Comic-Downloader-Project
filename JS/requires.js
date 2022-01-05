@@ -700,7 +700,6 @@ function CreateDatabase() {
 		jsonfile.writeFileSync(dirDB+'/index.lowdb',{a:indexDB})
 	}
 
-
 	// Groups DB
 	if (fs.existsSync(dirDB+'/groups')) {
 		let temp_comic_groups = new nedb({ filename: dirDB+'/groups', autoload: true })
