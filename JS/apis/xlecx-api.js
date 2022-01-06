@@ -26,9 +26,13 @@ class XlecxAPI {
 	}
 
 	#getPagnitionNumber(text, list = []) {
-		let txt = text.replace('https://','').replace('xlecx.one','').replace('xlecx.org','').replace('xlecx.com','')
+		let txt = text.replace('http://','').replace('https://','').replace('xlecx.one','').replace('xlecx.org','').replace('xlecx.com','')
 		for (let i = 0; i < list.length; i++) txt = txt.replace(list[i],'')
 		return Number(txt.replace('/page/','').replace(/\//g,''))
+	}
+
+	#getThumb(text) {
+		return text.replace('http://','').replace('https://','').replace('xlecx.one','').replace('xlecx.org','').replace('xlecx.com','')
 	}
 
 	getPage(options = {page:1, random:false, pagination:true, category:false}, callback) {
@@ -74,7 +78,7 @@ class XlecxAPI {
 					arr.random.push({
 						"id": this.#lastSlash(gg),
 						"title": container[i].getElementsByClassName('th-title')[0].textContent,
-						"thumb": container[i].getElementsByTagName('img')[0].getAttribute('src').replace('http://xlecx.com', ''),
+						"thumb": this.#getThumb(container[i].getElementsByTagName('img')[0].getAttribute('src')),
 						"pages": bb,
 						"url": gg
 					})
@@ -98,7 +102,7 @@ class XlecxAPI {
 					arr.content.push({
 						"id": this.#lastSlash(gg),
 						"title": save[1].textContent,
-						"thumb": save2[0].getAttribute('src').replace('http://xlecx.com', ''),
+						"thumb": this.#getThumb(save2[0].getAttribute('src')),
 						"pages": bb,
 						"url": gg
 					})
@@ -202,7 +206,7 @@ class XlecxAPI {
 					arr.random.push({
 						"id": this.#lastSlash(gg),
 						"title": container[i].getElementsByClassName('th-title')[0].textContent,
-						"thumb": container[i].getElementsByTagName('img')[0].getAttribute('src').replace('http://xlecx.com', ''),
+						"thumb": this.#getThumb(container[i].getElementsByTagName('img')[0].getAttribute('src').replace('http://xlecx.com', '')),
 						"pages": bb,
 						"url": gg
 					})
@@ -226,7 +230,7 @@ class XlecxAPI {
 					arr.content.push({
 						"id": this.#lastSlash(gg),
 						"title": save[1].textContent,
-						"thumb": save2[0].getAttribute('src').replace('http://xlecx.com', ''),
+						"thumb": this.#getThumb(save2[0].getAttribute('src')),
 						"pages": bb,
 						"url": gg
 					})
@@ -378,7 +382,7 @@ class XlecxAPI {
 								arr.related.push({
 									"id": this.#lastSlash(gg),
 									"title": li[i].getElementsByClassName('th-title')[0].textContent,
-									"thumb": li[i].getElementsByTagName('img')[0].getAttribute('src').replace('http://xlecx.com', ''),
+									"thumb": this.#getThumb(li[i].getElementsByTagName('img')[0].getAttribute('src')),
 									"pages": bb,
 									"url": gg
 								})
@@ -429,7 +433,7 @@ class XlecxAPI {
 							arr.push({
 								"id": this.#lastSlash(gg),
 								"title": li[i].getElementsByClassName('th-title')[0].textContent,
-								"thumb": li[i].getElementsByTagName('img')[0].getAttribute('src').replace('http://xlecx.com', ''),
+								"thumb": this.#getThumb(li[i].getElementsByTagName('img')[0].getAttribute('src')),
 								"pages": bb,
 								"url": gg
 							})
@@ -537,7 +541,7 @@ class XlecxAPI {
 					arr.content.push({
 						"id": this.#lastSlash(gg),
 						"title": save[1].textContent,
-						"thumb": save2[0].getAttribute('src').replace('http://xlecx.com', ''),
+						"thumb": this.#getThumb(save2[0].getAttribute('src')),
 						"pages": bb,
 						"url": gg
 					})
@@ -624,7 +628,7 @@ class XlecxAPI {
 					arr.content.push({
 						"id": this.#lastSlash(gg),
 						"title": save[1].textContent,
-						"thumb": save2[0].getAttribute('src').replace('http://xlecx.com', ''),
+						"thumb": this.#getThumb(save2[0].getAttribute('src')),
 						"pages": bb,
 						"url": gg
 					})
@@ -711,7 +715,7 @@ class XlecxAPI {
 					arr.content.push({
 						"id": this.#lastSlash(gg),
 						"title": save[1].textContent,
-						"thumb": save2[0].getAttribute('src').replace('http://xlecx.com', ''),
+						"thumb": this.#getThumb(save2[0].getAttribute('src')),
 						"pages": bb,
 						"url": gg
 					})
@@ -798,7 +802,7 @@ class XlecxAPI {
 					arr.content.push({
 						"id": this.#lastSlash(gg),
 						"title": save[1].textContent,
-						"thumb": save2[0].getAttribute('src').replace('http://xlecx.com', ''),
+						"thumb": this.#getThumb(save2[0].getAttribute('src')),
 						"pages": bb,
 						"url": gg
 					})
@@ -891,7 +895,7 @@ class XlecxAPI {
 					arr.content.push({
 						"id": this.#lastSlash(gg),
 						"title": save[1].textContent,
-						"thumb": save2[0].getAttribute('src').replace('http://xlecx.com', ''),
+						"thumb": this.#getThumb(save2[0].getAttribute('src')),
 						"pages": bb,
 						"url": gg
 					})
