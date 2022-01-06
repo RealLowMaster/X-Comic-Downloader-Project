@@ -8,7 +8,7 @@ class XlecxAPI {
 	]
 
 	constructor() {
-		this.baseURL = 'https://xlecx.org'
+		this.baseURL = 'https://xlecx.one'
 		this.groupURL = '/xfsearch/group/'
 		this.artistURL = '/xfsearch/artist/'
 		this.parodyURL = '/xfsearch/parody/'
@@ -23,6 +23,12 @@ class XlecxAPI {
 
 	#getOverviewPages(text) {
 		return Number(text.replace('img', '').replace('images', '').replace('pages', '').replace('page', '').replace('стр.', '').replace('шьп', '').replace(/ /g, ''))
+	}
+
+	#getPagnitionNumber(text, list) {
+		let txt = text.replace('https://','').replace('xlecx.one','').replace('xlecx.org','').replace('xlecx.com','')
+		for (let i = 0; i < list.length; i++) txt = txt.replace(list[i],'')
+		return Number(txt.replace(/ /g, '%20').replace('/page/','').replace(/\//g,''))
 	}
 
 	getPage(options = {page:1, random:false, pagination:true, category:false}, callback) {
@@ -100,20 +106,21 @@ class XlecxAPI {
 
 				// Pagination
 				if (pagination == true) {
-					let value, pPage
 					arr.pagination = [];
 					li = htmlDoc.getElementById('bottom-nav').querySelector('.navigation').children
 					for (let i = 0; i < li.length; i++) {
-						if (li[i].textContent == "")
+						let value, pPage
+						if (li[i].textContent == "") {
 							if (i == li.length - 1) value = ">"
 							else value = "<"
-						else value = li[i].textContent
-						
-						if (li[i].getAttribute('href') == null) pPage = null
-						else pPage = Number(li[i].getAttribute('href').replace(this.baseURL+'/page/', '').replace(slashReg, ''))
+						} else value = li[i].textContent
+
+						if (li[i].tagName == 'SPAN') pPage = null
+						else pPage = this.#getPagnitionNumber(li[i].getAttribute('href'))
 						
 						arr.pagination.push([value, pPage])
 					}
+					console.log(true)
 				}
 			}
 
@@ -228,17 +235,21 @@ class XlecxAPI {
 
 				// Pagination
 				if (pagination == true) {
-					let value, pPage
 					arr.pagination = []
 					li = htmlDoc.getElementById('bottom-nav').querySelector('.navigation').children
 					for (let i = 0; i < li.length; i++) {
-						if (li[i].textContent == "")
+						let value, pPage
+
+						if (li[i].textContent == "") {
 							if (i == li.length - 1) value = ">"
 							else value = "<"
-						else value = li[i].textContent
+						} else value = li[i].textContent
 						
 						if (li[i].getAttribute('href') == null) pPage = null
 						else pPage = Number(li[i].getAttribute('href').replace((this.baseURL+'/'+name+'/page/').replace(/ /g, '%20'), '').replace(slashReg, ''))
+
+						if (li[i].tagName == 'SPAN') pPage = null
+						else pPage = this.#getPagnitionNumber(li[i].getAttribute('href'), name)
 						
 						arr.pagination.push([value, pPage])
 					}
@@ -468,9 +479,7 @@ class XlecxAPI {
 			if (category == true) {
 				arr.categories = []
 				li = htmlDoc.getElementsByClassName('side-bc')[0].getElementsByTagName('a')
-				for (let i=0; i<li.length; i++) {
-					arr.categories.push({ "name": li[i].textContent, "url": li[i].getAttribute('href').replace(this.baseURL+'/', '').replace(slashReg, '') })
-				}
+				for (let i=0; i<li.length; i++) arr.categories.push({ "name": li[i].textContent, "url": li[i].getAttribute('href').replace(this.baseURL+'/', '').replace(slashReg, '') })
 			}
 
 			callback(null, arr)
@@ -540,17 +549,17 @@ class XlecxAPI {
 					li = htmlDoc.getElementById('bottom-nav') || null
 					if (li != null) {
 						li = li.querySelector('.navigation').children || null
-						var value, pPage
 						arr.pagination = []
-						for (var i = 0; i < li.length; i++) {
-							if (li[i].textContent == "")
+						for (let i = 0; i < li.length; i++) {
+							let value, pPage
+							if (li[i].textContent == "") {
 								if (i == li.length - 1) value = ">"
 								else value = "<"
-							else value = li[i].textContent
-							
-							if (li[i].getAttribute('href') == null) pPage = null
+							} else value = li[i].textContent
+
+							if (li[i].tagName == 'SPAN') pPage = null
 							else {
-								pPage = Number(li[i].getAttribute('href').replace((this.baseURL+this.groupURL+name+'/page/').replace(/ /g, '%20'), '').replace(slashReg, ''))
+								pPage = this.#getPagnitionNumber(li[i].getAttribute('href'), [this.groupURL, name])
 								if (Number.isNaN(pPage)) pPage = 1
 							}
 							
@@ -627,17 +636,17 @@ class XlecxAPI {
 					li = htmlDoc.getElementById('bottom-nav') || null
 					if (li != null) {
 						li = li.querySelector('.navigation').children || null
-						let value, pPage
 						arr.pagination = []
 						for (let i = 0; i < li.length; i++) {
-							if (li[i].textContent == "")
+							let value, pPage
+							if (li[i].textContent == "") {
 								if (i == li.length - 1) value = ">"
 								else value = "<"
-							else value = li[i].textContent
-							
-							if (li[i].getAttribute('href') == null) pPage = null
+							} else value = li[i].textContent
+
+							if (li[i].tagName == 'SPAN') pPage = null
 							else {
-								pPage = Number(li[i].getAttribute('href').replace((this.baseURL+this.artistURL+name+'/page/').replace(/ /g, '%20'), '').replace(slashReg, ''))
+								pPage = this.#getPagnitionNumber(li[i].getAttribute('href'), [this.artistURL, name])
 								if (Number.isNaN(pPage)) pPage = 1
 							}
 							
@@ -714,17 +723,17 @@ class XlecxAPI {
 					li = htmlDoc.getElementById('bottom-nav') || null
 					if (li != null) {
 						li = li.querySelector('.navigation').children || null
-						let value, pPage
 						arr.pagination = []
 						for (let i = 0; i < li.length; i++) {
-							if (li[i].textContent == "")
+							let value, pPage
+							if (li[i].textContent == "") {
 								if (i == li.length - 1) value = ">"
 								else value = "<"
-							else value = li[i].textContent
-							
-							if (li[i].getAttribute('href') == null) pPage = null
+							} else value = li[i].textContent
+
+							if (li[i].tagName == 'SPAN') pPage = null
 							else {
-								pPage = Number(li[i].getAttribute('href').replace((this.baseURL+this.parodyURL+name+'/page/').replace(/ /g, '%20'), '').replace(slashReg, ''))
+								pPage = this.#getPagnitionNumber(li[i].getAttribute('href'), [this.parodyURL, name])
 								if (Number.isNaN(pPage)) pPage = 1
 							}
 							
@@ -801,17 +810,17 @@ class XlecxAPI {
 					li = htmlDoc.getElementById('bottom-nav') || null
 					if (li != null) {
 						li = li.querySelector('.navigation').children || null
-						let value, pPage
 						arr.pagination = []
 						for (let i = 0; i < li.length; i++) {
-							if (li[i].textContent == "")
+							let value, pPage
+							if (li[i].textContent == "") {
 								if (i == li.length - 1) value = ">"
 								else value = "<"
-							else value = li[i].textContent
-							
-							if (li[i].getAttribute('href') == null) pPage = null
+							} else value = li[i].textContent
+
+							if (li[i].tagName == 'SPAN') pPage = null
 							else {
-								pPage = Number(li[i].getAttribute('href').replace((this.baseURL+this.tagURL+name+'/page/').replace(/ /g, '%20'), '').replace(slashReg, ''))
+								pPage = this.#getPagnitionNumber(li[i].getAttribute('href'), [this.tagURL, name])
 								if (Number.isNaN(pPage)) pPage = 1
 							}
 							
@@ -891,20 +900,20 @@ class XlecxAPI {
 
 				// Pagination
 				if (pagination == true) {
-					let value, pPage
 					li = htmlDoc.getElementById('bottom-nav') || null
 					if (li != null) {
 						arr.pagination = []
 						li = li.querySelector('.navigation').children
 						for (let i = 0; i < li.length; i++) {
-							if (li[i].textContent == "")
+							let value, pPage
+							if (li[i].textContent == "") {
 								if (i == li.length - 1) value = ">"
 								else value = "<"
-							else value = li[i].textContent
-							
-							if (li[i].getAttribute('href') == null) pPage = null
+							} else value = li[i].textContent
+
+							if (li[i].tagName == 'SPAN') pPage = null
 							else {
-								pPage = Number(li[i].getAttribute('onclick').replace('javascript:list_submit(', '').replace('); return(false)', ''))
+								pPage = this.#getPagnitionNumber(li[i].getAttribute('href'), ['javascript:list_submit(', '); return(false)'])
 								if (Number.isNaN(pPage)) pPage = 1
 							}
 							

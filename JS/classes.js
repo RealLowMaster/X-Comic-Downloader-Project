@@ -545,7 +545,7 @@ class DownloadManager {
 			const num2 = this.#indexs.indexOf(index)
 			if (num2 < 0) return
 			this.#info[num2].dlSize += data
-			this.#info[num2].text.innerText = this.#info[num2].dlIndex+' / '+this.#info[num2].max+' '+formatBytes(this.#info[num2].dlSize)+'/'+this.#info[num2].totalSize
+			this.#info[num2].text.innerText = this.#info[num2].dlIndex+' / '+this.#info[num2].max+' - '+formatBytes(this.#info[num2].dlSize)+'/'+this.#info[num2].totalSize
 		})
 
 		this.#info[num].dl.Start()
