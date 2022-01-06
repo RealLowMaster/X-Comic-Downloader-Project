@@ -25,10 +25,10 @@ class XlecxAPI {
 		return Number(text.replace('img', '').replace('images', '').replace('pages', '').replace('page', '').replace('стр.', '').replace('шьп', '').replace(/ /g, ''))
 	}
 
-	#getPagnitionNumber(text, list) {
+	#getPagnitionNumber(text, list = []) {
 		let txt = text.replace('https://','').replace('xlecx.one','').replace('xlecx.org','').replace('xlecx.com','')
 		for (let i = 0; i < list.length; i++) txt = txt.replace(list[i],'')
-		return Number(txt.replace(/ /g, '%20').replace('/page/','').replace(/\//g,''))
+		return Number(txt.replace('/page/','').replace(/\//g,''))
 	}
 
 	getPage(options = {page:1, random:false, pagination:true, category:false}, callback) {
@@ -120,7 +120,6 @@ class XlecxAPI {
 						
 						arr.pagination.push([value, pPage])
 					}
-					console.log(true)
 				}
 			}
 
@@ -559,7 +558,7 @@ class XlecxAPI {
 
 							if (li[i].tagName == 'SPAN') pPage = null
 							else {
-								pPage = this.#getPagnitionNumber(li[i].getAttribute('href'), [this.groupURL, name])
+								pPage = this.#getPagnitionNumber(li[i].getAttribute('href'), [this.groupURL, name.replace(/ /g, '%20')])
 								if (Number.isNaN(pPage)) pPage = 1
 							}
 							
@@ -646,7 +645,7 @@ class XlecxAPI {
 
 							if (li[i].tagName == 'SPAN') pPage = null
 							else {
-								pPage = this.#getPagnitionNumber(li[i].getAttribute('href'), [this.artistURL, name])
+								pPage = this.#getPagnitionNumber(li[i].getAttribute('href'), [this.artistURL, name.replace(/ /g, '%20')])
 								if (Number.isNaN(pPage)) pPage = 1
 							}
 							
@@ -733,7 +732,7 @@ class XlecxAPI {
 
 							if (li[i].tagName == 'SPAN') pPage = null
 							else {
-								pPage = this.#getPagnitionNumber(li[i].getAttribute('href'), [this.parodyURL, name])
+								pPage = this.#getPagnitionNumber(li[i].getAttribute('href'), [this.parodyURL, name.replace(/ /g, '%20')])
 								if (Number.isNaN(pPage)) pPage = 1
 							}
 							
@@ -820,7 +819,7 @@ class XlecxAPI {
 
 							if (li[i].tagName == 'SPAN') pPage = null
 							else {
-								pPage = this.#getPagnitionNumber(li[i].getAttribute('href'), [this.tagURL, name])
+								pPage = this.#getPagnitionNumber(li[i].getAttribute('href'), [this.tagURL, name.replace(/ /g, '%20')])
 								if (Number.isNaN(pPage)) pPage = 1
 							}
 							
@@ -913,7 +912,7 @@ class XlecxAPI {
 
 							if (li[i].tagName == 'SPAN') pPage = null
 							else {
-								pPage = this.#getPagnitionNumber(li[i].getAttribute('href'), ['javascript:list_submit(', '); return(false)'])
+								pPage = this.#getPagnitionNumber(li[i].getAttribute('onclick'), ['javascript:list_submit(','); return(false)'])
 								if (Number.isNaN(pPage)) pPage = 1
 							}
 							

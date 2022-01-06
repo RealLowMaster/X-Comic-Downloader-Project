@@ -231,7 +231,7 @@ class Tab {
 
 	addHistory(text) {
 		if (this.activeHistory < this.history.length - 1) {
-			var ind = this.activeHistory
+			let ind = this.activeHistory
 			this.history = this.history.filter((value, index, arr) => { 
 				return index <= ind
 			})

@@ -125,7 +125,6 @@ Doing {
 
 Tasks => {
 	Change All Download System To New One { Repair and ... }
-	Update Xlecx API - Pages Number etc...
 	{
 		update: for those who still have v2.0.0: xlecx page system wont work, so im getting the newest version here now (v2.0.71)
 		Edit: same issue with v2.0.71
