@@ -116,6 +116,7 @@ Add Comic {
 Added To Version {
 	Completely Change Downlaod System
 	Fix Bug: databases been empty error
+	Fix Bug: Some Update Errors
 	Update Xlecx API
 	Change Font
 }
@@ -126,14 +127,6 @@ Doing {
 
 Tasks => {
 	Change All Download System To New One { Repair and ... }
-	{
-		update: for those who still have v2.0.0: xlecx page system wont work, so im getting the newest version here now (v2.0.71)
-		Edit: same issue with v2.0.71
-
-		i want to go to the next page on xlecx and it just keeps me on page 1;
-
-		if i want to go to a certain catagory, in my case furry, i get an error message "Page not found".
-	}
 	Improve Release-Note
 	Add Browser-Right Click
 	Change Tab Remove Activating Next Tab

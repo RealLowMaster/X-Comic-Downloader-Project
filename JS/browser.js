@@ -583,18 +583,34 @@ function changeButtonsToDownloaded(id, site, have, haveBackward) {
 function ImageListDownloader(list, index, saveList, error, callback) {
 	if (index == list.length) callback(error)
 	else {
-		ImageDownloader.image({ url: list[index], dest: saveList[index] }).then(({ filename }) => {
-			procressPanel.addMini(`Img ${index + 1} Downloaded.`)
-			procressPanel.forward(`Downloading Images (${index + 1}/${list.length})`)
-
-			ImageListDownloader(list, index + 1, saveList, error, callback)
-		}).catch(err => {
+		const dl = new Download(list[index], saveList[index])
+		let totalSize = 0, dlSize = 0
+		dl.OnError(err => {
 			error = true
 			procressPanel.add('DL->ERR: '+err, 'danger')
 			procressPanel.forward(`Downloading Images (${index + 1}/${list.length})`)
 
 			ImageListDownloader(list, index + 1, saveList, error, callback)
 		})
+
+		dl.OnComplete(() => {
+			procressPanel.addMini(`Img ${index + 1} Downloaded.`)
+			procressPanel.forward(`Downloading Images (${index + 1}/${list.length})`)
+
+			ImageListDownloader(list, index + 1, saveList, error, callback)
+		})
+
+		dl.OnResponse(resp => {
+			totalSize = formatBytes(parseInt(resp.headers['content-length']))
+			procressPanel.text(`Downloading Images (${index + 1}/${list.length}) (0/${totalSize})`)
+		})
+
+		dl.OnData(data => {
+			dlSize += data
+			procressPanel.text(`Downloading Images (${index + 1}/${list.length}) (${formatBytes(dlSize)}/${totalSize})`)
+		})
+
+		dl.Start()
 	}
 }
 

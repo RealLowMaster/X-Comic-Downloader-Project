@@ -162,7 +162,7 @@ class ProcressPanel {
 		this.#txt.innerHTML = text
 	}
 
-	config(config = { miniLog:false, miniSize:30, bgClose:false, closeBtn:false, closeEvent:'event', closeBGEvent:'event' }) {
+	config(config = { miniLog:false, miniSize:30, bgClose:false, closeBtn:false, closeEvent, closeBGEvent }) {
 		if (config.miniLog != undefined) {
 			if (config.miniLog) {
 				this.#constainer.setAttribute('mini', true)
@@ -355,6 +355,7 @@ class DownloadManager {
 	#indexs
 	#info
 	#sort
+	#passKeyIndex
 
 	constructor() {
 		this.#indexs = []
@@ -662,10 +663,13 @@ class DownloadManager {
 	}
 
 	OpenPanel() {
+		this.#passKeyIndex = keydownEventIndex
+		keydownEventIndex = null
 		document.getElementById('download-panel').setAttribute('active', '')
 	}
 
 	ClosePanel() {
+		keydownEventIndex = this.#passKeyIndex
 		document.getElementById('download-panel').removeAttribute('active')
 	}
 }

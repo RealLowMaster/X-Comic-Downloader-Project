@@ -79,13 +79,12 @@
 		"electron-builder": "22.7.0"
 	},
 	"dependencies": {
-		"image-downloader": "^4.0.2",
 		"jsonfile": "^6.1.0",
 		"jszip": "^3.7.1",
 		"nedb": "^1.8.0",
 		"node-stream-zip": "^1.14.0",
 		"request": "^2.88.2",
-		"sharp": "^0.29.0"
+		"sharp": "^0.29.3"
 	},
 	"repository": {
 		"type": "git",

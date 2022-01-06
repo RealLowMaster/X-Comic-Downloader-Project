@@ -4,7 +4,6 @@ const nedb = require('nedb')
 const sharp = require('sharp')
 const jsonfile = require('jsonfile')
 const request = require('request')
-const ImageDownloader = require('image-downloader')
 const defaultSettingLang = {
 	tab_at_limit: "You Can't Make Any More Tab."
 }
@@ -293,8 +292,7 @@ function GetFileLocationForInput(who) {
 	})
 }
 
-function CheckUpdate(alert) {
-	alert = alert || false
+function CheckUpdate() {
 	if (window.navigator.onLine) {
 		fetch('https://api.npoint.io/1cc57afc1a05329fe920', { method: "GET" }).then(response => {
 			if (!response.ok) {
@@ -335,61 +333,43 @@ function UpdateApp() {
 
 	procressPanel.add('Connected To Update Data.')
 	procressPanel.forward('Downloading Update...')
-	const file = fs.createWriteStream(`${dirTmp}/update.zip`)
 
-	setTimeout(async () => {
-		await new Promise((resolve, reject) => {
-			let total_bytes = 0, total_size = '', received_bytes = 0
+	let totalSize = 0, totalBytes = 0, dlSize = 0
+	const dl = new Download(new_update.zip, `${dirTmp}/update.zip`)
+	dl.OnError(err => {
+		error('DownloadUpdate->'+err)
+		procressPanel.reset()
+		isUpdating = false
+	})
 
-			const stream = request({
-				method: 'GET',
-				followAllRedirects: true,
-				url: new_update.zip
-			})
+	dl.OnComplete(filename => {
+		const StreamZip = require('node-stream-zip')
+		const path = require('path')
 
-			stream.on('error', err => {
-				file.close()
-				fs.unlinkSync(`${dirTmp}/update.zip`)
+		if (node_update) {
+			procressPanel.add('Complete Downloading Update First Part.')
+			procressPanel.forward('Downloading NodeUpdate...')
+			totalSize = 0, totalBytes = 0, dlSize = 0
+			const dl2 = new Download(new_update.latest_node_modules, `${dirTmp}/node_update.zip`)
+			dl2.OnError(err => {
+				error('DownloadNodeUpdate->'+err)
 				isUpdating = false
-				reject(err)
 			})
 
-			stream.on('response', response => {
-				total_bytes = parseInt(response.headers['content-length'])
-				total_size = formatBytes(total_bytes)
-			})
+			dl2.OnComplete(filename2 => {
 
-			stream.on('data', chunk => {
-				received_bytes += chunk.length
-				procressPanel.text(`Downloading Update (${formatBytes(received_bytes)}/${total_size}) (${((received_bytes * 100) / total_bytes).toFixed()}%/100%)`)
-			})
-
-			stream.pipe(file).on('finish', async () => {
-				file.close()
-
-				const StreamZip = require('node-stream-zip')
-				const path = require('path')
-
-				if (node_update) {
-					procressPanel.add('Complete Downloading Update First Part.')
-					procressPanel.forward('Extracting First Part...')
-				} else {
-					procressPanel.add('Complete Downloading Update.')
-					procressPanel.forward('Updating...')
-				}
-
-				const zip = new StreamZip.async({ file: `${dirTmp}/update.zip` })
+				const zip = new StreamZip.async({ file: filename })
 
 				zip.on('error', err => {
+					error('UnZippingUpdate->'+err)
 					isUpdating = false
-					error('UPDATE::UNZIPING::ERR::'+err)
 				})
 
-				await zip.entries().then(async entries => {
+				zip.entries().then(async entries => {
 					for (const entry of Object.values(entries)) {
 						if (entry.isDirectory) continue
 						const pathname = path.resolve(__dirname, entry.name)
-
+			
 						try {
 							fs.mkdirSync(
 								path.dirname(pathname),
@@ -397,104 +377,126 @@ function UpdateApp() {
 							)
 							await zip.extract(entry.name, pathname)
 						} catch(err) {
-							procressPanel.add('UnZip-ExtractFile-ERR:: '+err, 'danger')
+							procressPanel.add('UnZipFirstPart->:: '+err, 'danger')
 						}
 					}
 
 					zip.close()
-					fs.unlinkSync(`${dirTmp}/update.zip`)
+					try { fs.unlinkSync(filename) } catch(err) { procressPanel.add('DeletingUpdateFile->'+err, 'danger') }
 
-					if (node_update) {
-						procressPanel.add('Extracte First Part Complete.')
-						procressPanel.forward('Downloading Update Secend Part...')
+					procressPanel.add('Extracte First Part Complete.')
+					procressPanel.forward('Extracting NodeUpdate...')
 
-						const secendFile = fs.createWriteStream(`${dirTmp}/node_update.zip`)
+					const secendZip = new StreamZip.async({ file: filename2 })
 
-						total_bytes = 0
-						total_size = ''
-						received_bytes = 0
+					secendZip.on('error', err => {
+						error('UnZippingNodeUpdate->'+err)
+						isUpdating = false
+					})
 
-						const secendStream = request({
-							method: 'GET',
-							followAllRedirects: true,
-							url: new_update.latest_node_modules
-						})
+					await secendZip.entries().then(async secendEntries => {
+						for (const entry of Object.values(secendEntries)) {
+							if (entry.isDirectory) continue
+							const pathname = path.resolve(__dirname, entry.name)
 
-						secendStream.on('error', err => {
-							secendFile.close()
-							fs.unlinkSync(`${dirTmp}/node_update.zip`)
-							isUpdating = false
-							reject(err)
-						})
+							try {
+								fs.mkdirSync(
+									path.dirname(pathname),
+									{ recursive: true }
+								)
+								await secendZip.extract(entry.name, pathname)
+							} catch(err) {
+								procressPanel.add('UnZipNode->'+err, 'danger')
+							}
+						}
 
-						secendStream.on('response', response => {
-							total_bytes = parseInt(response.headers['content-length'])
-							total_size = formatBytes(total_bytes)
-						})
+						secendZip.close()
+						try { fs.unlinkSync(filename2) } catch(err) { procressPanel.add('DeletingNodeUpdateFile->'+err, 'danger') }
 
-						secendStream.on('data', chunk => {
-							received_bytes += chunk.length
-							procressPanel.text(`Downloading Update (${formatBytes(received_bytes)}/${total_size}) (${((received_bytes * 100) / total_bytes).toFixed()}%/100%)`)
-						})
-
-						secendStream.pipe(secendFile).on('finish', async () => {
-							secendFile.close()
-
-							const secendZip = new StreamZip.async({ file: `${dirTmp}/node_update.zip` })
-
-							secendZip.on('error', err => {
-								isUpdating = false
-								error('UPDATE-2::UNZIPING::ERR::'+err)
-							})
-
-							await secendZip.entries().then(async secendEntries => {
-								for (const entry of Object.values(secendEntries)) {
-									if (entry.isDirectory) continue
-									const pathname = path.resolve(__dirname, entry.name)
-		
-									try {
-										fs.mkdirSync(
-											path.dirname(pathname),
-											{ recursive: true }
-										)
-										await secendZip.extract(entry.name, pathname)
-									} catch(err) {
-										procressPanel.add('UnZip-2-ExtractFile-ERR:: '+err, 'danger')
-									}
-								}
-		
-								secendZip.close()
-								fs.unlinkSync(`${dirTmp}/node_update.zip`)
-
-								procressPanel.add('Update Complete.')
-								procressPanel.forward('Closing App...')
-								resolve()
-								setTimeout(() => {
-									ThisWindow.removeAllListeners()
-									remote.app.quit()
-								}, 250)
-							})
-						})
-
-					} else {
 						procressPanel.add('Update Complete.')
 						procressPanel.forward('Closing App...')
-						isUpdating = false
-						resolve()
 						setTimeout(() => {
 							ThisWindow.removeAllListeners()
 							remote.app.quit()
 						}, 250)
-					}
+					}).catch(err => {
+						error('UnZippingNodeUpdateEntries->'+err)
+						isUpdating = false
+					})
 				}).catch(err => {
-					procressPanel.add('UnZip-GettingEntries-ERR:: '+err, 'danger')
+					error('UnZippingUpdateEntries->'+err)
+					isUpdating = false
 				})
 			})
-		}).catch(err => {
-			isUpdating = false
-			error('UPDATE::DOWNLOAD::ERR::'+err)
-		})
-	}, 100)
+
+			dl2.OnResponse(resp => {
+				totalBytes = parseInt(resp.headers['content-length'])
+				totalSize = formatBytes(totalBytes)
+				procressPanel.text(`Downloading NodeUpdate (0/${totalSize}) (0%/100%)`)
+			})
+
+			dl2.OnData(data => {
+				dlSize += data
+				procressPanel.text(`Downloading Update (${formatBytes(dlSize)}/${totalSize}) (${((dlSize * 100) / totalBytes).toFixed()}%/100%)`)
+			})
+
+			dl2.Start()
+			
+		} else {
+			procressPanel.add('Complete Downloading Update.')
+			procressPanel.forward('Updating...')
+			const zip = new StreamZip.async({ file: filename })
+
+			zip.on('error', err => {
+				error('UnZippingUpdate->'+err)
+				isUpdating = false
+			})
+
+			zip.entries().then(async entries => {
+				for (const entry of Object.values(entries)) {
+					if (entry.isDirectory) continue
+					const pathname = path.resolve(__dirname, entry.name)
+		
+					try {
+						fs.mkdirSync(
+							path.dirname(pathname),
+							{ recursive: true }
+						)
+						await zip.extract(entry.name, pathname)
+					} catch(err) {
+						procressPanel.add('UnZip-ExtractFile-ERR:: '+err, 'danger')
+					}
+				}
+
+				zip.close()
+				try { fs.unlinkSync(filename) } catch(err) { procressPanel.add('DeletingUpdateFile->'+err, 'danger') }
+
+				procressPanel.add('Update Complete.')
+				procressPanel.forward('Closing App...')
+				isUpdating = false
+				setTimeout(() => {
+					ThisWindow.removeAllListeners()
+					remote.app.quit()
+				}, 250)
+			}).catch(err => {
+				error('UnZippingUpdateEntries->'+err)
+				isUpdating = false
+			})
+		}
+	})
+
+	dl.OnResponse(resp => {
+		totalBytes = parseInt(resp.headers['content-length'])
+		totalSize = formatBytes(totalBytes)
+		procressPanel.text(`Downloading Update (0/${totalSize}) (0%/100%)`)
+	})
+
+	dl.OnData(data => {
+		dlSize += data
+		procressPanel.text(`Downloading Update (${formatBytes(dlSize)}/${totalSize}) (${((dlSize * 100) / totalBytes).toFixed()}%/100%)`)
+	})
+
+	dl.Start()
 }
 
 function UpdateNotes() {
