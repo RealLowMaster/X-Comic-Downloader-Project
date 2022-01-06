@@ -289,8 +289,9 @@ class nHentaiAPI {
 			// Thumb
 			save = save[0].children[0].children[0].getAttribute('data-src').replace(this.thumbURL, '').replace('/galleries/', '')
 			save2 = save.indexOf('/')
+			save3 = fileExt(save)
 			if (save2 > -1) save = save.substring(0, save2)
-			arr.thumb = this.thumbURL+'/galleries/'+save+'/thumb.jpg'
+			arr.thumb = this.thumbURL+'/galleries/'+save+'/thumb.'+save3
 
 			// Related
 			if (related) {
