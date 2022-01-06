@@ -28,9 +28,7 @@
 	user-select: text;
 }
 
-.xlecx-container > div:first-child > button:hover {
-	color: #d20068;
-}
+.xlecx-container > div:first-child > button:hover { color: #d20068 }
 
 .xlecx-container > div:last-child {
 	padding: 15px;
@@ -91,10 +89,7 @@
 	user-select: text;
 }
 
-.xlecx-container-one-row > div > .browser-comic-have {
-	display: block;
-	text-align: right;
-}
+.xlecx-container-one-row > div > .browser-comic-have { display: block; text-align: right }
 
 .xlecx-container-one-row > div > .browser-comic-have > span,
 .xlecx-container-one-row > div > .browser-comic-have > button:not(.remove-from-have),
@@ -195,9 +190,7 @@
 	object-position: center;
 }
 
-.xlecx-post-tags > button:hover {
-	color: #d20068;
-}
+.xlecx-post-tags > button:hover { color: #d20068 }
 
 .xlecx-post-container {
 	display: block;
@@ -272,11 +265,13 @@
 	transition: left .2s, background-color .2s, color .2s;
 }
 
-.xlecx-post-container > div > button:hover {
+.xlecx-post-container > div:hover > button {
 	left: 0;
 	background-color: #fff;
 	color: #222;
 }
+
+.xlecx-post-container > div > button:hover { background-color: #ddd }
 
 .xlecx-post-container > div > .comic-downloaded,
 .xlecx-post-container > div > .comic-had {
@@ -289,14 +284,8 @@
 	cursor: default !important;
 }
 
-.xlecx-post-container > div > .comic-had {
-	background-color: #D68910 !important;
-	left: -22px;
-}
-
-.xlecx-post-container > div:hover {
-	background-color: #a7025b;
-}
+.xlecx-post-container > div > .comic-had { background-color: #D68910 !important; left: -22px }
+.xlecx-post-container > div:hover { background-color: #a7025b }
 
 .xlecx-post-container > div > cid {
 	display: flex;
@@ -334,10 +323,5 @@
 	color: #fff;
 }
 
-.xlecx-pagination > button[disable="true"] {
-	background-color: #d20068;
-}
-
-.xlecx-pagination > button:hover {
-	background-color: #d20068;
-}
+.xlecx-pagination > button[disable="true"] { background-color: #d20068 }
+.xlecx-pagination > button:hover { background-color: #d20068 }

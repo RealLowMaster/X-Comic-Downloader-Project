@@ -1049,7 +1049,7 @@ function nhentaiDownloader(id) {
 				sendingResult.tags = []
 				for (let i = 0; i < result.tags.length; i++) sendingResult.tags.push(result.tags[i].name)
 			}
-			Downloader.Add(index, 'url', 'thumb', downloadImageList, sendingResult)
+			Downloader.Add(index, result.url, result.thumb, downloadImageList, sendingResult)
 		})
 	})
 }

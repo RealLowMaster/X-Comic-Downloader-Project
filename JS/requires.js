@@ -3,6 +3,7 @@ const fs = require('fs')
 const nedb = require('nedb')
 const sharp = require('sharp')
 const jsonfile = require('jsonfile')
+const request = require('request')
 const ImageDownloader = require('image-downloader')
 const defaultSettingLang = {
 	tab_at_limit: "You Can't Make Any More Tab."
@@ -334,7 +335,6 @@ function UpdateApp() {
 
 	procressPanel.add('Connected To Update Data.')
 	procressPanel.forward('Downloading Update...')
-	const request = require('request')
 	const file = fs.createWriteStream(`${dirTmp}/update.zip`)
 
 	setTimeout(async () => {

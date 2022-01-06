@@ -272,14 +272,91 @@ class Tab {
 	}
 }
 
+class Download {
+	#url
+	#savepath
+	#file
+	#stream
+	#onerror
+	#oncomplete
+	#ondata
+	#onresponse
+
+	constructor(url, savepath) {
+		this.#url = url
+		this.#savepath = savepath
+		this.#file = null
+		this.#stream = null
+		this.#onerror = null
+		this.#oncomplete = null
+		this.#ondata = null
+		this.#onresponse = null
+	}
+
+	OnError(callback) {
+		if (typeof callback != 'function') return
+		this.#onerror = callback
+	}
+
+	OnComplete(callback) {
+		if (typeof callback != 'function') return
+		this.#oncomplete = callback
+	}
+
+	OnResponse(callback) {
+		if (typeof callback != 'function') return
+		this.#onresponse = callback
+	}
+
+	OnData(callback) {
+		if (typeof callback != 'function') return
+		this.#ondata = callback
+	}
+
+	Start() {
+		this.#file = fs.createWriteStream(this.#savepath)
+		this.#stream = request(this.#url, { followRedirect:true, followAllRedirects:true })
+		this.#stream.pipe(this.#file)
+		this.#stream.on('error', err => {
+			this.#file.close()
+			try { fs.unlinkSync(this.#savepath) } catch(e) {}
+			if (this.#onerror != null) this.#onerror(err)
+		})
+		this.#stream.on('response', resp => {
+			if (this.#onresponse != null) this.#onresponse(resp)
+		})
+		this.#stream.on('complete', () => {
+			this.#file.close()
+			if (this.#oncomplete != null) this.#oncomplete(this.#savepath)
+		})
+		this.#stream.on('data', data => {
+			if (this.#ondata != null) this.#ondata(data.length)
+		})
+	}
+
+	Pause() {
+		this.#stream.pause()
+	}
+
+	Play() {
+		this.#stream.resume()
+	}
+
+	Stop() {
+		this.#stream.destroy()
+		this.#file.close()
+		try {
+			fs.unlinkSync(this.#savepath)
+		} catch(err) { console.error('StopingDownload->'+err) }
+	}
+}
+
 class DownloadManager {
 	#indexs
-	#pauseDownload
 	#info
 
 	constructor() {
 		this.#indexs = []
-		this.#pauseDownload = false
 		this.#info = []
 	}
 
@@ -303,7 +380,7 @@ class DownloadManager {
 		const index = `${date}-${Math.floor(Math.random() * 1000)}`
 		const num = this.#indexs.length
 		this.#indexs[num] = index
-		this.#info[num] = {site:site,id:id,date:date}
+		this.#info[num] = {site:site,id:id,date:date,dl:null}
 		changeButtonsToDownloading(id, site, false)
 		return index
 	}
@@ -315,7 +392,7 @@ class DownloadManager {
 		const id = this.#info[num].id
 		this.#indexs.splice(num,1)
 		this.#info.splice(num,1)
-		changeButtonsToDownloading(site, id, true)
+		changeButtonsToDownloading(id, site, true)
 		this.HasDownload()
 	}
 
@@ -324,10 +401,13 @@ class DownloadManager {
 		if (num < 0) return
 		this.#info[num].pause = false
 		this.#info[num].result = result
+		this.#info[num].url = url
 		this.#info[num].dlList = list
 		this.#info[num].dls = []
 		this.#info[num].dlIndex = 0
 		this.#info[num].max = list.length
+		this.#info[num].totalSize = 0
+		this.#info[num].dlSize = 0
 		this.#info[num].percent = (100 / list.length)
 		this.MakeFormatList(num)
 		this.#info[num].comicId = lastComicId
@@ -338,10 +418,10 @@ class DownloadManager {
 		const container = document.createElement('div')
 		const site = sites[this.#info[num].site]
 
-		container.innerHTML = `<div><img src="${thumb}"><img src="Image/sites/${site.name}-30x30.jpg" title="${site.url}"></div>`
+		container.innerHTML = `<div><img src="${thumb}" loading="lazy"><img src="Image/sites/${site.name}-30x30.jpg" title="${site.url}"></div>`
 		const second = document.createElement('div')
 		second.setAttribute('detail', '')
-		second.innerHTML = `<name title="${result.title.replace(/"/g, '')}">${result.title}</name><url title="Open in Browser" onclick="Downloader.OpenURL('${url}')">${url}</url>`
+		second.innerHTML = `<name title="${result.title.replace(/"/g, '')}">${result.title}</name><url title="Open in Browser" onclick="Downloader.OpenURL('${index}')">${url}</url>`
 		const second_first = document.createElement('proc')
 		const second_first_first = document.createElement('div')
 		second_first_first.innerText = '0 / '+list.length
@@ -352,7 +432,14 @@ class DownloadManager {
 		second_first.appendChild(second_first_second)
 		second.appendChild(second_first)
 		let temp = document.createElement('btns')
-		temp.innerHTML = `<btn onclick="Downloader.TogglePause('${index}',this)">Pause</btn><btn onclick="Downloader.Cancel('${index}',true)">Cancel</btn>`
+		const btn = document.createElement('btn')
+		btn.setAttribute('onclick', `Downloader.TogglePause('${index}')`)
+		btn.innerText = 'Pause'
+		let temp2 = document.createElement('btn')
+		temp2.setAttribute('onclick',`Downloader.Cancel('${index}',true)`)
+		temp2.innerText = 'Cancel'
+		temp.appendChild(btn)
+		temp.appendChild(temp2)
 		second.appendChild(temp)
 		temp = document.createElement('showinfolder')
 		temp.innerHTML = `<div title="Open Downloading Comic Folder" onclick="Downloader.OpenFolder('${index}')">Show in Folder</div>`
@@ -365,6 +452,7 @@ class DownloadManager {
 		this.#info[num].container = container
 		this.#info[num].text = second_first_first
 		this.#info[num].proc = second_first_second_first
+		this.#info[num].btn = btn
 		PopAlert(`Download Started. '${result.title.length > 26 ? result.title : result.title.substr(0, 23)+'...'}'`, 'primary')
 		document.getElementById('d-p-t').style.display = 'block'
 		this.Download(index)
@@ -373,7 +461,7 @@ class DownloadManager {
 	Download(index) {
 		const num = this.#indexs.indexOf(index)
 		if (num < 0) return
-		if (num >= setting.download_limit || this.#pauseDownload || this.#info[num].pause) {
+		if (num >= setting.download_limit || this.#info[num].pause) {
 			setTimeout(() => { this.Download(index) }, 1000);
 			return
 		}
@@ -382,31 +470,11 @@ class DownloadManager {
 		if (!fs.existsSync(SubFolder)) fs.mkdirSync(SubFolder)
 		const url = this.#info[num].dlList[0]
 		const SaveName = `${date}-${this.#info[num].dlIndex}.${fileExt(url)}`
-		const Options = { url: url, dest: SubFolder+'/'+SaveName }
 		this.#info[num].dlIndex += 1
 		const Percent = this.#info[num].percent * this.#info[num].dlIndex
-		ImageDownloader.image(Options).then(filename => {
-			const num2 = this.#indexs.indexOf(index)
-			if (num2 < 0) {
-				try {
-					fs.unlinkSync(filename.filename)
-					fs.rmdirSync(SubFolder)
-				} catch(err) {}
-				return
-			}
-			this.#info[num2].dlList.shift()
-			this.#info[num2].dls.push(filename.filename)
-			this.#info[num2].proc.style.width = Percent+'%'
-			this.#info[num2].text.innerText = this.#info[num2].dlIndex+' / '+this.#info[num2].max
+		this.#info[num].dl = new Download(url, SubFolder+'/'+SaveName)
 
-			if (this.#info[num2].dlList.length == 0) {
-				CreateComic(this.#info[num2].comicId, this.#info[num2].haveId, this.#info[num2].result, this.#info[num2].date, this.#info[num2].site, this.#info[num2].id, this.#info[num2].max, this.#info[num2].formatList)
-				this.#info[num2].container.remove()
-				this.#indexs.splice(num2,1)
-				this.#info.splice(num2,1)
-				this.HasDownload()
-			} else this.Download(index)
-		}).catch(dlErr => {
+		this.#info[num].dl.OnError(err => {
 			const num2 = this.#indexs.indexOf(index)
 			if (num2 < 0) {
 				try { fs.rmdirSync(SubFolder) } catch(err) {}
@@ -422,8 +490,52 @@ class DownloadManager {
 				this.#indexs.splice(num2,1)
 				this.#info.splice(num2,1)
 				this.HasDownload()
-			} else this.Download(index)
+			} else {
+				this.#info[num2].totalSize = 0
+				this.#info[num2].dlSize = 0
+				this.Download(index)
+			}
 		})
+
+		this.#info[num].dl.OnComplete(filename => {
+			const num2 = this.#indexs.indexOf(index)
+			if (num2 < 0) {
+				try { fs.unlinkSync(filename) } catch(e) {}
+				try { fs.rmdirSync(SubFolder) } catch(err) {}
+				return
+			}
+			this.#info[num2].dlList.shift()
+			this.#info[num2].dls.push(filename)
+			this.#info[num2].proc.style.width = Percent+'%'
+			this.#info[num2].text.innerText = this.#info[num2].dlIndex+' / '+this.#info[num2].max
+
+			if (this.#info[num2].dlList.length == 0) {
+				CreateComic(this.#info[num2].comicId, this.#info[num2].haveId, this.#info[num2].result, this.#info[num2].date, this.#info[num2].site, this.#info[num2].id, this.#info[num2].max, this.#info[num2].formatList)
+				this.#info[num2].container.remove()
+				this.#indexs.splice(num2,1)
+				this.#info.splice(num2,1)
+				this.HasDownload()
+			} else {
+				this.#info[num2].totalSize = 0
+				this.#info[num2].dlSize = 0
+				this.Download(index)
+			}
+		})
+
+		this.#info[num].dl.OnResponse(resp => {
+			const num2 = this.#indexs.indexOf(index)
+			if (num2 < 0) return
+			this.#info[num2].totalSize = formatBytes(parseInt(resp.headers['content-length']))
+		})
+
+		this.#info[num].dl.OnData(data => {
+			const num2 = this.#indexs.indexOf(index)
+			if (num2 < 0) return
+			this.#info[num2].dlSize += data
+			this.#info[num2].text.innerText = this.#info[num2].dlIndex+' / '+this.#info[num2].max+' '+formatBytes(this.#info[num2].dlSize)+'/'+this.#info[num2].totalSize
+		})
+
+		this.#info[num].dl.Start()
 	}
 
 	MakeFormatList(num) {
@@ -447,22 +559,38 @@ class DownloadManager {
 		this.#info[num].formatList = formatList
 	}
 
-	TogglePause(index, who) {
+	TogglePause(index) {
 		const num = this.#indexs.indexOf(index)
 		if (num < 0) return
 		if (this.#info[num].pause) {
 			this.#info[num].pause = false
-			who.removeAttribute('resume')
-			who.innerText = 'Pause'
+			if (this.#info[num].dl != null) this.#info[num].dl.Play()
+			this.#info[num].btn.removeAttribute('resume')
+			this.#info[num].btn.innerText = 'Pause'
 		} else {
 			this.#info[num].pause = true
-			who.setAttribute('resume', '')
-			who.innerText = 'Resume'
+			if (this.#info[num].dl != null) this.#info[num].dl.Pause()
+			this.#info[num].btn.setAttribute('resume', '')
+			this.#info[num].btn.innerText = 'Resume'
 		}
 	}
 
-	TogglePauseAll() {
-		this.#pauseDownload = !this.#pauseDownload
+	PauseAll() {
+		for (let i = 0; i < this.#indexs.length; i++) if (!this.#info[i].pause) {
+			this.#info[i].pause = true
+			if (this.#info[i].dl != null) this.#info[i].dl.Pause()
+			this.#info[i].btn.setAttribute('resume', '')
+			this.#info[i].btn.innerText = 'Resume'
+		}
+	}
+
+	ResumeAll() {
+		for (let i = 0; i < this.#indexs.length; i++) if (this.#info[i].pause) {
+			this.#info[i].pause = false
+			if (this.#info[i].dl != null) this.#info[i].dl.Play()
+			this.#info[i].btn.removeAttribute('resume')
+			this.#info[i].btn.innerText = 'Pause'
+		}
 	}
 
 	Cancel(index, alert = false) {
@@ -471,13 +599,12 @@ class DownloadManager {
 		const list = this.#info[num].dls
 		const SubFolder = `${dirUL}/${this.#info[num].comicId}${this.#info[num].date}`
 		const site = this.#info[num].site, id = this.#info[num].id
+		if (this.#info[num].dl != null) this.#info[num].dl.Stop()
 		this.#info[num].container.remove()
 		this.#indexs.splice(num,1)
 		this.#info.splice(num,1)
 		for (let i = 0; i < list.length; i++) if (fs.existsSync(list[i])) fs.unlinkSync(list[i])
-		try {
-			fs.rmdirSync(SubFolder)
-		} catch(err) {}
+		try { fs.rmdirSync(SubFolder) } catch(err) {}
 		changeButtonsToDownloading(id, site, true)
 		if (alert) {
 			PopAlert('Download Canceled.', 'warning')
@@ -486,13 +613,14 @@ class DownloadManager {
 	}
 
 	CancelAll() {
-		for (let i = 0; i < this.#indexs.length; i++) this.Cancel(this.#indexs[i], false)
+		for (let i = this.#indexs.length - 1; i >= 0; i--) this.Cancel(this.#indexs[i], false)
 		PopAlert('Downloads Canceled.', 'warning')
 		this.HasDownload()
 	}
 
-	OpenURL(url) {
-		
+	OpenURL(index) {
+		const num = this.#indexs.indexOf(index)
+		if (num < 0) return
 	}
 
 	OpenFolder(index) {

@@ -145,6 +145,7 @@ class nHentaiAPI {
 			arr.name = save.getElementsByClassName('pretty')[0].innerText
 			arr.title = save.innerText
 			arr.cover = htmlDoc.getElementById('cover').children[0].children[0].getAttribute('data-src')
+			arr.url = url
 
 			save = htmlDoc.getElementById('tags').children
 
@@ -285,6 +286,12 @@ class nHentaiAPI {
 				})
 			}
 
+			// Thumb
+			save = save[0].children[0].children[0].getAttribute('data-src').replace(this.thumbURL, '').replace('/galleries/', '')
+			save2 = save.indexOf('/')
+			if (save2 > -1) save = save.substring(0, save2)
+			arr.thumb = this.thumbURL+'/galleries/'+save+'/thumb.jpg'
+
 			// Related
 			if (related) {
 				let child
@@ -313,7 +320,6 @@ class nHentaiAPI {
 					}
 				}
 			}
-
 
 			callback(null, arr)
 		}).catch(err => {

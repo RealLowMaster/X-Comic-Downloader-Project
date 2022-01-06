@@ -277,6 +277,7 @@ class XlecxAPI {
 			let li = htmlDoc.getElementsByClassName('main')[0].getElementsByClassName('full-in')
 			if (li.length != 0) {
 				li = li[0]
+				arr.url = url
 				arr.title = li.getElementsByTagName('h1')[0].textContent
 				arr.images = []
 				let info = li.getElementsByClassName('full-tags')
