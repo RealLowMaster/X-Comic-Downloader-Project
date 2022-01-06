@@ -354,10 +354,12 @@ class Download {
 class DownloadManager {
 	#indexs
 	#info
+	#sort
 
 	constructor() {
 		this.#indexs = []
 		this.#info = []
+		this.#sort = []
 	}
 
 	HasDownload() {
@@ -392,6 +394,8 @@ class DownloadManager {
 		const id = this.#info[num].id
 		this.#indexs.splice(num,1)
 		this.#info.splice(num,1)
+		const sortnum = this.#sort.indexOf(index)
+		if (sortnum > -1) this.#sort.splice(sortnum,1)
 		changeButtonsToDownloading(id, site, true)
 		this.HasDownload()
 	}
@@ -448,11 +452,15 @@ class DownloadManager {
 		temp = document.createElement('div')
 		container.appendChild(temp)
 
-		document.getElementById('d-p-c').appendChild(container)
+		try {
+			if (num > 0) this.#info[num-1].container.parentElement.insertBefore(container, this.#info[num-1].container)
+			else document.getElementById('d-p-c').appendChild(container)
+		} catch(err) { document.getElementById('d-p-c').appendChild(container) }
 		this.#info[num].container = container
 		this.#info[num].text = second_first_first
 		this.#info[num].proc = second_first_second_first
 		this.#info[num].btn = btn
+		this.#sort.push(index)
 		PopAlert(`Download Started. '${result.title.length > 26 ? result.title : result.title.substr(0, 23)+'...'}'`, 'primary')
 		document.getElementById('d-p-t').style.display = 'block'
 		this.Download(index)
@@ -461,7 +469,8 @@ class DownloadManager {
 	Download(index) {
 		const num = this.#indexs.indexOf(index)
 		if (num < 0) return
-		if (num >= setting.download_limit || this.#info[num].pause) {
+		const sortnum = this.#sort.indexOf(index)
+		if (sortnum < 0 || sortnum >= setting.download_limit || this.#info[num].pause) {
 			setTimeout(() => { this.Download(index) }, 1000);
 			return
 		}
@@ -489,6 +498,8 @@ class DownloadManager {
 				this.#info[num2].container.remove()
 				this.#indexs.splice(num2,1)
 				this.#info.splice(num2,1)
+				const sortnum2 = this.#sort.indexOf(index)
+				if (sortnum2 > -1) this.#sort.splice(sortnum2,1)
 				this.HasDownload()
 			} else {
 				this.#info[num2].totalSize = 0
@@ -514,6 +525,8 @@ class DownloadManager {
 				this.#info[num2].container.remove()
 				this.#indexs.splice(num2,1)
 				this.#info.splice(num2,1)
+				const sortnum2 = this.#sort.indexOf(index)
+				if (sortnum2 > -1) this.#sort.splice(sortnum2,1)
 				this.HasDownload()
 			} else {
 				this.#info[num2].totalSize = 0
@@ -567,11 +580,16 @@ class DownloadManager {
 			if (this.#info[num].dl != null) this.#info[num].dl.Play()
 			this.#info[num].btn.removeAttribute('resume')
 			this.#info[num].btn.innerText = 'Pause'
+			const sortnum = this.#sort.indexOf(index)
+			if (sortnum > -1) this.#sort.splice(sortnum,1)
+			this.#sort.push(index)
 		} else {
 			this.#info[num].pause = true
 			if (this.#info[num].dl != null) this.#info[num].dl.Pause()
 			this.#info[num].btn.setAttribute('resume', '')
 			this.#info[num].btn.innerText = 'Resume'
+			const sortnum = this.#sort.indexOf(index)
+			if (sortnum > -1) this.#sort.splice(sortnum,1)
 		}
 	}
 
@@ -581,15 +599,22 @@ class DownloadManager {
 			if (this.#info[i].dl != null) this.#info[i].dl.Pause()
 			this.#info[i].btn.setAttribute('resume', '')
 			this.#info[i].btn.innerText = 'Resume'
+			const sortnum = this.#sort.indexOf(this.#indexs[i])
+			if (sortnum > -1) this.#sort.splice(sortnum,1)
 		}
 	}
 
 	ResumeAll() {
 		for (let i = 0; i < this.#indexs.length; i++) if (this.#info[i].pause) {
-			this.#info[i].pause = false
-			if (this.#info[i].dl != null) this.#info[i].dl.Play()
-			this.#info[i].btn.removeAttribute('resume')
-			this.#info[i].btn.innerText = 'Pause'
+			if (this.#info[i].pause) {
+				this.#info[i].pause = false
+				if (this.#info[i].dl != null) this.#info[i].dl.Play()
+				this.#info[i].btn.removeAttribute('resume')
+				this.#info[i].btn.innerText = 'Pause'
+				const sortnum = this.#sort.indexOf(this.#indexs[i])
+				if (sortnum > -1) this.#sort.splice(sortnum,1)
+				this.#sort.push(this.#indexs[i])
+			}
 		}
 	}
 
@@ -603,6 +628,8 @@ class DownloadManager {
 		this.#info[num].container.remove()
 		this.#indexs.splice(num,1)
 		this.#info.splice(num,1)
+		const sortnum = this.#sort.indexOf(index)
+		if (sortnum > -1) this.#sort.splice(sortnum,1)
 		for (let i = 0; i < list.length; i++) if (fs.existsSync(list[i])) fs.unlinkSync(list[i])
 		try { fs.rmdirSync(SubFolder) } catch(err) {}
 		changeButtonsToDownloading(id, site, true)
@@ -621,11 +648,17 @@ class DownloadManager {
 	OpenURL(index) {
 		const num = this.#indexs.indexOf(index)
 		if (num < 0) return
+		try {
+			remote.shell.openExternal(this.#info[num].url)
+		} catch(err) { error('OpenURL->'+err)}
 	}
 
 	OpenFolder(index) {
 		const num = this.#indexs.indexOf(index)
 		if (num < 0) return
+		try {
+			remote.shell.openPath(`${dirUL}/${this.#info[num].comicId}${this.#info[num].date}`)
+		} catch(err) { PopAlert('OpenFolder->'+err) }
 	}
 
 	OpenPanel() {

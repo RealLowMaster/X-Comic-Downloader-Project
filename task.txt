@@ -114,6 +114,7 @@ Add Comic {
 }
 
 Added To Version {
+	Completely Change Downlaod System
 	Fix Bug: databases been empty error
 	Change Font
 }
