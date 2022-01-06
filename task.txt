@@ -101,8 +101,6 @@ Add Comic {
 	Artist => Nemu
 	Artist => Jun
 	Artist => Ganmarei
-	Artist => 
-	Artist => 
 
 	Artist => Ikezaki Misa
 	Artist => Aichi Shiho
@@ -114,11 +112,7 @@ Add Comic {
 }
 
 Added To Version {
-	Completely Change Downlaod System
-	Fix Bug: databases been empty error
-	Fix Bug: Some Update Errors
-	Update Xlecx API
-	Change Font
+	
 }
 
 Doing {
@@ -131,8 +125,6 @@ Tasks => {
 	Add Browser-Right Click
 	Change Tab Remove Activating Next Tab
 	Add Search In Tags, Artists, and etc...
-	Fix Bug: Download Stop When you are downloading more than 200 image comic
-	Update Add Procress-Panels { Update, etc... }
 	Add Downloaded Comic Site Icon In Comic Panel
 	Fix bug: nhentai -> Searching B-trayal pagination won't work
 	Add Ability To Play Song
