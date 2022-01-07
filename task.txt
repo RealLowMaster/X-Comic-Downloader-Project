@@ -112,7 +112,7 @@ Add Comic {
 }
 
 Added To Version {
-	Fix Bug: Saving Comic Formats
+	
 }
 
 Doing {
