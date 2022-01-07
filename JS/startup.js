@@ -97,8 +97,12 @@ function makeSubFolder(sfComicsDoc, sfLength, index) {
 			}
 		} else {
 			formatIndex++
-			lastIndex = formats[formatIndex][1]
-			thisForamat = formats[formatIndex][2]
+			try {
+				lastIndex = formats[formatIndex][1]
+				thisForamat = formats[formatIndex][2]
+			} catch(err) {
+				break
+			}
 			src = `/${image}-${i}.${thisForamat}`
 			if (fs.existsSync(dirUL+src)) {
 				fs.renameSync(dirUL+src, subFolder+src)

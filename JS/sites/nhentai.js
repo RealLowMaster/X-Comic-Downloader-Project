@@ -289,8 +289,14 @@ function nhentaiOpenPost(id, makeNewTab, updateTabIndex) {
 							html += `<img data-src="${src}">`
 						} else {
 							formatIndex++
-							lastIndex = formats[formatIndex][1]
-							thisForamat = formats[formatIndex][2]
+							try {
+								lastIndex = formats[formatIndex][1]
+								thisForamat = formats[formatIndex][2]
+							} catch(err) {
+								for (let j = i; j < ImagesCount; j++) html += `<img data-src="Image/no-img-300x300.png">`
+								break
+							}
+							
 							src = `${dirUL}/${comic_id}${image}/${image}-${i}.${thisForamat}`
 							if (!fs.existsSync(src)) {
 								need_repair.push([src, i])
@@ -913,8 +919,13 @@ function nhentaiRandom(makeNewTab, updateTabIndex) {
 							html += `<img data-src="${src}">`
 						} else {
 							formatIndex++
-							lastIndex = formats[formatIndex][1]
-							thisForamat = formats[formatIndex][2]
+							try {
+								lastIndex = formats[formatIndex][1]
+								thisForamat = formats[formatIndex][2]
+							} catch(err) {
+								for (let j = i; j < ImagesCount; j++) html += `<img data-src="Image/no-img-300x300.png">`
+								break
+							}
 							src = `${dirUL}/${comic_id}${image}/${image}-${i}.${thisForamat}`
 							if (!fs.existsSync(src)) {
 								need_repair.push([src, i])
@@ -1141,17 +1152,24 @@ function nhentaiRepairComicInfoGetInfo(id, whitch) {
 
 				const newList = [], saveList = []
 				for (let i = 0; i < need_repair.length; i++) {
-					newList.push(neededResult[need_repair[i][1]].url)
-					saveList.push(need_repair[i][0])
+					const thumb = neededResult[need_repair[i][1]].url
+					newList.push(thumb)
+					saveList.push(need_repair[i][0]+need_repair[i][2]+'-'+need_repair[i][1]+'.'+fileExt(thumb))
 				}
+
+				const urls = []
+				for (let i = 0; i < neededResult.length; i++) urls.push(neededResult[i].url)
+				let formatList = Downloader.MakeFormatList(null, urls)
+				db.comics.update({_id:off_comic_id}, { $set: {f:formatList} }, {}, err => {})
 
 				ImageListDownloader(newList, 0, saveList, false, err => {
 					if (err) {
 						procressPanel.config({ bgClose:true, closeBtn:true })
+						PopAlert('There was an Error.', 'danger')
 					} else {
 						procressPanel.reset(1)
+						PopAlert('Comic Undownloaded Images Has Beed Downloaded.')
 					}
-					PopAlert('Comic Undownloaded Images Has Beed Downloaded.')
 					openComic(comic_id)
 				})
 				break

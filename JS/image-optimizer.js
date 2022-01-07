@@ -52,8 +52,13 @@ function OptimizeComicImages(comic_id, opened_comic, keyEvent) {
 			for (let i = 0; i < ImagesCount; i++) {
 				if (i > lastIndex) {
 					formatIndex++
-					lastIndex = formats[formatIndex][1]
-					thisForamat = formats[formatIndex][2]
+					try {
+						lastIndex = formats[formatIndex][1]
+						thisForamat = formats[formatIndex][2]
+					} catch(err) {
+						for (let j = i; j < ImagesCount; j++) procressPanel.add(`Image ${j+1}: Undownloaded Image.`, 'danger')
+						break
+					}
 				}
 
 				if (!fs.existsSync(`${dirUL}/${comic_id}${image}/${image}-${i}.${thisForamat}`)) procressPanel.add(`Image ${i+1}: Undownloaded Image.`, 'danger')
@@ -284,8 +289,13 @@ function ConvertDocToOptimzationList(docList) {
 	for (let i = 0; i < docList[2]; i++) {
 		if (i > lastIndex) {
 			formatIndex++
-			lastIndex = formats[formatIndex][1]
-			thisForamat = formats[formatIndex][2]
+			try {
+				lastIndex = formats[formatIndex][1]
+				thisForamat = formats[formatIndex][2]
+			} catch(err) {
+				for (let j = i; j < ImagesCount; j++) urls.push([null, null])
+				break
+			}
 		}
 
 		if (!fs.existsSync(`${dirUL}/${docList[4]}${docList[1]}/${docList[1]}-${i}.${thisForamat}`)) urls.push([null, null])

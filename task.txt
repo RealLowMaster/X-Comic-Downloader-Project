@@ -112,7 +112,7 @@ Add Comic {
 }
 
 Added To Version {
-	
+	Fix Bug: Saving Comic Formats
 }
 
 Doing {
@@ -120,7 +120,8 @@ Doing {
 }
 
 Tasks => {
-	Change All Download System To New One { Repair and ... }
+	Fix Crashed Comics
+	Make All Theme Same
 	Improve Release-Note
 	Add Browser-Right Click
 	Change Tab Remove Activating Next Tab

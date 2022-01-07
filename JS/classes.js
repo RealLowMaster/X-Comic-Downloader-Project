@@ -552,25 +552,27 @@ class DownloadManager {
 		this.#info[num].dl.Start()
 	}
 
-	MakeFormatList(num) {
-		let formatList = [], firstIndex = 0, lastIndex = 0
-		const dlList = this.#info[num].dlList
+	MakeFormatList(num, list = null) {
+		let formatList = [], firstIndex = 0
+		let dlList
+		if (list == null) dlList = this.#info[num].dlList
+		else dlList = list
 		let thisFormat = fileExt(dlList[0])
 		if (dlList.length > 1) {
-			for (let j = 1; j < dlList.length; j++) {
-				lastIndex++
-				if (fileExt(dlList[j]) == thisFormat) {
-					if (j == dlList.length - 1) formatList.push([firstIndex, lastIndex, thisFormat])
+			for (let i = 0; i < dlList.length; i++) {
+				if (fileExt(dlList[i]) == thisFormat) {
+					if (i == dlList.length - 1) formatList.push([firstIndex, i, thisFormat])
 				} else {
-					formatList.push([firstIndex, lastIndex - 1, thisFormat])
-					thisFormat = fileExt(dlList[j])
-					firstIndex = lastIndex
-					if (j == dlList[1].length - 1) formatList.push([firstIndex, lastIndex, thisFormat])
+					formatList.push([firstIndex, i - 1, thisFormat])
+					thisFormat = fileExt(dlList[i])
+					firstIndex = i
+					if (i == dlList.length - 1) formatList.push([firstIndex, i, thisFormat])
 				}
 			}
 		} else formatList = [[0,0,fileExt(dlList[0])]]
 
-		this.#info[num].formatList = formatList
+		if (list == null) this.#info[num].formatList = formatList
+		else return formatList
 	}
 
 	TogglePause(index) {

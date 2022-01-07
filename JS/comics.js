@@ -6,7 +6,7 @@ const comicArtistsContainer = document.getElementById('c-p-a')
 const comicParodyContainer = document.getElementById('c-p-p')
 const comicTagsContainer = document.getElementById('c-p-ts')
 const comicImageContainer = document.getElementById('c-p-i')
-let off_site = null, off_id = null, off_comic_id = null, off_quality = null, need_repair = [], in_comic = false, comic_menu_id = null, passKeyEvent = null, export_comic_id = null, comic_panel_menu_info = null, isThumbing = false, isRepairing = false, isRepairingContiue = false, repair_all_list = null, repair_all_error_list = null, closingApp = false
+let off_site = null, off_id = null, off_comic_id = null, need_repair = [], in_comic = false, comic_menu_id = null, passKeyEvent = null, export_comic_id = null, comic_panel_menu_info = null, isThumbing = false, isRepairing = false, isRepairingContiue = false, repair_all_list = null, repair_all_error_list = null, closingApp = false
 
 function loadComics(page, search, safeScroll) {
 	page = page || 1
@@ -414,7 +414,6 @@ function openComic(id) {
 			off_site = doc.s
 			off_comic_id = doc._id
 			off_id = doc.p
-			off_quality = doc.q
 
 			title_container.textContent = name
 			
@@ -441,7 +440,7 @@ function openComic(id) {
 				if (i <= lastIndex) {
 					src = `${dirUL}/${id}${image}/${image}-${i}.${thisForamat}`
 					if (!fs.existsSync(src)) {
-						need_repair.push([src, i])
+						need_repair.push([`${dirUL}/${id}${image}/`, i, image])
 						src = 'Image/no-img-300x300.png'
 						save = `onclick="openComicSlider(${i})"`
 					} else save = `onmousedown="OnComicPanelImageClick(${i}, ${id})"`
@@ -449,11 +448,20 @@ function openComic(id) {
 					slider_overview_html += `<div i="${i}" onclick="changeSliderIndex(${i})"><img src="${src}" loading="lazy"><p>${i+1}</p></div>`
 				} else {
 					formatIndex++
-					lastIndex = formats[formatIndex][1]
-					thisForamat = formats[formatIndex][2]
+					try {
+						lastIndex = formats[formatIndex][1]
+						thisForamat = formats[formatIndex][2]
+					} catch(err) {
+						for (let j = i; j < ImagesCount; j++) {
+							need_repair.push([`${dirUL}/${id}${image}/`, j, image])
+							html += `<img data-src="Image/no-img-300x300.png" onclick="openComicSlider(${i})">`
+							slider_overview_html += `<div i="${i}" onclick="changeSliderIndex(${i})"><img src="Image/no-img-300x300.png" loading="lazy"><p>${i+1}</p></div>`
+						}
+						break
+					}
 					src = `${dirUL}/${id}${image}/${image}-${i}.${thisForamat}`
 					if (!fs.existsSync(src)) {
-						need_repair.push([src, i])
+						need_repair.push([`${dirUL}/${id}${image}/`, i, image])
 						src = 'Image/no-img-300x300.png'
 						save = `onclick="openComicSlider(${i})"`
 					} else save = `onmousedown="OnComicPanelImageClick(${i}, ${id})"`
@@ -500,7 +508,6 @@ function closeComicPanel() {
 	off_site = null
 	off_comic_id = null
 	off_id = null
-	off_quality = null
 	document.getElementById('main').style.display = 'flex'
 
 	comicCharactersContainer.innerHTML = ''
@@ -846,8 +853,14 @@ function checkExportComicInfo() {
 					zipFiles.push(src)
 				} else {
 					formatIndex++
-					lastIndex = formats[formatIndex][1]
-					thisForamat = formats[formatIndex][2]
+					try {
+						lastIndex = formats[formatIndex][1]
+						thisForamat = formats[formatIndex][2]
+					} catch(err) {
+						for (let j = i; j < ImagesCount; j++) zipFiles.push('Image/no-img-300x300.png')
+						undl = true
+						break
+					}
 					src = `${dirUL}/${id}${image}/${image}-${i}.${thisForamat}`
 					if (!fs.existsSync(src)) {
 						src = 'Image/no-img-300x300.png'
@@ -1019,8 +1032,13 @@ function deleteComic(id) {
 						if (i <= lastIndex) thisUrl = `${dirUL}/${id}${ImagesId}/${ImagesId}-${i}.${thisForamat}`
 						else {
 							formatIndex++
-							lastIndex = ImagesFormats[formatIndex][1]
-							thisForamat = ImagesFormats[formatIndex][2]
+							try {
+								lastIndex = ImagesFormats[formatIndex][1]
+								thisForamat = ImagesFormats[formatIndex][2]
+							} catch(err) {
+								break
+							}
+							
 							thisUrl = `${dirUL}/${id}${ImagesId}/${ImagesId}-${i}.${thisForamat}`
 						}
 	
