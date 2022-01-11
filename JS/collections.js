@@ -22,7 +22,7 @@ function openCollectionsPanel() {
 function closeCollectionsPanel() {
 	keydownEventIndex = 0
 	afterDLReload = true
-	reloadLoadingComics()
+	PageManager.Reload()
 	document.getElementById('main').style.display = 'flex'
 	document.getElementById('collections-panel').style.display = 'none'
 }
@@ -140,7 +140,7 @@ function LoadCollection() {
 
 function LoadCollectionComics(contents, maxPage) {
 	if (contents.length == 0) {
-		const thisPagination = pagination(maxPage, collectionPage)
+		const thisPagination = PageManager.GetPagination(maxPage, collectionPage)
 		html = '<div>'
 		for (let i in thisPagination) {
 			if (thisPagination[i][1] == null) html += `<button disabled>${thisPagination[i][0]}</button>`

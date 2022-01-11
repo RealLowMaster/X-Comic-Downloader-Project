@@ -105,7 +105,7 @@ function convertImagesToOptimize(list, index, comic_id, image, callback) {
 				procressPanel.reset(1)
 				callback()
 			} else {
-				procressPanel.config({ bgClose:true, closeBtn:true })
+				procressPanel.config({ bgClose:true, closeBtn:true, closeEvent:"this.parentElement.style.display='none'" })
 				procressPanel.text(`___Complete___>>> <span class="tx-danger">${formatBytes(optimizeFullSize)}</span> To <span class="tx-danger">${formatBytes(optimizeConvertSize)}</span>`)
 				callback()
 			}
@@ -114,7 +114,7 @@ function convertImagesToOptimize(list, index, comic_id, image, callback) {
 			if (setting.notification_optimization_finish && remote.Notification.isSupported()) new remote.Notification({title: 'Comic Optimization Finished.', body: doc.n}).show()
 			if (setting.show_unoptimize) {
 				if (inCollection) LoadCollection()
-				else reloadLoadingComics()
+				else PageManager.Reload()
 			}
 		})
 		isOptimizing = false
@@ -341,9 +341,9 @@ function OptimizeAll(docList, index, maxLength, list) {
 
 	if (docList.length == 0) {
 		procressPanel.clearMini()
-		procressPanel.config({closeBtn:true, bgClose:true})
+		procressPanel.config({closeBtn:true, bgClose:true, closeEvent:"this.parentElement.style.display='none'"})
 		procressPanel.text(`___Complete___>>> <span class="tx-danger">${formatBytes(optimizeAllFullSize)}</span> To <span class="tx-danger">${formatBytes(optimizeAllConvertSize)}</span>`)
-		if (setting.show_unoptimize) reloadLoadingComics()
+		if (setting.show_unoptimize) PageManager.Reload()
 		if (setting.notification_optimization_finish && remote.Notification.isSupported()) new remote.Notification({title: 'Comics Optimization Finished.', body: doc.n}).show()
 		isOptimizing = false
 		isOptimzingContiue = false
@@ -384,7 +384,7 @@ function OptimizeAll(docList, index, maxLength, list) {
 		procressPanel.hide()
 		procressPanel.reset()
 		isOptimizing = false
-		if (setting.show_unoptimize) reloadLoadingComics()
+		if (setting.show_unoptimize) PageManager.Reload()
 		return
 	} else if (list[index][1] == null) {
 		procressPanel.addMini(`Img ${index+1} -> Undownloaded Image`, 'danger')

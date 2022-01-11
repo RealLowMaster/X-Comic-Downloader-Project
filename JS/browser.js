@@ -27,7 +27,7 @@ function openBrowser() {
 function closeBrowser() {
 	imageLazyLoadingOptions.root = comicPanel
 	imageLoadingObserver = new IntersectionObserver(ObserverFunction, imageLazyLoadingOptions)
-	reloadLoadingComics()
+	PageManager.Reload()
 	document.getElementById('browser').style.display = 'none'
 	document.getElementById('main').style.display = 'flex'
 	closeSitePanel()

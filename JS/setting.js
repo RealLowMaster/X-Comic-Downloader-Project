@@ -52,10 +52,10 @@ function setLuanchTimeSettings(reloadSettingPanel) {
 	const s_file_location_label = s_file_location.parentElement.parentElement.children[0]
 
 	if (setting.show_comic_pages) {
-		document.getElementById('comic-container').setAttribute('show-pages', true)
+		PageManager.container.setAttribute('show-pages', true)
 		document.getElementById('o-c-p-c-c').setAttribute('show-pages', true)
 	} else {
-		document.getElementById('comic-container').removeAttribute('show-pages')
+		PageManager.container.removeAttribute('show-pages')
 		document.getElementById('o-c-p-c-c').removeAttribute('show-pages')
 	}
 
@@ -92,7 +92,7 @@ function saveSetting(justSave) {
 
 		if (setting.max_per_page != max_per_page) {
 			setting.max_per_page = max_per_page
-			reloadLoadingComics()
+			PageManager.Reload()
 		}
 
 		setting.comic_panel_theme = Number(document.getElementById('s_comic_panel_theme').getAttribute('value'))
@@ -112,15 +112,15 @@ function saveSetting(justSave) {
 		setting.auto_backup = document.getElementById('s_auto_backup').checked
 
 		if (setting.show_comic_pages) {
-			document.getElementById('comic-container').setAttribute('show-pages', true)
+			PageManager.container.setAttribute('show-pages', true)
 			document.getElementById('o-c-p-c-c').setAttribute('show-pages', true)
 		} else {
-			document.getElementById('comic-container').removeAttribute('show-pages')
+			PageManager.container.removeAttribute('show-pages')
 			document.getElementById('o-c-p-c-c').removeAttribute('show-pages')
 		}
 
 		if (show_unoptimize != setting.show_unoptimize) {
-			reloadLoadingComics()
+			PageManager.Reload()
 			setting.show_unoptimize = show_unoptimize
 		}
 

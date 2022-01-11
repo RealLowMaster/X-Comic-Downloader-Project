@@ -162,7 +162,7 @@ class ProcressPanel {
 		this.#txt.innerHTML = text
 	}
 
-	config(config = { miniLog:false, miniSize:30, bgClose:false, closeBtn:false, closeEvent, closeBGEvent }) {
+	config(config = { miniLog:false, miniSize:30, bgClose:false, closeBtn:false, closeEvent:'e', closeBGEvent:'e' }) {
 		if (config.miniLog != undefined) {
 			if (config.miniLog) {
 				this.#constainer.setAttribute('mini', true)
@@ -673,5 +673,185 @@ class DownloadManager {
 	ClosePanel() {
 		keydownEventIndex = this.#passKeyIndex
 		document.getElementById('download-panel').removeAttribute('active')
+	}
+}
+
+class OfflinePageManager {
+	#byName
+	#scroll
+	#counter
+
+	constructor() {
+		this.page = 1
+		this.maxPage = 1
+		this.search = null
+		this.container = document.getElementById('comic-container')
+		this.#byName = false
+		this.#scroll = 0
+		this.#counter = document.getElementById('comics-counter')
+	}
+
+	GetPagination(total_pages, page) {
+		let min = 1, max = 1, bdot = false, fdot = false, bfirst = false, ffirst = false, pagination_width = 5
+		if (total_pages > pagination_width - 1) {
+			if (page == 1) {
+				min = 1
+				max = pagination_width
+			} else {
+				if (page < total_pages) {
+					if (page == pagination_width || page == pagination_width - 1) min = page - Math.floor(pagination_width / 2) - 1
+					else min = page - Math.floor(pagination_width / 2)
+					
+					if (page == (total_pages - pagination_width) + 1 || page == (total_pages - pagination_width) + 2) max = page + Math.floor(pagination_width / 2) + 1
+					else max = page + Math.floor(pagination_width / 2)
+				} else {
+					min = page - pagination_width + 1
+					max = page
+				}
+			}
+		} else {
+			min = 1
+			max = total_pages
+		}
+		
+		if (min < 1) min = 1
+		if (max > total_pages) max = total_pages
+		
+		if (page > pagination_width - 1 && total_pages > pagination_width) bfirst = true
+		if (page > pagination_width && total_pages > pagination_width + 1) bdot = true
+		if (page < (total_pages - pagination_width) + 2 && total_pages > pagination_width) ffirst = true
+		if (page < (total_pages - pagination_width) + 1 && total_pages > pagination_width + 1) fdot = true
+		
+		const arr = []
+		if (page > 1) arr.push(['Prev', page - 1])
+		if (bfirst) arr.push(['1', 1])
+		if (bdot) arr.push(['...', null])
+		for (let i=min; i <= max;i++) {
+			if (i == page) arr.push([`${i}`, null])
+			else arr.push([`${i}`, i])
+		}
+		if (fdot) arr.push(['...', null])
+		if (ffirst) arr.push([`${total_pages}`, total_pages])
+		if (page < total_pages) arr.push(['Next', page + 1])
+
+		return arr
+	}
+	
+	Load(page = 1) {
+		this.page = page
+		this.#scroll = document.getElementById('main-body').scrollTop
+
+		this.container.innerHTML = ''
+		this.container.setAttribute('page', page)
+
+		let load = {}
+		if (this.search != null) load.n = new RegExp(this.search.toLowerCase())
+
+		db.comics.find(load).sort({_id:-1}).exec((err, doc) => {
+			if (err) { error(err); return }
+			const list = []
+			let limit = this.#MaxAndMin(doc.length, page)
+			if (page > limit[2]) {
+				page = limit[2]
+				limit = this.#MaxAndMin(doc.length, page)
+			}
+			this.maxPage = limit[2]
+			
+			for (let i = limit[0]; i < limit[1]; i++) list.push([doc[i]._id, doc[i].n, doc[i].i, doc[i].o, doc[i].c])
+
+			this.#counter.textContent = 'Comics: '+doc.length
+			this.#Content(limit[2], list, page, 'PageManager.Load({page})')
+		})
+	}
+
+	#Content(allPages, list, page, paginationTemplate) {
+		let html = ''
+		
+		const time = new Date().getTime()
+		if (setting.show_unoptimize) {
+			for (let i = 0; i < list.length; i++) {
+				let image = `${dirUL}/thumbs/${list[i][2]}.jpg`, thumb = true, optimize = true , unoptimize = ''
+				if (!fs.existsSync(image)) { image = 'Image/no-img-300x300.png'; thumb = false }
+				if (typeof list[i][3] != 'number') { unoptimize = ' unoptimize'; optimize = false }
+				
+				html += `<div class="comic" onmousedown="onComicClicked(${list[i][0]}, ${thumb}, ${optimize})"${unoptimize}><img src="${image}?${time}"><span>${list[i][4]}</span><p>${list[i][1]}</p></div>`
+			}
+		} else {
+			for (let i = 0; i < list.length; i++) {
+				let image = `${dirUL}/thumbs/${list[i][2]}.jpg`, thumb = true, optimize = true
+
+				if (!fs.existsSync(image)) { image = 'Image/no-img-300x300.png'; thumb = false }
+				if (typeof(list[i][3]) != 'number') optimize = false
+
+				html += `<div class="comic" onmousedown="onComicClicked(${list[i][0]}, ${thumb}, ${optimize})"><img src="${image}?${time}"><span>${list[i][4]}</span><p>${list[i][1]}</p></div>`
+			}
+		}
+		this.container.innerHTML = html
+		
+		// Pagination
+		document.getElementById('jp-m-p').textContent = allPages
+		if (allPages > 1) {
+			document.getElementById('offline-search-form').style.display = 'flex'
+			document.getElementById('jump-page-container').style.display = 'inline-block'
+			const jp_i = document.getElementById('jp-i')
+			jp_i.setAttribute('oninput', `inputLimit(this, ${allPages});PageManager.JumpPage(Number(this.value))`)
+			jp_i.value = page
+			const thisPagination = this.GetPagination(allPages, page)
+			html = '<div>'
+			for (let i in thisPagination) {
+				if (thisPagination[i][1] == null) html += `<button disabled>${thisPagination[i][0]}</button>`
+				else html += `<button onclick="${paginationTemplate.replace('{page}', thisPagination[i][1])}">${thisPagination[i][0]}</button>`
+			}
+			html += '</div>'
+			document.getElementById('pagination').innerHTML = html
+			document.getElementById('pagination').style.display = 'block'
+		} else {
+			if (this.search == null) document.getElementById('offline-search-form').style.display = 'none'
+			document.getElementById('pagination').style.display = 'none'
+			document.getElementById('jump-page-container').style.display = 'none'
+		}
+
+		if (list.length == 0) {
+			if (this.search != null) this.container.innerHTML = '<br><div class="alert alert-danger">No Comic has been Found.</div>'
+			else this.container.innerHTML = '<br><div class="alert alert-danger">There is no Comic Downloaded.</div>'
+		}
+
+		document.getElementById('main-body').scrollTop = this.#scroll
+	}
+
+	#MaxAndMin(length, page) {
+		const max_per_page = setting.max_per_page
+		let min = 0, max = 0
+		const allPages = Math.ceil(length / max_per_page)
+		if (length >= max_per_page) {
+			min = (max_per_page * page) - max_per_page
+			max = min + max_per_page
+			if (max > length) max = length
+		} else max = length
+
+		return [min, max, allPages]
+	}
+
+	Reload() {
+		this.Load(this.page)
+	}
+
+	Search(value) {
+		if (value.replace(/ /g, '').length == 0) value = null
+		this.search = value
+		this.Load(1)
+	}
+
+	JumpPage(page) {
+		if (page < 1) page = 1
+		this.Load(page)
+	}
+
+	Next() {
+		if (this.page < this.maxPage) this.Load(this.page + 1)
+	}
+
+	Prev() {
+		if (this.page > 1) this.Load(this.page - 1)
 	}
 }

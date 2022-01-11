@@ -112,7 +112,7 @@ Add Comic {
 }
 
 Added To Version {
-	
+
 }
 
 Doing {
@@ -120,7 +120,16 @@ Doing {
 }
 
 Tasks => {
-	Fix Crashed Comics
+	{
+		1. add an ability to sort by tag/author/series/character while in your personal gallery
+
+		2. when in a comic slider add the ability to scroll pages with the arrow keys instead of just the A and D keys or the mouse wheel
+
+		3. add an option to sort everything alphabetically instead of just by the order in which they were downloaded
+	Requested By Zogarth23
+	}
+	Optimize and Fix Events
+	Improve Slize Event Bugs
 	Make All Theme Same
 	Improve Release-Note
 	Add Browser-Right Click

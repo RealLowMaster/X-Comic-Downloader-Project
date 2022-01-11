@@ -566,7 +566,7 @@ function CreateComic(comicIndex, haveIndex, gottenResult, image, siteIndex, comi
 			PopAlert(`Comic (${shortName}) Downloaded.`)
 			if (setting.notification_download_finish && remote.Notification.isSupported()) new remote.Notification({title: 'Comic Download Finished.', body: gottenResult.title}).show()
 			changeButtonsToDownloaded(doc.p, doc.s, false, false)
-			if (afterDLReload == true) reloadLoadingComics()
+			if (afterDLReload == true) PageManager.Reload()
 		})
 	})
 }

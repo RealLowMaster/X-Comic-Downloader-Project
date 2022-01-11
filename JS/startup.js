@@ -30,7 +30,7 @@ function AfterDatabaseDoneOnStartup() {
 
 	try {
 		loading.forward('Load Comics...')
-		loadComics()
+		PageManager.Load(1)
 	} catch(err) {
 		error("Startup->LoadComics->Err: "+err);
 	}

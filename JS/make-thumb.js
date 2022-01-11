@@ -11,7 +11,7 @@ function makeThumb(reCreate) {
 		document.getElementById('main').style.display = 'none'
 
 		const scrollTop = document.getElementById('main-body').scrollTop
-		document.getElementById('comic-container').innerHTML = ''
+		PageManager.container.innerHTML = ''
 		setTimeout(() => {
 			checkThumbs(doc, reCreate, scrollTop)
 		}, 1)
@@ -60,13 +60,13 @@ function checkThumbs(doc, reCreate, scrollTop) {
 		document.getElementById('main').style.display = 'flex'
 		keydownEventIndex = 0
 		PopAlert('All Thumbs Made Successfuly.')
-		reloadLoadingComics(scrollTop)
+		PageManager.Reload()
 	} else {
 		loading.hide()
 		document.getElementById('main').style.display = 'flex'
 		keydownEventIndex = 0
 		errorList(thumbErrLog)
-		reloadLoadingComics(scrollTop)
+		PageManager.Reload()
 	}
 }
 
@@ -81,7 +81,7 @@ function createThumb(list, index, scrollTop) {
 			loading.hide()
 			document.getElementById('main').style.display = 'flex'
 			keydownEventIndex = 0
-			reloadLoadingComics(scrollTop)
+			PageManager.Reload()
 			if (thumbErrLog.length == 0) PopAlert('All Thumbs Made Successfuly.')
 			else errorList(thumbErrLog)
 		}
@@ -96,7 +96,7 @@ function createThumb(list, index, scrollTop) {
 			loading.hide()
 			document.getElementById('main').style.display = 'flex'
 			keydownEventIndex = 0
-			reloadLoadingComics(scrollTop)
+			PageManager.Reload()
 			if (thumbErrLog.length == 0) PopAlert('All Thumbs Made Successfuly.')
 			else errorList(thumbErrLog)
 		}
@@ -110,7 +110,7 @@ function makeThumbForAComic(id, keyEvents) {
 		if (err) { error(err); keydownEventIndex = keyEvents; return }
 		if (doc == undefined) { error('Comic Not Found'); return }
 		const scrollTop = document.getElementById('main-body').scrollTop
-		document.getElementById('comic-container').innerHTML = ''
+		PageManager.container.innerHTML = ''
 		loading.reset(3)
 		loading.show(`Checking Thumbs...`)
 
@@ -122,7 +122,7 @@ function makeThumbForAComic(id, keyEvents) {
 				error('This Comic First Image Is not Downloaded, we cannot make Thumb From It.')
 				loading.hide()
 				if (inCollection) LoadCollection()
-				else reloadLoadingComics(scrollTop)
+				else PageManager.Reload()
 				keydownEventIndex = keyEvents
 				return
 			}
@@ -146,14 +146,14 @@ function makeThumbForAComic(id, keyEvents) {
 						comic_thumb_optimize_btn.setAttribute('class', 'warning-action')
 						comic_thumb_optimize_btn.innerText = 'ReMake Thumb'
 						if (inCollection) LoadCollection()
-						else reloadLoadingComics(scrollTop)
+						else PageManager.Reload()
 						keydownEventIndex = keyEvents
 					}).catch(err => {
 						loading.forward()
 						loading.hide()
 						error('MakeThumb: '+err)
 						if (inCollection) LoadCollection()
-						else reloadLoadingComics(scrollTop)
+						else PageManager.Reload()
 						keydownEventIndex = keyEvents
 					})
 				}, 10)
@@ -161,7 +161,7 @@ function makeThumbForAComic(id, keyEvents) {
 				loading.hide()
 				error("Image Not Found, Comic: "+doc.n)
 				if (inCollection) LoadCollection()
-				else reloadLoadingComics(scrollTop)
+				else PageManager.Reload()
 				keydownEventIndex = keyEvents
 			}
 		}, 10)
