@@ -1217,37 +1217,37 @@ function xlecxRepairAllComicInfo(id, comic_id) {
 		}
 
 		const title = result.title.toLowerCase() || null
-		let neededResult
+		let neededResult, groups = null, artists = null, parodies = null, tags = null
 		
 		neededResult = result.groups || null
 		if (neededResult != null) {
 			const groupsList = []
 			for (let i in neededResult) groupsList.push(neededResult[i].name)
-			CreateGroup(groupsList, comic_id, 0, true)
+			groups = CreateGroup(groupsList)
 		}
 
 		neededResult = result.artists || null
 		if (neededResult != null) {
 			const artistsList = []
 			for (let i in neededResult) artistsList.push(neededResult[i].name)
-			CreateArtist(artistsList, comic_id, 0, true)
+			artists = CreateArtist(artistsList)
 		}
 
 		neededResult = result.parody || null
 		if (neededResult != null) {
 			const parodyList = []
 			for (let i in neededResult) parodyList.push(neededResult[i].name)
-			CreateParody(parodyList, comic_id, 0, true)
+			parodies = CreateParody(parodyList)
 		}
 
 		neededResult = result.tags || null
 		if (neededResult != null) {
 			const tagsList = []
 			for (let i in neededResult) tagsList.push(neededResult[i].name)
-			CreateTag(tagsList, comic_id, 0, true)
+			tags = CreateTag(tagsList)
 		}
 
-		db.comics.update({_id:comic_id}, { $set: {n:title} }, {}, (err) => {
+		db.comics.update({_id:comic_id}, { $set: {n:title,g:groups,a:artists,d:parodies,t:tags} }, {}, (err) => {
 			if (err) procressPanel.add(`UpdateComicName -> "${repair_all_list[0][0]}" -> ${err}`, 'danger')
 			repair_all_list.shift()
 			RepairAllComicLoop()
