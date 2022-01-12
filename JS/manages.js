@@ -1,3 +1,0 @@
-function openManagePanel(index) {
-	
-}

@@ -11,6 +11,13 @@ DB => {
 		site = s
 		post_id = p
 		optimized = o
+		groups = g
+		artists = a
+		parodies = d
+		tags = t
+		characters = h
+		languages = l
+		categories = e
 		_id
 	}
 	artists => [

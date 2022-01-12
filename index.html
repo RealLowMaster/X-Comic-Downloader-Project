@@ -29,7 +29,7 @@
 	<script type="text/javascript" src="JS/collections.js" defer></script>
 	<script type="text/javascript" src="JS/make-thumb.js" defer></script>
 	<script type="text/javascript" src="JS/image-optimizer.js" defer></script>
-	<script type="text/javascript" src="JS/manages.js" defer></script>
+	<script type="text/javascript" src="JS/infos.js" defer></script>
 	<script type="text/javascript" src="JS/setting.js" defer></script>
 	<script type="text/javascript" src="JS/startup.js" defer></script>
 	<!-- Sites -->
@@ -51,6 +51,7 @@
 			<div>
 				<div class="top-menu" id="top-menu">
 					<div>
+						<button onclick="PageManager.Load(1)">Home</button>
 						<button onclick="openBrowser()">Browser</button>
 						<div class="menu-dropdown">
 							<p>Optimzation</p>
@@ -64,16 +65,16 @@
 							<p>Manage</p>
 							<div>
 								<button onclick="openCollectionsPanel()">Collections</button>
-								<div class="menu-dropdown" style="display: none;">
+								<div class="menu-dropdown">
 									<p>Infos</p>
 									<div>
-										<button onclick="">Groups</button>
-										<button onclick="">Artists</button>
-										<button onclick="">Parodies</button>
-										<button onclick="">Tags</button>
-										<button onclick="">Characters</button>
-										<button onclick="">Languages</button>
-										<button onclick="">Categories</button>
+										<button onclick="openInfoPanel(0)">Groups</button>
+										<button onclick="openInfoPanel(1)">Artists</button>
+										<button onclick="openInfoPanel(2)">Parodies</button>
+										<button onclick="openInfoPanel(3)">Tags</button>
+										<button onclick="openInfoPanel(4)">Characters</button>
+										<button onclick="openInfoPanel(5)">Languages</button>
+										<button onclick="openInfoPanel(6)">Categories</button>
 									</div>
 								</div>
 								<button type="button" onclick="RepairAllComicInfos()" title="Repair All Comics Infos">Repair All</button>
@@ -102,6 +103,15 @@
 				<p id="comics-counter"></p>
 			</div>
 		</div>
+	</div>
+
+	<!-- Info Panel -->
+	<div id="info-panel">
+		<div id="i-p-c-btn" title="Close | Esc" onclick="closeInfoPanel()"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"><g><path fill="currentColor" d="M9.21,356.07a31.46,31.46,0,0,0,0,44.48l22.24,22.24a31.46,31.46,0,0,0,44.48,0L176,322.72,109.28,256ZM342.79,111.45,320.55,89.21a31.46,31.46,0,0,0-44.48,0L176,189.28,242.72,256,342.79,155.93a31.46,31.46,0,0,0,0-44.48Z" style="opacity:.6"></path><path fill="currentColor" d="M342.79,356.07a31.46,31.46,0,0,1,0,44.48l-22.24,22.24a31.46,31.46,0,0,1-44.48,0L9.21,155.93a31.46,31.46,0,0,1,0-44.48L31.45,89.21a31.46,31.46,0,0,1,44.48,0Z"></path></g></svg></div>
+
+		<input id="i-p-s-i" type="text" placeholder="Search...">
+
+		<div id="i-p-i-c"></div>
 	</div>
 
 	<!-- Collections -->
