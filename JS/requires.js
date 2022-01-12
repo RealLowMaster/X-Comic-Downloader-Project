@@ -676,13 +676,6 @@ function GetDirection() {
 function CreateDatabase() {
 	db.comics = new nedb({ filename: dirDB+'/comics', autoload: true })
 	db.have = new nedb({ filename: dirDB+'/have', autoload: true })
-	db.comic_groups = new nedb({ filename: dirDB+'/comic_groups', autoload: true })
-	db.comic_artists = new nedb({ filename: dirDB+'/comic_artists', autoload: true })
-	db.comic_parodies = new nedb({ filename: dirDB+'/comic_parodies', autoload: true })
-	db.comic_tags = new nedb({ filename: dirDB+'/comic_tags', autoload: true })
-	db.comic_characters = new nedb({ filename: dirDB+'/comic_characters', autoload: true })
-	db.comic_languages = new nedb({ filename: dirDB+'/comic_languages', autoload: true })
-	db.comic_categories = new nedb({ filename: dirDB+'/comic_categories', autoload: true })
 
 	// Index
 	if (fs.existsSync(dirDB+'/index')) {
@@ -812,8 +805,22 @@ function CreateDatabase() {
 	} else if (fs.existsSync(dirDB+'/categories.lowdb')) categoriesDB = jsonfile.readFileSync(dirDB+'/categories.lowdb').a
 	else jsonfile.writeFileSync(dirDB+'/categories.lowdb',{a:[]})
 	
+	// Collections
 	if (fs.existsSync(dirDB+'/collections.lowdb')) collectionsDB = jsonfile.readFileSync(dirDB+'/collections.lowdb').a
 	else jsonfile.writeFileSync(dirDB+'/collections.lowdb',{a:[]})
+
+	// Comic Artists
+	if (fs.existsSync(dirDB+'/comic_groups')) {
+		let tmp_comic_artists = new nedb({ filename: dirDB+'/comic_groups', autoload: true })
+	}
+
+	// db.comic_groups = new nedb({ filename: dirDB+'/comic_groups', autoload: true })
+	// db.comic_artists = new nedb({ filename: dirDB+'/comic_artists', autoload: true })
+	// db.comic_parodies = new nedb({ filename: dirDB+'/comic_parodies', autoload: true })
+	// db.comic_tags = new nedb({ filename: dirDB+'/comic_tags', autoload: true })
+	// db.comic_characters = new nedb({ filename: dirDB+'/comic_characters', autoload: true })
+	// db.comic_languages = new nedb({ filename: dirDB+'/comic_languages', autoload: true })
+	// db.comic_categories = new nedb({ filename: dirDB+'/comic_categories', autoload: true })
 
 	// Check DBs
 	if (typeof groupsDB != 'object') groupsDB = []

@@ -441,7 +441,6 @@ function CreateComic(comicIndex, haveIndex, gottenResult, image, siteIndex, comi
 	db.comics.insert(insertInfo, (err, doc) => {
 		if (err) { error(err); return }
 		FixIndex(0, false)
-		const id = doc._id
 
 		// Add Comic To Have
 		CreateHave(doc.s, doc.p, haveIndex, true)

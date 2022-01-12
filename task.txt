@@ -127,6 +127,7 @@ Doing {
 }
 
 Tasks => {
+	Add RandomJumpPage To Class
 	{
 		1. add an ability to sort by tag/author/series/character while in your personal gallery
 

@@ -73,93 +73,100 @@ function randomJumpPage(limit) {
 }
 
 function openComicCharacters(comicId) {
-	db.comic_characters.findOne({_id:comicId}, (err, doc) => {
-		if (err) { error('OpenComicCharacter: '+err); return }
-		if (doc != undefined) {
-			const character = doc.t || null
-			if (character == null) return
-			let html = 'Characters: '
-			for (let i = 0; i < character.length; i++) html += `<button>${charactersDB[character[i]]}</button>`
-			comicCharactersContainer.innerHTML = html
+	db.comics.findOne({_id:comicId}, (err, doc) => {
+		if (err) { error('OpenComicCharacter->'+err); return }
+		let html = null
+		if (doc != null) {
+			const info = doc.h || null
+			if (info == null) return
+			html = 'Characters: '
+			for (let i = 0; i < info.length; i++) html += `<button>${charactersDB[info[i]]}</button>`
 		}
+		comicCharactersContainer.innerHTML = html
 	})
 }
 
 function openComicLanguages(comicId) {
-	db.comic_languages.findOne({_id:comicId}, (err, doc) => {
-		if (err) { error('OpenComicLanguage: '+err); return }
-		if (doc != undefined) {
-			const language = doc.t || null
-			if (language == null) return
-			let html = 'Languages: '
-			for (let i = 0; i < language.length; i++) html += `<button>${languagesDB[language[i]]}</button>`
-			comicLanguagesContainer.innerHTML = html
+	db.comics.findOne({_id:comicId}, (err, doc) => {
+		if (err) { error('OpenComicLanguage->'+err); return }
+		let html = null
+		if (doc != null) {
+			const info = doc.l || null
+			if (info == null) return
+			html = 'Languages: '
+			for (let i = 0; i < info.length; i++) html += `<button>${languagesDB[info[i]]}</button>`
 		}
+		comicLanguagesContainer.innerHTML = html
 	})
 }
 
 function openComicCategories(comicId) {
-	db.comic_categories.findOne({_id:comicId}, (err, doc) => {
-		if (err) { error('OpenComicCategory: '+err); return }
-		if (doc != undefined) {
-			const category = doc.t || null
-			if (category == null) return
-			let html = 'Categories: '
-			for (let i = 0; i < category.length; i++) html += `<button>${categoriesDB[category[i]]}</button>`
-			comicCategoriesContainer.innerHTML = html
+	db.comics.findOne({_id:comicId}, (err, doc) => {
+		if (err) { error('OpenComicCategory->'+err); return }
+		let html = null
+		if (doc != null) {
+			const info = doc.e || null
+			if (info == null) return
+			html = 'Categories: '
+			for (let i = 0; i < info.length; i++) html += `<button>${categoriesDB[info[i]]}</button>`
 		}
+		comicCategoriesContainer.innerHTML = html
 	})
 }
 
 function openComicGroups(comicId) {
-	db.comic_groups.findOne({_id:comicId}, (err, doc) => {
-		if (err) { error('OpenComicGroup: '+err); return }
-		if (doc != undefined) {
-			const groups = doc.t || null
-			if (groups == null) return
-			let html = 'Groups: '
-			for (let i = 0; i < groups.length; i++) html += `<button>${groupsDB[groups[i]]}</button>`
-			comicGroupsContainer.innerHTML = html
+	db.comics.findOne({_id:comicId}, (err, doc) => {
+		if (err) { error('OpenComicGroup->'+err); return }
+		let html = null
+		if (doc != null) {
+			const info = doc.g || null
+			if (info == null) return
+			html = 'Groups: '
+			for (let i = 0; i < info.length; i++) html += `<button>${groupsDB[info[i]]}</button>`
 		}
+		comicGroupsContainer.innerHTML = html
 	})
 }
 
 function openComicArtists(comicId) {
-	db.comic_artists.findOne({_id:comicId}, (err, doc) => {
-		if (err) { error('OpenComicArtist: '+err); return }
-		if (doc != undefined) {
-			const artists = doc.t || null
-			if (artists == null) return
-			let html = 'Artists: '
-			for (let i = 0; i < artists.length; i++) html += `<button>${artistsDB[artists[i]]}</button>`
-			comicArtistsContainer.innerHTML = html
+	db.comics.findOne({_id:comicId}, (err, doc) => {
+		if (err) { error('OpenComicArtist->'+err); return }
+		let html = null
+		if (doc != null) {
+			const info = doc.a || null
+			if (info == null) return
+			html = 'Artists: '
+			for (let i = 0; i < info.length; i++) html += `<button>${artistsDB[info[i]]}</button>`
 		}
+		comicArtistsContainer.innerHTML = html
 	})
 }
 
 function openComicParodies(comicId) {
-	db.comic_parodies.findOne({_id:comicId}, (err, doc) => {
-		if (err) { error('OpenComicParody: '+err); return }
-		if (doc != undefined) {
-			const parodies = doc.t || null
-			if (parodies == null) return
-			let html = 'Parody: '
-			for (let i = 0; i < parodies.length; i++) html += `<button>${parodiesDB[parodies[i]]}</button>`
-			comicParodyContainer.innerHTML = html
+	db.comics.findOne({_id:comicId}, (err, doc) => {
+		if (err) { error('OpenComicParody->'+err); return }
+		let html = null
+		if (doc != null) {
+			const info = doc.d || null
+			if (info == null) return
+			html = 'Parody: '
+			for (let i = 0; i < info.length; i++) html += `<button>${parodiesDB[info[i]]}</button>`
 		}
+		comicParodyContainer.innerHTML = html
 	})
 }
 
 function openComicTags(comicId) {
-	db.comic_tags.findOne({_id:comicId}, (err, doc) => {
-		if (err) { error('OpenComicTag: '+err); return }
-		if (doc != undefined) {
-			const tags = doc.t || null
-			if (tags == null) return
-			let html = 'Tags: '
-			for (let i = 0; i < tags.length; i++) html += `<button>${tagsDB[tags[i]]}</button>`
-			comicTagsContainer.innerHTML = html
+	db.comics.findOne({_id:comicId}, (err, doc) => {
+		if (err) { error('OpenComicTag->'+err); return }
+		let html = null
+		if (doc != null) {
+			const info = doc.d || null
+			if (info == null) return
+			html = 'Tags: '
+			for (let i = 0; i < info.length; i++) html += `<button>${tagsDB[info[i]]}</button>`
 		}
+		comicTagsContainer.innerHTML = html
 	})
 }
 
@@ -265,13 +272,49 @@ function openComic(id) {
 
 			loadImagesOneByOne([...comicImageContainer.getElementsByTagName('img')])
 
-			openComicCharacters(id)
-			openComicLanguages(id)
-			openComicCategories(id)
-			openComicGroups(id)
-			openComicArtists(id)
-			openComicParodies(id)
-			openComicTags(id)
+			// Load Infos
+			if (doc.g != null) {
+				html = 'Groups: '
+				for (let i = 0; i < doc.g.length; i++) html += `<button>${groupsDB[doc.g[i]]}</button>`
+				comicGroupsContainer.innerHTML = html
+			}
+
+			if (doc.a != null) {
+				html = 'Artists: '
+				for (let i = 0; i < doc.a.length; i++) html += `<button>${artistsDB[doc.a[i]]}</button>`
+				comicArtistsContainer.innerHTML = html
+			}
+
+			if (doc.d != null) {
+				html = 'Parody: '
+				for (let i = 0; i < doc.d.length; i++) html += `<button>${parodiesDB[doc.d[i]]}</button>`
+				comicParodyContainer.innerHTML = html
+			}
+
+			if (doc.h != null) {
+				html = 'Characters: '
+				for (let i = 0; i < doc.h.length; i++) html += `<button>${charactersDB[doc.h[i]]}</button>`
+				comicCharactersContainer.innerHTML = html
+			}
+
+			if (doc.l != null) {
+				html = 'Languages: '
+				for (let i = 0; i < doc.l.length; i++) html += `<button>${languagesDB[doc.l[i]]}</button>`
+				comicLanguagesContainer.innerHTML = html
+			}
+
+			if (doc.e != null) {
+				html = 'Categories: '
+				for (let i = 0; i < doc.e.length; i++) html += `<button>${categoriesDB[doc.e[i]]}</button>`
+				comicCategoriesContainer.innerHTML = html
+			}
+
+			if (doc.d != null) {
+				html = 'Tags: '
+				for (let i = 0; i < doc.d.length; i++) html += `<button>${tagsDB[doc.d[i]]}</button>`
+				comicTagsContainer.innerHTML = html
+			}
+
 			comicPanel.style.display = 'block'
 			comicPanel.scrollTop = 0
 			keydownEventIndex = 1
