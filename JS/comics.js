@@ -174,7 +174,7 @@ function openComic(id) {
 	need_repair = []
 	in_comic = true
 	id = id || null
-	if (id == null) { error('Id Can\'t be Null.'); return }
+	if (id == null) { error("Id Can't be Null."); return }
 	const title_container = document.getElementById('c-p-t')
 	let html = '', formatIndex = 0, name, image, ImagesCount, formats
 
@@ -309,9 +309,9 @@ function openComic(id) {
 				comicCategoriesContainer.innerHTML = html
 			}
 
-			if (doc.d != null) {
+			if (doc.t != null) {
 				html = 'Tags: '
-				for (let i = 0; i < doc.d.length; i++) html += `<button>${tagsDB[doc.d[i]]}</button>`
+				for (let i = 0; i < doc.t.length; i++) html += `<button>${tagsDB[doc.t[i]]}</button>`
 				comicTagsContainer.innerHTML = html
 			}
 

@@ -23,31 +23,15 @@ DB => {
 	artists => [
 		'name'
 	]
-	comic_artists {
-		artists = t = []
-		_id => Comic Id
-	}
 	tags => [
 		'name'
 	]
-	comic_tags {
-		tags = t = []
-		_id => Comic Id
-	}
 	groups => [
 		'name'
 	]
-	comic_groups {
-		groups = t = []
-		_id => Comic Id
-	}
 	parodies => [
 		'name'
 	]
-	comic_parodies {
-		parodies = t = []
-		_id => Comic Id
-	}
 	collections => [
 		[
 			'title' = name => 0
@@ -64,24 +48,12 @@ DB => {
 	characters => [
 		'name'
 	]
-	comic_characters {
-		parodies = t = []
-		_id => Comic Id
-	}
 	languages => [
 		'name'
 	]
-	comic_languages {
-		parodies = t = []
-		_id => Comic Id
-	}
 	categories => [
 		'name'
 	]
-	comic_categories {
-		parodies = t = []
-		_id => Comic Id
-	}
 }
 
 Add Comic {
