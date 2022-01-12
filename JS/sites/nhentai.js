@@ -1084,30 +1084,10 @@ function nhentaiRepairComicInfoGetInfo(id, whitch) {
 				})
 				break
 			case 1:
-				neededResult = result.groups || null
-				if (neededResult == null) {
-					loading.hide()
-					PopAlert('This Comic has no Group.', 'danger')
-					return
-				}
-				loading.forward('Listing Groups...')
-				const groupsList = []
-				for (let i in neededResult) groupsList.push(neededResult[i].name)
-				loading.forward('Add Groups To Database...')
-				CreateGroup(groupsList, comic_id, 0, true)
+				RepairGroup(result.groups, comic_id)
 				break
 			case 2:
-				neededResult = result.artists || null
-				if (neededResult == null) {
-					loading.hide()
-					PopAlert('This Comic has no Artist.', 'danger')
-					return
-				}
-				loading.forward('Listing Artists...')
-				const artistsList = []
-				for (let i in neededResult) artistsList.push(neededResult[i].name)
-				loading.forward('Add Artists To Database...')
-				CreateArtist(artistsList, comic_id, 0, true)
+				RepairArtist(result.artists, comic_id)
 				break
 			case 3:
 				RepairParody(result.parodies, comic_id)
@@ -1152,43 +1132,13 @@ function nhentaiRepairComicInfoGetInfo(id, whitch) {
 				})
 				break
 			case 6:
-				neededResult = result.characters || null
-				if (neededResult == null) {
-					loading.hide()
-					PopAlert('This Comic has no Characters.', 'danger')
-					return
-				}
-				loading.forward('Listing Characters...')
-				const charactersList = []
-				for (let i in neededResult) charactersList.push(neededResult[i].name)
-				loading.forward('Add Characters To Database...')
-				CreateCharacter(charactersList, comic_id, 0, true)
+				RepairCharacter(result.characters, comic_id)
 				break
 			case 7:
-				neededResult = result.languages || null
-				if (neededResult == null) {
-					loading.hide()
-					PopAlert('This Comic has no Languages.', 'danger')
-					return
-				}
-				loading.forward('Listing Languages...')
-				const languagesList = []
-				for (let i in neededResult) languagesList.push(neededResult[i].name)
-				loading.forward('Add Languages To Database...')
-				CreateLanguage(languagesList, comic_id, 0, true)
+				RepairLanguage(result.languages, comic_id)
 				break
 			case 8:
-				neededResult = result.categories || null
-				if (neededResult == null) {
-					loading.hide()
-					PopAlert('This Comic has no Categories.', 'danger')
-					return
-				}
-				loading.forward('Listing Categories...')
-				const categoriesList = []
-				for (let i in neededResult) categoriesList.push(neededResult[i].name)
-				loading.forward('Add Categories To Database...')
-				CreateCategory(categoriesList, comic_id, 0, true)
+				RepairCategory(result.categories, comic_id)
 				break
 		}
 	})

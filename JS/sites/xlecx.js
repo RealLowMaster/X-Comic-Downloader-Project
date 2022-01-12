@@ -1155,62 +1155,10 @@ function xlecxRepairComicInfoGetInfo(id, whitch) {
 				})
 				break
 			case 1:
-				neededResult = result.groups || null
-				if (neededResult == null) {
-					loading.hide()
-					PopAlert('This Comic has no Group.', 'danger')
-					return
-				}
-				loading.forward('Listing Groups...')
-				let groupsList = null
-				if (neededResult.length > 0) {
-					groupsList = []
-					for (let i in neededResult) groupsList.push(neededResult[i].name)
-				}
-				loading.forward('Add Groups To Database...')
-				const groups = CreateGroup(groupsList)
-
-				db.comics.update({_id:comic_id}, { $set: {g:groups} }, {}, err => {
-					loading.forward()
-					loading.hide()
-					if (err) {
-						if (!isRepairing) {
-							openComicGroups(comic_id)
-							error('GroupListUpdate: '+err)
-						}
-						return
-					}
-					PopAlert('Comic Groups Has Been Repaired!')
-				})
+				RepairGroup(result.groups, comic_id)
 				break
 			case 2:
-				neededResult = result.artists || null
-				if (neededResult == null) {
-					loading.hide()
-					PopAlert('This Comic has no Artist.', 'danger')
-					return
-				}
-				loading.forward('Listing Artists...')
-				let artistsList = null
-				if (neededResult.length > 0) {
-					artistsList = []
-					for (let i in neededResult) artistsList.push(neededResult[i].name)
-				}
-				loading.forward('Add Artists To Database...')
-				const artists = CreateArtist(artistsList)
-
-				db.comics.update({_id:comic_id}, { $set: {a:artists} }, {}, err => {
-					loading.forward()
-					loading.hide()
-					if (err) {
-						if (!isRepairing) {
-							openComicArtists(comic_id)
-							error('GroupListUpdate: '+err)
-						}
-						return
-					}
-					PopAlert('Comic Groups Has Been Repaired!')
-				})
+				RepairArtist(result.artists, comic_id)
 				break
 			case 3:
 				RepairParody(result.parody, comic_id)

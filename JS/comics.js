@@ -161,7 +161,7 @@ function openComicTags(comicId) {
 		if (err) { error('OpenComicTag->'+err); return }
 		let html = null
 		if (doc != null) {
-			const info = doc.d || null
+			const info = doc.t || null
 			if (info == null) return
 			html = 'Tags: '
 			for (let i = 0; i < info.length; i++) html += `<button>${tagsDB[info[i]]}</button>`
