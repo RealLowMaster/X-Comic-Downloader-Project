@@ -741,7 +741,7 @@ function deleteComic(id) {
 			const site = doc.s
 			const post_id = doc.p
 			
-			loading.reset(11 + ImagesCount)
+			loading.reset(4 + ImagesCount)
 			loading.show('Removing Comic From Database...')
 	
 			const fix_removed_index = () => {
@@ -767,68 +767,12 @@ function deleteComic(id) {
 				} else keydownEventIndex = 0
 				
 			}
-
-			const remove_characters = () => {
-				db.comic_characters.remove({_id:id}, {}, err => {
-					if (err) { comicDeleting = false; loading.hide(); error(err); keydownEventIndex = 0; return }
-					loading.forward('Removing Comic Have From Database...')
-					fix_removed_index()
-				})
-			}
-
-			const remove_languages = () => {
-				db.comic_languages.remove({_id:id}, {}, err => {
-					if (err) { comicDeleting = false; loading.hide(); error(err); keydownEventIndex = 0; return }
-					loading.forward('Removing Comic Have From Database...')
-					remove_characters()
-				})
-			}
-
-			const remove_categories = () => {
-				db.comic_categories.remove({_id:id}, {}, err => {
-					if (err) { comicDeleting = false; loading.hide(); error(err); keydownEventIndex = 0; return }
-					loading.forward('Removing Comic Have From Database...')
-					remove_languages()
-				})
-			}
-	
-			const remove_tags = () => {
-				db.comic_tags.remove({_id:id}, {}, err => {
-					if (err) { comicDeleting = false; loading.hide(); error(err); keydownEventIndex = 0; return }
-					loading.forward('Removing Comic Have From Database...')
-					remove_categories()
-				})
-			}
-	
-			const remove_parodies = () => {
-				db.comic_parodies.remove({_id:id}, {}, err => {
-					if (err) { comicDeleting = false; loading.hide(); error(err); keydownEventIndex = 0; return }
-					loading.forward('Removing Comic Tags From Database...')
-					remove_tags()
-				})
-			}
-	
-			const remove_artists = () => {
-				db.comic_artists.remove({_id:id}, {}, err => {
-					if (err) { comicDeleting = false; loading.hide(); error(err); keydownEventIndex = 0; return }
-					loading.forward('Removing Comic Parodies From Database...')
-					remove_parodies()
-				})
-			}
-	
-			const remove_groups = () => {
-				db.comic_groups.remove({_id:id}, {}, err => {
-					if (err) { comicDeleting = false; loading.hide(); error(err); keydownEventIndex = 0; return }
-					loading.forward('Removing Comic Artists From Database...')
-					remove_artists()
-				})
-			}
 	
 			const remove_have = () => {
 				db.have.remove({s:site, i:post_id}, {}, err => {
 					if (err) { comicDeleting = false; loading.hide(); error(err); keydownEventIndex = 0; return }
 					loading.forward('Fix Indexs...')
-					remove_groups()
+					fix_removed_index()
 				})
 			}
 	

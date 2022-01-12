@@ -42,6 +42,8 @@ class Loading {
 
 	hide() { this.#loading.style.display = 'none' }
 
+	text(text) { this.#txt.innerHTML = text }
+
 	show(text, bgColor, color) {
 		if (text != undefined) this.#txt.innerText = text
 		if (bgColor != undefined) this.#loading.style.backgroundColor = bgColor

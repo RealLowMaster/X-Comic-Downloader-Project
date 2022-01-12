@@ -1067,9 +1067,7 @@ function nhentaiDownloader(id) {
 
 function nhentaiRepairComicInfoGetInfo(id, whitch) {
 	let comic_id = Number(comicPanel.getAttribute('cid'))
-	let reset = 4
-	if (whitch == 0) reset = 2
-	loading.reset(reset)
+	loading.reset(0)
 	loading.show('Connecting To Web...')
 	nhentai.getComic(id, false, (err, result) => {
 		if (err) { loading.hide(); error(err); return }
@@ -1112,30 +1110,10 @@ function nhentaiRepairComicInfoGetInfo(id, whitch) {
 				CreateArtist(artistsList, comic_id, 0, true)
 				break
 			case 3:
-				neededResult = result.parodies || null
-				if (neededResult == null) {
-					loading.hide()
-					PopAlert('This Comic has no Parody.', 'danger')
-					return
-				}
-				loading.forward('Listing Parodies...')
-				const parodyList = []
-				for (let i in neededResult) parodyList.push(neededResult[i].name)
-				loading.forward('Add Parodies To Database...')
-				CreateParody(parodyList, comic_id, 0, true)
+				RepairParody(result.parodies, comic_id)
 				break
 			case 4:
-				neededResult = result.tags || null
-				if (neededResult == null) {
-					loading.hide()
-					PopAlert('This Comic has no Tag.', 'danger')
-					return
-				}
-				loading.forward('Listing Tags...')
-				const tagsList = []
-				for (let i in neededResult) tagsList.push(neededResult[i].name)
-				loading.forward('Add Tags To Database...')
-				CreateTag(tagsList, comic_id, 0, true)
+				RepairTag(result.tags, comic_id)
 				break
 			case 5:
 				loading.hide()
