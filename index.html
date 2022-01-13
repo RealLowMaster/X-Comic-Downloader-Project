@@ -10,6 +10,7 @@
 	<link rel="stylesheet" type="text/css" href="CSS/collections.css">
 	<link rel="stylesheet" type="text/css" href="CSS/action.css">
 	<link rel="stylesheet" type="text/css" href="CSS/public.css">
+	<link rel="stylesheet" type="text/css" href="CSS/theme-manager.css">
 	<link rel="stylesheet" type="text/css" href="CSS/xlecx.css">
 	<link rel="stylesheet" type="text/css" href="CSS/nhentai.css">
 	<!-- Scripts -->
@@ -21,7 +22,6 @@
 	<script type="text/javascript" src="JS/apis/nhentai-api.js"></script>
 	<script type="text/javascript" src="JS/classes.js"></script>
 	<script type="text/javascript" src="JS/requires.js" defer></script>
-	<script type="text/javascript" src="JS/themes.js" defer></script>
 	<script type="text/javascript" src="JS/comics.js" defer></script>
 	<script type="text/javascript" src="JS/slider.js" defer></script>
 	<script type="text/javascript" src="JS/browser.js" defer></script>
@@ -30,6 +30,9 @@
 	<script type="text/javascript" src="JS/make-thumb.js" defer></script>
 	<script type="text/javascript" src="JS/image-optimizer.js" defer></script>
 	<script type="text/javascript" src="JS/infos.js" defer></script>
+	<script type="text/javascript" src="JS/theme-database.js"></script>
+	<script type="text/javascript" src="JS/theme.js" defer></script>
+	<script type="text/javascript" src="JS/themes.js" defer></script>
 	<script type="text/javascript" src="JS/setting.js" defer></script>
 	<script type="text/javascript" src="JS/startup.js" defer></script>
 	<!-- Sites -->
@@ -101,6 +104,29 @@
 				<div id="comic-container" page=""></div>
 				<div id="pagination"></div>
 				<p id="comics-counter"></p>
+			</div>
+		</div>
+	</div>
+
+	<!-- Theme Manager -->
+	<div id="theme-manager">
+		<div>
+			<select id="theme-index-selector" oninput="ThemeIndexSelector(Number(this.value))"></select>
+			<button class="btn btn-primary" type="button" title="Add New Theme" onclick="AddNewTheme()">Add Theme</button>
+			<button class="btn btn-danger" type="button" title="Close Theme Manager Without Saving" onclick="CloseThemeManager()" style="margin-left: 100px;">Close Manager</button>
+			<button class="btn btn-success" type="button" title="Save Theme And Reload App" onclick="SaveThemeManager()">Save</button>
+		</div>
+
+		<div id="theme-adder">
+			<div id="theme-container"></div>
+			<button id="theme-add-btn" type="button" onclick="AddThemeAttribute()" title="Add Attrbiute">+</button>
+		</div>
+
+		<div id="theme-rename">
+			<div onclick="isAddingThemeAttr=null;this.parentElement.style.display = 'none'"></div>
+			<div>
+				<input type="text" placeholder="Attribute Name..." id="theme-attribute-input">
+				<button type="button" class="btn btn-primary" onclick="RenameThemeAttribute()">Save</button>
 			</div>
 		</div>
 	</div>

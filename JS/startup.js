@@ -24,28 +24,32 @@ function AfterDatabaseDoneOnStartup() {
 		loading.forward('Set Settings...')
 		setLuanchTimeSettings(false)
 	} catch(err) {
-		error("Startup->SetLuanchSetting->Err: "+err);
+		error("Startup->SetLuanchSetting->Err: "+err)
+		console.error(err)
 	}
 
 	try {
 		loading.forward('Set Sites...')
 		SetSite()
 	} catch(err) {
-		error("Startup->SetSites->Err: "+err);
+		error("Startup->SetSites->Err: "+err)
+		console.error(err)
 	}
 
 	try {
 		loading.forward('Load Comics...')
 		PageManager.Load(1)
 	} catch(err) {
-		error("Startup->LoadComics->Err: "+err);
+		error("Startup->LoadComics->Err: "+err)
+		console.error(err)
 	}
 
 	try {
 		loading.forward('Load Collections...')
 		LoadCollections()
 	} catch(err) {
-		error("Startup->LoadCollections->Err: "+err);
+		error("Startup->LoadCollections->Err: "+err)
+		console.error(err)
 	}
 
 	try {
@@ -53,31 +57,36 @@ function AfterDatabaseDoneOnStartup() {
 		document.getElementById('main').style.display = 'flex'
 		loading.hide()
 	} catch(err) {
-		error("Startup->HideLoading->Err: "+err);
+		error("Startup->HideLoading->Err: "+err)
+		console.error(err)
 	}
 
 	try {
 		CheckReleaseNote()
 	} catch(err) {
-		error("Startup->CheckReleaseNote->Err: "+err);
+		error("Startup->CheckReleaseNote->Err: "+err)
+		console.error(err)
 	}
 
 	try {
 		document.getElementById('ex-p-l-input').value = remote.app.getPath('downloads')
 	} catch(err) {
-		error("Startup->SetExportPath->Err: "+err);
+		error("Startup->SetExportPath->Err: "+err)
+		console.error(err)
 	}
 
 	try {
 		if (setting.check_update) CheckUpdate()
 	} catch(err) {
-		error("Startup->CheckUpdate->Err: "+err);
+		error("Startup->CheckUpdate->Err: "+err)
+		console.error(err)
 	}
 
 	try {
 		if (setting.open_br_startup) openBrowser()
 	} catch(err) {
-		error("Startup->OpenBrowser->Err: "+err);
+		error("Startup->OpenBrowser->Err: "+err)
+		console.error(err)
 	}
 }
 
@@ -133,34 +142,39 @@ document.addEventListener("DOMContentLoaded", () => {
 	try {
 		ChangeSizes()
 	} catch(err) {
-		error("Startup->ChangingSizes->Err: "+err);
+		error("Startup->ChangingSizes->Err: "+err)
+		console.error(err)
 	}
 
 	try {
 		GetSettingFile()
 	} catch(err) {
-		error("Startup->GettingSettingFile->Err: "+err);
+		error("Startup->GettingSettingFile->Err: "+err)
+		console.error(err)
 	}
 
 	try {
 		loading.forward('Getting Directories...')
 		GetDirection()
 	} catch(err) {
-		error("Startup->GetDirections->Err: "+err);
+		error("Startup->GetDirections->Err: "+err)
+		console.error(err)
 	}
 
 	try {
 		loading.forward('Creating Databases...')
 		CreateDatabase()
 	} catch(err) {
-		error("Startup->CreateDatabase->Err: "+err);
+		error("Startup->CreateDatabase->Err: "+err)
+		console.error(err)
 	}
 
 	try {
 		loading.forward('Checking Settings...')
 		CheckSettings()
 	} catch(err) {
-		error("Startup->CheckSettings->Err: "+err);
+		error("Startup->CheckSettings->Err: "+err)
+		console.error(err)
 	}
 
 	try {
@@ -176,7 +190,8 @@ document.addEventListener("DOMContentLoaded", () => {
 			}
 		})
 	} catch(err) {
-		error("Startup->SetWindowEvents->Err: "+err);
+		error("Startup->SetWindowEvents->Err: "+err)
+		console.error(err)
 	}
 
 	try {
@@ -188,7 +203,8 @@ document.addEventListener("DOMContentLoaded", () => {
 			if (keydownEventIndex != null) eval(keydownEvents[keydownEventIndex].replace('{ctrl}', e.ctrlKey).replace('{shift}', e.shiftKey).replace('{key}', e.which))
 		})
 	} catch(err) {
-		error("Startup->SetClickEvents->Err: "+err);
+		error("Startup->SetClickEvents->Err: "+err)
+		console.error(err)
 	}
 
 	try {
@@ -197,14 +213,13 @@ document.addEventListener("DOMContentLoaded", () => {
 		})
 	} catch(err) {
 		error("Startup->SetFullScreenEvents->Err: "+err)
+		console.error(err)
 	}
 
 	loading.forward('Checking SubFolder...')
 	const IndexLoadCheck = () => {
 		if (indexDB.length < 3) { setTimeout(IndexLoadCheck, 250); return }
-		for (let i = 0; i < indexDB.length; i++) {
-			if (indexDB[i] == undefined) { setTimeout(IndexLoadCheck, 250); return }
-		}
+		for (let i = 0; i < indexDB.length; i++) if (indexDB[i] == undefined) { setTimeout(IndexLoadCheck, 250); return }
 		lastComicId = indexDB[0]
 		lastHaveId = indexDB[1]
 

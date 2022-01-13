@@ -1,0 +1,149 @@
+#theme-manager {
+	display: none;
+	width: 100%;
+	height: calc(100% - var(--topMenuSize));
+	padding: 20px;
+	background-color: #fff;
+	position: fixed;
+	top: var(--topMenuSize);
+	left: 0;
+	z-index: 100;
+	cursor: default;
+}
+
+#theme-adder {
+	display: block;
+	width: auto;
+	max-width: 1440px;
+	height: auto;
+	padding: 10px;
+	margin: 20px 0;
+	border: 1px solid #eee;
+	border-radius: 4px;
+}
+
+#theme-container {
+	display: block;
+	width: 100%;
+	text-align: center;
+}
+
+#theme-container > div {
+	display: inline-block;
+	width: 220px;
+	margin: 5px;
+	position: relative;
+}
+
+#theme-container > div > p {
+	width: 182px;
+	margin-bottom: 2px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	text-align: left;
+}
+
+#theme-container > div > input {
+	width: 220px;
+	padding: 7px 10px;
+	border: 1px solid #ddd;
+	border-radius: 4px 0 4px 4px;
+	text-align: left;
+	transition: border-color ease-in-out .2s;
+}
+
+#theme-container > div > input:hover,
+#theme-container > div > input:focus {
+	border-color: #5DADE2;
+}
+
+#theme-container > div > button {
+	width: 17px;
+	height: 17px;
+	background-color: #ddd;
+	border-radius: 50% 0 0 0;
+	text-align: center;
+	font-size: 11px;
+	font-weight: 600;
+	position: absolute;
+	top: 6px;
+	right: 17px;
+	transition: background-color .1s, color .1s;
+}
+
+#theme-container > div > button:hover {
+	background-color: #E74C3C;
+	color: #fff;
+}
+
+#theme-container > div > button:last-child {
+	border-radius: 0 50% 0 0;
+	right: 0;
+}
+
+#theme-container > div > button:last-child:hover {
+	background-color: #229954;
+}
+
+#theme-add-btn {
+	display: block;
+	width: 40px;
+	height: 40px;
+	margin: 10px auto;
+	background-color: #ddd;
+	color: #222;
+	border-radius: 50%;
+	font-size: 24px;
+	text-align: center;
+}
+
+#theme-rename {
+	display: none;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+#theme-rename > div:first-child {
+	width: 100%;
+	height: 100%;
+	background-color: #000c;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+#theme-rename > div:last-child {
+	pointer-events: none;
+	z-index: +1;
+}
+
+#theme-rename > div:last-child > input {
+	display: block;
+	width: 230px;
+	padding: 7px 10px;
+	margin-bottom: 10px;
+	background-color: #fff;
+	color: #222;
+	border: 1px solid #eee;
+	border-radius: 4px;
+	pointer-events: visible;
+}
+
+#theme-rename > div:last-child > button {
+	pointer-events: visible;
+}
+
+#theme-index-selector {
+	display: inline-block;
+	padding: 7px 10px;
+	background-color: #fff;
+	color: #222;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+}
