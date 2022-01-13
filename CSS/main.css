@@ -259,6 +259,16 @@ input::-webkit-input-placeholder { user-select: none }
 #comic-container[show-pages] .comic > span,
 #o-c-p-c-c[show-pages] .comic > span { display: block !important }
 
+#off-page-title {
+	display: block;
+	width: 100%;
+	padding: 10px 10px 0 10px;
+	color: var(--i-p-t-color);
+	text-align: center;
+	text-transform: capitalize;
+	font-size: 20px;
+}
+
 #c-c-r-c-p,
 #c-p-i-r-p,
 #c-r-c-m {

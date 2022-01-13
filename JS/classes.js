@@ -682,7 +682,10 @@ class OfflinePageManager {
 	#byName
 	#scroll
 	#counter
+	#title
+	#titleDom
 	#infoSearchs
+	#infoNames
 
 	constructor() {
 		this.page = 1
@@ -696,6 +699,8 @@ class OfflinePageManager {
 		this.#byName = false
 		this.#scroll = 0
 		this.#counter = document.getElementById('comics-counter')
+		this.#title = null
+		this.#titleDom = document.getElementById('off-page-title')
 		this.#infoSearchs = [
 			'groupsDB.indexOf({})',
 			'artistsDB.indexOf({})',
@@ -704,6 +709,15 @@ class OfflinePageManager {
 			'charactersDB.indexOf({})',
 			'languagesDB.indexOf({})',
 			'categoriesDB.indexOf({})',
+		]
+		this.#infoNames = [
+			'Groups',
+			'Artists',
+			'Parodies',
+			'Tags',
+			'Characters',
+			'Languages',
+			'Categories'
 		]
 	}
 
@@ -757,7 +771,8 @@ class OfflinePageManager {
 		this.page = page
 		this.loadIndex = 0
 		this.#scroll = document.getElementById('main-body').scrollTop
-		this.container.innerHTML = ''
+		this.container.innerHTML = null
+		this.#titleDom.innerHTML = null
 
 		let load = {}
 		if (this.search != null) load.n = new RegExp(this.search.toLowerCase())
@@ -771,6 +786,7 @@ class OfflinePageManager {
 				limit = this.#MaxAndMin(doc.length, page)
 			}
 			this.maxPage = limit[2]
+			this.#title = 'Page '
 			
 			for (let i = limit[0]; i < limit[1]; i++) list.push([doc[i]._id, doc[i].n, doc[i].i, doc[i].o, doc[i].c])
 
@@ -789,6 +805,7 @@ class OfflinePageManager {
 		document.getElementById('offline-search-form-input').value = null
 		closeInfoPanel()
 		closeComicPanel()
+		this.#title = this.#infoNames[index]+' > <span class="nhentai-glow">'+name+'</span> > Page '
 		this.LoadInfo(1)
 	}
 
@@ -796,7 +813,8 @@ class OfflinePageManager {
 		this.page = page
 		this.loadIndex = 1
 		this.#scroll = document.getElementById('main-body').scrollTop
-		this.container.innerHTML = ''
+		this.container.innerHTML = null
+		this.#titleDom.innerHTML = null
 
 		const load = {}
 		if (this.search != null) load.n = new RegExp(this.search.toLowerCase())
@@ -853,7 +871,7 @@ class OfflinePageManager {
 
 	#Content(allPages, list, page, paginationTemplate) {
 		let html = ''
-		
+		this.#titleDom.innerHTML = this.#title+page
 		const time = new Date().getTime()
 		if (setting.show_unoptimize) {
 			for (let i = 0; i < list.length; i++) {
