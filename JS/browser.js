@@ -1044,6 +1044,9 @@ function BrowserKeyEvents(ctrl, shift, key) {
 				case 72:
 					toggleBrowserHistory()
 					break
+				case 78:
+					openSite(active_site)
+					break
 				case 81:
 					browserTabHome()
 					break

@@ -919,6 +919,9 @@ function OfflineKeyEvents(ctrl, shift, key) {
 				case 82:
 					PageManager.Reload()
 					break
+				case 88:
+					openCollectionsPanel()
+					break
 				case 90:
 					PageManager.RandomJumpPage()
 					break
@@ -935,6 +938,27 @@ function OfflineKeyEvents(ctrl, shift, key) {
 					break
 				case 37:
 					PageManager.Prev()
+					break
+				case 49:
+					openInfoPanel(0)
+					break
+				case 50:
+					openInfoPanel(1)
+					break
+				case 51:
+					openInfoPanel(2)
+					break
+				case 52:
+					openInfoPanel(3)
+					break
+				case 53:
+					openInfoPanel(4)
+					break
+				case 54:
+					openInfoPanel(5)
+					break
+				case 55:
+					openInfoPanel(6)
 					break
 			}
 		}

@@ -10,7 +10,7 @@
 	<link rel="stylesheet" type="text/css" href="CSS/collections.css">
 	<link rel="stylesheet" type="text/css" href="CSS/action.css">
 	<link rel="stylesheet" type="text/css" href="CSS/public.css">
-	<link rel="stylesheet" type="text/css" href="CSS/theme-manager.css">
+	<!-- <link rel="stylesheet" type="text/css" href="CSS/theme-manager.css"> -->
 	<link rel="stylesheet" type="text/css" href="CSS/xlecx.css">
 	<link rel="stylesheet" type="text/css" href="CSS/nhentai.css">
 	<!-- Scripts -->
@@ -30,8 +30,8 @@
 	<script type="text/javascript" src="JS/make-thumb.js" defer></script>
 	<script type="text/javascript" src="JS/image-optimizer.js" defer></script>
 	<script type="text/javascript" src="JS/infos.js" defer></script>
-	<script type="text/javascript" src="JS/theme-database.js"></script>
-	<script type="text/javascript" src="JS/theme.js" defer></script>
+	<!-- <script type="text/javascript" src="JS/theme-database.js"></script> -->
+	<!-- <script type="text/javascript" src="JS/theme.js" defer></script> -->
 	<script type="text/javascript" src="JS/themes.js" defer></script>
 	<script type="text/javascript" src="JS/setting.js" defer></script>
 	<script type="text/javascript" src="JS/startup.js" defer></script>
@@ -67,17 +67,17 @@
 						<div class="menu-dropdown">
 							<p>Manage</p>
 							<div>
-								<button onclick="openCollectionsPanel()">Collections</button>
+								<button onclick="openCollectionsPanel()" title="Open Collection Panel | Ctrl+X">Collections</button>
 								<div class="menu-dropdown">
 									<p>Infos</p>
 									<div>
-										<button onclick="openInfoPanel(0)">Groups</button>
-										<button onclick="openInfoPanel(1)">Artists</button>
-										<button onclick="openInfoPanel(2)">Parodies</button>
-										<button onclick="openInfoPanel(3)">Tags</button>
-										<button onclick="openInfoPanel(4)">Characters</button>
-										<button onclick="openInfoPanel(5)">Languages</button>
-										<button onclick="openInfoPanel(6)">Categories</button>
+										<button onclick="openInfoPanel(0)" title="Groups | 1">Groups</button>
+										<button onclick="openInfoPanel(1)" title="Artists | 2">Artists</button>
+										<button onclick="openInfoPanel(2)" title="Parodies | 3">Parodies</button>
+										<button onclick="openInfoPanel(3)" title="Tags | 4">Tags</button>
+										<button onclick="openInfoPanel(4)" title="Characters | 5">Characters</button>
+										<button onclick="openInfoPanel(5)" title="Languages | 6">Languages</button>
+										<button onclick="openInfoPanel(6)" title="Categories | 7">Categories</button>
 									</div>
 								</div>
 								<button type="button" onclick="RepairAllComicInfos()" title="Repair All Comics Infos">Repair All</button>
@@ -134,6 +134,8 @@
 	<!-- Info Panel -->
 	<div id="info-panel">
 		<div id="i-p-c-btn" title="Close | Esc" onclick="closeInfoPanel()"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"><g><path fill="currentColor" d="M9.21,356.07a31.46,31.46,0,0,0,0,44.48l22.24,22.24a31.46,31.46,0,0,0,44.48,0L176,322.72,109.28,256ZM342.79,111.45,320.55,89.21a31.46,31.46,0,0,0-44.48,0L176,189.28,242.72,256,342.79,155.93a31.46,31.46,0,0,0,0-44.48Z" style="opacity:.6"></path><path fill="currentColor" d="M342.79,356.07a31.46,31.46,0,0,1,0,44.48l-22.24,22.24a31.46,31.46,0,0,1-44.48,0L9.21,155.93a31.46,31.46,0,0,1,0-44.48L31.45,89.21a31.46,31.46,0,0,1,44.48,0Z"></path></g></svg></div>
+
+		<p id="i-p-t"></p>
 
 		<input id="i-p-s-i" type="text" placeholder="Search...">
 
@@ -311,7 +313,7 @@
 	<div class="browser" id="browser">
 		<div class="browser-tab-container" id="browser-tabs"></div>
 
-		<button class="borwser-add-tab-btn" onclick="openSite(active_site)"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="svg-inline--fa fa-plus fa-w-14 fa-2x"><g><path fill="currentColor" d="M176 448a32 32 0 0 0 32 32h32a32 32 0 0 0 32-32V304h-96zm64-416h-32a32 32 0 0 0-32 32v144h96V64a32 32 0 0 0-32-32z" style="opacity:.5"></path><path fill="currentColor" d="M448 240v32a32 32 0 0 1-32 32H32a32 32 0 0 1-32-32v-32a32 32 0 0 1 32-32h384a32 32 0 0 1 32 32z"></path></g></svg></button>
+		<button class="borwser-add-tab-btn" onclick="openSite(active_site)" title="Create New Tab | Ctrl+N"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="svg-inline--fa fa-plus fa-w-14 fa-2x"><g><path fill="currentColor" d="M176 448a32 32 0 0 0 32 32h32a32 32 0 0 0 32-32V304h-96zm64-416h-32a32 32 0 0 0-32 32v144h96V64a32 32 0 0 0-32-32z" style="opacity:.5"></path><path fill="currentColor" d="M448 240v32a32 32 0 0 1-32 32H32a32 32 0 0 1-32-32v-32a32 32 0 0 1 32-32h384a32 32 0 0 1 32 32z"></path></g></svg></button>
 
 		<div class="browser-tools-container" id="browser-tools">
 			<div>

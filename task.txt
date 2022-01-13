@@ -93,6 +93,7 @@ Add Comic {
 Added To Version {
 	*Add Ability To sort by tag/artist/parody/character/group/language/category in your personal gallery (Requested By Zogarth23)
 	Add Ability To Change Slider Pages with Arror Keys (Requested By Zogarth23)
+	Add More HotKeys
 	Combine All Themes
 	Optimize and Change Saving Comic Tags, Artists, etc... System
 }

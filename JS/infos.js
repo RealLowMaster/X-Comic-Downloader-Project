@@ -3,26 +3,34 @@ let info_panel_index = null
 function openInfoPanel(index) {
 	keydownEventIndex = null
 	info_panel_index = index
+	const title = document.getElementById('i-p-t')
 	switch(index) {
 		case 0:
+			title.innerText = 'Groups'
 			MakeInfoContent(groupsDB)
 			break
 		case 1:
+			title.innerText = 'Artists'
 			MakeInfoContent(artistsDB)
 			break
 		case 2:
+			title.innerText = 'Parodies'
 			MakeInfoContent(parodiesDB)
 			break
 		case 3:
+			title.innerText = 'Tags'
 			MakeInfoContent(tagsDB)
 			break
 		case 4:
+			title.innerText = 'Characters'
 			MakeInfoContent(charactersDB)
 			break
 		case 5:
+			title.innerText = 'Languages'
 			MakeInfoContent(languagesDB)
 			break
 		case 6:
+			title.innerText = 'Categories'
 			MakeInfoContent(categoriesDB)
 			break
 	}
@@ -40,6 +48,8 @@ function MakeInfoContent(list) {
 
 	if (have) document.getElementById('i-p-i-c').innerHTML = html
 	else document.getElementById('i-p-i-c').innerHTML = '<div class="alert alert-danger">There is no Info.</div>'
+
+	document.getElementById('info-panel').scrollTop = 0
 }
 
 function closeInfoPanel() {
