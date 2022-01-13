@@ -8,10 +8,8 @@ const defaultSettingLang = {
 	tab_at_limit: "You Can't Make Any More Tab."
 }
 const defaultSetting = {
-	"comic_panel_theme": 1,
+	"theme": 1,
 	"pagination_theme": 0,
-	"offline_theme": 1,
-	"browser_theme": 1,
 	"waiting_quality": 1,
 	"show_comic_pages": false,
 	"max_per_page": 18,
@@ -947,16 +945,10 @@ function CreateDatabase() {
 }
 
 function CheckSettings() {
-	if (typeof(setting.comic_panel_theme) != 'number' || setting.comic_panel_theme < 0) setting.comic_panel_theme = defaultSetting.comic_panel_theme
-	if (setting.comic_panel_theme > 1) setting.comic_panel_theme = 1
+	if (typeof(setting.theme) != 'number' || setting.theme < 0) setting.theme = defaultSetting.theme
+	if (setting.theme > 1) setting.theme = 1
 	if (typeof(setting.pagination_theme) != 'number' || setting.pagination_theme < 0) setting.pagination_theme = defaultSetting.pagination_theme
 	if (setting.pagination_theme > 6) setting.pagination_theme = 6
-	if (typeof(setting.offline_theme) != 'number') setting.offline_theme = defaultSetting.offline_theme
-	if (setting.offline_theme < 0) setting.offline_theme = 0
-	if (setting.offline_theme > 1) setting.offline_theme = 1
-	if (typeof(setting.browser_theme) != 'number') setting.browser_theme = defaultSetting.browser_theme
-	if (setting.browser_theme < 0) setting.browser_theme = 0
-	if (setting.browser_theme > 1) setting.browser_theme = 1
 	if (typeof(setting.waiting_quality) != 'number') setting.waiting_quality = defaultSetting.waiting_quality
 	if (setting.waiting_quality > 2) setting.waiting_quality = 2
 	else if (setting.waiting_quality < 0) setting.waiting_quality = 0

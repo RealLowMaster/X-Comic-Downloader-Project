@@ -4,25 +4,19 @@ function changeWaitingPreview(fps) {
 }
 
 function setLuanchTimeSettings(reloadSettingPanel) {
-	const s_comic_panel_theme = document.getElementById('s_comic_panel_theme')
-	const s_offline_theme = document.getElementById('s_offline_theme')
-	const s_browser_theme = document.getElementById('s_browser_theme')
-	const s_waiting_quality = document.getElementById('s_waiting_quality')
+	const s_theme = document.getElementById('s_theme')
 	const s_pagination_theme = document.getElementById('s_pagination_theme')
+	const s_waiting_quality = document.getElementById('s_waiting_quality')
 	const s_img_graphic = document.getElementById('s_img_graphic')
 	const s_search_speed = document.getElementById('s_search_speed')
 	const s_file_location = document.getElementById('s_file_location')
 
-	s_comic_panel_theme.setAttribute('value', setting.comic_panel_theme)
-	s_offline_theme.setAttribute('value', setting.offline_theme)	
-	s_browser_theme.setAttribute('value', setting.browser_theme)	
+	s_theme.setAttribute('value', setting.theme)
 	s_pagination_theme.setAttribute('value', setting.pagination_theme)
 	s_img_graphic.setAttribute('value', setting.img_graphic)
 	s_search_speed.setAttribute('value', setting.search_speed)
 
-	s_comic_panel_theme.getElementsByTagName('div')[0].textContent = s_comic_panel_theme.getElementsByTagName('div')[1].querySelector(`[onclick="select(this, ${setting.comic_panel_theme})"]`).textContent
-	s_offline_theme.getElementsByTagName('div')[0].textContent = s_offline_theme.getElementsByTagName('div')[1].querySelector(`[onclick="select(this, ${setting.offline_theme})"]`).textContent
-	s_browser_theme.getElementsByTagName('div')[0].textContent = s_browser_theme.getElementsByTagName('div')[1].querySelector(`[onclick="select(this, ${setting.browser_theme})"]`).textContent
+	s_theme.getElementsByTagName('div')[0].textContent = s_theme.getElementsByTagName('div')[1].querySelector(`[onclick="select(this, ${setting.theme})"]`).textContent
 	s_pagination_theme.getElementsByTagName('div')[0].textContent = s_pagination_theme.getElementsByTagName('div')[1].querySelector(`[onclick="select(this, ${setting.pagination_theme})"]`).textContent
 	s_img_graphic.getElementsByTagName('div')[0].textContent = s_img_graphic.getElementsByTagName('div')[1].querySelector(`[onclick="select(this, ${setting.img_graphic})"]`).textContent
 	s_search_speed.getElementsByTagName('div')[0].textContent = s_search_speed.getElementsByTagName('div')[1].querySelector(`[onclick="select(this, ${setting.search_speed})"]`).textContent
@@ -67,9 +61,7 @@ function setLuanchTimeSettings(reloadSettingPanel) {
 
 	if (reloadSettingPanel != true) {
 		const style = document.documentElement.style
-		for (let i = 0; i < offline_theme_var.length; i++) style.setProperty(offline_theme_var[i], offline_theme_themes[setting.offline_theme][i])
-		for (let i = 0; i < comic_panel_theme_var.length; i++) style.setProperty(comic_panel_theme_var[i], comic_panel_theme_themes[setting.comic_panel_theme][i])
-		for (let i = 0; i < browser_theme_var.length; i++) style.setProperty(browser_theme_var[i], browser_theme_themes[setting.browser_theme][i])
+		for (let i = 0; i < themes_var.length; i++) style.setProperty('--'+themes_var[i], themes[setting.theme][i])
 		for (let i = 0; i < pagination_theme_var.length; i++) style.setProperty(pagination_theme_var[i], pagination_theme_themes[setting.pagination_theme][i])
 	}
 }
@@ -95,9 +87,7 @@ function saveSetting(justSave) {
 			PageManager.Reload()
 		}
 
-		setting.comic_panel_theme = Number(document.getElementById('s_comic_panel_theme').getAttribute('value'))
-		setting.offline_theme = Number(document.getElementById('s_offline_theme').getAttribute('value'))
-		setting.browser_theme = Number(document.getElementById('s_browser_theme').getAttribute('value'))
+		setting.theme = Number(document.getElementById('s_theme').getAttribute('value'))
 		setting.pagination_theme = Number(document.getElementById('s_pagination_theme').getAttribute('value'))
 		setting.img_graphic = Number(document.getElementById('s_img_graphic').getAttribute('value'))
 		setting.search_speed = Number(document.getElementById('s_search_speed').getAttribute('value'))
@@ -136,21 +126,8 @@ function saveSetting(justSave) {
 			setting.file_location = file_location
 		}
 
-		for (let i = 0; i < offline_theme_var.length; i++) {
-			style.setProperty(offline_theme_var[i], offline_theme_themes[setting.offline_theme][i])
-		}
-
-		for (let i = 0; i < comic_panel_theme_var.length; i++) {
-			style.setProperty(comic_panel_theme_var[i], comic_panel_theme_themes[setting.comic_panel_theme][i])
-		}
-
-		for (let i = 0; i < browser_theme_var.length; i++) {
-			style.setProperty(browser_theme_var[i], browser_theme_themes[setting.browser_theme][i])
-		}
-
-		for (let i = 0; i < pagination_theme_var.length; i++) {
-			style.setProperty(pagination_theme_var[i], pagination_theme_themes[setting.pagination_theme][i])
-		}
+		for (let i = 0; i < themes_var.length; i++) style.setProperty('--'+themes_var[i], themes[setting.theme][i])
+		for (let i = 0; i < pagination_theme_var.length; i++) style.setProperty(pagination_theme_var[i], pagination_theme_themes[setting.pagination_theme][i])
 
 		PopAlert('Setting Saved.')
 	}

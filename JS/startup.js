@@ -11,6 +11,12 @@ function ChangeSizes() {
 
 function test() {
 	//sharp('Image/sites/nhentai.png').png({ quality: 100 }).resize(30,30).toFile('Image/sites/nhentai-30x30.png')
+
+	let text = ''
+	for (let i = 0; i < offline_theme_var.length; i++) {
+		text += `'${offline_theme_var[i].replace('--','')}',`
+	}
+	console.log(text)
 }
 
 function AfterDatabaseDoneOnStartup() {

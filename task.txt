@@ -92,6 +92,9 @@ Add Comic {
 
 Added To Version {
 	*Add Ability To sort by tag/artist/parody/character/group/language/category in your personal gallery (Requested By Zogarth23)
+	Add Ability To Change Slider Pages with Arror Keys (Requested By Zogarth23)
+	Combine All Themes
+	Optimize and Change Saving Comic Tags, Artists, etc... System
 }
 
 Doing {
@@ -100,8 +103,6 @@ Doing {
 
 Tasks => {
 	{
-		2. when in a comic slider add the ability to scroll pages with the arrow keys instead of just the A and D keys or the mouse wheel
-
 		3. add an option to sort everything alphabetically instead of just by the order in which they were downloaded
 	Requested By Zogarth23
 	}
