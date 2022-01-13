@@ -61,11 +61,12 @@ const sites = [
 	}
 ]
 const keydownEvents = [
-	'OfflineKeyEvents({ctrl},{shift},{key})',
-	'OfflineComicKeyEvents({ctrl},{shift},{key})',
-	'SliderKeyEvents({ctrl},{shift},{key})',
-	'BrowserKeyEvents({ctrl},{shift},{key})',
-	'SettingKeyEvents({ctrl},{shift},{key})'
+	'OfflineKeyEvents({ctrl},{shift},{key})', // 0
+	'OfflineComicKeyEvents({ctrl},{shift},{key})', // 1
+	'SliderKeyEvents({ctrl},{shift},{key})', // 2
+	'BrowserKeyEvents({ctrl},{shift},{key})', // 3
+	'SettingKeyEvents({ctrl},{shift},{key})', // 4
+	'InfoKeyEvents({ctrl},{shift},{key})' // 5
 ]
 const ThisWindow = remote.getCurrentWindow(), loading = new Loading(10), Downloader = new DownloadManager(), PageManager = new OfflinePageManager(), db = {}, procressPanel = new ProcressPanel(0), update_number = 12
 let comicDeleting = false, wt_fps = 20, dirDB, dirUL, dirBU, dirTmp, isOptimizing = false, browserLastTabs = [], tabsHistory = [], dirHistory = '', keydownEventIndex = 0, new_update, save_value = null, save_value2 = null, afterDLReload = true, setting, openedMenuTabIndex, copiedTab = null, tabs = [], lastComicId, lastHaveId, searchTimer, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = [], isUpdating = false

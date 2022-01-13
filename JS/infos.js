@@ -1,6 +1,7 @@
 let info_panel_index = null
 
 function openInfoPanel(index) {
+	keydownEventIndex = null
 	info_panel_index = index
 	switch(index) {
 		case 0:
@@ -26,6 +27,7 @@ function openInfoPanel(index) {
 			break
 	}
 	document.getElementById('info-panel').style.display = 'block'
+	keydownEventIndex = 5
 }
 
 function MakeInfoContent(list) {
@@ -41,11 +43,19 @@ function MakeInfoContent(list) {
 }
 
 function closeInfoPanel() {
+	keydownEventIndex = 0
 	document.getElementById('info-panel').style.display = 'none'
+	info_panel_index = null
 	document.getElementById('i-p-s-i').value = null
 	document.getElementById('i-p-i-c').innerHTML = null
 }
 
-function OpenInfo(name) {
-	console.log(name, artistsDB.indexOf(name))
+function OpenInfo(name, index = null) {
+	if (index == null) index = info_panel_index
+	name = name.replace(/\\"/g, '"')
+	PageManager.SetInfo(name, index)
+}
+
+function InfoKeyEvents(ctrl, shift, key) {
+	if (!ctrl && !shift && key == 27) closeInfoPanel()
 }

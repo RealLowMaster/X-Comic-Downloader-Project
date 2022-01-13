@@ -727,7 +727,7 @@ input::-webkit-input-placeholder { user-select: none }
 	font: 13px 'Open Sans', Arial, Helvetica, sans-serif;
 }
 
-.comic-panel-tags > button {
+.comic-panel-tags > div {
 	display: inline-block;
 	padding: 0 10px;
 	margin: 0 0 10px 5px;
@@ -740,7 +740,7 @@ input::-webkit-input-placeholder { user-select: none }
 	cursor: pointer;
 }
 
-.comic-panel-tags > button:hover {
+.comic-panel-tags > div:hover {
 	background-color: var(--cp-info-btns-hover-bgc);
 	color: var(--cp-info-btns-hover-color);
 	box-shadow: var(--cp-info-btns-hover-bshadow);

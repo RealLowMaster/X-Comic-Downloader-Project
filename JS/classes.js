@@ -682,15 +682,29 @@ class OfflinePageManager {
 	#byName
 	#scroll
 	#counter
+	#infoSearchs
 
 	constructor() {
 		this.page = 1
 		this.maxPage = 1
 		this.search = null
+		this.loadIndex = 0
+		this.name = null
+		this.infoIndex = null
+		this.infoNameIndex = null
 		this.container = document.getElementById('comic-container')
 		this.#byName = false
 		this.#scroll = 0
 		this.#counter = document.getElementById('comics-counter')
+		this.#infoSearchs = [
+			'groupsDB.indexOf({})',
+			'artistsDB.indexOf({})',
+			'parodiesDB.indexOf({})',
+			'tagsDB.indexOf({})',
+			'charactersDB.indexOf({})',
+			'languagesDB.indexOf({})',
+			'categoriesDB.indexOf({})',
+		]
 	}
 
 	GetPagination(total_pages, page) {
@@ -741,10 +755,9 @@ class OfflinePageManager {
 	
 	Load(page = 1) {
 		this.page = page
+		this.loadIndex = 0
 		this.#scroll = document.getElementById('main-body').scrollTop
-
 		this.container.innerHTML = ''
-		this.container.setAttribute('page', page)
 
 		let load = {}
 		if (this.search != null) load.n = new RegExp(this.search.toLowerCase())
@@ -762,7 +775,79 @@ class OfflinePageManager {
 			for (let i = limit[0]; i < limit[1]; i++) list.push([doc[i]._id, doc[i].n, doc[i].i, doc[i].o, doc[i].c])
 
 			this.#counter.textContent = 'Comics: '+doc.length
-			this.#Content(limit[2], list, page, 'PageManager.Load({page})')
+			this.#Content(limit[2], list, page, 'PageManager.Load({p})')
+		})
+	}
+
+	SetInfo(name, index) {
+		this.name = name
+		this.infoIndex = index
+		const result = eval(this.#infoSearchs[index].replace('{}', `'${name.replace(/'/g, "\\'")}'`))
+		if (result < 0) { error('Info not Found! Maybe this is Bug! Please Report it with info name.'); return }
+		this.infoNameIndex = result
+		this.search = null
+		document.getElementById('offline-search-form-input').value = null
+		closeInfoPanel()
+		closeComicPanel()
+		this.LoadInfo(1)
+	}
+
+	LoadInfo(page = 1) {
+		this.page = page
+		this.loadIndex = 1
+		this.#scroll = document.getElementById('main-body').scrollTop
+		this.container.innerHTML = ''
+
+		const load = {}
+		if (this.search != null) load.n = new RegExp(this.search.toLowerCase())
+
+		db.comics.find(load).sort({_id:-1}).exec((err, doc) => {
+			if (err) { error(err); return }
+
+			let check
+
+			switch(this.infoIndex) {
+				case 0:
+					check = 'g'
+					break
+				case 1:
+					check = 'a'
+					break
+				case 2:
+					check = 'd'
+					break
+				case 3:
+					check = 't'
+					break
+				case 4:
+					check = 'h'
+					break
+				case 5:
+					check = 'l'
+					break
+				case 6:
+					check = 'e'
+					break
+			}
+
+			const result = []
+			for (let i = 0; i < doc.length; i++) {
+				if (doc[i][check] == null || doc[i][check].length == 0) continue
+				if (doc[i][check].indexOf(this.infoNameIndex) > -1) result.push(doc[i])
+			}
+
+			const list = []
+			let limit = this.#MaxAndMin(result.length, page)
+			if (page > limit[2]) {
+				page = limit[2]
+				limit = this.#MaxAndMin(result.length, page)
+			}
+			this.maxPage = limit[2]
+			
+			for (let i = limit[0]; i < limit[1]; i++) list.push([result[i]._id, result[i].n, result[i].i, result[i].o, result[i].c])
+
+			this.#counter.textContent = 'Comics: '+doc.length
+			this.#Content(limit[2], list, page, 'PageManager.LoadInfo({p})')
 		})
 	}
 
@@ -775,16 +860,13 @@ class OfflinePageManager {
 				let image = `${dirUL}/thumbs/${list[i][2]}.jpg`, thumb = true, optimize = true , unoptimize = ''
 				if (!fs.existsSync(image)) { image = 'Image/no-img-300x300.png'; thumb = false }
 				if (typeof list[i][3] != 'number') { unoptimize = ' unoptimize'; optimize = false }
-				
 				html += `<div class="comic" onmousedown="onComicClicked(${list[i][0]}, ${thumb}, ${optimize})"${unoptimize}><img src="${image}?${time}"><span>${list[i][4]}</span><p>${list[i][1]}</p></div>`
 			}
 		} else {
 			for (let i = 0; i < list.length; i++) {
 				let image = `${dirUL}/thumbs/${list[i][2]}.jpg`, thumb = true, optimize = true
-
 				if (!fs.existsSync(image)) { image = 'Image/no-img-300x300.png'; thumb = false }
 				if (typeof(list[i][3]) != 'number') optimize = false
-
 				html += `<div class="comic" onmousedown="onComicClicked(${list[i][0]}, ${thumb}, ${optimize})"><img src="${image}?${time}"><span>${list[i][4]}</span><p>${list[i][1]}</p></div>`
 			}
 		}
@@ -802,7 +884,7 @@ class OfflinePageManager {
 			html = '<div>'
 			for (let i in thisPagination) {
 				if (thisPagination[i][1] == null) html += `<button disabled>${thisPagination[i][0]}</button>`
-				else html += `<button onclick="${paginationTemplate.replace('{page}', thisPagination[i][1])}">${thisPagination[i][0]}</button>`
+				else html += `<button onclick="${paginationTemplate.replace('{p}', thisPagination[i][1])}">${thisPagination[i][0]}</button>`
 			}
 			html += '</div>'
 			document.getElementById('pagination').innerHTML = html
@@ -835,25 +917,83 @@ class OfflinePageManager {
 	}
 
 	Reload() {
-		this.Load(this.page)
+		switch(this.loadIndex) {
+			case 0:
+				this.Load(this.page)
+				break
+			case 1:
+				this.LoadInfo(this.page)
+				break
+		}
 	}
 
 	Search(value) {
 		if (value.replace(/ /g, '').length == 0) value = null
 		this.search = value
-		this.Load(1)
+		switch(this.loadIndex) {
+			case 0:
+				this.Load(1)
+				break
+			case 1:
+				this.LoadInfo(1)
+				break
+		}
 	}
 
 	JumpPage(page) {
 		if (page < 1) page = 1
-		this.Load(page)
+		switch(this.loadIndex) {
+			case 0:
+				this.Load(page)
+				break
+			case 1:
+				this.LoadInfo(page)
+				break
+		}
+	}
+
+	RandomJumpPage() {
+		let page = Math.floor(Math.random() * this.maxPage)
+		if (page < 1) page = 1
+		switch(this.loadIndex) {
+			case 0:
+				this.Load(page)
+				break
+			case 1:
+				this.LoadInfo(page)
+				break
+		}
 	}
 
 	Next() {
-		if (this.page < this.maxPage) this.Load(this.page + 1)
+		if (this.page < this.maxPage) {
+			switch(this.loadIndex) {
+				case 0:
+					this.Load(this.page + 1)
+					break
+				case 1:
+					this.LoadInfo(this.page + 1)
+					break
+			}
+		}
 	}
 
 	Prev() {
-		if (this.page > 1) this.Load(this.page - 1)
+		if (this.page > 1) {
+			switch(this.loadIndex) {
+				case 0:
+					this.Load(this.page - 1)
+					break
+				case 1:
+					this.LoadInfo(this.page - 1)
+					break
+			}
+		}
+	}
+
+	Home() {
+		document.getElementById('offline-search-form-input').value = null
+		this.search = null
+		this.Load(1)
 	}
 }

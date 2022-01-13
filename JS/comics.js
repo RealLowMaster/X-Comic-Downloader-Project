@@ -66,12 +66,6 @@ function closeComicMenu() {
 	window.removeEventListener('resize', closeComicMenu)
 }
 
-function randomJumpPage(limit) {
-	const value = document.getElementById('offline-search-form-input').value || null
-	if (value == null || value.replace(/ /g, '').length == 0) loadComics(Math.floor(Math.random() * limit), null)
-	else loadComics(Math.floor(Math.random() * limit), value)
-}
-
 function openComicCharacters(comicId) {
 	db.comics.findOne({_id:comicId}, (err, doc) => {
 		if (err) { error('OpenComicCharacter->'+err); return }
@@ -80,7 +74,7 @@ function openComicCharacters(comicId) {
 			const info = doc.h || null
 			if (info == null) return
 			html = 'Characters: '
-			for (let i = 0; i < info.length; i++) html += `<button>${charactersDB[info[i]]}</button>`
+			for (let i = 0; i < info.length; i++) html += `<div onclick="PageManager.SetInfo('${charactersDB[info[i]].replace(/'/g, "\\'").replace(/"/g, '\\"')}',4)">${charactersDB[info[i]]}</div>`
 		}
 		comicCharactersContainer.innerHTML = html
 	})
@@ -94,7 +88,7 @@ function openComicLanguages(comicId) {
 			const info = doc.l || null
 			if (info == null) return
 			html = 'Languages: '
-			for (let i = 0; i < info.length; i++) html += `<button>${languagesDB[info[i]]}</button>`
+			for (let i = 0; i < info.length; i++) html += `<div onclick="PageManager.SetInfo('${languagesDB[info[i]].replace(/'/g, "\\'").replace(/"/g, '\\"')}',5)">${languagesDB[info[i]]}</div>`
 		}
 		comicLanguagesContainer.innerHTML = html
 	})
@@ -108,7 +102,7 @@ function openComicCategories(comicId) {
 			const info = doc.e || null
 			if (info == null) return
 			html = 'Categories: '
-			for (let i = 0; i < info.length; i++) html += `<button>${categoriesDB[info[i]]}</button>`
+			for (let i = 0; i < info.length; i++) html += `<div onclick="PageManager.SetInfo('${categoriesDB[info[i]].replace(/'/g, "\\'").replace(/"/g, '\\"')}',6)">${categoriesDB[info[i]]}</div>`
 		}
 		comicCategoriesContainer.innerHTML = html
 	})
@@ -122,7 +116,7 @@ function openComicGroups(comicId) {
 			const info = doc.g || null
 			if (info == null) return
 			html = 'Groups: '
-			for (let i = 0; i < info.length; i++) html += `<button>${groupsDB[info[i]]}</button>`
+			for (let i = 0; i < info.length; i++) html += `<div onclick="PageManager.SetInfo('${groupsDB[info[i]].replace(/'/g, "\\'").replace(/"/g, '\\"')}',0)">${groupsDB[info[i]]}</div>`
 		}
 		comicGroupsContainer.innerHTML = html
 	})
@@ -136,7 +130,7 @@ function openComicArtists(comicId) {
 			const info = doc.a || null
 			if (info == null) return
 			html = 'Artists: '
-			for (let i = 0; i < info.length; i++) html += `<button>${artistsDB[info[i]]}</button>`
+			for (let i = 0; i < info.length; i++) html += `<div onclick="PageManager.SetInfo('${artistsDB[info[i]].replace(/'/g, "\\'").replace(/"/g, '\\"')}',1)">${artistsDB[info[i]]}</div>`
 		}
 		comicArtistsContainer.innerHTML = html
 	})
@@ -150,7 +144,7 @@ function openComicParodies(comicId) {
 			const info = doc.d || null
 			if (info == null) return
 			html = 'Parody: '
-			for (let i = 0; i < info.length; i++) html += `<button>${parodiesDB[info[i]]}</button>`
+			for (let i = 0; i < info.length; i++) html += `<div onclick="PageManager.SetInfo('${parodiesDB[info[i]].replace(/'/g, "\\'").replace(/"/g, '\\"')}',2)">${parodiesDB[info[i]]}</div>`
 		}
 		comicParodyContainer.innerHTML = html
 	})
@@ -164,7 +158,7 @@ function openComicTags(comicId) {
 			const info = doc.t || null
 			if (info == null) return
 			html = 'Tags: '
-			for (let i = 0; i < info.length; i++) html += `<button>${tagsDB[info[i]]}</button>`
+			for (let i = 0; i < info.length; i++) html += `<div onclick="PageManager.SetInfo('${tagsDB[info[i]].replace(/'/g, "\\'").replace(/"/g, '\\"')}',3)">${tagsDB[info[i]]}</div>`
 		}
 		comicTagsContainer.innerHTML = html
 	})
@@ -175,6 +169,7 @@ function openComic(id) {
 	in_comic = true
 	id = id || null
 	if (id == null) { error("Id Can't be Null."); return }
+	keydownEventIndex = null
 	const title_container = document.getElementById('c-p-t')
 	let html = '', formatIndex = 0, name, image, ImagesCount, formats
 
@@ -187,7 +182,7 @@ function openComic(id) {
 	comicTagsContainer.innerHTML = ''
 
 	title_container.textContent = ''
-	comicImageContainer.innerHTML = ''
+	comicImageContainer.innerHTML = `<div class="browser-page-loading"><img class="spin" style="width:60px;height:60px" src="Image/dual-ring-primary-${wt_fps}.gif"><p>Loading...</p></div>`
 	comicSliderOverview.setAttribute('aindex', '')
 
 	const findComic = async() => {
@@ -275,54 +270,54 @@ function openComic(id) {
 			// Load Infos
 			if (doc.g != null) {
 				html = 'Groups: '
-				for (let i = 0; i < doc.g.length; i++) html += `<button>${groupsDB[doc.g[i]]}</button>`
+				for (let i = 0; i < doc.g.length; i++) html += `<div onclick="PageManager.SetInfo('${groupsDB[doc.g[i]].replace(/'/g, "\\'").replace(/"/g, '\\"')}',0)">${groupsDB[doc.g[i]]}</div>`
 				comicGroupsContainer.innerHTML = html
 			}
 
 			if (doc.a != null) {
 				html = 'Artists: '
-				for (let i = 0; i < doc.a.length; i++) html += `<button>${artistsDB[doc.a[i]]}</button>`
+				for (let i = 0; i < doc.a.length; i++) html += `<div onclick="PageManager.SetInfo('${artistsDB[doc.a[i]].replace(/'/g, "\\'").replace(/"/g, '\\"')}',1)">${artistsDB[doc.a[i]]}</div>`
 				comicArtistsContainer.innerHTML = html
 			}
 
 			if (doc.d != null) {
 				html = 'Parody: '
-				for (let i = 0; i < doc.d.length; i++) html += `<button>${parodiesDB[doc.d[i]]}</button>`
+				for (let i = 0; i < doc.d.length; i++) html += `<div onclick="PageManager.SetInfo('${parodiesDB[doc.d[i]].replace(/'/g, "\\'").replace(/"/g, '\\"')}',2)">${parodiesDB[doc.d[i]]}</div>`
 				comicParodyContainer.innerHTML = html
 			}
 
 			if (doc.h != null) {
 				html = 'Characters: '
-				for (let i = 0; i < doc.h.length; i++) html += `<button>${charactersDB[doc.h[i]]}</button>`
+				for (let i = 0; i < doc.h.length; i++) html += `<div onclick="PageManager.SetInfo('${charactersDB[doc.h[i]].replace(/'/g, "\\'").replace(/"/g, '\\"')}',4)">${charactersDB[doc.h[i]]}</div>`
 				comicCharactersContainer.innerHTML = html
 			}
 
 			if (doc.l != null) {
 				html = 'Languages: '
-				for (let i = 0; i < doc.l.length; i++) html += `<button>${languagesDB[doc.l[i]]}</button>`
+				for (let i = 0; i < doc.l.length; i++) html += `<div onclick="PageManager.SetInfo('${languagesDB[doc.l[i]].replace(/'/g, "\\'").replace(/"/g, '\\"')}',5)">${languagesDB[doc.l[i]]}</div>`
 				comicLanguagesContainer.innerHTML = html
 			}
 
 			if (doc.e != null) {
 				html = 'Categories: '
-				for (let i = 0; i < doc.e.length; i++) html += `<button>${categoriesDB[doc.e[i]]}</button>`
+				for (let i = 0; i < doc.e.length; i++) html += `<div onclick="PageManager.SetInfo('${categoriesDB[doc.e[i]].replace(/'/g, "\\'").replace(/"/g, '\\"')}',6)">${categoriesDB[doc.e[i]]}</div>`
 				comicCategoriesContainer.innerHTML = html
 			}
 
 			if (doc.t != null) {
 				html = 'Tags: '
-				for (let i = 0; i < doc.t.length; i++) html += `<button>${tagsDB[doc.t[i]]}</button>`
+				for (let i = 0; i < doc.t.length; i++) html += `<div onclick="PageManager.SetInfo('${tagsDB[doc.t[i]].replace(/'/g, "\\'").replace(/"/g, '\\"')}',3)">${tagsDB[doc.t[i]]}</div>`
 				comicTagsContainer.innerHTML = html
 			}
 
-			comicPanel.style.display = 'block'
 			comicPanel.scrollTop = 0
 			keydownEventIndex = 1
-			document.getElementById('main').style.display = 'none'
 		})
 	}
 
 	comicPanel.setAttribute('cid', id)
+	comicPanel.style.display = 'block'
+	document.getElementById('main').style.display = 'none'
 	findComic()
 }
 
@@ -915,8 +910,17 @@ function OfflineKeyEvents(ctrl, shift, key) {
 	if (ctrl) {
 		if (!shift) {
 			switch (key) {
+				case 66:
+					openBrowser()
+					break
+				case 72:
+					PageManager.Home()
+					break
 				case 82:
 					PageManager.Reload()
+					break
+				case 90:
+					PageManager.RandomJumpPage()
 					break
 			}
 		}
