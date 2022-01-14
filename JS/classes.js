@@ -916,7 +916,8 @@ class OfflinePageManager {
 			if (this.search != null) this.container.innerHTML = '<br><div class="alert alert-danger">No Comic has been Found.</div>'
 			else this.container.innerHTML = '<br><div class="alert alert-danger">There is no Comic Downloaded.</div>'
 			this.#titleDom.innerHTML = null
-		}
+			document.getElementById('off-page-sort').style.display = 'none'
+		} else document.getElementById('off-page-sort').style.display = 'inline-block'
 
 		document.getElementById('main-body').scrollTop = this.#scroll
 	}
