@@ -95,6 +95,7 @@ Added To Version {
 	Add Ability To Change Slider Pages with Arror Keys (Requested By Zogarth23)
 	Add Ability To Sort personal gallery Oreder (Requested By Zogarth23)
 	Add More HotKeys
+	Add Theme For Download Panel
 	Combine All Themes
 	Optimize and Change Saving Comic Tags, Artists, etc... System
 }
@@ -104,6 +105,7 @@ Doing {
 }
 
 Tasks => {
+	Optimize Comic Image Loading
 	Optimize and Fix Events
 	Improve Slize Event Bugs
 	Make All Theme Same

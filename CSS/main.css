@@ -460,7 +460,7 @@ input::-webkit-input-placeholder { user-select: none }
 	background-color: transparent;
 	color: var(--obr-comic-counter-color);
 	font-size: 12px;
-	position: absolute;
+	position: fixed;
 	bottom: 10px;
 	right: 20px;
 	cursor: default;
@@ -967,96 +967,6 @@ input::-webkit-input-placeholder { user-select: none }
 }
 /* Jump Page > */
 
-/* Downloader */
-#downloader {
-	display: none;
-	width: 220px;
-	max-height: 150px;
-	background-color: #111d;
-	border: 0 solid #1D8348;
-	border-width: 3px 0 0 3px;
-	overflow-y: auto;
-	position: fixed;
-	right: -210px;
-	bottom: 0px;
-	box-shadow: 0 0 10px 3px rgba(29,131,72,.8);
-	z-index: 99999;
-	user-select: none;
-	transition: right .3s;
-}
-
-#downloader:hover,
-#downloader[fixed] { right: 0 !important }
-
-#downloader::-webkit-scrollbar {
-	width: 3px;
-}
-
-#downloader *:not(span):not(button) {
-	display: block;
-	width: 100%;
-}
-
-#downloader > div {
-	height: 50px;
-	padding: 10px;
-	background-color: #2227;
-	border: 0 solid #111a;
-	border-width: 1px 0 1px 0;
-	overflow: hidden;
-	position: relative;
-}
-
-#downloader > div > img {
-	width: 18px;
-	height: 18px;
-	position: absolute;
-	top: 3px;
-	right: 3px;
-}
-
-#downloader > div > p {
-	width: 92%;
-	margin: 0 0 6px 0;
-	color: #fff;
-	font-size: 12px;
-	white-space: nowrap;
-	text-align: left;
-	overflow: hidden;
-}
-
-#downloader > div > div {
-	width: 90%;
-	height: 3px;
-	background-color: #eeea;
-}
-
-#downloader > div > div > div {
-	width: 0;
-	max-width: 100%;
-	height: 100%;
-	background-color: #025bd7;
-	transition: width .2s;
-}
-
-#downloader > div > button {
-	width: 15px;
-	height: 15px;
-	background-color: #E74C3C;
-	color: #fff;
-	border-radius: 50%;
-	font-size: 11px;
-	position: absolute;
-	bottom: 8px;
-	right: 4px;
-	cursor: pointer;
-	transition: background-color .2s;
-}
-
-#downloader > div > button:hover {
-	background-color: #A93226;
-}
-
 .dragging {
 	background-color: #eee;
 	opacity: .4;
@@ -1232,7 +1142,7 @@ input::-webkit-input-placeholder { user-select: none }
 	display: block;
 	width: 100%;
 	height: calc(100% - var(--topMenuSize));
-	background-color: #fff;
+	background-color: var(--obr-con-bgc);
 	overflow-x: visible;
 	overflow-y: auto;
 	position: fixed;
@@ -1271,7 +1181,7 @@ input::-webkit-input-placeholder { user-select: none }
 #d-p-c-btn {
 	width: 30px;
 	height: 30px;
-	color: #000;
+	color: var(--black-white);
 	position: sticky;
 	top: 10px;
 	right: 10px;
@@ -1291,7 +1201,7 @@ input::-webkit-input-placeholder { user-select: none }
 	min-width: 103px;
 	width: 680px;
 	min-height: 128px;
-	background-color: #fff;
+	background-color: var(--dp-dl-bg);
 	border-radius: 4px;
 	box-shadow: rgba(60, 64, 67, .3) 0 1px 2px 0,
 		rgba(60, 64, 67, .15) 0 1px 3px 1px;
@@ -1343,7 +1253,7 @@ input::-webkit-input-placeholder { user-select: none }
 	display: block;
 	width: 100%;
 	max-width: 100%;
-	color: rgb(26, 115, 232);
+	color: var(--dp-color);
 	font-size: 14px;
 	font-weight: 500;
 	word-break: break-all;
@@ -1354,7 +1264,7 @@ input::-webkit-input-placeholder { user-select: none }
 	display: block;
 	width: 100%;
 	margin-top: 6px;
-	color: rgb(95, 99, 104);
+	color: var(--dp-u-color);
 	font-size: 13px;
 	font-weight: 500;
 	overflow: hidden;
@@ -1375,12 +1285,12 @@ input::-webkit-input-placeholder { user-select: none }
 
 #d-p-c > div > div[detail] > showinfolder > div {
 	display: inline-block;
-	color: rgb(26, 115, 232);
+	color: var(--dp-color);
 	font-size: 13px;
 	cursor: pointer;
 }
 
-#d-p-c > div > div[detail] > showinfolder > div:hover { color: rgb(27, 104, 204) }
+#d-p-c > div > div[detail] > showinfolder > div:hover { color: #1b68cc }
 
 #d-p-c > div > div[detail] > proc {
 	display: block;
@@ -1392,7 +1302,7 @@ input::-webkit-input-placeholder { user-select: none }
 #d-p-c > div > div[detail] > proc > div {
 	display: block;
 	width: 100%;
-	color: #616161;
+	color: var(--dp-p-color);
 	text-align: left;
 	font-size: 14px;
 	font-weight: 500;
@@ -1423,16 +1333,16 @@ input::-webkit-input-placeholder { user-select: none }
 #d-p-c > div > div[detail] > btns > btn {
 	display: inline-block;
 	padding: 7px 14px;
-	color: rgb(26, 115, 232);
+	color: var(--dp-color);
 	margin-left: 5px;
-	border: 1px solid rgb(218, 220, 224);
+	border: 1px solid var(--dp-btn-bd);
 	border-radius: 4px;
 	font-size: 14px;
 	cursor: pointer;
 }
 
-#d-p-c > div > div[detail] > btns > btn:hover { border-color: rgb(187, 187, 189) }
-#d-p-c > div > div[detail] > btns > btn[resume] { color: #fff; background-color: rgb(26, 115, 232) }
+#d-p-c > div > div[detail] > btns > btn:hover { border-color: #bbbbbd }
+#d-p-c > div > div[detail] > btns > btn[resume] { color: #fff; background-color: var(--dp-color) }
 
 #d-p-c > div > div:last-child {
 	display: flex;
