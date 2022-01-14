@@ -696,6 +696,7 @@ class OfflinePageManager {
 		this.infoIndex = null
 		this.infoNameIndex = null
 		this.container = document.getElementById('comic-container')
+		this.sort = {_id:-1}
 		this.#byName = false
 		this.#scroll = 0
 		this.#counter = document.getElementById('comics-counter')
@@ -777,7 +778,7 @@ class OfflinePageManager {
 		let load = {}
 		if (this.search != null) load.n = new RegExp(this.search.toLowerCase())
 
-		db.comics.find(load).sort({_id:-1}).exec((err, doc) => {
+		db.comics.find(load).sort(this.sort).exec((err, doc) => {
 			if (err) { error(err); return }
 			const list = []
 			let limit = this.#MaxAndMin(doc.length, page)
@@ -819,7 +820,7 @@ class OfflinePageManager {
 		const load = {}
 		if (this.search != null) load.n = new RegExp(this.search.toLowerCase())
 
-		db.comics.find(load).sort({_id:-1}).exec((err, doc) => {
+		db.comics.find(load).sort(this.sort).exec((err, doc) => {
 			if (err) { error(err); return }
 
 			let check
@@ -916,6 +917,7 @@ class OfflinePageManager {
 		if (list.length == 0) {
 			if (this.search != null) this.container.innerHTML = '<br><div class="alert alert-danger">No Comic has been Found.</div>'
 			else this.container.innerHTML = '<br><div class="alert alert-danger">There is no Comic Downloaded.</div>'
+			this.#titleDom.innerHTML = null
 		}
 
 		document.getElementById('main-body').scrollTop = this.#scroll
@@ -1007,6 +1009,27 @@ class OfflinePageManager {
 					break
 			}
 		}
+	}
+
+	Sort(index) {
+		switch(index) {
+			case 0:
+				this.sort = {_id:-1}
+				break
+			case 1:
+				this.sort = {_id:1}
+				break
+			case 2:
+				this.sort = {n:-1}
+				break
+			case 3:
+				this.sort = {n:1}
+				break
+		}
+		const children = document.getElementById('off-page-sort').children
+		for (let i = 0; i < children.length; i++) children[i].removeAttribute('active')
+		children[index].setAttribute('active','')
+		this.Reload()
 	}
 
 	Home() {
