@@ -1650,6 +1650,7 @@ input::-webkit-input-placeholder { user-select: none }
 	padding: 10px 7px;
 	margin-bottom: 20px;
 	background-color: var(--ip-s-bg);
+	color: var(--black-white);
 	border: 1px solid var(--ip-s-bd);
 	border-radius: 4px;
 	box-shadow: 0 2px 6px 0 rgba(75,125,140,.2);

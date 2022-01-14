@@ -679,7 +679,6 @@ class DownloadManager {
 }
 
 class OfflinePageManager {
-	#byName
 	#scroll
 	#counter
 	#title
@@ -697,7 +696,6 @@ class OfflinePageManager {
 		this.infoNameIndex = null
 		this.container = document.getElementById('comic-container')
 		this.sort = {_id:-1}
-		this.#byName = false
 		this.#scroll = 0
 		this.#counter = document.getElementById('comics-counter')
 		this.#title = null
