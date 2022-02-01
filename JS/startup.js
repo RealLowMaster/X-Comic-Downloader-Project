@@ -11,6 +11,8 @@ function ChangeSizes() {
 
 function test() {
 	//sharp('Image/sites/nhentai.png').png({ quality: 100 }).resize(30,30).toFile('Image/sites/nhentai-30x30.png')
+	const img = new Image()
+	img.src = 'Image/dual-ring-primary-10.gif'
 }
 
 function AfterDatabaseDoneOnStartup() {

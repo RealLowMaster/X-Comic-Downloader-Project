@@ -15,8 +15,11 @@ function xlecxChangePage(page, whitchbutton, updateTabIndex) {
 		const thisTagIndex = GetTabIndexById(id)
 		const passImages = tabs[thisTagIndex].page.getElementsByTagName('img')
 		for (let i = 0; i < passImages.length; i++) {
-			passImages[i].removeAttribute('data-src')
-			passImages[i].removeAttribute('src')
+			try {
+				passImages[i].removeAttribute('data-src')
+				passImages[i].removeAttribute('src')
+				passImages[i].remove()
+			} catch(err) { console.error(err) }
 		}
 
 		if (updateTabIndex == true) tabs[thisTagIndex].addHistory(`xlecxChangePage(${page}, 0, false)`)
@@ -188,8 +191,11 @@ function xlecxOpenPost(whitchbutton, id, updateTabIndex) {
 		thisTabIndex = GetTabIndexById(pageId)
 		const passImages = tabs[thisTabIndex].page.getElementsByTagName('img')
 		for (let i = 0; i < passImages.length; i++) {
-			passImages[i].removeAttribute('data-src')
-			passImages[i].removeAttribute('src')
+			try {
+				passImages[i].removeAttribute('data-src')
+				passImages[i].removeAttribute('src')
+				passImages[i].remove()
+			} catch(err) { console.error(err) }
 		}
 		if (updateTabIndex == true) tabs[thisTabIndex].addHistory(`xlecxOpenPost(0, '${id}', false)`)
 	}
@@ -438,8 +444,11 @@ function xlecxOpenCategory(name, page, shortName, whitchbutton, updateTabIndex) 
 		thisTabIndex = GetTabIndexById(pageId)
 		const passImages = tabs[thisTabIndex].page.getElementsByTagName('img')
 		for (let i = 0; i < passImages.length; i++) {
-			passImages[i].removeAttribute('data-src')
-			passImages[i].removeAttribute('src')
+			try {
+				passImages[i].removeAttribute('data-src')
+				passImages[i].removeAttribute('src')
+				passImages[i].remove()
+			} catch(err) { console.error(err) }
 		}
 		if (updateTabIndex == true) tabs[thisTabIndex].addHistory(`xlecxOpenCategory('${name}', ${page}, '${shortName}', 0, false)`)
 	}
@@ -683,8 +692,11 @@ function xlecxOpenTag(name, page, whitch, whitchbutton, updateTabIndex) {
 		thisTabIndex = GetTabIndexById(pageId)
 		const passImages = tabs[thisTabIndex].page.getElementsByTagName('img')
 		for (let i = 0; i < passImages.length; i++) {
-			passImages[i].removeAttribute('data-src')
-			passImages[i].removeAttribute('src')
+			try {
+				passImages[i].removeAttribute('data-src')
+				passImages[i].removeAttribute('src')
+				passImages[i].remove()
+			} catch(err) { console.error(err) }
 		}
 		if (updateTabIndex == true) tabs[thisTabIndex].addHistory(`xlecxOpenTag('${name}', ${page}, ${whitch}, 0, false)`)
 	}
@@ -852,8 +864,11 @@ function xlecxSearch(text, page, whitchbutton, updateTabIndex) {
 		thisTabIndex = GetTabIndexById(pageId)
 		const passImages = tabs[thisTabIndex].page.getElementsByTagName('img')
 		for (let i = 0; i < passImages.length; i++) {
-			passImages[i].removeAttribute('data-src')
-			passImages[i].removeAttribute('src')
+			try {
+				passImages[i].removeAttribute('data-src')
+				passImages[i].removeAttribute('src')
+				passImages[i].remove()
+			} catch(err) { console.error(err) }
 		}
 		if (updateTabIndex == true) tabs[thisTabIndex].addHistory(`xlecxSearch('${text}', ${page}, 0, false)`)
 	}
@@ -995,8 +1010,11 @@ function xlecxOpenAllTags(whitchbutton, updateTabIndex) {
 		thisTabIndex = GetTabIndexById(pageId)
 		const passImages = tabs[thisTabIndex].page.getElementsByTagName('img')
 		for (let i = 0; i < passImages.length; i++) {
-			passImages[i].removeAttribute('data-src')
-			passImages[i].removeAttribute('src')
+			try {
+				passImages[i].removeAttribute('data-src')
+				passImages[i].removeAttribute('src')
+				passImages[i].remove()
+			} catch(err) { console.error(err) }
 		}
 		if (updateTabIndex == true) tabs[thisTabIndex].addHistory('xlecxOpenAllTags(0, false)')
 	}

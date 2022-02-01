@@ -58,8 +58,11 @@ function closeBrowser() {
 		if (passImageCon != undefined) {
 			const passImages = passImageCon.children
 			for (let j = 0; j < passImages.length; j++) {
-				passImages[j].removeAttribute('data-src')
-				passImages[j].removeAttribute('src')
+				try {
+					passImages[i].removeAttribute('data-src')
+					passImages[i].removeAttribute('src')
+					passImages[i].remove()
+				} catch(err) { console.error(err) }
 			}
 		}
 	}
@@ -289,8 +292,11 @@ function removeTab(id) {
 
 	const passImages = tabs[thisTabIndex].page.getElementsByTagName('img')
 	for (let i = 0; i < passImages.length; i++) {
-		passImages[i].removeAttribute('data-src')
-		passImages[i].removeAttribute('src')
+		try {
+			passImages[i].removeAttribute('data-src')
+			passImages[i].removeAttribute('src')
+			passImages[i].remove()
+		} catch(err) { console.error(err) }
 	}
 
 	if (activeTabComicId == id && btabs.length != 1) {

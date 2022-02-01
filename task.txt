@@ -94,6 +94,7 @@ Added To Version {
 	Fix Bug: When renaming still can use hotkeys
 	Merge Collections To Normal Gallery View
 	Add Comic Properties
+	Make Image Stop Loading System Work Better
 }
 
 Doing {

@@ -16,8 +16,11 @@ function nhentaiChangePage(page, makeNewPage, updateTabIndex) {
 		thisTabIndex = GetTabIndexById(pageId)
 		const passImages = tabs[thisTabIndex].page.getElementsByTagName('img')
 		for (let i = 0; i < passImages.length; i++) {
-			passImages[i].removeAttribute('data-src')
-			passImages[i].removeAttribute('src')
+			try {
+				passImages[i].removeAttribute('data-src')
+				passImages[i].removeAttribute('src')
+				passImages[i].remove()
+			} catch(err) { console.error(err) }
 		}
 		if (updateTabIndex == true) tabs[thisTabIndex].addHistory(`nhentaiChangePage(${page}, false, false)`)
 	}
@@ -130,8 +133,11 @@ function nhentaiOpenPost(id, makeNewTab, updateTabIndex) {
 		thisTabIndex = GetTabIndexById(pageId)
 		const passImages = tabs[thisTabIndex].page.getElementsByTagName('img')
 		for (let i = 0; i < passImages.length; i++) {
-			passImages[i].removeAttribute('data-src')
-			passImages[i].removeAttribute('src')
+			try {
+				passImages[i].removeAttribute('data-src')
+				passImages[i].removeAttribute('src')
+				passImages[i].remove()
+			} catch(err) { console.error(err) }
 		}
 		if (updateTabIndex == true) tabs[thisTabIndex].addHistory(`nhentaiOpenPost(${id}, false, false)`)
 	}
@@ -367,8 +373,11 @@ function nhentaiOpenInfo(name, page, whitch, makeNewTab, updateTabIndex) {
 		thisTabIndex = GetTabIndexById(pageId)
 		const passImages = tabs[thisTabIndex].page.getElementsByTagName('img')
 		for (let i = 0; i < passImages.length; i++) {
-			passImages[i].removeAttribute('data-src')
-			passImages[i].removeAttribute('src')
+			try {
+				passImages[i].removeAttribute('data-src')
+				passImages[i].removeAttribute('src')
+				passImages[i].remove()
+			} catch(err) { console.error(err) }
 		}
 		if (updateTabIndex == true) tabs[thisTabIndex].addHistory(`nhentaiOpenInfo('${name}', ${page}, ${whitch}, false, false)`)
 	}
@@ -467,8 +476,11 @@ function nhentaiOpenPages(from, to, page, makeNewTab, updateTabIndex) {
 		thisTabIndex = GetTabIndexById(pageId)
 		const passImages = tabs[thisTabIndex].page.getElementsByTagName('img')
 		for (let i = 0; i < passImages.length; i++) {
-			passImages[i].removeAttribute('data-src')
-			passImages[i].removeAttribute('src')
+			try {
+				passImages[i].removeAttribute('data-src')
+				passImages[i].removeAttribute('src')
+				passImages[i].remove()
+			} catch(err) { console.error(err) }
 		}
 		if (updateTabIndex == true) tabs[thisTabIndex].addHistory(`nhentaiOpenPages(${from}, ${to}, ${page}, false, false)`)
 	}
@@ -566,8 +578,11 @@ function nhentaiSearch(text, page, makeNewTab, updateTabIndex) {
 		thisTabIndex = GetTabIndexById(pageId)
 		const passImages = tabs[thisTabIndex].page.getElementsByTagName('img')
 		for (let i = 0; i < passImages.length; i++) {
-			passImages[i].removeAttribute('data-src')
-			passImages[i].removeAttribute('src')
+			try {
+				passImages[i].removeAttribute('data-src')
+				passImages[i].removeAttribute('src')
+				passImages[i].remove()
+			} catch(err) { console.error(err) }
 		}
 		if (updateTabIndex == true) tabs[thisTabIndex].addHistory(`nhentaiSearch('${text}', ${page}, false, false)`)
 	}
@@ -666,8 +681,11 @@ function nhentaiInfoType(page, whitch, makeNewTab, updateTabIndex) {
 		thisTabIndex = GetTabIndexById(pageId)
 		const passImages = tabs[thisTabIndex].page.getElementsByTagName('img')
 		for (let i = 0; i < passImages.length; i++) {
-			passImages[i].removeAttribute('data-src')
-			passImages[i].removeAttribute('src')
+			try {
+				passImages[i].removeAttribute('data-src')
+				passImages[i].removeAttribute('src')
+				passImages[i].remove()
+			} catch(err) { console.error(err) }
 		}
 		if (updateTabIndex == true) tabs[thisTabIndex].addHistory(`nhentaiInfoType(${page}, ${whitch}, false, false)`)
 	}
@@ -758,8 +776,11 @@ function nhentaiRandom(makeNewTab, updateTabIndex) {
 		thisTabIndex = GetTabIndexById(pageId)
 		const passImages = tabs[thisTabIndex].page.getElementsByTagName('img')
 		for (let i = 0; i < passImages.length; i++) {
-			passImages[i].removeAttribute('data-src')
-			passImages[i].removeAttribute('src')
+			try {
+				passImages[i].removeAttribute('data-src')
+				passImages[i].removeAttribute('src')
+				passImages[i].remove()
+			} catch(err) { console.error(err) }
 		}
 		if (updateTabIndex == true) tabs[thisTabIndex].addHistory(`nhentaiRandom(false, false)`)
 	}
