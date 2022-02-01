@@ -100,7 +100,6 @@ Doing {
 }
 
 Tasks => {
-	Fix Collection Search
 	Add tab system within your collection so you can have multiple comics open at once (Requested By Zogarth23)
 	Add the ability to sort using multiple tags (Requested By Zogarth23)
 	Fix Bug: When renaming still can use hotkeys

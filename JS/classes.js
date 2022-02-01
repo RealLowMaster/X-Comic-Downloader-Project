@@ -882,11 +882,25 @@ class OfflinePageManager {
 
 		db.comics.find(load).sort(this.sort).exec((err, doc) => {
 			if (err) { error(err); return }
-			
-			const newList = []
-			for (let i = 0, l = doc.length; i < l; i++) if (col_list.indexOf(doc[i]._id) > -1) newList.push(doc[i])
 
-			if (newList.length != col_list.length) {
+			const newList = []
+			if (this.sort._id != null) {
+				const indexList = []
+				for (let i = 0, l = doc.length; i < l; i++) {
+					const thisIndex = col_list.indexOf(doc[i]._id)
+					if (thisIndex > -1) indexList[thisIndex] = doc[i]
+				}
+
+				if (this.sort._id == -1) {
+					for (let i = indexList.length - 1; i >= 0; i--) if (indexList[i] != null) newList.push(indexList[i])
+				} else {
+					for (let i = 0, l = indexList.length; i < l; i++) if (indexList[i] != null) newList.push(indexList[i])
+				}
+			} else {
+				for (let i = 0, l = doc.length; i < l; i++) if (col_list.indexOf(doc[i]._id) > -1) newList.push(doc[i])
+			}
+
+			if (this.search == null && newList.length != col_list.length) {
 				collectionsDB[index][1] = newList
 				try { jsonfile.writeFileSync(dirDB+'/collections.lowdb',{a:collectionsDB}) } catch(err) { console.error(err) }
 			}
@@ -903,7 +917,7 @@ class OfflinePageManager {
 			for (let i = limit[0]; i < limit[1]; i++) list.push([newList[i]._id, newList[i].n, newList[i].i, newList[i].o, newList[i].c])
 		
 			this.#counter.textContent = 'Comics: '+newList.length
-			this.#Content(limit[2], list, page, 'PageManager.LoadCollection(PageManager.this.infoIndex, {p})')
+			this.#Content(limit[2], list, page, 'PageManager.LoadCollection(PageManager.infoIndex, {p})')
 		})
 	}
 
