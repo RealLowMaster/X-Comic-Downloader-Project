@@ -140,7 +140,7 @@ function AddComicToCollection(who, collection_index, comic_id) {
 				if (err1 || doc == null) {
 					collectionsDB[collection_index][2] = null
 					try { jsonfile.writeFileSync(dirDB+'/collections.lowdb',{a:collectionsDB}) } catch(err) { console.error(err) }
-					console.log(err1)
+					console.error(err1)
 					return
 				}
 
@@ -162,6 +162,7 @@ function RemoveComicToCollection(who, collection_index, comic_id) {
 	if (index > -1) {
 		collectionsDB[collection_index][1].splice(index, 1)
 		jsonfile.writeFileSync(dirDB+'/collections.lowdb',{a:collectionsDB})
+		if (PageManager.loadIndex == 2) PageManager.Reload()
 	}
 	who.innerText = 'Add'
 	who.setAttribute('class', 'btn btn-success')
@@ -210,7 +211,8 @@ function closeCollectionMenu() {
 // Delete Collection
 function deleteCollection(index) {
 	collectionsDB.splice(index, 1)
-	jsonfile.writeFileSync(dirDB+'/collections.lowdb',{a:collectionsDB})
+	try { jsonfile.writeFileSync(dirDB+'/collections.lowdb',{a:collectionsDB}) } catch(err) { console.error(err) }
+	if (PageManager.loadIndex == 2 && PageManager.infoIndex == index) PageManager.Home()
 	LoadCollections()
 }
 
