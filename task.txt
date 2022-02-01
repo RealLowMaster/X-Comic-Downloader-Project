@@ -91,6 +91,7 @@ Add Comic {
 }
 
 Added To Version {
+	Fix Bug: When renaming still can use hotkeys
 	Merge Collections To Normal Gallery View
 	Add Comic Properties
 }
@@ -102,7 +103,6 @@ Doing {
 Tasks => {
 	Add tab system within your collection so you can have multiple comics open at once (Requested By Zogarth23)
 	Add the ability to sort using multiple tags (Requested By Zogarth23)
-	Fix Bug: When renaming still can use hotkeys
 	Add Download To Related in nhentai
 	Fix Bug: nhentai -> Search -> Otokonoko Heaven Vol. 4 Jump Page
 	Optimize Comic Image Loading
