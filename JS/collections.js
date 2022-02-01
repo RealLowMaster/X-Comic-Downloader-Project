@@ -2,7 +2,7 @@ const CollectionContainer = document.getElementById('c-p-c-c')
 const ComicCollectionPanelContainer = document.getElementById('c-c-p-c-c')
 const CollectionPagination = document.getElementById('o-c-p-p')
 const CollectionRightClickMenu = document.getElementById('c-r-c-m')
-let collectionPage = null, openedCollectionIndex = null, inCollection = false, collection_menu_index
+let openedCollectionIndex = null, collection_menu_index
 
 function CreateCollection(name) {
 	name = name || null
@@ -15,6 +15,7 @@ function CreateCollection(name) {
 function openCollectionsPanel() {
 	keydownEventIndex = null
 	afterDLReload = false
+	LoadCollections()
 	document.getElementById('main').style.display = 'none'
 	document.getElementById('collections-panel').style.display = 'block'
 }
@@ -38,7 +39,6 @@ function LoadCollections() {
 			let image = collectionsDB[i][2] || null
 			if (image != null) {
 				image = dirUL+'/thumbs/'+image
-				// if (!fs.existsSync(dirUL+'/cthumbs/'+image)) image = 'Image/no-img-300x300.png'
 				if (!fs.existsSync(image)) {
 					collectionsDB[i][2] = null
 					isChanged = true
@@ -54,141 +54,6 @@ function LoadCollections() {
 	if (isChanged) jsonfile.writeFileSync(dirDB+'/collections.lowdb',{a:collectionsDB})
 
 	CollectionContainer.innerHTML = html
-}
-
-function openCollection(index) {
-	openedCollectionIndex = index
-	if (collectionsDB[index][1].length == 0) { PopAlert('There is no Comic In this Collection.', 'danger'); return }
-	collectionPage = 1
-	CheckAllCollectionIds(index, 0, false, () => {
-		if (collectionsDB[index][1].length == 0) { PopAlert('There is no Comic In this Collection.', 'danger'); return }
-		inCollection = true
-		LoadCollection()
-		document.getElementById('opened-collections-panel').style.display = 'block'
-		document.getElementById('collections-panel').style.display = 'none'
-		CollectionRightClickMenu.style.display = 'none'
-	})
-}
-
-function CheckAllCollectionIds(collectionIndex, index, changed, callback) {
-	if (collectionsDB[collectionIndex][1].length == index) {
-		if (changed) jsonfile.writeFileSync(dirDB+'/collections.lowdb',{a:collectionsDB})
-		LoadCollections()
-		callback()
-		return
-	}
-
-	db.comics.findOne({_id:collectionsDB[collectionIndex][1][index]}, (err, doc) => {
-		if (err) { error('CheckCollectionComics->Err: '+err); return }
-		if (doc == undefined || doc == null) {
-			collectionsDB[collectionIndex][1].splice(index, 1)
-			CheckAllCollectionIds(collectionIndex, index, true, callback)
-		} else {
-			if (collectionsDB[collectionIndex][2] == null) {
-				if (fs.existsSync(`${dirUL}/thumbs/${doc.i}.jpg`)) {
-					collectionsDB[collectionIndex][2] = doc.i+'.jpg'
-					changed = true
-				}
-			}
-			CheckAllCollectionIds(collectionIndex, index + 1, changed, callback)
-		}
-	})
-}
-
-function closeCollection() {
-	inCollection = false
-	openedCollectionIndex = null
-	collectionPage = null
-	document.getElementById('collections-panel').style.display = 'block'
-	document.getElementById('opened-collections-panel').style.display = 'none'
-	document.getElementById('o-c-p-c-c').innerHTML = ''
-	CollectionPagination.style.display = 'none'
-	CollectionPagination.innerHTML = null
-}
-
-function LoadCollection() {
-	const ids = collectionsDB[openedCollectionIndex][1]
-
-	if (ids.length == 0) {
-		document.getElementById('o-c-p-c-c').innerHTML = '<div class="alert alert-danger">This Collection Have no Comic.</div>'
-		return
-	}
-
-	document.getElementById('o-c-p-c-c').innerHTML = null
-
-	const max_per_page = setting.max_per_page
-	let min = 0
-	let max = ids.length
-	const maxPage = Math.ceil(max / max_per_page)
-	while (collectionPage > maxPage) {
-		collectionPage--
-	}
-
-	if (max >= max_per_page) {
-		min = (max_per_page * collectionPage) - max_per_page
-		max = min + max_per_page
-		if (max > ids.length) max = ids.length
-	}
-
-	const newIds = []
-	for (let i = ids.length - 1; i >= 0; i--) newIds.push(ids[i])
-
-	const comic_ids = []
-	for (let i = min; i < max; i++) comic_ids.push(newIds[i])
-	LoadCollectionComics(comic_ids, maxPage)
-}
-
-function LoadCollectionComics(contents, maxPage) {
-	if (contents.length == 0) {
-		const thisPagination = PageManager.GetPagination(maxPage, collectionPage)
-		html = '<div>'
-		for (let i in thisPagination) {
-			if (thisPagination[i][1] == null) html += `<button disabled>${thisPagination[i][0]}</button>`
-			else html += `<button onclick="collectionPage=${thisPagination[i][1]};LoadCollection()">${thisPagination[i][0]}</button>`
-		}
-		html += '</div>'
-		CollectionPagination.innerHTML = html
-		CollectionPagination.style.display = 'block'
-		return
-	} else CollectionPagination.style.display = 'none'
-
-	db.comics.findOne({_id:contents[0]}, (err, doc) => {
-		if (err) { error('LoadCollection->Err: '+err); return }
-		if (doc == undefined || doc == null) {
-			contents.shift()
-			LoadCollectionComics(contents, maxPage)
-			return
-		}
-
-		let html = ''
-		if (setting.show_unoptimize) {
-			let unoptimize = ''
-			id = doc._id
-			_name = doc.n
-			image = `${dirUL}/thumbs/${doc.i}.jpg`
-			thumb = true
-			
-			if (!fs.existsSync(image)) { image = 'Image/no-img-300x300.png'; thumb = false }
-			if (typeof(doc.o) == 'number') { unoptimize = ''; optimize = true }
-			else { unoptimize = ' unoptimize'; optimize = false }
-			
-			html += `<div class="comic" onmousedown="onComicClicked(${id}, ${thumb}, ${optimize})"${unoptimize}><img src="${image}?${new Date().getTime()}"><span>${doc.c}</span><p>${_name}</p></div>`
-		} else {
-			id = doc._id
-			_name = doc.n
-			image = `${dirUL}/thumbs/${doc.i}.jpg`
-			thumb = true
-
-			if (!fs.existsSync(image)) { image = 'Image/no-img-300x300.png'; thumb = false }
-			if (typeof(doc.o) == 'number') optimize = true
-			else optimize = false
-
-			html += `<div class="comic" onmousedown="onComicClicked(${id}, ${thumb}, ${optimize})"><img src="${image}?${new Date().getTime()}"><span>${doc.c}</span><p>${_name}</p></div>`
-		}
-		document.getElementById('o-c-p-c-c').innerHTML += html
-		contents.shift()
-		LoadCollectionComics(contents, maxPage)
-	})
 }
 
 function openAddCollection() {
@@ -269,8 +134,6 @@ function AddComicToCollection(who, collection_index, comic_id) {
 	if (collectionsDB[collection_index][1].indexOf(comic_id) == -1) {
 		collectionsDB[collection_index][1].push(comic_id)
 		jsonfile.writeFileSync(dirDB+'/collections.lowdb',{a:collectionsDB})
-		LoadCollections()
-		if (inCollection) LoadCollection()
 	}
 	who.innerText = 'Remove'
 	who.setAttribute('class', 'btn btn-danger')
@@ -283,8 +146,6 @@ function RemoveComicToCollection(who, collection_index, comic_id) {
 	if (index > -1) {
 		collectionsDB[collection_index][1].splice(index, 1)
 		jsonfile.writeFileSync(dirDB+'/collections.lowdb',{a:collectionsDB})
-		LoadCollections()
-		if (inCollection) LoadCollection()
 	}
 	who.innerText = 'Add'
 	who.setAttribute('class', 'btn btn-success')
@@ -298,8 +159,10 @@ function OnCollectionMouseDown(index) {
 		return
 	}
 
-	if (key == 1) openCollection(index)
-	else {
+	if (key == 1) {
+		closeCollectionsPanel()
+		PageManager.LoadCollection(index, 1)
+	} else {
 		collection_menu_index = index
 		let x = e.clientX, y = e.clientY
 		CollectionRightClickMenu.style.display = 'block'

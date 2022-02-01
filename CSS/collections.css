@@ -1,5 +1,4 @@
-#collections-panel,
-#opened-collections-panel {
+#collections-panel {
 	display: none;
 	width: 100%;
 	height: calc(100% - var(--topMenuSize));
@@ -10,16 +9,14 @@
 	left: 0;
 }
 
-#c-p-t-m,
-#o-c-p-t-m {
+#c-p-t-m {
 	width: 100%;
 	padding: 10px;
 	margin-bottom: 20px;
 	direction: rtl;
 }
 
-#c-p-t-m > *,
-#o-c-p-t-m > * {
+#c-p-t-m > * {
 	direction: ltr;
 }
 

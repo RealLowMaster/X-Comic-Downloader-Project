@@ -767,8 +767,8 @@ class OfflinePageManager {
 	}
 	
 	Load(page = 1) {
-		this.page = page
 		this.loadIndex = 0
+		this.page = page
 		this.#scroll = document.getElementById('main-body').scrollTop
 		this.container.innerHTML = null
 		this.#titleDom.innerHTML = null
@@ -809,8 +809,8 @@ class OfflinePageManager {
 	}
 
 	LoadInfo(page = 1) {
-		this.page = page
 		this.loadIndex = 1
+		this.page = page
 		this.#scroll = document.getElementById('main-body').scrollTop
 		this.container.innerHTML = null
 		this.#titleDom.innerHTML = null
@@ -865,6 +865,45 @@ class OfflinePageManager {
 
 			this.#counter.textContent = 'Comics: '+doc.length
 			this.#Content(limit[2], list, page, 'PageManager.LoadInfo({p})')
+		})
+	}
+
+	LoadCollection(index, page = 1) {
+		this.loadIndex = 2
+		this.page = page
+		this.infoIndex = index
+		this.#scroll = document.getElementById('main-body').scrollTop
+		this.container.innerHTML = null
+		this.#titleDom.innerHTML = null
+
+		let load = {}
+		if (this.search != null) load.n = new RegExp(this.search.toLowerCase())
+		const col_list = collectionsDB[index][1]
+
+		db.comics.find(load).sort(this.sort).exec((err, doc) => {
+			if (err) { error(err); return }
+			
+			const newList = []
+			for (let i = 0, l = doc.length; i < l; i++) if (col_list.indexOf(doc[i]._id) > -1) newList.push(doc[i])
+
+			if (newList.length != col_list.length) {
+				collectionsDB[index][1] = newList
+				try { jsonfile.writeFileSync(dirDB+'/collections.lowdb',{a:collectionsDB}) } catch(err) { console.error(err) }
+			}
+			
+			let limit = this.#MaxAndMin(newList.length, page)
+			if (page > limit[2]) {
+				page = limit[2]
+				limit = this.#MaxAndMin(newList.length, page)
+			}
+			this.maxPage = limit[2]
+			this.#title = 'Collections > <span class="nhentai-glow">'+collectionsDB[index][0]+'</span> > Page '
+			
+			const list = []
+			for (let i = limit[0]; i < limit[1]; i++) list.push([newList[i]._id, newList[i].n, newList[i].i, newList[i].o, newList[i].c])
+		
+			this.#counter.textContent = 'Comics: '+newList.length
+			this.#Content(limit[2], list, page, 'PageManager.LoadCollection(PageManager.this.infoIndex, {p})')
 		})
 	}
 
@@ -943,6 +982,9 @@ class OfflinePageManager {
 			case 1:
 				this.LoadInfo(this.page)
 				break
+			case 2:
+				this.LoadCollection(this.infoIndex, this.page)
+				break
 		}
 	}
 
@@ -956,6 +998,9 @@ class OfflinePageManager {
 			case 1:
 				this.LoadInfo(1)
 				break
+			case 2:
+				this.LoadCollection(this.infoIndex, 1)
+				break
 		}
 	}
 
@@ -967,6 +1012,9 @@ class OfflinePageManager {
 				break
 			case 1:
 				this.LoadInfo(page)
+				break
+			case 2:
+				this.LoadCollection(this.infoIndex, page)
 				break
 		}
 	}
@@ -981,6 +1029,9 @@ class OfflinePageManager {
 			case 1:
 				this.LoadInfo(page)
 				break
+			case 2:
+				this.LoadCollection(this.infoIndex, page)
+				break
 		}
 	}
 
@@ -992,6 +1043,9 @@ class OfflinePageManager {
 					break
 				case 1:
 					this.LoadInfo(this.page + 1)
+					break
+				case 2:
+					this.LoadCollection(this.infoIndex, this.page + 1)
 					break
 			}
 		}
@@ -1005,6 +1059,9 @@ class OfflinePageManager {
 					break
 				case 1:
 					this.LoadInfo(this.page - 1)
+					break
+				case 2:
+					this.LoadCollection(this.infoIndex, this.page - 1)
 					break
 			}
 		}

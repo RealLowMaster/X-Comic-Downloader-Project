@@ -6,7 +6,7 @@ const comicArtistsContainer = document.getElementById('c-p-a')
 const comicParodyContainer = document.getElementById('c-p-p')
 const comicTagsContainer = document.getElementById('c-p-ts')
 const comicImageContainer = document.getElementById('c-p-i')
-let off_site = null, off_id = null, off_comic_id = null, need_repair = [], in_comic = false, comic_menu_id = null, passKeyEvent = null, export_comic_id = null, comic_panel_menu_info = null, isThumbing = false, isRepairing = false, isRepairingContiue = false, repair_all_list = null, repair_all_error_list = null, closingApp = false
+let off_site = null, off_id = null, off_comic_id = null, need_repair = [], in_comic = false, comic_menu_id = null, passKeyEvent = null, export_comic_id = null, comic_panel_menu_info = null, isThumbing = false, isRepairing = false, isRepairingContiue = false, repair_all_list = null, repair_all_error_list = null, closingApp = false, pr_c_folder = null
 
 function onComicClicked(id, thumb, optimize) {
 	const e = window.event, key = e.which
@@ -28,8 +28,7 @@ function onComicClicked(id, thumb, optimize) {
 			childs[1].innerHTML = '<svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><g><path fill="currentColor" d="M448 384H64v-48l71.51-71.52a12 12 0 0 1 17 0L208 320l135.51-135.52a12 12 0 0 1 17 0L448 272z" style="opacity:.4"></path><path fill="currentColor" d="M464 64H48a48 48 0 0 0-48 48v288a48 48 0 0 0 48 48h416a48 48 0 0 0 48-48V112a48 48 0 0 0-48-48zm-352 56a56 56 0 1 1-56 56 56 56 0 0 1 56-56zm336 264H64v-48l71.51-71.52a12 12 0 0 1 17 0L208 320l135.51-135.52a12 12 0 0 1 17 0L448 272z"></path></g></svg> Make Thumb'
 			childs[1].setAttribute('title', 'Make Thumb')
 		}
-		if (inCollection) childs[1].setAttribute('onclick', 'makeThumbForAComic(comic_menu_id, null)')
-		else childs[1].setAttribute('onclick', 'makeThumbForAComic(comic_menu_id, 0)')
+		childs[1].setAttribute('onclick', 'makeThumbForAComic(comic_menu_id, 0)')
 
 		if (optimize) {
 			childs[2].removeAttribute('success-btn')
@@ -323,8 +322,7 @@ function openComic(id) {
 
 function closeComicPanel() {
 	comicPanel.style.display = 'none'
-	if (inCollection) keydownEventIndex = null
-	else keydownEventIndex = 0
+	keydownEventIndex = 0
 	need_repair = []
 	in_comic = false
 	off_site = null
@@ -471,8 +469,7 @@ function SetComicThumb(id, index) {
 		for (let i = 0; i < ImageFormats.length; i++) if (index >= ImageFormats[i][0] && index <= ImageFormats[i][1]) { format = ImageFormats[i][2]; break }
 		const src = `${dirUL}/${id}${doc.i}/${doc.i}-${index}.${format}`
 		if (!fs.existsSync(src)) {
-			if (inCollection) LoadCollection()
-			else PageManager.Reload()
+			PageManager.Reload()
 			error('Could not Find Image')
 			loading.hide()
 			isThumbing = false
@@ -483,14 +480,12 @@ function SetComicThumb(id, index) {
 		setTimeout(() => {
 			sharp(src).resize(225, 315).jpeg().toFile(`${dirUL}/thumbs/${doc.i}.jpg`).then(() => {
 				PageManager.Reload()
-				if (inCollection) LoadCollection()
 				loading.forward()
 				loading.hide()
 				isThumbing = false
 				keydownEventIndex = passKeyEvent
 			}).catch(tErr => {
 				PageManager.Reload()
-				if (inCollection) LoadCollection()
 				error('MakingThumb->Err: '+tErr)
 				loading.hide()
 				isThumbing = false
@@ -747,19 +742,7 @@ function deleteComic(id) {
 				PopAlert('Comic Deleted.', 'warning')
 				comicDeleting = false
 				PageManager.Reload()
-				if (inCollection) {
-					keydownEventIndex = null
-					document.getElementById('o-c-p-c-c').innerHTML = ''
-					CheckAllCollectionIds(openedCollectionIndex, 0, false, () => {
-						if (collectionsDB[openedCollectionIndex][1].length == 0) {
-							document.getElementById('o-c-p-c-c').innerHTML = '<div class="alert alert-danger">This Collection Have no Comic.</div>'
-							return
-						}
-						LoadCollection()
-						document.getElementById('opened-collections-panel').style.display = 'block'
-						document.getElementById('collections-panel').style.display = 'none'
-					})
-				} else keydownEventIndex = 0
+				keydownEventIndex = 0
 				
 			}
 	
@@ -878,10 +861,7 @@ function closeRenamePanel() {
 function renameComic(id, newName) {
 	if (newName == undefined || newName.replace(/ /g, '').length <= 0) { error('Please Fill name Input!'); return }
 	db.comics.update({_id:id}, { $set: {n:newName.toLowerCase()} }, {}, (err) => {
-		if (inCollection) {
-			LoadCollection()
-			keydownEventIndex = null
-		} else PageManager.Reload()
+		PageManager.Reload()
 		if (comicPanel.getAttribute('cid') != 'null') openComic(id)
 		if (err) { error('UpdatingName->Err: '+err); return }
 		closeRenamePanel()
@@ -903,6 +883,58 @@ function askForClosingApp() {
 			'closingApp = false;this.parentElement.parentElement.remove()'
 		]
 	])
+}
+
+// Comic Properties
+function OpenComicProperties(comic_id) {
+	passKeyEvent = keydownEventIndex
+	keydownEventIndex = null
+	const container = document.getElementById('c-p-c')
+	container.style.display = 'none'
+	document.getElementById('comic-properties').style.display = 'flex'
+	db.comics.findOne({_id:comic_id}, (err, doc) => {
+		if (err || doc == null) {
+			document.getElementById('comic-properties').style.display = 'none'
+			keydownEventIndex = passKeyEvent
+			passKeyEvent = null
+			error(err)
+			console.error(err)
+			return
+		}
+
+		document.getElementById('c-p-c-n').innerText = doc.n
+		document.getElementById('c-p-c-i-c').innerText = doc.c
+
+		let lastIndex = doc.f[0][1], thisForamat = doc.f[0][2], formatIndex = 0, bytes = 0
+		for (let i = 0; i < doc.c; i++) {
+			if (i > lastIndex) {
+				formatIndex++
+				try {
+					lastIndex = doc.f[formatIndex][1]
+					thisForamat = doc.f[formatIndex][2]
+				} catch(err) { console.error(err); break }
+			}
+
+			try { bytes += fs.statSync(`${dirUL}/${comic_id}${doc.i}/${doc.i}-${i}.${thisForamat}`).size } catch(err) { console.error(err) }
+		}
+		document.getElementById('c-p-c-s').innerText = formatBytes(bytes)
+		document.getElementById('c-p-c-i-o').innerText = typeof(doc.o) != 'number' ? 'false' : 'true'
+
+		pr_c_folder = `${dirUL}/${comic_id}${doc.i}`
+		document.getElementById('c-p-c-o-f').setAttribute('onclick', 'OpenPath(pr_c_folder)')
+
+		container.style.display = 'block'
+	})
+}
+
+function OpenPath(path) {
+	try { remote.shell.openPath(path) } catch(err) { PopAlert('OpenPath->'+err); console.error(err) }
+}
+
+function CloseComicProperties() {
+	document.getElementById('comic-properties').style.display = 'none'
+	keydownEventIndex = passKeyEvent
+	passKeyEvent = null
 }
 
 // Key Event

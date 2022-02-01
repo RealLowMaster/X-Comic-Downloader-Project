@@ -91,13 +91,8 @@ Add Comic {
 }
 
 Added To Version {
-	*Add Ability To sort by tag/artist/parody/character/group/language/category in your personal gallery (Requested By Zogarth23)
-	Add Ability To Change Slider Pages with Arrow Keys (Requested By Zogarth23)
-	Add Ability To Sort personal gallery Order (Requested By Zogarth23)
-	Add More HotKeys
-	Add Theme For Download Panel
-	Combine All Themes
-	Optimize and Change Saving Comic Tags, Artists, etc... System
+	Merge Collections To Normal Gallery View
+	Add Comic Properties
 }
 
 Doing {
@@ -105,6 +100,12 @@ Doing {
 }
 
 Tasks => {
+	Fix Collection Search
+	Add tab system within your collection so you can have multiple comics open at once (Requested By Zogarth23)
+	Add the ability to sort using multiple tags (Requested By Zogarth23)
+	Fix Bug: When renaming still can use hotkeys
+	Add Download To Related in nhentai
+	Fix Bug: nhentai -> Search -> Otokonoko Heaven Vol. 4 Jump Page
 	Optimize Comic Image Loading
 	Optimize and Fix Events
 	Improve Slize Event Bugs
@@ -144,14 +145,19 @@ Tasks => {
 		Add Bookmark || Favoriet Posts
 		Make Tab Resizing Work Better
 		Add Ability That Check Post Updated Image
-		Add Find Artist and ... To Offline Part
 		Add Report Bug Button
 	}
 	
 	New Abilities For v2 {
 		Add Ability To Zoom in Image in Sldier
-		Add Custom Theme Maker
 		Add ReDownload Comic or A Picture
 		Add Jump to Picture to Comic Panel
+	}
+
+	Sites {
+		myhentaigallery.com
+		pururin.to
+		allporncomic.com
+		myhentaicomics.com
 	}
 }

@@ -66,7 +66,7 @@ const keydownEvents = [
 	'SettingKeyEvents({ctrl},{shift},{key})', // 4
 	'InfoKeyEvents({ctrl},{shift},{key})' // 5
 ]
-const ThisWindow = remote.getCurrentWindow(), loading = new Loading(10), Downloader = new DownloadManager(), PageManager = new OfflinePageManager(), db = {}, procressPanel = new ProcressPanel(0), update_number = 13
+const ThisWindow = remote.getCurrentWindow(), loading = new Loading(9), Downloader = new DownloadManager(), PageManager = new OfflinePageManager(), db = {}, procressPanel = new ProcressPanel(0), update_number = 13
 let comicDeleting = false, wt_fps = 20, dirDB, dirUL, dirBU, dirTmp, isOptimizing = false, browserLastTabs = [], tabsHistory = [], dirHistory = '', keydownEventIndex = 0, new_update, save_value = null, save_value2 = null, afterDLReload = true, setting, openedMenuTabIndex, copiedTab = null, tabs = [], lastComicId, lastHaveId, searchTimer, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = [], isUpdating = false
 let collectionsDB = [], groupsDB = [], artistsDB = [], parodiesDB = [], tagsDB = [], charactersDB = [], languagesDB = [], categoriesDB = [], comicGroupsDB = [], comicArtistsDB = [], comicParodiesDB = [], comicTagsDB = [], comicCharactersDB = [], comicLanguagesDB = [], comicCategoriesDB = [], indexDB = []
 

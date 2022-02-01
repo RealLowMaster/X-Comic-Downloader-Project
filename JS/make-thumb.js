@@ -121,8 +121,7 @@ function makeThumbForAComic(id, keyEvents) {
 			if (!fs.existsSync(url)) {
 				error('This Comic First Image Is not Downloaded, we cannot make Thumb From It.')
 				loading.hide()
-				if (inCollection) LoadCollection()
-				else PageManager.Reload()
+				PageManager.Reload()
 				keydownEventIndex = keyEvents
 				return
 			}
@@ -145,23 +144,20 @@ function makeThumbForAComic(id, keyEvents) {
 						const comic_thumb_optimize_btn = document.getElementById('c-a-p-o-t')
 						comic_thumb_optimize_btn.setAttribute('class', 'warning-action')
 						comic_thumb_optimize_btn.innerText = 'ReMake Thumb'
-						if (inCollection) LoadCollection()
-						else PageManager.Reload()
+						PageManager.Reload()
 						keydownEventIndex = keyEvents
 					}).catch(err => {
 						loading.forward()
 						loading.hide()
 						error('MakeThumb: '+err)
-						if (inCollection) LoadCollection()
-						else PageManager.Reload()
+						PageManager.Reload()
 						keydownEventIndex = keyEvents
 					})
 				}, 10)
 			} else {
 				loading.hide()
 				error("Image Not Found, Comic: "+doc.n)
-				if (inCollection) LoadCollection()
-				else PageManager.Reload()
+				PageManager.Reload()
 				keydownEventIndex = keyEvents
 			}
 		}, 10)
