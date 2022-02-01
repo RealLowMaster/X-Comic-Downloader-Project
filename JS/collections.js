@@ -133,7 +133,23 @@ function AddComicToCollection(who, collection_index, comic_id) {
 	who.removeAttribute('onclick')
 	if (collectionsDB[collection_index][1].indexOf(comic_id) == -1) {
 		collectionsDB[collection_index][1].push(comic_id)
-		jsonfile.writeFileSync(dirDB+'/collections.lowdb',{a:collectionsDB})
+
+		if (collectionsDB[collection_index][2] != null && fs.existsSync(dirUL+'/thumbs/'+collectionsDB[collection_index][2])) try { jsonfile.writeFileSync(dirDB+'/collections.lowdb',{a:collectionsDB}) } catch(err) { console.error(err) }
+		else {
+			db.comics.findOne({_id:comic_id}, (err1,doc) => {
+				if (err1 || doc == null) {
+					collectionsDB[collection_index][2] = null
+					try { jsonfile.writeFileSync(dirDB+'/collections.lowdb',{a:collectionsDB}) } catch(err) { console.error(err) }
+					console.log(err1)
+					return
+				}
+
+				const url = doc.i+'.jpg'
+				if (fs.existsSync(dirUL+'/thumbs/'+url)) collectionsDB[collection_index][2] = url
+				else collectionsDB[collection_index][2] = null
+				try { jsonfile.writeFileSync(dirDB+'/collections.lowdb',{a:collectionsDB}) } catch(err) { console.error(err) }
+			})
+		}
 	}
 	who.innerText = 'Remove'
 	who.setAttribute('class', 'btn btn-danger')
