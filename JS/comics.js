@@ -338,8 +338,17 @@ function closeComicPanel() {
 	comicParodyContainer.innerHTML = ''
 	comicTagsContainer.innerHTML = ''
 
+	const passImages = comicImageContainer.getElementsByTagName('img')
+	for (let i = 0; i < passImages.length; i++) {
+		try {
+			passImages[i].removeAttribute('data-src')
+			passImages[i].removeAttribute('src')
+			passImages[i].remove()
+		} catch(err) { console.error(err) }
+	}
+
 	document.getElementById('c-p-t').textContent = ''
-	document.getElementById('c-p-i').innerHTML = ''
+	comicImageContainer.innerHTML = ''
 	document.getElementById('c-s-o').innerHTML = ''
 
 	comicPanel.setAttribute('cid', null)
@@ -388,7 +397,7 @@ function deleteComicImage(id, index) {
 	loading.show('Calculating...')
 
 	document.getElementById('comic-action-panel').style.display = 'none'
-	document.getElementById('c-p-i').innerHTML = ''
+	comicImageContainer.innerHTML = ''
 	const errors = document.getElementsByClassName('action-error')
 	for (let i = 0; i < errors.length; i++) {
 		errors[i].remove()
@@ -711,7 +720,7 @@ function checkExportComicInfo() {
 // Delete a Comic
 function deleteComic(id) {
 	document.getElementById('comic-action-panel').style.display = 'none'
-	document.getElementById('c-p-i').innerHTML = ''
+	comicImageContainer.innerHTML = ''
 	const errors = document.getElementsByClassName('action-error')
 	for (let i = 0; i < errors.length; i++) {
 		errors[i].remove()
