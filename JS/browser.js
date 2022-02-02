@@ -405,12 +405,11 @@ function searchFilter(txt, database, alert) {
 }
 
 function removeDownloadedComicsDownloadButton(site, id, parent, btn, haveCallback, downloadedCallback) {
-	IsHavingComic(site, id, (have, downloaded) => {
-		if (have == true) {
-			if (downloaded == true) downloadedCallback(parent, btn)
-			else haveCallback(parent, btn, id)
-		}
-	})
+	const haveIndex = GetHave(site,id)
+	if (haveIndex != null) {
+		if (haveDBComic[haveIndex] == 1) downloadedCallback(parent, btn)
+		else haveCallback(parent, btn, id)
+	}
 }
 
 function clearDownloadedComics(content, site) {

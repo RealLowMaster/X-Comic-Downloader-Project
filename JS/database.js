@@ -16,9 +16,8 @@ function CreateHave(site, id, index, downloaded) {
 	index = index || null
 	downloaded = downloaded || false
 
-	if (index != null) {
-		CreateHaveInsert(site, id, index, downloaded)
-	} else {
+	if (index != null) CreateHaveInsert(site, id, index, downloaded)
+	else {
 		db.index.findOne({_id:11}, (err, doc) => {
 			if (err) { error(err); return }
 			const haveIndex = doc.i
@@ -41,17 +40,24 @@ function AddToHave(site, id) {
 
 function RemoveFromHave(site, id, who) {
 	who = who || null
-	db.have.remove({s:site, i:id}, {}, (err, num) => {
-		if (err) { error(err); return }
-		if (num == 1) {
-			if (who != null) {
-				const parent = who.parentElement
-				parent.innerHTML = `<button onclick="${id}">Download</button><button class="add-to-have" onclick="AddToHave(${site}, '${id}')">Add To Have</button>`
-			}
-			changeButtonsToDownloaded(id, site, true, true)
-			PopAlert('Comic Removed From Have List.')
-		}
-	})
+	const haveIndex = GetHave(site,id)
+	if (haveIndex != null) {
+		haveDBSite.splice(haveIndex, 1)
+		haveDBId.splice(haveIndex, 1)
+		haveDBComic.splice(haveIndex, 1)
+	}
+	try { jsonfile.writeFileSync(dirDB+'/have.lowdb', {s:haveDBSite,i:haveDBId,c:haveDBComic}) } catch(err) { error('SavingHaveDB->'+err); console.log(err) }
+	
+	if (who != null) who.parentElement.innerHTML = `<button onclick="${id}">Download</button><button class="add-to-have" onclick="AddToHave(${site}, '${id}')">Add To Have</button>`
+	changeButtonsToDownloaded(id, site, true, true)
+	PopAlert('Comic Removed From Have List.')
+}
+
+function GetHave(site, id) {
+	for (let i = 0, l = haveDBComic.length; i < l; i++) {
+		if (haveDBId[i] == id && haveDBSite[i] == site) return i
+	}
+	return null
 }
 
 // Check That We Have Comic Or Not

@@ -1114,42 +1114,41 @@ function xlecxJumpPage(index, page) {
 
 function xlecxDownloader(id) {
 	if (Downloader.IsDownloading(0, id)) { PopAlert('You are Downloading This Comic.', 'danger'); return }
-	IsHavingComic(0, id, (have, downloaded) => {
-		if (have == true) { PopAlert('You Already Have This Comic.', 'danger'); return }
-		const index = Downloader.AddToStarting(0, id)
-		xlecx.getComic(id, {related:false}, (err, result) => {
-			if (err) { Downloader.StopFromStarting(index); PopAlert(err, 'danger'); return }
-			
-			let quality = 0, downloadImageList = []
-			if (result.images[0].src == result.images[0].thumb) quality = 1
-			else quality = setting.img_graphic
-	
-			if (quality == 0) {
-				for (let i = 0; i < result.images.length; i++) downloadImageList.push(xlecx.baseURL+result.images[i].thumb)
-			} else {
-				for (let i = 0; i < result.images.length; i++) downloadImageList.push(xlecx.baseURL+result.images[i].src)
-			}
-	
-			const sendingResult = {}
-			sendingResult.title = result.title
-			if (result.groups != undefined)	{
-				sendingResult.groups = []
-				for (let i = 0; i < result.groups.length; i++) sendingResult.groups.push(result.groups[i].name)
-			}
-			if (result.artists != undefined)	{
-				sendingResult.artists = []
-				for (let i = 0; i < result.artists.length; i++) sendingResult.artists.push(result.artists[i].name)
-			}
-			if (result.parody != undefined)	{
-				sendingResult.parody = []
-				for (let i = 0; i < result.parody.length; i++) sendingResult.parody.push(result.parody[i].name)
-			}
-			if (result.tags != undefined)	{
-				sendingResult.tags = []
-				for (let i = 0; i < result.tags.length; i++) sendingResult.tags.push(result.tags[i].name)
-			}
-			Downloader.Add(index, result.url, xlecx.baseURL+'/'+result.images[0].thumb, downloadImageList, sendingResult)
-		})
+	const haveIndex = GetHave(0,id)
+	if (haveIndex != null) { PopAlert('You Already Have This Comic.', 'danger'); return } 
+	const index = Downloader.AddToStarting(0, id)
+	xlecx.getComic(id, {related:false}, (err, result) => {
+		if (err) { Downloader.StopFromStarting(index); PopAlert(err, 'danger'); return }
+		
+		let quality = 0, downloadImageList = []
+		if (result.images[0].src == result.images[0].thumb) quality = 1
+		else quality = setting.img_graphic
+
+		if (quality == 0) {
+			for (let i = 0; i < result.images.length; i++) downloadImageList.push(xlecx.baseURL+result.images[i].thumb)
+		} else {
+			for (let i = 0; i < result.images.length; i++) downloadImageList.push(xlecx.baseURL+result.images[i].src)
+		}
+
+		const sendingResult = {}
+		sendingResult.title = result.title
+		if (result.groups != undefined)	{
+			sendingResult.groups = []
+			for (let i = 0; i < result.groups.length; i++) sendingResult.groups.push(result.groups[i].name)
+		}
+		if (result.artists != undefined)	{
+			sendingResult.artists = []
+			for (let i = 0; i < result.artists.length; i++) sendingResult.artists.push(result.artists[i].name)
+		}
+		if (result.parody != undefined)	{
+			sendingResult.parody = []
+			for (let i = 0; i < result.parody.length; i++) sendingResult.parody.push(result.parody[i].name)
+		}
+		if (result.tags != undefined)	{
+			sendingResult.tags = []
+			for (let i = 0; i < result.tags.length; i++) sendingResult.tags.push(result.tags[i].name)
+		}
+		Downloader.Add(index, result.url, xlecx.baseURL+'/'+result.images[0].thumb, downloadImageList, sendingResult)
 	})
 }
 

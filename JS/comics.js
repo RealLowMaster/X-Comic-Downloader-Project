@@ -753,13 +753,17 @@ function deleteComic(id) {
 				keydownEventIndex = 0
 				
 			}
-	
+
 			const remove_have = () => {
-				db.have.remove({s:site, i:post_id}, {}, err => {
-					if (err) { comicDeleting = false; loading.hide(); error(err); keydownEventIndex = 0; return }
-					loading.forward('Fix Indexs...')
-					fix_removed_index()
-				})
+				const haveIndex = GetHave(site, post_id)
+				if (haveIndex != null) {
+					haveDBSite.splice(haveIndex, 1)
+					haveDBId.splice(haveIndex, 1)
+					haveDBComic.splice(haveIndex, 1)
+				}
+				try { jsonfile.writeFileSync(dirDB+'/have.lowdb', {s:haveDBSite,i:haveDBId,c:haveDBComic}) } catch(err) { error('SavingHaveDB->'+err); console.log(err) }
+				loading.forward('Fix Indexs...')
+				fix_removed_index()
 			}
 	
 			const remove_comic = () => {

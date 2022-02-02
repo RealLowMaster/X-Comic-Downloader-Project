@@ -156,11 +156,11 @@ function BackUp(filename = null, callback = null) {
 		'collections.lowdb',
 		'comics',
 		'groups.lowdb',
-		'have',
 		'index.lowdb',
 		'languages.lowdb',
 		'parodies.lowdb',
-		'tags.lowdb'
+		'tags.lowdb',
+		'have.lowdb'
 	]
 
 	const zip = new require('jszip')()

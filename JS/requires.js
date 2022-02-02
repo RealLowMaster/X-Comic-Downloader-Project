@@ -67,7 +67,7 @@ const keydownEvents = [
 	'InfoKeyEvents({ctrl},{shift},{key})' // 5
 ]
 const ThisWindow = remote.getCurrentWindow(), loading = new Loading(9), Downloader = new DownloadManager(), PageManager = new OfflinePageManager(), db = {}, procressPanel = new ProcressPanel(0), update_number = 13, SliderManager = new Slider()
-let comicDeleting = false, wt_fps = 20, dirDB, dirUL, dirBU, dirTmp, isOptimizing = false, browserLastTabs = [], tabsHistory = [], dirHistory = '', keydownEventIndex = 0, new_update, save_value = null, save_value2 = null, afterDLReload = true, setting, openedMenuTabIndex, copiedTab = null, tabs = [], lastComicId, lastHaveId, searchTimer, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = [], isUpdating = false, collectionsDB = [], groupsDB = [], artistsDB = [], parodiesDB = [], tagsDB = [], charactersDB = [], languagesDB = [], categoriesDB = [], comicGroupsDB = [], comicArtistsDB = [], comicParodiesDB = [], comicTagsDB = [], comicCharactersDB = [], comicLanguagesDB = [], comicCategoriesDB = [], indexDB = []
+let comicDeleting = false, wt_fps = 20, dirDB, dirUL, dirBU, dirTmp, isOptimizing = false, browserLastTabs = [], tabsHistory = [], dirHistory = '', keydownEventIndex = 0, new_update, save_value = null, save_value2 = null, afterDLReload = true, setting, openedMenuTabIndex, copiedTab = null, tabs = [], lastComicId, lastHaveId, searchTimer, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = [], isUpdating = false, collectionsDB = [], groupsDB = [], artistsDB = [], parodiesDB = [], tagsDB = [], charactersDB = [], languagesDB = [], categoriesDB = [], comicGroupsDB = [], comicArtistsDB = [], comicParodiesDB = [], comicTagsDB = [], comicCharactersDB = [], comicLanguagesDB = [], comicCategoriesDB = [], indexDB = [], haveDBSite = [], haveDBId = [], haveDBComic = []
 
 /*
 	37 // Left Arrow
@@ -668,7 +668,6 @@ function GetDirection() {
 
 function CreateDatabase() {
 	db.comics = new nedb({ filename: dirDB+'/comics', autoload: true })
-	db.have = new nedb({ filename: dirDB+'/have', autoload: true })
 
 	// Index
 	if (fs.existsSync(dirDB+'/index')) {
@@ -906,6 +905,50 @@ function CreateDatabase() {
 			try { fs.unlinkSync(dirDB+'/comic_categories') } catch(err) { console.error(err) }
 		})
 	}
+
+	// Have
+	if (fs.existsSync(dirDB+'/have')) {
+		let tmp_have = new nedb({ filename: dirDB+'/have', autoload: true })
+		tmp_have.find({}, (err,doc) => {
+			if (err) { error('OptimizingHaveDB->'+err); console.error(err); return }
+			if (doc == null || doc.length == 0) {
+				try { fs.unlinkSync(dirDB+'/have') } catch(err) { console.error(err) }
+				try {
+					const data = jsonfile.readFileSync(dirDB+'/have.lowdb')
+					haveDBSite = data.s
+					haveDBId = data.i
+					haveDBComic = data.c
+					if (haveDBSite == null) haveDBSite = []
+					if (haveDBId == null) haveDBId = []
+					if (haveDBComic == null) haveDBComic = []
+				} catch(err) { console.error(err) }
+				return
+			}
+
+			for (let i = 0, l = doc.length; i < l; i++) {
+				haveDBSite[i] = doc[i].s
+				haveDBId[i] = doc[i].i
+				if (doc[i].d == null) haveDBComic[i] = 0
+				else haveDBComic[i] = 1
+			}
+
+			try { jsonfile.writeFileSync(dirDB+'/have.lowdb', {s:haveDBSite,i:haveDBId,c:haveDBComic}) } catch(err) { error('MakingHaveDB->'+err); console.log(err) }
+			try { fs.unlinkSync(dirDB+'/have') } catch(err) { console.error(err) }
+		})
+	} else if (fs.existsSync(dirDB+'/have.lowdb')) {
+		try {
+			const data = jsonfile.readFileSync(dirDB+'/have.lowdb')
+			haveDBSite = data.s
+			haveDBId = data.i
+			haveDBComic = data.c
+			if (haveDBSite == null) haveDBSite = []
+			if (haveDBId == null) haveDBId = []
+			if (haveDBComic == null) haveDBComic = []
+		} catch(err) {
+			error('LoadingHaveDB->'+err)
+			console.error(err)
+		}
+	} else try { jsonfile.writeFileSync(dirDB+'/have.lowdb', {s:[],i:[],c:[]}) } catch(err) { error('MakingHaveDB->'+err); console.log(err) }
 
 	// Check DBs
 	if (typeof groupsDB != 'object') groupsDB = []

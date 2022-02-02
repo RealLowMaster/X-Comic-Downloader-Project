@@ -1042,47 +1042,46 @@ function nhentaiLinkClick(job) {
 function nhentaiDownloader(id) {
 	id = Number(id)
 	if (Downloader.IsDownloading(1, id)) { PopAlert('You are Downloading This Comic.', 'danger'); return }
-	IsHavingComic(0, id, (have, downloaded) => {
-		if (have == true) { PopAlert('You Already Have This Comic.', 'danger'); return }
-		const index = Downloader.AddToStarting(1, id)
-		nhentai.getComic(id, false, (err, result) => {
-			if (err) { Downloader.StopFromStarting(index); PopAlert(err, 'danger'); return }
-			
-			let downloadImageList = []
-			for (let i = 0; i < result.images.length; i++) downloadImageList.push(result.images[i].url)
-	
-			const sendingResult = {}
-			sendingResult.title = result.name
-			if (result.characters != undefined)	{
-				sendingResult.characters = []
-				for (let i = 0; i < result.characters.length; i++) sendingResult.characters.push(result.characters[i].name)
-			}
-			if (result.languages != undefined)	{
-				sendingResult.languages = []
-				for (let i = 0; i < result.languages.length; i++) sendingResult.languages.push(result.languages[i].name)
-			}
-			if (result.categories != undefined)	{
-				sendingResult.categories = []
-				for (let i = 0; i < result.categories.length; i++) sendingResult.categories.push(result.categories[i].name)
-			}
-			if (result.groups != undefined)	{
-				sendingResult.groups = []
-				for (let i = 0; i < result.groups.length; i++) sendingResult.groups.push(result.groups[i].name)
-			}
-			if (result.artists != undefined)	{
-				sendingResult.artists = []
-				for (let i = 0; i < result.artists.length; i++) sendingResult.artists.push(result.artists[i].name)
-			}
-			if (result.parody != undefined)	{
-				sendingResult.parody = []
-				for (let i = 0; i < result.parodies.length; i++) sendingResult.parody.push(result.parodies[i].name)
-			}
-			if (result.tags != undefined)	{
-				sendingResult.tags = []
-				for (let i = 0; i < result.tags.length; i++) sendingResult.tags.push(result.tags[i].name)
-			}
-			Downloader.Add(index, result.url, result.thumb, downloadImageList, sendingResult)
-		})
+	const haveIndex = GetHave(0,id)
+	if (haveIndex != null) { PopAlert('You Already Have This Comic.', 'danger'); return }
+	const index = Downloader.AddToStarting(1, id)
+	nhentai.getComic(id, false, (err, result) => {
+		if (err) { Downloader.StopFromStarting(index); PopAlert(err, 'danger'); return }
+		
+		let downloadImageList = []
+		for (let i = 0; i < result.images.length; i++) downloadImageList.push(result.images[i].url)
+
+		const sendingResult = {}
+		sendingResult.title = result.name
+		if (result.characters != undefined)	{
+			sendingResult.characters = []
+			for (let i = 0; i < result.characters.length; i++) sendingResult.characters.push(result.characters[i].name)
+		}
+		if (result.languages != undefined)	{
+			sendingResult.languages = []
+			for (let i = 0; i < result.languages.length; i++) sendingResult.languages.push(result.languages[i].name)
+		}
+		if (result.categories != undefined)	{
+			sendingResult.categories = []
+			for (let i = 0; i < result.categories.length; i++) sendingResult.categories.push(result.categories[i].name)
+		}
+		if (result.groups != undefined)	{
+			sendingResult.groups = []
+			for (let i = 0; i < result.groups.length; i++) sendingResult.groups.push(result.groups[i].name)
+		}
+		if (result.artists != undefined)	{
+			sendingResult.artists = []
+			for (let i = 0; i < result.artists.length; i++) sendingResult.artists.push(result.artists[i].name)
+		}
+		if (result.parody != undefined)	{
+			sendingResult.parody = []
+			for (let i = 0; i < result.parodies.length; i++) sendingResult.parody.push(result.parodies[i].name)
+		}
+		if (result.tags != undefined)	{
+			sendingResult.tags = []
+			for (let i = 0; i < result.tags.length; i++) sendingResult.tags.push(result.tags[i].name)
+		}
+		Downloader.Add(index, result.url, result.thumb, downloadImageList, sendingResult)
 	})
 }
 
