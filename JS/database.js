@@ -1,34 +1,15 @@
-// Add Comic To Have
-function CreateHaveInsert(site, id, index, downloaded) {
-	downloaded = downloaded || false
-	const insertInfo = {}
-	insertInfo.s = site
-	insertInfo.i = id
-	if (downloaded == true) insertInfo.d = 0
-	insertInfo._id = index
-	db.have.insert(insertInfo, err => {
-		if (err) { error(err); return }
-		FixIndex(1, false)
-	})
-}
-
-function CreateHave(site, id, index, downloaded) {
-	index = index || null
-	downloaded = downloaded || false
-
-	if (index != null) CreateHaveInsert(site, id, index, downloaded)
-	else {
-		db.index.findOne({_id:11}, (err, doc) => {
-			if (err) { error(err); return }
-			const haveIndex = doc.i
-			CreateHaveInsert(site, id, haveIndex, downloaded)
-		})
-	}
+// Have
+function CreateHave(site, id, downloaded = false) {
+	const index = haveDBComic.length
+	haveDBSite[index] = site
+	haveDBId[index] = id
+	if (downloaded) haveDBComic[index] = 1
+	else haveDBComic[index] = 0
+	try { jsonfile.writeFileSync(dirDB+'/have.lowdb', {s:haveDBSite,i:haveDBId,c:haveDBComic}) } catch(err) { error('SavingHaveDB->'+err); console.log(err) }
 }
 
 function AddToHave(site, id) {
-	CreateHave(site, id, lastHaveId, false)
-	lastHaveId++
+	CreateHave(site, id, false)
 	let saveId
 	if (typeof(id) == 'number') saveId = id
 	else saveId = `'${id}'`
@@ -54,25 +35,8 @@ function RemoveFromHave(site, id, who) {
 }
 
 function GetHave(site, id) {
-	for (let i = 0, l = haveDBComic.length; i < l; i++) {
-		if (haveDBId[i] == id && haveDBSite[i] == site) return i
-	}
+	for (let i = 0, l = haveDBComic.length; i < l; i++) if (haveDBId[i] == id && haveDBSite[i] == site) return i
 	return null
-}
-
-// Check That We Have Comic Or Not
-function IsHavingComic(site, id, callback) {
-	db.have.findOne({s:site, i:id}, (err, doc) => {
-		if (err) { error(err); return }
-		if (doc == null)
-			callback(false, false)
-		else {
-			if (doc.d != null && doc.d == 0)
-				callback(true, true)
-			else
-				callback(true, false)
-		}
-	})
 }
 
 // Character
@@ -371,7 +335,7 @@ function CreateTag(list) {
 }
 
 // Comic
-function CreateComic(comicIndex, haveIndex, gottenResult, image, siteIndex, comic_id, imagesCount, formats) {
+function CreateComic(comicIndex, gottenResult, image, siteIndex, comic_id, imagesCount, formats) {
 	const groups = gottenResult.groups || null
 	const artists = gottenResult.artists || null
 	const parody = gottenResult.parody || null
@@ -405,10 +369,10 @@ function CreateComic(comicIndex, haveIndex, gottenResult, image, siteIndex, comi
 
 	db.comics.insert(insertInfo, (err, doc) => {
 		if (err) { error(err); return }
-		FixIndex(0, false)
+		FixComicIndex(false)
 
 		// Add Comic To Have
-		CreateHave(doc.s, doc.p, haveIndex, true)
+		CreateHave(doc.s, doc.p, true)
 
 		makeThumbForDownloadingComic(doc.i, doc.f[0][2], doc._id, () => {
 			let shortName = gottenResult.title

@@ -202,7 +202,6 @@ document.addEventListener("DOMContentLoaded", () => {
 		if (indexDB.length < 3) { setTimeout(IndexLoadCheck, 250); return }
 		for (let i = 0; i < indexDB.length; i++) if (indexDB[i] == undefined) { setTimeout(IndexLoadCheck, 250); return }
 		lastComicId = indexDB[0]
-		lastHaveId = indexDB[1]
 
 		if (indexDB[2]) AfterDatabaseDoneOnStartup()
 		else {

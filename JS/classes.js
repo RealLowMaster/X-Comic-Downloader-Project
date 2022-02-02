@@ -418,9 +418,7 @@ class DownloadManager {
 		this.#info[num].percent = (100 / list.length)
 		this.MakeFormatList(num)
 		this.#info[num].comicId = lastComicId
-		this.#info[num].haveId = lastHaveId
 		lastComicId++
-		lastHaveId++
 		
 		const container = document.createElement('div')
 		const site = sites[this.#info[num].site]
@@ -497,7 +495,7 @@ class DownloadManager {
 			this.#info[num2].text.innerText = this.#info[num2].dlIndex+' / '+this.#info[num2].max
 
 			if (this.#info[num2].dlList.length == 0) {
-				CreateComic(this.#info[num2].comicId, this.#info[num2].haveId, this.#info[num2].result, this.#info[num2].date, this.#info[num2].site, this.#info[num2].id, this.#info[num2].max, this.#info[num2].formatList)
+				CreateComic(this.#info[num2].comicId, this.#info[num2].result, this.#info[num2].date, this.#info[num2].site, this.#info[num2].id, this.#info[num2].max, this.#info[num2].formatList)
 				this.#info[num2].container.remove()
 				this.#indexs.splice(num2,1)
 				this.#info.splice(num2,1)
@@ -524,7 +522,7 @@ class DownloadManager {
 			this.#info[num2].text.innerText = this.#info[num2].dlIndex+' / '+this.#info[num2].max
 
 			if (this.#info[num2].dlList.length == 0) {
-				CreateComic(this.#info[num2].comicId, this.#info[num2].haveId, this.#info[num2].result, this.#info[num2].date, this.#info[num2].site, this.#info[num2].id, this.#info[num2].max, this.#info[num2].formatList)
+				CreateComic(this.#info[num2].comicId, this.#info[num2].result, this.#info[num2].date, this.#info[num2].site, this.#info[num2].id, this.#info[num2].max, this.#info[num2].formatList)
 				this.#info[num2].container.remove()
 				this.#indexs.splice(num2,1)
 				this.#info.splice(num2,1)

@@ -743,8 +743,7 @@ function deleteComic(id) {
 			loading.show('Removing Comic From Database...')
 	
 			const fix_removed_index = () => {
-				FixIndex(0, true)
-				FixIndex(1, true)
+				FixComicIndex(true)
 				loading.forward()
 				loading.hide()
 				PopAlert('Comic Deleted.', 'warning')

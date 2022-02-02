@@ -67,7 +67,7 @@ const keydownEvents = [
 	'InfoKeyEvents({ctrl},{shift},{key})' // 5
 ]
 const ThisWindow = remote.getCurrentWindow(), loading = new Loading(9), Downloader = new DownloadManager(), PageManager = new OfflinePageManager(), db = {}, procressPanel = new ProcressPanel(0), update_number = 13, SliderManager = new Slider()
-let comicDeleting = false, wt_fps = 20, dirDB, dirUL, dirBU, dirTmp, isOptimizing = false, browserLastTabs = [], tabsHistory = [], dirHistory = '', keydownEventIndex = 0, new_update, save_value = null, save_value2 = null, afterDLReload = true, setting, openedMenuTabIndex, copiedTab = null, tabs = [], lastComicId, lastHaveId, searchTimer, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = [], isUpdating = false, collectionsDB = [], groupsDB = [], artistsDB = [], parodiesDB = [], tagsDB = [], charactersDB = [], languagesDB = [], categoriesDB = [], comicGroupsDB = [], comicArtistsDB = [], comicParodiesDB = [], comicTagsDB = [], comicCharactersDB = [], comicLanguagesDB = [], comicCategoriesDB = [], indexDB = [], haveDBSite = [], haveDBId = [], haveDBComic = []
+let comicDeleting = false, wt_fps = 20, dirDB, dirUL, dirBU, dirTmp, isOptimizing = false, browserLastTabs = [], tabsHistory = [], dirHistory = '', keydownEventIndex = 0, new_update, save_value = null, save_value2 = null, afterDLReload = true, setting, openedMenuTabIndex, copiedTab = null, tabs = [], lastComicId, searchTimer, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = [], isUpdating = false, collectionsDB = [], groupsDB = [], artistsDB = [], parodiesDB = [], tagsDB = [], charactersDB = [], languagesDB = [], categoriesDB = [], comicGroupsDB = [], comicArtistsDB = [], comicParodiesDB = [], comicTagsDB = [], comicCharactersDB = [], comicLanguagesDB = [], comicCategoriesDB = [], indexDB = [], haveDBSite = [], haveDBId = [], haveDBComic = []
 
 /*
 	37 // Left Arrow
@@ -1068,37 +1068,19 @@ function getDragAfterElement(container, x) {
 }
 
 // Database Main Stuff
-const FixIndex = async(id, updateLast) => {
-	switch (id) {
-		case 0:
-			db.comics.find({}, (err, doc) => {
-				if (err) { error(err); return }
-				const len = doc.length
-				if (len > 0) {
-					const neededId = doc[len - 1]._id
-					UpdateIndex(0, neededId + 1)
-					if (updateLast == true && !Downloader.HasDownload()) lastComicId = neededId + 1
-				} else {
-					UpdateIndex(0, 1)
-					if (updateLast == true && !Downloader.HasDownload()) lastComicId = 1
-				}
-			})
-			break
-		case 1:
-			db.have.find({}, (err, doc) => {
-				if (err) { error(err); return }
-				const len = doc.length
-				if (len > 0) {
-					const neededId = doc[len - 1]._id
-					UpdateIndex(1, neededId + 1)
-					if (updateLast == true && !Downloader.HasDownload()) lastHaveId = neededId + 1
-				} else {
-					UpdateIndex(1, 1)
-					if (updateLast == true && !Downloader.HasDownload()) lastHaveId = 1
-				}
-			})
-			break
-	}
+function FixComicIndex(updateLast) {
+	db.comics.find({}, (err, doc) => {
+		if (err) { error(err); return }
+		const len = doc.length
+		if (len > 0) {
+			const neededId = doc[len - 1]._id
+			UpdateIndex(0, neededId + 1)
+			if (updateLast == true && !Downloader.HasDownload()) lastComicId = neededId + 1
+		} else {
+			UpdateIndex(0, 1)
+			if (updateLast == true && !Downloader.HasDownload()) lastComicId = 1
+		}
+	})
 }
 
 function UpdateIndex(index, value) {
