@@ -93,8 +93,9 @@ Add Comic {
 Added To Version {
 	Fix Bug: When renaming still can use hotkeys
 	Merge Collections To Normal Gallery View
-	Add Comic Properties
 	Make Image Stop Loading System Work Better
+	Add Comic Properties
+	Add More Choose Location Checkup
 }
 
 Doing {
@@ -102,6 +103,7 @@ Doing {
 }
 
 Tasks => {
+	Fix Bug: First Time Choose App Save Direction
 	Add tab system within your collection so you can have multiple comics open at once (Requested By Zogarth23)
 	Add the ability to sort using multiple tags (Requested By Zogarth23)
 	Add Download To Related in nhentai

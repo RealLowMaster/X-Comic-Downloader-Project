@@ -245,14 +245,9 @@ function PopAlert(txt, style) {
 
 function ChooseDirectory(title, callback) {
 	title = title || 'Choose Directory'
-	callback = callback || null
-
-	if (callback == null) throw "Callback function Can't Be Null."
-	if (typeof(callback) != 'function') throw 'Callback Should Be Function.'
 
 	const choosedDirectory = remote.dialog.showOpenDialogSync({title:title, properties:['openDirectory']})
-
-	if (choosedDirectory == undefined) callback('Canceled', null)
+	if (choosedDirectory == undefined || choosedDirectory.length == 0 || choosedDirectory[0] == null) callback('Canceled', null)
 	else callback(null, choosedDirectory[0])
 }
 
