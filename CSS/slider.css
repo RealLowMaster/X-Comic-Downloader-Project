@@ -1,6 +1,7 @@
 #comic-slider {
 	display: none;
 	grid-template-rows: 0 12fr;
+	width: 100%;
 	height: calc(100% - var(--topMenuSize));
 	position: fixed;
 	top: var(--topMenuSize);
@@ -133,13 +134,11 @@
 	background-color: #000;
 	justify-content: center;
 	align-items: center;
-	overflow: auto;
+	overflow: hidden;
 	position: relative;
-	pointer-events: fill;
 }
 
-#c-s-bg,
-#c-s-c > div {
+#c-s-bg {
 	width: 100%;
 	height: 100%;
 	position: absolute;
@@ -158,79 +157,51 @@
 	text-shadow: 6px 6px 0px rgba(0,0,0,0.2);
 }
 
-#c-s-pg > span {
-	margin: 0 3px;
-}
+#c-s-pg > span { margin: 0 3px }
 
 #c-s-c {
 	display: flex;
+	justify-content: center;
+	align-items: center;
 	width: calc(100% - 115px + 2px);
 	height: calc(100% - 115px + 2px);
 	max-width: calc(100% - 115px + 2px);
-	max-height: calc(100% - 85px + 2px);
+	max-height: calc(100% - 115px + 2px);
 	border: 2px solid transparent;
-	justify-content: center;
-	align-items: center;
 	overflow: hidden;
-	position: relative;
-	z-index: 0;
+	z-index: +1;
+	pointer-events: none;
 }
 
-#c-s-c::-webkit-scrollbar {
-	display: none;
-}
+#c-s-c::-webkit-scrollbar { display: none }
 
 #c-s-c > img {
 	display: block;
+	width: auto;
+	height: auto;
 	max-width: 100%;
 	max-height: 100%;
 	object-position: center;
-	z-index: +2;
 	cursor: zoom-in;
 	transition: .2s;
+	pointer-events: visible;
 }
 
 #c-s-c[o-size] {
-	display: block;
+	display: block !important;
 	width: auto !important;
 	height: auto !important;
-	max-width: 100%;
-	max-height: 100%;
-	overflow: auto;
-	z-index: +1;
-}
-
-#c-s-c[o-size] > div {
-	display: none;
+	max-width: 100% !important;
+	max-height: 100% !important;
+	overflow: auto !important;
+	pointer-events: visible;
 }
 
 #c-s-c[o-size] > img {
-	width: auto !important;
-	height: auto !important;
 	margin: 0 auto;
 	max-width: none;
 	max-height: none;
 	pointer-events: none !important;
-	z-index: -2;
-}
-
-#c-s-s-p {
-	display: none;
-	margin: auto;
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	z-index: +2;
-	cursor: grab;
-}
-
-#c-s-s-p[sliding] {
-	width: 100% !important;
-	height: 100% !important;
-	position: fixed !important;
-	z-index: +1 !important;
 }
 
 #c-s-btns {

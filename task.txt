@@ -93,6 +93,7 @@ Add Comic {
 Added To Version {
 	Fix Bug: When renaming still can use hotkeys
 	Merge Collections To Normal Gallery View
+	Change Slider System and Fix Some Bugs
 	Make Image Stop Loading System Work Better
 	Add Comic Properties
 	Add More Choose Location Checkup
@@ -103,19 +104,16 @@ Doing {
 }
 
 Tasks => {
-	Fix Bug: First Time Choose App Save Direction
 	Add tab system within your collection so you can have multiple comics open at once (Requested By Zogarth23)
 	Add the ability to sort using multiple tags (Requested By Zogarth23)
 	Add Download To Related in nhentai
 	Fix Bug: nhentai -> Search -> Otokonoko Heaven Vol. 4 Jump Page
 	Optimize Comic Image Loading
 	Optimize and Fix Events
-	Improve Slize Event Bugs
-	Make All Theme Same
+	Rebuild Slider
 	Improve Release-Note
 	Add Browser-Right Click
 	Change Tab Remove Activating Next Tab
-	Add Search In Tags, Artists, and etc...
 	Add Downloaded Comic Site Icon In Comic Panel
 	Fix bug: nhentai -> Searching B-trayal pagination won't work
 	Add Ability To Play Song
@@ -123,17 +121,12 @@ Tasks => {
 	Make UI Beatiful
 	Add Search To History Panel
 	Add Auto Optimize Image After Download
-	Make New Download System { Download Panel, Stop Download and etc... }
 
 	Optimize Gifs { giflossy imagemin Packages }
-	Optimize offlineChangePage()
 	Make New History System [ Indexing ]
-	Add Slider System To Repaired Image
 	Add Reset Setting Button
 	Make Tab Doplicator inset after tab
-	Add Perfect Drag to Scroll To Slider Overview
 	Add Auto Scroll Down for Comic Panel
-	Make new Update System
 	Make Browser Selecting History Easier
 	Make New Browser Change Page System
 

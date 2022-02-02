@@ -1108,3 +1108,194 @@ class OfflinePageManager {
 		this.Load(1)
 	}
 }
+
+class Slider {
+	constructor() {
+		this.count = 0
+		this.activeIndex = 0
+		this.passKeyEvent = null
+		this.overview = false
+		this.size = false
+		this.firstTime = true
+		this.img = document.getElementById('c-s-i')
+		this.imgcon = document.getElementById('c-s-c')
+		this.imgcon.addEventListener('wheel', e => {
+			e.preventDefault()
+			if (this.size) {
+				this.imgcon.scrollTop += e.deltaY
+				this.HighBorders()
+			}
+		})
+		this.imgcon.addEventListener('mousemove', e => {
+			e.preventDefault()
+			if (this.size && e.buttons == 1) {
+				this.imgcon.scrollLeft += -e.movementX
+				this.imgcon.scrollTop += -e.movementY
+				this.HighBorders()
+			}
+		})
+		this.overviewcon = document.getElementById('c-s-o')
+		this.overviewcon.addEventListener('wheel', e => {
+			e.preventDefault()
+			if (this.overview) this.overviewcon.scrollLeft += e.deltaY
+		})
+		document.getElementById('c-s-ct').addEventListener('wheel', e => { e.preventDefault(); if (!this.size) this.WheelEvent(e.deltaY < 0) })
+	}
+
+	WheelEvent(forward) {
+		if (forward) {
+			if (this.activeIndex != 0) this.Change(this.activeIndex - 1)
+		} else {
+			if (this.activeIndex < this.count - 1) this.Change(this.activeIndex + 1)
+		}
+	}
+
+	Set(list) {
+		let html = ''
+		for (let i = 0, l = list.length; i < l; i++) html += `<div i="${i}" onclick="SliderManager.Change(${i})"><img src="${list[i]}" loading="lazy"><p>${i+1}</p></div>`
+		this.count = list.length
+		document.getElementById('c-s-m-pg').innerText = this.count
+		this.overviewcon.innerHTML = html
+	}
+
+	Open(index = null) {
+		if (this.count == 0) { PopAlert('There is no Image!','warning'); return }
+		this.passKeyEvent = keydownEventIndex
+		keydownEventIndex = 2
+		if (index != null) this.Change(index)
+		else this.Change(this.activeIndex)
+		this.overview = false
+		this.firstTime = true
+		const element = document.getElementById('comic-slider')
+		element.removeAttribute('opened-overview')
+		element.style.display = 'grid'
+		document.getElementById('d-p-t').setAttribute('hov','')
+	}
+
+	Close() {
+		keydownEventIndex = this.passKeyEvent
+		document.getElementById('comic-slider').style.display = 'none'
+		this.img.setAttribute('src','')
+		document.getElementById('d-p-t').removeAttribute('hov')
+		this.size = true
+		this.ToggleSize()
+	}
+
+	Change(index) {
+		const passIndex = this.activeIndex
+		this.activeIndex = index
+		const children = this.overviewcon.children
+		try { children[passIndex].removeAttribute('active') } catch(err) { console.error(err) }
+		try { children[index].setAttribute('active','') } catch(err) { console.error(err) }
+		try { this.img.setAttribute('src', children[index].children[0].getAttribute('src')) } catch(err) { console.error(err) }
+
+		if (this.size) {
+			this.imgcon.scrollTop = 0
+			this.imgcon.scrollLeft = (this.img.clientWidth / 2) / 2
+			this.HighBorders()
+		}
+
+		const prev = document.getElementById('c-s-p'), next = document.getElementById('c-s-n')
+		if (index == 0) prev.setAttribute('disabled','')
+		else {
+			prev.removeAttribute('disabled')
+			prev.setAttribute('onclick', `SliderManager.Change(${index - 1})`)
+		}
+
+		if (index == this.count - 1) next.setAttribute('disabled', true)
+		else {
+			next.removeAttribute('disabled')
+			next.setAttribute('onclick', `SliderManager.Change(${index + 1})`)
+		}
+
+		document.getElementById('c-s-a-pg').textContent = index + 1
+	}
+
+	Prev() {
+		if (this.activeIndex != 0) this.Change(this.activeIndex - 1)
+	}
+
+	Next() {
+		if (this.activeIndex != this.count - 1) this.Change(this.activeIndex + 1)
+	}
+
+	ToggleOverview() {
+		const element = document.getElementById('comic-slider')
+		if (this.overview) element.removeAttribute('opened-overview')
+		else {
+			element.setAttribute('opened-overview','')
+			if (this.firstTime) {
+				this.firstTime = false
+				this.overviewcon.scrollLeft = (this.activeIndex * 138) - 3
+			}
+		}
+		this.overview = !this.overview
+	}
+
+	ToggleSize() {
+		if (this.size) {
+			this.imgcon.removeAttribute('o-size')
+			this.imgcon.scrollTop = 0
+			this.imgcon.scrollLeft = 0
+			document.getElementById('c-s-s').setAttribute('title', 'Orginal Size | Ctrl+O')
+			this.imgcon.removeAttribute('o-size')
+			this.imgcon.style.borderColor = 'transparent'
+			this.img.setAttribute('onclick', 'SliderManager.ToggleSize()')
+		} else {
+			this.imgcon.setAttribute('o-size','')
+			this.imgcon.scrollTop = 0
+			this.imgcon.scrollLeft = (this.img.clientWidth / 2) / 2
+			document.getElementById('c-s-s').setAttribute('title', 'Cover Size | Ctrl+O')
+			this.img.removeAttribute('onclick')
+			this.imgcon.style.borderColor = '#000'
+			this.HighBorders()
+		}
+		this.size = !this.size
+	}
+
+	HighBorders() {
+		if (this.imgcon.scrollTop == 0) this.imgcon.style.borderTopColor = '#5dade2'
+		else this.imgcon.style.borderTopColor = '#000'
+
+		if (this.imgcon.scrollLeft == 0) this.imgcon.style.borderLeftColor = '#5dade2'
+		else this.imgcon.style.borderLeftColor = '#000'
+
+		if (this.imgcon.scrollLeft == this.img.clientWidth - this.imgcon.clientWidth) this.imgcon.style.borderRightColor = '#5dade2'
+		else this.imgcon.style.borderRightColor = '#000'
+
+		if (this.imgcon.scrollTop == this.img.clientHeight - this.imgcon.clientHeight) this.imgcon.style.borderBottomColor = '#5dade2'
+		else this.imgcon.style.borderBottomColor = '#000'
+	}
+
+	SliderKeyEvents(ctrl, shift, key) {
+		if (ctrl) {
+			if (!shift) {
+				switch (key) {
+					case 37:
+						SliderManager.Prev()
+						break
+					case 39:
+						SliderManager.Next()
+						break
+				}
+			}
+		} else {
+			if (!shift) {
+				switch (key) {
+					case 27:
+						SliderManager.Close()
+						break
+					case 65:
+						SliderManager.Prev()
+						break
+					case 68:
+						SliderManager.Next()
+						break
+					case 79:
+						SliderManager.ToggleSize()
+						break
+				}
+			}
+		}
+	}
+}

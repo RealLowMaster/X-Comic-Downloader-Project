@@ -182,7 +182,6 @@ function openComic(id) {
 
 	title_container.textContent = ''
 	comicImageContainer.innerHTML = `<div class="browser-page-loading"><img class="spin" style="width:60px;height:60px" src="Image/dual-ring-primary-${wt_fps}.gif"><p>Loading...</p></div>`
-	comicSliderOverview.setAttribute('aindex', '')
 
 	const findComic = async() => {
 		await db.comics.findOne({_id:Number(id)}, (err, doc) => {
@@ -220,17 +219,17 @@ function openComic(id) {
 				comic_optimize_btn.textContent = 'Optimize Images'
 			}
 
-			let lastIndex = formats[0][1], thisForamat = formats[0][2], slider_overview_html = '', save, src = ''
+			let lastIndex = formats[0][1], thisForamat = formats[0][2], slider_overview = [], save, src = ''
 			for (let i = 0; i < ImagesCount; i++) {
 				if (i <= lastIndex) {
 					src = `${dirUL}/${id}${image}/${image}-${i}.${thisForamat}`
 					if (!fs.existsSync(src)) {
 						need_repair.push([`${dirUL}/${id}${image}/`, i, image])
 						src = 'Image/no-img-300x300.png'
-						save = `onclick="openComicSlider(${i})"`
+						save = `onclick="SliderManager.Open(${i})"`
 					} else save = `onmousedown="OnComicPanelImageClick(${i}, ${id})"`
 					html += `<img data-src="${src}" ${save}>`
-					slider_overview_html += `<div i="${i}" onclick="changeSliderIndex(${i})"><img src="${src}" loading="lazy"><p>${i+1}</p></div>`
+					slider_overview.push(src)
 				} else {
 					formatIndex++
 					try {
@@ -239,8 +238,8 @@ function openComic(id) {
 					} catch(err) {
 						for (let j = i; j < ImagesCount; j++) {
 							need_repair.push([`${dirUL}/${id}${image}/`, j, image])
-							html += `<img data-src="Image/no-img-300x300.png" onclick="openComicSlider(${i})">`
-							slider_overview_html += `<div i="${i}" onclick="changeSliderIndex(${i})"><img src="Image/no-img-300x300.png" loading="lazy"><p>${i+1}</p></div>`
+							html += `<img data-src="Image/no-img-300x300.png" onclick="SliderManager.Open(${i})">`
+							slider_overview.push('Image/no-img-300x300.png')
 						}
 						break
 					}
@@ -248,10 +247,10 @@ function openComic(id) {
 					if (!fs.existsSync(src)) {
 						need_repair.push([`${dirUL}/${id}${image}/`, i, image])
 						src = 'Image/no-img-300x300.png'
-						save = `onclick="openComicSlider(${i})"`
+						save = `onclick="SliderManager.Open(${i})"`
 					} else save = `onmousedown="OnComicPanelImageClick(${i}, ${id})"`
 					html += `<img data-src="${src}" ${save}>`
-					slider_overview_html += `<div i="${i}" onclick="changeSliderIndex(${i})"><img src="${src}" loading="lazy"><p>${i+1}</p></div>`
+					slider_overview.push(src)
 				}
 			}
 			
@@ -260,9 +259,7 @@ function openComic(id) {
 			else document.getElementById('c-p-r-btn').style.display = 'flex'
 
 			comicImageContainer.innerHTML = html
-			comicSliderOverview.innerHTML = slider_overview_html
-			comicSliderOverview.setAttribute('count', ImagesCount - 1)
-			comicSliderMaxPages.textContent = ImagesCount
+			SliderManager.Set(slider_overview)
 
 			loadImagesOneByOne([...comicImageContainer.getElementsByTagName('img')])
 
@@ -359,7 +356,7 @@ function OnComicPanelImageClick(index, comic_id) {
 	const e = window.event, key = e.which
 	comic_panel_menu_info = null
 	if (key == 2) e.preventDefault()
-	else if (key == 1) openComicSlider(index)
+	else if (key == 1) SliderManager.Open(index)
 	else if (key == 3) {
 		comic_panel_menu_info = [comic_id, index]
 
@@ -1037,7 +1034,7 @@ function OfflineComicKeyEvents(ctrl, shift, key) {
 					}
 					break
 				case 83:
-					reOpenLastSlider()
+					SliderManager.Open()
 					break
 			}
 		}

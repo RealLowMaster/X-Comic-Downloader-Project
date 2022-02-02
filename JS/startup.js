@@ -1,12 +1,7 @@
 function ChangeSizes() {
 	const size = window.innerWidth
-	comicSlider.style.width = size+'px'
 	document.getElementById('c-s-o').style.width = size+'px'
-	if (comicSliderCanvas.hasAttribute('o-size')) {
-		comicSliderCanvasScrollPanel.style.width = comicSliderCanvas.clientWidth+'px'
-		comicSliderCanvasScrollPanel.style.height = comicSliderCanvas.clientHeight+'px'
-		sliderImageBorderHighlighter()
-	}
+	if (SliderManager.size) SliderManager.HighBorders()
 }
 
 function test() {
