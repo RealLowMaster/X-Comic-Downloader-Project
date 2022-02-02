@@ -296,9 +296,7 @@ input::-webkit-input-placeholder { user-select: none }
 	color: #fff;
 }
 
-#c-c-r-c-p,
-#c-p-i-r-p,
-#c-r-c-m {
+.right-cmenu {
 	display: none;
 	width: 170px;
 	background-color: transparent;
@@ -310,9 +308,7 @@ input::-webkit-input-placeholder { user-select: none }
 	box-shadow: var(--ccp-box-shadow);
 }
 
-#c-c-r-c-p > button,
-#c-p-i-r-p > button,
-#c-r-c-m > button {
+.right-cmenu > button {
 	display: flex;
 	align-items: center;
 	width: 100%;
@@ -326,65 +322,52 @@ input::-webkit-input-placeholder { user-select: none }
 	transition: background-color .2s, color .2s, border-color .2s;
 }
 
-#c-c-r-c-p > button:first-child,
-#c-p-i-r-p > button:first-child,
-#c-r-c-m > button:first-child { border-top-left-radius: 5px; border-top-right-radius: 5px }
+.right-cmenu > button:first-child { border-top-left-radius: 5px; border-top-right-radius: 5px }
+.right-cmenu > button:last-child { border-bottom-left-radius: 5px; border-bottom-right-radius: 5px }
 
-#c-c-r-c-p > button:last-child,
-#c-p-i-r-p > button:last-child,
-#c-r-c-m > button:last-child { border-bottom-left-radius: 5px; border-bottom-right-radius: 5px }
-
-#c-c-r-c-p > button:hover,
-#c-p-i-r-p > button:hover,
-#c-r-c-m > button:hover {
+.right-cmenu > button:hover {
 	background-color: var(--ccp-btn-hover-bgc);
 	color: var(--ccp-btn-hover-color);
 	border-color: var(--ccp-btn-hover-bd-color);
 }
 
-#c-c-r-c-p > button[success-btn] {
+.right-cmenu > button[success-btn] {
 	background-color: var(--ccp-btn-sc-bgc);
 	color: var(--ccp-btn-sc-color);
 	border-color: var(--ccp-btn-sc-bd-color);
 }
 
-#c-c-r-c-p > button[success-btn]:hover {
+.right-cmenu > button[success-btn]:hover {
 	background-color: var(--ccp-btn-sc-hover-bgc);
 	color: var(--ccp-btn-sc-hover-color);
 	border-color: var(--ccp-btn-sc-hover-bd-color);
 }
 
-#c-c-r-c-p > button[warning-btn] {
+.right-cmenu > button[warning-btn] {
 	background-color: var(--ccp-btn-wn-bgc);
 	color: var(--ccp-btn-wn-color);
 	border-color: var(--ccp-btn-wn-bd-color);
 }
 
-#c-c-r-c-p > button[warning-btn]:hover {
+.right-cmenu > button[warning-btn]:hover {
 	background-color: var(--ccp-btn-wn-hover-bgc);
 	color: var(--ccp-btn-wn-hover-color);
 	border-color: var(--ccp-btn-wn-hover-bd-color);
 }
 
-#c-c-r-c-p > button[danger-btn],
-#c-p-i-r-p > button[danger-btn],
-#c-r-c-m > button[danger-btn] {
+.right-cmenu > button[danger-btn] {
 	background-color: var(--ccp-btn-dg-bgc);
 	color: var(--ccp-btn-dg-color);
 	border-color: var(--ccp-btn-dg-bd-color);
 }
 
-#c-c-r-c-p > button[danger-btn]:hover,
-#c-p-i-r-p > button[danger-btn]:hover,
-#c-r-c-m > button[danger-btn]:hover {
+.right-cmenu > button[danger-btn]:hover {
 	background-color: var(--ccp-btn-dg-hover-bgc);
 	color: var(--ccp-btn-dg-hover-color);
 	border-color: var(--ccp-btn-dg-hover-bd-color);
 }
 
-#c-c-r-c-p > button > svg,
-#c-p-i-r-p > button > svg,
-#c-r-c-m > button > svg {
+.right-cmenu > button > svg {
 	width: 17px;
 	height: 17px;
 	margin-right: 6px;

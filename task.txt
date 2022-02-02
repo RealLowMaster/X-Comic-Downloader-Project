@@ -92,6 +92,7 @@ Add Comic {
 
 Added To Version {
 	Fix Bug: When renaming still can use hotkeys
+	Fix Some Database Optimization Bugs
 	Fix Some Right Click Menu Bugs
 	Merge Collections To Normal Gallery View
 	Change Slider System and Fix Some Bugs
@@ -105,8 +106,6 @@ Doing {
 }
 
 Tasks => {
-	Add tab system within your collection so you can have multiple comics open at once (Requested By Zogarth23)
-	Add the ability to sort using multiple tags (Requested By Zogarth23)
 	Add Download To Related in nhentai
 	Fix Bug: nhentai -> Search -> Otokonoko Heaven Vol. 4 Jump Page
 	Optimize Comic Image Loading
@@ -134,6 +133,8 @@ Tasks => {
 		Add Site pururin.to (Requested By John Smith)
 		Add Ability To Control gallery with keyboard (Requested By wakeupjeff64)
 		import my own comics manually using images ia lready have on my computer. (Requested By wakeupjeff64)
+		Add tab system within your collection so you can have multiple comics open at once (Requested By Zogarth23)
+		Add the ability to sort using multiple tags (Requested By Zogarth23)
 	}
 
 	Mybe in v2  {
