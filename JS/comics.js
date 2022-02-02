@@ -54,15 +54,17 @@ function onComicClicked(id, thumb, optimize) {
 
 function setComicMenuEvents() {
 	window.addEventListener('click', closeComicMenu)
-	document.getElementById('main-body').addEventListener('scroll', closeComicMenu)
+	window.addEventListener('wheel', closeComicMenu)
 	window.addEventListener('resize', closeComicMenu)
+	window.addEventListener('keydown', closeComicMenu)
 }
 
 function closeComicMenu() {
 	document.getElementById('c-c-r-c-p').style.display = 'none'
 	window.removeEventListener('click', closeComicMenu)
-	document.getElementById('main-body').removeEventListener('scroll', closeComicMenu)
+	window.removeEventListener('wheel', closeComicMenu)
 	window.removeEventListener('resize', closeComicMenu)
+	window.removeEventListener('keydown', closeComicMenu)
 }
 
 function openComicCharacters(comicId) {

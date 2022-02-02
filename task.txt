@@ -92,6 +92,7 @@ Add Comic {
 
 Added To Version {
 	Fix Bug: When renaming still can use hotkeys
+	Fix Some Right Click Menu Bugs
 	Merge Collections To Normal Gallery View
 	Change Slider System and Fix Some Bugs
 	Make Image Stop Loading System Work Better
@@ -110,7 +111,6 @@ Tasks => {
 	Fix Bug: nhentai -> Search -> Otokonoko Heaven Vol. 4 Jump Page
 	Optimize Comic Image Loading
 	Optimize and Fix Events
-	Rebuild Slider
 	Improve Release-Note
 	Add Browser-Right Click
 	Change Tab Remove Activating Next Tab
