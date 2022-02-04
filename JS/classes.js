@@ -228,7 +228,42 @@ class Tab {
 		this.icon = element.children[0]
 		this.span = element.children[1]
 		this.page = pageElement
+		this.linksIndex = []
+		this.linksValue = []
 		this.options = null
+	}
+
+	ClearLinks() {
+		this.linksIndex = []
+		this.linksValue = []
+	}
+
+	AddLink(index, value = null) {
+		this.linksIndex.push(index)
+		this.linksValue.push(value)
+		return this.linksIndex.length - 1
+	}
+
+	Clicked(index, newTab = false) {
+		const site = this.site
+		if (site == 0) {
+			switch(this.linksIndex[index]) {
+				case 0:
+					xlecxOpenAllTags(newTab)
+					break
+				case 1:
+					xlecxOpenCategory(this.linksValue[index][0], 1, this.linksValue[index][1], newTab)
+					break
+				case 2:
+					xlecxOpenPost(newTab, this.linksValue[index])
+					break
+				case 3:
+					xlecxChangePage(this.linksValue[index], newTab)
+					break
+			}
+		} else if (site == 1) {
+
+		}
 	}
 
 	addHistory(text) {
@@ -269,9 +304,7 @@ class Tab {
 		this.tab.setAttribute('title', name)
 	}
 
-	changeIcon(url) {
-		this.icon.setAttribute('src', url)
-	}
+	changeIcon(url) { this.icon.setAttribute('src', url) }
 }
 
 class Download {

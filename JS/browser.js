@@ -1035,6 +1035,18 @@ function askClearBrowserHistory() {
 	])
 }
 
+// Right Click On Comic
+function LinkClick(tindex, lindex) {
+	const e = window.event, key = e.which
+	e.preventDefault()
+	if (tabs[tindex] == null) return
+	if (key == 1) tabs[tindex].Clicked(lindex)
+	else if (key == 2) tabs[tindex].Clicked(lindex, true)
+	else if (key == 3) {
+		
+	}
+}
+
 // Key Event
 function BrowserKeyEvents(ctrl, shift, key) {
 	if (ctrl) {

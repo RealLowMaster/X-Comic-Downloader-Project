@@ -1,9 +1,6 @@
 const xlecx = new XlecxAPI()
 
-function xlecxChangePage(page, whitchbutton, updateTabIndex) {
-	if (whitchbutton == 3) return
-	let makeNewPage = false
-	if (whitchbutton == 2) makeNewPage = true
+function xlecxChangePage(page, makeNewPage, updateTabIndex) {
 	page = page || 1
 	if (updateTabIndex == null) updateTabIndex = true
 	let id
@@ -55,9 +52,8 @@ function createNewXlecxTab(id, pageNumber) {
 		}
 		tabs[thisTabIndex].rename(`Page ${pageNumber}`)
 		tabs[thisTabIndex].icon.setAttribute('src', 'Image/sites/xlecx-30x30.jpg')
-		let container = document.createElement('div')
-		container.classList.add("xlecx-container")
-		let elementContainerContainer, elementContainer, element, miniElement, html, valueStorage
+		tabs[thisTabIndex].ClearLinks()
+		let valueStorage, html = '<div class="xlecx-container">'
 
 		if (result.pagination[result.pagination.length - 1][1] > result.pagination[result.pagination.length - 2][1]) valueStorage = result.pagination[result.pagination.length - 1][1]
 		else valueStorage = result.pagination[result.pagination.length - 2][1]
@@ -75,112 +71,30 @@ function createNewXlecxTab(id, pageNumber) {
 		}
 
 		// Categories
-		elementContainer = document.createElement('div')
-		element = document.createElement('button')
-		element.textContent = 'All Tags'
-		element.onmousedown = e => {
-			e.preventDefault()
-			xlecxOpenAllTags(WhichMouseButton(e))
-		}
-		elementContainer.appendChild(element)
-		for (let i = 0; i < result.categories.length; i++) {
-			element = document.createElement('button')
-			element.setAttribute('c', result.categories[i].url)
-			element.textContent = result.categories[i].name
-			element.onmousedown = e => {
-				e.preventDefault()
-				xlecxOpenCategory(e.target.getAttribute('c'), 1, e.target.textContent, WhichMouseButton(e))
-			}
-			elementContainer.appendChild(element)
-		}
-		container.appendChild(elementContainer)
+		html += `<div><button type="button" onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0)})">All Tags</button>`
+		for (let i = 0; i < result.categories.length; i++) html += `<button onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(1, [result.categories[i].url, result.categories[i].name])})">${result.categories[i].name}</button>`
+		html += '</div>'
 
 		// Content
-		elementContainerContainer = document.createElement('div')
-		elementContainer = document.createElement('div')
-		elementContainer.classList.add("xlecx-post-container")
-		for (let i = 0; i < result.content.length; i++) {
-			element = document.createElement('div')
-			valueStorage = ''
-			if (setting.lazy_loading == true) valueStorage = ' loading="lazy"'
-			html = `<img src="${xlecx.baseURL+result.content[i].thumb}"${valueStorage}>`
-
-			if (result.content[i].pages == null) valueStorage = ''
-			else valueStorage = `<span>${result.content[i].pages}</span>`
-
-			html += `${valueStorage}<p>${result.content[i].title}</p>`
-			if (Downloader.IsDownloading(0, result.content[i].id)) html += `<cid ssite="0" cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid>`
-			else html += `<button ssite="0" cid="${result.content[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
-			element.innerHTML = html
-			miniElement = document.createElement('div')
-			miniElement.setAttribute('id', result.content[i].id)
-			miniElement.onmousedown = e => {
-				e.preventDefault()
-				xlecxOpenPost(WhichMouseButton(e), e.target.getAttribute('id'))
-			}
-			element.appendChild(miniElement)
-			elementContainer.appendChild(element)
-		}
-		elementContainerContainer.appendChild(elementContainer)
-
+		html += '<div><div class="xlecx-post-container">'
+		for (let i = 0; i < result.content.length; i++) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(2, result.content[i].id)})"><img src="${xlecx.baseURL+result.content[i].thumb}"${setting.lazy_loading ? ' loading="lazy"' : ''}>${result.content[i].pages != null ? '<span>'+result.content[i].pages+'</span>' : ''}<p>${result.content[i].title}</p>${Downloader.IsDownloading(0, result.content[i].id) ? '<cid ssite="0" cid="'+result.content[i].id+'"><img class="spin" src="Image/dual-ring-success-'+wt_fps+'.gif"></cid>' : '<button ssite="0" cid="'+result.content[i].id+'" onclick="xlecxDownloader(this.getAttribute(\'cid\'))">Download</button>'}</div>`
+		
 		// Pagination
-		elementContainer = document.createElement('div')
-		elementContainer.classList.add("xlecx-pagination")
-		for (let i = 0; i < result.pagination.length; i++) {
-			element = document.createElement('button')
-			if (result.pagination[i][1] == null) {
-				element.setAttribute('disable', true)
-				element.textContent = result.pagination[i][0]
-			} else {
-				element.textContent = result.pagination[i][0]
-				element.setAttribute('p', result.pagination[i][1])
-				element.onmousedown = e => {
-					e.preventDefault()
-					xlecxChangePage(Number(e.target.getAttribute('p')), WhichMouseButton(e))
-				}
-			}
-			
-			elementContainer.appendChild(element)
-		}
-		elementContainerContainer.appendChild(elementContainer)
-
+		html += '</div><div class="xlecx-pagination">'
+		for (let i = 0; i < result.pagination.length; i++) html += `<button type="button" onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(3,result.pagination[i][1])})"${result.pagination[i][1] == null ? 'disable' : ''}>${result.pagination[i][0]}</button>`
+		
 		// Random
-		elementContainer = document.createElement('div')
-		elementContainer.classList.add("xlecx-post-container")
-		for (let i = 0; i < result.random.length; i++) {
-			element = document.createElement('div')
-			valueStorage = ''
-			if (setting.lazy_loading == true) valueStorage = ' loading="lazy"'
-			html = `<img src="${xlecx.baseURL+result.random[i].thumb}"${valueStorage}>`
+		html += '</div><div class="xlecx-post-container">'
+		for (let i = 0; i < result.random.length; i++) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(2, result.random[i].id)})"><img src="${xlecx.baseURL+result.random[i].thumb}"${setting.lazy_loading ? ' loading="lazy"' : ''}>${result.random[i].pages != null ? '<span>'+result.random[i].pages+'</span>' : ''}<p>${result.random[i].title}</p>${Downloader.IsDownloading(0, result.random[i].id) ? '<cid ssite="0" cid="'+result.random[i].id+'"><img class="spin" src="Image/dual-ring-success-'+wt_fps+'.gif"></cid>' : '<button ssite="0" cid="'+result.random[i].id+'" onclick="xlecxDownloader(this.getAttribute(\'cid\'))">Download</button>'}</div>`
 
-			if (result.random[i].pages == null) valueStorage = ''
-			else valueStorage = `<span>${result.random[i].pages}</span>`
-
-			html += `${valueStorage}<p>${result.random[i].title}</p>`
-			if (Downloader.IsDownloading(0, result.random[i].id)) html += `<cid ssite="0" cid="${result.random[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid>`
-			else html += `<button ssite="0" cid="${result.random[i].id}" onclick="xlecxDownloader(this.getAttribute('cid'))">Download</button>`
-			element.innerHTML = html
-			miniElement = document.createElement('div')
-			miniElement.setAttribute('id', result.random[i].id)
-			miniElement.onmousedown = e => {
-				e.preventDefault()
-				xlecxOpenPost(WhichMouseButton(e), e.target.getAttribute('id'))
-			}
-			element.appendChild(miniElement)
-			elementContainer.appendChild(element)
-		}
-		elementContainerContainer.appendChild(elementContainer)
-		container.appendChild(elementContainerContainer)
-
-		tabs[thisTabIndex].page.appendChild(container)
+		html += '</div></div></div>'
+		tabs[thisTabIndex].page.innerHTML = html
 		clearDownloadedComics(tabs[thisTabIndex].page, 0)
 	})
 }
 
-function xlecxOpenPost(whitchbutton, id, updateTabIndex) {
-	if (whitchbutton == 3) return
-	let makeNewPage = false, pageId, thisTabIndex
-	if (whitchbutton == 2) makeNewPage = true
+function xlecxOpenPost(makeNewPage, id, updateTabIndex) {
+	let pageId, thisTabIndex
 	if (updateTabIndex == null) updateTabIndex = true
 	if (makeNewPage) {
 		pageId = createNewTab(`xlecxOpenPost(0, '${id}', false)`, true, 0)
@@ -230,6 +144,7 @@ function xlecxOpenPost(whitchbutton, id, updateTabIndex) {
 		}
 		tabs[thisTabIndex].rename(result.title)
 		tabs[thisTabIndex].icon.setAttribute('src', 'Image/sites/xlecx-30x30.jpg')
+		tabs[thisTabIndex].ClearLinks()
 		let image_container = document.createElement('div')
 		image_container.classList.add('xlecx-image-container-1x1')
 		let containerContainer = document.createElement('div')
@@ -420,18 +335,13 @@ function xlecxOpenPost(whitchbutton, id, updateTabIndex) {
 	})
 }
 
-function xlecxOpenCategory(name, page, shortName, whitchbutton, updateTabIndex) {
-	if (whitchbutton == 3) return
-	let makeNewPage = false
-	if (whitchbutton == 2) makeNewPage = true
+function xlecxOpenCategory(name, page, shortName, makeNewPage, updateTabIndex) {
 	name = name || null
 	page = page || 1
 	shortName = shortName || null
 	if (name == null || shortName == null) return
 	if (updateTabIndex == null) updateTabIndex = true
 	let pageId = activeTabComicId, thisTabIndex
-	
-	
 	
 	if (makeNewPage) {
 		pageId = createNewTab(`xlecxOpenCategory('${name}', ${page}, '${shortName}', 0, false)`, true, 0)
@@ -474,6 +384,7 @@ function xlecxOpenCategory(name, page, shortName, whitchbutton, updateTabIndex) 
 		}
 		tabs[thisTabIndex].rename(`${shortName} - ${page}`)
 		tabs[thisTabIndex].icon.setAttribute('src', 'Image/sites/xlecx-30x30.jpg')
+		tabs[thisTabIndex].ClearLinks()
 		let container = document.createElement('div')
 		container.classList.add("xlecx-container")
 		let elementContainerContainer, elementContainer, element, miniElement, html, valueStorage
@@ -724,6 +635,7 @@ function xlecxOpenTag(name, page, whitch, whitchbutton, updateTabIndex) {
 				}
 				tabs[thisTabIndex].rename(`${name} - ${page}`)
 				tabs[thisTabIndex].icon.setAttribute('src', 'Image/sites/xlecx-30x30.jpg')
+				tabs[thisTabIndex].ClearLinks()
 				let valueStorage
 	
 				if (result.pagination == undefined) valueStorage = 0
@@ -756,6 +668,7 @@ function xlecxOpenTag(name, page, whitch, whitchbutton, updateTabIndex) {
 				}
 				tabs[thisTabIndex].rename(`${name} - ${page}`)
 				tabs[thisTabIndex].icon.setAttribute('src', 'Image/sites/xlecx-30x30.jpg')
+				tabs[thisTabIndex].ClearLinks()
 				let valueStorage
 	
 				if (result.pagination == undefined) valueStorage = 0
@@ -788,6 +701,7 @@ function xlecxOpenTag(name, page, whitch, whitchbutton, updateTabIndex) {
 				}
 				tabs[thisTabIndex].rename(`${name} - ${page}`)
 				tabs[thisTabIndex].icon.setAttribute('src', 'Image/sites/xlecx-30x30.jpg')
+				tabs[thisTabIndex].ClearLinks()
 				let valueStorage
 	
 				if (result.pagination == undefined) valueStorage = 0
@@ -820,6 +734,7 @@ function xlecxOpenTag(name, page, whitch, whitchbutton, updateTabIndex) {
 				}
 				tabs[thisTabIndex].rename(`${name} - ${page}`)
 				tabs[thisTabIndex].icon.setAttribute('src', 'Image/sites/xlecx-30x30.jpg')
+				tabs[thisTabIndex].ClearLinks()
 				let valueStorage
 	
 				if (result.pagination == undefined) valueStorage = 0
@@ -893,6 +808,7 @@ function xlecxSearch(text, page, whitchbutton, updateTabIndex) {
 		}
 		tabs[thisTabIndex].rename(`S: ${convertToURL(text, true)} - ${page}`)
 		tabs[thisTabIndex].icon.setAttribute('src', 'Image/sites/xlecx-30x30.jpg')
+		tabs[thisTabIndex].ClearLinks()
 		let container = document.createElement('div')
 		container.classList.add("xlecx-container")
 		let elementContainerContainer = document.createElement('div')
@@ -993,10 +909,8 @@ function xlecxSearch(text, page, whitchbutton, updateTabIndex) {
 	})
 }
 
-function xlecxOpenAllTags(whitchbutton, updateTabIndex) {
-	if (whitchbutton == 3) return
-	let makeNewPage = false, pageId, thisTabIndex
-	if (whitchbutton == 2) makeNewPage = true
+function xlecxOpenAllTags(makeNewPage, updateTabIndex) {
+	let pageId, thisTabIndex
 	if (updateTabIndex == null) updateTabIndex = true
 	if (makeNewPage) {
 		pageId = createNewTab('xlecxOpenAllTags(0, false)', true, 0)
@@ -1034,6 +948,7 @@ function xlecxOpenAllTags(whitchbutton, updateTabIndex) {
 		}
 		tabs[thisTabIndex].rename('All Tags')
 		tabs[thisTabIndex].icon.setAttribute('src', 'Image/sites/xlecx-30x30.jpg')
+		tabs[thisTabIndex].ClearLinks()
 		let container = document.createElement('div')
 		container.classList.add("xlecx-container")
 		let elementContainerContainer, elementContainer, element, miniElement, html, valueStorage
@@ -1088,22 +1003,22 @@ function xlecxJumpPage(index, page) {
 	switch (index) {
 		case 0:
 			searchTimer = setTimeout(() => {
-				xlecxSearch(tabs[activeTabIndex].s.replace("'", "\\'"), page, 0)
+				xlecxSearch(tabs[activeTabIndex].s.replace("'", "\\'"), page, false)
 			}, 185)
 			break
 		case 1:
 			searchTimer = setTimeout(() => {
-				xlecxChangePage(page, 0)
+				xlecxChangePage(page, false)
 			}, 185)
 			break
 		case 2:
 			searchTimer = setTimeout(() => {
-				xlecxOpenCategory(tabs[activeTabIndex].options[0], page, tabs[activeTabIndex].options[1], 0)
+				xlecxOpenCategory(tabs[activeTabIndex].options[0], page, tabs[activeTabIndex].options[1], false)
 			}, 185)
 			break
 		case 3:
 			searchTimer = setTimeout(() => {
-				xlecxOpenTag(tabs[activeTabIndex].options[0], page, tabs[activeTabIndex].options[1], 0)
+				xlecxOpenTag(tabs[activeTabIndex].options[0], page, tabs[activeTabIndex].options[1], false)
 			}, 185)
 			break
 	}

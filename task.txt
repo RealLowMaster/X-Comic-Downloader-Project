@@ -40,10 +40,9 @@ DB => {
 		]
 	]
 	have 1 => {
-		site = s
-		comic_real_id = i
-		downloaded = d
-		_id
+		s: [SiteIndex...],
+		i: [Indexs...], => *
+		c: [IsComicDownloaded...] => 0 || 1
 	}
 	characters => [
 		'name'
@@ -94,6 +93,7 @@ Added To Version {
 	Fix Bug: When renaming still can use hotkeys
 	Fix Some Database Optimization Bugs
 	Fix Some Right Click Menu Bugs
+	Optimize Have Database and its System
 	Merge Collections To Normal Gallery View
 	Change Slider System and Fix Some Bugs
 	Make Image Stop Loading System Work Better
