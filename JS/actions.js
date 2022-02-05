@@ -4,6 +4,7 @@ function error(txt, onclick) {
 	const element = document.createElement('div')
 	element.classList.add('action-error')
 
+	console.error(err)
 	let html = `<div></div><div><p>${err}</p>`
 	if (onclick == null) html += `<button class="btn btn-danger" onclick="this.parentElement.parentElement.remove()">OK</button></div></div>`
 	else html += `<button onclick="${onclick}">OK</button></div>`

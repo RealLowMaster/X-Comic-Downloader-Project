@@ -323,5 +323,5 @@
 	color: #fff;
 }
 
-.xlecx-pagination > button[disable="true"] { background-color: #d20068 }
+.xlecx-pagination > button:disabled { background-color: #d20068 }
 .xlecx-pagination > button:hover { background-color: #d20068 }

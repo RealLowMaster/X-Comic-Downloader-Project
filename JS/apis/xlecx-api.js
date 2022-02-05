@@ -109,8 +109,8 @@ class XlecxAPI {
 				}
 
 				// Pagination
+				arr.pagination = []
 				if (pagination == true) {
-					arr.pagination = [];
 					li = htmlDoc.getElementById('bottom-nav').querySelector('.navigation').children
 					for (let i = 0; i < li.length; i++) {
 						let value, pPage
@@ -237,8 +237,8 @@ class XlecxAPI {
 				}
 
 				// Pagination
+				arr.pagination = []
 				if (pagination == true) {
-					arr.pagination = []
 					li = htmlDoc.getElementById('bottom-nav').querySelector('.navigation').children
 					for (let i = 0; i < li.length; i++) {
 						let value, pPage
@@ -550,9 +550,9 @@ class XlecxAPI {
 				// Pagination
 				if (pagination == true) {
 					li = htmlDoc.getElementById('bottom-nav') || null
+					arr.pagination = []
 					if (li != null) {
 						li = li.querySelector('.navigation').children || null
-						arr.pagination = []
 						for (let i = 0; i < li.length; i++) {
 							let value, pPage
 							if (li[i].textContent == "") {
@@ -637,9 +637,9 @@ class XlecxAPI {
 				// Pagination
 				if (pagination == true) {
 					li = htmlDoc.getElementById('bottom-nav') || null
+					arr.pagination = []
 					if (li != null) {
 						li = li.querySelector('.navigation').children || null
-						arr.pagination = []
 						for (let i = 0; i < li.length; i++) {
 							let value, pPage
 							if (li[i].textContent == "") {
@@ -724,9 +724,9 @@ class XlecxAPI {
 				// Pagination
 				if (pagination == true) {
 					li = htmlDoc.getElementById('bottom-nav') || null
+					arr.pagination = []
 					if (li != null) {
 						li = li.querySelector('.navigation').children || null
-						arr.pagination = []
 						for (let i = 0; i < li.length; i++) {
 							let value, pPage
 							if (li[i].textContent == "") {
@@ -811,9 +811,9 @@ class XlecxAPI {
 				// Pagination
 				if (pagination == true) {
 					li = htmlDoc.getElementById('bottom-nav') || null
+					arr.pagination = []
 					if (li != null) {
 						li = li.querySelector('.navigation').children || null
-						arr.pagination = []
 						for (let i = 0; i < li.length; i++) {
 							let value, pPage
 							if (li[i].textContent == "") {
@@ -904,8 +904,8 @@ class XlecxAPI {
 				// Pagination
 				if (pagination == true) {
 					li = htmlDoc.getElementById('bottom-nav') || null
+					arr.pagination = []
 					if (li != null) {
-						arr.pagination = []
 						li = li.querySelector('.navigation').children
 						for (let i = 0; i < li.length; i++) {
 							let value, pPage

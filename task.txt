@@ -106,6 +106,7 @@ Doing {
 }
 
 Tasks => {
+	Fix History
 	Add Download To Related in nhentai
 	Fix Bug: nhentai -> Search -> Otokonoko Heaven Vol. 4 Jump Page
 	Optimize Comic Image Loading

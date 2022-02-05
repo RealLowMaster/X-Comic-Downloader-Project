@@ -252,7 +252,7 @@ class Tab {
 					xlecxOpenAllTags(newTab)
 					break
 				case 1:
-					xlecxOpenCategory(this.linksValue[index][0], 1, this.linksValue[index][1], newTab)
+					xlecxOpenCategory(this.linksValue[index][0], this.linksValue[index][1], this.linksValue[index][2], newTab)
 					break
 				case 2:
 					xlecxOpenPost(newTab, this.linksValue[index])
@@ -260,9 +260,18 @@ class Tab {
 				case 3:
 					xlecxChangePage(this.linksValue[index], newTab)
 					break
+				case 4:
+					xlecxOpenTag(this.linksValue[index][0], this.linksValue[index][1], this.linksValue[index][2], newTab)
+					break
+				case 5:
+					xlecxSearch(this.linksValue[index][0], this.linksValue[index][1], newTab)
+					break
 			}
 		} else if (site == 1) {
-
+			switch(this.linksIndex[index]) {
+				case 0:
+					break
+			}
 		}
 	}
 
