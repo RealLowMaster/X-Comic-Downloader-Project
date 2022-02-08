@@ -1044,8 +1044,33 @@ function LinkClick(tindex, lindex) {
 	if (key == 1) tabs[tindex].Clicked(lindex)
 	else if (key == 2) tabs[tindex].Clicked(lindex, true)
 	else if (key == 3) {
+		const menu = document.getElementById('br-crmenu')
+		const children = menu.children
+		let x = e.clientX, y = e.clientY
+		if (window.innerWidth <= x+170) x = window.innerWidth - 170
+		if (window.innerHeight <= y+menu.clientHeight) y = window.innerHeight - menu.clientHeight
+
+		children[0].setAttribute('onclick', `tabs[${tindex}].Clicked(${lindex},false)`)
+		children[1].setAttribute('onclick', `tabs[${tindex}].Clicked(${lindex},true)`)
 		
+
+
+		menu.style.display = 'block'
+		menu.style.top = y+'px'
+		menu.style.left = x+'px'
+		window.addEventListener('click', closeBRCMenu)
+		window.addEventListener('wheel', closeBRCMenu)
+		window.addEventListener('resize', closeBRCMenu)
+		window.addEventListener('keydown', closeBRCMenu)
 	}
+}
+
+function closeBRCMenu() {
+	document.getElementById('br-crmenu').style.display = 'none'
+	window.removeEventListener('click', closeBRCMenu)
+	window.removeEventListener('wheel', closeBRCMenu)
+	window.removeEventListener('resize', closeBRCMenu)
+	window.removeEventListener('keydown', closeBRCMenu)
 }
 
 // Key Event

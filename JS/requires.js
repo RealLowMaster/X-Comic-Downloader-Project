@@ -582,29 +582,6 @@ function convertToURL(text = 'text', backward = false) {
 	}
 }
 
-function loadImagesOneByOne(images) {
-	if (comicImageContainer.children.length <= 0 || images.length <= 0) return
-	let src = images[0].getAttribute('data-src')
-	images[0].removeAttribute('data-src')
-	if (!src) {
-		if (images[0].complete) {
-			images.shift()
-			setTimeout(() => {
-				loadImagesOneByOne(images)
-			}, 1)
-		} else {
-			setTimeout(() => {
-				loadImagesOneByOne(images)
-			}, 250)
-		}
-	} else {
-		images[0].src = src
-		setTimeout(() => {
-			loadImagesOneByOne(images)
-		}, 1)
-	}
-}
-
 function ChangeScreenMode(fullscreen = null, save = true) {
 	if (fullscreen == null) fullscreen = !ThisWindow.isFullScreen()
 

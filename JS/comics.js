@@ -6,7 +6,7 @@ const comicArtistsContainer = document.getElementById('c-p-a')
 const comicParodyContainer = document.getElementById('c-p-p')
 const comicTagsContainer = document.getElementById('c-p-ts')
 const comicImageContainer = document.getElementById('c-p-i')
-let off_site = null, off_id = null, off_comic_id = null, need_repair = [], in_comic = false, comic_menu_id = null, passKeyEvent = null, export_comic_id = null, comic_panel_menu_info = null, isThumbing = false, isRepairing = false, isRepairingContiue = false, repair_all_list = null, repair_all_error_list = null, closingApp = false, pr_c_folder = null
+let off_site = null, off_id = null, off_comic_id = null, need_repair = [], in_comic = false, comic_menu_id = null, passKeyEvent = null, export_comic_id = null, comic_panel_menu_info = null, isThumbing = false, isRepairing = false, isRepairingContiue = false, repair_all_list = null, repair_all_error_list = null, closingApp = false, pr_c_folder = null, comic_load_id = null
 
 function onComicClicked(id, thumb, optimize) {
 	const e = window.event, key = e.which
@@ -230,7 +230,7 @@ function openComic(id) {
 						src = 'Image/no-img-300x300.png'
 						save = `onclick="SliderManager.Open(${i})"`
 					} else save = `onmousedown="OnComicPanelImageClick(${i}, ${id})"`
-					html += `<img data-src="${src}" ${save}>`
+					html += `<img data-src="${src}" ${save} loading="lazy">`
 					slider_overview.push(src)
 				} else {
 					formatIndex++
@@ -240,7 +240,7 @@ function openComic(id) {
 					} catch(err) {
 						for (let j = i; j < ImagesCount; j++) {
 							need_repair.push([`${dirUL}/${id}${image}/`, j, image])
-							html += `<img data-src="Image/no-img-300x300.png" onclick="SliderManager.Open(${i})">`
+							html += `<img data-src="Image/no-img-300x300.png" onclick="SliderManager.Open(${i})" loading="lazy">`
 							slider_overview.push('Image/no-img-300x300.png')
 						}
 						break
@@ -251,19 +251,19 @@ function openComic(id) {
 						src = 'Image/no-img-300x300.png'
 						save = `onclick="SliderManager.Open(${i})"`
 					} else save = `onmousedown="OnComicPanelImageClick(${i}, ${id})"`
-					html += `<img data-src="${src}" ${save}>`
+					html += `<img data-src="${src}" ${save} loading="lazy">`
 					slider_overview.push(src)
 				}
 			}
 			
-
 			if (need_repair.length == 0) document.getElementById('c-p-r-btn').style.display = 'none'
 			else document.getElementById('c-p-r-btn').style.display = 'flex'
 
 			comicImageContainer.innerHTML = html
 			SliderManager.Set(slider_overview)
 
-			loadImagesOneByOne([...comicImageContainer.getElementsByTagName('img')])
+			comic_load_id = new Date().getTime()
+			loadImagesOneByOne([...comicImageContainer.getElementsByTagName('img')], comic_load_id)
 
 			// Load Infos
 			if (doc.g != null) {
@@ -319,6 +319,21 @@ function openComic(id) {
 	findComic()
 }
 
+function loadImagesOneByOne(images, id) {
+	if (id != comic_load_id || images.length == 0) return
+	const src = images[0].getAttribute('data-src')
+	images[0].removeAttribute('data-src')
+	if (!src) {
+		if (images[0].complete) {
+			images.shift()
+			loadImagesOneByOne(images, id)
+		} else setTimeout(() => { loadImagesOneByOne(images, id) }, 300)
+	} else {
+		images[0].src = src
+		loadImagesOneByOne(images, id)
+	}
+}
+
 function closeComicPanel() {
 	comicPanel.style.display = 'none'
 	keydownEventIndex = 0
@@ -327,6 +342,7 @@ function closeComicPanel() {
 	off_site = null
 	off_comic_id = null
 	off_id = null
+	comic_load_id = null
 	document.getElementById('main').style.display = 'flex'
 
 	comicCharactersContainer.innerHTML = ''

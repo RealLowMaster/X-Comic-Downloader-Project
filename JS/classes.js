@@ -828,6 +828,7 @@ class OfflinePageManager {
 		this.#scroll = document.getElementById('main-body').scrollTop
 		this.container.innerHTML = null
 		this.#titleDom.innerHTML = null
+		document.getElementById('pagination').style.display = 'none'
 
 		let load = {}
 		if (this.search != null) load.n = new RegExp(this.search.toLowerCase())
@@ -870,6 +871,7 @@ class OfflinePageManager {
 		this.#scroll = document.getElementById('main-body').scrollTop
 		this.container.innerHTML = null
 		this.#titleDom.innerHTML = null
+		document.getElementById('pagination').style.display = 'none'
 
 		const load = {}
 		if (this.search != null) load.n = new RegExp(this.search.toLowerCase())
@@ -931,6 +933,7 @@ class OfflinePageManager {
 		this.#scroll = document.getElementById('main-body').scrollTop
 		this.container.innerHTML = null
 		this.#titleDom.innerHTML = null
+		document.getElementById('pagination').style.display = 'none'
 
 		let load = {}
 		if (this.search != null) load.n = new RegExp(this.search.toLowerCase())
