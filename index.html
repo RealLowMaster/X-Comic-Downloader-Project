@@ -100,7 +100,7 @@
 	
 			<!-- Body -->
 			<div id="main-body">
-				<div id="off-sorter-toggle" onclick="PageManager.ToggleOffSorter()">S</div>
+				<div id="off-sorter-toggle" style="display:none" onclick="PageManager.ToggleOffSorter()">S</div>
 				<p id="off-page-title"></p>
 				<div id="off-page-sort">
 					<div onclick="PageManager.Sort(0)" title="Sort Newest To Oldest" active><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M330.17 258.91a79 79 0 0 0-55 54.17c-14.27 51.05 21.19 97.77 68.83 102.53a84.07 84.07 0 0 1-20.85 12.91c-7.57 3.4-10.8 12.47-8.18 20.34l9.9 20c2.87 8.63 12.53 13.49 20.9 9.91 58-24.76 86.25-61.61 86.25-132V336c-.02-51.21-48.4-91.34-101.85-77.09zM352 356a20 20 0 1 1 20-20 20 20 0 0 1-20 20zM304 96h16v64h-16a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h96a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16h-16V48a16 16 0 0 0-16-16h-48a16 16 0 0 0-14.29 8.83l-16 32A16 16 0 0 0 304 96zM107.31 36.69a16 16 0 0 0-22.62 0l-80 96C-5.35 142.74 1.78 160 16 160h48v304a16 16 0 0 0 16 16h32a16 16 0 0 0 16-16V160h48c14.21 0 21.38-17.24 11.31-27.31z"></path></svg></div>
@@ -108,34 +108,41 @@
 					<div onclick="PageManager.Sort(2)" title="Sort Z To A"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M176 352h-48V48a16 16 0 0 0-16-16H80a16 16 0 0 0-16 16v304H16c-14.19 0-21.36 17.24-11.29 27.31l80 96a16 16 0 0 0 22.62 0l80-96C197.35 369.26 190.22 352 176 352zm112-128h128a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16h-56l61.26-70.45A32 32 0 0 0 432 65.63V48a16 16 0 0 0-16-16H288a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h56l-61.26 70.45A32 32 0 0 0 272 190.37V208a16 16 0 0 0 16 16zm159.06 234.62l-59.27-160A16 16 0 0 0 372.72 288h-41.44a16 16 0 0 0-15.07 10.62l-59.27 160A16 16 0 0 0 272 480h24.83a16 16 0 0 0 15.23-11.08l4.42-12.92h71l4.41 12.92A16 16 0 0 0 407.16 480H432a16 16 0 0 0 15.06-21.38zM335.61 400L352 352l16.39 48z"></path></svg></div>
 					<div onclick="PageManager.Sort(3)" title="Sort A To Z"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M16 160h48v304a16 16 0 0 0 16 16h32a16 16 0 0 0 16-16V160h48c14.21 0 21.38-17.24 11.31-27.31l-80-96a16 16 0 0 0-22.62 0l-80 96C-5.35 142.74 1.78 160 16 160zm272 64h128a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16h-56l61.26-70.45A32 32 0 0 0 432 65.63V48a16 16 0 0 0-16-16H288a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h56l-61.26 70.45A32 32 0 0 0 272 190.37V208a16 16 0 0 0 16 16zm159.06 234.62l-59.27-160A16 16 0 0 0 372.72 288h-41.44a16 16 0 0 0-15.07 10.62l-59.27 160A16 16 0 0 0 272 480h24.83a16 16 0 0 0 15.23-11.08l4.42-12.92h71l4.41 12.92A16 16 0 0 0 407.16 480H432a16 16 0 0 0 15.06-21.38zM335.61 400L352 352l16.39 48z"></path></svg></div>
 				</div>
-				<div id="off-sorter">
+				<div id="off-sorter" style="display:none">
 					<div>
-						<p>Groups</p>
-						<div></div>
+						Groups:
+						<div id="os-g"></div>
+						<div onclick="PageManager.addInfo = true;openInfoPanel(0)">+</div>
 					</div>
 					<div>
-						<p>Artists</p>
-						<div></div>
+						Artists:
+						<div id="os-a"></div>
+						<div onclick="PageManager.addInfo = true;openInfoPanel(1)">+</div>
 					</div>
 					<div>
-						<p>Parodies</p>
-						<div></div>
+						Parodies:
+						<div id="os-p"></div>
+						<div onclick="PageManager.addInfo = true;openInfoPanel(2)">+</div>
 					</div>
 					<div>
-						<p>Tags</p>
-						<div></div>
+						Tags:
+						<div id="os-t"></div>
+						<div onclick="PageManager.addInfo = true;openInfoPanel(3)">+</div>
 					</div>
 					<div>
-						<p>Characters</p>
-						<div></div>
+						Characters:
+						<div id="os-c"></div>
+						<div onclick="PageManager.addInfo = true;openInfoPanel(4)">+</div>
 					</div>
 					<div>
-						<p>Languages</p>
-						<div></div>
+						Languages:
+						<div id="os-l"></div>
+						<div onclick="PageManager.addInfo = true;openInfoPanel(5)">+</div>
 					</div>
 					<div>
-						<p>Categories</p>
-						<div></div>
+						Categories:
+						<div id="os-ca"></div>
+						<div onclick="PageManager.addInfo = true;openInfoPanel(6)">+</div>
 					</div>
 				</div>
 				<div id="comic-container" page=""></div>
@@ -354,6 +361,7 @@
 		<div class="right-cmenu" id="br-crmenu">
 			<button type="button">Open</button>
 			<button type="button">Open In New Tab</button>
+			<button type="button" style="display:none">Add To Bookmark</button>
 			<button type="button">Add To Have</button>
 			<button type="button">Remove From Have</button>
 			<button type="button">Download</button>

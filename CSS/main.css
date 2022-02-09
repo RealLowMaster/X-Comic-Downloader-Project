@@ -306,6 +306,48 @@ input::-webkit-input-placeholder { user-select: none }
 	left: 15px;
 }
 
+#off-sorter {
+	display: block;
+	width: calc(100% - 40px);
+	margin: 25px auto 5px auto;
+	color: var(--black-white);
+	border: 2px solid #2488cb;
+	border-radius: 4px;
+	user-select: none;
+}
+
+#off-sorter > div {
+	display: block;
+	width: 100%;
+	margin: 5px;
+}
+
+#off-sorter > div > div:first-child { display: inline-block }
+
+#off-sorter > div > div:first-child > div {
+	display: inline-block;
+	padding: 4px 8px;
+	margin: 3px;
+	background-color: #666;
+	color: #fff;
+	border-radius: 4px;
+	text-transform: capitalize;
+	cursor: pointer;
+}
+
+#off-sorter > div > div:first-child > div:hover {
+	color: var(--cp-info-btns-hover-color);
+}
+
+#off-sorter > div > div:last-child {
+	display: inline-block;
+	padding: 0 4px;
+	background-color: var(--black-white);
+	color: var(--white-black);
+	border-radius: 4px;
+	cursor: pointer;
+}
+
 .right-cmenu {
 	display: none;
 	width: 170px;

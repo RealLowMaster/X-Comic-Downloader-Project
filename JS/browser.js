@@ -1037,7 +1037,7 @@ function askClearBrowserHistory() {
 }
 
 // Right Click On Comic
-function LinkClick(tindex, lindex) {
+function LinkClick(tindex, lindex, who = null) {
 	const e = window.event, key = e.which
 	e.preventDefault()
 	if (tabs[tindex] == null || e.target.tagName == 'BUTTON') return
@@ -1052,8 +1052,14 @@ function LinkClick(tindex, lindex) {
 
 		children[0].setAttribute('onclick', `tabs[${tindex}].Clicked(${lindex},false)`)
 		children[1].setAttribute('onclick', `tabs[${tindex}].Clicked(${lindex},true)`)
-		
 
+		if (who != null) {
+
+		} else {
+			children[3].style.display = 'none'
+			children[4].style.display = 'none'
+			children[5].style.display = 'none'
+		}
 
 		menu.style.display = 'block'
 		menu.style.top = y+'px'

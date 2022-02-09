@@ -744,6 +744,7 @@ class OfflinePageManager {
 	#titleDom
 	#infoSearchs
 	#infoNames
+	#infosIds
 
 	constructor() {
 		this.page = 1
@@ -752,7 +753,7 @@ class OfflinePageManager {
 		this.loadIndex = 0
 		this.name = null
 		this.infoIndex = null
-		this.infoNameIndex = null
+		this.addInfo = false
 		this.container = document.getElementById('comic-container')
 		this.sort = {_id:-1}
 		this.#scroll = 0
@@ -760,13 +761,13 @@ class OfflinePageManager {
 		this.#title = null
 		this.#titleDom = document.getElementById('off-page-title')
 		this.#infoSearchs = [
-			'groupsDB.indexOf({})',
-			'artistsDB.indexOf({})',
-			'parodiesDB.indexOf({})',
-			'tagsDB.indexOf({})',
-			'charactersDB.indexOf({})',
-			'languagesDB.indexOf({})',
-			'categoriesDB.indexOf({})',
+			'groupsDB',
+			'artistsDB',
+			'parodiesDB',
+			'tagsDB',
+			'charactersDB',
+			'languagesDB',
+			'categoriesDB'
 		]
 		this.#infoNames = [
 			'Groups',
@@ -776,6 +777,16 @@ class OfflinePageManager {
 			'Characters',
 			'Languages',
 			'Categories'
+		]
+		this.#infosIds = ['os-g','os-a','os-p','os-t','os-c','os-l','os-ca']
+		this.infos = [
+			[], // Groups 0
+			[], // Artists 1
+			[], // Parodies 2
+			[], // Tags 3
+			[], // Characters 4
+			[], // Languages 5
+			[] // Categories 6
 		]
 	}
 
@@ -832,6 +843,7 @@ class OfflinePageManager {
 		this.container.innerHTML = null
 		this.#titleDom.innerHTML = null
 		document.getElementById('pagination').style.display = 'none'
+		this.DisplaySorter(false)
 
 		let load = {}
 		if (this.search != null) load.n = new RegExp(this.search.toLowerCase())
@@ -854,18 +866,55 @@ class OfflinePageManager {
 		})
 	}
 
+	GetInfoName() {
+		let found_count = 0, name
+		for (let i = 0, l = this.infos.length; i < l; i++) {
+			if (this.infos[i].length == 0) continue
+			if (found_count == 0) name = eval(`${this.#infoSearchs[i]}[${this.infos[i][0]}]`)
+			found_count += this.infos[i].length
+		}
+		if (found_count == 0) name = null
+		else if (found_count > 1) name = 'Combine'
+		return name
+	}
+
 	SetInfo(name, index) {
-		this.name = name
 		this.infoIndex = index
-		const result = eval(this.#infoSearchs[index].replace('{}', `'${name.replace(/'/g, "\\'")}'`))
+		if (!this.addInfo) {
+			this.infos = [[],[],[],[],[],[],[]]
+			for (let i = 0, l = this.#infosIds.length; i < l; i++) document.getElementById(this.#infosIds[i]).innerHTML = null
+		}
+		this.addInfo = false
+		const result = eval(`${this.#infoSearchs[index]}.indexOf('${name.replace(/'/g, "\\'")}')`)
 		if (result < 0) { error('Info not Found! Maybe this is Bug! Please Report it with info name.'); return }
-		this.infoNameIndex = result
+		if (this.infos[index].indexOf(result) < 0) {
+			this.infos[index].push(result)
+			const element = document.createElement('div')
+			element.innerText = name
+			element.setAttribute('onclick', `PageManager.RemoveInfo(${index},${result},this)`)
+			document.getElementById(this.#infosIds[index]).appendChild(element)
+		}
+		this.name = this.GetInfoName()
 		this.search = null
 		document.getElementById('offline-search-form-input').value = null
 		closeInfoPanel()
 		closeComicPanel()
-		this.#title = this.#infoNames[index]+' > <span class="nhentai-glow">'+name+'</span> > Page '
+		this.#title = this.#infoNames[index]+' > <span class="nhentai-glow">'+this.name+'</span> > Page '
 		this.LoadInfo(1)
+	}
+
+	RemoveInfo(index, value, who) {
+		try { who.remove() } catch(err) { console.error(err) }
+		this.addInfo = false
+		const list_index = this.infos[index].indexOf(value)
+		if (list_index > -1) this.infos[index].splice(list_index, 1)
+		this.name = this.GetInfoName()
+		if (this.name != null) {
+			this.search = null
+			document.getElementById('offline-search-form-input').value = null
+			this.#title = this.#infoNames[index]+' > <span class="nhentai-glow">'+this.name+'</span> > Page '
+			this.LoadInfo(1)
+		} else this.Home()
 	}
 
 	LoadInfo(page = 1) {
@@ -875,6 +924,7 @@ class OfflinePageManager {
 		this.container.innerHTML = null
 		this.#titleDom.innerHTML = null
 		document.getElementById('pagination').style.display = 'none'
+		this.DisplaySorter()
 
 		const load = {}
 		if (this.search != null) load.n = new RegExp(this.search.toLowerCase())
@@ -882,36 +932,82 @@ class OfflinePageManager {
 		db.comics.find(load).sort(this.sort).exec((err, doc) => {
 			if (err) { error(err); return }
 
-			let check
-
-			switch(this.infoIndex) {
-				case 0:
-					check = 'g'
-					break
-				case 1:
-					check = 'a'
-					break
-				case 2:
-					check = 'd'
-					break
-				case 3:
-					check = 't'
-					break
-				case 4:
-					check = 'h'
-					break
-				case 5:
-					check = 'l'
-					break
-				case 6:
-					check = 'e'
-					break
+			let result = [], hasSaved = false
+			if (this.infos[0].length != 0) {
+				for (let i = 0, l = this.infos[0].length; i < l; i++) {
+					const new_save = []
+					if (hasSaved) {
+						for (let j = 0, n = result.length; j < n; j++) if (result[j].g.indexOf(this.infos[0][i]) > -1) new_save.push(result[j])
+						result = new_save
+					} else for (let j = 0, n = doc.length; j < n; j++) if (doc[j].g != null && doc[j].g.indexOf(this.infos[0][i]) > -1) result.push(doc[j])
+					hasSaved = true
+				}
 			}
 
-			const result = []
-			for (let i = 0; i < doc.length; i++) {
-				if (doc[i][check] == null || doc[i][check].length == 0) continue
-				if (doc[i][check].indexOf(this.infoNameIndex) > -1) result.push(doc[i])
+			if (this.infos[1].length != 0) {
+				for (let i = 0, l = this.infos[1].length; i < l; i++) {
+					const new_save = []
+					if (hasSaved) {
+						for (let j = 0, n = result.length; j < n; j++) if (result[j].a.indexOf(this.infos[1][i]) > -1) new_save.push(result[j])
+						result = new_save
+					} else for (let j = 0, n = doc.length; j < n; j++) if (doc[j].a != null && doc[j].a.indexOf(this.infos[1][i]) > -1) result.push(doc[j])
+					hasSaved = true
+				}
+			}
+
+			if (this.infos[2].length != 0) {
+				for (let i = 0, l = this.infos[2].length; i < l; i++) {
+					const new_save = []
+					if (hasSaved) {
+						for (let j = 0, n = result.length; j < n; j++) if (result[j].d.indexOf(this.infos[2][i]) > -1) new_save.push(result[j])
+						result = new_save
+					} else for (let j = 0, n = doc.length; j < n; j++) if (doc[j].d != null && doc[j].d.indexOf(this.infos[2][i]) > -1) result.push(doc[j])
+					hasSaved = true
+				}
+			}
+
+			if (this.infos[3].length != 0) {
+				for (let i = 0, l = this.infos[3].length; i < l; i++) {
+					const new_save = []
+					if (hasSaved) {
+						for (let j = 0, n = result.length; j < n; j++) if (result[j].t.indexOf(this.infos[3][i]) > -1) new_save.push(result[j])
+						result = new_save
+					} else for (let j = 0, n = doc.length; j < n; j++) if (doc[j].t != null && doc[j].t.indexOf(this.infos[3][i]) > -1) result.push(doc[j])
+					hasSaved = true
+				}
+			}
+
+			if (this.infos[4].length != 0) {
+				for (let i = 0, l = this.infos[4].length; i < l; i++) {
+					const new_save = []
+					if (hasSaved) {
+						for (let j = 0, n = result.length; j < n; j++) if (result[j].h.indexOf(this.infos[4][i]) > -1) new_save.push(result[j])
+						result = new_save
+					} else for (let j = 0, n = doc.length; j < n; j++) if (doc[j].h != null && doc[j].h.indexOf(this.infos[4][i]) > -1) result.push(doc[j])
+					hasSaved = true
+				}
+			}
+
+			if (this.infos[5].length != 0) {
+				for (let i = 0, l = this.infos[5].length; i < l; i++) {
+					const new_save = []
+					if (hasSaved) {
+						for (let j = 0, n = result.length; j < n; j++) if (result[j].l.indexOf(this.infos[5][i]) > -1) new_save.push(result[j])
+						result = new_save
+					} else for (let j = 0, n = doc.length; j < n; j++) if (doc[j].l != null && doc[j].l.indexOf(this.infos[5][i]) > -1) result.push(doc[j])
+					hasSaved = true
+				}
+			}
+
+			if (this.infos[6].length != 0) {
+				for (let i = 0, l = this.infos[6].length; i < l; i++) {
+					const new_save = []
+					if (hasSaved) {
+						for (let j = 0, n = result.length; j < n; j++) if (result[j].e.indexOf(this.infos[6][i]) > -1) new_save.push(result[j])
+						result = new_save
+					} else for (let j = 0, n = doc.length; j < n; j++) if (doc[j].e != null && doc[j].e.indexOf(this.infos[6][i]) > -1) result.push(doc[j])
+					hasSaved = true
+				}
 			}
 
 			const list = []
@@ -937,6 +1033,7 @@ class OfflinePageManager {
 		this.container.innerHTML = null
 		this.#titleDom.innerHTML = null
 		document.getElementById('pagination').style.display = 'none'
+		this.DisplaySorter(false)
 
 		let load = {}
 		if (this.search != null) load.n = new RegExp(this.search.toLowerCase())
@@ -984,6 +1081,7 @@ class OfflinePageManager {
 	}
 
 	#Content(allPages, list, page, paginationTemplate) {
+		this.addInfo = false
 		let html = ''
 		this.#titleDom.innerHTML = this.#title+page
 		const time = new Date().getTime()
@@ -1050,8 +1148,20 @@ class OfflinePageManager {
 		return [min, max, allPages]
 	}
 
+	DisplaySorter(show = true) {
+		if (show) {
+			document.getElementById('off-sorter-toggle').style.display = 'inline-block'
+		} else {
+			document.getElementById('off-sorter-toggle').style.display = 'none'
+			document.getElementById('off-sorter').style.display = 'none'
+			this.infos = [[],[],[],[],[],[],[]]
+		}
+	}
+
 	ToggleOffSorter() {
-		
+		const element = document.getElementById('off-sorter')
+		if (element.style.display == 'none') element.style.display = 'inline-block'
+		else element.style.display = 'none'
 	}
 
 	Reload() {

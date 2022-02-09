@@ -590,11 +590,12 @@ function xlecxSearch(text, page, whitchbutton, updateTabIndex) {
 		tabs[thisTabIndex].ClearLinks()
 		let valueStorage, html = '<div class="xlecx-container">'
 
-		if (result.pagination == undefined) valueStorage = 0
-		else if (result.pagination[result.pagination.length - 1][1] > result.pagination[result.pagination.length - 2][1]) valueStorage = result.pagination[result.pagination.length - 1][1]
-		else valueStorage = result.pagination[result.pagination.length - 2][1]
-
-		if (valueStorage == null) valueStorage = page
+		try {
+			if (result.pagination == undefined) valueStorage = 0
+			else if (result.pagination[result.pagination.length - 1][1] > result.pagination[result.pagination.length - 2][1]) valueStorage = result.pagination[result.pagination.length - 1][1]
+			else valueStorage = result.pagination[result.pagination.length - 2][1]
+			if (valueStorage == null) valueStorage = page
+		} catch(err) { valueStorage = page }
 
 		tabs[thisTabIndex].jp = 0
 		tabs[thisTabIndex].tp = page

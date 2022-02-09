@@ -63,6 +63,8 @@ Add Comic {
 	Artist => Nisego
 
 	nhentai =>
+	Comic => BADEND DREAMER
+	Artist => Abubu
 	Group => Behind Moon
 	Artist => Binbi
 	Artist => Chikiko
@@ -91,6 +93,7 @@ Add Comic {
 }
 
 Added To Version {
+	*Add Ability To Sort With Multiple Tags/etc... (Requested By Zogarth23)
 	Fix Bug: When renaming still can use hotkeys
 	Fix Some Database Optimization Bugs
 	Fix Some Right Click Menu Bugs
@@ -137,7 +140,6 @@ Tasks => {
 		Add Ability To Control gallery with keyboard (Requested By wakeupjeff64)
 		import my own comics manually using images ia lready have on my computer. (Requested By wakeupjeff64)
 		Add tab system within your collection so you can have multiple comics open at once (Requested By Zogarth23)
-		Add the ability to sort using multiple tags (Requested By Zogarth23)
 	}
 
 	Mybe in v2  {

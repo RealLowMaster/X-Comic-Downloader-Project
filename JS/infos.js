@@ -59,6 +59,7 @@ function closeInfoPanel() {
 	info_panel_index = null
 	document.getElementById('i-p-s-i').value = null
 	infoContainer.innerHTML = null
+	PageManager.addInfo = false
 }
 
 function OpenInfo(name, index = null) {
