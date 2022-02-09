@@ -273,7 +273,7 @@ class Tab {
 					nhentaiOpenPost(this.linksValue[index], newTab, true)
 					break
 				case 1:
-					nhentaiOpenInfo(this.linksValue[index][0], this.linksValue[index][1], this.linksValue[2], newTab, true)
+					nhentaiOpenInfo(this.linksValue[index][0], this.linksValue[index][1], this.linksValue[index][2], newTab, true)
 					break
 				case 2:
 					nhentaiOpenPages(this.linksValue[index][0], this.linksValue[index][1], this.linksValue[index][2], {tab}, true)
@@ -1045,6 +1045,10 @@ class OfflinePageManager {
 		} else max = length
 
 		return [min, max, allPages]
+	}
+
+	ToggleOffSorter() {
+		
 	}
 
 	Reload() {

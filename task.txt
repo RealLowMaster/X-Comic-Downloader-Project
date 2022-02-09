@@ -58,8 +58,9 @@ DB => {
 Add Comic {
 	League Of Legends
 	Aroma Sensei
-	xlecx => Search => ufos
-	xlecx => Group => Tracy Scops
+	Search => ufos
+	Group => Tracy Scops
+	Artist => Nisego
 
 	nhentai =>
 	Group => Behind Moon

@@ -276,7 +276,8 @@ input::-webkit-input-placeholder { user-select: none }
 	cursor: default;
 }
 
-#off-page-sort > div {
+#off-page-sort > div,
+#off-sorter-toggle {
 	display: inline-block;
 	width: 30px;
 	height: 30px;
@@ -288,12 +289,21 @@ input::-webkit-input-placeholder { user-select: none }
 	cursor: pointer;
 }
 
-#off-page-sort > div > svg { width: 100%; height: 100% }
-#off-page-sort > div:not([active]):hover { border-color: #5DADE2 }
+#off-page-sort > div > svg,
+#off-sorter-toggle > svg { width: 100%; height: 100% }
+#off-page-sort > div:not([active]):hover,
+#off-sorter-toggle:hover { border-color: #5DADE2 }
 
 #off-page-sort > div[active] {
 	background-color: #2488cb;
 	color: #fff;
+}
+
+#off-sorter-toggle {
+	margin: 0;
+	position: absolute;
+	top: 17px;
+	left: 15px;
 }
 
 .right-cmenu {
