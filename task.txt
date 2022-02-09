@@ -106,10 +106,6 @@ Added To Version {
 	Add More Choose Location Checkup
 }
 
-Doing {
-	
-}
-
 Tasks => {
 	Fix History
 	Add Download Log
