@@ -1315,7 +1315,11 @@ class Slider {
 			e.preventDefault()
 			if (this.overview) this.overviewcon.scrollLeft += e.deltaY
 		})
-		document.getElementById('c-s-ct').addEventListener('wheel', e => { e.preventDefault(); if (!this.size) this.WheelEvent(e.deltaY < 0) })
+		document.getElementById('c-s-ct').addEventListener('wheel', e => {
+			e.preventDefault()
+			if (this.size && e.target.id == 'c-s-c') return
+			this.WheelEvent(e.deltaY < 0)
+		})
 	}
 
 	WheelEvent(forward) {
