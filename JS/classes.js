@@ -287,6 +287,9 @@ class Tab {
 				case 5:
 					nhentaiRandom(newTab, true)
 					break
+				case 6:
+					nhentaiChangePage(this.linksValue[index], newTab, true)
+					break
 			}
 		}
 	}

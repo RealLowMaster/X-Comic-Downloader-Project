@@ -71,8 +71,8 @@ function createNewXlecxTab(id, pageNumber) {
 		}
 
 		// Categories
-		html += `<div><button type="button" onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0)})">All Tags</button>`
-		for (let i = 0; i < result.categories.length; i++) html += `<button onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(1, [result.categories[i].url, 1, result.categories[i].name])})">${result.categories[i].name}</button>`
+		html += `<div><div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0)})">All Tags</div>`
+		for (let i = 0; i < result.categories.length; i++) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(1, [result.categories[i].url, 1, result.categories[i].name])})">${result.categories[i].name}</div>`
 
 		// Content
 		html += '</div><div><div class="xlecx-post-container">'
@@ -80,7 +80,7 @@ function createNewXlecxTab(id, pageNumber) {
 		
 		// Pagination
 		html += '</div><div class="xlecx-pagination">'
-		for (let i = 0; i < result.pagination.length; i++) html += `<button type="button" onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(3,result.pagination[i][1])})"${result.pagination[i][1] == null ? 'disabled' : ''}>${result.pagination[i][0]}</button>`
+		for (let i = 0; i < result.pagination.length; i++) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(3,result.pagination[i][1])})"${result.pagination[i][1] == null ? 'disabled' : ''}>${result.pagination[i][0]}</div>`
 		
 		// Random
 		html += '</div><div class="xlecx-post-container">'
@@ -153,28 +153,28 @@ function xlecxOpenPost(makeNewPage, id, updateTabIndex) {
 		// Groups
 		if (result.groups != undefined) {
 			html += '<div class="xlecx-post-tags">Group: '
-			for(let i = 0; i < result.groups.length; i++) html += `<button type="button" onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(4,[result.groups[i].name,1,1])})">${result.groups[i].name}</button>`
+			for(let i = 0; i < result.groups.length; i++) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(4,[result.groups[i].name,1,1])})">${result.groups[i].name}</div>`
 			html += '</div>'
 		}
 
 		// Artists
 		if (result.artists != undefined) {
 			html += '<div class="xlecx-post-tags">Artist: '
-			for(let i = 0; i < result.artists.length; i++) html += `<button type="button" onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(4,[result.artists[i].name,1,2])})">${result.artists[i].name}</button>`
+			for(let i = 0; i < result.artists.length; i++) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(4,[result.artists[i].name,1,2])})">${result.artists[i].name}</div>`
 			html += '</div>'
 		}
 
 		// Parody
 		if (result.parody != undefined) {
 			html += '<div class="xlecx-post-tags">Parody: '
-			for(let i = 0; i < result.parody.length; i++) html += `<button type="button" onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(4,[result.parody[i].name,1,3])})">${result.parody[i].name}</button>`
+			for(let i = 0; i < result.parody.length; i++) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(4,[result.parody[i].name,1,3])})">${result.parody[i].name}</div>`
 			html += '</div>'
 		}
 
 		// Tags
 		if (result.tags != undefined) {
 			html += '<div class="xlecx-post-tags">Tag: '
-			for(let i = 0; i < result.tags.length; i++) html += `<button type="button" onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(4,[result.tags[i].name,1,4])})">${result.tags[i].name}</button>`
+			for(let i = 0; i < result.tags.length; i++) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(4,[result.tags[i].name,1,4])})">${result.tags[i].name}</div>`
 			html += '</div>'
 		}
 
@@ -317,8 +317,8 @@ function xlecxOpenCategory(name, page, shortName, makeNewPage, updateTabIndex) {
 		}
 
 		// Categories
-		html += `<div><button type="button" onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0)})">All Tags</button>`
-		for (let i = 0; i < result.categories.length; i++) html += `<button onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(1, [result.categories[i].url, 1, result.categories[i].name])})">${result.categories[i].name}</button>`
+		html += `<div><div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0)})">All Tags</div>`
+		for (let i = 0; i < result.categories.length; i++) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(1, [result.categories[i].url, 1, result.categories[i].name])})">${result.categories[i].name}</div>`
 		html += '</div>'
 
 		// Content
@@ -327,7 +327,7 @@ function xlecxOpenCategory(name, page, shortName, makeNewPage, updateTabIndex) {
 		
 		// Pagination
 		html += '</div><div class="xlecx-pagination">'
-		for (let i = 0; i < result.pagination.length; i++) html += `<button type="button" onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(1,[name, result.pagination[i][1], shortName])})"${result.pagination[i][1] == null ? 'disabled' : ''}>${result.pagination[i][0]}</button>`
+		for (let i = 0; i < result.pagination.length; i++) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(1,[name, result.pagination[i][1], shortName])})"${result.pagination[i][1] == null ? 'disabled' : ''}>${result.pagination[i][0]}</div>`
 		
 		// Random
 		html += '</div><div class="xlecx-post-container">'
@@ -343,8 +343,8 @@ function xlecxOpenTagContentMaker(result, thisTabIndex, name, whitch) {
 	let html = '<div class="xlecx-container">'
 
 	// Categories
-	html += `<div><button type="button" onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0)})">All Tags</button>`
-	for (let i = 0; i < result.categories.length; i++) html += `<button onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(1, [result.categories[i].url, 1, result.categories[i].name])})">${result.categories[i].name}</button>`
+	html += `<div><div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0)})">All Tags</div>`
+	for (let i = 0; i < result.categories.length; i++) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(1, [result.categories[i].url, 1, result.categories[i].name])})">${result.categories[i].name}</div>`
 
 	// Content
 	html += '</div><div><div class="xlecx-post-container">'
@@ -352,7 +352,7 @@ function xlecxOpenTagContentMaker(result, thisTabIndex, name, whitch) {
 
 	// Pagination
 	html += '</div><div class="xlecx-pagination">'
-	for (let i = 0; i < result.pagination.length; i++) html += `<button type="button" onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(4,[name,result.pagination[i][1],whitch])})"${result.pagination[i][1] == null ? 'disabled' : ''}>${result.pagination[i][0]}</button>`
+	for (let i = 0; i < result.pagination.length; i++) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(4,[name,result.pagination[i][1],whitch])})"${result.pagination[i][1] == null ? 'disabled' : ''}>${result.pagination[i][0]}</div>`
 
 	html += '</div></div></div>'
 	tabs[thisTabIndex].page.innerHTML = html
@@ -607,8 +607,8 @@ function xlecxSearch(text, page, whitchbutton, updateTabIndex) {
 		}
 
 		// Categories
-		html += `<div><button type="button" onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0)})">All Tags</button>`
-		for (let i = 0; i < result.categories.length; i++) html += `<button onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(1, [result.categories[i].url, 1, result.categories[i].name])})">${result.categories[i].name}</button>`
+		html += `<div><div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0)})">All Tags</div>`
+		for (let i = 0; i < result.categories.length; i++) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(1, [result.categories[i].url, 1, result.categories[i].name])})">${result.categories[i].name}</div>`
 
 		// Content
 		if (result.content != undefined) {
@@ -618,7 +618,7 @@ function xlecxSearch(text, page, whitchbutton, updateTabIndex) {
 			
 			// Pagination
 			html += '</div><div class="xlecx-pagination">'
-			for (let i = 0; i < result.pagination.length; i++) html += `<button type="button" onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(5,[text, result.pagination[i][1]])})"${result.pagination[i][1] == null ? 'disabled' : ''}>${result.pagination[i][0]}</button>`
+			for (let i = 0; i < result.pagination.length; i++) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(5,[text, result.pagination[i][1]])})"${result.pagination[i][1] == null ? 'disabled' : ''}>${result.pagination[i][0]}</div>`
 		}
 
 		html += '</div></div></div>'
@@ -671,12 +671,12 @@ function xlecxOpenAllTags(makeNewPage, updateTabIndex) {
 
 		// Categories
 		html += '<div>'
-		for (let i = 0; i < result.categories.length; i++) html += `<button onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(1, [result.categories[i].url, 1, result.categories[i].name])})">${result.categories[i].name}</button>`
+		for (let i = 0; i < result.categories.length; i++) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(1, [result.categories[i].url, 1, result.categories[i].name])})">${result.categories[i].name}</div>`
 
 		// Tags
 		html += '</div><div style="background-color:#333"><div class="xlecx-tags-search"><input type="text" oninput="searchFilter(this.value, this.parentElement.parentElement.getElementsByClassName(\'xlecx-post-tags\')[0], this.parentElement.parentElement.getElementsByClassName(\'alert alert-danger\')[0])" placeholder="Search in Tags..."></div><div class="alert alert-danger" style="display:none">No Tag has been Found.</div><div class="xlecx-post-tags">'
 
-		for (let i = 0; i < result.tags.length; i++) html += `<button type="button" onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(4,[result.tags[i].name,1,4])})">${result.tags[i].name}</button>`
+		for (let i = 0; i < result.tags.length; i++) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(4,[result.tags[i].name,1,4])})">${result.tags[i].name}</div>`
 
 		html += '</div></div></div>'
 		tabs[thisTabIndex].page.innerHTML = html

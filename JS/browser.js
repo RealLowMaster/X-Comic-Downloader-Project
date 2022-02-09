@@ -1040,7 +1040,7 @@ function askClearBrowserHistory() {
 function LinkClick(tindex, lindex) {
 	const e = window.event, key = e.which
 	e.preventDefault()
-	if (tabs[tindex] == null) return
+	if (tabs[tindex] == null || e.target.tagName == 'BUTTON') return
 	if (key == 1) tabs[tindex].Clicked(lindex)
 	else if (key == 2) tabs[tindex].Clicked(lindex, true)
 	else if (key == 3) {

@@ -7,11 +7,10 @@
 }
 
 .nhentai-top-menu { display: flex; height: 50px; background-color: #1f1f1f }
-
 .nhentai-top-menu > i { display: inline-block; padding: 10px }
 .nhentai-top-menu > i > svg { width: 46px; height: 30px }
 
-.nhentai-top-menu > button {
+.nhentai-top-menu > div {
 	padding: 0 10px;
 	color: #d9d9d9;
 	background-color: transparent;
@@ -19,7 +18,7 @@
 	cursor: pointer;
 }
 
-.nhentai-top-menu > button:hover { background-color: #383838 }
+.nhentai-top-menu > div:hover { background-color: #383838 }
 
 .nhentai-postrow {
 	display: block;
@@ -117,8 +116,8 @@
 	bottom: 0;
 	left: 0;
 	cursor: pointer;
-	z-index: +100;
 	transition: background-color .2s, color .2s;
+	z-index: +1;
 }
 
 .nhentai-postrow > div:last-child > div > button:hover { left: 0; background-color: #fff; color: #222 }
@@ -163,7 +162,7 @@
 	cursor: default;
 }
 
-.nhentai-pagination > button {
+.nhentai-pagination > div {
 	display: inline-block;
 	min-width: 35px;
 	margin: 1px;
@@ -176,8 +175,8 @@
 	cursor: pointer;
 }
 
-.nhentai-pagination > button:hover { background-color: #333; border-radius: 100% }
-.nhentai-pagination > button:disabled { background-color: #262626; border-radius: 100% }
+.nhentai-pagination > div:hover { background-color: #333; border-radius: 100% }
+.nhentai-pagination > div[disabled] { background-color: #262626 !important; border-radius: 100% }
 .nhentai-container > .browser-comic-have { display: block; text-align: right; padding: 10px }
 
 .nhentai-container > .browser-comic-have > span,
@@ -280,7 +279,7 @@
 	text-align: left;
 }
 
-.nhentai-info-row > button {
+.nhentai-info-row > div {
 	display: inline-flex;
 	flex-direction: row;
 	justify-content: center;
@@ -293,20 +292,17 @@
 	cursor: pointer;
 }
 
-.nhentai-info-row > button > span { display: flex; padding: 2px 6px; align-items: center }
-
-.nhentai-info-row > button > span:first-child { background-color: #4d4d4d; color: #d9d9d9; user-select: text }
-
-.nhentai-info-row > button > span:not(:first-child) {
+.nhentai-info-row > div > span { display: flex; padding: 2px 6px; align-items: center }
+.nhentai-info-row > div > span:first-child { background-color: #4d4d4d; color: #d9d9d9; user-select: text }
+.nhentai-info-row > div > span:not(:first-child) {
 	background-color: #333;
 	color: gray;
 	font-weight: 400;
 	box-shadow: inset 0 0 0.4em #2b2b2b;
 }
 
-.nhentai-info-row > button:hover > span:first-child { background-color: #595959 }
-
-.nhentai-info-row > button:hover > span:not(:first-child) { background-color: #404040 }
+.nhentai-info-row > div:hover > span:first-child { background-color: #595959 }
+.nhentai-info-row > div:hover > span:not(:first-child) { background-color: #404040 }
 
 .nhentai-info-type {
 	display: block;
@@ -346,7 +342,7 @@
 	text-align: center;
 }
 
-.nhentai-info-type > section > button {
+.nhentai-info-type > section > div {
 	display: flex;
 	width: 95%;
 	flex-direction: row;
@@ -359,7 +355,7 @@
 	cursor: pointer;
 }
 
-.nhentai-info-type > section > button > span:first-child {
+.nhentai-info-type > section > div > span:first-child {
 	display: flex;
 	flex: 1;
 	align-items: center;
@@ -374,7 +370,7 @@
 	user-select: text;
 }
 
-.nhentai-info-type > section > button > span:last-child {
+.nhentai-info-type > section > div > span:last-child {
 	display: flex;
 	justify-content: flex-end;
 	align-items: center;
@@ -392,8 +388,8 @@
 	box-shadow: inset 0 0 0.4em #2b2b2b;
 }
 
-.nhentai-info-type > section > button:hover > span:first-child { background-color: #595959 }
-.nhentai-info-type > section > button:hover > span:last-child { background-color: #404040 }
+.nhentai-info-type > section > div:hover > span:first-child { background-color: #595959 }
+.nhentai-info-type > section > div:hover > span:last-child { background-color: #404040 }
 
 .nhentai-images {
 	display: block;
