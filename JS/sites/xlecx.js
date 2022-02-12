@@ -76,7 +76,7 @@ function createNewXlecxTab(id, pageNumber) {
 
 		// Content
 		html += '</div><div><div class="xlecx-post-container">'
-		for (let i = 0; i < result.content.length; i++) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(2, result.content[i].id)})"><img src="${xlecx.baseURL+result.content[i].thumb}"${setting.lazy_loading ? ' loading="lazy"' : ''}>${result.content[i].pages != null ? '<span>'+result.content[i].pages+'</span>' : ''}<p>${result.content[i].title}</p>${Downloader.IsDownloading(0, result.content[i].id) ? '<cid ssite="0" cid="'+result.content[i].id+'"><img class="spin" src="Image/dual-ring-success-'+wt_fps+'.gif"></cid>' : '<button ssite="0" cid="'+result.content[i].id+'" onclick="xlecxDownloader(this.getAttribute(\'cid\'))">Download</button>'}</div>`
+		for (let i = 0; i < result.content.length; i++) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(2, result.content[i].id)},this)" cid="${result.content[i].id}" h="0"><img src="${xlecx.baseURL+result.content[i].thumb}"${setting.lazy_loading ? ' loading="lazy"' : ''}>${result.content[i].pages != null ? '<span>'+result.content[i].pages+'</span>' : ''}<p>${result.content[i].title}</p>${Downloader.IsDownloading(0, result.content[i].id) ? '<cid><img class="spin" src="Image/dual-ring-success-'+wt_fps+'.gif"></cid>' : '<button onclick="xlecxDownloader(this.parentElement.getAttribute(\'cid\'))">Download</button>'}</div>`
 		
 		// Pagination
 		html += '</div><div class="xlecx-pagination">'
@@ -84,7 +84,7 @@ function createNewXlecxTab(id, pageNumber) {
 		
 		// Random
 		html += '</div><div class="xlecx-post-container">'
-		for (let i = 0; i < result.random.length; i++) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(2, result.random[i].id)})"><img src="${xlecx.baseURL+result.random[i].thumb}"${setting.lazy_loading ? ' loading="lazy"' : ''}>${result.random[i].pages != null ? '<span>'+result.random[i].pages+'</span>' : ''}<p>${result.random[i].title}</p>${Downloader.IsDownloading(0, result.random[i].id) ? '<cid ssite="0" cid="'+result.random[i].id+'"><img class="spin" src="Image/dual-ring-success-'+wt_fps+'.gif"></cid>' : '<button ssite="0" cid="'+result.random[i].id+'" onclick="xlecxDownloader(this.getAttribute(\'cid\'))">Download</button>'}</div>`
+		for (let i = 0; i < result.random.length; i++) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(2, result.random[i].id)},this)" cid="${result.random[i].id}" h="0"><img src="${xlecx.baseURL+result.random[i].thumb}"${setting.lazy_loading ? ' loading="lazy"' : ''}>${result.random[i].pages != null ? '<span>'+result.random[i].pages+'</span>' : ''}<p>${result.random[i].title}</p>${Downloader.IsDownloading(0, result.random[i].id) ? '<cid><img class="spin" src="Image/dual-ring-success-'+wt_fps+'.gif"></cid>' : '<button onclick="xlecxDownloader(this.parentElement.getAttribute(\'cid\'))">Download</button>'}</div>`
 
 		html += '</div></div></div>'
 		tabs[thisTabIndex].page.innerHTML = html
@@ -183,7 +183,7 @@ function xlecxOpenPost(makeNewPage, id, updateTabIndex) {
 			if (result.related != undefined) {
 				html += '<div><p class="xlecx-post-title">Related:</p><div class="xlecx-post-container">'
 
-				for (let i = 0; i < result.related.length; i++) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(2, result.related[i].id)})"><img src="${xlecx.baseURL+result.related[i].thumb}"${setting.lazy_loading ? ' loading="lazy"' : ''}>${result.related[i].pages != null ? '<span>'+result.related[i].pages+'</span>' : ''}<p>${result.related[i].title}</p>${Downloader.IsDownloading(0, result.related[i].id) ? '<cid ssite="0" cid="'+result.related[i].id+'"><img class="spin" src="Image/dual-ring-success-'+wt_fps+'.gif"></cid>' : '<button ssite="0" cid="'+result.related[i].id+'" onclick="xlecxDownloader(this.getAttribute(\'cid\'))">Download</button>'}</div>`
+				for (let i = 0; i < result.related.length; i++) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(2, result.related[i].id)},this)" cid="${result.related[i].id}" h="0"><img src="${xlecx.baseURL+result.related[i].thumb}"${setting.lazy_loading ? ' loading="lazy"' : ''}>${result.related[i].pages != null ? '<span>'+result.related[i].pages+'</span>' : ''}<p>${result.related[i].title}</p>${Downloader.IsDownloading(0, result.related[i].id) ? '<cid><img class="spin" src="Image/dual-ring-success-'+wt_fps+'.gif"></cid>' : '<button onclick="xlecxDownloader(this.parentElement.getAttribute(\'cid\'))">Download</button>'}</div>`
 				html += '</div></div>'
 			}
 
@@ -323,7 +323,7 @@ function xlecxOpenCategory(name, page, shortName, makeNewPage, updateTabIndex) {
 
 		// Content
 		html += '<div><div class="xlecx-post-container">'
-		for (let i = 0; i < result.content.length; i++) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(2, result.content[i].id)})"><img src="${xlecx.baseURL+result.content[i].thumb}"${setting.lazy_loading ? ' loading="lazy"' : ''}>${result.content[i].pages != null ? '<span>'+result.content[i].pages+'</span>' : ''}<p>${result.content[i].title}</p>${Downloader.IsDownloading(0, result.content[i].id) ? '<cid ssite="0" cid="'+result.content[i].id+'"><img class="spin" src="Image/dual-ring-success-'+wt_fps+'.gif"></cid>' : '<button ssite="0" cid="'+result.content[i].id+'" onclick="xlecxDownloader(this.getAttribute(\'cid\'))">Download</button>'}</div>`
+		for (let i = 0; i < result.content.length; i++) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(2, result.content[i].id)},this)" cid="${result.content[i].id}" h="0"><img src="${xlecx.baseURL+result.content[i].thumb}"${setting.lazy_loading ? ' loading="lazy"' : ''}>${result.content[i].pages != null ? '<span>'+result.content[i].pages+'</span>' : ''}<p>${result.content[i].title}</p>${Downloader.IsDownloading(0, result.content[i].id) ? '<cid><img class="spin" src="Image/dual-ring-success-'+wt_fps+'.gif"></cid>' : '<button onclick="xlecxDownloader(this.parentElement.getAttribute(\'cid\'))">Download</button>'}</div>`
 		
 		// Pagination
 		html += '</div><div class="xlecx-pagination">'
@@ -331,7 +331,7 @@ function xlecxOpenCategory(name, page, shortName, makeNewPage, updateTabIndex) {
 		
 		// Random
 		html += '</div><div class="xlecx-post-container">'
-		for (let i = 0; i < result.random.length; i++) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(2, result.random[i].id)})"><img src="${xlecx.baseURL+result.random[i].thumb}"${setting.lazy_loading ? ' loading="lazy"' : ''}>${result.random[i].pages != null ? '<span>'+result.random[i].pages+'</span>' : ''}<p>${result.random[i].title}</p>${Downloader.IsDownloading(0, result.random[i].id) ? '<cid ssite="0" cid="'+result.random[i].id+'"><img class="spin" src="Image/dual-ring-success-'+wt_fps+'.gif"></cid>' : '<button ssite="0" cid="'+result.random[i].id+'" onclick="xlecxDownloader(this.getAttribute(\'cid\'))">Download</button>'}</div>`
+		for (let i = 0; i < result.random.length; i++) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(2, result.random[i].id)},this)" cid="${result.random[i].id}" h="0"><img src="${xlecx.baseURL+result.random[i].thumb}"${setting.lazy_loading ? ' loading="lazy"' : ''}>${result.random[i].pages != null ? '<span>'+result.random[i].pages+'</span>' : ''}<p>${result.random[i].title}</p>${Downloader.IsDownloading(0, result.random[i].id) ? '<cid><img class="spin" src="Image/dual-ring-success-'+wt_fps+'.gif"></cid>' : '<button onclick="xlecxDownloader(this.parentElement.getAttribute(\'cid\'))">Download</button>'}</div>`
 
 		html += '</div></div></div>'
 		tabs[thisTabIndex].page.innerHTML = html
@@ -348,7 +348,7 @@ function xlecxOpenTagContentMaker(result, thisTabIndex, name, whitch) {
 
 	// Content
 	html += '</div><div><div class="xlecx-post-container">'
-	for (let i = 0; i < result.content.length; i++) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(2, result.content[i].id)})"><img src="${xlecx.baseURL+result.content[i].thumb}"${setting.lazy_loading ? ' loading="lazy"' : ''}>${result.content[i].pages != null ? '<span>'+result.content[i].pages+'</span>' : ''}<p>${result.content[i].title}</p>${Downloader.IsDownloading(0, result.content[i].id) ? '<cid ssite="0" cid="'+result.content[i].id+'"><img class="spin" src="Image/dual-ring-success-'+wt_fps+'.gif"></cid>' : '<button ssite="0" cid="'+result.content[i].id+'" onclick="xlecxDownloader(this.getAttribute(\'cid\'))">Download</button>'}</div>`
+	for (let i = 0; i < result.content.length; i++) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(2, result.content[i].id)},this)" cid="${result.content[i].id}" h="0"><img src="${xlecx.baseURL+result.content[i].thumb}"${setting.lazy_loading ? ' loading="lazy"' : ''}>${result.content[i].pages != null ? '<span>'+result.content[i].pages+'</span>' : ''}<p>${result.content[i].title}</p>${Downloader.IsDownloading(0, result.content[i].id) ? '<cid><img class="spin" src="Image/dual-ring-success-'+wt_fps+'.gif"></cid>' : '<button onclick="xlecxDownloader(this.parentElement.getAttribute(\'cid\'))">Download</button>'}</div>`
 
 	// Pagination
 	html += '</div><div class="xlecx-pagination">'
@@ -615,7 +615,7 @@ function xlecxSearch(text, page, whitchbutton, updateTabIndex) {
 		if (result.content != undefined) {
 			// Content
 			html += '</div><div><div class="xlecx-post-container">'
-			for (let i = 0; i < result.content.length; i++) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(2, result.content[i].id)})"><img src="${xlecx.baseURL+result.content[i].thumb}"${setting.lazy_loading ? ' loading="lazy"' : ''}>${result.content[i].pages != null ? '<span>'+result.content[i].pages+'</span>' : ''}<p>${result.content[i].title}</p>${Downloader.IsDownloading(0, result.content[i].id) ? '<cid ssite="0" cid="'+result.content[i].id+'"><img class="spin" src="Image/dual-ring-success-'+wt_fps+'.gif"></cid>' : '<button ssite="0" cid="'+result.content[i].id+'" onclick="xlecxDownloader(this.getAttribute(\'cid\'))">Download</button>'}</div>`
+			for (let i = 0; i < result.content.length; i++) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(2, result.content[i].id)},this)" cid="${result.content[i].id}" h="0"><img src="${xlecx.baseURL+result.content[i].thumb}"${setting.lazy_loading ? ' loading="lazy"' : ''}>${result.content[i].pages != null ? '<span>'+result.content[i].pages+'</span>' : ''}<p>${result.content[i].title}</p>${Downloader.IsDownloading(0, result.content[i].id) ? '<cid><img class="spin" src="Image/dual-ring-success-'+wt_fps+'.gif"></cid>' : '<button onclick="xlecxDownloader(this.parentElement.getAttribute(\'cid\'))">Download</button>'}</div>`
 			
 			// Pagination
 			html += '</div><div class="xlecx-pagination">'

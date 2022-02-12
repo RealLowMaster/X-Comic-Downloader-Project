@@ -358,6 +358,7 @@ input::-webkit-input-placeholder { user-select: none }
 	left: 0;
 	z-index: +100;
 	box-shadow: var(--ccp-box-shadow);
+	transition: left .1s, top .1s;
 }
 
 .right-cmenu > button {

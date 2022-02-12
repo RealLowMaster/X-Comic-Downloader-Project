@@ -3,7 +3,7 @@ const browserPasteMenu = document.getElementById('browser-paste-menu')
 const bjp = document.getElementById('browser-jump-page-container')
 const bjp_i = document.getElementById('bjp-i')
 const bjp_m_p = document.getElementById('bjp-m-p')
-let browserHistoryIndex = 0, browserHistoryRowOpElement, br_history_selected_inputs = [], br_history_selected_indexs = [], resizeTabTimer, active_site = null, historyObserver, historyLaodCounter = 0
+let browserHistoryIndex = 0, browserHistoryRowOpElement, br_history_selected_inputs = [], br_history_selected_indexs = [], resizeTabTimer, active_site = null, historyObserver, historyLaodCounter = 0, br_cmenu_info = null
 
 function openBrowser() {
 	keydownEventIndex = 3
@@ -405,182 +405,125 @@ function searchFilter(txt, database, alert) {
 	}
 }
 
-function removeDownloadedComicsDownloadButton(site, id, parent, btn, haveCallback, downloadedCallback) {
-	const haveIndex = GetHave(site,id)
-	if (haveIndex != null) {
-		if (haveDBComic[haveIndex] == 1) downloadedCallback(parent, btn)
-		else haveCallback(parent, btn, id)
-	}
-}
-
 function clearDownloadedComics(content, site) {
-	switch (site) {
-		case 0:
-			const xlecxPostContainers = content.getElementsByClassName('xlecx-post-container')
-			for (let i = 0; i < xlecxPostContainers.length; i++) {
-				const mainComics = xlecxPostContainers[i].children
-				for (let j = 0; j < mainComics.length; j++) {
-					let id = mainComics[j].getElementsByTagName('button')[0]
-					if (id != undefined) {
-						id = id.getAttribute('cid')
-						removeDownloadedComicsDownloadButton(0, id, mainComics[j], mainComics[j].getElementsByTagName('button')[0], (parent, btn, lastId) => {
-							btn.remove()
-							const element = document.createElement('button')
-							element.setAttribute('cid', lastId)
-							element.classList.add('comic-had')
-							element.textContent = 'Had'
-							parent.appendChild(element)
-						}, (parent, btn) => {
-							btn.remove()
-							const element = document.createElement('button')
-							element.classList.add('comic-downloaded')
-							element.textContent = 'Downloaded'
-							parent.appendChild(element)
-						})
-					}
-				}
-			}
-			break
-		case 1:
-			const nhentaicontainers = content.getElementsByClassName('nhentai-postrow')
-			const nhentaiposts = []
-			for (let i = 0; i < nhentaicontainers.length; i++) {
-				let nhentai_save = nhentaicontainers[i].getElementsByTagName('button')
-				for (let j = 0; j < nhentai_save.length; j++) {
-					nhentaiposts.push(nhentai_save[j])
-				}
-			}
-			for (let i = 0; i < nhentaiposts.length; i++) {
-				let id = Number(nhentaiposts[i].getAttribute('cid'))
-				removeDownloadedComicsDownloadButton(1, id, nhentaiposts[i].parentElement, nhentaiposts[i], (parent, btn, lastId) => {
-					btn.remove()
-					const element = document.createElement('button')
-					element.setAttribute('ssite', 1)
-					element.setAttribute('cid', lastId)
-					element.classList.add('comic-had')
-					element.textContent = 'Had'
-					parent.appendChild(element)
-				}, (parent, btn) => {
-					btn.remove()
+	const posts = content.querySelectorAll(`[cid]`)
+	for (let i = 0, l = posts.length; i < l; i++) {
+		let id
+		// Get Id
+		if (site == 0) id = posts[i].getAttribute('cid')
+		else if (site == 1) id = Number(posts[i].getAttribute('cid'))
+
+		if (id != null) {
+			const haveIndex = GetHave(site,id)
+			if (haveIndex != null) {
+				const child = posts[i].children
+				child[child.length - 1].remove()
+				if (haveDBComic[haveIndex] == 1) {
 					const element = document.createElement('button')
 					element.classList.add('comic-downloaded')
 					element.textContent = 'Downloaded'
-					parent.appendChild(element)
-				})
+					posts[i].appendChild(element)
+					posts[i].setAttribute('h',2)
+				} else {
+					const element = document.createElement('button')
+					element.classList.add('comic-had')
+					element.textContent = 'Had'
+					posts[i].appendChild(element)
+					posts[i].setAttribute('h',1)
+				}
 			}
-			break
+		}
 	}
 }
 
 function changeButtonsToDownloading(id, site, backward) {
-	const comic_page_btns_elements = document.querySelectorAll(`[ccid="${id}"]`)
-	const comic_page_btns = []
-	for (let i = 0; i < comic_page_btns_elements.length; i++) {
-		if (Number(comic_page_btns_elements[i].getAttribute('sssite')) == site) comic_page_btns.push(comic_page_btns_elements[i])
-	}
+	for (let i = 0, l = tabs.length; i < l; i++) {
+		if (tabs[i] != null && tabs[i].site == site) {
+			const comic_page_btns = tabs[i].page.querySelectorAll(`[ccid="${id}"]`)
+			const comic_overview = tabs[i].page.querySelectorAll(`[cid="${id}"]`)
 
-	const comic_overview_btns_elements = document.querySelectorAll(`[cid="${id}"]`)
-	const comic_overview_btns = []
-	for (let i = 0; i < comic_overview_btns_elements.length; i++) {
-		if (Number(comic_overview_btns_elements[i].getAttribute('ssite')) == site) comic_overview_btns.push(comic_overview_btns_elements[i])
-	}
+			let element
+			if (!backward) {
+				for (let j = 0, n = comic_page_btns.length; j < n; j++) comic_page_btns[j].innerHTML = `<p>Downloading... <img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"><p>`
 
-	let element, parent
-	if (backward == false) {
-		for (let i = 0; i < comic_page_btns.length; i++) {
-			comic_page_btns[i].innerHTML = `<p>Downloading... <img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"><p>`
-		}
-	
-		for (let i = 0; i < comic_overview_btns.length; i++) {
-			parent = comic_overview_btns[i].parentElement
-			comic_overview_btns[i].remove()
-			element = document.createElement('cid')
-			element.setAttribute('ssite', site)
-			element.setAttribute('cid', id)
-			element.innerHTML = `<img class="spin" src="Image/dual-ring-success-${wt_fps}.gif">`
-			parent.appendChild(element)
-		}
-	} else {
-		let saveId
-		if (typeof(id) == 'number') saveId = id
-		else saveId = `'${id}'`
-		let dl = sites[site].downloader.replace('{id}', saveId)
-		for (let i = 0; i < comic_page_btns.length; i++) {
-			comic_page_btns[i].innerHTML = `<button onclick="${dl}">Download</button><button class="add-to-have" onclick="AddToHave(${site}, ${saveId})">Add To Have</button>`
-		}
-	
-		dl = sites[site].downloader.replace('{id}', "this.getAttribute('cid')")
-		for (let i = 0; i < comic_overview_btns.length; i++) {
-			parent = comic_overview_btns[i].parentElement
-			comic_overview_btns[i].remove()
-			element = document.createElement('button')
-			element.setAttribute('ssite', site)
-			element.setAttribute('cid', id)
-			element.setAttribute('onclick', dl)
-			element.textContent = 'Download'
-			parent.appendChild(element)
+				for (let j = 0, n = comic_overview.length; j < n; j++) {
+					const child = comic_overview[j].children
+					child[child.length - 1].remove()
+					element = document.createElement('cid')
+					element.innerHTML = `<img class="spin" src="Image/dual-ring-success-${wt_fps}.gif">`
+					comic_overview[j].appendChild(element)
+					comic_overview[j].setAttribute('h',3)
+				}
+			} else {
+				let saveId
+				if (typeof(id) == 'number') saveId = id
+				else saveId = `'${id}'`
+				for (let j = 0, n = comic_page_btns.length; j < n; j++) {
+					comic_page_btns[j].innerHTML = `<button onclick="${sites[site].downloader.replace('{id}', "this.getAttribute('cid')")}">Download</button><button class="add-to-have" onclick="AddToHave(${site}, ${saveId})">Add To Have</button>`
+				}
+
+				for (let j = 0, n = comic_overview.length; j < n; j++) {
+					const child = comic_overview[j].children
+					child[child.length - 1].remove()
+					element = document.createElement('button')
+					element.setAttribute('onclick', sites[site].downloader.replace('{id}', "this.parentElement.getAttribute('cid')"))
+					element.textContent = 'Download'
+					comic_overview[j].appendChild(element)
+					comic_overview[j].setAttribute('h',0)
+				}
+			}
 		}
 	}
 }
 
-function changeButtonsToDownloaded(id, site, have, haveBackward) {
-	const comic_page_btns_elements = document.querySelectorAll(`[ccid="${id}"]`)
-	const comic_page_btns = []
-	for (let i = 0; i < comic_page_btns_elements.length; i++) {
-		if (Number(comic_page_btns_elements[i].getAttribute('sssite')) == site) comic_page_btns.push(comic_page_btns_elements[i])
-	}
-	const comic_overview_btns = document.querySelectorAll(`[cid="${id}"]`)
-	let element, parent
+function changeButtonsToDownloaded(id, site, have = false, haveBackward = false) {
+	for (let i = 0, l = tabs.length; i < l; i++) {
+		if (tabs[i] != null && tabs[i].site == site) {
+			const comic_page_btns = tabs[i].page.querySelectorAll(`[ccid="${id}"]`)
+			const comic_overview = tabs[i].page.querySelectorAll(`[cid="${id}"]`)
 
-	if (have == false) {
-		for (let i = 0; i < comic_page_btns.length; i++) {
-			comic_page_btns[i].innerHTML = '<span>You Downloaded This Comic.<span></span></span>'
-		}
-	
-		for (let i = 0; i < comic_overview_btns.length; i++) {
-			parent = comic_overview_btns[i].parentElement
-			comic_overview_btns[i].remove()
-			element = document.createElement('button')
-			element.classList.add('comic-downloaded')
-			element.textContent = 'Downloaded'
-			parent.appendChild(element)
-		}
-	} else {
-		let saveId
-		if (typeof(id) == 'number') saveId = id
-		else saveId = `'${id}'`
+			let element
+			if (!have) {
+				for (let j = 0, n = comic_page_btns.length; j < n; j++) comic_page_btns[j].innerHTML = '<span>You Downloaded This Comic.<span></span></span>'
+				for (let i = 0; i < comic_overview[j].length; i++) {
+					const child = comic_overview[j].children
+					child[child.length - 1].remove()
+					element = document.createElement('button')
+					element.classList.add('comic-downloaded')
+					element.textContent = 'Downloaded'
+					comic_overview[j].appendChild(element)
+					comic_overview[j].setAttribute('h',2)
+				}
+			} else {
+				let saveId
+				if (typeof(id) == 'number') saveId = id
+				else saveId = `'${id}'`
 
-		if (haveBackward == false) {
-			for (let i = 0; i < comic_page_btns.length; i++) {
-				comic_page_btns[i].innerHTML = `<button class="remove-from-have" onclick="RemoveFromHave(${site}, ${saveId}, this)">You Have This Comic.</button>`
-			}
-		
-			for (let i = 0; i < comic_overview_btns.length; i++) {
-				parent = comic_overview_btns[i].parentElement
-				comic_overview_btns[i].remove()
-				element = document.createElement('button')
-				element.setAttribute('ssite', site)
-				element.setAttribute('cid', id)
-				element.classList.add('comic-had')
-				element.textContent = 'Had'
-				parent.appendChild(element)
-			}
-		} else {
-			let dl = sites[site].downloader.replace('{id}', saveId)
-			for (let i = 0; i < comic_page_btns.length; i++) {
-				comic_page_btns[i].innerHTML = `<button onclick="${dl}">Download</button><button class="add-to-have" onclick="AddToHave(${site}, ${saveId})">Add To Have</button>`
-			}
+				if (!haveBackward) {
+					for (let j = 0, n = comic_page_btns.length; j < n; j++) comic_page_btns[j].innerHTML = `<button class="remove-from-have" onclick="RemoveFromHave(${site}, ${saveId}, this)">You Have This Comic.</button>`
 
-			dl = sites[site].downloader.replace('{id}', "this.getAttribute('cid')")
-			for (let i = 0; i < comic_overview_btns.length; i++) {
-				parent = comic_overview_btns[i].parentElement
-				comic_overview_btns[i].remove()
-				element = document.createElement('button')
-				element.setAttribute('ssite', site)
-				element.setAttribute('cid', id)
-				element.setAttribute('onclick', dl)
-				element.textContent = 'Download'
-				parent.appendChild(element)
+					for (let j = 0, n = comic_overview.length; j < n; j++) {
+						const child = comic_overview[j].children
+						child[child.length - 1].remove()
+						element = document.createElement('button')
+						element.classList.add('comic-had')
+						element.textContent = 'Had'
+						comic_overview[j].appendChild(element)
+						comic_overview[j].setAttribute('h',1)
+					}
+				} else {
+					for (let j = 0, n = comic_page_btns.length; j < n; j++) comic_page_btns[j].innerHTML = `<button onclick="${sites[site].downloader.replace('{id}', saveId)}">Download</button><button class="add-to-have" onclick="AddToHave(${site}, ${saveId})">Add To Have</button>`
+			
+					for (let j = 0, n = comic_overview.length; j < n; j++) {
+						const child = comic_overview[j].children
+						child[child.length - 1].remove()
+						element = document.createElement('button')
+						element.setAttribute('onclick', sites[site].downloader.replace('{id}', "this.parentElement.getAttribute('cid')"))
+						element.textContent = 'Download'
+						comic_overview[j].appendChild(element)
+						comic_overview[j].setAttribute('h',0)
+					}
+				}
 			}
 		}
 	}
@@ -1039,6 +982,7 @@ function askClearBrowserHistory() {
 // Right Click On Comic
 function LinkClick(tindex, lindex, who = null) {
 	const e = window.event, key = e.which
+	closeBRCMenu()
 	e.preventDefault()
 	if (tabs[tindex] == null || e.target.tagName == 'BUTTON') return
 	if (key == 1) tabs[tindex].Clicked(lindex)
@@ -1046,22 +990,50 @@ function LinkClick(tindex, lindex, who = null) {
 	else if (key == 3) {
 		const menu = document.getElementById('br-crmenu')
 		const children = menu.children
-		let x = e.clientX, y = e.clientY
-		if (window.innerWidth <= x+170) x = window.innerWidth - 170
-		if (window.innerHeight <= y+menu.clientHeight) y = window.innerHeight - menu.clientHeight
 
 		children[0].setAttribute('onclick', `tabs[${tindex}].Clicked(${lindex},false)`)
 		children[1].setAttribute('onclick', `tabs[${tindex}].Clicked(${lindex},true)`)
 
 		if (who != null) {
+			br_cmenu_info = [
+				who.getAttribute('cid') || null,
+				tabs[tindex].site,
+				Number(who.getAttribute('h'))
+			]
 
+			if (!Number.isNaN(br_cmenu_info[2])) {
+				if (br_cmenu_info[2] == 0) {
+					children[3].style.display = 'flex'
+					children[3].setAttribute('onclick', `AddToHave(${br_cmenu_info[1]},br_cmenu_info[0])`)
+					children[4].style.display = 'none'
+				} else if (br_cmenu_info[2] == 1) {
+					children[3].style.display = 'none'
+					children[4].style.display = 'flex'
+					children[4].setAttribute('onclick', `RemoveFromHave(${br_cmenu_info[1]},br_cmenu_info[0])`)
+				} else {
+					children[3].style.display = 'none'
+					children[4].style.display = 'none'
+				}
+			} else {
+				children[3].style.display = 'none'
+				children[4].style.display = 'none'
+			}
+
+
+			if (br_cmenu_info[0] != null && br_cmenu_info[2] == 0) {
+				children[5].setAttribute('onclick',sites[tabs[tindex].site].downloader.replace('{id}','br_cmenu_info[0]'))
+				children[5].style.display = 'flex'
+			} else children[5].style.display = 'none'
 		} else {
 			children[3].style.display = 'none'
 			children[4].style.display = 'none'
 			children[5].style.display = 'none'
 		}
 
+		let x = e.clientX, y = e.clientY
 		menu.style.display = 'block'
+		if (window.innerWidth <= x+170) x = window.innerWidth - 170
+		if (window.innerHeight <= y+menu.clientHeight) y = window.innerHeight - menu.clientHeight
 		menu.style.top = y+'px'
 		menu.style.left = x+'px'
 		window.addEventListener('click', closeBRCMenu)

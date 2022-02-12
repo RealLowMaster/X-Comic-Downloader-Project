@@ -79,13 +79,13 @@ function nhentaiChangePage(page = 1, makeNewPage = false, updateTabIndex = true)
 			html += '<div class="nhentai-postrow"><div>Popular</div><div>'
 			if (setting.lazy_loading) {
 				for (let i = 0; i < result.popular.length; i++) {
-					if (Downloader.IsDownloading(1, result.popular[i].id)) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.popular[i].id)})"><img src="${result.popular[i].thumb}" loading="lazy"><div ${result.popular[i].lang}>${result.popular[i].title}</div><cid ssite="1" cid="${result.popular[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
-					else html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.popular[i].id)})"><img src="${result.popular[i].thumb}" loading="lazy"><div ${result.popular[i].lang}>${result.popular[i].title}</div><button ssite="1" cid="${result.popular[i].id}" onclick="nhentaiDownloader(this.getAttribute('cid'))">Download</button></div>`
+					if (Downloader.IsDownloading(1, result.popular[i].id)) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.popular[i].id)},this)" cid="${result.popular[i].id}" h="0"><img src="${result.popular[i].thumb}" loading="lazy"><div ${result.popular[i].lang}>${result.popular[i].title}</div><cid><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
+					else html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.popular[i].id)},this)" cid="${result.popular[i].id}" h="0"><img src="${result.popular[i].thumb}" loading="lazy"><div ${result.popular[i].lang}>${result.popular[i].title}</div><button onclick="nhentaiDownloader(this.parentElement.getAttribute('cid'))">Download</button></div>`
 				}
 			} else {
 				for (let i = 0; i < result.popular.length; i++) {
-					if (Downloader.IsDownloading(1, result.popular[i].id)) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.popular[i].id)})"><img src="${result.popular[i].thumb}"><div ${result.popular[i].lang}>${result.popular[i].title}</div><cid ssite="1" cid="${result.popular[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
-					else html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.popular[i].id)})"><img src="${result.popular[i].thumb}"><div ${result.popular[i].lang}>${result.popular[i].title}</div><button ssite="1" cid="${result.popular[i].id}" onclick="nhentaiDownloader(this.getAttribute('cid'))">Download</button></div>`
+					if (Downloader.IsDownloading(1, result.popular[i].id)) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.popular[i].id)},this)" cid="${result.popular[i].id}" h="0"><img src="${result.popular[i].thumb}"><div ${result.popular[i].lang}>${result.popular[i].title}</div><cid><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
+					else html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.popular[i].id)},this)" cid="${result.popular[i].id}" h="0"><img src="${result.popular[i].thumb}"><div ${result.popular[i].lang}>${result.popular[i].title}</div><button onclick="nhentaiDownloader(this.parentElement.getAttribute('cid'))">Download</button></div>`
 				}
 			}
 			html += '</div></div>'
@@ -95,13 +95,13 @@ function nhentaiChangePage(page = 1, makeNewPage = false, updateTabIndex = true)
 		html += `<div class="nhentai-postrow"><div>Content Page ${page}</div><div>`
 		if (setting.lazy_loading) {
 			for (let i = 0; i < result.content.length; i++) {
-				if (Downloader.IsDownloading(1, result.content[i].id)) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.content[i].id)})"><img src="${result.content[i].thumb}" loading="lazy"><div ${result.content[i].lang}>${result.content[i].title}</div><cid ssite="1" cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
-				else html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.content[i].id)})"><img src="${result.content[i].thumb}" loading="lazy"><div ${result.content[i].lang}>${result.content[i].title}</div><button ssite="1" cid="${result.content[i].id}" onclick="nhentaiDownloader(this.getAttribute('cid'))">Download</button></div>`
+				if (Downloader.IsDownloading(1, result.content[i].id)) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.content[i].id)},this)" cid="${result.content[i].id}" h="0"><img src="${result.content[i].thumb}" loading="lazy"><div ${result.content[i].lang}>${result.content[i].title}</div><cid><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
+				else html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.content[i].id)},this)" cid="${result.content[i].id}" h="0"><img src="${result.content[i].thumb}" loading="lazy"><div ${result.content[i].lang}>${result.content[i].title}</div><button onclick="nhentaiDownloader(this.parentElement.getAttribute('cid'))">Download</button></div>`
 			}
 		} else {
 			for (let i = 0; i < result.content.length; i++) {
-				if (Downloader.IsDownloading(1, result.content[i].id)) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.content[i].id)})"><img src="${result.content[i].thumb}"><div ${result.content[i].lang}>${result.content[i].title}</div><cid ssite="1" cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
-				else html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.content[i].id)})"><img src="${result.content[i].thumb}"><div ${result.content[i].lang}>${result.content[i].title}</div><button ssite="1" cid="${result.content[i].id}" onclick="nhentaiDownloader(this.getAttribute('cid'))">Download</button></div>`
+				if (Downloader.IsDownloading(1, result.content[i].id)) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.content[i].id)},this)" cid="${result.content[i].id}" h="0"><img src="${result.content[i].thumb}"><div ${result.content[i].lang}>${result.content[i].title}</div><cid><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
+				else html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.content[i].id)},this)" cid="${result.content[i].id}" h="0"><img src="${result.content[i].thumb}"><div ${result.content[i].lang}>${result.content[i].title}</div><button onclick="nhentaiDownloader(this.parentElement.getAttribute('cid'))">Download</button></div>`
 			}
 		}
 		html += '</div></div>'
@@ -308,7 +308,10 @@ function nhentaiOpenPost(id, makeNewTab, updateTabIndex) {
 				// Related
 				if (result.related != undefined && result.related.length != 0) {
 					html += '<div class="nhentai-postrow"><div>Related</div><div>'
-					for (let i = 0; i < result.related.length; i++) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.related[i].id)})"><img src="${result.related[i].thumb}" loading="lazy"><div ${result.related[i].lang}>${result.related[i].title}</div></div>`
+					for (let i = 0; i < result.related.length; i++) {
+						if (Downloader.IsDownloading(1, result.related[i].id)) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.related[i].id)},this)" cid="${result.related[i].id}" h="0"><img src="${result.related[i].thumb}" loading="lazy"><div ${result.related[i].lang}>${result.related[i].title}</div><cid><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
+						else html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.related[i].id)},this)" cid="${result.related[i].id}" h="0"><img src="${result.related[i].thumb}" loading="lazy"><div ${result.related[i].lang}>${result.related[i].title}</div><button onclick="nhentaiDownloader(this.parentElement.getAttribute('cid'))">Download</button></div>`
+					}
 					html += '</div></div>'
 				}
 
@@ -330,7 +333,10 @@ function nhentaiOpenPost(id, makeNewTab, updateTabIndex) {
 			// Related
 			if (result.related != undefined && result.related.length != 0) {
 				html += '<div class="nhentai-postrow"><div>Related</div><div>'
-				for (let i = 0; i < result.related.length; i++) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.related[i].id)})"><img src="${result.related[i].thumb}" loading="lazy"><div ${result.related[i].lang}>${result.related[i].title}</div></div>`
+				for (let i = 0; i < result.related.length; i++) {
+					if (Downloader.IsDownloading(1, result.related[i].id)) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.related[i].id)},this)" cid="${result.related[i].id}" h="0"><img src="${result.related[i].thumb}" loading="lazy"><div ${result.related[i].lang}>${result.related[i].title}</div><cid><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
+					else html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.related[i].id)},this)" cid="${result.related[i].id}" h="0"><img src="${result.related[i].thumb}" loading="lazy"><div ${result.related[i].lang}>${result.related[i].title}</div><button onclick="nhentaiDownloader(this.parentElement.getAttribute('cid'))">Download</button></div>`
+				}
 				html += '</div></div>'
 			}
 
@@ -417,13 +423,13 @@ function nhentaiOpenInfo(name = null, page = 1, whitch = null, makeNewTab = fals
 		html += `<div class="nhentai-postrow"><div>${types[whitch]} > <span class="nhentai-glow">${result.name}</span> > Page ${page}</div><div>`
 		if (setting.lazy_loading) {
 			for (let i = 0; i < result.content.length; i++) {
-				if (Downloader.IsDownloading(1, result.content[i].id)) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.content[i].id)})"><img src="${result.content[i].thumb}" loading="lazy"><div ${result.content[i].lang}>${result.content[i].title}</div><cid ssite="1" cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
-				else html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.content[i].id)})"><img src="${result.content[i].thumb}" loading="lazy"><div ${result.content[i].lang}>${result.content[i].title}</div><button ssite="1" cid="${result.content[i].id}" onclick="nhentaiDownloader(this.getAttribute('cid'))">Download</button></div>`
+				if (Downloader.IsDownloading(1, result.content[i].id)) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.content[i].id)},this)" cid="${result.content[i].id}" h="0"><img src="${result.content[i].thumb}" loading="lazy"><div ${result.content[i].lang}>${result.content[i].title}</div><cid><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
+				else html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.content[i].id)},this)" cid="${result.content[i].id}" h="0"><img src="${result.content[i].thumb}" loading="lazy"><div ${result.content[i].lang}>${result.content[i].title}</div><button onclick="nhentaiDownloader(this.parentElement.getAttribute('cid'))">Download</button></div>`
 			}
 		} else {
 			for (let i = 0; i < result.content.length; i++) {
-				if (Downloader.IsDownloading(1, result.content[i].id)) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.content[i].id)})"><img src="${result.content[i].thumb}"><div ${result.content[i].lang}>${result.content[i].title}</div><cid ssite="1" cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
-				else html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.content[i].id)})"><img src="${result.content[i].thumb}"><div ${result.content[i].lang}>${result.content[i].title}</div><button ssite="1" cid="${result.content[i].id}" onclick="nhentaiDownloader(this.getAttribute('cid'))">Download</button></div>`
+				if (Downloader.IsDownloading(1, result.content[i].id)) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.content[i].id)},this)" cid="${result.content[i].id}" h="0"><img src="${result.content[i].thumb}"><div ${result.content[i].lang}>${result.content[i].title}</div><cid><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
+				else html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.content[i].id)},this)" cid="${result.content[i].id}" h="0"><img src="${result.content[i].thumb}"><div ${result.content[i].lang}>${result.content[i].title}</div><button onclick="nhentaiDownloader(this.parentElement.getAttribute('cid'))">Download</button></div>`
 			}
 		}
 		html += '</div></div>'
@@ -513,13 +519,13 @@ function nhentaiOpenPages(from = null, to = null, page = 1, makeNewTab = false, 
 		html += `<div class="nhentai-postrow"><div>${result.title} -> Page ${page} | Results: ${result.result}</div><div>`
 		if (setting.lazy_loading) {
 			for (let i = 0; i < result.content.length; i++) {
-				if (Downloader.IsDownloading(1, result.content[i].id)) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.content[i].id)})"><img src="${result.content[i].thumb}" loading="lazy"><div ${result.content[i].lang}>${result.content[i].title}</div><cid ssite="1" cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
-				else html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.content[i].id)})"><img src="${result.content[i].thumb}" loading="lazy"><div ${result.content[i].lang}>${result.content[i].title}</div><button ssite="1" cid="${result.content[i].id}" onclick="nhentaiDownloader(this.getAttribute('cid'))">Download</button></div>`
+				if (Downloader.IsDownloading(1, result.content[i].id)) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.content[i].id)},this)" cid="${result.content[i].id}" h="0"><img src="${result.content[i].thumb}" loading="lazy"><div ${result.content[i].lang}>${result.content[i].title}</div><cid><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
+				else html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.content[i].id)},this)" cid="${result.content[i].id}" h="0"><img src="${result.content[i].thumb}" loading="lazy"><div ${result.content[i].lang}>${result.content[i].title}</div><button onclick="nhentaiDownloader(this.parentElement.getAttribute('cid'))">Download</button></div>`
 			}
 		} else {
 			for (let i = 0; i < result.content.length; i++) {
-				if (Downloader.IsDownloading(1, result.content[i].id)) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.content[i].id)})"><img src="${result.content[i].thumb}"><div ${result.content[i].lang}>${result.content[i].title}</div><cid ssite="1" cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
-				else html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.content[i].id)})"><img src="${result.content[i].thumb}"><div ${result.content[i].lang}>${result.content[i].title}</div><button ssite="1" cid="${result.content[i].id}" onclick="nhentaiDownloader(this.getAttribute('cid'))">Download</button></div>`
+				if (Downloader.IsDownloading(1, result.content[i].id)) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.content[i].id)},this)" cid="${result.content[i].id}" h="0"><img src="${result.content[i].thumb}"><div ${result.content[i].lang}>${result.content[i].title}</div><cid><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
+				else html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.content[i].id)},this)" cid="${result.content[i].id}" h="0"><img src="${result.content[i].thumb}"><div ${result.content[i].lang}>${result.content[i].title}</div><button onclick="nhentaiDownloader(this.parentElement.getAttribute('cid'))">Download</button></div>`
 			}
 		}
 		html += '</div></div>'
@@ -609,13 +615,13 @@ function nhentaiSearch(text = null, page = 1, makeNewTab = false, updateTabIndex
 		html += `<div class="nhentai-postrow"><div>Search -> Page ${page} | Results: ${result.result}</div><div>`
 		if (setting.lazy_loading) {
 			for (let i = 0; i < result.content.length; i++) {
-				if (Downloader.IsDownloading(1, result.content[i].id)) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.content[i].id)})"><img src="${result.content[i].thumb}" loading="lazy"><div ${result.content[i].lang}>${result.content[i].title}</div><cid ssite="1" cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
-				else html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.content[i].id)})"><img src="${result.content[i].thumb}" loading="lazy"><div ${result.content[i].lang}>${result.content[i].title}</div><button ssite="1" cid="${result.content[i].id}" onclick="nhentaiDownloader(this.getAttribute('cid'))">Download</button></div>`
+				if (Downloader.IsDownloading(1, result.content[i].id)) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.content[i].id)},this)" cid="${result.content[i].id}" h="0"><img src="${result.content[i].thumb}" loading="lazy"><div ${result.content[i].lang}>${result.content[i].title}</div><cid><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
+				else html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.content[i].id)},this)" cid="${result.content[i].id}" h="0"><img src="${result.content[i].thumb}" loading="lazy"><div ${result.content[i].lang}>${result.content[i].title}</div><button onclick="nhentaiDownloader(this.parentElement.getAttribute('cid'))">Download</button></div>`
 			}
 		} else {
 			for (let i = 0; i < result.content.length; i++) {
-				if (Downloader.IsDownloading(1, result.content[i].id)) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.content[i].id)})"><img src="${result.content[i].thumb}"><div ${result.content[i].lang}>${result.content[i].title}</div><cid ssite="1" cid="${result.content[i].id}"><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
-				else html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.content[i].id)})"><img src="${result.content[i].thumb}"><div ${result.content[i].lang}>${result.content[i].title}</div><button ssite="1" cid="${result.content[i].id}" onclick="nhentaiDownloader(this.getAttribute('cid'))">Download</button></div>`
+				if (Downloader.IsDownloading(1, result.content[i].id)) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.content[i].id)},this)" cid="${result.content[i].id}" h="0"><img src="${result.content[i].thumb}"><div ${result.content[i].lang}>${result.content[i].title}</div><cid><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
+				else html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.content[i].id)},this)" cid="${result.content[i].id}" h="0"><img src="${result.content[i].thumb}"><div ${result.content[i].lang}>${result.content[i].title}</div><button onclick="nhentaiDownloader(this.parentElement.getAttribute('cid'))">Download</button></div>`
 			}
 		}
 		html += '</div></div>'
@@ -910,11 +916,14 @@ function nhentaiRandom(makeNewTab = false, updateTabIndex = true) {
 				html += '</div>'
 
 				// Related
-				if (result.related != undefined && result.related.length != 0) {
-					html += '<div class="nhentai-postrow"><div>Related</div><div>'
-					for (let i = 0; i < result.related.length; i++) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.related[i].id)})"><img src="${result.related[i].thumb}" loading="lazy"><div ${result.related[i].lang}>${result.related[i].title}</div></div>`
-					html += '</div></div>'
+			if (result.related != undefined && result.related.length != 0) {
+				html += '<div class="nhentai-postrow"><div>Related</div><div>'
+				for (let i = 0; i < result.related.length; i++) {
+					if (Downloader.IsDownloading(1, result.related[i].id)) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.related[i].id)},this)" cid="${result.related[i].id}" h="0"><img src="${result.related[i].thumb}" loading="lazy"><div ${result.related[i].lang}>${result.related[i].title}</div><cid><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
+					else html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.related[i].id)},this)" cid="${result.related[i].id}" h="0"><img src="${result.related[i].thumb}" loading="lazy"><div ${result.related[i].lang}>${result.related[i].title}</div><button onclick="nhentaiDownloader(this.parentElement.getAttribute('cid'))">Download</button></div>`
 				}
+				html += '</div></div>'
+			}
 
 				html += '</div></div>'
 				tabs[thisTabIndex].page.innerHTML = html
@@ -932,7 +941,10 @@ function nhentaiRandom(makeNewTab = false, updateTabIndex = true) {
 			// Related
 			if (result.related != undefined && result.related.length != 0) {
 				html += '<div class="nhentai-postrow"><div>Related</div><div>'
-				for (let i = 0; i < result.related.length; i++) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.related[i].id)})"><img src="${result.related[i].thumb}" loading="lazy"><div ${result.related[i].lang}>${result.related[i].title}</div></div>`
+				for (let i = 0; i < result.related.length; i++) {
+					if (Downloader.IsDownloading(1, result.related[i].id)) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.related[i].id)},this)" cid="${result.related[i].id}" h="0"><img src="${result.related[i].thumb}" loading="lazy"><div ${result.related[i].lang}>${result.related[i].title}</div><cid><img class="spin" src="Image/dual-ring-success-${wt_fps}.gif"></cid></div>`
+					else html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(0,result.related[i].id)},this)" cid="${result.related[i].id}" h="0"><img src="${result.related[i].thumb}" loading="lazy"><div ${result.related[i].lang}>${result.related[i].title}</div><button onclick="nhentaiDownloader(this.parentElement.getAttribute('cid'))">Download</button></div>`
+				}
 				html += '</div></div>'
 			}
 

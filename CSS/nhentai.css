@@ -6,7 +6,7 @@
 	background-color: #0d0d0d;
 }
 
-.nhentai-top-menu { display: flex; height: 50px; background-color: #1f1f1f }
+.nhentai-top-menu { display: flex; height: 50px; background-color: #1f1f1f; user-select: none }
 .nhentai-top-menu > i { display: inline-block; padding: 10px }
 .nhentai-top-menu > i > svg { width: 46px; height: 30px }
 

@@ -10,17 +10,11 @@ function CreateHave(site, id, downloaded = false) {
 
 function AddToHave(site, id) {
 	CreateHave(site, id, false)
-	let saveId
-	if (typeof(id) == 'number') saveId = id
-	else saveId = `'${id}'`
-	const page = document.getElementById(activeTabComicId)
-	page.getElementsByClassName('browser-comic-have')[0].innerHTML = `<button class="remove-from-have" onclick="RemoveFromHave(${site}, ${saveId}, this)">You Have This Comic.</button>`
 	changeButtonsToDownloaded(id, site, true, false)
 	PopAlert('Comic Added To Have List.')
 }
 
-function RemoveFromHave(site, id, who) {
-	who = who || null
+function RemoveFromHave(site, id, who = null) {
 	const haveIndex = GetHave(site,id)
 	if (haveIndex != null) {
 		haveDBSite.splice(haveIndex, 1)

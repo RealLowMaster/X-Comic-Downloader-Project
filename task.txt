@@ -94,6 +94,7 @@ Add Comic {
 
 Added To Version {
 	*Add Ability To Sort With Multiple Tags/etc... (Requested By Zogarth23)
+	*Add Right Click Menu To Browser Links
 	Fix Bug: When renaming still can use hotkeys
 	Fix Some Database Optimization Bugs
 	Fix Some Right Click Menu Bugs
@@ -103,13 +104,14 @@ Added To Version {
 	Change Slider System and Fix Some Bugs
 	Make Image Stop Loading System Work Better
 	Add Comic Properties
+	Add Download Button To nhentai Related Comics
 	Add More Choose Location Checkup
 }
 
 Tasks => {
+	Make Mac and Linux version
 	Fix History
 	Add Download Log
-	Add Download To Related in nhentai
 	Fix Bug: nhentai -> Search -> Otokonoko Heaven Vol. 4 Jump Page
 	Optimize and Fix Events
 	Improve Release-Note
