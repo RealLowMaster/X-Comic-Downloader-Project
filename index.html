@@ -79,6 +79,7 @@
 										<button onclick="openInfoPanel(6)" title="Categories | 7">Categories</button>
 									</div>
 								</div>
+								<button type="button" onclick="Downloader.OpenPanel()" title="Open Downloads">Downloads</button>
 								<button type="button" onclick="RepairAllComicInfos()" title="Repair All Comics Infos">Repair All</button>
 							</div>
 						</div>
@@ -650,23 +651,18 @@
 					<p class="input-row-helper">Recommend (High).<br>The Quality of Downloading Images.<br>(If High) App will check if Comic Have High Quality Image Then it will Download it, But If It Doesn't Then it will Download Low Quality.</p>
 				</div>
 
-				<br><br>
-
+				<br><br><br>
+				
 				<div class="input-row">
-					<label class="input-row-label">Search Speed</label>
-					<div class="input-row-selector" id="s_search_speed" value>
-						<div onclick="openSelect(this.parentElement)"></div>
-						<div class="input-row-selector-overflow">
-							<p onclick="select(this, 0)">Dynamic</p>
-							<p onclick="select(this, 1)">Fast</p>
-							<p onclick="select(this, 2)">Normal</p>
-							<p onclick="select(this, 3)">Slow</p>
+					<div class="input-row-checkbox">
+						<label>Auto Remove Download</label>
+						<div>
+							<input type="checkbox" id="s_rdls">
 						</div>
-						<span></span>
 					</div>
-					<p class="input-row-helper">Recommend (Normal/Fast).<br>The Delay of searching in Downloaded Comics.<br>Dynamic = No Delay (Not Recommended For Low PC)<br>Fast = 0.3 Secend<br>Normal = 0.7 Secend<br>Slow = 1 Secend (For Low-End PC)</p>
+					<p class="input-row-helper">Automaticly Remove Downloaded Comic From Download Panel List</p>
 				</div>
-
+				
 				<br><br><br>
 
 				<div class="input-row">

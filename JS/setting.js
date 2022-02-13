@@ -8,18 +8,15 @@ function setLuanchTimeSettings(reloadSettingPanel) {
 	const s_pagination_theme = document.getElementById('s_pagination_theme')
 	const s_waiting_quality = document.getElementById('s_waiting_quality')
 	const s_img_graphic = document.getElementById('s_img_graphic')
-	const s_search_speed = document.getElementById('s_search_speed')
 	const s_file_location = document.getElementById('s_file_location')
 
 	s_theme.setAttribute('value', setting.theme)
 	s_pagination_theme.setAttribute('value', setting.pagination_theme)
 	s_img_graphic.setAttribute('value', setting.img_graphic)
-	s_search_speed.setAttribute('value', setting.search_speed)
 
 	s_theme.getElementsByTagName('div')[0].textContent = s_theme.getElementsByTagName('div')[1].querySelector(`[onclick="select(this, ${setting.theme})"]`).textContent
 	s_pagination_theme.getElementsByTagName('div')[0].textContent = s_pagination_theme.getElementsByTagName('div')[1].querySelector(`[onclick="select(this, ${setting.pagination_theme})"]`).textContent
 	s_img_graphic.getElementsByTagName('div')[0].textContent = s_img_graphic.getElementsByTagName('div')[1].querySelector(`[onclick="select(this, ${setting.img_graphic})"]`).textContent
-	s_search_speed.getElementsByTagName('div')[0].textContent = s_search_speed.getElementsByTagName('div')[1].querySelector(`[onclick="select(this, ${setting.search_speed})"]`).textContent
 
 	const wt_passValue = s_waiting_quality.getAttribute('value') || null
 	if (wt_passValue != null) s_waiting_quality.querySelector(`[cs="${wt_passValue}"]`).removeAttribute('active')
@@ -39,6 +36,7 @@ function setLuanchTimeSettings(reloadSettingPanel) {
 	document.getElementById('s_auto_close_optimize_panel').checked = setting.auto_close_optimize_panel
 	document.getElementById('s_full_screen').checked = setting.full_screen
 	document.getElementById('s_open_br_startup').checked = setting.open_br_startup
+	document.getElementById('s_rdls').checked = setting.rdls
 	document.getElementById('s_show_comic_pages').checked = setting.show_comic_pages
 	document.getElementById('s_auto_backup').checked = setting.auto_backup
 
@@ -85,7 +83,6 @@ function saveSetting(justSave) {
 		setting.theme = Number(document.getElementById('s_theme').getAttribute('value'))
 		setting.pagination_theme = Number(document.getElementById('s_pagination_theme').getAttribute('value'))
 		setting.img_graphic = Number(document.getElementById('s_img_graphic').getAttribute('value'))
-		setting.search_speed = Number(document.getElementById('s_search_speed').getAttribute('value'))
 		setting.notification_download_finish = document.getElementById('s_notification_download_finish').checked
 		setting.notification_optimization_finish = document.getElementById('s_notification_optimization_finish').checked
 		setting.download_limit = Number(document.getElementById('s_download_limit').value)
@@ -93,6 +90,7 @@ function saveSetting(justSave) {
 		setting.auto_close_optimize_panel = document.getElementById('s_auto_close_optimize_panel').checked
 		setting.open_br_startup = document.getElementById('s_open_br_startup').checked
 		setting.show_comic_pages = document.getElementById('s_show_comic_pages').checked
+		setting.rdls = document.getElementById('s_rdls').checked
 		setting.full_screen = document.getElementById('s_full_screen').checked
 		setting.auto_backup = document.getElementById('s_auto_backup').checked
 

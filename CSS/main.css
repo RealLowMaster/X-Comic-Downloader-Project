@@ -1402,6 +1402,11 @@ input::-webkit-input-placeholder { user-select: none }
 	color: #f00;
 }
 
+.dl_disable {
+	border: 1px solid #1a73e8;
+	opacity: .85;
+}
+
 /* New Release */
 #new-release {
 	display: none;

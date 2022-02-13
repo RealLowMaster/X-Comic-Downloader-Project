@@ -18,12 +18,12 @@ const defaultSetting = {
 	"notification_optimization_finish": true,
 	"lazy_loading": true,
 	"tabs_limit": 32,
-	"search_speed": 1,
 	"download_limit": 5,
 	"show_unoptimize": false,
 	"check_update": true,
 	"auto_close_optimize_panel": false,
 	"file_location": null,
+	"rdls": false,
 	"full_screen": true,
 	"open_br_startup": false,
 	"auto_backup": true,
@@ -955,15 +955,13 @@ function CheckSettings() {
 	if (setting.lazy_loading == false) imageLazyLoadingOptions.rootMargin = "0px 0px 1200px 0px"
 	if (typeof(setting.tabs_limit) != 'number') setting.tabs_limit = defaultSetting.tabs_limit
 	if (setting.tabs_limit < 1) setting.tabs_limit = 1
-	if (typeof(setting.search_speed) != 'number') setting.search_speed = defaultSetting.search_speed
-	if (setting.search_speed > 3) setting.search_speed = 3
-	else if (setting.search_speed < 0) setting.search_speed = 0
 	if (typeof(setting.download_limit) != 'number') setting.download_limit = defaultSetting.download_limit
 	if (setting.download_limit < 1) setting.download_limit = 1
 	if (typeof(setting.show_unoptimize) != 'boolean') setting.show_unoptimize = defaultSetting.show_unoptimize
 	if (typeof(setting.check_update) != 'boolean') setting.check_update = defaultSetting.check_update
 	if (typeof(setting.auto_close_optimize_panel) != 'boolean') setting.auto_close_optimize_panel = defaultSetting.auto_close_optimize_panel
 	if (typeof(setting.open_br_startup) != 'boolean') setting.open_br_startup = defaultSetting.open_br_startup
+	if (typeof setting.rdls != 'boolean') setting.rdls = defaultSetting.rdls
 	if (typeof(setting.full_screen) != 'boolean') setting.full_screen = defaultSetting.full_screen
 	if (typeof(setting.auto_backup) != 'boolean') setting.auto_backup = defaultSetting.auto_backup
 	if (typeof(setting.developer_mode) != 'boolean') setting.developer_mode = defaultSetting.developer_mode

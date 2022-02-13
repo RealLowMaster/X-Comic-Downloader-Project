@@ -485,7 +485,7 @@ function changeButtonsToDownloaded(id, site, have = false, haveBackward = false)
 			let element
 			if (!have) {
 				for (let j = 0, n = comic_page_btns.length; j < n; j++) comic_page_btns[j].innerHTML = '<span>You Downloaded This Comic.<span></span></span>'
-				for (let i = 0; i < comic_overview[j].length; i++) {
+				for (let j = 0, n = comic_overview.length; j < n; j++) {
 					const child = comic_overview[j].children
 					child[child.length - 1].remove()
 					element = document.createElement('button')

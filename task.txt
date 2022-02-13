@@ -110,8 +110,9 @@ Added To Version {
 
 Tasks => {
 	Make Mac and Linux version
-	Fix History
+	Fix Browser Multi Change Page Problem
 	Add Download Log
+	Fix History
 	Fix Bug: nhentai -> Search -> Otokonoko Heaven Vol. 4 Jump Page
 	Optimize and Fix Events
 	Improve Release-Note
