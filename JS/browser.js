@@ -3,7 +3,7 @@ const browserPasteMenu = document.getElementById('browser-paste-menu')
 const bjp = document.getElementById('browser-jump-page-container')
 const bjp_i = document.getElementById('bjp-i')
 const bjp_m_p = document.getElementById('bjp-m-p')
-let browserHistoryIndex = 0, browserHistoryRowOpElement, br_history_selected_inputs = [], br_history_selected_indexs = [], resizeTabTimer, active_site = null, historyObserver, historyLaodCounter = 0, br_cmenu_info = null
+let browserHistoryIndex = 0, browserHistoryRowOpElement, br_history_selected_inputs = [], br_history_selected_indexs = [], resizeTabTimer, active_site = null, historyObserver, historyLaodCounter = 0, br_cmenu_info = null, brh_cb_save = null
 
 function openBrowser() {
 	keydownEventIndex = 3
@@ -770,6 +770,9 @@ function loadMoreHistory() {
 					element.setAttribute('h', passHistory[j][1])
 					element.setAttribute('onclick', 'browserHistorySelect(this)')
 					container.appendChild(element)
+					element = document.createElement('div')
+					element.setAttribute('onclick', 'this.parentElement.children[0].click()')
+					container.appendChild(element)
 					element = document.createElement('img')
 					element.src = 'Image/sites/'+sites[passHistory[j][0][1][3]].name+'-30x30.jpg'
 					container.appendChild(element)
@@ -816,6 +819,9 @@ function loadMoreHistory() {
 					element.type = 'checkbox'
 					element.setAttribute('h', passHistory[j][1])
 					element.setAttribute('onclick', 'browserHistorySelect(this)')
+					container.appendChild(element)
+					element = document.createElement('div')
+					element.setAttribute('onclick', 'this.parentElement.children[0].click()')
 					container.appendChild(element)
 					element = document.createElement('img')
 					element.src = 'Image/sites/'+sites[passHistory[j][0][1][3]].name+'-30x30.jpg'

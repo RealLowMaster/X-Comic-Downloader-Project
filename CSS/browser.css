@@ -418,6 +418,15 @@
 	position: relative;
 }
 
+#b-h-p-h-c > div > div:last-child > div > div {
+	height: 100%;
+	width: 35px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	cursor: pointer;
+}
+
 #b-h-p-h-c > div > div:last-child > div > input {
 	width: 15px;
 	height: 15px;

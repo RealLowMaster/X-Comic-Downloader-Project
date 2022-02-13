@@ -102,10 +102,11 @@ Added To Version {
 	Optimize Have Database and its System
 	Merge Collections To Normal Gallery View
 	Change Slider System and Fix Some Bugs
-	Make Image Stop Loading System Work Better
 	Add Comic Properties
 	Add Download Button To nhentai Related Comics
 	Add More Choose Location Checkup
+	Make Image Stop Loading System Work Better
+	Make History Checkboxs Hitbox Bigger
 }
 
 Tasks => {

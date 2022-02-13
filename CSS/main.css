@@ -1173,7 +1173,8 @@ input::-webkit-input-placeholder { user-select: none }
 
 /* Download Panel */
 #download-panel {
-	display: block;
+	display: grid;
+	grid-template-rows: 40px 11fr;
 	width: 100%;
 	height: calc(100% - var(--topMenuSize));
 	background-color: var(--obr-con-bgc);
@@ -1187,6 +1188,12 @@ input::-webkit-input-placeholder { user-select: none }
 }
 
 #download-panel[active] { left: 0 }
+
+#d-p-m {
+	display: flex;
+	align-items: center;
+	position: relative;
+}
 
 #d-p-t {
 	display: none;
@@ -1216,17 +1223,18 @@ input::-webkit-input-placeholder { user-select: none }
 	width: 30px;
 	height: 30px;
 	color: var(--black-white);
-	position: sticky;
-	top: 10px;
+	position: absolute;
 	right: 10px;
-	float: right;
-	left: auto;
 	cursor: pointer;
 }
 
 #d-p-c-btn > svg { width: 100%; height: 100% }
 #d-p-c-btn:hover { color: #f00 }
-#d-p-c { padding: 30px 0 }
+
+#d-p-c {
+	padding: 30px 0;
+	overflow-y: auto;
+}
 
 #d-p-c > div {
 	display: flex;
