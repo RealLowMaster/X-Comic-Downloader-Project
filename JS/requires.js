@@ -70,23 +70,6 @@ const keydownEvents = [
 const ThisWindow = remote.getCurrentWindow(), loading = new Loading(9), Downloader = new DownloadManager(), PageManager = new OfflinePageManager(), db = {}, procressPanel = new ProcressPanel(0), SliderManager = new Slider(), update_number = 14
 let comicDeleting = false, wt_fps = 20, dirDB, dirUL, dirBU, dirTmp, isOptimizing = false, browserLastTabs = [], tabsHistory = [], dirHistory = '', keydownEventIndex = 0, new_update, save_value = null, save_value2 = null, afterDLReload = true, setting, openedMenuTabIndex, copiedTab = null, tabs = [], lastComicId, searchTimer, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = [], isUpdating = false, collectionsDB = [], groupsDB = [], artistsDB = [], parodiesDB = [], tagsDB = [], charactersDB = [], languagesDB = [], categoriesDB = [], comicGroupsDB = [], comicArtistsDB = [], comicParodiesDB = [], comicTagsDB = [], comicCharactersDB = [], comicLanguagesDB = [], comicCategoriesDB = [], indexDB = [], haveDBSite = [], haveDBId = [], haveDBComic = []
 
-/*
-	37 // Left Arrow
-	39 // Right Arrow
-	38 // Up Arrow
-	40 // Down Arrow
-	84 // T = Open Recent Tab
-	78 // N = Create New Tab
-	72 // H = Open History
-	70 // F = Search Tab
-	87 // W = Close Current Tab
-	36 // Home = Go To Home Site
-	107 // + = Zoom In
-	109 // - = Zoom Out
-	83 // S = Open Slider
-	82 // R = Reload
-*/
-
 // Set Windows Closing Event
 function closeApp() {
 	closingApp = true

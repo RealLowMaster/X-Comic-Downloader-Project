@@ -22,5 +22,26 @@
 > - ###### nhentai.net
 > - More Sites Gonna Be Added Later :)
 
-If you found any bug Please Write it In Issues Tab, Thank you ;)
+If you found any bug Please Write it In Issues Tab, Thank you ;)\
 If you have any question about Project Like Whats going on, Tell Me! (mehdi.enayatzadeh83@gmail.com)
+
+### How To Build From Source
+#### Step 1:
+Download Source and Extract it Some were
+#### Step 2:
+Download Node.js (Recomended Version v13.14.0)
+#### Step 3:
+Open CommandPromp/Cmd\
+In Windows Windows+R Then Type 'cmd' and hit Ok
+#### Step 4:
+In Cmd Type 'npm i yarn'\
+Now yarn package will download\
+after its finish close Cmd and open it again
+#### Step 5:
+Now In Cmd that Opened Type the Drive that Source Codes are there (ex. E:) then hit Enter\
+Now In Cmd Type 'cd \<SourceFolderAddress\>' Replace \<SourceFolderAddress\> With Source Extract Location
+#### Step 6:
+In Cmd Type 'yarn install'\
+This will Install All Source Packages\
+After its Finish In Cmd Type 'yarn run dist' this Will Build The App Wait Till its Finish\
+After its Done Now You can Find App In Folder Called build Right in the Source Folder

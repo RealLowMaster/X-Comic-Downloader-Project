@@ -52,10 +52,7 @@
 			]
 		},
 		"linux": {
-			"target": [
-				"AppImage",
-				"deb"
-			],
+			"target": "deb",
 			"icon": "Image/favicon-32x32.png"
 		},
 		"win": {
@@ -67,12 +64,15 @@
 		"nsis": {
 			"allowToChangeInstallationDirectory": true,
 			"oneClick": false
-		}
+		},
+		"deb": {}
 	},
 	"scripts": {
 		"start": "electron .",
 		"build": "electron-builder --dir",
-		"dist": "electron-builder"
+		"dist": "electron-builder",
+		"dist-mac": "electron-builder --mac",
+		"dist-linux": "electron-builder --linux"
 	},
 	"devDependencies": {
 		"electron": "^13.1.4",
