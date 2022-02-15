@@ -1,7 +1,9 @@
-![APM](https://img.shields.io/badge/npm-v6.14.4-blue?logo=npm)
-![APM](https://img.shields.io/badge/node.js-v13.14.0-red?logo=node.js)
-![APM](https://img.shields.io/badge/electron-v13.1.4-blue?logo=electron&logoColor=green)
-![APM](https://img.shields.io/apm/l/vim-mode)
+![npm](https://img.shields.io/badge/npm-v6.14.4-blue?logo=npm)
+![node.js](https://img.shields.io/badge/node.js-v13.14.0-red?logo=node.js)
+![electron](https://img.shields.io/badge/electron-v13.1.4-blue?logo=electron&logoColor=green)
+![license](https://img.shields.io/apm/l/vim-mode)
+
+![Banner](https://github.com/RealLowMaster/X-Comic-Downloader-Project/releases/download/v2.3.3/1.jpeg)
 
 ##### Site: [itch.io](https://lowmaster.itch.io/x-comic-downloader)
 an Adult and Hentai Comic Downloader Made By LowMaster (Mehdi Enayatzadeh).\
@@ -24,7 +26,7 @@ I use Nodejs and Electron as main framework, then I use nedb for database, and t
 ### Supporting Sites:
 > - **xlecx.org**
 > - **nhentai.net**
-> - More Sites Gonna Be Added Later :)
+> - **More Sites Gonna Be Added Later :)**
 
 If you found any bug Please Write it In Issues Tab, Thank you ;)\
 If you have any question about Project Like Whats going on, Tell Me! (mehdi.enayatzadeh83@gmail.com)
