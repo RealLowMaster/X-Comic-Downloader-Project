@@ -29,6 +29,8 @@ I use Nodejs and Electron as main framework, then I use nedb for database, and t
 If you found any bug Please Write it In Issues Tab, Thank you ;)\
 If you have any question about Project Like Whats going on, Tell Me! (mehdi.enayatzadeh83@gmail.com)
 
+---
+
 ### How To Build From Source
 #### Step 1:
 Download Source and Extract it Some were
