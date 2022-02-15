@@ -43,7 +43,7 @@ function AfterDatabaseDoneOnStartup() {
 	}
 
 	try {
-		CheckReleaseNote()
+		if (setting.rc != update_number) OpenReleaseNotes()
 	} catch(err) {
 		error("Startup->CheckReleaseNote->Err: "+err)
 		console.error(err)

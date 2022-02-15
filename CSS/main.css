@@ -112,6 +112,7 @@ input::-webkit-input-placeholder { user-select: none }
 	flex-flow: column;
 	width: 100%;
 	height: calc(100% - var(--topMenuSize));
+	z-index: 0;
 }
 
 #main > div:first-child {
@@ -129,6 +130,7 @@ input::-webkit-input-placeholder { user-select: none }
 	background-color: var(--obr-con-bgc);
 	overflow-y: auto;
 	position: relative;
+	z-index: -1;
 }
 
 /* Menu */
@@ -206,7 +208,7 @@ input::-webkit-input-placeholder { user-select: none }
 	min-width: 110px;
 	height: auto;
 	position: absolute;
-	z-index: +1;
+	/* z-index: +1; */
 }
 
 .menu-dropdown > div > button { padding: 10px }
@@ -1688,3 +1690,27 @@ input::-webkit-input-placeholder { user-select: none }
 	text-transform: capitalize;
 	user-select: text;
 }
+
+/* New Release Note */
+#nrelease-note {
+	display: none;
+	width: 100%;
+	height: calc(100% - var(--topMenuSize));
+	padding: 20px 35px;
+	background-color: #F8F8FC;
+	color: #000;
+	overflow-y: auto;
+	position: fixed;
+	top: var(--topMenuSize);
+	left: 0;
+}
+
+#nrelease-note > h1, #nrelease-note > h2, #nrelease-note > h3 { display: block; width: 100%; margin-bottom: 30px; font-size: 36px; font-weight: 400; }
+#nrelease-note > h1 { font-weight: 600; }
+#nrelease-note > h2 { margin-bottom: 50px; font-size: 24px; }
+#nrelease-note > h3 { margin-bottom: 12px; font-size: 18px; }
+#nrelease-note > ul { display: block; width: 100%; padding-left: 40px; margin-bottom: 30px; line-height: 32px; }
+#nrelease-note > ul > li > span { color: #7d7d89; }
+#nrelease-note > div { width: 100%; margin-bottom: 20px; text-align: right }
+#nrelease-note > div > div { display: inline-block; padding: 7px 10px; cursor: pointer; user-select: none; border-radius: 4px; }
+#nrelease-note > div > div:hover { background-color: #e9e9ea; }

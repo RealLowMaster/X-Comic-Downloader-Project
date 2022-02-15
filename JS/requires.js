@@ -26,6 +26,7 @@ const defaultSetting = {
 	"rdls": false,
 	"full_screen": true,
 	"open_br_startup": false,
+	"rc": 0,
 	"auto_backup": true,
 	"developer_mode": false
 }
@@ -66,7 +67,7 @@ const keydownEvents = [
 	'SettingKeyEvents({ctrl},{shift},{key})', // 4
 	'InfoKeyEvents({ctrl},{shift},{key})' // 5
 ]
-const ThisWindow = remote.getCurrentWindow(), loading = new Loading(9), Downloader = new DownloadManager(), PageManager = new OfflinePageManager(), db = {}, procressPanel = new ProcressPanel(0), update_number = 13, SliderManager = new Slider()
+const ThisWindow = remote.getCurrentWindow(), loading = new Loading(9), Downloader = new DownloadManager(), PageManager = new OfflinePageManager(), db = {}, procressPanel = new ProcressPanel(0), SliderManager = new Slider(), update_number = 14
 let comicDeleting = false, wt_fps = 20, dirDB, dirUL, dirBU, dirTmp, isOptimizing = false, browserLastTabs = [], tabsHistory = [], dirHistory = '', keydownEventIndex = 0, new_update, save_value = null, save_value2 = null, afterDLReload = true, setting, openedMenuTabIndex, copiedTab = null, tabs = [], lastComicId, searchTimer, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = [], isUpdating = false, collectionsDB = [], groupsDB = [], artistsDB = [], parodiesDB = [], tagsDB = [], charactersDB = [], languagesDB = [], categoriesDB = [], comicGroupsDB = [], comicArtistsDB = [], comicParodiesDB = [], comicTagsDB = [], comicCharactersDB = [], comicLanguagesDB = [], comicCategoriesDB = [], indexDB = [], haveDBSite = [], haveDBId = [], haveDBComic = []
 
 /*
@@ -938,33 +939,34 @@ function CreateDatabase() {
 }
 
 function CheckSettings() {
-	if (typeof(setting.theme) != 'number' || setting.theme < 0) setting.theme = defaultSetting.theme
+	if (typeof setting.theme != 'number' || setting.theme < 0) setting.theme = defaultSetting.theme
 	if (setting.theme > 1) setting.theme = 1
-	if (typeof(setting.pagination_theme) != 'number' || setting.pagination_theme < 0) setting.pagination_theme = defaultSetting.pagination_theme
+	if (typeof setting.pagination_theme != 'number' || setting.pagination_theme < 0) setting.pagination_theme = defaultSetting.pagination_theme
 	if (setting.pagination_theme > 6) setting.pagination_theme = 6
-	if (typeof(setting.waiting_quality) != 'number') setting.waiting_quality = defaultSetting.waiting_quality
+	if (typeof setting.waiting_quality != 'number') setting.waiting_quality = defaultSetting.waiting_quality
 	if (setting.waiting_quality > 2) setting.waiting_quality = 2
 	else if (setting.waiting_quality < 0) setting.waiting_quality = 0
-	if (typeof(setting.max_per_page) != 'number') setting.max_per_page = defaultSetting.max_per_page
+	if (typeof setting.max_per_page != 'number') setting.max_per_page = defaultSetting.max_per_page
 	if (setting.max_per_page < 1) setting.max_per_page = 1
-	if (typeof(setting.img_graphic) != 'number' || setting.img_graphic < 0) setting.img_graphic = defaultSetting.img_graphic
+	if (typeof setting.img_graphic != 'number' || setting.img_graphic < 0) setting.img_graphic = defaultSetting.img_graphic
 	if (setting.img_graphic > 1) setting.img_graphic = 1
-	if (typeof(setting.notification_download_finish) != 'boolean') setting.notification_download_finish = defaultSetting.notification_download_finish
-	if (typeof(setting.notification_optimization_finish) != 'boolean') setting.notification_optimization_finish = defaultSetting.notification_optimization_finish
-	if (typeof(setting.lazy_loading) != 'boolean') setting.lazy_loading = defaultSetting.lazy_loading
+	if (typeof setting.notification_download_finish != 'boolean') setting.notification_download_finish = defaultSetting.notification_download_finish
+	if (typeof setting.notification_optimization_finish != 'boolean') setting.notification_optimization_finish = defaultSetting.notification_optimization_finish
+	if (typeof setting.lazy_loading != 'boolean') setting.lazy_loading = defaultSetting.lazy_loading
 	if (setting.lazy_loading == false) imageLazyLoadingOptions.rootMargin = "0px 0px 1200px 0px"
-	if (typeof(setting.tabs_limit) != 'number') setting.tabs_limit = defaultSetting.tabs_limit
+	if (typeof setting.tabs_limit != 'number') setting.tabs_limit = defaultSetting.tabs_limit
 	if (setting.tabs_limit < 1) setting.tabs_limit = 1
-	if (typeof(setting.download_limit) != 'number') setting.download_limit = defaultSetting.download_limit
+	if (typeof setting.download_limit != 'number') setting.download_limit = defaultSetting.download_limit
 	if (setting.download_limit < 1) setting.download_limit = 1
-	if (typeof(setting.show_unoptimize) != 'boolean') setting.show_unoptimize = defaultSetting.show_unoptimize
-	if (typeof(setting.check_update) != 'boolean') setting.check_update = defaultSetting.check_update
-	if (typeof(setting.auto_close_optimize_panel) != 'boolean') setting.auto_close_optimize_panel = defaultSetting.auto_close_optimize_panel
-	if (typeof(setting.open_br_startup) != 'boolean') setting.open_br_startup = defaultSetting.open_br_startup
+	if (typeof setting.rc !== 'number') setting.rc = defaultSetting.rc
+	if (typeof setting.show_unoptimize != 'boolean') setting.show_unoptimize = defaultSetting.show_unoptimize
+	if (typeof setting.check_update != 'boolean') setting.check_update = defaultSetting.check_update
+	if (typeof setting.auto_close_optimize_panel != 'boolean') setting.auto_close_optimize_panel = defaultSetting.auto_close_optimize_panel
+	if (typeof setting.open_br_startup != 'boolean') setting.open_br_startup = defaultSetting.open_br_startup
 	if (typeof setting.rdls != 'boolean') setting.rdls = defaultSetting.rdls
-	if (typeof(setting.full_screen) != 'boolean') setting.full_screen = defaultSetting.full_screen
-	if (typeof(setting.auto_backup) != 'boolean') setting.auto_backup = defaultSetting.auto_backup
-	if (typeof(setting.developer_mode) != 'boolean') setting.developer_mode = defaultSetting.developer_mode
+	if (typeof setting.full_screen != 'boolean') setting.full_screen = defaultSetting.full_screen
+	if (typeof setting.auto_backup != 'boolean') setting.auto_backup = defaultSetting.auto_backup
+	if (typeof setting.developer_mode != 'boolean') setting.developer_mode = defaultSetting.developer_mode
 	if (setting.developer_mode == true) {
 		window.addEventListener('keydown', e => {
 			if (e.ctrlKey && e.shiftKey && e.which == 73) remote.getCurrentWebContents().toggleDevTools()
@@ -972,21 +974,64 @@ function CheckSettings() {
 	}
 }
 
-function CheckReleaseNote() {
-	if (fs.existsSync(__dirname+'/release-note.json')) {
-		new_update = jsonfile.readFileSync(__dirname+'/release-note.json')
-		fs.unlinkSync(__dirname+'/release-note.json')
+function OpenReleaseNotes() {
+	if (!fs.existsSync(__dirname+'/rn.json')) return
+	let data
+	try { data = jsonfile.readFileSync(__dirname+'/rn.json') || null } catch(err) { console.error(err) }
+	if (data == null) return
+	// data = {
+	// 	version: '',
+	// 	new: [],
+	// 	bug: [],
+	// 	impr: [],
+	// 	plan: []
+	// }
 
+	const container = document.getElementById('nrelease-note')
+	let html = ''
 
-		document.getElementById('r-n-n-v').innerHTML = "What's new in v"+new_update.v
-		let html = '<h2>Important Changes</h2>'
-		for (let i = 0; i < new_update.s.length; i++) {
-			html += `<p class="${new_update.c[i]}">${new_update.s[i]}</p>`
-		}
-		document.getElementById('r-n-n-n').innerHTML = html
-		document.getElementById('release-note').style.display = 'flex'
+	if (data.version != null) html += '<h1>Release Notes v'+data.version+'</h1>'
+	html += "<h2>🚀 What's New</h2>"
 
-		new_update = null
+	if (data.new != null) {
+		html += '<h3>🔥 New Features</h3><ul>'
+		for (let i = 0, l = data.new.length; i < l; i++) html += '<li><span>'+data.new[i]+'</span></li>'
+		html += '</ul>'
+	}
+
+	if (data.bug != null) {
+		html += '<h3>🔧 Bug Fixes</h3><ul>'
+		for (let i = 0, l = data.bug.length; i < l; i++) html += '<li><span>'+data.bug[i]+'</span></li>'
+		html += '</ul>'
+	}
+
+	if (data.impr != null) {
+		html += '<h3>🌟 Improvements</h3><ul>'
+		for (let i = 0, l = data.impr.length; i < l; i++) html += '<li><span>'+data.impr[i]+'</span></li>'
+		html += '</ul>'
+	}
+
+	if (data.plan != null) {
+		html += '<h3>🚢 Plans</h3><ul>'
+		for (let i = 0, l = data.plan.length; i < l; i++) html += '<li><span>'+data.plan[i]+'</span></li>'
+		html += '</ul>'
+	}
+
+	if (setting.rc == update_number) html += '<div><div onclick="CloseReleaseNotes()">Close</div></div>'
+	else html += '<div><div onclick="CloseReleaseNotes()">Show This Later</div><div onclick="CloseReleaseNotes(true)">I Undrestand</div></div>'
+
+	container.innerHTML = html
+	container.style.display = 'block'
+	container.scrollTop = 0
+}
+
+function CloseReleaseNotes(save = false) {
+	const container = document.getElementById('nrelease-note')
+	container.style.display = 'none'
+	container.innerHTML = null
+	if (save) {
+		setting.rc = update_number
+		try { jsonfile.writeFileSync(dirDocument+'/setting.json', setting) } catch(err) { console.error(err) }
 	}
 }
 

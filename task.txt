@@ -93,31 +93,23 @@ Add Comic {
 }
 
 Added To Version {
-	*Add Ability To Sort With Multiple Tags/etc... (Requested By Zogarth23)
-	*Add Right Click Menu To Browser Links
-	Fix Bug: When renaming still can use hotkeys
-	Fix Some Database Optimization Bugs
-	Fix Some Right Click Menu Bugs
-	Fix Some Gallery Comic Loading
-	Optimize Have Database and its System
-	Merge Collections To Normal Gallery View
-	Change Slider System and Fix Some Bugs
-	Add Comic Properties
-	Add Download Button To nhentai Related Comics
-	Add More Choose Location Checkup
-	Make Image Stop Loading System Work Better
-	Make History Checkboxs Hitbox Bigger
+
 }
 
 Tasks => {
+	Plans {
+		Add Download Log (Requested By SmartBadger)
+		Add Tab System In Personal Gallery (Requested By Zogarth23)
+		Add Ability To ReDownload an Image
+		Add Bookmark System To Browser
+		Add Ability To Edit Comic Infos Such as Tags/Artists/etc...
+	}
 	Make Mac and Linux version
 	Fix Browser Multi Change Page Problem
 	Add Download Log
 	Fix History
 	Fix Bug: nhentai -> Search -> Otokonoko Heaven Vol. 4 Jump Page
 	Optimize and Fix Events
-	Improve Release-Note
-	Add Browser-Right Click
 	Change Tab Remove Activating Next Tab
 	Add Downloaded Comic Site Icon In Comic Panel
 	Fix bug: nhentai -> Searching B-trayal pagination won't work
@@ -143,7 +135,6 @@ Tasks => {
 	}
 
 	Mybe in v2  {
-		Add Bookmark || Favoriet Posts
 		Make Tab Resizing Work Better
 		Add Ability That Check Post Updated Image
 		Add Report Bug Button
@@ -151,7 +142,6 @@ Tasks => {
 	
 	New Abilities For v2 {
 		Add Ability To Zoom in Image in Sldier
-		Add ReDownload Comic or A Picture
 		Add Jump to Picture to Comic Panel
 	}
 
