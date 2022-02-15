@@ -4,11 +4,10 @@
 ![APM](https://img.shields.io/apm/l/vim-mode)
 
 ##### Site: [itch.io](https://lowmaster.itch.io/x-comic-downloader)
-#### an Adult and Hentai Comic Downloader Made By LowMaster (Mehdi Enayatzadeh).
-#### You can download or view any comic that the supported sites have, easily!
-
-#### This is a Open-Source Software For Downloading Hentai and Adult Comics or Mangas From Populer WebSite, you can check WebSite Lists.
-#### I use Nodejs and Electron as main framework, then I use nedb for database, and then I use sharp for Image Optimization
+an Adult and Hentai Comic Downloader Made By LowMaster (Mehdi Enayatzadeh).
+You can download or view any comic that the supported sites have, easily!
+This is a Open-Source Software For Downloading Hentai and Adult Comics or Mangas From Populer WebSite, you can check WebSite Lists.
+I use Nodejs and Electron as main framework, then I use nedb for database, and then I use sharp for Image Optimization
 
 ### You Can:
 > - View (Hentai/Adult) (Comics/Mangas).
