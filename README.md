@@ -1,3 +1,8 @@
+![APM](https://img.shields.io/badge/npm-v6.14.4-blue?logo=npm)
+![APM](https://img.shields.io/badge/node.js-v13.14.0-red?logo=node.js)
+![APM](https://img.shields.io/badge/electron-v13.1.4-blue?logo=electron&logoColor=green)
+![APM](https://img.shields.io/apm/l/vim-mode)
+
 ##### Site: [itch.io](https://lowmaster.itch.io/x-comic-downloader)
 #### an Adult and Hentai Comic Downloader Made By LowMaster (Mehdi Enayatzadeh).
 #### You can download or view any comic that the supported sites have, easily!
