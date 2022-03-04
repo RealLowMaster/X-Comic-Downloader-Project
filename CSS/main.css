@@ -438,11 +438,7 @@ input::-webkit-input-placeholder { user-select: none }
 	position: relative;
 	cursor: pointer;
 	transition: background-color .2s;
-}
-
-.comic[unoptimize] {
-	border:1px solid var(--obr-comic-uo-bd-color);
-	box-shadow: var(--obr-comic-uo-shadow)
+	box-shadow: 0 4px 8px 1px rgba(0,0,0,.35);
 }
 
 .comic > img {
@@ -483,6 +479,11 @@ input::-webkit-input-placeholder { user-select: none }
 	line-height: 1.4;
 	text-transform: capitalize;
 	user-select: text;
+}
+
+.comic[unoptimize] > p {
+	border: 1px solid var(--obr-comic-uo-bd-color);
+	box-shadow: var(--obr-comic-uo-shadow);
 }
 
 .comic:hover {

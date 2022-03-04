@@ -139,9 +139,7 @@ function minimizeApp() {
 }
 
 // Needable Functions
-function fileExt(str) {
-	return new String(str).substring(str.lastIndexOf('.') + 1)
-}
+function fileExt(str) { return new String(str).substring(str.lastIndexOf('.') + 1) }
 
 function lastSlash(str, backSlasg) {
 	backSlasg = backSlasg || '/'
