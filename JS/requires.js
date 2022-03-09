@@ -67,7 +67,7 @@ const keydownEvents = [
 	'SettingKeyEvents({ctrl},{shift},{key})', // 4
 	'InfoKeyEvents({ctrl},{shift},{key})' // 5
 ]
-const ThisWindow = remote.getCurrentWindow(), loading = new Loading(9), Downloader = new DownloadManager(), PageManager = new OfflinePageManager(), db = {}, procressPanel = new ProcressPanel(0), SliderManager = new Slider(), update_number = 14
+const ThisWindow = remote.getCurrentWindow(), loading = new Loading(9), Downloader = new DownloadManager(), PageManager = new OfflinePageManager(), db = {}, procressPanel = new ProcressPanel(0), SliderManager = new Slider(), update_number = 15
 let comicDeleting = false, wt_fps = 20, dirDB, dirUL, dirBU, dirTmp, isOptimizing = false, browserLastTabs = [], tabsHistory = [], dirHistory = '', keydownEventIndex = 0, new_update, save_value = null, save_value2 = null, afterDLReload = true, setting, openedMenuTabIndex, copiedTab = null, tabs = [], lastComicId, searchTimer, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = [], isUpdating = false, collectionsDB = [], groupsDB = [], artistsDB = [], parodiesDB = [], tagsDB = [], charactersDB = [], languagesDB = [], categoriesDB = [], comicGroupsDB = [], comicArtistsDB = [], comicParodiesDB = [], comicTagsDB = [], comicCharactersDB = [], comicLanguagesDB = [], comicCategoriesDB = [], indexDB = [], haveDBSite = [], haveDBId = [], haveDBComic = []
 
 // Set Windows Closing Event
@@ -520,8 +520,6 @@ function convertToURL(text = 'text', backward = false) {
 			.replace(/%2A/g, '*')
 			.replace(/%2B/g, '+')
 			.replace(/%2C/g, ',')
-			.replace(/%2D/g, '-')
-			.replace(/%2E/g, '.')
 			.replace(/%2F/g, '/')
 			.replace(/%5C/g, '\\')
 			.replace(/%3A/g, ':')
@@ -548,8 +546,6 @@ function convertToURL(text = 'text', backward = false) {
 			.replace(/\*/g, '%2A')
 			.replace(/\+/g, '%2B')
 			.replace(/,/g, '%2C')
-			.replace(/-/g, '%2D')
-			.replace(/\./g, '%2E')
 			.replace(/\//g, '%2F')
 			.replace(/\\/g, '%5C')
 			.replace(/:/g, '%3A')

@@ -19,8 +19,6 @@ class nHentaiAPI {
 		this.characterURL = '/character/'
 		this.searchURL = '/search/'
 		this.randomURL = '/random/'
-		this.thumbURL = 'https://t.nhentai.net'
-		this.imgURL = 'https://i.nhentai.net'
 	}
 
 	getPage(page = 1, callback = () => {}) {
@@ -277,21 +275,24 @@ class nHentaiAPI {
 
 			// Images
 			arr.images = []
+			let save4
 			save = htmlDoc.getElementById('thumbnail-container').children[0].children
 			for (let i = 0; i < save.length; i++) {
 				save2 = save[i].children[0].children[0].getAttribute('data-src')
+				save3 = save2.replace('https://t', '')
+				save4 = save3.lastIndexOf('t')
+				save3 = save3.substring(0, save4) + save3.substring(save4 + 1)
 				arr.images.push({
-					url: this.imgURL+(save2.replace(this.thumbURL, '').replace('t', '')),
+					url: 'https://i'+save3,
 					thumb: save2
 				})
 			}
 
 			// Thumb
-			save = save[0].children[0].children[0].getAttribute('data-src').replace(this.thumbURL, '').replace('/galleries/', '')
-			save2 = save.indexOf('/')
+			save = save[0].children[0].children[0].getAttribute('data-src')
+			save2 = save.substring(0, save.lastIndexOf('/'))
 			save3 = fileExt(save)
-			if (save2 > -1) save = save.substring(0, save2)
-			arr.thumb = this.thumbURL+'/galleries/'+save+'/thumb.'+save3
+			arr.thumb = save2+'/thumb.'+save3
 
 			// Related
 			if (related) {
@@ -935,14 +936,24 @@ class nHentaiAPI {
 
 			// Images
 			arr.images = []
+			let save4
 			save = htmlDoc.getElementById('thumbnail-container').children[0].children
 			for (let i = 0; i < save.length; i++) {
 				save2 = save[i].children[0].children[0].getAttribute('data-src')
+				save3 = save2.replace('https://t', '')
+				save4 = save3.lastIndexOf('t')
+				save3 = save3.substring(0, save4) + save3.substring(save4 + 1)
 				arr.images.push({
-					url: this.imgURL+(save2.replace(this.thumbURL, '').replace('t', '')),
+					url: 'https://i'+save3,
 					thumb: save2
 				})
 			}
+
+			// Thumb
+			save = save[0].children[0].children[0].getAttribute('data-src')
+			save2 = save.substring(0, save.lastIndexOf('/'))
+			save3 = fileExt(save)
+			arr.thumb = save2+'/thumb.'+save3
 
 			// Related
 			let child

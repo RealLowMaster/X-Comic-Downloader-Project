@@ -89,14 +89,21 @@ Add Comic {
 	Tag => Bestiality
 	Tag => Insect
 
+	Check {
+	The Intoxicated Harbinger and Archon
+	Urabambi vol.34 Fuhrer befiehl
+
+	}
+
 	Comic => [Togo Mito] Ookami-san to Ushi-san Ch. 1
 }
 
 Added To Version {
-
+	
 }
 
 Tasks => {
+	Fix Bug: Canceling Optimize all Comic::Line::380::errorList is not a function
 	Plans {
 		Add Download Log (Requested By SmartBadger)
 		Add Tab System In Personal Gallery (Requested By Zogarth23)
@@ -108,11 +115,9 @@ Tasks => {
 	Fix Browser Multi Change Page Problem
 	Add Download Log
 	Fix History
-	Fix Bug: nhentai -> Search -> Otokonoko Heaven Vol. 4 Jump Page
 	Optimize and Fix Events
 	Change Tab Remove Activating Next Tab
 	Add Downloaded Comic Site Icon In Comic Panel
-	Fix bug: nhentai -> Searching B-trayal pagination won't work
 	Add Ability To Play Song
 	Add Email System
 	Make UI Beatiful

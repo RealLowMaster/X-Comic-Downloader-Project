@@ -276,7 +276,7 @@ class Tab {
 					nhentaiOpenInfo(this.linksValue[index][0], this.linksValue[index][1], this.linksValue[index][2], newTab, true)
 					break
 				case 2:
-					nhentaiOpenPages(this.linksValue[index][0], this.linksValue[index][1], this.linksValue[index][2], {tab}, true)
+					nhentaiOpenPages(this.linksValue[index][0], this.linksValue[index][1], this.linksValue[index][2], newTab, true)
 					break
 				case 3:
 					nhentaiSearch(this.linksValue[index][0], this.linksValue[index][1], newTab, true)

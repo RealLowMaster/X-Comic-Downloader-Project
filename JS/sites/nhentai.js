@@ -330,6 +330,8 @@ function nhentaiOpenPost(id, makeNewTab, updateTabIndex) {
 			for (let i = 0; i < result.images.length; i++) html += `<img data-src="${result.images[i].url}" loading="lazy">`
 			html += '</div>'
 
+			console.log(result.thumb)
+
 			// Related
 			if (result.related != undefined && result.related.length != 0) {
 				html += '<div class="nhentai-postrow"><div>Related</div><div>'
@@ -726,7 +728,7 @@ function nhentaiInfoType(page = 1, whitch = null, makeNewTab = false, updateTabI
 		if (result.pagination != null && result.pagination.length != 0) {
 			html += '<div class="nhentai-pagination">'
 			for (let i = 0; i < result.pagination.length; i++) {
-				if (result.pagination[i][1] != null) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(1,[result.pagination[i][1],whitch])})">${result.pagination[i][0]}</div>`
+				if (result.pagination[i][1] != null) html += `<div onmousedown="LinkClick(${thisTabIndex},${tabs[thisTabIndex].AddLink(4,[result.pagination[i][1],whitch])})">${result.pagination[i][0]}</div>`
 				else html += `<div disabled>${result.pagination[i][0]}</div>`
 			}
 			html += '</div>'
