@@ -239,9 +239,10 @@ class Tab {
 	}
 
 	AddLink(index, value = null) {
-		this.linksIndex.push(index)
-		this.linksValue.push(value)
-		return this.linksIndex.length - 1
+		const i = this.linksIndex.length
+		this.linksIndex[i] = index
+		this.linksValue[i] = value
+		return i
 	}
 
 	Clicked(index, newTab = false) {

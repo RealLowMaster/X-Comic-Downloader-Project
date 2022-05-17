@@ -330,8 +330,6 @@ function nhentaiOpenPost(id, makeNewTab, updateTabIndex) {
 			for (let i = 0; i < result.images.length; i++) html += `<img data-src="${result.images[i].url}" loading="lazy">`
 			html += '</div>'
 
-			console.log(result.thumb)
-
 			// Related
 			if (result.related != undefined && result.related.length != 0) {
 				html += '<div class="nhentai-postrow"><div>Related</div><div>'

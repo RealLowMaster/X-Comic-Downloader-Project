@@ -117,15 +117,15 @@ function convertImagesToOptimize(list, index, comic_id, image, callback) {
 		isOptimizing = false
 		return
 	} else if (!isOptimizing) {
-		const errorList = []
+		const error_list = []
 		for (let i = index; i < list.length; i++) {
 			try {
 				fs.renameSync(`${dirTmp}/${list[i][0]}`, `${dirUL}/${comic_id}${image}/${list[i][0]}`)
 			} catch(err) {
-				errorList.push('MovingBackImages->Err: '+err)
+				error_list.push('MovingBackImages->Err: '+err)
 			}
 		}
-		if (errorList.length > 0) errorList(errorList)
+		if (error_list.length > 0) console.error(error_list)
 		procressPanel.hide()
 		callback()
 		return
@@ -369,15 +369,15 @@ function OptimizeAll(docList, index, maxLength, list) {
 	}
 
 	if (!isOptimzingContiue) {
-		const errorList = []
+		const error_list = []
 		for (let i = index; i < list.length; i++) {
 			try {
 				fs.renameSync(`${dirTmp}/${list[i][0]}`, `${dirUL}/${docList[0][4]}${docList[0][1]}/${list[i][0]}`)
 			} catch(err) {
-				errorList.push('MovingBackImages->Err: '+err)
+				error_list.push('MovingBackImages->Err: '+err)
 			}
 		}
-		if (errorList.length > 0) errorList(errorList)
+		if (error_list.length > 0) console.error(error_list)
 		procressPanel.hide()
 		procressPanel.reset()
 		isOptimizing = false

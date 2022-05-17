@@ -85,25 +85,43 @@ Add Comic {
 
 	Artist => Ikezaki Misa
 	Artist => Aichi Shiho
+	Artist => xxzero
 
 	Tag => Bestiality
 	Tag => Insect
 
 	Check {
+	Kotatsu
+	COMIC BAVEL
+	Loli & Futa Vol.12
+	Fella Pure
+	Artist > Ohtomo Takuji 
+	Artist > Puripuri Jet
+	Group > Topgun
+	Group > Eromazun
+	Onimara
 	The Intoxicated Harbinger and Archon
 	Urabambi vol.34 Fuhrer befiehl
-
+	COMIC HOTMiLK Koime Vol. n
+	COMIC Megastore DEEP Vol. n
+	Henshin!? Sukekomas
+	Papa no daisuki
 	}
 
 	Comic => [Togo Mito] Ookami-san to Ushi-san Ch. 1
 }
 
 Added To Version {
-	
+	Fix Bug: Optimizing Comic ErrorList
 }
 
 Tasks => {
-	Fix Bug: Canceling Optimize all Comic::Line::380::errorList is not a function
+	Add Ability To Rename During Download
+	Add Repair To Reload Image From Cache
+	Make Delete Image Rescroll
+	Fix KeyIndex Bug With Canceling Optimization
+	Fix Problem with Undownloaded Image Make Result said from 300MB to NAN undefined
+	Add Ability To See Image Aspectratio
 	Plans {
 		Add Download Log (Requested By SmartBadger)
 		Add Tab System In Personal Gallery (Requested By Zogarth23)

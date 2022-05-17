@@ -43,8 +43,7 @@ class XlecxAPI {
 		callback = callback || null
 		const url = this.baseURL+'/page/'+page+'/'
 
-		if (callback == null) throw "You can't Set Callback as Null."
-		if (typeof callback != 'function') throw "The Type of Callback Should Be a Function."
+		if (typeof callback !== 'function') throw "Callback Should Be Function."
 
 		fetch(url).then(response => {
 			if (response.status != 200) {
