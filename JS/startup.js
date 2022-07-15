@@ -10,7 +10,7 @@ function test() {
 
 function AfterDatabaseDoneOnStartup() {
 	try {
-		loading.forward('Set Settings...')
+		loading.Forward('Set Settings...')
 		setLuanchTimeSettings(false)
 	} catch(err) {
 		error("Startup->SetLuanchSetting->Err: "+err)
@@ -18,7 +18,7 @@ function AfterDatabaseDoneOnStartup() {
 	}
 
 	try {
-		loading.forward('Set Sites...')
+		loading.Forward('Set Sites...')
 		SetSite()
 	} catch(err) {
 		error("Startup->SetSites->Err: "+err)
@@ -26,7 +26,7 @@ function AfterDatabaseDoneOnStartup() {
 	}
 
 	try {
-		loading.forward('Load Comics...')
+		loading.Forward('Load Comics...')
 		PageManager.Load(1)
 	} catch(err) {
 		error("Startup->LoadComics->Err: "+err)
@@ -34,9 +34,10 @@ function AfterDatabaseDoneOnStartup() {
 	}
 
 	try {
-		loading.forward()
+		loading.Forward()
 		document.getElementById('main').style.display = 'flex'
-		loading.hide()
+		loading.Close()
+		KeyManager.ChangeCategory('default')
 	} catch(err) {
 		error("Startup->HideLoading->Err: "+err)
 		console.error(err)
@@ -77,7 +78,7 @@ function makeSubFolder(sfComicsDoc, sfLength, index) {
 	if (!fs.existsSync(subFolder)) fs.mkdirSync(subFolder)
 
 	if(typeof formats[0] === "undefined") {
-		loading.forward(`Making SubFolders (${index + 1}/${sfLength})`)
+		loading.Forward(`Making SubFolders (${index + 1}/${sfLength})`)
 		setTimeout(() => {
 			makeSubFolder(sfComicsDoc, sfLength, index + 1)
 		}, 1)
@@ -106,7 +107,7 @@ function makeSubFolder(sfComicsDoc, sfLength, index) {
 		}
 	}
 
-	loading.forward(`Making SubFolders (${index + 1}/${sfLength})`)
+	loading.Forward(`Making SubFolders (${index + 1}/${sfLength})`)
 
 	if (index + 1 == sfLength) {
 		UpdateIndex(2, true)
@@ -119,7 +120,7 @@ function makeSubFolder(sfComicsDoc, sfLength, index) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-	loading.show('Getting Setting...', '#fff', '#222')
+	loading.Show(10, 'Getting Setting...')
 	try {
 		ChangeSizes()
 	} catch(err) {
@@ -135,7 +136,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	}
 
 	try {
-		loading.forward('Getting Directories...')
+		loading.Forward('Getting Directories...')
 		GetDirection()
 	} catch(err) {
 		error("Startup->GetDirections->Err: "+err)
@@ -143,7 +144,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	}
 
 	try {
-		loading.forward('Creating Databases...')
+		loading.Forward('Creating Databases...')
 		CreateDatabase()
 	} catch(err) {
 		error("Startup->CreateDatabase->Err: "+err)
@@ -151,7 +152,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	}
 
 	try {
-		loading.forward('Checking Settings...')
+		loading.Forward('Checking Settings...')
 		CheckSettings()
 	} catch(err) {
 		error("Startup->CheckSettings->Err: "+err)
@@ -159,7 +160,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	}
 
 	try {
-		loading.forward('Set Window Event...')
+		loading.Forward('Set Window Event...')
 
 		window.onresize = () => { updateTabSize(); ChangeSizes() }
 		tabsContainer.addEventListener('contextmenu', e => {
@@ -176,28 +177,24 @@ document.addEventListener("DOMContentLoaded", () => {
 	}
 
 	try {
+		loading.Forward("SetHotKeys..")
+		SetHotKeys()
+	} catch(err) {
+		console.log(err)
+		error("Startup->SettingHotKeys->ERR::"+err)
+	}
+
+	try {
 		window.addEventListener('click', () => {
 			browserTabMenu.style.display = 'none'
 			browserPasteMenu.style.display = 'none'
-		})
-		window.addEventListener('keydown', e => {
-			if (keydownEventIndex != null) eval(keydownEvents[keydownEventIndex].replace('{ctrl}', e.ctrlKey).replace('{shift}', e.shiftKey).replace('{key}', e.which))
 		})
 	} catch(err) {
 		error("Startup->SetClickEvents->Err: "+err)
 		console.error(err)
 	}
 
-	try {
-		window.addEventListener('keydown', e => {
-			if (!e.ctrlKey && !e.shiftKey && e.keyCode == 122) ChangeScreenMode()
-		})
-	} catch(err) {
-		error("Startup->SetFullScreenEvents->Err: "+err)
-		console.error(err)
-	}
-
-	loading.forward('Checking SubFolder...')
+	loading.Forward('Checking SubFolder...')
 	const IndexLoadCheck = () => {
 		if (indexDB.length < 3) { setTimeout(IndexLoadCheck, 250); return }
 		for (let i = 0; i < indexDB.length; i++) if (indexDB[i] == undefined) { setTimeout(IndexLoadCheck, 250); return }
@@ -215,8 +212,7 @@ document.addEventListener("DOMContentLoaded", () => {
 					AfterDatabaseDoneOnStartup()
 				} else {
 					const sfLength = doc.length
-					loading.reset(sfLength)
-					loading.show(`Making SubFolders (0/${sfLength})`)
+					loading.Show(sfLength, `Making SubFolders (0/${sfLength})`)
 					setTimeout(() => { makeSubFolder(doc, sfLength, 0) }, 100)
 				}
 			})

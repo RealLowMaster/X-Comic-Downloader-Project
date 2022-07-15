@@ -170,7 +170,7 @@ function openComic(id) {
 	in_comic = true
 	id = id || null
 	if (id == null) { error("Id Can't be Null."); return }
-	keydownEventIndex = null
+	KeyManager.ChangeCategory(null)
 	const title_container = document.getElementById('c-p-t')
 	let html = '', formatIndex = 0, name, image, ImagesCount, formats
 
@@ -309,7 +309,7 @@ function openComic(id) {
 			}
 
 			comicPanel.scrollTop = 0
-			keydownEventIndex = 1
+			KeyManager.ChangeCategory('comic')
 		})
 	}
 
@@ -336,7 +336,7 @@ function loadImagesOneByOne(images, id) {
 
 function closeComicPanel() {
 	comicPanel.style.display = 'none'
-	keydownEventIndex = 0
+	KeyManager.ChangeCategory('default')
 	need_repair = []
 	in_comic = false
 	off_site = null
@@ -408,8 +408,7 @@ function closeComicPanelImageMenu() {
 
 // Delete Comic Image
 function deleteComicImage(id, index) {
-	loading.reset(0)
-	loading.show('Calculating...')
+	loading.Show(1, 'Calculating...')
 
 	document.getElementById('comic-action-panel').style.display = 'none'
 	comicImageContainer.innerHTML = ''
@@ -420,8 +419,8 @@ function deleteComicImage(id, index) {
 	closeComicPanel()
 
 	db.comics.findOne({_id:id}, (err, doc) => {
-		if (err) { comicDeleting = false; error(err); openComic(id); loading.hide(); return }
-		if (doc == undefined) { comicDeleting = false; error('Comic Not Found.'); openComic(id); loading.hide(); return }
+		if (err) { comicDeleting = false; error(err); openComic(id); loading.Close(); return }
+		if (doc == undefined) { comicDeleting = false; error('Comic Not Found.'); openComic(id); loading.Close(); return }
 
 		const ImageFormats = doc.f
 		let format = null
@@ -439,7 +438,7 @@ function deleteComicImage(id, index) {
 		openComic(id)
 		PopAlert('Image Has Been Deleted!')
 		comicDeleting = false
-		loading.hide()
+		loading.Close()
 
 		// console.log(ImageFormats, format, index, src)
 	})
@@ -466,28 +465,26 @@ function askForDeletingComicImage(id, index) {
 function SetComicThumb(id, index) {
 	if (isThumbing) return
 	isThumbing = true
-	const passKeyEvent = keydownEventIndex
-	keydownEventIndex = null
-	loading.reset(3)
-	loading.show('Loading Comic')
+	KeyManager.stop = true
+	loading.Show(3, 'Loading Comic')
 
 	db.comics.findOne({_id:id}, (err, doc) => {
-		if (err) { error(err); loading.hide(); isThumbing = false; keydownEventIndex = passKeyEvent; return }
-		if (doc == undefined) { error('Comic not Found.'); loading.hide(); isThumbing = false; keydownEventIndex = passKeyEvent; return }
-		loading.forward('Checking Existed Thumb')
+		if (err) { error(err); loading.Close(); isThumbing = false; KeyManager.stop = false; return }
+		if (doc == undefined) { error('Comic not Found.'); loading.Close(); isThumbing = false; KeyManager.stop = false; return }
+		loading.Forward('Checking Existed Thumb')
 		const pass_thumb = `${dirUL}/thumbs/${doc.i}.jpg`
 		if (fs.existsSync(pass_thumb)) {
 			try {
 				fs.unlinkSync(pass_thumb)
 			} catch (dErr) {
 				error('Could not Delete Existed Thumb -> '+dErr)
-				loading.hide()
+				loading.Close()
 				isThumbing = false
-				keydownEventIndex = passKeyEvent
+				KeyManager.stop = false
 				return
 			}
 		}
-		loading.forward('Get New Thumb Image URL')
+		loading.Forward('Get New Thumb Image URL')
 		const ImageFormats = doc.f
 		let format = null
 		for (let i = 0; i < ImageFormats.length; i++) if (index >= ImageFormats[i][0] && index <= ImageFormats[i][1]) { format = ImageFormats[i][2]; break }
@@ -495,25 +492,25 @@ function SetComicThumb(id, index) {
 		if (!fs.existsSync(src)) {
 			PageManager.Reload()
 			error('Could not Find Image')
-			loading.hide()
+			loading.Close()
 			isThumbing = false
-			keydownEventIndex = passKeyEvent
+			KeyManager.stop = false
 			return
 		}
 		if (!fs.existsSync(dirUL+'/thumbs')) fs.mkdirSync(dirUL+'/thumbs')
 		setTimeout(() => {
 			sharp(src).resize(225, 315).jpeg().toFile(`${dirUL}/thumbs/${doc.i}.jpg`).then(() => {
 				PageManager.Reload()
-				loading.forward()
-				loading.hide()
+				loading.Forward()
+				loading.Close()
 				isThumbing = false
-				keydownEventIndex = passKeyEvent
+				KeyManager.stop = false
 			}).catch(tErr => {
 				PageManager.Reload()
 				error('MakingThumb->Err: '+tErr)
-				loading.hide()
+				loading.Close()
 				isThumbing = false
-				keydownEventIndex = passKeyEvent
+				KeyManager.stop = false
 				return
 			})
 		}, 1)
@@ -529,14 +526,13 @@ function RepairAllComicInfos() {
 	procressPanel.reset(0)
 	procressPanel.show('Collecting Comics...')
 	procressPanel.config({bgClose:false, closeBtn:true, closeEvent:'isRepairingContiue=false'})
-	const passKeyEvent = keydownEventIndex
-	keydownEventIndex = null
+	KeyManager.ChangeCategory(null)
 	repair_all_error_list = []
 	repair_all_looped = false
 
 	db.comics.find({}, (err, doc) => {
-		if (err) { error('CollectingComics->Err: '+err); procressPanel.hide(); isRepairing = false; isRepairingContiue = false; keydownEventIndex = passKeyEvent; return }
-		if (doc == undefined || doc.length == 0) { PopAlert('There is no Comic Downloaded'); procressPanel.hide(); isRepairing = false; isRepairingContiue = false; keydownEventIndex = passKeyEvent; return }
+		if (err) { error('CollectingComics->Err: '+err); procressPanel.hide(); isRepairing = false; isRepairingContiue = false; KeyManager.BackwardCategory(); return }
+		if (doc == undefined || doc.length == 0) { PopAlert('There is no Comic Downloaded'); procressPanel.hide(); isRepairing = false; isRepairingContiue = false; KeyManager.BackwardCategory(); return }
 		repair_all_list = []
 		for (let i = 0; i < doc.length; i++) repair_all_list.push([toCapitalize(doc[i].n), doc[i].s, doc[i].p, doc[i]._id])
 
@@ -561,7 +557,7 @@ function RepairAllComicLoop() {
 			procressPanel.config({bgClose:true, closeBtn:true})
 			isRepairing = false
 			isRepairingContiue = false
-			keydownEventIndex = 0
+			KeyManager.BackwardCategory()
 			PageManager.Reload()
 		}
 		return
@@ -571,7 +567,7 @@ function RepairAllComicLoop() {
 		isRepairing = false
 		procressPanel.hide()
 		procressPanel.reset(0)
-		keydownEventIndex = 0
+		KeyManager.BackwardCategory()
 		PageManager.Reload()
 		return
 	}
@@ -605,8 +601,7 @@ function repairComicImages(repair_list) {
 
 // Export Comic
 function openComicExportPanel(id) {
-	passKeyEvent = keydownEventIndex
-	keydownEventIndex = null
+	KeyManager.ChangeCategory(null)
 	document.getElementById('export-panel').style.display = 'flex'
 	db.comics.findOne({_id:id}, (err, doc) => {
 		if (err) { error('LoadingComicInfo->ERR: '+err); closeComicExportPanel(); return }
@@ -617,7 +612,7 @@ function openComicExportPanel(id) {
 
 function closeComicExportPanel() {
 	document.getElementById('export-panel').style.display = 'none'
-	keydownEventIndex = passKeyEvent
+	KeyManager.BackwardCategory()
 	export_comic_id = null
 }
 
@@ -633,18 +628,17 @@ function exportComicBrowseLocation() {
 function exportComic(filepath, filelist) {
 	const JSZip = require('jszip')
 	const flen = filelist.length
-	loading.reset(2)
-	loading.show(`Compressing...`)
+	loading.Show(2, 'Compressing...')
 	setTimeout(() => {
 		const zip = new JSZip()
 		for (let i = 0; i < filelist.length; i++) zip.file(i+'.'+fileExt(filelist[i]), fs.readFileSync(filelist[i]), { base64: true })
 
-		loading.forward(`Making File...`)
+		loading.Forward(`Making File...`)
 		setTimeout(async() => {
 			const content = await zip.generateAsync({ type: "nodebuffer" })
 			fs.writeFileSync(filepath, content)
-			loading.forward()
-			loading.hide()
+			loading.Forward()
+			loading.Close()
 			PopAlert('Exporting Finished')
 		}, 1)
 	}, 1)
@@ -742,30 +736,29 @@ function deleteComic(id) {
 	}
 	closeComicPanel()
 
-	loading.reset(0)
-	loading.show('Calculating...')
+	loading.Show(1, 'Calculating...')
 
 	setTimeout(() => {
 		db.comics.findOne({_id:id}, (err, doc) => {
-			if (err) { comicDeleting = false; loading.hide(); error(err); keydownEventIndex = 0; return }
-			if (doc == undefined) { comicDeleting = false; loading.hide(); error('Comic Not Found.'); keydownEventIndex = 0; return }
+			if (err) { comicDeleting = false; loading.Close(); error(err); KeyManager.ChangeCategory('default'); return }
+			if (doc == undefined) { comicDeleting = false; loading.Close(); error('Comic Not Found.'); KeyManager.ChangeCategory('default'); return }
 			const ImagesId = doc.i
 			const ImagesFormats = doc.f
 			const ImagesCount = doc.c
 			const site = doc.s
 			const post_id = doc.p
 			
-			loading.reset(4 + ImagesCount)
-			loading.show('Removing Comic From Database...')
+			loading.Close()
+			loading.Show(4 + ImagesCount, 'Removing Comic From Database...')
 	
 			const fix_removed_index = () => {
 				FixComicIndex(true)
-				loading.forward()
-				loading.hide()
+				loading.Forward()
+				loading.Close()
 				PopAlert('Comic Deleted.', 'warning')
 				comicDeleting = false
 				PageManager.Reload()
-				keydownEventIndex = 0
+				KeyManager.ChangeCategory('default')
 				
 			}
 
@@ -777,14 +770,14 @@ function deleteComic(id) {
 					haveDBComic.splice(haveIndex, 1)
 				}
 				try { jsonfile.writeFileSync(dirDB+'/have.lowdb', {s:haveDBSite,i:haveDBId,c:haveDBComic}) } catch(err) { error('SavingHaveDB->'+err); console.log(err) }
-				loading.forward('Fix Indexs...')
+				loading.Forward('Fix Indexs...')
 				fix_removed_index()
 			}
 	
 			const remove_comic = () => {
 				db.comics.remove({_id:id}, {}, err => {
-					if (err) { comicDeleting = false; loading.hide(); error(err); keydownEventIndex = 0; return }
-					loading.forward('Deleting Comic Images...')
+					if (err) { comicDeleting = false; loading.Close(); error(err); KeyManager.ChangeCategory('default'); return }
+					loading.Forward('Deleting Comic Images...')
 					remove_have()
 				})
 			}
@@ -821,14 +814,14 @@ function deleteComic(id) {
 							try {
 								fs.unlinkSync(thisUrl)
 							} catch(err) {
-								loading.hide()
+								loading.Close()
 								error(err)
-								keydownEventIndex = 0
+								KeyManager.ChangeCategory('default')
 								return
 							}
 						}
 						
-						loading.forward(`Deleting Comic Images (${i+1}/${ImagesCount})...`)
+						loading.Forward(`Deleting Comic Images (${i+1}/${ImagesCount})...`)
 					}
 				}
 
@@ -838,7 +831,7 @@ function deleteComic(id) {
 					console.error(`Couldn't Delete Folder: ${dirUL}/${id}${ImagesId}`)
 				}
 
-				loading.forward('Removing Comic Groups From Database...')
+				loading.Forward('Removing Comic Groups From Database...')
 				remove_comic()
 			}
 	
@@ -866,14 +859,13 @@ function askForDeletingComic(id) {
 
 // Rename a Comic
 function openRenameComic(id) {
-	passKeyEvent = keydownEventIndex
-	keydownEventIndex = null
+	KeyManager.ChangeCategory(null)
 	const panel = document.getElementById('comic-rename-panel')
 	db.comics.findOne({_id:id}, (err, doc) => {
 		if (err || doc == null) {
 			error('FindingComic->Err: '+err)
 			console.error(err)
-			keydownEventIndex = passKeyEvent
+			KeyManager.BackwardCategory()
 			passKeyEvent = null
 			return
 		}
@@ -890,7 +882,7 @@ function closeRenamePanel() {
 	panel.style.display = 'none'
 	panel.removeAttribute('cid')
 	panel.children[1].children[0].value = null
-	keydownEventIndex = passKeyEvent
+	KeyManager.BackwardCategory()
 	passKeyEvent = null
 }
 
@@ -927,15 +919,14 @@ function askForClosingApp() {
 
 // Comic Properties
 function OpenComicProperties(comic_id) {
-	passKeyEvent = keydownEventIndex
-	keydownEventIndex = null
+	KeyManager.ChangeCategory(null)
 	const container = document.getElementById('c-p-c')
 	container.style.display = 'none'
 	document.getElementById('comic-properties').style.display = 'flex'
 	db.comics.findOne({_id:comic_id}, (err, doc) => {
 		if (err || doc == null) {
 			document.getElementById('comic-properties').style.display = 'none'
-			keydownEventIndex = passKeyEvent
+			KeyManager.BackwardCategory()
 			passKeyEvent = null
 			error(err)
 			console.error(err)
@@ -973,99 +964,6 @@ function OpenPath(path) {
 
 function CloseComicProperties() {
 	document.getElementById('comic-properties').style.display = 'none'
-	keydownEventIndex = passKeyEvent
+	KeyManager.BackwardCategory()
 	passKeyEvent = null
-}
-
-// Key Event
-function OfflineKeyEvents(ctrl, shift, key) {
-	if (ctrl) {
-		if (!shift) {
-			switch (key) {
-				case 66:
-					openBrowser()
-					break
-				case 72:
-					PageManager.Home()
-					break
-				case 82:
-					PageManager.Reload()
-					break
-				case 88:
-					openCollectionsPanel()
-					break
-				case 90:
-					PageManager.RandomJumpPage()
-					break
-			}
-		}
-	} else {
-		if (!shift) {
-			switch (key) {
-				case 27:
-					askForClosingApp()
-					break
-				case 39:
-					PageManager.Next()
-					break
-				case 37:
-					PageManager.Prev()
-					break
-				case 49:
-					openInfoPanel(0)
-					break
-				case 50:
-					openInfoPanel(1)
-					break
-				case 51:
-					openInfoPanel(2)
-					break
-				case 52:
-					openInfoPanel(3)
-					break
-				case 53:
-					openInfoPanel(4)
-					break
-				case 54:
-					openInfoPanel(5)
-					break
-				case 55:
-					openInfoPanel(6)
-					break
-			}
-		}
-	}
-}
-
-function OfflineComicKeyEvents(ctrl, shift, key) {
-	if (ctrl) {
-		if (!shift) {
-			switch (key) {
-				case 69:
-					openComicExportPanel(Number(comicPanel.getAttribute('cid')), 1)
-					break
-				case 81:
-					keydownEventIndex = null
-					document.getElementById('comic-action-panel').style.display='flex'
-					break
-				case 82:
-					if (need_repair.length > 0) {
-						keydownEventIndex = null
-						repairComicImages()
-					}
-					break
-				case 83:
-					SliderManager.Open()
-					break
-			}
-		}
-	} else {
-		if (!shift) {
-			switch (key) {
-				case 27:
-					closeComicPanel()
-					break
-			}
-		}
-	}
 }

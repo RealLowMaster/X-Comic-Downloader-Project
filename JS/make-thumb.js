@@ -1,13 +1,12 @@
 let thumbErrLog = []
 
 function makeThumb(reCreate) {
-	keydownEventIndex = null
+	KeyManager.ChangeCategory(null)
 	thumbErrLog = []
 	if (!fs.existsSync(dirUL+'/thumbs')) fs.mkdirSync(dirUL+'/thumbs')
 	db.comics.find({}, (err, doc) => {
-		if (err) { error(err); keydownEventIndex = 0; return }
-		loading.reset(0)
-		loading.show(`Checking Thumbs...`)
+		if (err) { error(err); KeyManager.ChangeCategory('default'); return }
+		loading.Show(1, 'Checking Thumbs...')
 		document.getElementById('main').style.display = 'none'
 
 		const scrollTop = document.getElementById('main-body').scrollTop
@@ -52,19 +51,19 @@ function checkThumbs(doc, reCreate, scrollTop) {
 	}
 	
 	if (list.length > 0) {
-		loading.changePercent(list.length)
-		loading.forward(`Making Thumbs (0/${list.length})...`)
+		loading.ChangePercent(list.length)
+		loading.Forward(`Making Thumbs (0/${list.length})...`)
 		createThumb(list, 0)
 	} else if (thumbErrLog.length == 0) {
-		loading.hide()
+		loading.Close()
 		document.getElementById('main').style.display = 'flex'
-		keydownEventIndex = 0
+		KeyManager.ChangeCategory('default')
 		PopAlert('All Thumbs Made Successfuly.')
 		PageManager.Reload()
 	} else {
-		loading.hide()
+		loading.Close()
 		document.getElementById('main').style.display = 'flex'
-		keydownEventIndex = 0
+		KeyManager.ChangeCategory('default')
 		errorList(thumbErrLog)
 		PageManager.Reload()
 	}
@@ -72,30 +71,30 @@ function checkThumbs(doc, reCreate, scrollTop) {
 
 function createThumb(list, index, scrollTop) {
 	sharp(list[index][0]).resize(225, 315).jpeg({ mozjpeg: true }).toFile(`${dirUL}/thumbs/${list[index][1]}.jpg`).then(() => {
-		loading.forward(`Making Thumbs (${index+1}/${list.length})...`)
+		loading.Forward(`Making Thumbs (${index+1}/${list.length})...`)
 		if (index != list.length - 1) {
 			setTimeout(() => {
 				createThumb(list, index + 1, scrollTop)
 			}, 1)
 		} else {
-			loading.hide()
+			loading.Close()
 			document.getElementById('main').style.display = 'flex'
-			keydownEventIndex = 0
+			KeyManager.ChangeCategory('default')
 			PageManager.Reload()
 			if (thumbErrLog.length == 0) PopAlert('All Thumbs Made Successfuly.')
 			else errorList(thumbErrLog)
 		}
 	}).catch(err => {
-		loading.forward(`Making Thumbs (${index+1}/${list.length})...`)
+		loading.Forward(`Making Thumbs (${index+1}/${list.length})...`)
 		thumbErrLog.push(err)
 		if (index != list.length - 1) {
 			setTimeout(() => {
 				createThumb(list, index + 1, scrollTop)
 			}, 1)
 		} else {
-			loading.hide()
+			loading.Close()
 			document.getElementById('main').style.display = 'flex'
-			keydownEventIndex = 0
+			KeyManager.ChangeCategory('default')
 			PageManager.Reload()
 			if (thumbErrLog.length == 0) PopAlert('All Thumbs Made Successfuly.')
 			else errorList(thumbErrLog)
@@ -104,15 +103,14 @@ function createThumb(list, index, scrollTop) {
 }
 
 function makeThumbForAComic(id, keyEvents) {
-	keydownEventIndex = null
+	KeyManager.ChangeCategory(null)
 	if (!fs.existsSync(dirUL+'/thumbs')) fs.mkdirSync(dirUL+'/thumbs')
 	db.comics.findOne({_id:id}, (err, doc) => {
-		if (err) { error(err); keydownEventIndex = keyEvents; return }
+		if (err) { error(err); KeyManager.BackwardCategory(); return }
 		if (doc == undefined) { error('Comic Not Found'); return }
 		const scrollTop = document.getElementById('main-body').scrollTop
 		PageManager.container.innerHTML = ''
-		loading.reset(3)
-		loading.show(`Checking Thumbs...`)
+		loading.Show(3, 'Checking Thumbs...')
 
 		setTimeout(() => {
 			const image = doc.i
@@ -120,9 +118,9 @@ function makeThumbForAComic(id, keyEvents) {
 
 			if (!fs.existsSync(url)) {
 				error('This Comic First Image Is not Downloaded, we cannot make Thumb From It.')
-				loading.hide()
+				loading.Close()
 				PageManager.Reload()
-				keydownEventIndex = keyEvents
+				KeyManager.BackwardCategory()
 				return
 			}
 			
@@ -135,30 +133,30 @@ function makeThumbForAComic(id, keyEvents) {
 			}
 
 			if (fs.existsSync(url)) {
-				loading.forward('Making Thumbs...')
+				loading.Forward('Making Thumbs...')
 				setTimeout(() => {
 					sharp(url).resize(225, 315).jpeg().toFile(`${dirUL}/thumbs/${image}.jpg`).then(() => {
-						loading.forward()
-						loading.hide()
+						loading.Forward()
+						loading.Close()
 						PopAlert('Thumbs Made Successfuly.')
 						const comic_thumb_optimize_btn = document.getElementById('c-a-p-o-t')
 						comic_thumb_optimize_btn.setAttribute('class', 'warning-action')
 						comic_thumb_optimize_btn.innerText = 'ReMake Thumb'
 						PageManager.Reload()
-						keydownEventIndex = keyEvents
+						KeyManager.BackwardCategory()
 					}).catch(err => {
-						loading.forward()
-						loading.hide()
+						loading.Forward()
+						loading.Close()
 						error('MakeThumb: '+err)
 						PageManager.Reload()
-						keydownEventIndex = keyEvents
+						KeyManager.BackwardCategory()
 					})
 				}, 10)
 			} else {
-				loading.hide()
+				loading.Close()
 				error("Image Not Found, Comic: "+doc.n)
 				PageManager.Reload()
-				keydownEventIndex = keyEvents
+				KeyManager.BackwardCategory()
 			}
 		}, 10)
 	})

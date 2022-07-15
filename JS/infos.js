@@ -2,7 +2,7 @@ const infoContainer = document.getElementById('i-p-i-c')
 let info_panel_index = null
 
 function openInfoPanel(index) {
-	keydownEventIndex = null
+	KeyManager.ChangeCategory(null)
 	info_panel_index = index
 	const title = document.getElementById('i-p-t')
 	switch(index) {
@@ -36,7 +36,7 @@ function openInfoPanel(index) {
 			break
 	}
 	document.getElementById('info-panel').style.display = 'block'
-	keydownEventIndex = 5
+	KeyManager.ChangeCategory('info')
 }
 
 function MakeInfoContent(list) {
@@ -54,7 +54,7 @@ function MakeInfoContent(list) {
 }
 
 function closeInfoPanel() {
-	keydownEventIndex = 0
+	KeyManager.ChangeCategory('default')
 	document.getElementById('info-panel').style.display = 'none'
 	info_panel_index = null
 	document.getElementById('i-p-s-i').value = null

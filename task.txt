@@ -93,19 +93,16 @@ Add Comic {
 	Check {
 	Kotatsu
 	COMIC BAVEL
-	Loli & Futa Vol.12
 	Fella Pure
 	Artist > Ohtomo Takuji 
 	Artist > Puripuri Jet
 	Group > Topgun
 	Group > Eromazun
-	Onimara
 	The Intoxicated Harbinger and Archon
 	Urabambi vol.34 Fuhrer befiehl
 	COMIC HOTMiLK Koime Vol. n
 	COMIC Megastore DEEP Vol. n
 	Henshin!? Sukekomas
-	Papa no daisuki
 	}
 
 	Comic => [Togo Mito] Ookami-san to Ushi-san Ch. 1
@@ -116,6 +113,8 @@ Added To Version {
 }
 
 Tasks => {
+	Add ability To Combine two download folder
+	Add API Updator
 	Add Ability To Rename During Download
 	Add Repair To Reload Image From Cache
 	Make Delete Image Rescroll

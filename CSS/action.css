@@ -85,42 +85,125 @@
 	border-color: #1E8449;
 }
 
-/* Loading */
-.waiting-loading {
-	display: none;
-	flex-flow: column;
+/* Pop Alert */
+.pop-alert {
+	display: inline-block;
+	padding: 10px;
+	background-color: transparent;
+	color: #222;
+	border: 1px solid transparent;
+	border-radius: 4px;
+	font-size: 16px;
+	font-weight: 300;
+	position: fixed;
+	bottom: -42px;
+	left: 10px;
+	box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+	transition: bottom .3s;
+	z-index: 999999999;
+	user-select: none;
+}
+
+.pop-alert-primary {
+	background-color: #3498DB;
+	color: #fff;
+	border-color: #2E86C1;
+}
+
+.pop-alert-danger {
+	background-color: #C0392B;
+	color: #fff;
+	border-color: #A93226;
+}
+
+.pop-alert-warning {
+	background-color: #E67E22;
+	color: #fff;
+	border-color: #CA6F1E;
+}
+
+.pop-alert-success {
+	background-color: #229954;
+	color: #fff;
+	border-color: #1E8449;
+}
+
+.action-alert {
+	display: flex;
 	justify-content: center;
 	align-items: center;
 	width: 100%;
 	height: calc(100% - var(--topMenuSize));
-	background-color: #000d;
+	background-color: var(--modifier-selected-bg);
 	position: fixed;
 	top: var(--topMenuSize);
 	left: 0;
-	z-index: 999999;
+	z-index: 99999999999999;
 }
 
-.waiting-loading > p {
+.action-alert > div {
 	display: block;
-	margin-bottom: 15px;
-	color: #fff;
-	text-align: center;
+	width: 500px;
+	background-color: var(--secondary-bg);
+	padding: 10px;
+	box-shadow: 0 4px 8px 0 #000a;
+}
+
+.action-alert > div > p {
+	display: block;
+	width: 100%;
+	margin: 5px 0 15px 0;
+	padding: 10px;
+	background-color: var(--secondary-bg-alt);
+	color: var(--primary-header);
+	border-radius: 3px;
+}
+
+.action-alert > div > div { margin: 5px }
+
+/* Pop Alert */
+.pop-alert {
+	display: inline-block;
+	min-width: 200px;
+	padding: 10px;
+	background-color: transparent;
+	color: #222;
+	border-width: 0 0 0 4px;
+	border-style: solid;
+	border-radius: 3px;
 	font-size: 16px;
+	font-weight: 300;
+	position: fixed;
+	bottom: -42px;
+	left: 10px;
+	box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+	transition: bottom .3s;
+	z-index: 99999999999;
+	user-select: none;
 }
 
-.waiting-loading > div {
-	display: block;
-	width: 450px;
-	height: 4px;
-	background-color: #ddd;
-}
-
-.waiting-loading > div > div {
-	display: block;
-	width: 0;
-	height: 100%;
+.pop-alert-primary {
 	background-color: #3498DB;
-	transition: width .2s;
+	color: #fff;
+	border-color: #2E86C1;
+}
+
+.pop-alert-danger {
+	background-color: #d34333;
+	color: #fff;
+	border-color: #a31002;
+}
+
+.pop-alert-warning {
+	background-color: #E67E22;
+	color: #fff;
+	border-color: #c45c01;
+}
+
+.pop-alert-success {
+	background-color: #229954;
+	color: #fff;
+	border-color: #1E8449;
 }
 
 /* Procress Panel */
@@ -162,19 +245,13 @@
 	transition: background-color .2s;
 }
 
-.procress-panel > button:hover {
-	background-color: #fffa;
-}
+.procress-panel > button:hover { background-color: #fffa }
 
 .procress-panel > div:last-child {
 	display: flex;
 	flex-flow: row;
 	width: calc(100% - 80px);
 	height: calc(100% - 80px);
-	/* background-color: #fff; */
-	/* border: 1px solid #ddd; */
-	/* border-radius: 5px; */
-	/* box-shadow: 9px 7px 40px -6px rgba(0,0,0,.25); */
 	z-index: +1;
 }
 
@@ -284,45 +361,40 @@
 	border-color: #E67E22;
 }
 
-/* Pop Alert */
-.pop-alert {
-	display: inline-block;
-	padding: 10px;
-	background-color: transparent;
-	color: #222;
-	border: 1px solid transparent;
-	border-radius: 4px;
-	font-size: 16px;
-	font-weight: 300;
+/* Loading */
+.loading {
+	display: flex;
+	flex-flow: column;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: calc(100% - var(--topMenuSize));
+	background-color: #000d;
 	position: fixed;
-	bottom: -42px;
-	left: 10px;
-	box-shadow: 0 5px 10px rgba(0,0,0,0.3);
-	transition: bottom .3s;
-	z-index: 999999999;
-	user-select: none;
+	top: var(--topMenuSize);
+	left: 0;
+	z-index: 999999;
 }
 
-.pop-alert-primary {
+.loading > p {
+	display: block;
+	margin-bottom: 15px;
+	color: #fff;
+	text-align: center;
+	font-size: 16px;
+}
+
+.loading > div {
+	display: block;
+	width: 450px;
+	height: 4px;
+	background-color: #ddd;
+}
+
+.loading > div > div {
+	display: block;
+	width: 0;
+	height: 100%;
 	background-color: #3498DB;
-	color: #fff;
-	border-color: #2E86C1;
-}
-
-.pop-alert-danger {
-	background-color: #C0392B;
-	color: #fff;
-	border-color: #A93226;
-}
-
-.pop-alert-warning {
-	background-color: #E67E22;
-	color: #fff;
-	border-color: #CA6F1E;
-}
-
-.pop-alert-success {
-	background-color: #229954;
-	color: #fff;
-	border-color: #1E8449;
+	transition: width .2s;
 }

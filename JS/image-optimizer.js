@@ -4,7 +4,7 @@ let optimizeLog = [], optimizeFullSize = 0, optimizeConvertSize = 0, isOptimzing
 // Optimize Single Comic
 function OptimizeComicImages(comic_id, opened_comic, keyEvent) {
 	if (opened_comic && Downloader.HasDownload()) { error("You Can't Optimze Image When you are Downloading Something and Opening Offline Comic, Close and Optimize with Right Click!"); return }
-	keydownEventIndex = null
+	KeyManager.ChangeCategory(null)
 	isOptimizing = true
 	optimizeLog = []
 	optimizeFullSize = 0
@@ -33,7 +33,7 @@ function OptimizeComicImages(comic_id, opened_comic, keyEvent) {
 			procressPanel.hide()
 			if (opened_comic) openComic(comic_id)
 			isOptimizing = false
-			keydownEventIndex = keyEvent
+			KeyManager.BackwardCategory()
 			return
 		}
 		db.comics.findOne({ _id:comic_id }, (err, doc) => {
@@ -42,7 +42,7 @@ function OptimizeComicImages(comic_id, opened_comic, keyEvent) {
 				error(err)
 				if (opened_comic) openComic(comic_id)
 				isOptimizing = false
-				keydownEventIndex = keyEvent
+				KeyManager.BackwardCategory()
 				return
 			}
 	
@@ -83,14 +83,14 @@ function OptimizeComicImages(comic_id, opened_comic, keyEvent) {
 						error("MovingTemp: "+err)
 						if (opened_comic) openComic(comic_id)
 						isOptimizing = false
-						keydownEventIndex = keyEvent
+						KeyManager.BackwardCategory()
 						return
 					}
 				}
 				procressPanel.forward(`Optimizing Image (0/${urls.length})...`)
 				convertImagesToOptimize(urls, 0, comic_id, image, () => {
 					if (opened_comic) openComic(comic_id)
-					keydownEventIndex = keyEvent
+					KeyManager.BackwardCategory()
 				})
 			}, 10)
 		})
@@ -256,8 +256,7 @@ function startOptimizingAll() {
 	if (isOptimizing) return
 	isOptimizing = true
 	isOptimzingContiue = true
-	const passKeyEventIndex = keydownEventIndex
-	keydownEventIndex = null
+	KeyManager.ChangeCategory(null)
 	optimizeAllFullSize = 0
 	optimizeAllConvertSize = 0
 
@@ -266,14 +265,14 @@ function startOptimizingAll() {
 	procressPanel.show('Calculating...')
 
 	db.comics.find({}, (err, doc) => {
-		if (err) { error('CollectingComics->Err: '+err); procressPanel.reset(0); isOptimizing = false; isOptimzingContiue = false; keydownEventIndex = passKeyEventIndex; return }
-		if (doc == undefined || doc.length == 0) { PopAlert('There is no Comic Downloaded.', 'warning'); procressPanel.reset(0); isOptimizing = false; isOptimzingContiue = false; keydownEventIndex = passKeyEventIndex; return }
+		if (err) { error('CollectingComics->Err: '+err); procressPanel.reset(0); isOptimizing = false; isOptimzingContiue = false; KeyManager.BackwardCategory(); return }
+		if (doc == undefined || doc.length == 0) { PopAlert('There is no Comic Downloaded.', 'warning'); procressPanel.reset(0); isOptimizing = false; isOptimzingContiue = false; KeyManager.BackwardCategory(); return }
 		const collected_comics = []
 		for (let i = 0; i < doc.length; i++) {
 			if (typeof doc[i].o != 'number') collected_comics.push([toCapitalize(doc[i].n), doc[i].i, doc[i].c, doc[i].f, doc[i]._id])
 		}
 
-		if (collected_comics.length == 0) { PopAlert('All Comics are Optimized!'); procressPanel.reset(0); isOptimizing = false; isOptimzingContiue = false; keydownEventIndex = passKeyEventIndex; return }
+		if (collected_comics.length == 0) { PopAlert('All Comics are Optimized!'); procressPanel.reset(0); isOptimizing = false; isOptimzingContiue = false; KeyManager.BackwardCategory(); return }
 
 		OptimizeAll(collected_comics, 0, collected_comics.length)
 	})
@@ -344,7 +343,7 @@ function OptimizeAll(docList, index, maxLength, list) {
 		if (setting.notification_optimization_finish && remote.Notification.isSupported()) new remote.Notification({title: 'Comics Optimization Finished.', body: doc.n}).show()
 		isOptimizing = false
 		isOptimzingContiue = false
-		keydownEventIndex = 0
+		KeyManager.ChangeCategory('default')
 		PopAlert('Comic Images Has Been Optimize')
 		return
 	}

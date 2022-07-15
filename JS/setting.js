@@ -62,7 +62,7 @@ function setLuanchTimeSettings(reloadSettingPanel) {
 function saveSetting(justSave) {
 	let reload = false
 	if (justSave == false) {
-		keydownEventIndex = null
+		KeyManager.ChangeCategory(null)
 		const style = document.documentElement.style
 		const waiting_quality = Number(document.getElementById('s_waiting_quality').getAttribute('value'))
 		const lazy_loading = document.getElementById('s_lazy_loading').checked
@@ -125,14 +125,14 @@ function saveSetting(justSave) {
 		if (!Downloader.HasDownload()) ThisWindow.reload()
 		else PopAlert('You cannot Change Saving Location when downloading.', 'danger')
 	} else {
-		keydownEventIndex = 0
+		KeyManager.ChangeCategory('default')
 		document.getElementById('setting-panel').style.display = 'none'
 		document.getElementById('main').style.display = 'flex'
 	}
 }
 
 function openSetting() {
-	keydownEventIndex = 4
+	KeyManager.ChangeCategory('setting')
 	const panel = document.getElementById('setting-panel')
 	panel.style.display = 'block'
 	panel.scrollTop = 0
@@ -142,7 +142,7 @@ function openSetting() {
 function closeSetting() {
 	document.getElementById('setting-panel').style.display = 'none'
 	setLuanchTimeSettings(true)
-	keydownEventIndex = 0
+	KeyManager.ChangeCategory('default')
 	document.getElementById('main').style.display = 'flex'
 }
 
@@ -177,25 +177,4 @@ function BackUp(filename = null, callback = null) {
 		if (callback != null) callback()
 		else PopAlert('Backup Finished')
 	}, 1)
-}
-
-// Key Events
-function SettingKeyEvents(ctrl,shift,key) {
-	if (ctrl) {
-		if (!shift) {
-			switch (key) {
-				case 83:
-					saveSetting(false)
-					break
-			}
-		}
-	} else {
-		if (!shift) {
-			switch (key) {
-				case 27:
-					closeSetting()
-					break
-			}
-		}
-	}
 }

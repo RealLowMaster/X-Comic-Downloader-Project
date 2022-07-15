@@ -1,217 +1,3 @@
-class Loading {
-	#saveProcress = 0
-	#loading
-	#txt
-	#procress
-
-	constructor(times) {
-		this.times = (100/times)
-		this.id = `${new Date().getTime()}${Math.floor(Math.random() * 9)}`
-		this.#loading = document.createElement('div')
-		this.#loading.setAttribute('id', this.id)
-		this.#txt = document.createElement('p')
-		this.#txt.innerText = 'Loading...'
-		this.#procress = document.createElement('div')
-		this.#loading.setAttribute('class', 'waiting-loading')
-		this.#loading.appendChild(this.#txt)
-		const miniElement = document.createElement('div')
-		miniElement.appendChild(this.#procress)
-		this.#loading.appendChild(miniElement)
-		document.body.appendChild(this.#loading)
-	}
-
-	forward(text) {
-		if (text != undefined) this.#txt.innerText = text
-		this.#saveProcress += this.times
-		this.#procress.style.width = this.#saveProcress+'%'
-	}
-
-	changePercent(times) {
-		this.times = (100/times)
-	}
-
-	reset(times) {
-		this.hide()
-		if (times != undefined) this.times = (100/times)
-		this.#loading.style.backgroundColor = '#000d'
-		this.#txt.style.color = '#fff'
-		this.#txt.innerText = 'Loading...'
-		this.#saveProcress = 0
-		this.#procress.style.width = 0
-	}
-
-	hide() { this.#loading.style.display = 'none' }
-
-	text(text) { this.#txt.innerHTML = text }
-
-	show(text, bgColor, color) {
-		if (text != undefined) this.#txt.innerText = text
-		if (bgColor != undefined) this.#loading.style.backgroundColor = bgColor
-		if (color != undefined) this.#txt.style.color = color
-		this.#loading.style.display = 'flex'
-	}
-
-	remove() {
-		this.#loading.remove()
-	}
-}
-
-class ProcressPanel {
-	#saveProcress = 0
-	#constainer
-	#closeBtn
-	#secendSide
-	#miniLogContainer
-	#logContainer
-	#txt
-	#procress
-
-	constructor(times = 0) {
-		this.times = (100/times)
-		this.id = `pp${new Date().getTime()}`
-		this.#constainer = document.createElement('div')
-		this.#constainer.setAttribute('id', this.id)
-		this.#constainer.classList.add('procress-panel')
-		let elementContainer = document.createElement('div')
-		this.#constainer.appendChild(elementContainer)
-		this.#closeBtn = document.createElement('button')
-		this.#closeBtn.setAttribute('type', 'button')
-		this.#closeBtn.setAttribute('onclick', "this.parentElement.style.display='none'")
-		this.#closeBtn.innerText = 'X'
-		this.#constainer.appendChild(this.#closeBtn)
-		elementContainer = document.createElement('div')
-		this.#miniLogContainer = document.createElement('div')
-		elementContainer.appendChild(this.#miniLogContainer)
-		this.#secendSide = document.createElement('div')
-		this.#logContainer = document.createElement('div')
-		this.#secendSide.appendChild(this.#logContainer)
-		let element = document.createElement('div')
-		this.#txt = document.createElement('p')
-		this.#txt.innerText = 'Waiting...'
-		element.appendChild(this.#txt)
-		let miniElement = document.createElement('div')
-		this.#procress = document.createElement('div')
-		miniElement.appendChild(this.#procress)
-		element.appendChild(miniElement)
-		this.#secendSide.appendChild(element)
-		elementContainer.appendChild(this.#secendSide)
-		this.#constainer.appendChild(elementContainer)
-		document.body.appendChild(this.#constainer)
-	}
-
-	forward(text) {
-		if (text != undefined) this.#txt.innerText = text
-		this.#saveProcress += this.times
-		this.#procress.style.width = this.#saveProcress+'%'
-	}
-
-	changePercent(times = 0) {
-		this.times = (100/times)
-		this.#saveProcress = 0
-		this.#procress.style.width = '0%'
-	}
-
-	add(text, color) {
-		color = color || 'success'
-		const element = document.createElement('div')
-
-		element.innerHTML = text
-		element.classList.add('pp-log')
-		element.classList.add(`pp-${color}`)
-
-		this.#logContainer.appendChild(element)
-	}
-
-	addMini(text, color) {
-		color = color || 'success'
-		const element = document.createElement('div')
-
-		element.innerHTML = text
-		element.classList.add('pp-log')
-		element.classList.add(`pp-${color}`)
-
-		this.#miniLogContainer.appendChild(element)
-	}
-
-	clear() {
-		this.#logContainer.innerHTML = ''
-	}
-
-	clearMini() {
-		this.#miniLogContainer.innerHTML = ''
-	}
-
-	reset(times = 0) {
-		this.hide()
-		this.clear()
-		this.clearMini()
-		if (times != undefined) this.times = (100/times)
-		this.#txt.innerText = 'Waiting...'
-		this.#saveProcress = 0
-		this.#procress.style.width = 0
-		this.#constainer.children[0].setAttribute('onclick', "this.parentElement.style.display='none'")
-		this.#closeBtn.setAttribute('onclick', "this.parentElement.style.display='none'")
-	}
-
-	hide() { this.#constainer.style.display = 'none' }
-
-	show(text) {
-		if (text != undefined) this.#txt.innerHTML = text
-		this.#constainer.style.display = 'flex'
-	}
-
-	text(text) {
-		this.#txt.innerHTML = text
-	}
-
-	config(config = { miniLog:false, miniSize:30, bgClose:false, closeBtn:false, closeEvent:'e', closeBGEvent:'e' }) {
-		if (config.miniLog != undefined) {
-			if (config.miniLog) {
-				this.#constainer.setAttribute('mini', true)
-				if (config.miniSize != null && typeof(config.miniSize) == 'number') {
-					this.#miniLogContainer.style.flex = `0 0 ${config.miniSize}%`
-					this.#miniLogContainer.style.maxWidth = `${config.miniSize}%`
-					this.#secendSide.style.flex = `0 0 ${100 - config.miniSize}%`
-					this.#secendSide.style.maxWidth = `${100 - config.miniSize}%`
-				} else {
-					this.#miniLogContainer.style.flex = '0 0 30%'
-					this.#miniLogContainer.style.maxWidth = '30%'
-					this.#secendSide.style.flex = '0 0 70%'
-					this.#secendSide.style.maxWidth = '70%'
-				}
-			} else {
-				this.#constainer.removeAttribute('mini')
-				this.#miniLogContainer.style.flex = '0 0 0'
-				this.#miniLogContainer.style.maxWidth = '0'
-				this.#secendSide.style.flex = '0 0 100%'
-				this.#secendSide.style.maxWidth = '100%'
-			}
-		}
-
-		if (config.bgClose != undefined) {
-			if (config.bgClose) this.#constainer.children[0].setAttribute('onclick', "this.parentElement.style.display='none'")
-			else this.#constainer.children[0].removeAttribute('onclick')
-		}
-
-		if (config.closeBtn != undefined) {
-			if (config.closeBtn) this.#closeBtn.style.display = 'flex'
-			else this.#closeBtn.style.display = 'none'
-		}
-
-		if (config.closeEvent != undefined) {
-			this.#closeBtn.setAttribute('onclick', config.closeEvent)
-		}
-
-		if (config.closeBGEvent != undefined) {
-			this.#constainer.children[0].setAttribute('onclick', config.closeBGEvent)
-		}
-	}
-
-	remove() {
-		this.#constainer.remove()
-	}
-}
-
 class Tab {
 	constructor(id, scroll, search, jumpPage, thisPage, maxPage, site, isReloading, element, pageElement) {
 		this.id = id
@@ -419,7 +205,6 @@ class DownloadManager {
 	#indexs
 	#info
 	#sort
-	#passKeyIndex
 	#dlInfo
 
 	constructor() {
@@ -785,13 +570,12 @@ class DownloadManager {
 	}
 
 	OpenPanel() {
-		this.#passKeyIndex = keydownEventIndex
-		keydownEventIndex = null
+		KeyManager.stop = true
 		document.getElementById('download-panel').setAttribute('active', '')
 	}
 
 	ClosePanel() {
-		keydownEventIndex = this.#passKeyIndex
+		KeyManager.stop = false
 		document.getElementById('download-panel').removeAttribute('active')
 	}
 }
@@ -1348,7 +1132,6 @@ class Slider {
 	constructor() {
 		this.count = 0
 		this.activeIndex = 0
-		this.passKeyEvent = null
 		this.overview = false
 		this.size = false
 		this.firstTime = true
@@ -1399,8 +1182,7 @@ class Slider {
 
 	Open(index = null) {
 		if (this.count == 0) { PopAlert('There is no Image!','warning'); return }
-		this.passKeyEvent = keydownEventIndex
-		keydownEventIndex = 2
+		KeyManager.ChangeCategory('slider')
 		if (index != null) this.Change(index)
 		else this.Change(this.activeIndex)
 		this.overview = false
@@ -1412,7 +1194,7 @@ class Slider {
 	}
 
 	Close() {
-		keydownEventIndex = this.passKeyEvent
+		KeyManager.BackwardCategory()
 		document.getElementById('comic-slider').style.display = 'none'
 		this.img.setAttribute('src','')
 		document.getElementById('d-p-t').removeAttribute('hov')
@@ -1504,37 +1286,5 @@ class Slider {
 
 		if (this.imgcon.scrollTop == this.img.clientHeight - this.imgcon.clientHeight) this.imgcon.style.borderBottomColor = '#5dade2'
 		else this.imgcon.style.borderBottomColor = '#000'
-	}
-
-	SliderKeyEvents(ctrl, shift, key) {
-		if (ctrl) {
-			if (!shift) {
-				switch (key) {
-					case 37:
-						SliderManager.Prev()
-						break
-					case 39:
-						SliderManager.Next()
-						break
-				}
-			}
-		} else {
-			if (!shift) {
-				switch (key) {
-					case 27:
-						SliderManager.Close()
-						break
-					case 65:
-						SliderManager.Prev()
-						break
-					case 68:
-						SliderManager.Next()
-						break
-					case 79:
-						SliderManager.ToggleSize()
-						break
-				}
-			}
-		}
 	}
 }

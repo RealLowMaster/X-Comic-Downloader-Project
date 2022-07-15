@@ -6,7 +6,7 @@ const bjp_m_p = document.getElementById('bjp-m-p')
 let browserHistoryIndex = 0, browserHistoryRowOpElement, br_history_selected_inputs = [], br_history_selected_indexs = [], resizeTabTimer, active_site = null, historyObserver, historyLaodCounter = 0, br_cmenu_info = null, brh_cb_save = null
 
 function openBrowser() {
-	keydownEventIndex = 3
+	KeyManager.ChangeCategory('browser')
 	afterDLReload = false
 	imageLazyLoadingOptions.root = pageContainer
 	imageLoadingObserver = new IntersectionObserver(ObserverFunction, imageLazyLoadingOptions)
@@ -32,7 +32,7 @@ function closeBrowser() {
 	document.getElementById('main').style.display = 'flex'
 	closeSitePanel()
 	closeBrowserHistory()
-	keydownEventIndex = 0
+	KeyManager.ChangeCategory('default')
 	activeTabIndex = null
 	activeTabComicId = null
 	tabsPos = []
@@ -579,7 +579,7 @@ document.getElementById('browser-tool-search-form').addEventListener('submit', e
 	e.preventDefault()
 	closeSitePanel()
 	closeBrowserHistory()
-	keydownEventIndex = 3
+	KeyManager.ChangeCategory('browser')
 	const input = document.getElementById('browser-tool-search-input')
 	const checkText = input.value.replace(/ /g, '')
 	if (checkText.length > 0) {
@@ -1055,47 +1055,4 @@ function closeBRCMenu() {
 	window.removeEventListener('wheel', closeBRCMenu)
 	window.removeEventListener('resize', closeBRCMenu)
 	window.removeEventListener('keydown', closeBRCMenu)
-}
-
-// Key Event
-function BrowserKeyEvents(ctrl, shift, key) {
-	if (ctrl) {
-		if (!shift) {
-			switch (key) {
-				case 37:
-					browserPrev()
-					break
-				case 39:
-					browserNext()
-					break
-				case 72:
-					toggleBrowserHistory()
-					break
-				case 78:
-					openSite(active_site)
-					break
-				case 81:
-					browserTabHome()
-					break
-				case 82:
-					browserTabReload()
-					break
-				case 83:
-					toggleSitePanel()
-					break
-				case 87:
-					if (activeTabComicId != null) removeTab(activeTabComicId)
-					break
-			}
-			
-		} else if (key == 84) openBrowserLastTabs()
-	} else {
-		if (!shift) {
-			switch (key) {
-				case 27:
-					closeBrowser()
-					break
-			}
-		}
-	}
 }

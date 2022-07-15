@@ -36,7 +36,7 @@ function GetHave(site, id) {
 // Character
 function RepairCharacter(result, comicId) {
 	if (result == null || result.length == 0) {
-		loading.hide()
+		loading.Close()
 		db.comics.update({_id:comicId}, { $set: {h:null} }, {}, err => {
 			if (err) console.error(err)
 			PopAlert('This Comic has no Character.', 'danger')
@@ -44,15 +44,15 @@ function RepairCharacter(result, comicId) {
 		})
 		return
 	}
-	loading.text('Listing Characters...')
+	loading.Text('Listing Characters...')
 
 	const list = []
 	for (let i = 0; i < result.length; i++) list.push(result[i].name)
-	loading.text('Add Characters To Database...')
+	loading.Text('Add Characters To Database...')
 	const newInfo = CreateCharacter(list)
 
 	db.comics.update({_id:comicId}, { $set: {h:newInfo} }, {}, err => {
-		loading.hide()
+		loading.Close()
 		openComicCharacters(comicId)
 		if (err) { error('CharactersListUpdate->'+err); return }
 		PopAlert('Comic Characters Has Been Repaired!')
@@ -78,7 +78,7 @@ function CreateCharacter(list) {
 // Language
 function RepairLanguage(result, comicId) {
 	if (result == null || result.length == 0) {
-		loading.hide()
+		loading.Close()
 		db.comics.update({_id:comicId}, { $set: {l:null} }, {}, err => {
 			if (err) console.error(err)
 			PopAlert('This Comic has no Language.', 'danger')
@@ -86,15 +86,15 @@ function RepairLanguage(result, comicId) {
 		})
 		return
 	}
-	loading.text('Listing Languages...')
+	loading.Text('Listing Languages...')
 
 	const list = []
 	for (let i = 0; i < result.length; i++) list.push(result[i].name)
-	loading.text('Add Languages To Database...')
+	loading.Text('Add Languages To Database...')
 	const newInfo = CreateLanguage(list)
 
 	db.comics.update({_id:comicId}, { $set: {l:newInfo} }, {}, err => {
-		loading.hide()
+		loading.Close()
 		openComicLanguages(comicId)
 		if (err) { error('LanguagesListUpdate->'+err); return }
 		PopAlert('Comic Languages Has Been Repaired!')
@@ -120,7 +120,7 @@ function CreateLanguage(list) {
 // Category
 function RepairCategory(result, comicId) {
 	if (result == null || result.length == 0) {
-		loading.hide()
+		loading.Close()
 		db.comics.update({_id:comicId}, { $set: {e:null} }, {}, err => {
 			if (err) console.error(err)
 			PopAlert('This Comic has no Category.', 'danger')
@@ -128,15 +128,15 @@ function RepairCategory(result, comicId) {
 		})
 		return
 	}
-	loading.text('Listing Categories...')
+	loading.Text('Listing Categories...')
 
 	const list = []
 	for (let i = 0; i < result.length; i++) list.push(result[i].name)
-	loading.text('Add Categories To Database...')
+	loading.Text('Add Categories To Database...')
 	const newInfo = CreateCategory(list)
 
 	db.comics.update({_id:comicId}, { $set: {e:newInfo} }, {}, err => {
-		loading.hide()
+		loading.Close()
 		openComicCategories(comicId)
 		if (err) { error('CategoriesListUpdate->'+err); return }
 		PopAlert('Comic Categories Has Been Repaired!')
@@ -162,7 +162,7 @@ function CreateCategory(list) {
 // Groups
 function RepairGroup(result, comicId) {
 	if (result == null || result.length == 0) {
-		loading.hide()
+		loading.Close()
 		db.comics.update({_id:comicId}, { $set: {g:null} }, {}, err => {
 			if (err) console.error(err)
 			PopAlert('This Comic has no Group.', 'danger')
@@ -170,15 +170,15 @@ function RepairGroup(result, comicId) {
 		})
 		return
 	}
-	loading.text('Listing Groups...')
+	loading.Text('Listing Groups...')
 
 	const list = []
 	for (let i = 0; i < result.length; i++) list.push(result[i].name)
-	loading.text('Add Groups To Database...')
+	loading.Text('Add Groups To Database...')
 	const newInfo = CreateGroup(list)
 
 	db.comics.update({_id:comicId}, { $set: {g:newInfo} }, {}, err => {
-		loading.hide()
+		loading.Close()
 		openComicGroups(comicId)
 		if (err) { error('GroupsListUpdate->'+err); return }
 		PopAlert('Comic Groups Has Been Repaired!')
@@ -205,7 +205,7 @@ function CreateGroup(list) {
 // Artists
 function RepairArtist(result, comicId) {
 	if (result == null || result.length == 0) {
-		loading.hide()
+		loading.Close()
 		db.comics.update({_id:comicId}, { $set: {a:null} }, {}, err => {
 			if (err) console.error(err)
 			PopAlert('This Comic has no Artist.', 'danger')
@@ -213,15 +213,15 @@ function RepairArtist(result, comicId) {
 		})
 		return
 	}
-	loading.text('Listing Artists...')
+	loading.Text('Listing Artists...')
 
 	const list = []
 	for (let i = 0; i < result.length; i++) list.push(result[i].name)
-	loading.text('Add Artists To Database...')
+	loading.Text('Add Artists To Database...')
 	const newInfo = CreateArtist(list)
 
 	db.comics.update({_id:comicId}, { $set: {a:newInfo} }, {}, err => {
-		loading.hide()
+		loading.Close()
 		openComicArtists(comicId)
 		if (err) { error('ArtistsListUpdate->'+err); return }
 		PopAlert('Comic Artists Has Been Repaired!')
@@ -247,7 +247,7 @@ function CreateArtist(list) {
 // Parody
 function RepairParody(result, comicId) {
 	if (result == null || result.length == 0) {
-		loading.hide()
+		loading.Close()
 		db.comics.update({_id:comicId}, { $set: {d:null} }, {}, err => {
 			if (err) console.error(err)
 			PopAlert('This Comic has no Parody.', 'danger')
@@ -255,15 +255,15 @@ function RepairParody(result, comicId) {
 		})
 		return
 	}
-	loading.text('Listing Parodies...')
+	loading.Text('Listing Parodies...')
 
 	const list = []
 	for (let i = 0; i < result.length; i++) list.push(result[i].name)
-	loading.text('Add Parodies To Database...')
+	loading.Text('Add Parodies To Database...')
 	const newInfo = CreateParody(list)
 
 	db.comics.update({_id:comicId}, { $set: {d:newInfo} }, {}, err => {
-		loading.hide()
+		loading.Close()
 		openComicParodies(comicId)
 		if (err) { error('ParodiesListUpdate->'+err); return }
 		PopAlert('Comic Parodies Has Been Repaired!')
@@ -289,7 +289,7 @@ function CreateParody(list) {
 // Tag
 function RepairTag(result, comicId) {
 	if (result == null || result.length == 0) {
-		loading.hide()
+		loading.Close()
 		db.comics.update({_id:comicId}, { $set: {t:null} }, {}, err => {
 			if (err) console.error(err)
 			PopAlert('This Comic has no Tag.', 'danger')
@@ -297,15 +297,15 @@ function RepairTag(result, comicId) {
 		})
 		return
 	}
-	loading.text('Listing Tags...')
+	loading.Text('Listing Tags...')
 
 	const list = []
 	for (let i = 0; i < result.length; i++) list.push(result[i].name)
-	loading.text('Add Tags To Database...')
+	loading.Text('Add Tags To Database...')
 	const newInfo = CreateTag(list)
 
 	db.comics.update({_id:comicId}, { $set: {t:newInfo} }, {}, err => {
-		loading.hide()
+		loading.Close()
 		openComicTags(comicId)
 		if (err) { error('TagsListUpdate->'+err); return }
 		PopAlert('Comic Tags Has Been Repaired!')

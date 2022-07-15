@@ -13,7 +13,7 @@ function CreateCollection(name) {
 }
 
 function openCollectionsPanel() {
-	keydownEventIndex = null
+	KeyManager.stop = true
 	afterDLReload = false
 	LoadCollections()
 	document.getElementById('main').style.display = 'none'
@@ -21,7 +21,7 @@ function openCollectionsPanel() {
 }
 
 function closeCollectionsPanel() {
-	keydownEventIndex = 0
+	KeyManager.stop = false
 	afterDLReload = true
 	PageManager.Reload()
 	document.getElementById('main').style.display = 'flex'

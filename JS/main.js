@@ -59,16 +59,8 @@ const sites = [
 		downloader: 'nhentaiDownloader({id})'
 	}
 ]
-const keydownEvents = [
-	'OfflineKeyEvents({ctrl},{shift},{key})', // 0
-	'OfflineComicKeyEvents({ctrl},{shift},{key})', // 1
-	'SliderManager.SliderKeyEvents({ctrl},{shift},{key})', // 2
-	'BrowserKeyEvents({ctrl},{shift},{key})', // 3
-	'SettingKeyEvents({ctrl},{shift},{key})', // 4
-	'InfoKeyEvents({ctrl},{shift},{key})' // 5
-]
-const ThisWindow = remote.getCurrentWindow(), loading = new Loading(9), Downloader = new DownloadManager(), PageManager = new OfflinePageManager(), db = {}, procressPanel = new ProcressPanel(0), SliderManager = new Slider(), update_number = 15
-let comicDeleting = false, wt_fps = 20, dirDB, dirUL, dirBU, dirTmp, isOptimizing = false, browserLastTabs = [], tabsHistory = [], dirHistory = '', keydownEventIndex = 0, new_update, save_value = null, save_value2 = null, afterDLReload = true, setting, openedMenuTabIndex, copiedTab = null, tabs = [], lastComicId, searchTimer, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = [], isUpdating = false, collectionsDB = [], groupsDB = [], artistsDB = [], parodiesDB = [], tagsDB = [], charactersDB = [], languagesDB = [], categoriesDB = [], comicGroupsDB = [], comicArtistsDB = [], comicParodiesDB = [], comicTagsDB = [], comicCharactersDB = [], comicLanguagesDB = [], comicCategoriesDB = [], indexDB = [], haveDBSite = [], haveDBId = [], haveDBComic = []
+const ThisWindow = remote.getCurrentWindow(), loading = new Loading(), KeyManager = new HotKeyManager(), Downloader = new DownloadManager(), PageManager = new OfflinePageManager(), db = {}, procressPanel = new ProcressPanel(0), SliderManager = new Slider(), update_number = 15
+let comicDeleting = false, wt_fps = 20, dirDB, dirUL, dirBU, dirTmp, isOptimizing = false, browserLastTabs = [], tabsHistory = [], dirHistory = '', new_update, save_value = null, save_value2 = null, afterDLReload = true, setting, openedMenuTabIndex, copiedTab = null, tabs = [], lastComicId, searchTimer, activeTabComicId = null, activeTabIndex = null, tabsPos = [], tabsPosParent = [], isUpdating = false, collectionsDB = [], groupsDB = [], artistsDB = [], parodiesDB = [], tagsDB = [], charactersDB = [], languagesDB = [], categoriesDB = [], comicGroupsDB = [], comicArtistsDB = [], comicParodiesDB = [], comicTagsDB = [], comicCharactersDB = [], comicLanguagesDB = [], comicCategoriesDB = [], indexDB = [], haveDBSite = [], haveDBId = [], haveDBComic = []
 
 // Set Windows Closing Event
 function closeApp() {
@@ -96,8 +88,7 @@ function closeApp() {
 	}
 
 
-	loading.reset(0)
-	loading.show('Shutting Down')
+	loading.Show(1, 'Shutting Down')
 	const tabsElement = tabsContainer.children
 	if (tabsElement.length > 0) {
 		for (let i = 0; i < tabsElement.length; i++) addHistory(tabs[Number(tabsElement[i].getAttribute('ti'))], tabsElement[i].children[0].innerText)
@@ -1134,3 +1125,59 @@ function ObserverFunction(entries, imageLoadingObserver) {
 }
 
 let imageLoadingObserver = new IntersectionObserver(ObserverFunction, imageLazyLoadingOptions)
+
+function SetHotKeys() {
+	KeyManager.AddPublicHotKey(false, false, false, 122, ChangeScreenMode)
+	KeyManager.use_public = true
+
+	KeyManager.AddCategory('default') // 0
+	KeyManager.AddHotKey('default', true, false, false, 66, openBrowser)
+	KeyManager.AddHotKey('default', true, false, false, 72, 'PageManager.Home()')
+	KeyManager.AddHotKey('default', true, false, false, 82, 'PageManager.Reload()')
+	KeyManager.AddHotKey('default', true, false, false, 88, 'openCollectionsPanel()')
+	KeyManager.AddHotKey('default', true, false, false, 92, 'PageManager.RandomJumpPage()')
+	KeyManager.AddHotKey('default', false, false, false, 27, askForClosingApp)
+	KeyManager.AddHotKey('default', false, false, false, 37, 'PageManager.Prev()')
+	KeyManager.AddHotKey('default', false, false, false, 39, 'PageManager.Next()')
+	KeyManager.AddHotKey('default', false, false, false, 49, 'openInfoPanel(0)')
+	KeyManager.AddHotKey('default', false, false, false, 50, 'openInfoPanel(1)')
+	KeyManager.AddHotKey('default', false, false, false, 51, 'openInfoPanel(2)')
+	KeyManager.AddHotKey('default', false, false, false, 52, 'openInfoPanel(3)')
+	KeyManager.AddHotKey('default', false, false, false, 53, 'openInfoPanel(4)')
+	KeyManager.AddHotKey('default', false, false, false, 54, 'openInfoPanel(5)')
+	KeyManager.AddHotKey('default', false, false, false, 55, 'openInfoPanel(6)')
+
+	KeyManager.AddCategory('comic') // 1
+	KeyManager.AddHotKey('comic', true, false, false, 69, "openComicExportPanel(Number(comicPanel.getAttribute('cid')), 1)")
+	KeyManager.AddHotKey('comic', true, false, false, 81, "KeyManager.ChangeCategory(null);document.getElementById('comic-action-panel').style.display='flex'")
+	KeyManager.AddHotKey('comic', true, false, false, 82, 'if (need_repair.length > 0) {KeyManager.ChangeCategory(null);repairComicImages()}')
+	KeyManager.AddHotKey('comic', true, false, false, 83, 'SliderManager.Open()')
+	KeyManager.AddHotKey('comic', false, false, false, 27, closeComicPanel)
+	
+	KeyManager.AddCategory('slider') // 2
+	KeyManager.AddHotKey('slider', true, false, false, 37, 'SliderManager.Prev()')
+	KeyManager.AddHotKey('slider', true, false, false, 39, 'SliderManager.Next()')
+	KeyManager.AddHotKey('slider', false, false, false, 27, 'SliderManager.Close()')
+	KeyManager.AddHotKey('slider', false, false, false, 65, 'SliderManager.Prev()')
+	KeyManager.AddHotKey('slider', false, false, false, 68, 'SliderManager.Next()')
+	KeyManager.AddHotKey('slider', false, false, false, 79, 'SliderManager.ToggleSize()')
+
+	KeyManager.AddCategory('browser') // 3
+	KeyManager.AddHotKey('browser', true, false, false, 37, browserPrev)
+	KeyManager.AddHotKey('browser', true, false, false, 39, browserNext)
+	KeyManager.AddHotKey('browser', true, false, false, 72, toggleBrowserHistory)
+	KeyManager.AddHotKey('browser', true, false, false, 78, 'openSite(active_site)')
+	KeyManager.AddHotKey('browser', true, false, false, 81, browserTabHome)
+	KeyManager.AddHotKey('browser', true, false, false, 82, browserTabReload)
+	KeyManager.AddHotKey('browser', true, false, false, 83, toggleSitePanel)
+	KeyManager.AddHotKey('browser', true, false, false, 87, 'if (activeTabComicId != null) removeTab(activeTabComicId)')
+	KeyManager.AddHotKey('browser', true, true, false, 84, openBrowserLastTabs)
+	KeyManager.AddHotKey('browser', false, false, false, 27, closeBrowser)
+
+	KeyManager.AddCategory('setting') // 4
+	KeyManager.AddHotKey('setting', true, false, false, 83, 'saveSetting(false)')
+	KeyManager.AddHotKey('setting', false, false, false, 27, closeSetting)
+
+	KeyManager.AddCategory('info') // 5
+	KeyManager.AddHotKey('info', false, false, false, 27, closeInfoPanel)
+}
