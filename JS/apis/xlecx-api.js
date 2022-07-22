@@ -46,7 +46,7 @@ class XlecxAPI {
 		if (typeof callback !== 'function') throw "Callback Should Be Function."
 
 		fetch(url).then(response => {
-			if (response.status != 200) {
+			if (!response.ok) {
 				const index = this.#status.indexOf(response.status)
 				if (index > -1) throw this.#statusMessage[index]
 				else throw "Error::Code::"+response.status
@@ -142,7 +142,7 @@ class XlecxAPI {
 		if (typeof callback != 'function') throw "The Type of Callback Should Be a Function."
 
 		fetch(url).then(response => {
-			if (response.status != 200) {
+			if (!response.ok) {
 				const index = this.#status.indexOf(response.status)
 				if (index > -1) throw this.#statusMessage[index]
 				else throw "Error::Code::"+response.status
@@ -174,7 +174,7 @@ class XlecxAPI {
 		if (typeof callback != 'function') throw "The Type of Callback Should Be a Function."
 
 		fetch(url).then(response => {
-			if (response.status != 200) {
+			if (!response.ok) {
 				const index = this.#status.indexOf(response.status)
 				if (index > -1) throw this.#statusMessage[index]
 				else throw "Error::Code::"+response.status
@@ -276,7 +276,7 @@ class XlecxAPI {
 		if (typeof callback != 'function') throw "The Type of Callback Should Be a Function."
 
 		fetch(url).then(response => {
-			if (response.status != 200) {
+			if (!response.ok) {
 				const index = this.#status.indexOf(response.status)
 				if (index > -1) throw this.#statusMessage[index]
 				else throw "Error::Code::"+response.status
@@ -406,7 +406,7 @@ class XlecxAPI {
 		if (typeof callback != 'function') throw "The Type of Callback Should Be a Function."
 
 		fetch(url).then(response => {
-			if (response.status != 200) {
+			if (!response.ok) {
 				const index = this.#status.indexOf(response.status)
 				if (index > -1) throw this.#statusMessage[index]
 				else throw "Error::Code::"+response.status
@@ -457,7 +457,7 @@ class XlecxAPI {
 		if (typeof callback != 'function') throw "The Type of Callback Should Be a Function."
 
 		fetch(url).then(response => {
-			if (response.status != 200) {
+			if (!response.ok) {
 				const index = this.#status.indexOf(response.status)
 				if (index > -1) throw this.#statusMessage[index]
 				else throw "Error::Code::"+response.status
@@ -504,7 +504,7 @@ class XlecxAPI {
 		if (typeof callback != 'function') throw "The Type of Callback Should Be a Function."
 
 		fetch(url).then(response => {
-			if (response.status != 200) {
+			if (!response.ok) {
 				const index = this.#status.indexOf(response.status)
 				if (index > -1) throw this.#statusMessage[index]
 				else throw "Error::Code::"+response.status
@@ -592,7 +592,7 @@ class XlecxAPI {
 		if (typeof callback != 'function') throw "The Type of Callback Should Be a Function."
 
 		fetch(url).then(response => {
-			if (response.status != 200) {
+			if (!response.ok) {
 				const index = this.#status.indexOf(response.status)
 				if (index > -1) throw this.#statusMessage[index]
 				else throw "Error::Code::"+response.status
@@ -679,7 +679,7 @@ class XlecxAPI {
 		if (typeof callback != 'function') throw "The Type of Callback Should Be a Function."
 
 		fetch(url).then(response => {
-			if (response.status != 200) {
+			if (!response.ok) {
 				const index = this.#status.indexOf(response.status)
 				if (index > -1) throw this.#statusMessage[index]
 				else throw "Error::Code::"+response.status
@@ -766,7 +766,7 @@ class XlecxAPI {
 		if (typeof callback != 'function') throw "The Type of Callback Should Be a Function."
 
 		fetch(url).then(response => {
-			if (response.status != 200) {
+			if (!response.ok) {
 				const index = this.#status.indexOf(response.status)
 				if (index > -1) throw this.#statusMessage[index]
 				else throw "Error::Code::"+response.status
@@ -859,7 +859,7 @@ class XlecxAPI {
 			},
 			body: `do=search&subaction=search&search_start=${page}&full_search=0&result_from=${(page - 1) * 15 + 1}&story=${text}`
 		}).then(response => {
-			if (response.status != 200) {
+			if (!response.ok) {
 				const index = this.#status.indexOf(response.status)
 				if (index > -1) throw this.#statusMessage[index]
 				else throw "Error::Code::"+response.status

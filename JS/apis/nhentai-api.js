@@ -29,8 +29,10 @@ class nHentaiAPI {
 		if (callback == null) { callback("You can't Set Callback as Null.", null); return }
 		if (typeof callback != 'function') { callback("The Type of Callback Should Be a Function.", null); return }
 
+
+
 		fetch(url).then(response => {
-			if (response.status != 200) {
+			if (!response.ok) {
 				const index = this.#status.indexOf(response.status)
 				if (index > -1) throw this.#statusMessage[index]
 				else throw "Error->Code->"+response.status
@@ -128,7 +130,7 @@ class nHentaiAPI {
 		if (typeof callback != 'function') { callback("The Type of Callback Should Be a Function.", null); return }
 
 		fetch(url).then(response => {
-			if (response.status != 200) {
+			if (!response.ok) {
 				const index = this.#status.indexOf(response.status)
 				if (index > -1) throw this.#statusMessage[index]
 				else throw "Error->Code->"+response.status
@@ -353,7 +355,7 @@ class nHentaiAPI {
 		const url = this.baseURL+subURL+name+'/?page='+page
 
 		fetch(url).then(response => {
-			if (response.status != 200) {
+			if (!response.ok) {
 				const index = this.#status.indexOf(response.status)
 				if (index > -1) throw this.#statusMessage[index]
 				else throw "Error->Code->"+response.status
@@ -432,7 +434,7 @@ class nHentaiAPI {
 		const url = this.baseURL+this.searchURL+'?q=pages%3A>'+from+'+pages%3A<'+to+'&page='+page
 
 		fetch(url).then(response => {
-			if (response.status != 200) {
+			if (!response.ok) {
 				const index = this.#status.indexOf(response.status)
 				if (index > -1) throw this.#statusMessage[index]
 				else throw "Error->Code->"+response.status
@@ -512,7 +514,7 @@ class nHentaiAPI {
 		if (typeof callback != 'function') { callback("The Type of Callback Should Be a Function.", null); return }
 
 		fetch(url).then(response => {
-			if (response.status != 200) {
+			if (!response.ok) {
 				const index = this.#status.indexOf(response.status)
 				if (index > -1) throw this.#statusMessage[index]
 				else throw "Error->Code->"+response.status
@@ -603,7 +605,7 @@ class nHentaiAPI {
 		const url = save_url+1
 
 		fetch(url).then(response => {
-			if (response.status != 200) {
+			if (!response.ok) {
 				const index = this.#status.indexOf(response.status)
 				if (index > -1) throw this.#statusMessage[index]
 				else throw "Error->Code->"+response.status
@@ -651,7 +653,7 @@ class nHentaiAPI {
 		const url = this.baseURL+subURL+'?page='+page
 
 		fetch(url).then(response => {
-			if (response.status != 200) {
+			if (!response.ok) {
 				const index = this.#status.indexOf(response.status)
 				if (index > -1) throw this.#statusMessage[index]
 				else throw "Error->Code->"+response.status
@@ -713,7 +715,7 @@ class nHentaiAPI {
 		const url = this.baseURL+subURL+'?page='+page
 
 		fetch(url).then(response => {
-			if (response.status != 200) {
+			if (!response.ok) {
 				const index = this.#status.indexOf(response.status)
 				if (index > -1) throw this.#statusMessage[index]
 				else throw "Error->Code->"+response.status
@@ -788,7 +790,7 @@ class nHentaiAPI {
 		if (typeof callback != 'function') { callback("The Type of Callback Should Be a Function.", null); return }
 
 		fetch(this.baseURL+this.randomURL).then(response => {
-			if (response.status != 200) {
+			if (!response.ok) {
 				const index = this.#status.indexOf(response.status)
 				if (index > -1) throw this.#statusMessage[index]
 				else throw "Error->Code->"+response.status

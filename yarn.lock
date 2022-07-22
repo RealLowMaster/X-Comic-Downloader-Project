@@ -1405,6 +1405,11 @@ nedb@^1.8.0:
     mkdirp "~0.5.1"
     underscore "~1.4.4"
 
+nhentai-api@^3.4.3:
+  version "3.4.3"
+  resolved "https://registry.yarnpkg.com/nhentai-api/-/nhentai-api-3.4.3.tgz#65040e42b61ac049986af1b69752b5b8c1a2c60f"
+  integrity sha512-IPzoB9/GRVF/wofyao6SfpFIak2GyE8+4F7ipDJXK/vmxV3QPa+7E7+cst2zsXis5j9Yxk3Cf/zodktaM9UU9w==
+
 node-abi@^3.3.0:
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/node-abi/-/node-abi-3.5.0.tgz#26e8b7b251c3260a5ac5ba5aef3b4345a0229248"
