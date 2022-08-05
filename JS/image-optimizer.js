@@ -175,7 +175,7 @@ function convertImagesToOptimize(list, index, comic_id, image, callback) {
 			}, 1)
 		})
 	} else if (list[index][1] == 'png') {
-		sharp(`${dirTmp}/${list[index][0]}`).png({ quality: 100 }).toFile(`${dirUL}/${comic_id}${image}/${list[index][0]}`).then(() => {
+		sharp(`${dirTmp}/${list[index][0]}`).png({ quality: 100, compressionLevel: 9 }).toFile(`${dirUL}/${comic_id}${image}/${list[index][0]}`).then(() => {
 
 			try {
 				const size = fs.statSync(`${dirUL}/${comic_id}${image}/${list[index][0]}`).size
@@ -209,7 +209,7 @@ function convertImagesToOptimize(list, index, comic_id, image, callback) {
 			}, 1)
 		})
 	} else if (list[index][1] == 'webp') {
-		sharp(`${dirTmp}/${list[index][0]}`).webp().toFile(`${dirUL}/${comic_id}${image}/${list[index][0]}`).then(() => {
+		sharp(`${dirTmp}/${list[index][0]}`, { limitInputPixels: false }).webp({ quality: 100 }).toFile(`${dirUL}/${comic_id}${image}/${list[index][0]}`).then(() => {
 			try {
 				const size = fs.statSync(`${dirUL}/${comic_id}${image}/${list[index][0]}`).size
 				optimizeConvertSize += size
@@ -223,6 +223,11 @@ function convertImagesToOptimize(list, index, comic_id, image, callback) {
 				convertImagesToOptimize(list, index + 1, comic_id, image, callback) 
 			}, 1)
 		}).catch(err => {
+			try {
+				fs.renameSync(`${dirTmp}/${list[index][0]}`, `${dirUL}/${comic_id}${image}/${list[index][0]}`)
+				optimizeConvertSize += fs.statSync(`${dirUL}/${comic_id}${image}/${list[index][0]}`).size
+			} catch(err2) {}
+			
 			procressPanel.add(`Error: Img ${index+1} -> `+err, 'danger')
 			procressPanel.forward(`Optimizing Image (${index+1}/${list.length})...`)
 			setTimeout(() => {
@@ -434,7 +439,7 @@ function OptimizeAll(docList, index, maxLength, list) {
 			}, 1)
 		})
 	} else if (list[index][1] == 'png') {
-		sharp(`${dirTmp}/${list[index][0]}`).png({ quality: 100 }).toFile(`${dirUL}/${docList[0][4]}${docList[0][1]}/${list[index][0]}`).then(() => {
+		sharp(`${dirTmp}/${list[index][0]}`).png({ quality: 100, compressionLevel: 9 }).toFile(`${dirUL}/${docList[0][4]}${docList[0][1]}/${list[index][0]}`).then(() => {
 
 			try {
 				const size = fs.statSync(`${dirUL}/${docList[0][4]}${docList[0][1]}/${list[index][0]}`).size
@@ -468,7 +473,7 @@ function OptimizeAll(docList, index, maxLength, list) {
 			}, 1)
 		})
 	} else if (list[index][1] == 'webp') {
-		sharp(`${dirTmp}/${list[index][0]}`).webp().toFile(`${dirUL}/${docList[0][4]}${docList[0][1]}/${list[index][0]}`).then(() => {
+		sharp(`${dirTmp}/${list[index][0]}`, { limitInputPixels: false }).webp({ quality: 100 }).toFile(`${dirUL}/${docList[0][4]}${docList[0][1]}/${list[index][0]}`).then(() => {
 			try {
 				const size = fs.statSync(`${dirUL}/${docList[0][4]}${docList[0][1]}/${list[index][0]}`).size
 				optimizeConvertSize += size
@@ -499,6 +504,11 @@ function OptimizeAll(docList, index, maxLength, list) {
 				OptimizeAll(docList, index + 1, maxLength, list)
 			}, 1)
 		} catch(err) {
+			try {
+				fs.renameSync(`${dirTmp}/${list[index][0]}`, `${dirUL}/${docList[0][4]}${docList[0][1]}/${list[index][0]}`)
+				optimizeConvertSize += fs.statSync(`${dirUL}/${docList[0][4]}${docList[0][1]}/${list[index][0]}`).size
+			} catch(err2) {}
+
 			procressPanel.addMini(`Img ${index+1} -> ${err}`, 'danger')
 			procressPanel.forward(`(${maxLength - docList.length + 1}/${maxLength}) Optimizing Image (${index+1}/${list.length})...`)
 			setTimeout(() => {

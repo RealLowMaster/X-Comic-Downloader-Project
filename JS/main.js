@@ -2,6 +2,7 @@ const { remote } = require('electron')
 const fs = require('fs')
 const nedb = require('nedb')
 const sharp = require('sharp')
+sharp.cache(false)
 const jsonfile = require('jsonfile')
 const request = require('request')
 const defaultSettingLang = {
